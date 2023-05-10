@@ -364,7 +364,6 @@ const serveProfile = (req, res, next) => {
 const registerUser = (req, res, next) => {
   if (req.body.username && req.body.password & req.body.passwordConf) 
   {
-    // TODO: Improve this by returning to the page with an error flash message
     if (req.body.password !== req.body.passwordConf) 
     {
       console.log('ERROR: Passwords do not match');
@@ -411,9 +410,11 @@ const registerUser = (req, res, next) => {
             renderRegister(res, 'ERROR: Username is unavailable');
           }
           
-        } else {
+        } 
+        else 
+        {
           console.log("Successfully added user: " + user.username);
-          //renderRegister(res, 'User registrated successfully!');
+          renderRegister(res, 'User registrated successfully!');
         }
       });
     }
