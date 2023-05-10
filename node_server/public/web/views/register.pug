@@ -1,0 +1,38 @@
+html
+  head
+    title Circles - #{title}
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    block stylesheets
+      link(rel="stylesheet" type="text/css" href="/web/css/vendor/pure-min.css")
+      link(rel="stylesheet" type="text/css" href="/web/css/app.css")
+      link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+     
+  body
+    .homepage
+      .homepage__left
+      .homepage__right
+        .homepage__logo-wrapper.gutter-bottom
+          .homepage__logo
+            include includes/circles_logo.svg
+        .homepage__register
+            h1(class="text--centered") Register
+            br
+            p(class="text--centered") #{message}
+            form(action="/registering" method="post" class="pure-form pure-form-aligned")
+              fieldset
+                .pure-control-group
+                  label UserName
+                    span.required *
+                  input(type='text' name='username' placeholder='SuperFriend99' required)
+                .pure-control-group
+                  label Password
+                    span.required *
+                  input.field-long(type='password' name='password' required)
+                .pure-control-group
+                  label Confirm password
+                    span.required *
+                  input.field-long(type='password' name='passwordConf' required)
+                .pure-controls
+                  input(type='submit' value='Register' class="pure-button pure-input-1-2 pure-button-primary")
+            p.text--centered
+              a(href="/") Return to home page
