@@ -4,6 +4,7 @@ require('../../src/core/circles_server');
 const mongoose = require('mongoose');
 const User     = require('../models/user');
 const Model3D  = require('../models/model3D');
+const Worlds   = require('../models/worlds');
 const path     = require('path');
 const fs       = require('fs');
 const crypto   = require('crypto');

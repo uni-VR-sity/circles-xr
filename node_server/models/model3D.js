@@ -192,4 +192,5 @@ const addModels = async function()
 }
 
 addModels();
+
 module.exports = Model3D;
