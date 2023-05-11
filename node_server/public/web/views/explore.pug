@@ -4,14 +4,20 @@ block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
-  - var userCanGenMagicLinks  = userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
+  - var userCanGenMagicLinks  = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
   - var targetUsersText       = (userInfo.userType === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT;
   - var buttonText            = 'Create ' + targetUsersText + ' Links';
+  - var world;
 
   h2 Circles' Worlds
   div(class="gutter-bottom-doubled")
-    div(id="worlds_list_wrapper" class="pure-menu gutter-bottom")
-    //will ask for worlds list from server and populate here
+    div(id="worlds_list_wrapper" class="pure-menu gutter-bottom") 
+      // Rendering list of world buttons according to what the user has access to (the list of worlds is sent through the variable 'worldList')
+      ul(class="pure-menu-list")
+        for world of worldList
+          - var worldUrl = '/w/' + world; // Making url to world
+          li 
+            a(class="pure-button" href=worldUrl)= world
 
   if userCanGenMagicLinks
 

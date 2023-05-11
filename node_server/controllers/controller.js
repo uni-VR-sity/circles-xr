@@ -430,7 +430,7 @@ const serveRegister = (req, res, next) => {
   renderRegister(res, '');
 };
 
-const serveExplore = (req, res, next) => {
+const serveExplore = async (req, res, next) => {
   // Route now authenticates and ensures a user is logged in by this point
   let user = req.user;
 
@@ -457,9 +457,22 @@ const serveExplore = (req, res, next) => {
     handRightColor: user.color_hand_right,
   }
 
+
+  // Getting all worlds the user has access to and putting their names into an array
+  const worlds = await Worlds.find({});
+
+  let worldArray = [];
+
+  for (const world of worlds)
+  {
+    worldArray.push(world.name);
+  }
+
+  // Rendering the explore page
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
-    userInfo: userInfo
+    userInfo: userInfo,
+    worldList: worldArray
   });
 };
 
