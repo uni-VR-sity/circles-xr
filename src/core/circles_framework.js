@@ -60,6 +60,7 @@ const MODEL_FORMAT = {
 
 const USER_TYPE = {
   SUPERUSER   : 'Superuser',
+  ADMIN       : 'Admin',
   STUDENT     : 'Student',
   TEACHER     : 'Teacher',
   RESEARCHER  : 'Researcher',

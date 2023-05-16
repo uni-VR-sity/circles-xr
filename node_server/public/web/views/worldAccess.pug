@@ -1,0 +1,68 @@
+extends layout.pug
+
+block append stylesheets
+  link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+
+block content
+    - var permittedUser
+    - var restrictedUser
+
+    h2= world.name
+
+    // Showing permitted users only if there are access restrictions on the world
+    if world.accessRestrictions
+        p This world currently has 
+            span(style="font-weight: bold") access restrictions
+            span : Only users with 
+            span(style="color: green; font-weight: bold") permitted access 
+            span can see this world
+        
+        // Option to remove access restrictions on the world
+        - var removeRestrictionsUrl = '/removeRestrictions/' + world.name;
+
+        a(class="pure-button" style="font-weight: bold; margin-right: 10px" href=removeRestrictionsUrl) Remove access restrictions
+        span (This will allow all users to see the world)
+
+        br
+        br
+        br
+        br
+
+        h3 Students, Participants, and Testers
+
+        table.pure-table.profile-table.gutter-bottom-doubled
+            thead
+                tr
+                    th User
+                    th Type
+                    th Access
+                    th 
+            tbody
+                for permittedUser of world.accessPermission
+                    - var changeUrl = '/removeAccess/' + world.name + '/' + permittedUser.username;
+                    tr
+                        td= permittedUser.username
+                        td= permittedUser.usertype 
+                        td(style="color: green; font-weight: bold") Permitted
+                        td
+                            a(class="pure-button changeAccess-button" style="color: red; font-weight: bold" href=changeUrl) Remove Access
+
+                for restrictedUser of world.accessDenied
+                    - var changeUrl = '/permitAccess/' + world.name + '/' + restrictedUser.username;
+                    tr
+                        td= restrictedUser.username
+                        td= restrictedUser.usertype 
+                        td(style="color: red; font-weight: bold") Restricted
+                        td
+                            a(class="pure-button changeAccess-button" style="color: green; font-weight: bold" href=changeUrl) Permit Access
+
+    else
+        p This world currently has 
+            span(style="font-weight: bold") no access restrictions
+            span : All users can see this world
+
+        // Option to put access restrictions on the world
+        - var putRestrictionsUrl = '/putRestrictions/' + world.name;
+
+        a(class="pure-button" style="font-weight: bold; margin-right: 10px" href=putRestrictionsUrl) Put access restrictions
+        span (This restricts what users can see the world)

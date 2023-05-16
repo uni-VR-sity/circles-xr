@@ -25,6 +25,10 @@ const WorldSchema = new mongoose.Schema({
         trim:       true,
         default:    true
       },
+    accessPermissions: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'users' 
+    }],
 });
 
 const Worlds = mongoose.model('worlds', WorldSchema);

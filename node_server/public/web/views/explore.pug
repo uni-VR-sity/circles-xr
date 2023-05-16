@@ -4,7 +4,7 @@ block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
-  - var userCanGenMagicLinks  = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
+  - var adminUser             = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
   - var targetUsersText       = (userInfo.userType === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT;
   - var buttonText            = 'Create ' + targetUsersText + ' Links';
   - var world;
@@ -17,9 +17,12 @@ block content
         for world of worldList
           - var worldUrl = '/w/' + world; // Making url to world
           li 
-            a(class="pure-button" href=worldUrl)= world
+            if adminUser
+              - var editUrl = '/editAccess/' + world;
+              a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+            a(class="pure-button worldList" href=worldUrl)= world
 
-  if userCanGenMagicLinks
+  if adminUser
 
     div(id="MagicLinksWrapper" class="gutter-bottom-doubled")
       h3 #{targetUsersText} Links for "Magic" Automatic Login 

@@ -374,7 +374,7 @@ const registerUser = (req, res, next) => {
     {
       const userData = {
         username: req.body.username,
-        usertype: CIRCLES.USER_TYPE.PARTICIPANT,
+        usertype: CIRCLES.USER_TYPE.GUEST,
         password: req.body.password,
         gltf_head_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HEAD,
         gltf_hair_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HAIR,
@@ -457,10 +457,45 @@ const serveExplore = async (req, res, next) => {
     handRightColor: user.color_hand_right,
   }
 
+  let worlds = [];
+  let premittedWorlds = [];
+  let noRestrictions = [];
 
   // Getting all worlds the user has access to and putting their names into an array
-  const worlds = await Worlds.find({});
+  // - If user is a superuser, teacher, researcher, or admin, access is given to all worlds
+  // - If user is a student, participant, or tester, access is given to specific worlds (ones with no restrictions and ones that they have been given access to)
+  // - If user is a guest, access is given to worlds with no restictions
+  if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.TEACHER || user.usertype === CIRCLES.USER_TYPE.RESEARCHER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
+  { 
+    // All worlds
+    worlds = await Worlds.find({});
+  }
+  else if (user.usertype === CIRCLES.USER_TYPE.STUDENT || user.usertype === CIRCLES.USER_TYPE.PARTICIPANT || user.usertype === CIRCLES.USER_TYPE.TESTER)
+  {
+    // Worlds they have special access to
+    premittedWorlds = await Worlds.find({accessPermissions: { $in: [user] }});
 
+    for (const world of premittedWorlds)
+    {
+      worlds.push(world);
+    }
+
+    // Worlds with no access restrictions
+    noRestrictions = await Worlds.find({accessRestrictions: false});
+
+    for (const world of noRestrictions)
+    {
+      worlds.push(world);
+    }
+
+  }
+  else // Guest
+  {
+    // Worlds with no access restrictions
+    worlds = await Worlds.find({accessRestrictions: false});
+  }
+
+  // Getting all world names to send to explore page
   let worldArray = [];
 
   for (const world of worlds)
@@ -475,6 +510,190 @@ const serveExplore = async (req, res, next) => {
     worldList: worldArray
   });
 };
+
+const serveAccessEdit = async (req, res, next) => { 
+  // url: /editAccess/worldName
+  // split result array: {"", "editAccess", "worldName"}
+  const worldName = req.url.split('/')[2];
+  
+  // Getting world to send to worldAccess page
+  const world = await Worlds.findOne({name: worldName});
+
+  if (world)
+  {
+    const worldInfo = {
+      name: world.name,
+      accessRestrictions: world.accessRestrictions,
+      accessPermission: [],
+      accessDenied: [],
+    }
+  
+    // Getting usernames and usertypes of all users that have permission to enter world
+    for (const user of world.accessPermissions)
+    {
+      const currentUser = await User.findOne({_id: user});
+  
+      if (currentUser)
+      {
+        const userInfo = {
+          username: currentUser.username, 
+          usertype: currentUser.usertype
+        }
+  
+        worldInfo.accessPermission.push(userInfo);
+      }
+    }
+  
+    // Getting usernames of all users that do not have permission to enter world
+    const usersDenied = await User.find({_id: {$nin: world.accessPermissions}, usertype: {$in: [CIRCLES.USER_TYPE.STUDENT, CIRCLES.USER_TYPE.PARTICIPANT, CIRCLES.USER_TYPE.TESTER]}});
+  
+    for (const user of usersDenied)
+    {
+      const userInfo = {
+        username: user.username, 
+        usertype: user.usertype
+      }
+  
+      worldInfo.accessDenied.push(userInfo);
+    }
+  
+    // Rendering the worldAccess page
+    res.render(path.resolve(__dirname + '/../public/web/views/worldAccess'), {
+      title: world.name + ' Access',
+      world: worldInfo
+    });
+  }
+}
+
+// Gives a user access to specified world
+const permitWorldAccess = async (req, res, next) => { 
+  // url: /permitAccess/worldName/username
+  // split result array: {"", "permitAccess", "worldName", "username"}
+  const urlSplit = req.url.split('/');
+  const worldName = urlSplit[2];
+  const username = urlSplit[3];
+
+  // Finding the user in database with that username
+  const user = await User.findOne({username: username});
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: worldName});
+
+  if (user && world)
+  {
+    try
+    {
+      // Adding the user to the list of premitted users
+      world.accessPermissions.push(user);
+      await world.save();
+
+      console.log(username + ' given access to ' + worldName);
+    }
+    catch (e)
+    {
+      console.log('ERROR: Could not give ' + username + ' access to ' + worldName);
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not give ' + username + ' access to ' + worldName);
+  }
+
+  res.redirect('/editAccess/' + worldName);
+}
+
+// Removes a user's access from specified world
+const removeWorldAccess = async (req, res, next) => { 
+  // url: /removeAccess/worldName/username
+  // split result array: {"", "removeAccess", "worldName", "username"}
+  const urlSplit = req.url.split('/');
+  const worldName = urlSplit[2];
+  const username = urlSplit[3];
+
+  // Finding the user in database with that username
+  const user = await User.findOne({username: username});
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: worldName});
+
+  if (user && world)
+  {
+    try
+    {
+      // Adding the user to the list of premitted users
+      world.accessPermissions.pull(user);
+      await world.save();
+
+      console.log(username + ' restricted from accessing ' + worldName);
+    }
+    catch (e)
+    {
+      console.log('ERROR: Could not restrict ' + username + ' from accessing ' + worldName);
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not restrict ' + username + ' from accessing ' + worldName);
+  }
+
+  res.redirect('/editAccess/' + worldName);
+}
+
+// Removes access restrictions from a world
+const removeWorldRestrictions = async (req, res, next) => {
+  // url: /removeRestrictions/worldName
+  // split result array: {"", "removeRestrictions", "worldName"}
+  const worldName = req.url.split('/')[2];
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: worldName});
+
+  if (world)
+  {
+    try
+    {
+      // Changing world access restrictions to false
+      world.accessRestrictions = false;
+      await world.save();
+
+      console.log(worldName + ' access restrictions removed');
+    }
+    catch (e)
+    {
+      console.log('ERROR: ' + worldName + ' access restrictions could not be removed');
+    }
+  }
+
+  res.redirect('/editAccess/' + worldName);
+}
+
+// Puts access restrictions from a world
+const putWorldRestrictions = async (req, res, next) => {
+  // url: /putRestrictions/worldName
+  // split result array: {"", "putRestrictions", "worldName"}
+  const worldName = req.url.split('/')[2];
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: worldName});
+
+  if (world)
+  {
+    try
+    {
+      // Changing world access restrictions to true
+      world.accessRestrictions = true;
+      await world.save();
+
+      console.log(worldName + ' access restrictions put');
+    }
+    catch (e)
+    {
+      console.log('ERROR: ' + worldName + ' access restrictions could not be put');
+    }
+  }
+
+  res.redirect('/editAccess/' + worldName);
+}
 
 const generateAuthLink = (baseURL, route, expiryTimeMin) => {
   const jwtOptions = {
@@ -579,6 +798,11 @@ module.exports = {
   registerUser,
   serveRegister,
   serveExplore,
+  serveAccessEdit,
+  permitWorldAccess,
+  removeWorldAccess,
+  removeWorldRestrictions,
+  putWorldRestrictions,
   generateAuthLink,
   getMagicLinks,
   getWorldsList,

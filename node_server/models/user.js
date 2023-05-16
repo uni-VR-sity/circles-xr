@@ -33,10 +33,6 @@ const UserSchema = new mongoose.Schema({
     required:   true,
     trim:       false
   },
-  worldAccess: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'worlds' 
-  }],
   gltf_head_url: {
     type:       String,
     unique:     false,

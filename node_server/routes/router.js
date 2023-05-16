@@ -84,6 +84,12 @@ router.get('/register', notAuthenticated, controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
 
+router.get('/editAccess/:world_id', authenticated, controller.serveAccessEdit);
+router.get('/permitAccess/:world_id/:user_id', authenticated, controller.permitWorldAccess);
+router.get('/removeAccess/:world_id/:user_id', authenticated, controller.removeWorldAccess);
+router.get('/removeRestrictions/:world_id', authenticated, controller.removeWorldRestrictions);
+router.get('/putRestrictions/:world_id', authenticated, controller.putWorldRestrictions);
+
 //REST API (need to secure one day ... )
 //inspired by https://www.codementor.io/olatundegaruba/nodejs-restful-apis-in-10-minutes-q0sgsfhbd
 // router.route('/users/:username')
