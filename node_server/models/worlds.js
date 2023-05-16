@@ -25,7 +25,11 @@ const WorldSchema = new mongoose.Schema({
         trim:       true,
         default:    true
       },
-    accessPermissions: [{ 
+    viewingPermissions: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'users' 
+    }],
+    editingPermissions: [{ 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'users' 
     }],

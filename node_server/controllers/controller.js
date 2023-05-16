@@ -462,7 +462,8 @@ const serveExplore = async (req, res, next) => {
   let noRestrictions = [];
 
   // Getting all worlds the user has access to and putting their names into an array
-  // - If user is a superuser, teacher, researcher, or admin, access is given to all worlds
+  // - If user is a superuser or admin, access is given to all worlds
+  // - If user is a teacher or researcher, access is given to all worlds...
   // - If user is a student, participant, or tester, access is given to specific worlds (ones with no restrictions and ones that they have been given access to)
   // - If user is a guest, access is given to worlds with no restictions
   if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.TEACHER || user.usertype === CIRCLES.USER_TYPE.RESEARCHER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
