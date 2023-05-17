@@ -18,7 +18,7 @@ const WorldSchema = new mongoose.Schema({
         required:   true,
         trim:       true
       },
-    accessRestrictions: {
+    viewingRestrictions: {
         type:       Boolean,
         unique:     false,
         required:   false,

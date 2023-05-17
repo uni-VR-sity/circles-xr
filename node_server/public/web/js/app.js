@@ -174,8 +174,6 @@ function getWorldsList() {
     showWorldList(request.response); //show copy button
   };
   request.send();
-
-  console.log('tester: load on explore only');
 }
 
 function showWorldList(data) {

@@ -14,14 +14,6 @@ const dotenvParseVariables = require('dotenv-parse-variables');
 const jwt      = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
 
-const renderRegister = function(res, renderMessage)
-{
-    res.render(path.resolve(__dirname + '/../public/web/views/register'), {
-      title: `Register for Circles`,
-      message: renderMessage
-    });
-}
-
 //load in config
 let env = dotenv.config({})
 if (env.error) {
@@ -67,6 +59,19 @@ env = dotenvParseVariables(env.parsed);
 //     res.json({ message: 'User successfully deleted' });
 //   });
 // };
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering the register user page with a specific message to the user about their registration (ex. error messages, success messages)
+const renderRegister = function(res, renderMessage)
+{
+    res.render(path.resolve(__dirname + '/../public/web/views/register'), {
+      title: `Register for Circles`,
+      message: renderMessage
+    });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const updateUserInfo = (req, res, next) => {
   if (!req.body) {
@@ -164,6 +169,8 @@ const updateUserInfo = (req, res, next) => {
   }
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) => {
   // Ensure the world file exists
   fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => {
@@ -249,6 +256,8 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
   });
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const serveWorld = (req, res, next) => {
   //need to make sure we have the trailing slash to signify a folder so that relative links works correctly
   //https://stackoverflow.com/questions/30373218/handling-relative-urls-in-a-node-js-http-server 
@@ -283,6 +292,8 @@ const serveWorld = (req, res, next) => {
   modifyServeWorld(world_id, searchParamsObj, user, pathStr, req, res);
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const serveRelativeWorldContent = (req, res, next) => {
   //making it easier for devs as absolute paths are a pain to type in ...
   const worldID = req.params.world_id;
@@ -290,6 +301,8 @@ const serveRelativeWorldContent = (req, res, next) => {
   const newURL = '/worlds/' + worldID + '/' + relURL;
   return res.redirect(newURL);
 };
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const serveProfile = (req, res, next) => {
   // Route now authenticates and ensures a user is logged in by this point
@@ -362,9 +375,15 @@ const serveProfile = (req, res, next) => {
   });
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creates a new user and puts them in the user database
 const registerUser = (req, res, next) => {
+  // Making sure all required fields are there (username, password, and password confirmation)
   if (req.body.username && req.body.password & req.body.passwordConf) 
   {
+    // Making sure passwords match
+    // If they don't, send an error message to the user
     if (req.body.password !== req.body.passwordConf) 
     {
       console.log('ERROR: Passwords do not match');
@@ -372,23 +391,25 @@ const registerUser = (req, res, next) => {
     }
     else
     {
+      // Compiling all data for the new user
       const userData = {
-        username: req.body.username,
-        usertype: CIRCLES.USER_TYPE.GUEST,
-        password: req.body.password,
-        gltf_head_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HEAD,
-        gltf_hair_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HAIR,
-        gltf_body_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_BODY,
-        color_head: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,
-        color_hair: CIRCLES.CONSTANTS.DEFAULT_HAIR_COLOUR,
-        color_body: CIRCLES.CONSTANTS.DEFAULT_BODY_COLOUR,
-        color_hand_right: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,
-        color_hand_left: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,
+        username: req.body.username,                                    // User entered username
+        usertype: CIRCLES.USER_TYPE.GUEST,                              // Default usertype upon registration is "Guest"
+        password: req.body.password,                                    // User entered password
+        gltf_head_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HEAD,             // Default head model
+        gltf_hair_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HAIR,             // Default hair model
+        gltf_body_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_BODY,             // Default body model
+        color_head: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,              // Default head colour
+        color_hair: CIRCLES.CONSTANTS.DEFAULT_HAIR_COLOUR,              // Default hair colour
+        color_body: CIRCLES.CONSTANTS.DEFAULT_BODY_COLOUR,              // Default body colour
+        color_hand_right: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,        // Default right hand colour
+        color_hand_left: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,         // Default left hand colour
       };
 
       let user = null;
       let error = null;
 
+      // Creating new user in database
       async function createNewUser(newUser) 
       {
         try {
@@ -400,17 +421,22 @@ const registerUser = (req, res, next) => {
         }
       }
       
-      createNewUser(userData).then(function() {
-        if (error) {
+      createNewUser(userData).then(function() 
+      {
+        // Checking if there was an error while creating the user and if there was, sending the error to the console
+        // If user creation was successfull, outputting a success message to the user
+        if (error) 
+        {
           console.log("createUser error on [" + userData.username + "]: " + error.message);
 
           const errorMessage = error.message;
 
+          // Usernames must be unique
+          // If there was an error because the username already exists in the database, output an error message to the user
           if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
           {
             renderRegister(res, 'ERROR: Username is unavailable');
           }
-          
         } 
         else 
         {
@@ -426,22 +452,52 @@ const registerUser = (req, res, next) => {
   }
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const serveRegister = (req, res, next) => {
   renderRegister(res, '');
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Getting certain worlds from the world database
+// Permission Types:
+//    - all                 Returns all worlds in world database
+//    - freeViewing         Returns all worlds that have no viewing restrictions
+//    - specialViewing      Returns all worlds that the user has viewing access to
+//    - editing             Returns all worlds that the user has editing access to
+const getWorlds = async function(user, permissionType)
+{
+  let worlds = []
+
+  if (permissionType === "all")
+  {
+    worlds = await Worlds.find({});
+  }
+  else if (permissionType === "freeViewing")
+  {
+    worlds = await Worlds.find({viewingRestrictions: false});
+  }
+  else if (permissionType === "specialViewing")
+  {
+    worlds = await Worlds.find({viewingPermissions: { $in: [user] }});
+  }
+  else if (permissionType === "editing")
+  {
+    worlds = await Worlds.find({editingPermissions: { $in: [user] }});
+  }
+
+  return worlds;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering the explore page after the user has logged in according to what they have access
 const serveExplore = async (req, res, next) => {
   // Route now authenticates and ensures a user is logged in by this point
   let user = req.user;
 
-  const queryChecks = [
-    user.gltf_head_url,
-    user.gltf_hair_url,
-    user.gltf_body_url,
-    user.gltf_hand_left_url,
-    user.gltf_hand_right_url,
-  ];
-
+  // Gathering information on the user to send to explore page
   const userInfo = {
     userName: user.username,
     userType: user.usertype,
@@ -457,60 +513,82 @@ const serveExplore = async (req, res, next) => {
     handRightColor: user.color_hand_right,
   }
 
-  let worlds = [];
-  let premittedWorlds = [];
-  let noRestrictions = [];
-
   // Getting all worlds the user has access to and putting their names into an array
-  // - If user is a superuser or admin, access is given to all worlds
-  // - If user is a teacher or researcher, access is given to all worlds...
-  // - If user is a student, participant, or tester, access is given to specific worlds (ones with no restrictions and ones that they have been given access to)
-  // - If user is a guest, access is given to worlds with no restictions
-  if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.TEACHER || user.usertype === CIRCLES.USER_TYPE.RESEARCHER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
+  // - If user is a superuser or admin, viewing and editing access is given to all worlds
+  // - If user is a teacher or researcher:
+  //      - Viewing access is given to to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
+  //      - Editing access is given to specific worlds (ones that they have been given editing access to)
+  // - If user is a student, participant, or tester:
+  //      - Viewing access is given to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
+  //      - No editing access is given
+  // - If user is a guest
+  //      - Viewing access is given to worlds with no restictions
+  //      - No editing access is given
+
+  let viewingWorlds = [];
+  let editingWorlds = [];
+
+  if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
   { 
-    // All worlds
-    worlds = await Worlds.find({});
+    editingWorlds.push(await getWorlds(user, "all"));
+  }
+  else if (user.usertype === CIRCLES.USER_TYPE.TEACHER || user.usertype === CIRCLES.USER_TYPE.RESEARCHER)
+  {
+    viewingWorlds.push(await getWorlds(user, "freeViewing"));
+    viewingWorlds.push(await getWorlds(user, "specialViewing"));
+    editingWorlds.push(await getWorlds(user, "editing"));
   }
   else if (user.usertype === CIRCLES.USER_TYPE.STUDENT || user.usertype === CIRCLES.USER_TYPE.PARTICIPANT || user.usertype === CIRCLES.USER_TYPE.TESTER)
   {
-    // Worlds they have special access to
-    premittedWorlds = await Worlds.find({accessPermissions: { $in: [user] }});
-
-    for (const world of premittedWorlds)
-    {
-      worlds.push(world);
-    }
-
-    // Worlds with no access restrictions
-    noRestrictions = await Worlds.find({accessRestrictions: false});
-
-    for (const world of noRestrictions)
-    {
-      worlds.push(world);
-    }
-
+    viewingWorlds.push(await getWorlds(user, "freeViewing"));
+    viewingWorlds.push(await getWorlds(user, "specialViewing"));
   }
   else // Guest
   {
-    // Worlds with no access restrictions
-    worlds = await Worlds.find({accessRestrictions: false});
+    viewingWorlds.push(getWorlds(user, "freeViewing"));
   }
 
-  // Getting all world names to send to explore page
-  let worldArray = [];
+  // Flattening the arrays
+  editingWorlds = editingWorlds.flat(2);
+  viewingWorlds = viewingWorlds.flat(2);
 
-  for (const world of worlds)
+  // Getting all world names the user can view
+  let viewingArray = [];
+
+  for (const world of viewingWorlds)
   {
-    worldArray.push(world.name);
+    viewingArray.push(world.name);
+  }
+
+  // Getting all world names the user can edit
+  let editingArray = [];
+
+  for (const world of editingWorlds)
+  {
+    editingArray.push(world.name);
+  }
+
+  // Making sure there are no duplicates between the viewing and editing arrays
+  // If there are, the world is kept in editing and removed from viewing
+  for (const world of editingArray)
+  {
+    if (viewingArray.includes(world))
+    {
+      const index = viewingArray.indexOf(world);
+      viewingArray.splice(index, 1);
+    }
   }
 
   // Rendering the explore page
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
     userInfo: userInfo,
-    worldList: worldArray
+    worldViewingList: viewingArray,
+    worldEditingList: editingArray
   });
 };
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const serveAccessEdit = async (req, res, next) => { 
   // url: /editAccess/worldName
@@ -566,6 +644,8 @@ const serveAccessEdit = async (req, res, next) => {
   }
 }
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Gives a user access to specified world
 const permitWorldAccess = async (req, res, next) => { 
   // url: /permitAccess/worldName/username
@@ -602,6 +682,8 @@ const permitWorldAccess = async (req, res, next) => {
 
   res.redirect('/editAccess/' + worldName);
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Removes a user's access from specified world
 const removeWorldAccess = async (req, res, next) => { 
@@ -640,6 +722,8 @@ const removeWorldAccess = async (req, res, next) => {
   res.redirect('/editAccess/' + worldName);
 }
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Removes access restrictions from a world
 const removeWorldRestrictions = async (req, res, next) => {
   // url: /removeRestrictions/worldName
@@ -667,6 +751,8 @@ const removeWorldRestrictions = async (req, res, next) => {
 
   res.redirect('/editAccess/' + worldName);
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Puts access restrictions from a world
 const putWorldRestrictions = async (req, res, next) => {
@@ -696,6 +782,8 @@ const putWorldRestrictions = async (req, res, next) => {
   res.redirect('/editAccess/' + worldName);
 }
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const generateAuthLink = (baseURL, route, expiryTimeMin) => {
   const jwtOptions = {
     issuer: 'circlesxr.com',
@@ -707,6 +795,8 @@ const generateAuthLink = (baseURL, route, expiryTimeMin) => {
   const token = jwt.sign(env.JWT_SECRET, jwtOptions); //expects seconds as expiration
   return baseURL + '/magic-login?token=' + token + '&route=' + route;
 };
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const getMagicLinks = (req, res, next) => {
   const route = req.query.route;
@@ -746,6 +836,8 @@ const getMagicLinks = (req, res, next) => {
   });
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const loopAndGetFolderNames =  async (folderPath) => {
   let allSubFolderNames = [];
   // Get the files as an array
@@ -779,12 +871,16 @@ const loopAndGetFolderNames =  async (folderPath) => {
   return allSubFolderNames;
 };
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const getWorldsList = async (req, res, next) => {
   const folderPath = __dirname + '/../../src/worlds';
   loopAndGetFolderNames(folderPath).then(function(data) {
     res.json(data);
   });
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
   // getAllUsers,

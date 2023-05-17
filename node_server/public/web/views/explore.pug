@@ -4,28 +4,51 @@ block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
-  - var adminUser             = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
-  - var targetUsersText       = (userInfo.userType === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT;
-  - var buttonText            = 'Create ' + targetUsersText + ' Links';
+  - var adminUser               = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
+  - var userCanGenMagicLinks    = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
+  - var targetUsersText         = (userInfo.userType === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT;
+  - var buttonText              = 'Create ' + targetUsersText + ' Links';
   - var world;
 
-  h2 Circles' Worlds
+  h2 Worlds
   div(class="gutter-bottom-doubled")
     div(id="worlds_list_wrapper" class="pure-menu gutter-bottom") 
-      // Rendering list of world buttons according to what the user has access to (the list of worlds is sent through the variable 'worldList')
+
+      // Rendering list of world buttons according to what the user has access to
       ul(class="pure-menu-list")
-        for world of worldList
-          - var worldUrl = '/w/' + world; // Making url to world
-          li 
-            if adminUser
+
+        // Checking if there are worlds to render
+        // If there are not, outputting message to user to indicate there are no worlds for them to access
+        if worldViewingList.length > 0 || worldEditingList.length > 0
+
+          // Rendering all the worlds the user can view
+          for world of worldViewingList
+            - var worldUrl = '/w/' + world; // Making url to world
+            li 
+              a(class="pure-button worldList" href=worldUrl)= world
+
+          // Rendering all the worlds the user can edit (with an edit button)
+          for world of worldEditingList
+            - var worldUrl = '/w/' + world; // Making url to world
+            li 
               - var editUrl = '/editAccess/' + world;
               a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-            a(class="pure-button worldList" href=worldUrl)= world
+              a(class="pure-button worldList" href=worldUrl)= world
 
-  if adminUser
+        else
+
+          if adminUser
+            p You currently have no worlds in your server
+
+          else
+            p You currently have no worlds available to you
+
+    br
+
+  if userCanGenMagicLinks
 
     div(id="MagicLinksWrapper" class="gutter-bottom-doubled")
-      h3 #{targetUsersText} Links for "Magic" Automatic Login 
+      h2 #{targetUsersText} Links for "Magic" Automatic Login 
 
       form(class='pure-form pure-form-aligned')
         fieldset
