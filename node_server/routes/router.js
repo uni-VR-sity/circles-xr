@@ -85,8 +85,10 @@ router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
 
 router.get('/editAccess/:world_id', authenticated, controller.serveAccessEdit);
-router.get('/permitAccess/:world_id/:user_id', authenticated, controller.permitWorldAccess);
-router.get('/removeAccess/:world_id/:user_id', authenticated, controller.removeWorldAccess);
+router.get('/permitViewing/:world_id/:user_id', authenticated, controller.permitWorldViewing);
+router.get('/removeViewing/:world_id/:user_id', authenticated, controller.removeWorldViewing);
+router.get('/permitEditing/:world_id/:user_id', authenticated, controller.permitWorldEditing);
+router.get('/removeEditing/:world_id/:user_id', authenticated, controller.removeWorldEditing);
 router.get('/removeRestrictions/:world_id', authenticated, controller.removeWorldRestrictions);
 router.get('/putRestrictions/:world_id', authenticated, controller.putWorldRestrictions);
 

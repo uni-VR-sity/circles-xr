@@ -602,38 +602,160 @@ const serveAccessEdit = async (req, res, next) => {
   {
     const worldInfo = {
       name: world.name,
-      accessRestrictions: world.accessRestrictions,
-      accessPermission: [],
-      accessDenied: [],
+      viewingRestrictions: world.viewingRestrictions,
+      viewingPermission: [],
+      viewingDenied: [],
+      editingPermission: [],
+      editingDenied: [],
     }
   
-    // Getting usernames and usertypes of all users that have permission to enter world
-    for (const user of world.accessPermissions)
+    // Getting usernames and usertypes of all users that have permission to view world
+    for (const user of world.viewingPermissions)
     {
-      const currentUser = await User.findOne({_id: user});
+      // 1. Ignoring the current user
+      // 2. Ignoring users who have editing permissions on the world
+      // 3. Finding the user in the database
+      const currentUser = await User.aggregate([
+        {
+          $match:
+            // 1
+            {
+              _id: { $nin: [req.user._id] },
+            },
+        },
+        {
+          $match:
+            // 2
+            {
+              _id: {$nin: world.editingPermissions},
+            },
+        },
+        {
+          $match:
+            // 3
+            {
+              _id: user,
+            },
+        },
+      ]);
   
-      if (currentUser)
+      if (currentUser.length > 0)
       {
         const userInfo = {
-          username: currentUser.username, 
-          usertype: currentUser.usertype
+          username: currentUser[0].username, 
+          usertype: currentUser[0].usertype
         }
   
-        worldInfo.accessPermission.push(userInfo);
+        worldInfo.viewingPermission.push(userInfo);
       }
     }
   
-    // Getting usernames of all users that do not have permission to enter world
-    const usersDenied = await User.find({_id: {$nin: world.accessPermissions}, usertype: {$in: [CIRCLES.USER_TYPE.STUDENT, CIRCLES.USER_TYPE.PARTICIPANT, CIRCLES.USER_TYPE.TESTER]}});
+    // Getting usernames of all users that do not have permission to view world
   
-    for (const user of usersDenied)
+    // 1. Ignoring the current user and users of type superuser and admin (as they have access to all worlds by default) and users of type Guest (as they only have access to the worlds with no restrictions)
+    // 2. Ignoring users who have editing permissions on the world
+    // 3. Finding the users who are not in the viewingPermissions array
+    const usersViewingDenied = await User.aggregate([
+      {
+        $match:
+          // 1
+          {
+            _id: {$nin: [req.user._id]},
+            usertype: {$nin: [CIRCLES.USER_TYPE.SUPERUSER, CIRCLES.USER_TYPE.ADMIN, CIRCLES.USER_TYPE.GUEST]},
+          },
+      },
+      {
+        $match:
+          // 2
+          {
+            _id: {$nin: world.editingPermissions},
+          },
+      },
+      {
+        $match:
+          // 3
+          {
+            _id: {$nin: world.viewingPermissions},
+          },
+      },
+    ]);
+
+    // Getting usernames and usertypes of all users that do not have permission to view world
+    for (const user of usersViewingDenied)
     {
       const userInfo = {
         username: user.username, 
         usertype: user.usertype
       }
   
-      worldInfo.accessDenied.push(userInfo);
+      worldInfo.viewingDenied.push(userInfo);
+    }
+
+    // Getting usernames and usertypes of all users that have permission to edit world
+    for (const user of world.editingPermissions)
+    {
+      // 1. Ignoring the current user
+      // 2. Finding the user in the database
+      const currentUser = await User.aggregate([
+        {
+          $match:
+            // 1
+            {
+              _id: { $nin: [req.user._id] },
+            },
+        },
+        {
+          $match:
+            // 2
+            {
+              _id: user,
+            },
+        },
+      ]);
+
+      // If a user was found
+      if (currentUser.length > 0)
+      {
+        const userInfo = {
+          username: currentUser[0].username, 
+          usertype: currentUser[0].usertype
+        }
+  
+        worldInfo.editingPermission.push(userInfo);
+      }
+    } 
+
+    // Getting usernames of all users that do not have permission to edit world
+  
+    // 1. Ignoring the current user and only looking for users of type teacher and researcher
+    // 2. Finding the users who are not in the editingPermissions array
+    const usersEditingDenied = await User.aggregate([
+      {
+        $match:
+          // 1
+          {
+            _id: {$nin: [req.user._id]},
+            usertype: {$in: [CIRCLES.USER_TYPE.TEACHER, CIRCLES.USER_TYPE.RESEARCHER]},
+          },
+      },
+      {
+        $match:
+          // 2
+          {
+            _id: {$nin: world.editingPermissions},
+          },
+      },
+    ]);
+
+    // Getting usernames and usertypes of all users that do not have permission to edit world
+    for (const user of usersEditingDenied)
+    {
+      const userInfo = {
+        username: user.username, 
+        usertype: user.usertype
+      }
+  
+      worldInfo.editingDenied.push(userInfo);
     }
   
     // Rendering the worldAccess page
@@ -646,10 +768,10 @@ const serveAccessEdit = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Gives a user access to specified world
-const permitWorldAccess = async (req, res, next) => { 
-  // url: /permitAccess/worldName/username
-  // split result array: {"", "permitAccess", "worldName", "username"}
+// Gives a user viewing rights to specified world
+const permitWorldViewing = async (req, res, next) => { 
+  // url: /permitViewing/worldName/username
+  // split result array: {"", "permitViewing", "worldName", "username"}
   const urlSplit = req.url.split('/');
   const worldName = urlSplit[2];
   const username = urlSplit[3];
@@ -665,19 +787,19 @@ const permitWorldAccess = async (req, res, next) => {
     try
     {
       // Adding the user to the list of premitted users
-      world.accessPermissions.push(user);
+      world.viewingPermissions.push(user);
       await world.save();
 
-      console.log(username + ' given access to ' + worldName);
+      console.log(username + ' given viewing to ' + worldName);
     }
     catch (e)
     {
-      console.log('ERROR: Could not give ' + username + ' access to ' + worldName);
+      console.log('ERROR: Could not give ' + username + ' viewing to ' + worldName);
     }
   }
   else
   {
-    console.log('ERROR: Could not give ' + username + ' access to ' + worldName);
+    console.log('ERROR: Could not give ' + username + ' viewing to ' + worldName);
   }
 
   res.redirect('/editAccess/' + worldName);
@@ -685,10 +807,49 @@ const permitWorldAccess = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Removes a user's access from specified world
-const removeWorldAccess = async (req, res, next) => { 
-  // url: /removeAccess/worldName/username
-  // split result array: {"", "removeAccess", "worldName", "username"}
+// Removes a user's viewing rights from specified world
+const removeWorldViewing = async (req, res, next) => { 
+  // url: /removeViewing/worldName/username
+  // split result array: {"", "removeViewing", "worldName", "username"}
+  const urlSplit = req.url.split('/');
+  const worldName = urlSplit[2];
+  const username = urlSplit[3];
+
+  // Finding the user in database with that username
+  const user = await User.findOne({username: username});
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: worldName});
+
+  if (user && world)
+  {
+    try
+    {
+      // Removing the user from the list of premitted users
+      world.viewingPermissions.pull(user);
+      await world.save();
+
+      console.log(username + ' restricted from viewing ' + worldName);
+    }
+    catch (e)
+    {
+      console.log('ERROR: Could not restrict ' + username + ' from viewing ' + worldName);
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not restrict ' + username + ' from viewing ' + worldName);
+  }
+
+  res.redirect('/editAccess/' + worldName);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Gives a user editing rights from specified world
+const permitWorldEditing = async (req, res, next) => { 
+  // url: /permitEditing/worldName/username
+  // split result array: {"", "permitEditing", "worldName", "username"}
   const urlSplit = req.url.split('/');
   const worldName = urlSplit[2];
   const username = urlSplit[3];
@@ -704,19 +865,19 @@ const removeWorldAccess = async (req, res, next) => {
     try
     {
       // Adding the user to the list of premitted users
-      world.accessPermissions.pull(user);
+      world.editingPermissions.push(user);
       await world.save();
 
-      console.log(username + ' restricted from accessing ' + worldName);
+      console.log(username + ' given editing to ' + worldName);
     }
     catch (e)
     {
-      console.log('ERROR: Could not restrict ' + username + ' from accessing ' + worldName);
+      console.log('ERROR: Could not give ' + username + ' editing to ' + worldName);
     }
   }
   else
   {
-    console.log('ERROR: Could not restrict ' + username + ' from accessing ' + worldName);
+    console.log('ERROR: Could not give ' + username + ' editing to ' + worldName);
   }
 
   res.redirect('/editAccess/' + worldName);
@@ -724,7 +885,46 @@ const removeWorldAccess = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Removes access restrictions from a world
+// Removes a user's editing rights from specified world
+const removeWorldEditing = async (req, res, next) => { 
+  // url: /removeEditing/worldName/username
+  // split result array: {"", "removeEditing", "worldName", "username"}
+  const urlSplit = req.url.split('/');
+  const worldName = urlSplit[2];
+  const username = urlSplit[3];
+
+  // Finding the user in database with that username
+  const user = await User.findOne({username: username});
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: worldName});
+
+  if (user && world)
+  {
+    try
+    {
+      // Removing the user from the list of premitted users
+      world.editingPermissions.pull(user);
+      await world.save();
+
+      console.log(username + ' restricted from editing ' + worldName);
+    }
+    catch (e)
+    {
+      console.log('ERROR: Could not restrict ' + username + ' from editing ' + worldName);
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not restrict ' + username + ' from editing ' + worldName);
+  }
+
+  res.redirect('/editAccess/' + worldName);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Removes viewing restrictions from a world
 const removeWorldRestrictions = async (req, res, next) => {
   // url: /removeRestrictions/worldName
   // split result array: {"", "removeRestrictions", "worldName"}
@@ -738,14 +938,14 @@ const removeWorldRestrictions = async (req, res, next) => {
     try
     {
       // Changing world access restrictions to false
-      world.accessRestrictions = false;
+      world.viewingRestrictions = false;
       await world.save();
 
-      console.log(worldName + ' access restrictions removed');
+      console.log(worldName + ' viewing restrictions removed');
     }
     catch (e)
     {
-      console.log('ERROR: ' + worldName + ' access restrictions could not be removed');
+      console.log('ERROR: ' + worldName + ' viewing restrictions could not be removed');
     }
   }
 
@@ -754,7 +954,7 @@ const removeWorldRestrictions = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Puts access restrictions from a world
+// Puts viewing restrictions from a world
 const putWorldRestrictions = async (req, res, next) => {
   // url: /putRestrictions/worldName
   // split result array: {"", "putRestrictions", "worldName"}
@@ -768,14 +968,14 @@ const putWorldRestrictions = async (req, res, next) => {
     try
     {
       // Changing world access restrictions to true
-      world.accessRestrictions = true;
+      world.viewingRestrictions = true;
       await world.save();
 
-      console.log(worldName + ' access restrictions put');
+      console.log(worldName + ' viewing restrictions put');
     }
     catch (e)
     {
-      console.log('ERROR: ' + worldName + ' access restrictions could not be put');
+      console.log('ERROR: ' + worldName + ' viewing restrictions could not be put');
     }
   }
 
@@ -896,8 +1096,10 @@ module.exports = {
   serveRegister,
   serveExplore,
   serveAccessEdit,
-  permitWorldAccess,
-  removeWorldAccess,
+  permitWorldViewing,
+  removeWorldViewing,
+  permitWorldEditing,
+  removeWorldEditing,
   removeWorldRestrictions,
   putWorldRestrictions,
   generateAuthLink,
