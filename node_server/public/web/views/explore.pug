@@ -65,15 +65,18 @@ block content
           div(class='pure-control-group')
             label(for='MagicLinkGroup') Create Group Name
             input(name='MagicLinkGroup', id='MagicLinkGroup', type="text", placeholder="explore", class="pure-input-1-3")
-            button(type="button", class="pure-button pure-button", onclick='autogenerateGroupName(MagicLinkGroup, 4)') create new group
+            button(type="button", class="pure-button pure-button", style="margin-left:10px", onclick='autogenerateGroupName(MagicLinkGroup, 4)') Create new group
           div(class='pure-control-group')
             label(for='MagicLinkWorld') Select Entry World
+            
             select(name='MagicLinkWorld', id='MagicLinkWorld', , class="pure-input-1-3")
-            //will populate this select element when we load in worlds
-            //-   each val, index in window.all_circles_worlds 
-            //-     option=val
+
+              // Users can only create magic links for worlds that they have editing access to
+              for world of worldEditingList
+                option(value=world)=world
+
           div(class='pure-controls')
-            input(type='button', class="pure-button pure-button-primary", value=buttonText, onclick='createMagicLinks("' + userInfo.userName + '","' + '","' + userInfo.userType + '")')
+            input(type='button', class="pure-button pure-button-primary", value=buttonText, onclick='createMagicLinks("' + userInfo.userName + '","' + userInfo.userType + '")')
 
       p Selection the expiry and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[#{buttonText}]</span> button above to generate "magic links" to the selected world for each #{targetUsersText}. Just copy and send each link to each #{targetUsersText} to automatically log them in. Ask them to save the link so they can login repeatedly. 
       p <em>Note these links expire in <span id='countdownElem' style='color:#0078e7; font-weight:bold;'>15 minutes</span></em>.

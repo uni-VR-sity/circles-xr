@@ -5,9 +5,6 @@ window.onload = function () {
   //   autogenerateGroupName(MagicLinkGroup, 4);
   // }
 
-  //get worlds available from server
-  getWorldsList();
-
   let popover = new Popover();
   const cps = document.querySelectorAll('.colorPicker'); //from here - https://github.com/tovic/color-picker 
 
@@ -138,13 +135,13 @@ function showMagicLinks(data, expiryTimeMin) {
 
   const jsonData = JSON.parse(data);
   const menuElem = document.querySelector('#MagicLinksContent');
-  let tableStr   = '<table class=\'pure-table\'>'        
+  let tableStr   = '<table class=\'pure-table profile-table gutter-bottom-doubled\'>';       
   menuElem.setAttribute('class', 'pure-menu gutter-bottom');
 
   tableStr += '<thead>';
   tableStr += '<tr>';
-  tableStr += '<th>username</th>';
-  tableStr += '<th>magic link</th>';
+  tableStr += '<th>Username</th>';
+  tableStr += '<th>Magic Link</th>';
   tableStr += '</tr>';
   tableStr += '</thead>';
   tableStr += '<tbody>';
@@ -156,8 +153,8 @@ function showMagicLinks(data, expiryTimeMin) {
 
     tableStr += '<tr>';
     tableStr += '<td>' + username +  '</td>';
-    tableStr += '<td><input type=\'button\' class=\'pure-button pure-button-primary\' value=\'copy\' onclick=\'copyText(linkCopy' + i + ',"' + username + '")\'>';
-    tableStr += '<input id=linkCopy' + i + ' type=\'text\' class=\'\' value=\'' + magicLink + '\' size=\'50\' readonly></td>';
+    tableStr += '<td><input type=\'button\' class=\'pure-button pure-button-primary\' value=\'Copy\' style=\'margin: 0 10px 1px 0\' onclick=\'copyText(linkCopy' + i + ',"' + username + '")\'>';
+    tableStr += '<input id=linkCopy' + i + ' type=\'text\' class=\'\' style=\'padding:.4em 1em\' value=\'' + magicLink + '\' size=\'50\' readonly></td>';
     tableStr += '</tr>';
   }
 
@@ -165,32 +162,3 @@ function showMagicLinks(data, expiryTimeMin) {
   tableStr += '</table>';
   menuElem.innerHTML = tableStr;
 }
-
-function getWorldsList() {
-  let request = new XMLHttpRequest();
-  request.open('GET', '/get-worlds-list');
-  request.responseType = 'text';
-  request.onload = function() {
-    showWorldList(request.response); //show copy button
-  };
-  request.send();
-}
-
-function showWorldList(data) {
-  const jsonData                = JSON.parse(data);
-
-  let htmlStr_list    = '<ul class="pure-menu-list">';
-  let htmlStr_select  = '';
-  let urlLink = '';
-  let worldName = ';'
-  for (let i = 0; i < jsonData.length; i++) {
-    worldName = jsonData[i];
-
-    htmlStr_select += '<option value="' + worldName + '">' + worldName + '</option>';
-  }
-
-  const worldsSelectElem        = document.querySelector('#MagicLinkWorld');
-  if(worldsSelectElem) {
-    worldsSelectElem.innerHTML = htmlStr_select;
-  }
-} 

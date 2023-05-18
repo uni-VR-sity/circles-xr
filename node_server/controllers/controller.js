@@ -984,7 +984,7 @@ const putWorldRestrictions = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-const generateAuthLink = (baseURL, route, expiryTimeMin) => {
+const generateAuthLink = (username, baseURL, route, expiryTimeMin) => {
   const jwtOptions = {
     issuer: 'circlesxr.com',
     audience: 'circlesxr.com',
@@ -992,7 +992,8 @@ const generateAuthLink = (baseURL, route, expiryTimeMin) => {
     expiresIn: expiryTimeMin + 'm',
   };
 
-  const token = jwt.sign(env.JWT_SECRET, jwtOptions); //expects seconds as expiration
+  const token = jwt.sign({data:username}, env.JWT_SECRET, jwtOptions); //expects seconds as expiration
+
   return baseURL + '/magic-login?token=' + token + '&route=' + route;
 };
 
@@ -1012,7 +1013,7 @@ const getMagicLinks = (req, res, next) => {
   let error = null;
   async function getItems() {
     try {
-      users = await User.find({usertype: (userTypeAsking === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT }).exec();
+      users = await User.find({usertype: {$in: [CIRCLES.USER_TYPE.STUDENT, CIRCLES.USER_TYPE.PARTICIPANT, CIRCLES.USER_TYPE.TESTER]}}).exec();
     } catch(err) {
       error = err;
     }
@@ -1024,10 +1025,10 @@ const getMagicLinks = (req, res, next) => {
     }
 
     //add "self" first
-    allAccounts.push({username:usernameAsking, magicLink:generateAuthLink(baseURL, route, expiryTimeMin)});
+    allAccounts.push({username:usernameAsking, magicLink:generateAuthLink(usernameAsking, baseURL, route, expiryTimeMin)});
 
     for (let i = 0; i < users.length; i++) {
-      allAccounts.push({username:users[i].username, magicLink:generateAuthLink(baseURL, route, expiryTimeMin)});
+      allAccounts.push({username:users[i].username, magicLink:generateAuthLink(users[i].username, baseURL, route, expiryTimeMin)});
 
       if (i === users.length - 1 ) {
         res.json(allAccounts);
