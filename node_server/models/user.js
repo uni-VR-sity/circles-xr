@@ -31,55 +31,63 @@ const UserSchema = new mongoose.Schema({
     type:       String,
     unique:     false,
     required:   true,
-    trim:       false
+    trim:       false,
   },
   gltf_head_url: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_GLTF_HEAD
   },
   gltf_hair_url: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_GLTF_HAIR
   },
   gltf_body_url: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_GLTF_BODY
   },
   color_head: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR
   },
   color_hair: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_HAIR_COLOUR
   },
   color_body: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_BODY_COLOUR
   },
   color_hand_left: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR
   },
   color_hand_right: {
     type:       String,
     unique:     false,
     required:   false,
-    trim:       true
+    trim:       true,
+    default:    CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR
   }
 });
 
@@ -92,7 +100,6 @@ UserSchema.methods.validatePassword = function (password, next) {
     if (result === true) {
       return next(null, this);
     } else {
-      console.log('authentication FAILED');
       return next(err);
     }
   })
@@ -126,14 +133,6 @@ const addSuperUser = async function()
       username: 'superuser',
       usertype: CIRCLES.USER_TYPE.SUPERUSER,
       password: env.DEFAULT_PASSWORD,
-      gltf_head_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HEAD,
-      gltf_hair_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HAIR,
-      gltf_body_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_BODY,
-      color_head: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,
-      color_hair: CIRCLES.CONSTANTS.DEFAULT_HAIR_COLOUR,
-      color_body: CIRCLES.CONSTANTS.DEFAULT_BODY_COLOUR,
-      color_hand_right: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,
-      color_hand_left: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,
     };
 
     let user = null;

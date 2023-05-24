@@ -34,6 +34,7 @@ const MongoStore    = require('connect-mongo');
 //database
 const mongoose      = require('mongoose');
 const User          = require('./models/user');
+const Guest         = require('./models/guest');
 const bodyParser    = require('body-parser');
 const dbURL         = 'mongodb://' + env.DATABASE_HOST + ':' +  env.DATABASE_PORT + '/circles';
 
@@ -101,6 +102,7 @@ app.use(express.static(__dirname + '/public'));             //set root path of s
 // Set up Passport
 const passport              = require('passport');
 const passportLocalStrategy = require('passport-local').Strategy;
+const DummyStrategy         = require('@voxpelli/passport-dummy').Strategy;
 const JwtStrategy           = require('passport-jwt').Strategy
 const ExtractJwt            = require('passport-jwt').ExtractJwt
 
@@ -130,17 +132,45 @@ passport.use(
   })
 );
 
+// For guest login
+// Creates a guest user that expires in 24 hours
+// https://www.npmjs.com/package/@voxpelli/passport-dummy 
+passport.use(new DummyStrategy(async function(done) 
+{
+  let user = null;
+  let error = null;
+
+  try 
+  {
+    user = await Guest.create({});
+  } 
+  catch(err) 
+  {
+    error = err;
+  }
+
+  if (error)
+  {
+    return done(error, user);
+  }
+  else
+  {
+    console.log(user.username + " successfully created");
+    return done(null, user);
+  }
+}));
+
 // Build the passport local strategy for authentication
 passport.use(new passportLocalStrategy (
   {
     usernameField: 'username'
   },
-  function (checkUsername, password, done) {
+  function (username, password, done) {
       let user  = null;
       let error = null;
       async function getItems() {
         try {
-          user = await User.findOne({ username: checkUsername }).exec();
+          user = await User.findOne({ username: username }).exec();
         } catch(err) {
           error = err;
         }
@@ -171,18 +201,36 @@ passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(id, done) 
+{
   let user  = null;
   let error = null;
-  async function getItems() {
-    try {
+  async function getItems() 
+  {
+    try 
+    {
       user = await User.findById(id);
-    } catch(err) {
+    } 
+    catch(err) 
+    {
       error = err;
+    }
+
+    if (!user)
+    {
+      try 
+      {
+        user = await Guest.findById(id);
+      } 
+      catch(err) 
+      {
+        error = err;
+      }
     }
   }
 
-  getItems().then(function(foundItems) {
+  getItems().then(function(foundItems) 
+  {
     done(error, user);
   });
 });

@@ -50,7 +50,14 @@ router.post('/login', passport.authenticate('local', { successRedirect: '/explor
   res.render(path.resolve(__dirname + '/../public/web/views/index'), {
     title: 'Welcome to CIRCLES',
     message: 'ERROR: Username and/ or password incorrect',
-    text: '.error'
+  });
+});
+
+router.get('/guestLogin', passport.authenticate('dummy', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next)
+{
+  res.render(path.resolve(__dirname + '/../public/web/views/index'), {
+    title: 'Welcome to CIRCLES',
+    message: 'ERROR: Guest log in failed, please try again',
   });
 });
 
@@ -80,7 +87,7 @@ router.get('/logout', authenticated, (req, res, next) => {
   });
 });
 
-router.get('/register', notAuthenticated, controller.serveRegister);
+router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
 
@@ -102,7 +109,13 @@ router.get('/putRestrictions/:world_id', authenticated, controller.putWorldRestr
 // router.route('/users')
 //   .get(controller.getAllUsers);
 
-router.post('/registering', controller.registerUser);
+router.post('/registering', controller.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
+{
+  res.render(path.resolve(__dirname + '/../public/web/views/register'), {
+    title: `Register for Circles`,
+    message: "User registered successfully but login failed, please login again"
+  });
+});
     
 router.post('/update-user', controller.updateUserInfo);
 

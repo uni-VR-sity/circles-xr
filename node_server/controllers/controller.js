@@ -394,16 +394,8 @@ const registerUser = (req, res, next) => {
       // Compiling all data for the new user
       const userData = {
         username: req.body.username,                                    // User entered username
-        usertype: CIRCLES.USER_TYPE.GUEST,                              // Default usertype upon registration is "Guest"
+        usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
         password: req.body.password,                                    // User entered password
-        gltf_head_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HEAD,             // Default head model
-        gltf_hair_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_HAIR,             // Default hair model
-        gltf_body_url: CIRCLES.CONSTANTS.DEFAULT_GLTF_BODY,             // Default body model
-        color_head: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,              // Default head colour
-        color_hair: CIRCLES.CONSTANTS.DEFAULT_HAIR_COLOUR,              // Default hair colour
-        color_body: CIRCLES.CONSTANTS.DEFAULT_BODY_COLOUR,              // Default body colour
-        color_hand_right: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,        // Default right hand colour
-        color_hand_left: CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR,         // Default left hand colour
       };
 
       let user = null;
@@ -441,7 +433,7 @@ const registerUser = (req, res, next) => {
         else 
         {
           console.log("Successfully added user: " + user.username);
-          renderRegister(res, 'User registrated successfully!');
+          return next();
         }
       });
     }
@@ -545,7 +537,7 @@ const serveExplore = async (req, res, next) => {
   }
   else // Guest
   {
-    viewingWorlds.push(getWorlds(user, "freeViewing"));
+    viewingWorlds.push(await getWorlds(user, "freeViewing"));
   }
 
   // Flattening the arrays

@@ -14,9 +14,12 @@ html
         .homepage__logo-wrapper.gutter-bottom
           .homepage__logo
             include includes/circles_logo.svg
+        
         .homepage__register
             h1(class="text--centered") Register
-            br
+
+            p(class="text--centered" style="color:red") #{message}
+
             form(action="/registering" method="post" class="pure-form pure-form-aligned")
               fieldset
                 .pure-control-group
@@ -33,6 +36,6 @@ html
                   input.field-long(type='password' name='passwordConf' required)
                 .pure-controls
                   input(type='submit' value='Register' class="pure-button pure-input-1-2 pure-button-primary")
-            p(class="text--centered") #{message}
+            
             p.text--centered
               a(href="/") Return to home page
