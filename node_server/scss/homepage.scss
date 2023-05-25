@@ -1,33 +1,29 @@
 $homepage-bg: rgba(255, 255, 255, 0.85);
 
 .homepage {
-  height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   background-image: url('/web/images/campfire.jpg');
   background-size: cover;
+  background-attachment: fixed;
   background-position: 50% 50%;
+  min-height: 100vh;
 }
 
 .homepage__left {
   display: none;
-
   @include tablet-and-up {
     display: block;
     width: 50vw;
-    height: 100vh;
   }
 }
 
 .homepage__right {
   padding: calc($gutter * 2);
   width: 100vw;
-  height: 100vh;
+  position: relative;
   background-color: $homepage-bg;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 
   @include tablet-and-up {
     width: 50vw;
@@ -46,7 +42,7 @@ $homepage-bg: rgba(255, 255, 255, 0.85);
 
 .homepage__register {
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 500px;
 }
 
 .button-success,
