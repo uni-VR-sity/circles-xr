@@ -22,17 +22,14 @@ html
 
             form(action="/registering" method="post" class="pure-form pure-form-aligned")
               fieldset
-                .pure-control-group
-                  label UserName
-                    span.required *
+                .pure-right-control-group
+                  label Username
                   input(type='text' name='username' placeholder='SuperFriend99' required)
-                .pure-control-group
+                .pure-right-control-group
                   label Password
-                    span.required *
                   input.field-long(type='password' name='password' required)
-                .pure-control-group
+                .pure-right-control-group
                   label Confirm password
-                    span.required *
                   input.field-long(type='password' name='passwordConf' required)
                 .pure-controls
                   input(type='submit' value='Register' class="pure-button pure-input-1-2 pure-button-primary")

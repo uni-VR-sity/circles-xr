@@ -105,7 +105,15 @@ UserSchema.methods.validatePassword = function (password, next) {
   })
 };
 
-//hashing a password before saving it to the database
+// Comparing passwords
+// If they match, return true
+// If they don't, return false
+UserSchema.methods.comparePasswords = function(password) 
+{
+  return bcrypt.compareSync(password, this.password);
+};
+
+// Hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {
   let user = this;
   bcrypt.hash(user.password, 10, function (err, hash) {
@@ -115,6 +123,19 @@ UserSchema.pre('save', function (next) {
     user.password = hash;
     next();
   })
+});
+
+// Hashing a password before updating it in the database
+// https://github.com/Automattic/mongoose/issues/4575 
+UserSchema.pre('findOneAndUpdate', async function () 
+{
+  if (this._update)
+  {
+    if (this._update.password)
+    {
+      this._update.password = await bcrypt.hash(this._update.password, 10);
+    }
+  }
 });
 
 const User = mongoose.model('users', UserSchema);

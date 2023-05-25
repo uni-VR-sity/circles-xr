@@ -51,7 +51,7 @@ block content
       form(class='pure-form pure-form-aligned')
         fieldset
           legend Create Magic Links
-          div(class='pure-control-group')
+          div(class='pure-left-control-group')
             - let n = 0;
             - let selected = false;
             - let val = 0;
@@ -62,11 +62,11 @@ block content
                 - selected = (val === 7)
                 option(value!= val, selected!= selected)!= val
                 - selected = false
-          div(class='pure-control-group')
+          div(class='pure-left-control-group')
             label(for='MagicLinkGroup') Create Group Name
             input(name='MagicLinkGroup', id='MagicLinkGroup', type="text", placeholder="explore", class="pure-input-1-3")
             button(type="button", class="pure-button pure-button", style="margin-left:10px", onclick='autogenerateGroupName(MagicLinkGroup, 4)') Create new group
-          div(class='pure-control-group')
+          div(class='pure-left-control-group')
             label(for='MagicLinkWorld') Select Entry World
             
             select(name='MagicLinkWorld', id='MagicLinkWorld', , class="pure-input-1-3")

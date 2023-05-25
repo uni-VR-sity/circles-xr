@@ -5,6 +5,8 @@ const path       = require('path');
 const controller = require('../controllers/controller');
 const User       = require('../models/user');
 const passport   = require('passport');
+const express  = require('express');
+const app      = express();
 
 /**
  * Authenticated
@@ -40,25 +42,31 @@ const notAuthenticated = (req, res, next) => {
 
 //general web
 router.get('/', notAuthenticated, (req, res) => {
+
+  let errorMessage = null;
+
+  if (app.locals.errorMessage)
+  {
+    errorMessage = app.locals.errorMessage;
+    app.locals.errorMessage = '';
+  }
+
   res.render(path.resolve(__dirname + '/../public/web/views/index'), {
-    title: 'Welcome to CIRCLES'
+    title: 'Welcome to CIRCLES',
+    message: errorMessage
   });
 });
 
 router.post('/login', passport.authenticate('local', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next)
 {
-  res.render(path.resolve(__dirname + '/../public/web/views/index'), {
-    title: 'Welcome to CIRCLES',
-    message: 'ERROR: Username and/ or password incorrect',
-  });
+  app.locals.errorMessage = 'ERROR: Username and/ or password incorrect';
+  return res.redirect('/');
 });
 
 router.get('/guestLogin', passport.authenticate('dummy', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next)
 {
-  res.render(path.resolve(__dirname + '/../public/web/views/index'), {
-    title: 'Welcome to CIRCLES',
-    message: 'ERROR: Guest log in failed, please try again',
-  });
+  app.locals.errorMessage = 'ERROR: Guest log in failed, please try again';
+  return res.redirect('/');
 });
 
 //magic links for students

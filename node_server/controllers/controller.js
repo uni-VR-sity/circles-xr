@@ -2,7 +2,10 @@
 
 require('../../src/core/circles_server');
 const mongoose = require('mongoose');
+const express  = require('express');
+const app      = express();
 const User     = require('../models/user');
+const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
 const Worlds   = require('../models/worlds');
 const path     = require('path');
@@ -73,98 +76,262 @@ const renderRegister = function(res, renderMessage)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Rendering the user profile page with a specific message to the user about their registration (ex. error messages, success messages)
+const renderProfile = function(req, res, renderMessageSuccess, renderMessageError)
+{
+  // Route now authenticates and ensures a user is logged in by this point
+  let user = req.user;
+
+  //Mongoose promises http://mongoosejs.com/docs/promises.html
+  const promises = [
+    Model3D.find({type: CIRCLES.MODEL_TYPE.HEAD}).exec(),
+    Model3D.find({type: CIRCLES.MODEL_TYPE.HAIR}).exec(),
+    Model3D.find({type: CIRCLES.MODEL_TYPE.BODY}).exec(),
+  ];
+
+  const queryChecks = [
+    user.gltf_head_url,
+    user.gltf_hair_url,
+    user.gltf_body_url,
+  ];
+
+  Promise.all(promises).then((results) => {
+    let optionStrs = [];   //save all option str to replace after ...
+
+    for ( let r = 0; r < results.length; r++ ) {
+      let optionsStr  = '';
+      let models = results[r];
+      for ( let i = 0; i < models.length; i++ ) {
+        if (models[i].url === queryChecks[r]) {
+          optionsStr += '<option selected>' + models[i].name + '</option>';
+        }
+        else {
+          optionsStr += '<option>' + models[i].name + '</option>';
+        }
+      }
+      optionStrs.push(optionsStr);
+    }
+
+    const userInfo = {
+      userName: user.username,
+      userType: user.usertype,
+      headUrl: user.gltf_head_url,
+      hairUrl: user.gltf_hair_url,
+      bodyUrl: user.gltf_body_url,
+      headColor: user.color_head,
+      hairColor: user.color_hair,
+      bodyColor: user.color_body,
+      handLeftColor: user.color_hand_left,
+      handRightColor: user.color_hand_right,
+    }
+
+    const userOptions = {
+      headOptions: optionStrs[0],
+      hairOptions: optionStrs[1],
+      bodyOptions: optionStrs[2],
+    }
+
+    res.render(path.resolve(__dirname + '/../public/web/views/profile'), {
+      title: `Welcome ${user.username}`,
+      userInfo: userInfo,
+      userOptions: userOptions,
+      successMessage: renderMessageSuccess, 
+      errorMessage: renderMessageError
+    });
+
+  }).catch(function(err){
+    console.log(err);
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const updateUserInfo = (req, res, next) => {
-  if (!req.body) {
+  if (!req.body) 
+  {
     return res.sendStatus(400);
   }
-  else {
-    console.log('updating user info.');
+  else 
+  {
+    console.log('Updating user info');
 
-    if (req.body.password !== req.body.passwordConf) {
-      var error = new Error('Passwords do not match.');
-      error.status = 400;
-      res.send("passwords dont match");
-      return next(error);
-    }
+    let errorMessage = '';
+    let passwordUpdated = false;
+    let avatarUpdated = false;
 
     //Mongoose promises http://mongoosejs.com/docs/promises.html
     const promises = [
       Model3D.findOne({name: req.body.headModel}).exec(),
       Model3D.findOne({name: req.body.hairModel}).exec(),
       Model3D.findOne({name: req.body.bodyModel}).exec(),
-      Model3D.findOne({name: req.body.handLeftModel}).exec(),
-      Model3D.findOne({name: req.body.handRightModel}).exec(),
-      User.findOne({_id:req.user._id}).exec()
     ];
 
-    Promise.all(promises).then( (results) => {
-      //add properties dynamically after, depending on what was updated ...
+    if (req.user.usertype === CIRCLES.USER_TYPE.GUEST)
+    {
+      promises.push(Guest.findOne({_id: req.user._id}).exec());
+    }
+    else
+    {
+      promises.push(User.findOne({_id: req.user._id}).exec());
+    }
+
+    Promise.all(promises).then(async (results) => {
+
+      const user = results[3];
+      
+      // Adding properties dynamically after, depending on what was updated
       const userData = {};
 
-      //console.log(results);
-
-      //check to make sure passwords match better some day far away ....
-      if ( results[0].url !== results[5].gltf_head_url ) {
+      // Checking if head model was updated
+      if (results[0].url !== user.gltf_head_url ) 
+      {
         userData.gltf_head_url = results[0].url;
+        avatarUpdated = true;
+        console.log('Head model updated');
       }
 
-      //paths to models
-      if ( results[1].url !== results[5].gltf_hair_url ) {
+      // Checking if hair model was updated
+      if ( results[1].url !== user.gltf_hair_url ) 
+      {
         userData.gltf_hair_url = results[1].url;
+        avatarUpdated = true;
+        console.log('Hair model updated');
       }
 
-      if ( results[2].url !== results[5].gltf_body_url ) {
+      // Checking if body model was updated
+      if ( results[2].url !== user.gltf_body_url ) 
+      {
         userData.gltf_body_url = results[2].url;
+        avatarUpdated = true;
+        console.log('Body model updated');
       }
 
-      // if ( results[3].url !== results[5].gltf_hand_left_url ) {
-      //   userData.gltf_hand_left_url = results[3].url;
-      // }
-
-      // if ( results[4].url !== results[5].gltf_hand_right_url ) {
-      //   userData.gltf_hand_right_url = results[4].url;
-      // }
-
-      //colors
-      if ( req.body.color_head !== results[5].color_head ) {
+      // Checking if head color was updated
+      if ( req.body.color_head !== user.color_head ) 
+      {
         userData.color_head = req.body.color_head;
+        avatarUpdated = true;
+        console.log('Head color updated');
       }
 
-      if ( req.body.color_hair !== results[5].color_hair ) {
+      // Checking if hair color was updated
+      if ( req.body.color_hair !== user.color_hair ) 
+      {
         userData.color_hair = req.body.color_hair;
+        avatarUpdated = true;
+        console.log('Hair color updated');
       }
 
-      if ( req.body.color_body !== results[5].color_body ) {
+      // Checking if body color was updated
+      if ( req.body.color_body !== user.color_body ) 
+      {
         userData.color_body = req.body.color_body;
+        avatarUpdated = true;
+        console.log('Body color updated');
       }
 
-      if ( req.body.color_hand_left !== results[5].color_hand_left ) {
+      // Checking if left hand color was updated
+      if ( req.body.color_hand_left !== user.color_hand_left ) 
+      {
         userData.color_hand_left = req.body.color_hand_left;
+        avatarUpdated = true;
+        console.log('Left hand color updated');
       }
 
-      if ( req.body.color_hand_right !== results[5].color_hand_right ) {
+      // Checking if right hand color was updated
+      if ( req.body.color_hand_right !== user.color_hand_right ) 
+      {
         userData.color_hand_right = req.body.color_hand_right;
+        avatarUpdated = true;
+        console.log('Right hand color updated');
+      }
+
+      // Checking if password was updated
+      if (req.body.passwordNew) 
+      {
+        // Checking if old password field matches the database
+        // If they do not, output an error message to the user
+        if (user.comparePasswords(req.body.passwordOld))
+        {
+          // Checking if the new password and the password confirmation field matches
+          // If they do, update the user password to the new password
+          // If they don't, output an error message
+          if ( req.body.passwordNew === req.body.passwordConf )
+          {
+            userData.password = req.body.passwordNew;
+            passwordUpdated = true;
+            console.log('Password updated');
+          }
+          else
+          {
+            errorMessage = 'ERROR: Passwords do not match';
+          }
+        }
+        else
+        {
+          errorMessage = 'ERROR: Old password is incorrect';
+        }
       }
 
       let doc   = null;
       let error = null;
-      async function updateItems() {
-        try {
-          doc = await User.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
-        } catch(err) {
+
+      async function updateItems() 
+      {
+        try 
+        {
+          if (user.usertype === CIRCLES.USER_TYPE.GUEST)
+          {
+            doc = await Guest.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+          }
+          else
+          {
+            doc = await User.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+          }
+        } 
+        catch(err) 
+        {
           error = err;
         }
       }
 
-      updateItems().then(function() {
-        if (error) {
-          return next(error);
-        } else {
+      updateItems().then(function() 
+      {
+        if (error) 
+        {
+          console.log(error);
+
+          app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+          return res.redirect('/profile');
+        } 
+        else 
+        {
+          let successMessage = '';
+
+          if (avatarUpdated && passwordUpdated)
+          {
+            successMessage = 'Password and avatar updated successfully';
+          }
+          else if (avatarUpdated)
+          {
+            successMessage = 'Avatar updated successfully';
+          }
+          else if (passwordUpdated)
+          {
+            successMessage = 'Password updated successfully';
+          }
+
+          app.locals.errorMessage = errorMessage;
+          app.locals.successMessage = successMessage;
+
           return res.redirect('/profile');
         }
       });
-    }).catch(function(err){
+    }).catch(function(err)
+    {
       console.log(err);
+      app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+      return res.redirect('/profile');
     });
   }
 };
@@ -304,75 +471,24 @@ const serveRelativeWorldContent = (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-const serveProfile = (req, res, next) => {
-  // Route now authenticates and ensures a user is logged in by this point
-  let user = req.user;
+const serveProfile = (req, res, next) => 
+{
+  let successMessage = null;
+  let errorMessage = null;
 
-  //Mongoose promises http://mongoosejs.com/docs/promises.html
-  const promises = [
-    Model3D.find({type: CIRCLES.MODEL_TYPE.HEAD}).exec(),
-    Model3D.find({type: CIRCLES.MODEL_TYPE.HAIR}).exec(),
-    Model3D.find({type: CIRCLES.MODEL_TYPE.BODY}).exec(),
-    //Model3D.find({type: CIRCLES.MODEL_TYPE.HAND_LEFT}).exec(),
-    //Model3D.find({type: CIRCLES.MODEL_TYPE.HAND_RIGHT}).exec()
-  ];
+  if (app.locals.successMessage)
+  {
+    successMessage = app.locals.successMessage;
+    app.locals.successMessage = '';
+  }
 
-  const queryChecks = [
-    user.gltf_head_url,
-    user.gltf_hair_url,
-    user.gltf_body_url,
-    //user.gltf_hand_left_url,
-    //user.gltf_hand_right_url,
-  ];
+  if (app.locals.errorMessage)
+  {
+    errorMessage = app.locals.errorMessage;
+    app.locals.errorMessage = '';
+  }
 
-  Promise.all(promises).then((results) => {
-    let optionStrs = [];   //save all option str to replace after ...
-
-    for ( let r = 0; r < results.length; r++ ) {
-      let optionsStr  = '';
-      let models = results[r];
-      for ( let i = 0; i < models.length; i++ ) {
-        if (models[i].url === queryChecks[r]) {
-          optionsStr += '<option selected>' + models[i].name + '</option>';
-        }
-        else {
-          optionsStr += '<option>' + models[i].name + '</option>';
-        }
-      }
-      optionStrs.push(optionsStr);
-    }
-
-    const userInfo = {
-      userName: user.username,
-      userType: user.usertype,
-      headUrl: user.gltf_head_url,
-      hairUrl: user.gltf_hair_url,
-      bodyUrl: user.gltf_body_url,
-      //handLeftUrl: user.gltf_hand_left_url,
-      //handRightUrl: user.gltf_hand_right_url,
-      headColor: user.color_head,
-      hairColor: user.color_hair,
-      bodyColor: user.color_body,
-      handLeftColor: user.color_hand_left,
-      handRightColor: user.color_hand_right,
-    }
-
-    const userOptions = {
-      headOptions: optionStrs[0],
-      hairOptions: optionStrs[1],
-      bodyOptions: optionStrs[2],
-      //handLeftOptions: optionStrs[3],
-      //handRightOptions: optionStrs[4],
-    }
-
-    res.render(path.resolve(__dirname + '/../public/web/views/profile'), {
-      title: `Welcome ${user.username}`,
-      userInfo: userInfo,
-      userOptions: userOptions
-    });
-  }).catch(function(err){
-    console.log(err);
-  });
+  renderProfile(req, res, successMessage, errorMessage);
 };
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -427,7 +543,8 @@ const registerUser = (req, res, next) => {
           // If there was an error because the username already exists in the database, output an error message to the user
           if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
           {
-            renderRegister(res, 'ERROR: Username is unavailable');
+            app.locals.errorMessage = 'ERROR: Username is unavailable';
+            return res.redirect('/register');
           }
         } 
         else 
@@ -440,14 +557,24 @@ const registerUser = (req, res, next) => {
   } 
   else 
   {
-    renderRegister(res, 'ERROR: Something went wrong, please try again');
+    app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+    return res.redirect('/register');
   }
 };
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-const serveRegister = (req, res, next) => {
-  renderRegister(res, '');
+const serveRegister = (req, res, next) => 
+{
+  let errorMessage = null;
+
+  if (app.locals.errorMessage)
+  {
+    errorMessage = app.locals.errorMessage;
+    app.locals.errorMessage = '';
+  }
+
+  renderRegister(res, errorMessage);
 };
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
