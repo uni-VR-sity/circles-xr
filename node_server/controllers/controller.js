@@ -73,6 +73,7 @@ const getUserInfo = function(req)
   const userInfo = {
     userName: user.username,
     userType: user.usertype,
+    email: user.email,
     headUrl: user.gltf_head_url,
     hairUrl: user.gltf_hair_url,
     bodyUrl: user.gltf_body_url,
@@ -169,6 +170,7 @@ const updateUserInfo = (req, res, next) => {
 
     let errorMessage = '';
     let passwordUpdated = false;
+    let emailUpdated = false;
     let avatarUpdated = false;
 
     //Mongoose promises http://mongoosejs.com/docs/promises.html
@@ -195,7 +197,7 @@ const updateUserInfo = (req, res, next) => {
       const userData = {};
 
       // Checking if head model was updated
-      if (results[0].url !== user.gltf_head_url ) 
+      if (results[0].url !== user.gltf_head_url) 
       {
         userData.gltf_head_url = results[0].url;
         avatarUpdated = true;
@@ -203,7 +205,7 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if hair model was updated
-      if ( results[1].url !== user.gltf_hair_url ) 
+      if (results[1].url !== user.gltf_hair_url) 
       {
         userData.gltf_hair_url = results[1].url;
         avatarUpdated = true;
@@ -211,7 +213,7 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if body model was updated
-      if ( results[2].url !== user.gltf_body_url ) 
+      if (results[2].url !== user.gltf_body_url) 
       {
         userData.gltf_body_url = results[2].url;
         avatarUpdated = true;
@@ -219,7 +221,7 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if head color was updated
-      if ( req.body.color_head !== user.color_head ) 
+      if (req.body.color_head !== user.color_head) 
       {
         userData.color_head = req.body.color_head;
         avatarUpdated = true;
@@ -227,7 +229,7 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if hair color was updated
-      if ( req.body.color_hair !== user.color_hair ) 
+      if (req.body.color_hair !== user.color_hair) 
       {
         userData.color_hair = req.body.color_hair;
         avatarUpdated = true;
@@ -235,7 +237,7 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if body color was updated
-      if ( req.body.color_body !== user.color_body ) 
+      if (req.body.color_body !== user.color_body) 
       {
         userData.color_body = req.body.color_body;
         avatarUpdated = true;
@@ -243,7 +245,7 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if left hand color was updated
-      if ( req.body.color_hand_left !== user.color_hand_left ) 
+      if (req.body.color_hand_left !== user.color_hand_left) 
       {
         userData.color_hand_left = req.body.color_hand_left;
         avatarUpdated = true;
@@ -251,11 +253,28 @@ const updateUserInfo = (req, res, next) => {
       }
 
       // Checking if right hand color was updated
-      if ( req.body.color_hand_right !== user.color_hand_right ) 
+      if (req.body.color_hand_right !== user.color_hand_right) 
       {
         userData.color_hand_right = req.body.color_hand_right;
         avatarUpdated = true;
         console.log('Right hand color updated');
+      }
+
+      // Checking if email was updated
+      if (req.body.email !== user.email)
+      {
+        userData.email = req.body.email;
+        emailUpdated = true;
+        console.log('Email updated');
+      }
+
+      // Checking if the user wants to delete their email from their account
+      // If the checkbox was checked
+      if (req.body.deleteEmail)
+      {
+        userData.email = null;
+        emailUpdated = true;
+        console.log('Email deleted');
       }
 
       // Checking if password was updated
@@ -320,17 +339,17 @@ const updateUserInfo = (req, res, next) => {
         {
           let successMessage = '';
 
-          if (avatarUpdated && passwordUpdated)
+          if (avatarUpdated && (passwordUpdated || emailUpdated))
           {
-            successMessage = 'Password and avatar updated successfully';
+            successMessage = 'User account and avatar updated successfully';
           }
           else if (avatarUpdated)
           {
             successMessage = 'Avatar updated successfully';
           }
-          else if (passwordUpdated)
+          else if (passwordUpdated || emailUpdated)
           {
-            successMessage = 'Password updated successfully';
+            successMessage = 'User account updated successfully';
           }
 
           app.locals.errorMessage = errorMessage;

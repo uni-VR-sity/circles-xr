@@ -33,6 +33,12 @@ const UserSchema = new mongoose.Schema({
     required:   true,
     trim:       false,
   },
+  email: {
+    type:       String,
+    unique:     false,
+    required:   false,
+    trim:       false,
+  },
   gltf_head_url: {
     type:       String,
     unique:     false,

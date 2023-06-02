@@ -19,34 +19,41 @@ block content
         th Value
     tbody
       tr
-        td username
+        td Username
         td= userInfo.userName
       tr
-        td usertype
+        td User Type
         td= userInfo.userType
+      if !guest
+        tr
+          td Email
+          td= userInfo.email
       tr
-        td headUrl
+        td Display Name
+        td= userInfo.email
+      tr
+        td Head Url
         td= userInfo.headUrl
       tr
-        td hairUrl
+        td Hair Url
         td= userInfo.hairUrl
       tr
-        td bodyUrl
+        td Body Url
         td= userInfo.bodyUrl
       tr
-        td headColor
+        td Head Color
         td= userInfo.headColor
       tr
-        td hairColor
+        td Hair Color
         td= userInfo.hairColor
       tr
-        td bodyColor
+        td Body Color
         td= userInfo.bodyColor
       tr
-        td handLeftColor
+        td Hand Left Color
         td= userInfo.handLeftColor
       tr
-        td handRightColor
+        td Hand Right Color
         td= userInfo.handRightColor
 
   br
@@ -62,8 +69,18 @@ block content
         label Username
         input.field-long(type='text', name='username', placeholder='SuperFriend99', value=userInfo.userName, disabled='')
       .pure-left-control-group
-        label Usertype
+        label User Type
         input.field-long(type='text', name='usertype', placeholder='SuperFriendlyUser', value=userInfo.userType, disabled='')
+      .pure-left-control-group
+        label Display Name
+        input.field-long(type='text', name='displayName', placeholder='SuperFriend99', value=userInfo.email)
+      if !guest
+        .pure-left-control-group
+          label Email <i>(Optional)</i>
+          input.field-long(type='email', name='email', placeholder='super@email.com', value=userInfo.email)
+          span
+            input(type='checkbox', name='deleteEmail' style='margin:0 10 0 15')
+            label(style='white-space: nowrap') Delete from account
 
       hr.form-line-divider
 
