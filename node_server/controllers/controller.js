@@ -16,6 +16,7 @@ const url      = require('url');
 const dotenvParseVariables = require('dotenv-parse-variables');
 const jwt      = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
+const formidable = require("formidable");
 
 //load in config
 let env = dotenv.config({})
@@ -62,6 +63,28 @@ env = dotenvParseVariables(env.parsed);
 //     res.json({ message: 'User successfully deleted' });
 //   });
 // };
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const getUserInfo = function(req)
+{
+  let user = req.user;
+
+  const userInfo = {
+    userName: user.username,
+    userType: user.usertype,
+    headUrl: user.gltf_head_url,
+    hairUrl: user.gltf_hair_url,
+    bodyUrl: user.gltf_body_url,
+    headColor: user.color_head,
+    hairColor: user.color_hair,
+    bodyColor: user.color_body,
+    handLeftColor: user.color_hand_left,
+    handRightColor: user.color_hand_right,
+  }
+
+  return userInfo;
+}
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -112,18 +135,7 @@ const renderProfile = function(req, res, renderMessageSuccess, renderMessageErro
       optionStrs.push(optionsStr);
     }
 
-    const userInfo = {
-      userName: user.username,
-      userType: user.usertype,
-      headUrl: user.gltf_head_url,
-      hairUrl: user.gltf_hair_url,
-      bodyUrl: user.gltf_body_url,
-      headColor: user.color_head,
-      hairColor: user.color_hair,
-      bodyColor: user.color_body,
-      handLeftColor: user.color_hand_left,
-      handRightColor: user.color_hand_right,
-    }
+    const userInfo = getUserInfo(req);
 
     const userOptions = {
       headOptions: optionStrs[0],
@@ -479,13 +491,13 @@ const serveProfile = (req, res, next) =>
   if (app.locals.successMessage)
   {
     successMessage = app.locals.successMessage;
-    app.locals.successMessage = '';
+    app.locals.successMessage = null;
   }
 
   if (app.locals.errorMessage)
   {
     errorMessage = app.locals.errorMessage;
-    app.locals.errorMessage = '';
+    app.locals.errorMessage = null;
   }
 
   renderProfile(req, res, successMessage, errorMessage);
@@ -546,6 +558,11 @@ const registerUser = (req, res, next) => {
             app.locals.errorMessage = 'ERROR: Username is unavailable';
             return res.redirect('/register');
           }
+          else
+          {
+            app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+            return res.redirect('/register');
+          }
         } 
         else 
         {
@@ -571,7 +588,7 @@ const serveRegister = (req, res, next) =>
   if (app.locals.errorMessage)
   {
     errorMessage = app.locals.errorMessage;
-    app.locals.errorMessage = '';
+    app.locals.errorMessage = null;
   }
 
   renderRegister(res, errorMessage);
@@ -617,20 +634,7 @@ const serveExplore = async (req, res, next) => {
   let user = req.user;
 
   // Gathering information on the user to send to explore page
-  const userInfo = {
-    userName: user.username,
-    userType: user.usertype,
-    headUrl: user.gltf_head_url,
-    hairUrl: user.gltf_hair_url,
-    bodyUrl: user.gltf_body_url,
-    handLeftUrl: user.gltf_hand_left_url,
-    handRightUrl: user.gltf_hand_right_url,
-    headColor: user.color_head,
-    hairColor: user.color_hair,
-    bodyColor: user.color_body,
-    handLeftColor: user.color_hand_left,
-    handRightColor: user.color_hand_right,
-  }
+  const userInfo = getUserInfo(req);
 
   // Getting all worlds the user has access to and putting their names into an array
   // - If user is a superuser or admin, viewing and editing access is given to all worlds
@@ -710,8 +714,8 @@ const serveExplore = async (req, res, next) => {
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const serveAccessEdit = async (req, res, next) => { 
-  // url: /editAccess/worldName
-  // split result array: {"", "editAccess", "worldName"}
+  // url: /edit-access/worldName
+  // split result array: {"", "edit-access", "worldName"}
   const worldName = req.url.split('/')[2];
   
   // Getting world to send to worldAccess page
@@ -876,10 +880,13 @@ const serveAccessEdit = async (req, res, next) => {
   
       worldInfo.editingDenied.push(userInfo);
     }
+
+    const userInfo = getUserInfo(req);
   
     // Rendering the worldAccess page
     res.render(path.resolve(__dirname + '/../public/web/views/worldAccess'), {
       title: world.name + ' Access',
+      userInfo: userInfo,
       world: worldInfo
     });
   }
@@ -889,8 +896,8 @@ const serveAccessEdit = async (req, res, next) => {
 
 // Gives a user viewing rights to specified world
 const permitWorldViewing = async (req, res, next) => { 
-  // url: /permitViewing/worldName/username
-  // split result array: {"", "permitViewing", "worldName", "username"}
+  // url: /permit-viewing/worldName/username
+  // split result array: {"", "permit-viewing", "worldName", "username"}
   const urlSplit = req.url.split('/');
   const worldName = urlSplit[2];
   const username = urlSplit[3];
@@ -921,15 +928,15 @@ const permitWorldViewing = async (req, res, next) => {
     console.log('ERROR: Could not give ' + username + ' viewing to ' + worldName);
   }
 
-  res.redirect('/editAccess/' + worldName);
+  res.redirect('/edit-access/' + worldName);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Removes a user's viewing rights from specified world
 const removeWorldViewing = async (req, res, next) => { 
-  // url: /removeViewing/worldName/username
-  // split result array: {"", "removeViewing", "worldName", "username"}
+  // url: /remove-viewing/worldName/username
+  // split result array: {"", "remove-viewing", "worldName", "username"}
   const urlSplit = req.url.split('/');
   const worldName = urlSplit[2];
   const username = urlSplit[3];
@@ -960,15 +967,15 @@ const removeWorldViewing = async (req, res, next) => {
     console.log('ERROR: Could not restrict ' + username + ' from viewing ' + worldName);
   }
 
-  res.redirect('/editAccess/' + worldName);
+  res.redirect('/edit-access/' + worldName);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Gives a user editing rights from specified world
 const permitWorldEditing = async (req, res, next) => { 
-  // url: /permitEditing/worldName/username
-  // split result array: {"", "permitEditing", "worldName", "username"}
+  // url: /permit-editing/worldName/username
+  // split result array: {"", "permit-editing", "worldName", "username"}
   const urlSplit = req.url.split('/');
   const worldName = urlSplit[2];
   const username = urlSplit[3];
@@ -999,15 +1006,15 @@ const permitWorldEditing = async (req, res, next) => {
     console.log('ERROR: Could not give ' + username + ' editing to ' + worldName);
   }
 
-  res.redirect('/editAccess/' + worldName);
+  res.redirect('/edit-access/' + worldName);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Removes a user's editing rights from specified world
 const removeWorldEditing = async (req, res, next) => { 
-  // url: /removeEditing/worldName/username
-  // split result array: {"", "removeEditing", "worldName", "username"}
+  // url: /remove-editing/worldName/username
+  // split result array: {"", "remove-editing", "worldName", "username"}
   const urlSplit = req.url.split('/');
   const worldName = urlSplit[2];
   const username = urlSplit[3];
@@ -1038,15 +1045,15 @@ const removeWorldEditing = async (req, res, next) => {
     console.log('ERROR: Could not restrict ' + username + ' from editing ' + worldName);
   }
 
-  res.redirect('/editAccess/' + worldName);
+  res.redirect('/edit-access/' + worldName);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Removes viewing restrictions from a world
 const removeWorldRestrictions = async (req, res, next) => {
-  // url: /removeRestrictions/worldName
-  // split result array: {"", "removeRestrictions", "worldName"}
+  // url: /remove-restrictions/worldName
+  // split result array: {"", "remove-restrictions", "worldName"}
   const worldName = req.url.split('/')[2];
 
   // Finding world in database with that name
@@ -1068,15 +1075,15 @@ const removeWorldRestrictions = async (req, res, next) => {
     }
   }
 
-  res.redirect('/editAccess/' + worldName);
+  res.redirect('/edit-access/' + worldName);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Puts viewing restrictions from a world
 const putWorldRestrictions = async (req, res, next) => {
-  // url: /putRestrictions/worldName
-  // split result array: {"", "putRestrictions", "worldName"}
+  // url: /put-restrictions/worldName
+  // split result array: {"", "put-restrictions", "worldName"}
   const worldName = req.url.split('/')[2];
 
   // Finding world in database with that name
@@ -1098,7 +1105,7 @@ const putWorldRestrictions = async (req, res, next) => {
     }
   }
 
-  res.redirect('/editAccess/' + worldName);
+  res.redirect('/edit-access/' + worldName);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1202,6 +1209,491 @@ const getWorldsList = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Rendering the user manager page
+const serveUserManager = async (req, res, next) => 
+{
+  // Getting current user info
+  const userInfo = getUserInfo(req);
+
+  // Getting messages to output to user
+  let successMessage = null;            // Success message for user creation
+  let errorMessage = null;              // Error message for user creation
+  let Bulk_SuccessMessage = [];         // Success message for user creation
+  let Bulk_ErrorMessage = [];           // Error message for user creation
+  let A_SuccessMessage = [];            // Success message for admin usertype change
+  let A_ErrorMessage = [];              // Error message for admin usertype change
+  let T_R_SuccessMessage = [];          // Success message for teacher and researcher usertype change
+  let T_R_ErrorMessage = [];            // Error message for teacher and researcher usertype change
+  let S_P_T_SuccessMessage = [];        // Success message for student, participant, and tester usertype change
+  let S_P_T_ErrorMessage = [];          // Error message for student, participant, and tester usertype change
+
+  if (app.locals.successMessage)
+  {
+    successMessage = app.locals.successMessage;
+    app.locals.successMessage = null;
+  }
+
+  if (app.locals.errorMessage)
+  {
+    errorMessage = app.locals.errorMessage;
+    app.locals.errorMessage = null;
+  }
+
+  if (app.locals.Bulk_SuccessMessage && app.locals.Bulk_SuccessMessage.length > 0)
+  {
+    Bulk_SuccessMessage = app.locals.Bulk_SuccessMessage;
+    app.locals.Bulk_SuccessMessage = null;
+  }
+
+  if (app.locals.Bulk_ErrorMessage && app.locals.Bulk_ErrorMessage.length > 0)
+  {
+    Bulk_ErrorMessage = app.locals.Bulk_ErrorMessage;
+    app.locals.Bulk_ErrorMessage = null;
+  }
+
+  if (app.locals.A_SuccessMessage && app.locals.A_SuccessMessage.length > 0)
+  {
+    A_SuccessMessage = app.locals.A_SuccessMessage;
+    app.locals.A_SuccessMessage = null;
+  }
+
+  if (app.locals.A_ErrorMessage && app.locals.A_ErrorMessage.length > 0)
+  {
+    A_ErrorMessage = app.locals.A_ErrorMessage;
+    app.locals.A_ErrorMessage = null;
+  }
+
+  if (app.locals.T_R_SuccessMessage && app.locals.T_R_SuccessMessage.length > 0)
+  {
+    T_R_SuccessMessage = app.locals.T_R_SuccessMessage;
+    app.locals.T_R_SuccessMessage = null;
+  }
+
+  if (app.locals.T_R_ErrorMessage && app.locals.T_R_ErrorMessage.length > 0)
+  {
+    T_R_ErrorMessage = app.locals.T_R_ErrorMessage;
+    app.locals.T_R_ErrorMessage = null;
+  }
+
+  if (app.locals.S_P_T_SuccessMessage && app.locals.S_P_T_SuccessMessage.length > 0)
+  {
+    S_P_T_SuccessMessage = app.locals.S_P_T_SuccessMessage;
+    app.locals.S_P_T_SuccessMessage = null;
+  }
+
+  if (app.locals.S_P_T_ErrorMessage && app.locals.S_P_T_ErrorMessage.length > 0)
+  {
+    S_P_T_ErrorMessage = app.locals.S_P_T_ErrorMessage;
+    app.locals.S_P_T_ErrorMessage = null;
+  }
+
+  // Getting a list of user types for forms, with a certain user type selected (depending on lookingFor)
+  function getUserTypes(lookingFor)
+  {
+    let usertypesList = '';
+
+    for (const key in CIRCLES.USER_TYPE)
+    {
+      if (CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.SUPERUSER)
+      {
+        // Skipping guest and superuser types as creating these users is not an option
+      }
+      else if (CIRCLES.USER_TYPE[key] === lookingFor)
+      {
+        usertypesList += '<option selected>' + CIRCLES.USER_TYPE[key] + '</option>';
+      }
+      else 
+      {
+        usertypesList += '<option>' + CIRCLES.USER_TYPE[key] + '</option>';
+      }
+    }
+
+    return usertypesList;
+  }
+
+  // 1. Ignoring the current user
+  // 2. Getting all admin users
+  let A_Users = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.ADMIN,
+        },
+    },
+  ]);
+
+  // Customizing the list of user types so that the users current type is selected in the form
+  for (const user of A_Users)
+  {
+    user.usertypesList = getUserTypes(user.usertype);
+  }
+
+  // 1. Ignoring the current user
+  // 2. Getting all instructor and researcher users
+  let T_R_Users = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: { $in: [CIRCLES.USER_TYPE.TEACHER, CIRCLES.USER_TYPE.RESEARCHER] },
+        },
+    },
+  ]);
+
+  // Customizing the list of user types so that the users current type is selected in the form
+  for (const user of T_R_Users)
+  {
+    user.usertypesList = getUserTypes(user.usertype);
+  }
+
+  // 1. Ignoring the current user
+  // 2. Getting all student, participant, and tester users
+  let S_P_T_Users = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: { $in: [CIRCLES.USER_TYPE.STUDENT, CIRCLES.USER_TYPE.PARTICIPANT, CIRCLES.USER_TYPE.TESTER] },
+        },
+    },
+  ]);
+
+  // Customizing the list of user types so that the users current type is selected in the form
+  for (const user of S_P_T_Users)
+  {
+    user.usertypesList = getUserTypes(user.usertype);
+  }
+
+  // Rendering the user manager page
+  
+  let usertypes = getUserTypes(null);
+
+  res.render(path.resolve(__dirname + '/../public/web/views/manageUsers'), {
+    title: 'Manage Users',
+    errorMessage: errorMessage,
+    successMessage: successMessage,
+    Bulk_SuccessMessage: Bulk_SuccessMessage,
+    Bulk_ErrorMessage: Bulk_ErrorMessage,
+    A_SuccessMessage: A_SuccessMessage,
+    A_ErrorMessage: A_ErrorMessage,
+    T_R_SuccessMessage: T_R_SuccessMessage,
+    T_R_ErrorMessage: T_R_ErrorMessage,
+    S_P_T_SuccessMessage: S_P_T_SuccessMessage,
+    S_P_T_ErrorMessage: S_P_T_ErrorMessage,
+    userInfo: userInfo,
+    usertypes: usertypes,
+    A_Users: A_Users,
+    T_R_Users: T_R_Users,
+    S_P_T_Users: S_P_T_Users,
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating a new user by superuser or admin request
+const createUser = async (req, res, next) => 
+{
+  if (req.body.username && req.body.usertype)
+  {
+    // Compiling all data for the new user
+    const userData = {
+      username: req.body.username,                                    // User entered username
+      usertype: req.body.usertype,                                    // User entered usertype
+      password: env.DEFAULT_PASSWORD,                                 // Default password
+    };
+
+    let user = null;
+    let error = null;
+
+    // Creating new user in database
+    async function createNewUser(newUser) 
+    {
+      try 
+      {
+        user = await User.create(newUser);
+      } 
+      catch(err) 
+      {
+        error = err;
+      }
+    }
+    
+    createNewUser(userData).then(function() 
+    {
+      // Checking if there was an error while creating the user and if there was, sending the error to the console
+      // If user creation was successfull, outputting a success message to the user
+      if (error) 
+      {
+        console.log("createUser error on [" + userData.username + "]: " + error.message);
+
+        const errorMessage = error.message;
+
+        // Usernames must be unique
+        // If there was an error because the username already exists in the database, output an error message to the user
+        if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+        {
+          app.locals.errorMessage = 'ERROR: Username is unavailable';
+          return res.redirect('/manage-users');
+        }
+
+        app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+        return res.redirect('/manage-users');
+      } 
+      else 
+      {
+        app.locals.successMessage = userData.username + ' created successfully';
+        return res.redirect('/manage-users');
+      }
+    });
+  }
+  else
+  {
+    app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+    return res.redirect('/manage-users');
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const createUsersByFile = async (req, res, next) => 
+{
+  // Setting up user message as arrays to allow for multiple messages
+  app.locals.Bulk_SuccessMessage = [];
+  app.locals.Bulk_ErrorMessage = [];
+
+  // Variable to count how many users were created
+  let numCreated = 0;
+
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      app.locals.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
+      return res.redirect('/manage-users');
+    }
+
+    const file = files.userFile;
+
+    // file: fileContentType/fileType
+    // split result array: {"fileContentType", "fileType"}
+    const fileType = file.mimetype.split('/')[1];
+
+    // Checking if file is of the correct type
+    // If it is, read the file
+    // If it isn't, output error message to user
+    if (fileType === 'csv')
+    {
+      fs.readFile(file.filepath, 'utf8', async function(err, data) 
+      {
+        if (err)
+        {
+          app.locals.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
+          return res.redirect('/manage-users');
+        }
+
+        // Splitting up the file enteries (each entry is on a seperate line)
+        const entries = data.split(/\r?\n/);
+
+        // Reading each entry (each entry being a user) and getting the username and usertype
+        // Entries are organized as username,usertype
+        for (const entry of entries)
+        {
+          const entryInfo = entry.split(',');
+
+          // Ensuring entry has the correct amount of data
+          // Otherwise outputting an error message for the entry
+          if (entryInfo.length === 2)
+          {
+            // Getting user info
+            const userInfo = {
+              username: entryInfo[0],                                    // User entered username
+              usertype: entryInfo[1],                                    // User entered usertype
+              password: env.DEFAULT_PASSWORD,                            // Default password
+            }
+            
+            // Ensuring usertype is valid
+            let validUsertypes = [];
+
+            for (const key in CIRCLES.USER_TYPE)
+            {
+              if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST)
+              {
+                validUsertypes.push(CIRCLES.USER_TYPE[key]);
+              }
+            }
+
+            if (validUsertypes.includes(userInfo.usertype))
+            {
+              try 
+              {
+                let user = null;
+
+                user = await User.create(userInfo);
+
+                if (user)
+                {
+                  numCreated += 1;
+                }
+              } 
+              catch(err) 
+              {
+                const errorMessage = err.message;
+
+                // Usernames must be unique
+                // If there was an error because the username already exists in the database, output an error message to the user
+                if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+                {
+                  app.locals.Bulk_ErrorMessage.push('The following entry contains an unavailable username: ' + entry);
+                }
+                else
+                {
+                  app.locals.Bulk_ErrorMessage.push('An unexpected error occured when creating the following user: ' + entry);
+                }
+              }
+              
+            }
+            else
+            {
+              app.locals.Bulk_ErrorMessage.push('The following entry has an invalid usertype: ' + entry);
+            }
+          }
+          else
+          {
+            if (entryInfo.length === 1 && entryInfo[0].length === 0)
+            {
+              // Do nothing as it was just a blank entry
+            }
+            else
+            {
+              app.locals.Bulk_ErrorMessage.push('The following entry is invalid: ' + entry);
+            }
+          }
+        }
+
+        app.locals.Bulk_SuccessMessage.push(numCreated + ' users were successfully created');
+        return res.redirect('/manage-users');
+      });
+    }
+    // This file type means no file was uploaded
+    else if (fileType === 'octet-stream')
+    {
+      app.locals.Bulk_ErrorMessage.push('ERROR: No file uploaded' );
+      return res.redirect('/manage-users');
+    }
+    else
+    {
+      app.locals.Bulk_ErrorMessage.push('ERROR: Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
+      return res.redirect('/manage-users');
+    }
+
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Updating the user type by superuser or admin request
+const updateUsertype = async (req, res, next) => 
+{ 
+  // Setting up user message as arrays to allow for multiple messages
+  app.locals.A_SuccessMessage = [];
+  app.locals.A_ErrorMessage = [];
+  app.locals.T_R_SuccessMessage = [];
+  app.locals.T_R_ErrorMessage = [];
+  app.locals.S_P_T_SuccessMessage = [];
+  app.locals.S_P_T_ErrorMessage = [];
+
+  for (const username in req.body)
+  {
+    // Getting user from database
+    const user = await User.findOne({username: username});
+    
+    // If the user was found in the database
+    // Checking if the usertype the user has entered is different then what it currently is
+    if (user)
+    {
+      // If it is, changing the user's usertype in the database
+      if (user.usertype !== req.body[username])
+      {
+        const updatedUser = await User.findOneAndUpdate({username: username}, {usertype: req.body[username]}, {new:true});
+
+        if (updatedUser)
+        {
+          const message = user.username + ' usertype successfully updated to ' + req.body[username];
+
+          switch (user.usertype)
+          {
+            case CIRCLES.USER_TYPE.ADMIN:
+              app.locals.A_SuccessMessage.push(message);
+              break;
+
+            case CIRCLES.USER_TYPE.TEACHER:
+            case CIRCLES.USER_TYPE.RESEARCHER:
+              app.locals.T_R_SuccessMessage.push(message);
+              break;
+
+            case CIRCLES.USER_TYPE.STUDENT:
+            case CIRCLES.USER_TYPE.PARTICIPANT:
+            case CIRCLES.USER_TYPE.TESTER:
+              app.locals.S_P_T_SuccessMessage.push(message);
+              break;
+          }
+        }
+        else
+        {
+          const message = 'ERROR: ' + user.username + ' usertype failed to updated, please try again';
+
+          switch (req.body[username])
+          {
+            case CIRCLES.USER_TYPE.ADMIN:
+              app.locals.A_ErrorMessage.push(message);
+              break;
+
+            case CIRCLES.USER_TYPE.TEACHER:
+            case CIRCLES.USER_TYPE.RESEARCHER:
+              app.locals.T_R_ErrorMessage.push(message);
+              break;
+
+            case CIRCLES.USER_TYPE.STUDENT:
+            case CIRCLES.USER_TYPE.PARTICIPANT:
+            case CIRCLES.USER_TYPE.TESTER:
+              app.locals.S_P_T_ErrorMessage.push(message);
+              break;
+          }
+        }
+      }
+    }
+  }
+
+  return res.redirect('/manage-users');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   // getAllUsers,
   // getUser,
@@ -1225,4 +1717,8 @@ module.exports = {
   generateAuthLink,
   getMagicLinks,
   getWorldsList,
+  serveUserManager,
+  createUser,
+  createUsersByFile,
+  updateUsertype,
 };

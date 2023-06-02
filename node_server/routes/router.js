@@ -57,14 +57,12 @@ router.get('/', notAuthenticated, (req, res) => {
   });
 });
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next)
-{
+router.post('/login', passport.authenticate('local', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next) {
   app.locals.errorMessage = 'ERROR: Username and/ or password incorrect';
   return res.redirect('/');
 });
 
-router.get('/guestLogin', passport.authenticate('dummy', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next)
-{
+router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next) {
   app.locals.errorMessage = 'ERROR: Guest log in failed, please try again';
   return res.redirect('/');
 });
@@ -98,14 +96,23 @@ router.get('/logout', authenticated, (req, res, next) => {
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
+router.get('/manage-users', authenticated, controller.serveUserManager);
 
-router.get('/editAccess/:world_id', authenticated, controller.serveAccessEdit);
-router.get('/permitViewing/:world_id/:user_id', authenticated, controller.permitWorldViewing);
-router.get('/removeViewing/:world_id/:user_id', authenticated, controller.removeWorldViewing);
-router.get('/permitEditing/:world_id/:user_id', authenticated, controller.permitWorldEditing);
-router.get('/removeEditing/:world_id/:user_id', authenticated, controller.removeWorldEditing);
-router.get('/removeRestrictions/:world_id', authenticated, controller.removeWorldRestrictions);
-router.get('/putRestrictions/:world_id', authenticated, controller.putWorldRestrictions);
+router.post('/create-user', controller.createUser);
+router.post('/bulk-create-users', controller.createUsersByFile);
+router.post('/change-usertype', controller.updateUsertype);
+
+router.get('/sample-upload-file', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
+})
+
+router.get('/edit-access/:world_id', authenticated, controller.serveAccessEdit);
+router.get('/permit-viewing/:world_id/:user_id', authenticated, controller.permitWorldViewing);
+router.get('/remove-viewing/:world_id/:user_id', authenticated, controller.removeWorldViewing);
+router.get('/permit-editing/:world_id/:user_id', authenticated, controller.permitWorldEditing);
+router.get('/remove-editing/:world_id/:user_id', authenticated, controller.removeWorldEditing);
+router.get('/remove-restrictions/:world_id', authenticated, controller.removeWorldRestrictions);
+router.get('/put-restrictions/:world_id', authenticated, controller.putWorldRestrictions);
 
 //REST API (need to secure one day ... )
 //inspired by https://www.codementor.io/olatundegaruba/nodejs-restful-apis-in-10-minutes-q0sgsfhbd
@@ -117,7 +124,7 @@ router.get('/putRestrictions/:world_id', authenticated, controller.putWorldRestr
 // router.route('/users')
 //   .get(controller.getAllUsers);
 
-router.post('/registering', controller.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
+router.post('/register-user', controller.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/register'), {
     title: `Register for Circles`,

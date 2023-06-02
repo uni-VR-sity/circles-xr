@@ -6,8 +6,13 @@ block append stylesheets
 block content
   - var guest = userInfo.userType === CIRCLES.USER_TYPE.GUEST;
 
-  h2 Profile
-  table.pure-table.profile-table.gutter-bottom-doubled
+  h1 Profile
+  
+  hr
+  br
+  br
+
+  table.pure-table.profile-table.gutter-bottom-doubled(style='margin-bottom:0')
     thead
       tr
         th Property
@@ -44,10 +49,14 @@ block content
         td handRightColor
         td= userInfo.handRightColor
 
+  br
+  br
+  br
+
   h2 Update
-  p(style='color:green') #{successMessage}
-  p(style='color:red') #{errorMessage}
-  form(action='/update-user' method='post' class='pure-form pure-form-aligned' style='margin-left: 0')
+  p(style='color:green;margin-bottom:0') #{successMessage}
+  p(style='color:red;margin-bottom:0') #{errorMessage}
+  form(action='/update-user' method='post' class='pure-form pure-form-aligned' style='margin: 15 0 0 0')
     fieldset
       .pure-left-control-group
         label Username

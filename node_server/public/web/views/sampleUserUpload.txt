@@ -1,0 +1,6 @@
+sampleAdmin,Admin
+sampleTeacher,Teacher
+sampleResearcher,Researcher
+sampleStudent,Student
+sampleParticipant,Participant
+sampleTester,Tester

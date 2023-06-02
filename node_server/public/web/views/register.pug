@@ -19,17 +19,17 @@ html
             p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. [Work-In-Progress].
           
             p(style='margin-top:10px') Create an account to begin exploring! Or 
-              a(href="/guestLogin") continue as guest
+              a(href="/guest-login") continue as guest
 
             h2(class="text--centered" style='margin:40px 0 20px 0') Register
 
             p(class="text--centered" style="color:red") #{message}
 
-            form(action="/registering" method="post" class="pure-form pure-form-aligned")
+            form(action="/register-user" method="post" class="pure-form pure-form-aligned")
               fieldset
                 .pure-right-control-group
                   label Username
-                  input(right='text' name='username' placeholder='SuperFriend99' required)
+                  input.field-long(right='text' name='username' placeholder='SuperFriend99' required)
                 .pure-right-control-group
                   label Password
                   input.field-long(type='password' name='password' required)

@@ -7,13 +7,13 @@ block content
     - var permittedUser;
     - var restrictedUser;
 
-    h2= world.name
+    h1= world.name
 
     hr
     br
     br
 
-    h3 Viewing
+    h2 Viewing
 
     // Showing permitted users only if there are access restrictions on the world
     if world.viewingRestrictions
@@ -24,16 +24,16 @@ block content
             span can see this world
         
         // Option to remove access restrictions on the world
-        - var removeRestrictionsUrl = '/removeRestrictions/' + world.name;
+        - var removeRestrictionsUrl = '/remove-restrictions/' + world.name;
 
-        a(class="pure-button" style="font-weight: bold; margin-right: 10px" href=removeRestrictionsUrl) Remove Viewing Restrictions
+        a(class="pure-button" style="font-weight:bold; margin-right:10px; color:red" href=removeRestrictionsUrl) Remove Viewing Restrictions
         span (This will allow all users to see the world)
 
         br
         br
         br
 
-        table.pure-table.profile-table.gutter-bottom-doubled(style="margin-bottom: 10px")
+        table.pure-table.profile-table.gutter-bottom-doubled(style="margin-bottom:10px")
             thead
                 tr
                     th User
@@ -42,48 +42,48 @@ block content
                     th 
             tbody
                 for permittedUser of world.viewingPermission
-                    - var changeUrl = '/removeViewing/' + world.name + '/' + permittedUser.username;
+                    - var changeUrl = '/remove-viewing/' + world.name + '/' + permittedUser.username;
                     tr
                         td= permittedUser.username
                         td= permittedUser.usertype 
                         td(style="color: green; font-weight: bold") Permitted
                         td
-                            a(class="pure-button changeAccess-button" style="color: red; font-weight: bold" href=changeUrl) Remove Viewing
+                            a(class="pure-button" style="color:red; font-weight:bold" href=changeUrl) Remove Viewing
 
                 for restrictedUser of world.viewingDenied
-                    - var changeUrl = '/permitViewing/' + world.name + '/' + restrictedUser.username;
+                    - var changeUrl = '/permit-viewing/' + world.name + '/' + restrictedUser.username;
                     tr
                         td= restrictedUser.username
                         td= restrictedUser.usertype 
                         td(style="color: red; font-weight: bold") Restricted
                         td
-                            a(class="pure-button changeAccess-button" style="color: green; font-weight: bold" href=changeUrl) Permit Viewing
+                            a(class="pure-button" style="color:green; font-weight:bold" href=changeUrl) Permit Viewing
 
-        p * Users that have editing permissions will not be in this list
+        p(style='font-style:italic') Users that have editing permissions will not be in this list
 
         br
         br
 
     else
         p This world currently has 
-            span(style="font-weight: bold") no viewing restrictions
+            span(style="font-weight:bold") no viewing restrictions
             span : All users can see this world
 
         // Option to put access restrictions on the world
-        - var putRestrictionsUrl = '/putRestrictions/' + world.name;
+        - var putRestrictionsUrl = '/put-restrictions/' + world.name;
 
-        a(class="pure-button" style="font-weight: bold; margin-right: 10px" href=putRestrictionsUrl) Put Viewing Restrictions
-        span (This restricts what users can see the world)
+        a(class="pure-button" style="font-weight:bold; margin-right:10px; color:green" href=putRestrictionsUrl) Put Viewing Restrictions
+        span (This restricts which users can see the world)
 
         br
         br
         br
         br
 
-    h3 Editing
+    h2 Editing
 
     p Only users with  
-        span(style="color: green; font-weight: bold") permitted access 
+        span(style="color:green; font-weight:bold") permitted access 
         span can edit restrictions for this world
 
     table.pure-table.profile-table.gutter-bottom-doubled
@@ -95,19 +95,19 @@ block content
                 th 
         tbody
             for permittedUser of world.editingPermission
-                - var changeUrl = '/removeEditing/' + world.name + '/' + permittedUser.username;
+                - var changeUrl = '/remove-editing/' + world.name + '/' + permittedUser.username;
                 tr
                     td= permittedUser.username
                     td= permittedUser.usertype 
-                    td(style="color: green; font-weight: bold") Permitted
+                    td(style="color:green; font-weight:bold") Permitted
                     td
-                        a(class="pure-button changeAccess-button" style="color: red; font-weight: bold" href=changeUrl) Remove Editing
+                        a(class="pure-button" style="color:red; font-weight:bold" href=changeUrl) Remove Editing
 
             for restrictedUser of world.editingDenied
-                - var changeUrl = '/permitEditing/' + world.name + '/' + restrictedUser.username;
+                - var changeUrl = '/permit-editing/' + world.name + '/' + restrictedUser.username;
                 tr
                     td= restrictedUser.username
                     td= restrictedUser.usertype 
-                    td(style="color: red; font-weight: bold") Restricted
+                    td(style="color:red; font-weight:bold") Restricted
                     td
-                        a(class="pure-button changeAccess-button" style="color: green; font-weight: bold" href=changeUrl) Permit Editing
+                        a(class="pure-button" style="color:green; font-weight:bold" href=changeUrl) Permit Editing

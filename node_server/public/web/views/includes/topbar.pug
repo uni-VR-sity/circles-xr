@@ -1,4 +1,6 @@
 header.profile-header
+  - var adminUser = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
+  
   h1.profile-heading
     a(href="/explore" class="profile-logo")
       include ./circles_logo.svg
@@ -8,9 +10,12 @@ header.profile-header
   .topbar-header__popover-wrapper
     button.topbar-header__popover-activator
       img(src=`https://www.gravatar.com/avatar` class="topbar-header__image")
-      span= currentUser.username 
+      span= currentUser.username
     .topbar-popover
       ul
+        if adminUser
+          li
+            a(href="/manage-users" style='white-space:nowrap') Manage users
         li
           a(href="/profile") Profile
         li 

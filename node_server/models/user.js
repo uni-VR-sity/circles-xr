@@ -96,6 +96,7 @@ UserSchema.methods.validatePassword = function (password, next) {
   // NOTE: "Function" method here is *needed* to ensure "this" is the current
   // user object, not the global context when within the compare callback. This
   // is a good example of when to use function vs fat arrows.
+  console.log(password);
   bcrypt.compare(password, this.password, (err, result) => {
     if (result === true) {
       return next(null, this);
