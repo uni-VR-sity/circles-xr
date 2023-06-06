@@ -2,8 +2,6 @@ extends layout.pug
 
 block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
-  // Icon for tooltip
-  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
 
 
 block content
@@ -17,7 +15,7 @@ block content
     fieldset
       .pure-left-control-group
         label(style='white-space:nowrap') Session Display Name
-          span.tooltip <i class="fa fa-info-circle"></i>
+          span.tooltip <i class="fa-solid fa-circle-info"></i>
             p.tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
         input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 25px' value=sessionName)
         span 

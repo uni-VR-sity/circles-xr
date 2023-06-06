@@ -2,8 +2,6 @@ extends layout.pug
 
 block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
-  // Icon for tooltip
-  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
 
 block content
   - var guest = userInfo.userType === CIRCLES.USER_TYPE.GUEST;
@@ -75,7 +73,7 @@ block content
         input.field-long(type='text', name='usertype', placeholder='SuperFriendlyUser', value=userInfo.userType, disabled='')
       .pure-left-control-group
         label Display Name
-          span.tooltip <i class="fa fa-info-circle"></i>
+          span.tooltip <i class="fa-solid fa-circle-info"></i>
             p.tooltip-text(style='width:220px;margin-left:-110px;') Name that is shown when you enter a world
         input.field-long(type='text', name='displayName', placeholder='SuperFriend99', value=userInfo.displayName required)
       if !guest
