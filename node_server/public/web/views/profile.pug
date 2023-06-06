@@ -30,7 +30,7 @@ block content
           td= userInfo.email
       tr
         td Display Name
-        td= userInfo.email
+        td= userInfo.displayName
       tr
         td Head Url
         td= userInfo.headUrl
@@ -72,8 +72,10 @@ block content
         label User Type
         input.field-long(type='text', name='usertype', placeholder='SuperFriendlyUser', value=userInfo.userType, disabled='')
       .pure-left-control-group
-        label Display Name
-        input.field-long(type='text', name='displayName', placeholder='SuperFriend99', value=userInfo.email)
+        label Display Name 
+          span.tooltip 🛈
+            p.tooltip-text(style='width:220px;margin-left:-110px;') Name that is shown when you enter a world
+        input.field-long(type='text', name='displayName', placeholder='SuperFriend99', value=userInfo.displayName required)
       if !guest
         .pure-left-control-group
           label Email <i>(Optional)</i>

@@ -25,6 +25,13 @@ const GuestSchema = new mongoose.Schema({
       trim:       true,
       default:    CIRCLES.USER_TYPE.GUEST
     },
+    displayName: {
+      type:       String,
+      unique:     false,
+      required:   true,
+      trim:       false,
+      default:    "Guest"
+    },
     gltf_head_url: {
       type:       String,
       unique:     false,

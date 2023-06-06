@@ -39,6 +39,12 @@ const UserSchema = new mongoose.Schema({
     required:   false,
     trim:       false,
   },
+  displayName: {
+    type:       String,
+    unique:     false,
+    required:   true,
+    trim:       false,
+  },
   gltf_head_url: {
     type:       String,
     unique:     false,
@@ -102,7 +108,6 @@ UserSchema.methods.validatePassword = function (password, next) {
   // NOTE: "Function" method here is *needed* to ensure "this" is the current
   // user object, not the global context when within the compare callback. This
   // is a good example of when to use function vs fat arrows.
-  console.log(password);
   bcrypt.compare(password, this.password, (err, result) => {
     if (result === true) {
       return next(null, this);
@@ -161,6 +166,7 @@ const addSuperUser = async function()
       username: 'superuser',
       usertype: CIRCLES.USER_TYPE.SUPERUSER,
       password: env.DEFAULT_PASSWORD,
+      displayName: 'superuser',
     };
 
     let user = null;

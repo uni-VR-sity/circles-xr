@@ -5,7 +5,8 @@ const path       = require('path');
 const controller = require('../controllers/controller');
 const User       = require('../models/user');
 const passport   = require('passport');
-const express  = require('express');
+const express    = require('express');
+const session    = require('express-session');
 const app      = express();
 
 /**
@@ -45,10 +46,10 @@ router.get('/', notAuthenticated, (req, res) => {
 
   let errorMessage = null;
 
-  if (app.locals.errorMessage)
+  if (req.session.errorMessage)
   {
-    errorMessage = app.locals.errorMessage;
-    app.locals.errorMessage = '';
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = '';
   }
 
   res.render(path.resolve(__dirname + '/../public/web/views/index'), {
@@ -57,13 +58,19 @@ router.get('/', notAuthenticated, (req, res) => {
   });
 });
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next) {
-  app.locals.errorMessage = 'ERROR: Username and/ or password incorrect';
+router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
+  req.session.errorMessage = 'ERROR: Username and/ or password incorrect';
   return res.redirect('/');
 });
 
+router.get('/get-display-name', function(req, res)
+{
+  req.session.sessionName = req.user.displayName;
+  return res.redirect('/explore');
+});
+
 router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next) {
-  app.locals.errorMessage = 'ERROR: Guest log in failed, please try again';
+  req.session.errorMessage = 'ERROR: Guest log in failed, please try again';
   return res.redirect('/');
 });
 
@@ -92,6 +99,8 @@ router.get('/logout', authenticated, (req, res, next) => {
     res.redirect('/'); // Redirect to home page
   });
 });
+
+router.post('/update-session-name', controller.updateSessionName);
 
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);

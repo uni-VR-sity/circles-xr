@@ -231,6 +231,7 @@ passport.deserializeUser(function(id, done)
 
   getItems().then(function(foundItems) 
   {
+    
     done(error, user);
   });
 });

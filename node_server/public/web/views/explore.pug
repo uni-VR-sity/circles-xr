@@ -10,6 +10,19 @@ block content
   - var buttonText              = 'Create ' + targetUsersText + ' Links';
   - var world;
 
+  form(action="/update-session-name" method="post" class="pure-form pure-form-aligned")
+    fieldset
+      .pure-left-control-group
+        label(style='white-space:nowrap') Session Display Name 
+          span.tooltip &#128712
+            p.tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
+        input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 25px' value=sessionName)
+        span 
+          input(type='submit' value='Set Name' class='pure-button pure-button-primary')
+
+      p(style='color:green;margin-top:20px') #{successMessage}
+      p(style='color:red') #{errorMessage}
+
   h2 Worlds
   div(class="gutter-bottom-doubled")
     div(id="worlds_list_wrapper" class="pure-menu gutter-bottom") 

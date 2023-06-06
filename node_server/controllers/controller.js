@@ -3,6 +3,7 @@
 require('../../src/core/circles_server');
 const mongoose = require('mongoose');
 const express  = require('express');
+const session  = require('express-session');
 const app      = express();
 const User     = require('../models/user');
 const Guest    = require('../models/guest');
@@ -74,6 +75,7 @@ const getUserInfo = function(req)
     userName: user.username,
     userType: user.usertype,
     email: user.email,
+    displayName: user.displayName,
     headUrl: user.gltf_head_url,
     hairUrl: user.gltf_hair_url,
     bodyUrl: user.gltf_body_url,
@@ -169,8 +171,7 @@ const updateUserInfo = (req, res, next) => {
     console.log('Updating user info');
 
     let errorMessage = '';
-    let passwordUpdated = false;
-    let emailUpdated = false;
+    let accountUpdated = false;
     let avatarUpdated = false;
 
     //Mongoose promises http://mongoosejs.com/docs/promises.html
@@ -260,11 +261,31 @@ const updateUserInfo = (req, res, next) => {
         console.log('Right hand color updated');
       }
 
+      // Checking if display name was updated
+      if (req.body.displayName !== user.displayName)
+      {
+        // Ensuring that there is text in the display name
+        // If not, assigning the display name to be the username
+        if (req.body.displayName.length > 0 && req.body.displayName[0] != ' ')
+        {
+          userData.displayName = req.body.displayName;
+        }
+        else
+        {
+          userData.displayName = user.username;
+        }
+
+        req.session.sessionName = userData.displayName;
+
+        accountUpdated = true;
+        console.log('Display name updated');
+      }
+
       // Checking if email was updated
       if (req.body.email !== user.email)
       {
         userData.email = req.body.email;
-        emailUpdated = true;
+        accountUpdated = true;
         console.log('Email updated');
       }
 
@@ -273,7 +294,7 @@ const updateUserInfo = (req, res, next) => {
       if (req.body.deleteEmail)
       {
         userData.email = null;
-        emailUpdated = true;
+        accountUpdated = true;
         console.log('Email deleted');
       }
 
@@ -290,7 +311,7 @@ const updateUserInfo = (req, res, next) => {
           if ( req.body.passwordNew === req.body.passwordConf )
           {
             userData.password = req.body.passwordNew;
-            passwordUpdated = true;
+            accountUpdated = true;
             console.log('Password updated');
           }
           else
@@ -332,14 +353,14 @@ const updateUserInfo = (req, res, next) => {
         {
           console.log(error);
 
-          app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+          req.session.errorMessage = 'ERROR: Something went wrong, please try again';
           return res.redirect('/profile');
         } 
         else 
         {
           let successMessage = '';
 
-          if (avatarUpdated && (passwordUpdated || emailUpdated))
+          if (avatarUpdated && accountUpdated)
           {
             successMessage = 'User account and avatar updated successfully';
           }
@@ -347,13 +368,13 @@ const updateUserInfo = (req, res, next) => {
           {
             successMessage = 'Avatar updated successfully';
           }
-          else if (passwordUpdated || emailUpdated)
+          else if (accountUpdated)
           {
             successMessage = 'User account updated successfully';
           }
 
-          app.locals.errorMessage = errorMessage;
-          app.locals.successMessage = successMessage;
+          req.session.errorMessage = errorMessage;
+          req.session.successMessage = successMessage; 
 
           return res.redirect('/profile');
         }
@@ -361,7 +382,7 @@ const updateUserInfo = (req, res, next) => {
     }).catch(function(err)
     {
       console.log(err);
-      app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+      req.session.errorMessage = 'ERROR: Something went wrong, please try again';
       return res.redirect('/profile');
     });
   }
@@ -378,7 +399,7 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
     else {
       let specialStatus = '';
 
-      const u_name = ((searchParamsObj.has('name')) ? searchParamsObj.get('name') : user.username);
+      const u_name = ((searchParamsObj.has('name')) ? searchParamsObj.get('name') : req.session.sessionName);
       const u_height = ((searchParamsObj.has('height')) ? searchParamsObj.get('height') : CIRCLES.CONSTANTS.DEFAULT_USER_HEIGHT);
 
       //need to get types if available in params
@@ -502,21 +523,22 @@ const serveRelativeWorldContent = (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Getting success and error messages and then rendering the profile page
 const serveProfile = (req, res, next) => 
 {
   let successMessage = null;
   let errorMessage = null;
 
-  if (app.locals.successMessage)
+  if (req.session.successMessage)
   {
-    successMessage = app.locals.successMessage;
-    app.locals.successMessage = null;
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
   }
 
-  if (app.locals.errorMessage)
+  if (req.session.errorMessage)
   {
-    errorMessage = app.locals.errorMessage;
-    app.locals.errorMessage = null;
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
   }
 
   renderProfile(req, res, successMessage, errorMessage);
@@ -543,6 +565,7 @@ const registerUser = (req, res, next) => {
         username: req.body.username,                                    // User entered username
         usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
         password: req.body.password,                                    // User entered password
+        displayName: req.body.username,                                 // By default, display name is the same as the username
       };
 
       let user = null;
@@ -574,12 +597,12 @@ const registerUser = (req, res, next) => {
           // If there was an error because the username already exists in the database, output an error message to the user
           if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
           {
-            app.locals.errorMessage = 'ERROR: Username is unavailable';
+            req.session.errorMessage = 'ERROR: Username is unavailable';
             return res.redirect('/register');
           }
           else
           {
-            app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+            req.session.errorMessage = 'ERROR: Something went wrong, please try again';
             return res.redirect('/register');
           }
         } 
@@ -593,21 +616,22 @@ const registerUser = (req, res, next) => {
   } 
   else 
   {
-    app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+    req.session.errorMessage = 'ERROR: Something went wrong, please try again';
     return res.redirect('/register');
   }
 };
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Getting success and error messages and then rendering the register page
 const serveRegister = (req, res, next) => 
 {
   let errorMessage = null;
 
-  if (app.locals.errorMessage)
+  if (req.session.errorMessage)
   {
-    errorMessage = app.locals.errorMessage;
-    app.locals.errorMessage = null;
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
   }
 
   renderRegister(res, errorMessage);
@@ -649,6 +673,23 @@ const getWorlds = async function(user, permissionType)
 
 // Rendering the explore page after the user has logged in according to what they have access
 const serveExplore = async (req, res, next) => {
+
+  // Getting success and error messages
+  let successMessage = null;
+  let errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
   // Route now authenticates and ensures a user is logged in by this point
   let user = req.user;
 
@@ -726,7 +767,10 @@ const serveExplore = async (req, res, next) => {
     title: "Explore Worlds",
     userInfo: userInfo,
     worldViewingList: viewingArray,
-    worldEditingList: editingArray
+    worldEditingList: editingArray,
+    sessionName: req.session.sessionName,
+    successMessage: successMessage,
+    errorMessage: errorMessage,
   });
 };
 
@@ -1246,64 +1290,64 @@ const serveUserManager = async (req, res, next) =>
   let S_P_T_SuccessMessage = [];        // Success message for student, participant, and tester usertype change
   let S_P_T_ErrorMessage = [];          // Error message for student, participant, and tester usertype change
 
-  if (app.locals.successMessage)
+  if (req.session.successMessage)
   {
-    successMessage = app.locals.successMessage;
-    app.locals.successMessage = null;
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
   }
 
-  if (app.locals.errorMessage)
+  if (req.session.errorMessage)
   {
-    errorMessage = app.locals.errorMessage;
-    app.locals.errorMessage = null;
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
   }
 
-  if (app.locals.Bulk_SuccessMessage && app.locals.Bulk_SuccessMessage.length > 0)
+  if (req.session.Bulk_SuccessMessage && req.session.Bulk_SuccessMessage.length > 0)
   {
-    Bulk_SuccessMessage = app.locals.Bulk_SuccessMessage;
-    app.locals.Bulk_SuccessMessage = null;
+    Bulk_SuccessMessage = req.session.Bulk_SuccessMessage;
+    req.session.Bulk_SuccessMessage = null;
   }
 
-  if (app.locals.Bulk_ErrorMessage && app.locals.Bulk_ErrorMessage.length > 0)
+  if (req.session.Bulk_ErrorMessage && req.session.Bulk_ErrorMessage.length > 0)
   {
-    Bulk_ErrorMessage = app.locals.Bulk_ErrorMessage;
-    app.locals.Bulk_ErrorMessage = null;
+    Bulk_ErrorMessage = req.session.Bulk_ErrorMessage;
+    req.session.Bulk_ErrorMessage = null;
   }
 
-  if (app.locals.A_SuccessMessage && app.locals.A_SuccessMessage.length > 0)
+  if (req.session.A_SuccessMessage && req.session.A_SuccessMessage.length > 0)
   {
-    A_SuccessMessage = app.locals.A_SuccessMessage;
-    app.locals.A_SuccessMessage = null;
+    A_SuccessMessage = req.session.A_SuccessMessage;
+    req.session.A_SuccessMessage = null;
   }
 
-  if (app.locals.A_ErrorMessage && app.locals.A_ErrorMessage.length > 0)
+  if (req.session.A_ErrorMessage && req.session.A_ErrorMessage.length > 0)
   {
-    A_ErrorMessage = app.locals.A_ErrorMessage;
-    app.locals.A_ErrorMessage = null;
+    A_ErrorMessage = req.session.A_ErrorMessage;
+    req.session.A_ErrorMessage = null;
   }
 
-  if (app.locals.T_R_SuccessMessage && app.locals.T_R_SuccessMessage.length > 0)
+  if (req.session.T_R_SuccessMessage && req.session.T_R_SuccessMessage.length > 0)
   {
-    T_R_SuccessMessage = app.locals.T_R_SuccessMessage;
-    app.locals.T_R_SuccessMessage = null;
+    T_R_SuccessMessage = req.session.T_R_SuccessMessage;
+    req.session.T_R_SuccessMessage = null;
   }
 
-  if (app.locals.T_R_ErrorMessage && app.locals.T_R_ErrorMessage.length > 0)
+  if (req.session.T_R_ErrorMessage && req.session.T_R_ErrorMessage.length > 0)
   {
-    T_R_ErrorMessage = app.locals.T_R_ErrorMessage;
-    app.locals.T_R_ErrorMessage = null;
+    T_R_ErrorMessage = req.session.T_R_ErrorMessage;
+    req.session.T_R_ErrorMessage = null;
   }
 
-  if (app.locals.S_P_T_SuccessMessage && app.locals.S_P_T_SuccessMessage.length > 0)
+  if (req.session.S_P_T_SuccessMessage && req.session.S_P_T_SuccessMessage.length > 0)
   {
-    S_P_T_SuccessMessage = app.locals.S_P_T_SuccessMessage;
-    app.locals.S_P_T_SuccessMessage = null;
+    S_P_T_SuccessMessage = req.session.S_P_T_SuccessMessage;
+    req.session.S_P_T_SuccessMessage = null;
   }
 
-  if (app.locals.S_P_T_ErrorMessage && app.locals.S_P_T_ErrorMessage.length > 0)
+  if (req.session.S_P_T_ErrorMessage && req.session.S_P_T_ErrorMessage.length > 0)
   {
-    S_P_T_ErrorMessage = app.locals.S_P_T_ErrorMessage;
-    app.locals.S_P_T_ErrorMessage = null;
+    S_P_T_ErrorMessage = req.session.S_P_T_ErrorMessage;
+    req.session.S_P_T_ErrorMessage = null;
   }
 
   // Getting a list of user types for forms, with a certain user type selected (depending on lookingFor)
@@ -1441,6 +1485,7 @@ const createUser = async (req, res, next) =>
       username: req.body.username,                                    // User entered username
       usertype: req.body.usertype,                                    // User entered usertype
       password: env.DEFAULT_PASSWORD,                                 // Default password
+      displayName: req.body.username,                                 // By default, display name is the same as the username
     };
 
     let user = null;
@@ -1473,23 +1518,23 @@ const createUser = async (req, res, next) =>
         // If there was an error because the username already exists in the database, output an error message to the user
         if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
         {
-          app.locals.errorMessage = 'ERROR: Username is unavailable';
+          req.session.errorMessage = 'ERROR: Username is unavailable';
           return res.redirect('/manage-users');
         }
 
-        app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+        req.session.errorMessage = 'ERROR: Something went wrong, please try again';
         return res.redirect('/manage-users');
       } 
       else 
       {
-        app.locals.successMessage = userData.username + ' created successfully';
+        req.session.successMessage = userData.username + ' created successfully';
         return res.redirect('/manage-users');
       }
     });
   }
   else
   {
-    app.locals.errorMessage = 'ERROR: Something went wrong, please try again';
+    req.session.errorMessage = 'ERROR: Something went wrong, please try again';
     return res.redirect('/manage-users');
   }
 }
@@ -1499,8 +1544,8 @@ const createUser = async (req, res, next) =>
 const createUsersByFile = async (req, res, next) => 
 {
   // Setting up user message as arrays to allow for multiple messages
-  app.locals.Bulk_SuccessMessage = [];
-  app.locals.Bulk_ErrorMessage = [];
+  req.session.Bulk_SuccessMessage = [];
+  req.session.Bulk_ErrorMessage = [];
 
   // Variable to count how many users were created
   let numCreated = 0;
@@ -1512,7 +1557,7 @@ const createUsersByFile = async (req, res, next) =>
   {
     if (err)
     {
-      app.locals.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
+      req.session.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
       return res.redirect('/manage-users');
     }
 
@@ -1531,7 +1576,7 @@ const createUsersByFile = async (req, res, next) =>
       {
         if (err)
         {
-          app.locals.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
+          req.session.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
           return res.redirect('/manage-users');
         }
 
@@ -1553,6 +1598,7 @@ const createUsersByFile = async (req, res, next) =>
               username: entryInfo[0],                                    // User entered username
               usertype: entryInfo[1],                                    // User entered usertype
               password: env.DEFAULT_PASSWORD,                            // Default password
+              displayName: entryInfo[0],                                 // By default, display name is the same as the username
             }
             
             // Ensuring usertype is valid
@@ -1587,18 +1633,18 @@ const createUsersByFile = async (req, res, next) =>
                 // If there was an error because the username already exists in the database, output an error message to the user
                 if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
                 {
-                  app.locals.Bulk_ErrorMessage.push('The following entry contains an unavailable username: ' + entry);
+                  req.session.Bulk_ErrorMessage.push('The following entry contains an unavailable username: ' + entry);
                 }
                 else
                 {
-                  app.locals.Bulk_ErrorMessage.push('An unexpected error occured when creating the following user: ' + entry);
+                  req.session.Bulk_ErrorMessage.push('An unexpected error occured when creating the following user: ' + entry);
                 }
               }
               
             }
             else
             {
-              app.locals.Bulk_ErrorMessage.push('The following entry has an invalid usertype: ' + entry);
+              req.session.Bulk_ErrorMessage.push('The following entry has an invalid usertype: ' + entry);
             }
           }
           else
@@ -1609,24 +1655,24 @@ const createUsersByFile = async (req, res, next) =>
             }
             else
             {
-              app.locals.Bulk_ErrorMessage.push('The following entry is invalid: ' + entry);
+              req.session.Bulk_ErrorMessage.push('The following entry is invalid: ' + entry);
             }
           }
         }
 
-        app.locals.Bulk_SuccessMessage.push(numCreated + ' users were successfully created');
+        req.session.Bulk_SuccessMessage.push(numCreated + ' users were successfully created');
         return res.redirect('/manage-users');
       });
     }
     // This file type means no file was uploaded
     else if (fileType === 'octet-stream')
     {
-      app.locals.Bulk_ErrorMessage.push('ERROR: No file uploaded' );
+      req.session.Bulk_ErrorMessage.push('ERROR: No file uploaded' );
       return res.redirect('/manage-users');
     }
     else
     {
-      app.locals.Bulk_ErrorMessage.push('ERROR: Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
+      req.session.Bulk_ErrorMessage.push('ERROR: Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
       return res.redirect('/manage-users');
     }
 
@@ -1639,12 +1685,12 @@ const createUsersByFile = async (req, res, next) =>
 const updateUsertype = async (req, res, next) => 
 { 
   // Setting up user message as arrays to allow for multiple messages
-  app.locals.A_SuccessMessage = [];
-  app.locals.A_ErrorMessage = [];
-  app.locals.T_R_SuccessMessage = [];
-  app.locals.T_R_ErrorMessage = [];
-  app.locals.S_P_T_SuccessMessage = [];
-  app.locals.S_P_T_ErrorMessage = [];
+  req.session.A_SuccessMessage = [];
+  req.session.A_ErrorMessage = [];
+  req.session.T_R_SuccessMessage = [];
+  req.session.T_R_ErrorMessage = [];
+  req.session.S_P_T_SuccessMessage = [];
+  req.session.S_P_T_ErrorMessage = [];
 
   for (const username in req.body)
   {
@@ -1667,18 +1713,18 @@ const updateUsertype = async (req, res, next) =>
           switch (user.usertype)
           {
             case CIRCLES.USER_TYPE.ADMIN:
-              app.locals.A_SuccessMessage.push(message);
+              req.session.A_SuccessMessage.push(message);
               break;
 
             case CIRCLES.USER_TYPE.TEACHER:
             case CIRCLES.USER_TYPE.RESEARCHER:
-              app.locals.T_R_SuccessMessage.push(message);
+              req.session.T_R_SuccessMessage.push(message);
               break;
 
             case CIRCLES.USER_TYPE.STUDENT:
             case CIRCLES.USER_TYPE.PARTICIPANT:
             case CIRCLES.USER_TYPE.TESTER:
-              app.locals.S_P_T_SuccessMessage.push(message);
+              req.session.S_P_T_SuccessMessage.push(message);
               break;
           }
         }
@@ -1689,18 +1735,18 @@ const updateUsertype = async (req, res, next) =>
           switch (req.body[username])
           {
             case CIRCLES.USER_TYPE.ADMIN:
-              app.locals.A_ErrorMessage.push(message);
+              req.session.A_ErrorMessage.push(message);
               break;
 
             case CIRCLES.USER_TYPE.TEACHER:
             case CIRCLES.USER_TYPE.RESEARCHER:
-              app.locals.T_R_ErrorMessage.push(message);
+              req.session.T_R_ErrorMessage.push(message);
               break;
 
             case CIRCLES.USER_TYPE.STUDENT:
             case CIRCLES.USER_TYPE.PARTICIPANT:
             case CIRCLES.USER_TYPE.TESTER:
-              app.locals.S_P_T_ErrorMessage.push(message);
+              req.session.S_P_T_ErrorMessage.push(message);
               break;
           }
         }
@@ -1709,6 +1755,27 @@ const updateUsertype = async (req, res, next) =>
   }
 
   return res.redirect('/manage-users');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Updating the user display name for the session
+const updateSessionName = function(req, res, next)
+{
+  // Ensuring that there is text in the display name
+  // If not, not changing the display name and outputting an error message
+  if (req.body.sessionName.length > 0 && req.body.sessionName[0] != ' ')
+  {
+    req.session.sessionName = req.body.sessionName;
+
+    req.session.successMessage = 'Display name successfully changed for the session';
+  }
+  else
+  {
+    req.session.errorMessage = "ERROR: Display name must contain text and can not start with a space (' ')";
+  }
+
+  return res.redirect('/explore');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1740,4 +1807,5 @@ module.exports = {
   createUser,
   createUsersByFile,
   updateUsertype,
+  updateSessionName,
 };
