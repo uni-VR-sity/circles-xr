@@ -77,11 +77,34 @@ router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/g
 router.post('/create-magic-link', authenticated, controller.createMagicLink);
 
 router.get('/magic-login', function(req, res, next) {
-  passport.authenticate('jwt', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) { return res.redirect('/'); }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
+  passport.authenticate('jwt', function(err, user, info) 
+  {
+    if (err) 
+    { 
+      return next(err); 
+    }
+
+    if (!user) 
+    { 
+      if (info.message.includes('jwt expired') === true)
+      {
+        req.session.errorMessage = 'ERROR: This magic link is expired';
+      }
+      else
+      {
+        req.session.errorMessage = 'ERROR: This magic link is invalid';
+      }
+
+      return res.redirect('/'); 
+    }
+
+    req.logIn(user, function(err) 
+    {
+      if (err) 
+      { 
+        return next(err); 
+      }
+
       return res.redirect(req.query.route);
     });
   })(req, res, next);

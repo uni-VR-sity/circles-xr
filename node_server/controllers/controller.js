@@ -1264,7 +1264,6 @@ const createMagicLink = async (req, res, next) =>
 
     const payload = {
       worlds: worlds,
-      creator: req.user.username,
     };
 
     const token = jwt.sign(payload, env.JWT_SECRET, jwtOptions); // Expects seconds as expiration
