@@ -59,7 +59,7 @@ class Popover {
 let g_intervalTimer = null;
 
 function startCoundown(numMS, textId) {
-  clearInterval(g_intervalTimer); //remove if alreadt counting down
+  clearInterval(g_intervalTimer); //remove if already counting down
 
   let currTime = new Date();
   let countDownDate = new Date(currTime.getTime() + numMS).getTime();
@@ -92,30 +92,7 @@ function startCoundown(numMS, textId) {
   }, 1000);
 }
 
-
-//*********** magic links button functionality */
-function createMagicLinks(username, userTypeAsking) {
-  const magic_world = document.querySelector("#MagicLinkWorld").value;
-  const magic_group = document.querySelector("#MagicLinkGroup").value;
-  const url = 'w/' + magic_world + '?group=' + ((magic_group === '') ? 'explore' : magic_group);
-
-  const expiryTimeMin = document.querySelector("#MagicLinkExpiry").value * 24 * 60; //convert days to mins
-
-  let request = new XMLHttpRequest();
-  request.open('GET', '/get-magic-links?route=' + url 
-                                                + '&usernameAsking='  + username 
-                                                + '&userTypeAsking='  + userTypeAsking 
-                                                + '&expiryTimeMin='   + expiryTimeMin);
-  request.responseType = 'text';
-
-  request.onload = function() {
-    showMagicLinks(request.response, expiryTimeMin); //show copy button
-  };
-
-  request.send();
-}
-
-function copyText(copyTextElem, username) {
+function copyText(copyTextElem) {
   // Select the text field
   copyTextElem.select(); 
   copyTextElem.setSelectionRange(0, 99999); // For mobile devices
@@ -124,41 +101,4 @@ function copyText(copyTextElem, username) {
   navigator.clipboard.writeText(copyTextElem.value).then(function() {
     alert("Copied the magic link!");
   });
-}
-
-function autogenerateGroupName(inputElem, numWords = 1) {
-  inputElem.value = CIRCLES.UTILS.generateRandomString(numWords);
-}
-
-function showMagicLinks(data, expiryTimeMin) {
-  startCoundown(expiryTimeMin * 60000, 'countdownElem'); //start visual timer
-
-  const jsonData = JSON.parse(data);
-  const menuElem = document.querySelector('#MagicLinksContent');
-  let tableStr   = '<table class=\'pure-table profile-table gutter-bottom-doubled\'>';       
-  menuElem.setAttribute('class', 'pure-menu gutter-bottom');
-
-  tableStr += '<thead>';
-  tableStr += '<tr>';
-  tableStr += '<th>Username</th>';
-  tableStr += '<th>Magic Link</th>';
-  tableStr += '</tr>';
-  tableStr += '</thead>';
-  tableStr += '<tbody>';
-
-  for (let i = 0; i < jsonData.length; i++) {
-    let isYou     = (i === 0);
-    let username  = ((isYou) ? ' <strong>' : '') + jsonData[i].username + ((isYou) ? ' (you) </strong>' : '');
-    let magicLink = jsonData[i].magicLink ;
-
-    tableStr += '<tr>';
-    tableStr += '<td>' + username +  '</td>';
-    tableStr += '<td><input type=\'button\' class=\'pure-button pure-button-primary\' value=\'Copy\' style=\'margin: 0 10px 1px 0\' onclick=\'copyText(linkCopy' + i + ',"' + username + '")\'>';
-    tableStr += '<input id=linkCopy' + i + ' type=\'text\' class=\'\' style=\'padding:.4em 1em\' value=\'' + magicLink + '\' size=\'50\' readonly></td>';
-    tableStr += '</tr>';
-  }
-
-  tableStr += '</tbody>';
-  tableStr += '</table>';
-  menuElem.innerHTML = tableStr;
 }

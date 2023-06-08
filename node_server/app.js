@@ -113,24 +113,31 @@ const jwtOptions = {
   passReqToCallback: true
 };
 
-passport.use(
-  'jwt',
-  new JwtStrategy(jwtOptions, (req, token, done) => {
-    let user  = null;
-    let error = null;
-    async function getItems() {
-      try {
-        user = await User.findOne({ username: token.data }).exec();
-      } catch(err) {
-        error = err;
-      }
-    }
+// For magic link login
+// Creates a magic guest user that expires in 24 hours and has access to specified worlds
+passport.use('jwt', new JwtStrategy(jwtOptions, async (req, token, done) => 
+{
+  let user = null;
+  let error = null;
 
-    getItems().then(function() {
-      done(error, user);
-    });
-  })
-);
+  try 
+  {
+    let userInfo = {
+      usertype: CIRCLES.USER_TYPE.MAGIC_GUEST,
+      magicLinkWorlds: token.worlds,
+    };
+
+    user = await Guest.create(userInfo);
+  }
+  catch (err)
+  {
+    error = err;
+    console.log(error);
+  }
+
+  done(error, user);
+
+}));
 
 // For guest login
 // Creates a guest user that expires in 24 hours
@@ -151,6 +158,7 @@ passport.use(new DummyStrategy(async function(done)
 
   if (error)
   {
+    console.log(error);
     return done(error, user);
   }
   else

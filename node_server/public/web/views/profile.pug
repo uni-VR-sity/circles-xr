@@ -4,7 +4,7 @@ block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
-  - var guest = userInfo.userType === CIRCLES.USER_TYPE.GUEST;
+  - var guest = userInfo.userType === CIRCLES.USER_TYPE.GUEST || userInfo.userType === CIRCLES.USER_TYPE.MAGIC_GUEST;
 
   h1 Profile
   
@@ -24,6 +24,7 @@ block content
       tr
         td User Type
         td= userInfo.userType
+        
       if !guest
         tr
           td Email
@@ -82,7 +83,7 @@ block content
           input.field-long(type='email', name='email', placeholder='super@email.com', value=userInfo.email)
           span
             input(type='checkbox', name='deleteEmail' style='margin:0 10 0 15')
-            label(style='white-space: nowrap') Delete from account
+            label(style='white-space:nowrap') Delete from account
 
       hr.form-line-divider
 

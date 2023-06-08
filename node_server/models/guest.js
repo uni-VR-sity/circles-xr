@@ -16,7 +16,7 @@ const GuestSchema = new mongoose.Schema({
       unique:     false,
       required:   true,
       trim:       true,
-      default:    "Guest"
+      default:    'Guest'
     },
     usertype: {
       type:       String,
@@ -32,6 +32,10 @@ const GuestSchema = new mongoose.Schema({
       trim:       false,
       default:    "Guest"
     },
+    magicLinkWorlds: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'worlds' 
+    }],
     gltf_head_url: {
       type:       String,
       unique:     false,

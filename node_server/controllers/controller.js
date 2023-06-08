@@ -645,6 +645,7 @@ const serveRegister = (req, res, next) =>
 //    - freeViewing         Returns all worlds that have no viewing restrictions
 //    - specialViewing      Returns all worlds that the user has viewing access to
 //    - editing             Returns all worlds that the user has editing access to
+//    - magic               Returns all worlds that the user has viewing access to from a magic link
 const getWorlds = async function(user, permissionType)
 {
   let worlds = []
@@ -665,6 +666,13 @@ const getWorlds = async function(user, permissionType)
   {
     worlds = await Worlds.find({editingPermissions: { $in: [user] }});
   }
+  else if (permissionType === "magic")
+  {
+    for (const world of user.magicLinkWorlds)
+    {
+      worlds.push(await Worlds.find(world));
+    }
+  }
 
   return worlds;
 }
@@ -677,6 +685,7 @@ const serveExplore = async (req, res, next) => {
   // Getting success and error messages
   let successMessage = null;
   let errorMessage = null;
+  let magicLinkError = null;
 
   if (req.session.successMessage)
   {
@@ -688,6 +697,12 @@ const serveExplore = async (req, res, next) => {
   {
     errorMessage = req.session.errorMessage;
     req.session.errorMessage = null;
+  }
+
+  if (req.session.magicLinkError)
+  {
+    magicLinkError = req.session.magicLinkError;
+    req.session.magicLinkError = null;
   }
 
   // Route now authenticates and ensures a user is logged in by this point
@@ -704,11 +719,16 @@ const serveExplore = async (req, res, next) => {
   // - If user is a student, participant, or tester:
   //      - Viewing access is given to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
   //      - No editing access is given
+  // - If user is a magic guest
+  //      - Viewing access is given to worlds in magicLinkWorlds array
+  //      - Viewing access is given to worlds with no restictions
+  //      - No editing access is given
   // - If user is a guest
   //      - Viewing access is given to worlds with no restictions
   //      - No editing access is given
 
   let viewingWorlds = [];
+  let magicWorlds = [];
   let editingWorlds = [];
 
   if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
@@ -726,14 +746,21 @@ const serveExplore = async (req, res, next) => {
     viewingWorlds.push(await getWorlds(user, "freeViewing"));
     viewingWorlds.push(await getWorlds(user, "specialViewing"));
   }
+  else if (user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
+  {
+    magicWorlds.push(await getWorlds(user, "magic"));
+    viewingWorlds.push(await getWorlds(user, "freeViewing"));
+  }
   else // Guest
   {
     viewingWorlds.push(await getWorlds(user, "freeViewing"));
   }
 
   // Flattening the arrays
-  editingWorlds = editingWorlds.flat(2);
   viewingWorlds = viewingWorlds.flat(2);
+  magicWorlds = magicWorlds.flat(2);
+  editingWorlds = editingWorlds.flat(2);
+
 
   // Getting all world names the user can view
   let viewingArray = [];
@@ -741,6 +768,14 @@ const serveExplore = async (req, res, next) => {
   for (const world of viewingWorlds)
   {
     viewingArray.push(world.name);
+  }
+
+  // Getting all world names the user can view from the magic link
+  let magicArray = [];
+
+  for (const world of magicWorlds)
+  {
+    magicArray.push(world.name);
   }
 
   // Getting all world names the user can edit
@@ -767,10 +802,14 @@ const serveExplore = async (req, res, next) => {
     title: "Explore Worlds",
     userInfo: userInfo,
     worldViewingList: viewingArray,
+    worldMagicList: magicArray,
     worldEditingList: editingArray,
     sessionName: req.session.sessionName,
     successMessage: successMessage,
     errorMessage: errorMessage,
+    magicLinkSuccess: req.session.magicLinkSuccess,
+    magicLinkError: magicLinkError,
+    magicLink: req.session.magicLink,
   });
 };
 
@@ -1173,57 +1212,76 @@ const putWorldRestrictions = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-const generateAuthLink = (username, baseURL, route, expiryTimeMin) => {
-  const jwtOptions = {
-    issuer: 'circlesxr.com',
-    audience: 'circlesxr.com',
-    algorithm: 'HS256',
-    expiresIn: expiryTimeMin + 'm',
-  };
+// Creating magic link to user requested worlds
+const createMagicLink = async (req, res, next) => 
+{
+  // Setting up success message for link creation
+  let successMessage = req.body.linkExpiry + ' day magic link successfully created for the following world(s): ';
 
-  const token = jwt.sign({data:username}, env.JWT_SECRET, jwtOptions); //expects seconds as expiration
+  // Getting expiry time of magic link
+  const expiryTimeMin = req.body.linkExpiry * 24 * 60; // Convert days to mins
 
-  return baseURL + '/magic-login?token=' + token + '&route=' + route;
-};
+  // Getting worlds to create magic link to
+  const worlds = [];
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
+  for (const worldName in req.body)
+  {
+    if (worldName !== 'linkExpiry')
+    {
+      try 
+      {
+        worlds.push(await Worlds.findOne({name: worldName}));
 
-const getMagicLinks = (req, res, next) => {
-  const route = req.query.route;
-  const usernameAsking  = req.query.usernameAsking;
-  const userTypeAsking  = req.query.userTypeAsking;
-  const expiryTimeMin   = req.query.expiryTimeMin;
-  let allAccounts = [];
+        successMessage = successMessage + worldName + ', ';
+      }
+      catch (err)
+      {
+        console.log(err);
 
-  //ignore req.protocol as it will try and re-direct to https anyhow.
-  const baseURL = req.get('host');
-
-  let users = null;
-  let error = null;
-  async function getItems() {
-    try {
-      users = await User.find({usertype: {$in: [CIRCLES.USER_TYPE.STUDENT, CIRCLES.USER_TYPE.PARTICIPANT, CIRCLES.USER_TYPE.TESTER]}}).exec();
-    } catch(err) {
-      error = err;
+        req.session.magicLinkError = 'ERROR: Could not create a magic link for ' + worldName + ', please try again';
+        res.redirect('/explore');
+      }
     }
   }
 
-  getItems().then(function() {
-    if (error) {
-      res.send(error);
-    }
+  // Removing the last 2 characters (the ' ' and ',')
+  successMessage = successMessage.slice(0, -2);
 
-    //add "self" first
-    allAccounts.push({username:usernameAsking, magicLink:generateAuthLink(usernameAsking, baseURL, route, expiryTimeMin)});
+  // Making sure there were worlds selected before creating the link, if not, outputting an error message
+  if (worlds.length > 0)
+  {
+    // Ignore req.protocol as it will try and re-direct to https anyhow.
+    const baseURL = req.get('host');
 
-    for (let i = 0; i < users.length; i++) {
-      allAccounts.push({username:users[i].username, magicLink:generateAuthLink(users[i].username, baseURL, route, expiryTimeMin)});
+    const route = '/explore';
 
-      if (i === users.length - 1 ) {
-        res.json(allAccounts);
-      }
-    }
-  });
+    const jwtOptions = {
+      issuer: 'circlesxr.com',
+      audience: 'circlesxr.com',
+      algorithm: 'HS256',
+      expiresIn: expiryTimeMin + 'm',
+    };
+
+    const payload = {
+      worlds: worlds,
+      creator: req.user.username,
+    };
+
+    const token = jwt.sign(payload, env.JWT_SECRET, jwtOptions); // Expects seconds as expiration
+
+    const link = baseURL + '/magic-login?token=' + token + '&route=' + route;
+
+    req.session.magicLink = link;
+    req.session.magicLinkSuccess = successMessage;
+  }
+  else
+  {
+    req.session.magicLinkError = 'ERROR: No worlds selected';
+    req.session.magicLink = null;
+    req.session.magicLinkSuccess = null;
+  }
+
+  res.redirect('/explore');
 };
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1800,8 +1858,7 @@ module.exports = {
   removeWorldEditing,
   removeWorldRestrictions,
   putWorldRestrictions,
-  generateAuthLink,
-  getMagicLinks,
+  createMagicLink,
   getWorldsList,
   serveUserManager,
   createUser,

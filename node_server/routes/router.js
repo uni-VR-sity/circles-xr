@@ -69,16 +69,12 @@ router.get('/get-display-name', function(req, res)
   return res.redirect('/explore');
 });
 
-router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/explore', failWithError: true }), function(err, req, res, next) {
+router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
   req.session.errorMessage = 'ERROR: Guest log in failed, please try again';
   return res.redirect('/');
 });
 
-//magic links for students
-router.get('/get-magic-links', authenticated, controller.getMagicLinks);
-
-//get list of worlds
-router.get('/get-worlds-list', authenticated, controller.getWorldsList);
+router.post('/create-magic-link', authenticated, controller.createMagicLink);
 
 router.get('/magic-login', function(req, res, next) {
   passport.authenticate('jwt', function(err, user, info) {

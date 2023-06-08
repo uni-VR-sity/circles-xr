@@ -67,6 +67,7 @@ const USER_TYPE = {
   PARTICIPANT : 'Participant',
   TESTER      : 'Tester',
   GUEST       : 'Guest',
+  MAGIC_GUEST : 'Magic Guest',
 };
 
 const MODEL_HEAD_TYPE = {

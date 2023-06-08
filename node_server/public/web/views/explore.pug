@@ -7,9 +7,9 @@ block append stylesheets
 block content
   - var adminUser               = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
   - var userCanGenMagicLinks    = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
-  - var targetUsersText         = (userInfo.userType === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT;
-  - var buttonText              = 'Create ' + targetUsersText + ' Links';
+  - var magicGuest              = userInfo.userType === CIRCLES.USER_TYPE.MAGIC_GUEST
   - var world;
+
 
   form(action="/update-session-name" method="post" class="pure-form pure-form-aligned")
     fieldset
@@ -17,12 +17,27 @@ block content
         label(style='white-space:nowrap') Session Display Name
           span.tooltip <i class="fa-solid fa-circle-info"></i>
             p.tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
-        input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 25px' value=sessionName)
+        input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 30px' value=sessionName)
         span 
           input(type='submit' value='Set Name' class='pure-button pure-button-primary')
 
       p(style='color:green;margin-top:20px') #{successMessage}
       p(style='color:red') #{errorMessage}
+
+  if magicGuest
+
+    h2 Magic Link Worlds
+    div(class="gutter-bottom-doubled")
+      div(id="worlds_list_wrapper" class="pure-menu gutter-bottom") 
+
+        // Rendering list of world buttons according to what the user has access to
+        ul(class="pure-menu-list")
+
+          // Rendering all the worlds the user can view from the magic link
+          for world of worldMagicList
+            - var worldUrl = '/w/' + world; // Making url to world
+            li 
+              a(class="pure-button worldList" href=worldUrl)= world
 
   h2 Worlds
   div(class="gutter-bottom-doubled")
@@ -59,39 +74,43 @@ block content
 
   if userCanGenMagicLinks
 
-    div(id="MagicLinksWrapper" class="gutter-bottom-doubled")
-      h2 #{targetUsersText} Links for "Magic" Automatic Login 
+    div(id="MagicLinksWrapper" class="gutter-bottom-doubled" style='margin-top:55px;')
+      h2 Magic Links
 
-      form(class='pure-form pure-form-aligned')
+      p Select the expiry and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[Create]</span> button below to generate a magic link to the selected world(s). Just copy and send the link to automatically give then access to the world(s) as a guest user.
+
+      form(action="/create-magic-link" method="post" class='pure-form pure-form-aligned' style='margin-top:25px')
         fieldset
-          legend Create Magic Links
+          legend(style='margin-bottom:15px') Create Magic Link
           div(class='pure-left-control-group')
-            - let n = 0;
+            - let n = 1;
             - let selected = false;
-            - let val = 0;
-            label(for='MagicLinkExpiry') Select Expiry in Days
-            select(name='MagicLinkExpiry', id='MagicLinkExpiry', class="pure-input-1-3")
+            - let val = 1;
+            label Select Expiry in Days
+            select(name='linkExpiry' id='linkExpiry' class="pure-input-1-3")
               while n < 365
                 - val = n++;
                 - selected = (val === 7)
                 option(value!= val, selected!= selected)!= val
                 - selected = false
-          div(class='pure-left-control-group')
-            label(for='MagicLinkGroup') Create Group Name
-            input(name='MagicLinkGroup', id='MagicLinkGroup', type="text", placeholder="explore", class="pure-input-1-3")
-            button(type="button", class="pure-button pure-button", style="margin-left:10px", onclick='autogenerateGroupName(MagicLinkGroup, 4)') Create new group
-          div(class='pure-left-control-group')
-            label(for='MagicLinkWorld') Select Entry World
-            
-            select(name='MagicLinkWorld', id='MagicLinkWorld', , class="pure-input-1-3")
 
-              // Users can only create magic links for worlds that they have editing access to
-              for world of worldEditingList
-                option(value=world)=world
+          div(class='pure-left-control-group' style='margin-top:25px')
 
-          div(class='pure-controls')
-            input(type='button', class="pure-button pure-button-primary", value=buttonText, onclick='createMagicLinks("' + userInfo.userName + '","' + userInfo.userType + '")')
+            // Users can only create magic links for worlds that they have editing access to
+            for world of worldEditingList
+              div(style='margin-bottom:10px;display:inline-block')
+                input(type='checkbox', name=world style='margin-right:10px')
+                label(style='white-space:nowrap')=world
 
-      p Selection the expiry and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[#{buttonText}]</span> button above to generate "magic links" to the selected world for each #{targetUsersText}. Just copy and send each link to each #{targetUsersText} to automatically log them in. Ask them to save the link so they can login repeatedly. 
-      p <em>Note these links expire in <span id='countdownElem' style='color:#0078e7; font-weight:bold;'>15 minutes</span></em>.
-      div(id="MagicLinksContent" class="gutter-bottom-doubled")
+          div(class='pure-controls' style='margin:20px 0 20px 0')
+            input(type='submit' class="pure-button pure-button-primary" value='Create')
+
+          p(style='color:red') #{magicLinkError}   
+
+          if magicLink
+            div(style='margin-top:30px')
+              p(style='color:green; margin-bottom:10px') #{magicLinkSuccess}
+              <i class="fa-solid fa-link" style='position:absolute; padding:12px 15px;'></i>
+              input(type='text' id='linkCopy' value=magicLink readonly style='width:90%; background-color:white; color:black; padding-left:50px; padding-right:20px; border-radius: 4px 0 0 4px; height:40px;')
+              span
+                input(type='button' class='pure-button pure-button-primary' value='Copy' onclick='copyText(linkCopy)' style='width:10%; border-radius: 0 4px 4px 0; height:40px;')
