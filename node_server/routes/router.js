@@ -124,6 +124,7 @@ router.post('/update-session-name', controller.updateSessionName);
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
+router.get('/more-circles', authenticated, controller.serveMoreCircles);
 router.get('/manage-users', authenticated, controller.serveUserManager);
 
 router.post('/create-user', controller.createUser);
