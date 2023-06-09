@@ -1414,9 +1414,9 @@ const serveUserManager = async (req, res, next) =>
 
     for (const key in CIRCLES.USER_TYPE)
     {
-      if (CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.SUPERUSER)
+      if (CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.MAGIC_GUEST || CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE[key] === CIRCLES.USER_TYPE.SUPERUSER)
       {
-        // Skipping guest and superuser types as creating these users is not an option
+        // Skipping magic guest, guest and superuser types as creating these users is not an option
       }
       else if (CIRCLES.USER_TYPE[key] === lookingFor)
       {
@@ -1663,7 +1663,7 @@ const createUsersByFile = async (req, res, next) =>
 
             for (const key in CIRCLES.USER_TYPE)
             {
-              if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST)
+              if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.MAGIC_GUEST)
               {
                 validUsertypes.push(CIRCLES.USER_TYPE[key]);
               }
