@@ -4,96 +4,43 @@ block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
+    - var server;
+    - var world;
 
     h4(style='text-align:center') Take a look at the other Circles out there and what they have been working on!
     br
     br
     br
 
-    div.server-wrapper
-        h2 Name's Circles
-        table.circles-server-table
-            tbody
-                thead
-                    th.server-description Description
-                    th.server-worlds Worlds
-                tr
-                    td.server-description In blandit eu quam a finibus. In ac luctus libero. Sed erat nisl, hendrerit sed placerat quis, mollis ac velit. Proin a porta lacus, sit amet dapibus urna. Mauris dictum ultrices augue, eget efficitur tellus. Duis a massa non massa suscipit posuere. Curabitur congue congue odio, at lacinia lorem.
-                    td.server-worlds 
-                        ul 
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span In
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span blandit
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span eu
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span quam gj hgg
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span a
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span finibus
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span In
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span ac
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span luctus gih
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span libero
-        p <b>Check it out: </b>
-            a(href='') linkitylink.com
+    if circleServers.length > 0
 
-    div.server-wrapper
-        h2 Name's Circles
-        table.circles-server-table
-            tbody
-                thead
-                    th.server-description Description
-                    th.server-worlds Worlds
-                tr
-                    td.server-description In blandit eu quam a finibus. In ac luctus libero. Sed erat nisl, hendrerit sed placerat quis, mollis ac velit. Proin a porta lacus, sit amet dapibus urna. Mauris dictum ultrices augue, eget efficitur tellus. Duis a massa non massa suscipit posuere. Curabitur congue congue odio, at lacinia lorem.
-                    td.server-worlds 
-                        ul 
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span In
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span blandit
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span eu
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span quam gj hgg
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span a
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span finibus
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span In
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span ac
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span luctus gih
-                            li 
-                                <i class="fa-solid fa-circle fa-2xs"></i>
-                                span libero
-        p <b>Check it out: </b>
-            a(href='') linkitylink.com
+        // Displaying all Circles servers
+        for server of circleServers
+
+            div.server-wrapper
+                h2 #{server.name}'s Circles
+                table.circles-server-table
+                    tbody
+                        thead
+                            th.server-description Description
+                            th.server-worlds Worlds
+                        tr
+                            td.server-description= server.description
+                                if !server.description
+                                    p No description avaliable
+                                br
+                                br
+                                p(style='margin-bottom:0') <b>Check it out: </b>
+                                    a(href=server.link)= server.link
+                            td.server-worlds 
+                                ul 
+                                    for world of server.worlds
+
+                                        li 
+                                            <i class="fa-solid fa-circle fa-2xs"></i>
+                                            span= world
+    else 
+
+        // Displaying message that there are no servers up at the moment
+        p(style='text-align:center') Oops, no other Circles servers are available right now...
+                                

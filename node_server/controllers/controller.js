@@ -1841,15 +1841,12 @@ const serveMoreCircles = (req, res, next) =>
 {
   const userInfo = getUserInfo(req);
 
-  // Tester info
-
   let circleServers = {};
-
-  //let circle1 = 
 
   res.render(path.resolve(__dirname + '/../public/web/views/moreCircles'), {
     title: "More Circles",
     userInfo: userInfo,
+    circleServers: circleServers,
   });
 }
 
