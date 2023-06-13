@@ -6,6 +6,8 @@ html
       link(rel="stylesheet" type="text/css" href="/web/css/vendor/pure-min.css")
       link(rel="stylesheet" type="text/css" href="/web/css/app.css")
       link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+    block scripts
+      script(src="https://kit.fontawesome.com/23ccd10015.js" crossorigin="anonymous")
      
   body
     .homepage
@@ -23,7 +25,11 @@ html
 
             h2(class="text--centered" style='margin:40px 0 20px 0') Register
 
-            p(class="text--centered" style="color:red") #{message}
+            center
+              if message
+                div(style='margin-bottom:15px')
+                  i(class='fa-solid fa-triangle-exclamation error-icon')
+                  span.error-message=message
 
             form(action="/register-user" method="post" class="pure-form pure-form-aligned")
               fieldset

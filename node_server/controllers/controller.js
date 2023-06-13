@@ -295,7 +295,7 @@ const updateUserInfo = (req, res, next) => {
       // If the checkbox was checked
       if (req.body.deleteEmail)
       {
-        userData.email = null;
+        userData.email = '';
         accountUpdated = true;
         console.log('Email deleted');
       }
@@ -318,12 +318,12 @@ const updateUserInfo = (req, res, next) => {
           }
           else
           {
-            errorMessage = 'ERROR: Passwords do not match';
+            errorMessage = 'Passwords do not match';
           }
         }
         else
         {
-          errorMessage = 'ERROR: Old password is incorrect';
+          errorMessage = 'Old password is incorrect';
         }
       }
 
@@ -355,7 +355,7 @@ const updateUserInfo = (req, res, next) => {
         {
           console.log(error);
 
-          req.session.errorMessage = 'ERROR: Something went wrong, please try again';
+          req.session.errorMessage = 'Something went wrong, please try again';
           return res.redirect('/profile');
         } 
         else 
@@ -1240,7 +1240,7 @@ const createMagicLink = async (req, res, next) =>
       {
         console.log(err);
 
-        req.session.magicLinkError = 'ERROR: Could not create a magic link for ' + worldName + ', please try again';
+        req.session.magicLinkError = 'Could not create a magic link for ' + worldName + ', please try again';
         res.redirect('/explore');
       }
     }
@@ -1277,7 +1277,7 @@ const createMagicLink = async (req, res, next) =>
   }
   else
   {
-    req.session.magicLinkError = 'ERROR: No worlds selected';
+    req.session.magicLinkError = 'No worlds selected';
     req.session.magicLink = null;
     req.session.magicLinkSuccess = null;
   }
@@ -1577,11 +1577,11 @@ const createUser = async (req, res, next) =>
         // If there was an error because the username already exists in the database, output an error message to the user
         if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
         {
-          req.session.errorMessage = 'ERROR: Username is unavailable';
+          req.session.errorMessage = 'Username is unavailable';
           return res.redirect('/manage-users');
         }
 
-        req.session.errorMessage = 'ERROR: Something went wrong, please try again';
+        req.session.errorMessage = 'Something went wrong, please try again';
         return res.redirect('/manage-users');
       } 
       else 
@@ -1593,7 +1593,7 @@ const createUser = async (req, res, next) =>
   }
   else
   {
-    req.session.errorMessage = 'ERROR: Something went wrong, please try again';
+    req.session.errorMessage = 'Something went wrong, please try again';
     return res.redirect('/manage-users');
   }
 }
@@ -1767,7 +1767,7 @@ const updateUsertype = async (req, res, next) =>
 
         if (updatedUser)
         {
-          const message = user.username + ' usertype successfully updated to ' + req.body[username];
+          const message = user.username + "'s usertype successfully updated to " + req.body[username];
 
           switch (user.usertype)
           {
@@ -1789,7 +1789,7 @@ const updateUsertype = async (req, res, next) =>
         }
         else
         {
-          const message = 'ERROR: ' + user.username + ' usertype failed to updated, please try again';
+          const message = user.username + "'s usertype failed to updated, please try again";
 
           switch (req.body[username])
           {
@@ -1831,7 +1831,7 @@ const updateSessionName = function(req, res, next)
   }
   else
   {
-    req.session.errorMessage = "ERROR: Display name must contain text and can not start with a space (' ')";
+    req.session.errorMessage = "Display name must contain text and can not start with a space (' ')";
   }
 
   return res.redirect('/explore');

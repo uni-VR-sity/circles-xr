@@ -62,8 +62,17 @@ block content
   br
 
   h2 Update
-  p(style='color:green;margin-bottom:0') #{successMessage}
-  p(style='color:red;margin-bottom:0') #{errorMessage}
+  
+  if successMessage
+    div(style='margin-bottom:0')
+      i(class='fa-solid fa-circle-check success-icon')
+      span.success-message #{successMessage}
+
+  if errorMessage
+    div(style='margin-bottom:0')
+      i(class='fa-solid fa-triangle-exclamation error-icon')
+      span.error-message #{errorMessage}
+
   form(action='/update-user' method='post' class='pure-form pure-form-aligned' style='margin: 15 0 0 0')
     fieldset
       .pure-left-control-group

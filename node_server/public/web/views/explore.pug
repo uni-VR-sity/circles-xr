@@ -21,8 +21,15 @@ block content
         span 
           input(type='submit' value='Set Name' class='pure-button pure-button-primary')
 
-      p(style='color:green;margin-top:20px') #{successMessage}
-      p(style='color:red') #{errorMessage}
+      if successMessage
+        div(style='margin:20px 0 10px 0')
+          i(class='fa-solid fa-circle-check success-icon')
+          span.success-message #{successMessage}
+
+      if errorMessage
+        div(style='margin:20px 0 10px 0')
+          i(class='fa-solid fa-triangle-exclamation error-icon')
+          span.error-message #{errorMessage}
 
   if magicGuest
 
@@ -105,11 +112,17 @@ block content
           div(class='pure-controls' style='margin:20px 0 20px 0')
             input(type='submit' class="pure-button pure-button-primary" value='Create')
 
-          p(style='color:red') #{magicLinkError}   
+          if magicLinkError
+            div(style='margin-top:25px')
+              i(class='fa-solid fa-triangle-exclamation error-icon')
+              span.error-message #{magicLinkError}
 
           if magicLink
             div(style='margin-top:30px')
-              p(style='color:green; margin-bottom:10px') #{magicLinkSuccess}
+            if magicLinkSuccess
+              div(style='margin-bottom:10px')
+                i(class='fa-solid fa-circle-check success-icon')
+                span.success-message #{magicLinkSuccess}
               <i class="fa-solid fa-link" style='position:absolute; padding:12px 15px;'></i>
               input(type='text' id='linkCopy' value=magicLink readonly style='width:90%; background-color:white; color:black; padding-left:50px; padding-right:20px; border-radius: 4px 0 0 4px; height:40px;')
               span

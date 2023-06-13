@@ -29,8 +29,15 @@ block content
         .pure-controls
             input(type='submit' value='Create User' class='pure-button pure-button-primary')
 
-    p(style='color:green;margin-bottom:0') #{successMessage}
-    p(style='color:red;margin-bottom:0') #{errorMessage}
+    if successMessage
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-circle-check success-icon')
+            span.success-message #{successMessage}
+
+    if errorMessage
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-triangle-exclamation error-icon')
+            span.error-message #{errorMessage}
 
     br
 
@@ -59,10 +66,14 @@ block content
         input(type='submit' value='Create Users' class='pure-button pure-button-primary')
 
     for message of Bulk_SuccessMessage
-        p(style='color:green;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-circle-check success-icon')
+            span.success-message= message
 
     for message of Bulk_ErrorMessage
-        p(style='color:red;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-triangle-exclamation error-icon')
+            span.error-message= message
 
     br
     br
@@ -98,10 +109,14 @@ block content
         input(type='submit' value='Update Users' class='pure-button pure-button-primary')
 
     for message of A_SuccessMessage
-        p(style='color:green;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-circle-check success-icon')
+            span.success-message= message
 
     for message of A_ErrorMessage
-        p(style='color:red;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-triangle-exclamation error-icon')
+            span.error-message= message
         
     br
     br
@@ -135,10 +150,14 @@ block content
         input(type='submit' value='Update Users' class='pure-button pure-button-primary')
 
     for message of T_R_SuccessMessage
-        p(style='color:green;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-circle-check success-icon')
+            span.success-message= message
 
     for message of T_R_ErrorMessage
-        p(style='color:red;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-triangle-exclamation error-icon')
+            span.error-message= message
 
     br
     br
@@ -170,7 +189,11 @@ block content
         input(type='submit' value='Update Users' class='pure-button pure-button-primary')
 
     for message of S_P_T_SuccessMessage
-        p(style='color:green;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-circle-check success-icon')
+            span.success-message= message
 
     for message of S_P_T_ErrorMessage
-        p(style='color:red;margin-bottom:0')= message
+        div(style='margin-bottom:0')
+            i(class='fa-solid fa-triangle-exclamation error-icon')
+            span.error-message= message

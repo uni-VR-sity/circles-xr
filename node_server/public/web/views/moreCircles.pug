@@ -43,9 +43,9 @@ block content
     else 
         if errorMessage 
             // Displaying message that an error occured
-            center(style='color:red;')
-                i(class='fa-solid fa-circle-exclamation fa-lg center' style='width:0; position:relative; padding:8px 0')
-                span(style='padding-left:35px; font-weight:bold')=errorMessage
+            center
+                i(class='fa-solid fa-triangle-exclamation fa-lg error-icon')
+                span.error-message(style='padding-left:35px; font-weight:bold')=errorMessage
                 p(style='padding-top:25px')=secondaryMessage
 
         else

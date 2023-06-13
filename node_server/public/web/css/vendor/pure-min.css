@@ -23,3 +23,9 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 .circles-server-table .server-worlds{width:45%;padding-left:55px}
 .circles-server-table li i{font-size:4px;padding-right:7px;vertical-align:middle;text-align:left}
 .circles-server-table li{display:inline-block;min-width:140;padding-right:20px;margin-bottom:4px;white-space:nowrap}
+
+
+.error-icon, .success-icon{width:0;position:relative;padding:8px 0}
+.error-icon, .error-message{color:red}
+.success-icon, .success-message{color:green}
+.error-message, .success-message{padding-left:25px}

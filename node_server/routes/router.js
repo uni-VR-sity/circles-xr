@@ -59,7 +59,7 @@ router.get('/', notAuthenticated, (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
-  req.session.errorMessage = 'ERROR: Username and/ or password incorrect';
+  req.session.errorMessage = 'Username and/ or password incorrect';
   return res.redirect('/');
 });
 
@@ -70,7 +70,7 @@ router.get('/get-display-name', function(req, res)
 });
 
 router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
-  req.session.errorMessage = 'ERROR: Guest log in failed, please try again';
+  req.session.errorMessage = 'Guest log in failed, please try again';
   return res.redirect('/');
 });
 
@@ -88,11 +88,11 @@ router.get('/magic-login', function(req, res, next) {
     { 
       if (info.message.includes('jwt expired') === true)
       {
-        req.session.errorMessage = 'ERROR: This magic link is expired';
+        req.session.errorMessage = 'This magic link is expired';
       }
       else
       {
-        req.session.errorMessage = 'ERROR: This magic link is invalid';
+        req.session.errorMessage = 'This magic link is invalid';
       }
 
       return res.redirect('/'); 
