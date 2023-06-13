@@ -10,15 +10,15 @@ block content
     h4(style='text-align:center') Take a look at the other Circles out there and what they have been working on!
     br
     br
-    br
 
     if circleServers.length > 0
+        br
 
         // Displaying all Circles servers
         for server of circleServers
 
             div.server-wrapper
-                h2 #{server.name}'s Circles
+                h2 #{server.ownerName}'s Circles
                 table.circles-server-table
                     tbody
                         thead
@@ -30,17 +30,25 @@ block content
                                     p No description avaliable
                                 br
                                 br
-                                p(style='margin-bottom:0') <b>Check it out: </b>
-                                    a(href=server.link)= server.link
+                                a(class="pure-button worldList" style='background-color:#0078e7; color:white; margin:0' target='_blank' href=server.link) Check It Out
+                                
                             td.server-worlds 
-                                ul 
+                                    ul 
                                     for world of server.worlds
 
                                         li 
                                             <i class="fa-solid fa-circle fa-2xs"></i>
                                             span= world
+                hr
     else 
+        if errorMessage 
+            // Displaying message that an error occured
+            center(style='color:red;')
+                i(class='fa-solid fa-circle-exclamation fa-lg center' style='width:0; position:relative; padding:8px 0')
+                span(style='padding-left:35px; font-weight:bold')=errorMessage
+                p(style='padding-top:25px')=secondaryMessage
 
-        // Displaying message that there are no servers up at the moment
-        p(style='text-align:center') Oops, no other Circles servers are available right now...
+        else
+            // Displaying message that there are no servers up at the moment
+            p(style='text-align:center') Oops, no other Circles servers are available right now...
                                 

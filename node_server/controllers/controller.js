@@ -9,6 +9,7 @@ const User     = require('../models/user');
 const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
 const Worlds   = require('../models/worlds');
+const Servers  = require('../models/servers');
 const path     = require('path');
 const fs       = require('fs');
 const crypto   = require('crypto');
@@ -18,6 +19,7 @@ const dotenvParseVariables = require('dotenv-parse-variables');
 const jwt      = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
+const XMLHttpRequest = require('xhr2');
 
 //load in config
 let env = dotenv.config({})
@@ -1837,17 +1839,66 @@ const updateSessionName = function(req, res, next)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Getting list of servers from database
+const getServersList = async (req, res, next) =>
+{
+  try 
+  {
+    let servers = await Servers.find({});
+    res.json(servers);
+  }
+  catch(e)
+  {
+    res.json('ERROR');
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering Circles servers page
 const serveMoreCircles = (req, res, next) => 
 {
   const userInfo = getUserInfo(req);
 
-  let circleServers = {};
+  let request = new XMLHttpRequest();
+  request.open('GET', 'http://localhost:1111/get-servers');            // TO REPLACE WITH CENTRAL SERVER LINK
 
-  res.render(path.resolve(__dirname + '/../public/web/views/moreCircles'), {
-    title: "More Circles",
-    userInfo: userInfo,
-    circleServers: circleServers,
-  });
+  const renderError = function (message)
+  {
+    res.render(path.resolve(__dirname + '/../public/web/views/moreCircles'), {
+      title: 'More Circles',
+      userInfo: userInfo,
+      circleServers: {},
+      errorMessage: message,
+      secondaryMessage: 'Please try again. If error persists, contact the central Circles server',
+    });
+  }
+
+  request.onerror = function() 
+  {
+    renderError('An error occured while connecting to central server');
+  }
+
+  request.onload = function() 
+  {
+    let serverData = JSON.parse(request.response);
+    
+    // Checking that the server data was able the be collected, if not, outputting an error message
+    if (serverData === 'ERROR')
+    {
+      renderError('An error occured while getting data from central server');
+    }
+    else
+    {
+      res.render(path.resolve(__dirname + '/../public/web/views/moreCircles'), {
+        title: "More Circles",
+        userInfo: userInfo,
+        circleServers: JSON.parse(request.response),
+      });
+    }
+  };
+
+  request.send();
 }
 
 module.exports = {
@@ -1877,5 +1928,6 @@ module.exports = {
   createUsersByFile,
   updateUsertype,
   updateSessionName,
+  getServersList,
   serveMoreCircles,
 };
