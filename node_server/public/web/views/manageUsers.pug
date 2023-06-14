@@ -20,10 +20,12 @@ block content
     form(action='/create-user' method='post' class='pure-form pure-form-aligned' style='margin-bottom:25')
         fieldset
         .pure-left-control-group
-            label Username
+            label Username 
+                span.required *
             input.field-long(type='text', name='username', placeholder='SuperFriend99')
         .pure-left-control-group
-            label User Type
+            label User Type 
+                span.required *
             select.field-select(name='usertype' style='width:13.5em')!= usertypes
 
         .pure-controls

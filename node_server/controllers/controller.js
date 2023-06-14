@@ -384,7 +384,7 @@ const updateUserInfo = (req, res, next) => {
     }).catch(function(err)
     {
       console.log(err);
-      req.session.errorMessage = 'ERROR: Something went wrong, please try again';
+      req.session.errorMessage = 'Something went wrong, please try again';
       return res.redirect('/profile');
     });
   }
@@ -551,14 +551,14 @@ const serveProfile = (req, res, next) =>
 // Creates a new user and puts them in the user database
 const registerUser = (req, res, next) => {
   // Making sure all required fields are there (username, password, and password confirmation)
-  if (req.body.username && req.body.password & req.body.passwordConf) 
+  if (req.body.username && req.body.password && req.body.passwordConf) 
   {
     // Making sure passwords match
     // If they don't, send an error message to the user
     if (req.body.password !== req.body.passwordConf) 
     {
       console.log('ERROR: Passwords do not match');
-      renderRegister(res, 'ERROR: Passwords do not match');
+      renderRegister(res, 'Passwords do not match');
     }
     else
     {
@@ -599,12 +599,12 @@ const registerUser = (req, res, next) => {
           // If there was an error because the username already exists in the database, output an error message to the user
           if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
           {
-            req.session.errorMessage = 'ERROR: Username is unavailable';
+            req.session.errorMessage = 'Username is unavailable';
             return res.redirect('/register');
           }
           else
           {
-            req.session.errorMessage = 'ERROR: Something went wrong, please try again';
+            req.session.errorMessage = 'Something went wrong, please try again';
             return res.redirect('/register');
           }
         } 
@@ -618,7 +618,7 @@ const registerUser = (req, res, next) => {
   } 
   else 
   {
-    req.session.errorMessage = 'ERROR: Something went wrong, please try again';
+    req.session.errorMessage = 'Something went wrong, please try again';
     return res.redirect('/register');
   }
 };
@@ -1616,7 +1616,7 @@ const createUsersByFile = async (req, res, next) =>
   {
     if (err)
     {
-      req.session.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
+      req.session.Bulk_ErrorMessage.push('File could not be read, please try again');
       return res.redirect('/manage-users');
     }
 
@@ -1635,7 +1635,7 @@ const createUsersByFile = async (req, res, next) =>
       {
         if (err)
         {
-          req.session.Bulk_ErrorMessage.push('ERROR: File could not be read, please try again');
+          req.session.Bulk_ErrorMessage.push('File could not be read, please try again');
           return res.redirect('/manage-users');
         }
 
@@ -1726,12 +1726,12 @@ const createUsersByFile = async (req, res, next) =>
     // This file type means no file was uploaded
     else if (fileType === 'octet-stream')
     {
-      req.session.Bulk_ErrorMessage.push('ERROR: No file uploaded' );
+      req.session.Bulk_ErrorMessage.push('No file uploaded' );
       return res.redirect('/manage-users');
     }
     else
     {
-      req.session.Bulk_ErrorMessage.push('ERROR: Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
+      req.session.Bulk_ErrorMessage.push('Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
       return res.redirect('/manage-users');
     }
 
@@ -1860,6 +1860,22 @@ const serveMoreCircles = (req, res, next) =>
 {
   const userInfo = getUserInfo(req);
 
+  // Getting success and error messages
+  let successMessage = null;
+  let errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
   let request = new XMLHttpRequest();
   request.open('GET', 'http://localhost:1111/get-servers');            // TO REPLACE WITH CENTRAL SERVER LINK
 
@@ -1868,8 +1884,10 @@ const serveMoreCircles = (req, res, next) =>
     res.render(path.resolve(__dirname + '/../public/web/views/moreCircles'), {
       title: 'More Circles',
       userInfo: userInfo,
+      successMessage: successMessage,
+      errorMessage: errorMessage,
       circleServers: {},
-      errorMessage: message,
+      serverErrorMessage: message,
       secondaryMessage: 'Please try again. If error persists, contact the central Circles server',
     });
   }
@@ -1893,6 +1911,8 @@ const serveMoreCircles = (req, res, next) =>
       res.render(path.resolve(__dirname + '/../public/web/views/moreCircles'), {
         title: "More Circles",
         userInfo: userInfo,
+        successMessage: successMessage,
+        errorMessage: errorMessage,
         circleServers: JSON.parse(request.response),
       });
     }
@@ -1900,6 +1920,48 @@ const serveMoreCircles = (req, res, next) =>
 
   request.send();
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adding new server to database
+const addServer = async (req, res, next) => 
+{
+  // Making sure all required fields are there (owner's name, description, link to server, and worlds)
+  if (req.body.ownerName && req.body.link && req.body.description && req.body.worlds) 
+  {
+    let serverData = {
+      ownerName: req.body.ownerName,
+      description: req.body.description,
+      link: req.body.link,
+      worlds: [],
+    }
+
+    // Making sure all worlds in worlds array have text
+    for (const world of req.body.worlds)
+    {
+      if (world.length > 0)
+      {
+        serverData.worlds.push(world);
+      }
+    }
+
+    try
+    {
+      await Servers.create(serverData);
+      req.session.successMessage = serverData.ownerName + "'s server successfully added to database";
+
+    }
+    catch(e)
+    {
+      console.log(e);
+      req.session.errorMessage = 'Something went wrong, please try again';
+    }
+  }
+
+  return res.redirect('/more-circles');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
   // getAllUsers,
@@ -1930,4 +1992,5 @@ module.exports = {
   updateSessionName,
   getServersList,
   serveMoreCircles,
+  addServer,
 };

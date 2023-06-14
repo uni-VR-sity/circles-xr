@@ -34,13 +34,16 @@ html
             form(action="/register-user" method="post" class="pure-form pure-form-aligned")
               fieldset
                 .pure-right-control-group
-                  label Username
+                  label Username 
+                    span.required *
                   input.field-long(right='text' name='username' placeholder='SuperFriend99' required)
                 .pure-right-control-group
-                  label Password
+                  label Password 
+                    span.required *
                   input.field-long(type='password' name='password' required)
                 .pure-right-control-group
-                  label Confirm password
+                  label Confirm password 
+                    span.required *
                   input.field-long(type='password' name='passwordConf' required)
                 .pure-controls
                   input(type='submit' value='Register' class="pure-button pure-input-1-2 pure-button-primary")

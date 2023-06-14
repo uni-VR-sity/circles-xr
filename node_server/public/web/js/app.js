@@ -102,3 +102,59 @@ function copyText(copyTextElem) {
     alert("Copied the magic link!");
   });
 }
+
+// Adding another input into the server form ('moreCircles' page)
+function addWorldInput(aboveElementId)
+{
+  // Generating a random work to be a placeholder in the input
+  function randomWord()
+  {
+    let num = Math.floor(Math.random() * 10);
+
+    switch(num)
+    {
+      case 0:
+        return 'Technology';
+
+      case 1:
+        return 'Workplace';
+
+      case 2:
+        return 'Art Gallery';
+
+      case 3:
+        return 'Restaurant';
+
+      case 4:
+        return 'Theatre';
+
+      case 5:
+        return 'Police Station';
+
+      case 6:
+        return 'Fishing Boat';
+
+      case 7:
+        return 'Kitchen';
+
+      case 8:
+        return 'Farm';
+
+      case 9:
+        return 'Plane';
+
+      case 10:
+        return 'Church';
+    }
+  }
+
+  let newInput = document.createElement('input');
+  let aboveElement = document.getElementById(aboveElementId);
+
+  newInput.setAttribute('class', 'field-long');
+  newInput.setAttribute('type', 'text');
+  newInput.setAttribute('name', 'worlds');
+  newInput.setAttribute('placeholder', randomWord());
+
+  aboveElement.parentNode.insertBefore(newInput, aboveElement);
+}
