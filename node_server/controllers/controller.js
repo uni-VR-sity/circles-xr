@@ -1963,6 +1963,86 @@ const addServer = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Setting a server as inactive by superuser or admin request
+const inactivateServer = async (req, res, next) => 
+{
+  // url: /inactivate-server/serverId
+  // split result array: {"", "inactivate-server", "serverId"}
+  const urlSplit = req.url.split('/');
+  const serverId = urlSplit[2];
+
+  // Finding server in database
+  let server = await Servers.findById(serverId);
+
+  // Updating active variable in server
+  if (server)
+  {
+    try
+    {
+      server.active = false;
+      await server.save();
+
+      console.log(server.ownerName + "'s set to be inactive");
+    }
+    catch(e)
+    {
+      console.log('ERROR: Could not set the server with following id to be inactive: ' + serverId);
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not get the server with following id from the database: ' + serverId);
+  }
+
+  return res.redirect('/more-circles');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Setting a server as active by superuser or admin request
+const activateServer = async (req, res, next) => 
+{
+  // url: /activate-server/serverId
+  // split result array: {"", "activate-server", "serverId"}
+  const urlSplit = req.url.split('/');
+  const serverId = urlSplit[2];
+
+  // Finding server in database
+  let server = await Servers.findById(serverId);
+
+  // Updating active variable in server
+  if (server)
+  {
+    try
+    {
+      server.active = true;
+      await server.save();
+
+      console.log(server.ownerName + "'s set to be active");
+    }
+    catch(e)
+    {
+      console.log('ERROR: Could not set the server with following id to be active: ' + serverId);
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not get the server with following id from the database: ' + serverId);
+  }
+
+  return res.redirect('/more-circles');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Deleting a server by superuser or admin request
+const deleteServer = async (req, res, next) => 
+{
+  
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   // getAllUsers,
   // getUser,
@@ -1993,4 +2073,7 @@ module.exports = {
   getServersList,
   serveMoreCircles,
   addServer,
+  inactivateServer,
+  activateServer,
+  deleteServer,
 };
