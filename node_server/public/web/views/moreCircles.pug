@@ -4,6 +4,7 @@ block append stylesheets
   link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
+    - var adminUser = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
     - var server;
     - var world;
 
@@ -11,50 +12,51 @@ block content
     br
     br
 
-    // Form for adding additional servers to database
-    div.server-wrapper
-        form(action='/add-server' method='post' class='pure-form pure-form-aligned')
-            fieldset
+    if adminUser
+        // Form for adding additional servers to database
+        div.server-wrapper
+            form(action='/add-server' method='post' class='pure-form pure-form-aligned')
+                fieldset
 
-                table.circles-server-table
-                    tbody
-                        tr
-                            td.left
-                                .pure-left-control-group
-                                    label Owner's Name 
-                                        span.required *
-                                    input.field-long(type='text' name='ownerName' placeholder='John Doe' required)
-                                .pure-left-control-group
-                                    label(style='padding-top:3px') Description 
-                                        span.required *
-                                    textarea(name='description' placeholder='This server features ...' style='height:100px' required)
-                                .pure-left-control-group
-                                    label Link to Server 
-                                        span.required *
-                                    input.field-long(type='url' name='link' pattern="https?://www\\.+.+\\.+.+" placeholder='https://www.circles.com' required)
-                                .pure-controls(style='margin-top:40')
-                                    input(type='submit' value='Add Server' class='pure-button pure-button-primary')
-                                
-                            td.right
-                                .pure-left-control-group
-                                    label(style='width:6em;vertical-align:top;padding-top:4px') Worlds 
-                                        span.required *
-                                    div(style='width:65%;display:inline-block')
-                                        input.field-long(type='text' name='worlds' placeholder='Classroom' required)
-                                        center(id='add-input')
-                                            i(class='fa-solid fa-square-plus fa-xl' onclick="addWorldInput('add-input')")
+                    table.circles-server-table
+                        tbody
+                            tr
+                                td.left
+                                    .pure-left-control-group
+                                        label Owner's Name 
+                                            span.required *
+                                        input.field-long(type='text' name='ownerName' placeholder='John Doe' required)
+                                    .pure-left-control-group
+                                        label(style='padding-top:3px') Description 
+                                            span.required *
+                                        textarea(name='description' placeholder='This server features ...' style='height:100px' required)
+                                    .pure-left-control-group
+                                        label Link to Server 
+                                            span.required *
+                                        input.field-long(type='url' name='link' pattern="https?://www\\.+.+\\.+.+" placeholder='https://www.circles.com' required)
+                                    .pure-controls(style='margin-top:40')
+                                        input(type='submit' value='Add Server' class='pure-button pure-button-primary')
+                                    
+                                td.right
+                                    .pure-left-control-group
+                                        label(style='width:6em;vertical-align:top;padding-top:4px') Worlds 
+                                            span.required *
+                                        div(style='width:65%;display:inline-block')
+                                            input.field-long(type='text' name='worlds' placeholder='Classroom' required)
+                                            center(id='add-input')
+                                                i(class='fa-solid fa-square-plus fa-xl' onclick="addWorldInput('add-input')")
 
-        if successMessage
-            div(style='margin:40px 0 0 0')
-            i(class='fa-solid fa-circle-check success-icon')
-            span.success-message #{successMessage}
+            if successMessage
+                div(style='margin:40px 0 0 0')
+                i(class='fa-solid fa-circle-check success-icon')
+                span.success-message #{successMessage}
 
-        if errorMessage
-            div(style='margin:40px 0 0 0')
-            i(class='fa-solid fa-triangle-exclamation error-icon')
-            span.error-message #{errorMessage}
+            if errorMessage
+                div(style='margin:40px 0 0 0')
+                i(class='fa-solid fa-triangle-exclamation error-icon')
+                span.error-message #{errorMessage}
 
-        hr
+            hr
 
     if circleServers.length > 0
         // br                           ADD BACK IN FOR DISTRIBUTED VERSION OF CIRCLES
