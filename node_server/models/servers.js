@@ -23,11 +23,18 @@ const ServerSchema = new mongoose.Schema({
       trim:       true,
     },
     link: {
-        type:       String,
-        unique:     false,
-        required:   true,
-        trim:       true,
-      },
+      type:       String,
+      unique:     false,
+      required:   true,
+      trim:       true,
+    },
+    active: {
+      type:       Boolean,
+      unique:     false,
+      required:   true,
+      trim:       true,
+      default:    true,
+    },
   });
 
   const Servers = mongoose.model('servers', ServerSchema);

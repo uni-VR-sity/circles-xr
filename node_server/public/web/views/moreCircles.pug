@@ -59,34 +59,81 @@ block content
             hr
 
     if circleServers.length > 0
-        // br                           ADD BACK IN FOR DISTRIBUTED VERSION OF CIRCLES
+        if !adminUser 
+            br
 
         // Displaying all Circles servers
         for server of circleServers
+            
+            // Greying out if server is inactive
+            if server.active
 
-            div.server-wrapper
-                h2 #{server.ownerName}'s Circles
-                table.circles-server-table
-                    tbody
-                        thead
-                            th.server-description Description
-                            th.server-worlds Worlds
-                        tr
-                            td.server-description= server.description
-                                if !server.description
-                                    p No description avaliable
-                                br
-                                br
-                                a(class="pure-button worldList" style='background-color:#0078e7; color:white; margin:0' target='_blank' href=server.link) Check It Out
-                                
-                            td.server-worlds 
-                                ul 
-                                for world of server.worlds
+                div.server-wrapper
+                    h2(style='display:inline-block') #{server.ownerName}'s Circles 
+                    if adminUser
+                        div.dropdown
+                            i(class="fa-solid fa-square-caret-down fa-lg")
+                            div.drop-content
+                                - var inactivateLink = '/inactivate-server/' + server._id;
+                                - var deleteLink = '/delete-server/' + server._id;
+                                a(href=inactivateLink) Mark as inactive
+                                a(href=deleteLink style='color:red') Delete server
 
-                                    li 
-                                        <i class="fa-solid fa-circle fa-2xs"></i>
-                                        span= world
-                hr
+                    table.circles-server-table
+                        tbody
+                            thead
+                                th.server-description Description
+                                th.server-worlds Worlds
+                            tr
+                                td.server-description= server.description
+                                    if !server.description
+                                        p No description avaliable
+                                    br
+                                    br
+                                    a(class="pure-button worldList" style='background-color:#0078e7; color:white; margin:0' target='_blank' href=server.link) Check It Out
+                                    
+                                td.server-worlds 
+                                    ul 
+                                    for world of server.worlds
+
+                                        li 
+                                            <i class="fa-solid fa-circle fa-2xs"></i>
+                                            span= world
+                    hr
+
+            else 
+                div.server-wrapper.inactive-block
+                    h2(style='display:inline-block') #{server.ownerName}'s Circles 
+                    if adminUser
+                        div.dropdown
+                            i(class="fa-solid fa-square-caret-down fa-lg")
+                            div.drop-content
+                                - var activateLink = '/activate-server/' + server._id;
+                                - var deleteLink = '/delete-server/' + server._id;
+                                a(href=activateLink) Mark as active
+                                a(href=deleteLink style='color:red') Delete server
+                    
+                    p.inactive-text INACTIVE
+
+                    table.circles-server-table
+                        tbody
+                            thead
+                                th.server-description Description
+                                th.server-worlds Worlds
+                            tr
+                                td.server-description= server.description
+                                    if !server.description
+                                        p No description avaliable
+                                    
+                                td.server-worlds 
+                                    ul 
+                                    for world of server.worlds
+
+                                        li 
+                                            <i class="fa-solid fa-circle fa-2xs"></i>
+                                            span= world
+                    hr
+
     else 
         if serverErrorMessage 
             // Displaying message that an error occured
