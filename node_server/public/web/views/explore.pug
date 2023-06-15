@@ -15,8 +15,8 @@ block content
     fieldset
       .pure-left-control-group
         label(style='white-space:nowrap') Session Display Name
-          span.tooltip <i class="fa-solid fa-circle-info"></i>
-            p.tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
+          span.top-tooltip <i class="fa-solid fa-circle-info"></i>
+            p.top-tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
         input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 30px' value=sessionName)
         span 
           input(type='submit' value='Set Name' class='pure-button pure-button-primary')
@@ -30,6 +30,12 @@ block content
         div(style='margin:20px 0 10px 0')
           i(class='fa-solid fa-triangle-exclamation error-icon')
           span.error-message #{errorMessage}
+
+  div(style='margin:20px 0 30px 0;')
+    p(style='display:inline-block;') Customize avatar appearance for the session: 
+    a(class="pure-button worldList" style='margin:0 8px 0 15px; vertical-align:middle;' href='/w/Wardrobe') Wardrobe
+    span.right-tooltip <i class="fa-solid fa-circle-info"></i>
+      p.right-tooltip-text(style='width:auto;white-space:nowrap') Change it permanently on the Profile page
 
   if magicGuest
 

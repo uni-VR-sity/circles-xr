@@ -52,54 +52,58 @@ const addWorlds = async function()
 
   for (const file of files) 
   {
-    const path = __dirname + '/../public/worlds/' + file;
-
-    let stat = null;
-
-    // Checking if path is a directory
-    try
+    // Skipping over Wardrobe world as everyone has access to it
+    if (file != 'Wardrobe')
     {
-      stat = await fs.promises.stat(path);
-    }
-    catch (e)
-    {
-      console.log(e.message);
-    }
+      const path = __dirname + '/../public/worlds/' + file;
 
-    // If path is a directory,
-    // If the world is not already in the database,
-    // Add it to the database
-    if (stat.isDirectory())
-    {
-      let world = null;
+      let stat = null;
 
+      // Checking if path is a directory
       try
       {
-        world = await Worlds.findOne({ name: file }).exec();
+        stat = await fs.promises.stat(path);
       }
       catch (e)
       {
         console.log(e.message);
       }
 
-      if (world === null)
+      // If path is a directory,
+      // If the world is not already in the database,
+      // Add it to the database
+      if (stat.isDirectory())
       {
-        const worldData = {
-          name: file,
-          url: path,
-        };
+        let world = null;
 
-        try 
+        try
         {
-          await Worlds.create(worldData);
-          console.log(file + ' added to database');
-        } 
-        catch(err) 
-        {
-          throw file + " creation error: " + err.message;
+          world = await Worlds.findOne({ name: file }).exec();
         }
+        catch (e)
+        {
+          console.log(e.message);
+        }
+
+        if (world === null)
+        {
+          const worldData = {
+            name: file,
+            url: path,
+          };
+
+          try 
+          {
+            await Worlds.create(worldData);
+            console.log(file + ' added to database');
+          } 
+          catch(err) 
+          {
+            throw file + " creation error: " + err.message;
+          }
+        }
+      
       }
-    
     }
   }
 }
