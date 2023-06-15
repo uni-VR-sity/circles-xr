@@ -1982,11 +1982,11 @@ const inactivateServer = async (req, res, next) =>
       server.active = false;
       await server.save();
 
-      console.log(server.ownerName + "'s set to be inactive");
+      console.log(server.ownerName + "'s server set to be inactive");
     }
     catch(e)
     {
-      console.log('ERROR: Could not set the server with following id to be inactive: ' + serverId);
+      console.log("ERROR: Could not set " + server.ownerName + "'s server to be inactive");
     }
   }
   else
@@ -2018,11 +2018,11 @@ const activateServer = async (req, res, next) =>
       server.active = true;
       await server.save();
 
-      console.log(server.ownerName + "'s set to be active");
+      console.log(server.ownerName + "'s server set to be active");
     }
     catch(e)
     {
-      console.log('ERROR: Could not set the server with following id to be active: ' + serverId);
+      console.log("ERROR: Could not set " + server.ownerName + "'s server to be active");
     }
   }
   else
@@ -2038,7 +2038,24 @@ const activateServer = async (req, res, next) =>
 // Deleting a server by superuser or admin request
 const deleteServer = async (req, res, next) => 
 {
-  
+  // url: /delete-server/serverId
+  // split result array: {"", "delete-server", "serverId"}
+  const urlSplit = req.url.split('/');
+  const serverId = urlSplit[2];
+
+  // Deleting server
+  try
+  {
+    await Servers.findByIdAndDelete(serverId);
+
+    console.log('Server with the following id deleted: ' + serverId);
+  }
+  catch(e)
+  {
+    console.log('ERROR: The server with the following id could not be deleted: ' + serverId);
+  }
+
+  return res.redirect('/more-circles');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------

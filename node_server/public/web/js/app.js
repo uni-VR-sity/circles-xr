@@ -158,3 +158,55 @@ function addWorldInput(aboveElementId)
 
   aboveElement.parentNode.insertBefore(newInput, aboveElement);
 }
+
+// Creating a double check click before deleting the server ('moreCircles' page)
+function doubleCheckDelete(deleteLink)
+{
+  // deleteLink: /delete-server/serverId
+  // split result array: {"", "delete-server", "serverId"}
+  const urlSplit = deleteLink.split('/');
+  const id = urlSplit[2];
+
+  // Making sure there is not already a delete confirmation (they have an id of the serve id)
+  if (!document.getElementById('delete?' + id))
+  {
+    // Creating elements to confirm the delete
+
+    // DIV that holds elements
+    let confirmationContainer = document.createElement('div');
+    confirmationContainer.setAttribute('class', 'confirm-delete-wrapper');
+    confirmationContainer.setAttribute('id', 'delete?' + id);
+    
+
+    let confirmationText = document.createElement('p');
+    confirmationText.innerHTML = 'Delete this server?';
+    confirmationContainer.appendChild(confirmationText);
+
+    let cancelButton = document.createElement('a');
+    cancelButton.setAttribute('class', 'pure-button worldList no-delete');
+    cancelButton.setAttribute('onclick', 'cancelDelete("' + id + '")');
+    cancelButton.innerHTML = 'Cancel';
+    confirmationContainer.appendChild(cancelButton);
+
+    let deleteButton = document.createElement('a');
+    deleteButton.setAttribute('class', 'pure-button worldList delete');
+    deleteButton.setAttribute('href', deleteLink);
+    deleteButton.innerHTML = 'Delete';
+    confirmationContainer.appendChild(deleteButton);
+
+    // Finding the div with the id of this server id to put the check message in
+    
+    let parentElement = document.getElementById(id);
+    
+    parentElement.insertBefore(confirmationContainer, parentElement.lastElementChild);
+  }
+
+}
+
+// Canceling the delete by user request ('moreCircles' page)
+function cancelDelete(elementId)
+{
+  // Deleting delete confirmation div
+  let confirmation = document.getElementById('delete?' + elementId);
+  confirmation.remove();
+}

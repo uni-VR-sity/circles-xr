@@ -68,7 +68,7 @@ block content
             // Greying out if server is inactive
             if server.active
 
-                div.server-wrapper
+                div.server-wrapper(id=server._id)
                     h2(style='display:inline-block') #{server.ownerName}'s Circles 
                     if adminUser
                         div.dropdown
@@ -77,7 +77,7 @@ block content
                                 - var inactivateLink = '/inactivate-server/' + server._id;
                                 - var deleteLink = '/delete-server/' + server._id;
                                 a(href=inactivateLink) Mark as inactive
-                                a(href=deleteLink style='color:red') Delete server
+                                a(onclick='doubleCheckDelete("' + deleteLink + '")' style='color:red') Delete server
 
                     table.circles-server-table
                         tbody
@@ -111,7 +111,7 @@ block content
                                 - var activateLink = '/activate-server/' + server._id;
                                 - var deleteLink = '/delete-server/' + server._id;
                                 a(href=activateLink) Mark as active
-                                a(href=deleteLink style='color:red') Delete server
+                                a(onclick='doubleCheckDelete("' + deleteLink + '")' style='color:red') Delete server
                     
                     p.inactive-text INACTIVE
 
@@ -121,7 +121,7 @@ block content
                                 th.server-description Description
                                 th.server-worlds Worlds
                             tr
-                                td.server-description= server.description
+                                td.server-description(id=server._id)= server.description
                                     if !server.description
                                         p No description avaliable
                                     
