@@ -6,7 +6,7 @@
 
 ## Branches
 
-<b>basic branch</b> is the default server/ for distributing
+<b>main branch</b> is the default server/ for distributing
 
 <b>central branch</b> is the central server for circlesxr.com
 
