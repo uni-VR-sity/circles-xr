@@ -10,6 +10,8 @@
 
 <b>central branch</b> is the central server for circlesxr.com
 
+<b>standalone branch</b> is working on having a Circles world run without a server
+
 ----------------
 
 ## Table of Contents
