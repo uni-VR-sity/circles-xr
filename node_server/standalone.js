@@ -15,6 +15,9 @@ env = dotenvParseVariables(env.parsed);
 // Getting standalone_controller.js template
 let controller                  = fs.readFileSync('./node_server/controllers/standalone_template.js', 'utf8');
 
+// Inserting world parts
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Getting world parts
 let circles_header              =  fs.readFileSync('./src/webpack.worlds.parts/circles_header.part.html', 'utf8');
 let circles_enter_ui            =  fs.readFileSync('./src/webpack.worlds.parts/circles_enter_ui.part.html', 'utf8');
@@ -49,4 +52,6 @@ controller                      = controller.replace('avatar-part', circles_avat
 controller                      = controller.replace('end-part', circles_end_scripts);
 
 // Overwriting controller script file to update
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 fs.writeFileSync('./node_server/controllers/standalone_controller.js', controller);
