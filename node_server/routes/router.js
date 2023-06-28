@@ -140,6 +140,7 @@ router.get('/standalone-circles', (req, res) =>
 router.get('/standalone-circles/get-file/*', (req, res) => 
 {
   const filepath = req.url.replace('/standalone-circles/get-file/', '');
+  console.log(filepath);
 
   res.sendFile(path.resolve(__dirname + '/../public/global/' + filepath));
 });
