@@ -15,12 +15,6 @@ env = dotenvParseVariables(env.parsed);
 // Getting standalone_controller.js template
 let controller                  = fs.readFileSync('./node_server/controllers/standalone_template.js', 'utf8');
 
-
-// Adding in the central server domain name
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-controller = controller.replace('central-domain', env.DOMAIN);
-
-
 // Inserting world parts
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -49,17 +43,13 @@ circles_assets                  = circles_assets.replace(/[\r\n]+/gm, ' ');
 circles_avatar                  = circles_avatar.replace(/[\r\n]+/gm, ' ');
 circles_end_scripts             = circles_end_scripts.replace(/[\r\n]+/gm, ' ');
 
-// Updating header to request the files from the central server
-circles_header = circles_header.replace(/\/global/gm, env.DOMAIN + '/standalone-circles/get-file');
-
 // Updating controller script
-controller = controller.replace('start-scripts-part', circles_header);
-controller = controller.replace('start-ui-part', circles_enter_ui);
-controller = controller.replace('scene-part', circles_scene_properties);
-controller = controller.replace('assets-part', circles_assets);
-controller = controller.replace('avatar-part', circles_avatar);
-controller = controller.replace('end-part', circles_end_scripts);
-
+controller                      = controller.replace('start-scripts-part', circles_header);
+controller                      = controller.replace('start-ui-part', circles_enter_ui);
+controller                      = controller.replace('scene-part', circles_scene_properties);
+controller                      = controller.replace('assets-part', circles_assets);
+controller                      = controller.replace('avatar-part', circles_avatar);
+controller                      = controller.replace('end-part', circles_end_scripts);
 
 // Overwriting controller script file to update
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
