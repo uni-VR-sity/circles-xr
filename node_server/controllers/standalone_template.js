@@ -1,30 +1,22 @@
 // Standalone code for Circles World
 
-// Adding Circles code parts when html body is done loading
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
+// Adding Circles code when html body is done loading
 window.addEventListener('load', function() 
 {
-    console.log('start standalone');
-    
     // Getting user scripts to be reloaded
-    const userScripts = document.getElementsByTagName('script');
+    let userScripts = document.getElementsByTagName('script');
 
     let userScriptsFiltered = [];
-    let length = userScripts.length;
-    
-    for (let i = 0; i < length; i++)
+
+    for (const script of userScripts)
     {
-        if (userScripts[i].src !== 'https://ee5d-142-161-79-245.ngrok-free.app/standalone-circles')
+        if (script.src !== 'https://3f2c-190-113-101-35.ngrok-free.app/standalone-circles')
         {
-            let splitSRC = userScripts[i].src.split('/');
+            let splitSRC = script.src.split('/');
             userScriptsFiltered.push('scripts/' + splitSRC[splitSRC.length - 1]);
-
-            // Removing user script
-            userScripts[i].remove();
-
-            // Setting the index and length back as an element was removed
-            i -= 1;
-            length -= 1;
+            
+            // Removing the script
+            script.remove();
         }
     }
 
@@ -32,14 +24,14 @@ window.addEventListener('load', function()
     document.getElementsByTagName('head')[0].innerHTML += 'start-scripts-part';
 
     // Reloading user scripts
-    for (const script of userScriptsFiltered)
+    for (const script of userScripts)
     {
         let newScriptElement = document.createElement('script');
         newScriptElement.setAttribute('src', script);
 
         document.getElementsByTagName('head')[0].appendChild(newScriptElement);
     }
-    
+
     // Adding code to the body of the HTML document
     let bodyHTML = document.getElementsByTagName('body')[0].innerHTML;
 
@@ -51,5 +43,3 @@ window.addEventListener('load', function()
 
     document.getElementsByTagName('body')[0].innerHTML = bodyHTML;
 });
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-

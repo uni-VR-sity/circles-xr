@@ -1,30 +1,22 @@
 // Standalone code for Circles World
 
-// Adding Circles code parts when html body is done loading
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
+// Adding Circles code when html body is done loading
 window.addEventListener('load', function() 
 {
-    console.log('start standalone');
-    
     // Getting user scripts to be reloaded
-    const userScripts = document.getElementsByTagName('script');
+    let userScripts = document.getElementsByTagName('script');
 
     let userScriptsFiltered = [];
-    let length = userScripts.length;
-    
-    for (let i = 0; i < length; i++)
+
+    for (const script of userScripts)
     {
-        if (userScripts[i].src !== 'https://ee5d-142-161-79-245.ngrok-free.app/standalone-circles')
+        if (script.src !== 'https://3f2c-190-113-101-35.ngrok-free.app/standalone-circles')
         {
-            let splitSRC = userScripts[i].src.split('/');
+            let splitSRC = script.src.split('/');
             userScriptsFiltered.push('scripts/' + splitSRC[splitSRC.length - 1]);
-
-            // Removing user script
-            userScripts[i].remove();
-
-            // Setting the index and length back as an element was removed
-            i -= 1;
-            length -= 1;
+            
+            // Removing the script
+            script.remove();
         }
     }
 
@@ -32,14 +24,14 @@ window.addEventListener('load', function()
     document.getElementsByTagName('head')[0].innerHTML += '<title>Welcome to Circles! Currently visiting WORLDNAME__</title> <!-- libraries --> <!-- webrtc shim from https://webrtc.github.io/adapter/adapter-latest.js --> <script src="/global/js/libs/adapter-latest.js"></script> <script src="/global/js/libs/aframe-master.min.js"></script> <script src="/global/js/libs/networked-aframe.min.js"></script> <script src="/global/js/libs/naf-janus-adapter.min.js"></script> <script src="/global/js/libs/aframe-extras.animation-mixer.js"></script> <script src="/global/js/libs/aframe-extras.controls.min.js"></script> <script src="/global/js/libs/aframe-extras.pathfinding.min.js"></script> <script src="/global/js/libs/checkpoint.js"></script> <script src="/global/js/libs/pdf.min.js"></script> <script src="/socket.io/socket.io.js"></script> <!-- components --> <script src="/global/js/components/aframe-fps-counter-component.min.js"></script> <script src="/global/js/components/aframe-mirror.js"></script> <!-- circles code (needs to be last code as dependent on other aspects )--> <script src="/global/js/circles_client_bundle.min.js"></script> <!-- need a user gesture to allow sound on some browsers i.e. iOS --> <link rel="stylesheet" href="/global/css/user-gesture.css"> ';
 
     // Reloading user scripts
-    for (const script of userScriptsFiltered)
+    for (const script of userScripts)
     {
         let newScriptElement = document.createElement('script');
         newScriptElement.setAttribute('src', script);
 
         document.getElementsByTagName('head')[0].appendChild(newScriptElement);
     }
-    
+
     // Adding code to the body of the HTML document
     let bodyHTML = document.getElementsByTagName('body')[0].innerHTML;
 
@@ -51,5 +43,3 @@ window.addEventListener('load', function()
 
     document.getElementsByTagName('body')[0].innerHTML = bodyHTML;
 });
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
