@@ -4,8 +4,9 @@
 // Adding Circles code parts when html body is done loading
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 window.addEventListener('load', function() 
-{   
+{
     console.log('start standalone');
+    
     // Getting user scripts to be reloaded
     const userScripts = document.getElementsByTagName('script');
 
@@ -28,37 +29,8 @@ window.addEventListener('load', function()
         }
     }
 
-    // Configuring HTML document header
-
-    // Title
-    let titleElement = document.createElement('title');
-    titleElement.innerHTML = 'title-part';                                            // title-part is replaced
-    document.getElementsByTagName('head')[0].appendChild(titleElement);
-
-    // Scripts
-    let scripts = 'scripts-part';                                                     // scripts-part is replaced
-    scripts = scripts.split(',');
-
-    for (const script of scripts)
-    {
-        let newScriptElement = document.createElement('script');
-        newScriptElement.setAttribute('src', script);
-
-        document.getElementsByTagName('head')[0].appendChild(newScriptElement);
-    }
-
-    // Style
-    let styles = 'style-part';                                                        // style-part is replaced
-    styles = styles.split(',');
-
-    for (const style of styles)
-    {
-        let newStyleElement = document.createElement('link');
-        newStyleElement.setAttribute('rel', 'stylesheet');
-        newStyleElement.setAttribute('href', style);
-
-        document.getElementsByTagName('head')[0].appendChild(newStyleElement);
-    }
+    // Adding code to the head of the HTML document
+    document.getElementsByTagName('head')[0].innerHTML += 'start-scripts-part';     // start-scripts-part is replaced
 
     // Reloading user scripts
     for (const script of userScriptsFiltered)

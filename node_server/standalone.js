@@ -41,49 +41,19 @@ circles_scene_properties = circles_scene_properties.toString().replace(nafAudioR
 circles_scene_properties = circles_scene_properties.toString().replace(nafAdapterRegex, env.NAF_ADAPTER);
 circles_scene_properties = circles_scene_properties.toString().replace(nafServerRegex,  env.NAF_SERVER);
 
-// Updating header and start UI to request the files from the central server
-circles_header = circles_header.replace(/\/global/gm, env.DOMAIN + '/standalone-circles/get-file');
-circles_enter_ui = circles_enter_ui.replace(/\/global/gm, env.DOMAIN + '/standalone-circles/get-file');
-
-// Extracting header elements to append them to document
-// Title
-let circles_title = circles_header.split(/<title>(.+)?<\/title>/gm)[1];
-
-// Scripts
-let circles_scripts = [];
-let circles_scripts_unfiltered = circles_header.split(/src="(.+)?"/gm);
-
-for (const line of circles_scripts_unfiltered)
-{
-  if (line.includes('/js/'))
-  {
-    circles_scripts.push(line);
-  }
-}
-
-// Style
-let circles_style = [];
-let circles_style_unfiltered = circles_header.split(/href="(.+)?"/gm);
-
-for (const line of circles_style_unfiltered)
-{
-  if (line.includes('/css/'))
-  {
-    circles_style.push(line);
-  }
-}
-
 // Removing all line breaks (and replacing with spaces to keep multiline statements seperate) to create a string
+circles_header                  = circles_header.replace(/[\r\n]+/gm, ' ');
 circles_enter_ui                = circles_enter_ui.replace(/[\r\n]+/gm, ' ');
 circles_scene_properties        = circles_scene_properties.replace(/[\r\n]+/gm, ' ');
 circles_assets                  = circles_assets.replace(/[\r\n]+/gm, ' ');
 circles_avatar                  = circles_avatar.replace(/[\r\n]+/gm, ' ');
 circles_end_scripts             = circles_end_scripts.replace(/[\r\n]+/gm, ' ');
 
+// Updating header to request the files from the central server
+circles_header = circles_header.replace(/\/global/gm, env.DOMAIN + '/standalone-circles/get-file');
+
 // Updating controller script
-controller = controller.replace('title-part', circles_title);
-controller = controller.replace('scripts-part', circles_scripts);
-controller = controller.replace('style-part', circles_style);
+controller = controller.replace('start-scripts-part', circles_header);
 controller = controller.replace('start-ui-part', circles_enter_ui);
 controller = controller.replace('scene-part', circles_scene_properties);
 controller = controller.replace('assets-part', circles_assets);
