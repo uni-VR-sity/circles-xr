@@ -129,12 +129,7 @@ router.get('/more-circles', authenticated, controller.serveMoreCircles);
 
 router.post('/add-server', authenticated, controller.addServer);
 
-// These are requested from outside servers and can not require authenticated access
-router.get('/get-servers', controller.getServersList);
-router.get('/standalone-circles', (req, res) => 
-{
-  res.sendFile(path.resolve(__dirname + '/../controllers/standalone_controller.js'));
-});
+router.get('/get-servers', controller.getServersList); // This is requested from outside servers and can not have authenticated access only
 
 router.get('/inactivate-server/:server_id', authenticated, controller.inactivateServer);
 router.get('/activate-server/:server_id', authenticated, controller.activateServer);

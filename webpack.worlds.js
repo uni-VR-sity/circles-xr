@@ -16,7 +16,7 @@ if (env.error) {
 // Parse the dot configs so that things like false are boolean, not strings
 env = dotenvParseVariables(env.parsed);
 
-// Read in parts content to insert
+//read in parts content to insert
 let circles_header           =  fs.readFileSync('./src/webpack.worlds.parts/circles_header.part.html', 'utf8');
 let circles_enter_ui         =  fs.readFileSync('./src/webpack.worlds.parts/circles_enter_ui.part.html', 'utf8');
 let circles_scene_properties =  fs.readFileSync('./src/webpack.worlds.parts/circles_scene_properties.part.html', 'utf8');
