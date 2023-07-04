@@ -55,7 +55,7 @@ const addWorlds = async function()
     // Skipping over Wardrobe world as everyone has access to it
     if (file != 'Wardrobe')
     {
-      const path = __dirname + '/../public/worlds/' + file;
+      const path = __dirname + '/../../src/worlds/' + file;
 
       let stat = null;
 
