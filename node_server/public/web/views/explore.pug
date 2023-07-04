@@ -107,16 +107,26 @@ block content
                 option(value!= val, selected!= selected)!= val
                 - selected = false
 
-          div(class='pure-left-control-group' style='margin-top:25px')
+          if worldEditingList.length > 0
+            div(class='pure-left-control-group' style='margin-top:25px')
 
-            // Users can only create magic links for worlds that they have editing access to
-            for world of worldEditingList
-              div(style='margin-bottom:10px;display:inline-block;')
-                input(type='checkbox', name=world style='margin-right:10px')
-                label(style='white-space:nowrap')=world
+              // Users can only create magic links for worlds that they have editing access to
+              for world of worldEditingList
+                div(style='margin-bottom:10px;display:inline-block;')
+                  input(type='checkbox', name=world style='margin-right:10px')
+                  label(style='white-space:nowrap')=world
 
-          div(class='pure-controls' style='margin:20px 0 20px 0')
-            input(type='submit' class="pure-button pure-button-primary" value='Create')
+            div(class='pure-controls' style='margin:20px 0 20px 0')
+              input(type='submit' class="pure-button pure-button-primary" value='Create')
+          
+          else
+            div(style='margin-top:25px')
+              
+              if adminUser
+                p You currently have no worlds in your server to create a magic link for
+
+              else
+                p You currently have no worlds available to create a magic link for
 
           if magicLinkError
             div(style='margin-top:25px')
