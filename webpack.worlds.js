@@ -34,6 +34,8 @@ circles_scene_properties = circles_scene_properties.toString().replace(nafAudioR
 circles_scene_properties = circles_scene_properties.toString().replace(nafAdapterRegex, env.NAF_ADAPTER);
 circles_scene_properties = circles_scene_properties.toString().replace(nafServerRegex,  env.NAF_SERVER);
 
+let counter = 0;
+
 module.exports = {
   entry: function() {
     return {};
@@ -69,6 +71,8 @@ module.exports = {
               //return content.toString().replace(janusServerRegex, env.JANUS_SERVER);
               return content;
             } else {
+              counter += 1;
+              console.log(counter);
               return content;
             }
           }
