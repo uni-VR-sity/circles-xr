@@ -1,5 +1,4 @@
  'use strict';
- console.log('webpack worlds');
 const fs    = require('fs');
 const path  = require('path');
 const CopyWebpackPlugin   = require('copy-webpack-plugin');
@@ -57,7 +56,6 @@ module.exports = {
           to: './',
           transform (content, path) {
             if (path.endsWith('.html')) {
-              console.log(path);
               //insert new parts
               content = content.toString();
               content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
@@ -67,7 +65,6 @@ module.exports = {
               content = content.replace(/<circles-manager-avatar(\s+)?\/>/i, circles_avatar);
               content = content.replace(/<circles-end-scripts(\s+)?\/>/i, circles_end_scripts);
               //return content.toString().replace(janusServerRegex, env.JANUS_SERVER);
-              console.log(path);
               return content;
             } else {
               return content;
