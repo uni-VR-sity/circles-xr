@@ -1,4 +1,5 @@
-'use strict';
+ 'use strict';
+ console.log('webpack worlds');
 const fs    = require('fs');
 const path  = require('path');
 const CopyWebpackPlugin   = require('copy-webpack-plugin');
@@ -18,11 +19,17 @@ env = dotenvParseVariables(env.parsed);
 
 //read in parts content to insert
 let circles_header           =  fs.readFileSync('./src/webpack.worlds.parts/circles_header.part.html', 'utf8');
+console.log('circles header read');
 let circles_enter_ui         =  fs.readFileSync('./src/webpack.worlds.parts/circles_enter_ui.part.html', 'utf8');
+console.log('circles ui read');
 let circles_scene_properties =  fs.readFileSync('./src/webpack.worlds.parts/circles_scene_properties.part.html', 'utf8');
+console.log('circles scene properties read');
 let circles_assets           =  fs.readFileSync('./src/webpack.worlds.parts/circles_assets.part.html', 'utf8');
+console.log('circles assets read');
 let circles_avatar           =  fs.readFileSync('./src/webpack.worlds.parts/circles_avatar_manager.part.html', 'utf8');
+console.log('circles avatar read');
 let circles_end_scripts      =  fs.readFileSync('./src/webpack.worlds.parts/circles_end_scripts.part.html', 'utf8');
+console.log('circles end read');
 
 const nafAudioRegex   = new RegExp(/\{\{(\s+)?NAF_AUDIO(\s+)?\}\}/,   'gmi');
 const nafAdapterRegex = new RegExp(/\{\{(\s+)?NAF_ADAPTER(\s+)?\}\}/, 'gmi');
