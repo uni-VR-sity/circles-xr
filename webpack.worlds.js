@@ -73,6 +73,10 @@ module.exports = {
             } else {
               counter += 1;
               console.log(counter);
+              if (counter === 600)
+              {
+                console.log(path);
+              }
               return content;
             }
           }
