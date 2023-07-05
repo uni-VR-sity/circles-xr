@@ -62,6 +62,7 @@ module.exports = {
           from: 'src/worlds',
           to: './',
           transform (content, path) {
+            console.log(path);
             if (path.endsWith('.html')) {
               //insert new parts
               content = content.toString();
