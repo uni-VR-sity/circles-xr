@@ -43,7 +43,7 @@ const addWorlds = async function()
   let files = null;
   try
   {
-    files = await fs.promises.readdir(__dirname + '/../public/worlds');
+    files = await fs.promises.readdir(__dirname + '/../../src/worlds/');
   }
   catch (e) 
   {
