@@ -62,8 +62,8 @@ module.exports = {
           from: 'src/worlds',
           to: './',
           transform (content, path) {
-            console.log(path);
             if (path.endsWith('.html')) {
+              console.log(path);
               //insert new parts
               content = content.toString();
               content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
