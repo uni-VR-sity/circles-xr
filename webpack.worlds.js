@@ -1,4 +1,5 @@
  'use strict';
+ console.log('webpack worlds');
 const fs    = require('fs');
 const path  = require('path');
 const CopyWebpackPlugin   = require('copy-webpack-plugin');
@@ -56,6 +57,7 @@ module.exports = {
           to: './',
           transform (content, path) {
             if (path.endsWith('.html')) {
+              console.log(path);
               //insert new parts
               content = content.toString();
               content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
