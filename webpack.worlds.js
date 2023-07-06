@@ -33,6 +33,9 @@ circles_scene_properties = circles_scene_properties.toString().replace(nafAudioR
 circles_scene_properties = circles_scene_properties.toString().replace(nafAdapterRegex, env.NAF_ADAPTER);
 circles_scene_properties = circles_scene_properties.toString().replace(nafServerRegex,  env.NAF_SERVER);
 
+// Removing the current public worlds folder
+fs.rmSync(__dirname + '/node_server/public/worlds', {recursive: true, force: true});
+
 module.exports = {
   entry: function() {
     return {};
