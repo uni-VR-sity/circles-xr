@@ -1860,7 +1860,7 @@ const serveMoreCircles = (req, res, next) =>
   }
 
   let request = new XMLHttpRequest();
-  request.open('GET', env.CENTRAL_SERVER);
+  request.open('GET', env.CENTRAL_SERVER + '/get-servers');
 
   const renderError = function (message)
   {
