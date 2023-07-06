@@ -127,6 +127,14 @@ router.get('/explore', authenticated, controller.serveExplore);
 router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
 
+router.post('/add-server', authenticated, controller.addServer);
+
+router.get('/get-servers', controller.getServersList); // This is requested from outside servers and can not have authenticated access only
+
+router.get('/inactivate-server/:server_id', authenticated, controller.inactivateServer);
+router.get('/activate-server/:server_id', authenticated, controller.activateServer);
+router.get('/delete-server/:server_id', authenticated, controller.deleteServer);
+
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);
 router.post('/change-usertype', authenticated, controller.updateUsertype);
