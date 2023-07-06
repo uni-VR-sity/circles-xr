@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+    <!-- button JS -->
+    <script src="/worlds/Mocap_Demo/scripts/animation.js"></script>
+ 
+
+  </head>
+  <body>
+
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene circles_scene_properties button>
+      <a-assets>
+
+        <!-- assets -->
+     <a-asset-item id="robot" src="/worlds/Mocap_Demo/assets/robot.glb" response-type="arraybuffer"></a-asset-item>
+  
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+      <!-- <a-entity position="1.9801 2 -6.41127" circles-label="text:Normal Animation; visible:true; offset:1.1 0.2 0; arrow_position:down;"></a-entity>
+       -->
+      <!-- ROBOT ENTITIES ~~~ TESTING THE ANIMATION_MIXER -->
+
+      <!-- <a-entity id="robot_normal" position="1.9801 0 -6.41127" scale="0.6 0.6 0.6" gltf-model="#robot" animation-mixer=""></a-entity> -->
+      
+      <!-- slow -->
+      <!-- <a-entity position="-2.66786 2 -6.43876" circles-label="text:Slowed Animation; visible:true; offset:1.1 0.2 0; arrow_position:down;"></a-entity>
+      <a-entity id="robot_backwards" position="-2.66786 0 -6.43876" scale="0.6 0.6 0.6" gltf-model="#robot" animation-mixer="timeScale: -0.2"></a-entity> -->
+
+      <!-- stop when done -->
+      <!-- <a-entity position="-6.04083 2 -3.72736" circles-label="text:Play once then stop; visible:true; offset:1.1 0.2 0; arrow_position:down;"></a-entity>
+      <a-entity id="robot_stop" position="-6.04083 0 -3.72736" scale="0.6 0.6 0.6" gltf-model="#robot" animation-mixer="loop: once; clampWhenFinished: true"></a-entity>
+       -->
+   
+      <!-- button animation -->
+      <!-- <a-entity position="6.70501 0 -2.59195" circles-label="text:Play on Button Press; visible:true; offset:1.1 0.2 0; arrow_position:down;"></a-entity>
+       -->
+      <!-- <a-entity id="model" position="6.70501 0 -2.59195" scale="0.6 0.6 0.6" gltf-model="#robot" animation-mixer="timeScale: 0;"></a-entity>
+       -->
+      <!-- <a-entity class="button" AnimationButton position="4.495 0 -3.035"  scale="1 1 1" circles-button="pedastal_visible:true;"></a-entity>
+
+      <a-entity id="button label" position="-2 0.4 1.7" circles-label="text:Play on Button Press; visible:true; arrow_position:down;"></a-entity>
+      <a-entity id="model" position="" scale="0.6 0.6 0.6" gltf-model="#robot" animation-mixer="timeScale: 0"></a-entity>
+      <a-entity class="button" animation_button position="-2 0 2"  scale="1 1 1" circles-button=""></a-entity>
+      <a-entity id="base" geometry="primitive: cylinder" position="" rotation="" scale="2.2 0.07549 2.2" material="color: #ffffff; emissive: #000000"></a-entity>
+
+ -->
+ <a-entity id="spawnPoint" position="0.078 0 10"></a-entity>
+ <!-- ~~FEMALE DANCER~~ -->
+      <a-entity id="Animated-GLB-GLTF-Component" position="2.846 0 0"> 
+        <!-- model -->
+        <a-entity id="model" position="0 0.050 0" scale="2.1 2.1 2.1" gltf-model="/worlds/Mocap_Demo/assets/female dancer/female_01.glb"  shadow="receive: false" animation-mixer="loop: repeat; clampWhenFinished: true; timeScale: 0;"></a-entity>
+        <!-- label -->
+        <a-entity id="button label" position="-2 0.4 1.7" circles-label="text:Play on Button Press; visible:true; arrow_position:down;"></a-entity>
+       <!-- button -->
+        <a-entity class="button" animation_button position="-2 0 2"  scale="1 1 1" circles-button="pedastal_visible:true;"></a-entity>
+       <!-- base circle -->
+        <a-entity id="base" geometry="primitive: cylinder" position="0 -0.01965 0" rotation="" scale="2.2 0.07549 2.2" material="color: #4f4f4f; emissive: #000000"></a-entity>
+      </a-entity>
+
+       <!-- ~~FEMALE DANCER ALT~~ -->
+       <a-entity id="Animated-GLB-GLTF-Component" position="6.372 0 3.917" rotation="0 -49.749 0"> 
+        <!-- model -->
+        <a-entity id="model3" position="0 0.050 0" scale="2.1 2.1 2.1" gltf-model="/worlds/Mocap_Demo/assets/female dancer/female_alt.glb"  shadow="receive: false" animation-mixer="loop: repeat; clampWhenFinished: true; timeScale: 0;"></a-entity>
+        <!-- label -->
+        <a-entity id="button label" position="-2 0.4 1.7" circles-label="text:Play on Button Press; visible:true; arrow_position:down;"></a-entity>
+       <!-- button -->
+        <a-entity class="button" animation_button3 position="-2 0 2"  scale="1 1 1" circles-button="pedastal_visible:true;"></a-entity>
+       <!-- base circle -->
+        <a-entity id="base" geometry="primitive: cylinder" position="0 -0.01965 0" rotation="" scale="2.2 0.07549 2.2" material="color: #4f4f4f; emissive: #000000"></a-entity>
+      </a-entity>
+
+<!-- ~~MALE DANCER ~~ -->
+      <a-entity id="Animated-GLB-GLTF-Component" position="-2.347 0 0"> 
+        <a-entity id="model2" position="0 0.050 0" scale="1.1 1.1 1.1" gltf-model="/worlds/Mocap_Demo/assets/male dancer/male_06.glb"  shadow="receive: false" animation-mixer="loop: repeat; clampWhenFinished: true; timeScale: 0;"></a-entity>
+        <a-entity id="button label" position="-2 0.4 1.7" circles-label="text:Play on Button Press; visible:true; arrow_position:down;"></a-entity>
+        <a-entity class="button" animation_button2 position="-2 0 2"  scale="1 1 1" circles-button="pedastal_visible:true;"></a-entity>
+        <a-entity id="base" geometry="primitive: cylinder" position="0 -0.01965 0" rotation="" scale="2.2 0.07549 2.2" material="color: #4f4f4f; emissive: #000000"></a-entity>
+      </a-entity>
+
+
+      <!-- ~~MALE DANCER ALT~~ -->
+      <a-entity id="Animated-GLB-GLTF-Component" position="-6.550 0 3.752" rotation="0 60.251 0"> 
+        <a-entity id="model4" rotation="0 165.786 0" position="0 0.050 0" scale="1.6 1.6 1.6" gltf-model="/worlds/Mocap_Demo/assets/male dancer/male_alt.glb"  shadow="receive: false" animation-mixer="loop: repeat; clampWhenFinished: true; timeScale: 0;"></a-entity>
+        <a-entity id="button label" position="-2 0.4 1.7" circles-label="text:Play on Button Press; visible:true; arrow_position:down;"></a-entity>
+        <a-entity class="button" animation_button4 position="-2 0 2"  scale="1 1 1" circles-button="pedastal_visible:true;"></a-entity>
+        <a-entity id="base" geometry="primitive: cylinder" position="0 -0.01965 0" rotation="" scale="2.2 0.07549 2.2" material="color: #4f4f4f; emissive: #000000"></a-entity>
+      </a-entity>
+
+
+
+      <a-entity environment="preset: default; grid: none"></a-entity>
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>
