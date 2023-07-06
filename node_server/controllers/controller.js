@@ -1860,7 +1860,7 @@ const serveMoreCircles = (req, res, next) =>
   }
 
   let request = new XMLHttpRequest();
-  request.open('GET', 'http://localhost:1112/get-servers');            // TO REPLACE WITH CENTRAL SERVER LINK
+  request.open('GET', env.CENTRAL_SERVER);
 
   const renderError = function (message)
   {
