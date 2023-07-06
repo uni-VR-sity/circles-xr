@@ -1,5 +1,5 @@
 'use strict';
-console.log('app loading');
+
 // Set up and parse Environment based configuation
 const dotenv = require('dotenv');
 const dotenvParseVariables = require('dotenv-parse-variables');
