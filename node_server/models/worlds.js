@@ -37,13 +37,14 @@ const WorldSchema = new mongoose.Schema({
 
 const Worlds = mongoose.model('worlds', WorldSchema);
 
+// Adding worlds from public/worlds to the database
 const addWorlds = async function()
 {
   // Getting all world folders under public/worlds
   let files = null;
   try
   {
-    files = await fs.promises.readdir(__dirname + '/../../src/worlds/');
+    files = await fs.promises.readdir(__dirname + '/../public/worlds/');
   }
   catch (e) 
   {
@@ -55,7 +56,7 @@ const addWorlds = async function()
     // Skipping over Wardrobe world as everyone has access to it
     if (file != 'Wardrobe')
     {
-      const path = __dirname + '/../../src/worlds/' + file;
+      const path = __dirname + '/../public/worlds/' + file;
 
       let stat = null;
 
@@ -108,6 +109,53 @@ const addWorlds = async function()
   }
 }
 
+// Removing all worlds that are in the database but not in public/worlds
+const removeDeletedWorlds = async function()
+{
+  // Getting all worlds in the database
+  let databaseWorlds = [];
+
+  try
+  {
+    databaseWorlds = await Worlds.find({});
+  }
+  catch (e)
+  {
+    console.log(e.message);
+  }
+
+  // Getting all worlds in public/worlds
+  let serverWorlds = [];
+
+  try
+  {
+    serverWorlds = await fs.promises.readdir(__dirname + '/../public/worlds/');
+  }
+  catch (e) 
+  {
+    console.log(e.message);
+  }
+
+  // Comparing the worlds in the database to the worlds in public/worlds
+  // If a world in the database is not in public/worlds, delete it
+  for (const world of databaseWorlds)
+  {
+    if (!serverWorlds.includes(world.name))
+    {
+      try
+      {
+        console.log('deleting ' + world.name);
+        await Worlds.deleteOne({name: world.name});
+      }
+      catch (e) 
+      {
+        console.log(e.message);
+      }
+    }
+  }
+}
+
 addWorlds();
+removeDeletedWorlds();
 
 module.exports = Worlds;
