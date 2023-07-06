@@ -1,5 +1,4 @@
  'use strict';
- console.log('webpack worlds');
 const fs    = require('fs');
 const path  = require('path');
 const CopyWebpackPlugin   = require('copy-webpack-plugin');
@@ -34,8 +33,6 @@ circles_scene_properties = circles_scene_properties.toString().replace(nafAudioR
 circles_scene_properties = circles_scene_properties.toString().replace(nafAdapterRegex, env.NAF_ADAPTER);
 circles_scene_properties = circles_scene_properties.toString().replace(nafServerRegex,  env.NAF_SERVER);
 
-let counter = 0;
-
 module.exports = {
   entry: function() {
     return {};
@@ -59,7 +56,6 @@ module.exports = {
           to: './',
           transform (content, path) {
             if (path.endsWith('.html')) {
-              console.log(path);
               //insert new parts
               content = content.toString();
               content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
@@ -71,12 +67,6 @@ module.exports = {
               //return content.toString().replace(janusServerRegex, env.JANUS_SERVER);
               return content;
             } else {
-              counter += 1;
-              console.log(counter);
-              if (counter === 601)
-              {
-                console.log(path);
-              }
               return content;
             }
           }
