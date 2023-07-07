@@ -9,6 +9,7 @@ const User     = require('../models/user');
 const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
 const Worlds   = require('../models/worlds');
+const Uploads  = require('../models/uploads')
 const path     = require('path');
 const fs       = require('fs');
 const crypto   = require('crypto');
@@ -1599,6 +1600,7 @@ const createUser = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Creating new users through uploaded file
 const createUsersByFile = async (req, res, next) => 
 {
   // Setting up user message as arrays to allow for multiple messages
@@ -1909,6 +1911,22 @@ const serveMoreCircles = (req, res, next) =>
 // Rendering Uploaded Content page
 const serveUploadedContent = (req, res, next) => 
 {
+  // Getting success and error messages
+  let successMessage = null;
+  let errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
   const userInfo = getUserInfo(req);
 
   // Rendering the uploadedContent page
@@ -1916,6 +1934,118 @@ const serveUploadedContent = (req, res, next) =>
     title: 'Uploaded Content',
     userInfo: userInfo,
     content: [],
+    successMessage: successMessage,
+    errorMessage: errorMessage,
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Storing content uploaded by user
+const newContent = (req, res, next) => 
+{
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  // Setting location to upload file to
+  form.uploadDir = path.join(__dirname, '/../uploads');
+
+  // TO-DO: SET FILE SIZE RESTRICTION
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'File could not be uploaded, please try again';
+      return res.redirect('/uploaded-content');
+    }
+
+    const file = files.contentFile;
+
+    console.log(file);
+
+    // Checking that the file is of the correct type
+    // Otherwise, sending an error message
+
+    let validFiles = [];
+
+    for (const key in CIRCLES.VALID_CONTENT_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_CONTENT_TYPES[key]);
+    }
+
+    // file: fileContentType/fileType
+    // split result array: {"fileContentType", "fileType"}
+    const fileType = file.mimetype.split('/')[1];
+
+    if (validFiles.includes(fileType))
+    {
+      const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
+
+      // Renaming file to be valid
+      try
+      {
+        fs.renameSync(file.filepath, fileURL);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(file.filepath, {recursive: true});
+
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+        return res.redirect('/uploaded-content');
+      }
+      
+      // Storing the file in the database
+      const fileInfo = {
+        user: await User.findById(req.user._id).exec(),
+        displayName: file.originalFilename,
+        name: file.newFilename + '.' + fileType,
+        url: fileURL,
+        type: fileType,
+      }
+
+      try
+      {
+        await Uploads.create(fileInfo);
+        req.session.successMessage = file.originalFilename + ' uploaded successfully';
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(fileURL, {recursive: true});
+
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+        return res.redirect('/uploaded-content');
+      }
+
+      return res.redirect('/uploaded-content');
+    }
+    // This file type means no file was uploaded
+    else if (fileType === 'octet-stream')
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'No file uploaded';
+      return res.redirect('/uploaded-content');
+    }
+    else
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed';
+      return res.redirect('/uploaded-content');
+    }
+
   });
 }
 
@@ -1950,4 +2080,5 @@ module.exports = {
   updateSessionName,
   serveMoreCircles,
   serveUploadedContent,
+  newContent,
 };

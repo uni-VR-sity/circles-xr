@@ -70,6 +70,14 @@ const USER_TYPE = {
   MAGIC_GUEST : 'Magic Guest',
 };
 
+const VALID_CONTENT_TYPES = {
+  PNG     : 'png',
+  JPG     : 'jpg',
+  JPEG    : 'jpeg',
+  GIF     : 'gif',
+  PDF     : 'pdf',
+};
+
 const MODEL_HEAD_TYPE = {
   head_0   : '/global/assets/models/gltf/head/Head_Circle.glb',
   head_1   : '/global/assets/models/gltf/head/Head_Jaw.glb',
@@ -312,6 +320,7 @@ module.exports = {
   MODEL_TYPE,
   MODEL_FORMAT,
   USER_TYPE,
+  VALID_CONTENT_TYPES,
   MODEL_HEAD_TYPE,
   MODEL_HAIR_TYPE,
   MODEL_BODY_TYPE,

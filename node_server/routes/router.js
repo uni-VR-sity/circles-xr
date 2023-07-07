@@ -128,6 +128,8 @@ router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
 router.get('/uploaded-content', authenticated, controller.serveUploadedContent);
 
+router.post('/upload-content', authenticated, controller.newContent);
+
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);
 router.post('/change-usertype', authenticated, controller.updateUsertype);
