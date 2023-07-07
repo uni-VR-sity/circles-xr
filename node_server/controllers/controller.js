@@ -1906,6 +1906,21 @@ const serveMoreCircles = (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Rendering Uploaded Content page
+const serveUploadedContent = (req, res, next) => 
+{
+  const userInfo = getUserInfo(req);
+
+  // Rendering the uploadedContent page
+  res.render(path.resolve(__dirname + '/../public/web/views/uploadedContent'), {
+    title: 'Uploaded Content',
+    userInfo: userInfo,
+    content: [],
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   // getAllUsers,
   // getUser,
@@ -1934,4 +1949,5 @@ module.exports = {
   updateUsertype,
   updateSessionName,
   serveMoreCircles,
+  serveUploadedContent,
 };

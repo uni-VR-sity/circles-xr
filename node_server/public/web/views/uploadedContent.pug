@@ -1,0 +1,62 @@
+extends layout.pug
+
+block append stylesheets
+    link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+
+block content
+
+    h1 Uploaded Content
+  
+    hr
+    br
+    br
+
+    p Content uploaded here can be displayed within worlds. 2D content can be put up on whiteboards and 3D content can be showed off on loading points.
+
+    br
+
+    form(action='/upload-content' method='post' enctype='multipart/form-data' class='pure-form')
+
+        label Upload new content: 
+        input(name='contentFile' type='file' accept='.pdf, .jpeg, .jpg, .png, .gif')
+    
+        div(style='margin:15 0 25 0').instruction-box
+
+            p(style='margin-bottom:0') The acceptable file forms for 2D content are:
+
+            ul.user-type-list
+                li .pdf
+                li .png 
+                li .jpeg
+                li .jpg
+                li .gif
+
+            p(style='margin-bottom:0') The acceptable file forms for 3D content are:
+
+            ul.user-type-list
+                li 
+                li 
+                li 
+                li
+
+        input(type='submit' value='Upload' class='pure-button pure-button-primary')
+
+    if successMessage
+        div(style='margin:20px 0 10px 0')
+            i(class='fa-solid fa-circle-check success-icon')
+            span.success-message #{successMessage}
+
+    if errorMessage
+        div(style='margin:20px 0 10px 0')
+            i(class='fa-solid fa-triangle-exclamation error-icon')
+            span.error-message #{errorMessage}
+
+    br
+    hr
+    br
+
+    if content.length > 0
+
+    else
+        br
+        p(style='text-align:center') You have no content uploaded
