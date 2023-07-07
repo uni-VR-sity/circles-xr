@@ -1909,7 +1909,7 @@ const serveMoreCircles = (req, res, next) =>
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering Uploaded Content page
-const serveUploadedContent = (req, res, next) => 
+const serveUploadedContent = async (req, res, next) => 
 {
   // Getting success and error messages
   let successMessage = null;
@@ -1927,13 +1927,20 @@ const serveUploadedContent = (req, res, next) =>
     req.session.errorMessage = null;
   }
 
-  const userInfo = getUserInfo(req);
+  // Getting user content
+  let content = [];
+
+  let currentUser = req.user;
+
+  content = await Uploads.find({user: currentUser}, 'url displayName');
 
   // Rendering the uploadedContent page
+  const userInfo = getUserInfo(req);
+
   res.render(path.resolve(__dirname + '/../public/web/views/uploadedContent'), {
     title: 'Uploaded Content',
     userInfo: userInfo,
-    content: [],
+    content: content,
     successMessage: successMessage,
     errorMessage: errorMessage,
   });
@@ -1964,8 +1971,6 @@ const newContent = (req, res, next) =>
     }
 
     const file = files.contentFile;
-
-    console.log(file);
 
     // Checking that the file is of the correct type
     // Otherwise, sending an error message
