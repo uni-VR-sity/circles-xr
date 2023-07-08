@@ -11,56 +11,9 @@ block content
     h4(style='text-align:center') Take a look at the other Circles out there and what they have been working on!
     br
     br
-
-    if adminUser
-        // Form for adding additional servers to database
-        div.server-wrapper
-            form(action='/add-server' method='post' class='pure-form pure-form-aligned')
-                fieldset
-
-                    table.circles-server-table
-                        tbody
-                            tr
-                                td.left
-                                    .pure-left-control-group
-                                        label Owner's Name 
-                                            span.required *
-                                        input.field-long(type='text' name='ownerName' placeholder='John Doe' required)
-                                    .pure-left-control-group
-                                        label(style='padding-top:3px') Description 
-                                            span.required *
-                                        textarea(name='description' placeholder='This server features ...' style='height:100px' required)
-                                    .pure-left-control-group
-                                        label Link to Server 
-                                            span.required *
-                                        input.field-long(type='url' name='link' pattern="https?://www\\.+.+\\.+.+" placeholder='https://www.circles.com' required)
-                                    .pure-controls(style='margin-top:40')
-                                        input(type='submit' value='Add Server' class='pure-button pure-button-primary')
-                                    
-                                td.right
-                                    .pure-left-control-group
-                                        label(style='width:6em;vertical-align:top;padding-top:4px') Worlds 
-                                            span.required *
-                                        div(style='width:65%;display:inline-block')
-                                            input.field-long(type='text' name='worlds' placeholder='Classroom' required)
-                                            center(id='add-input')
-                                                i(class='fa-solid fa-square-plus fa-xl' onclick="addWorldInput('add-input')")
-
-            if successMessage
-                div(style='margin:40px 0 0 0')
-                i(class='fa-solid fa-circle-check success-icon')
-                span.success-message #{successMessage}
-
-            if errorMessage
-                div(style='margin:40px 0 0 0')
-                i(class='fa-solid fa-triangle-exclamation error-icon')
-                span.error-message #{errorMessage}
-
-            hr
+    br
 
     if circleServers.length > 0
-        if !adminUser 
-            br
 
         // Displaying all Circles servers
         for server of circleServers
@@ -70,14 +23,6 @@ block content
 
                 div.server-wrapper(id=server._id)
                     h2(style='display:inline-block') #{server.ownerName}'s Circles 
-                    if adminUser
-                        div.dropdown
-                            i(class="fa-solid fa-square-caret-down fa-lg")
-                            div.drop-content
-                                - var inactivateLink = '/inactivate-server/' + server._id;
-                                - var deleteLink = '/delete-server/' + server._id;
-                                a(href=inactivateLink) Mark as inactive
-                                a(onclick='doubleCheckDelete_Server("' + deleteLink + '")' style='color:red') Delete server
 
                     table.circles-server-table
                         tbody
@@ -104,15 +49,6 @@ block content
             else 
                 div.server-wrapper.inactive-block
                     h2(style='display:inline-block') #{server.ownerName}'s Circles 
-                    if adminUser
-                        div.dropdown
-                            i(class="fa-solid fa-square-caret-down fa-lg")
-                            div.drop-content
-                                - var activateLink = '/activate-server/' + server._id;
-                                - var deleteLink = '/delete-server/' + server._id;
-                                a(href=activateLink) Mark as active
-                                a(onclick='doubleCheckDelete_Server("' + deleteLink + '")' style='color:red') Delete server
-                    
                     p.inactive-text INACTIVE
 
                     table.circles-server-table
