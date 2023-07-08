@@ -10,6 +10,7 @@ const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
 const Worlds   = require('../models/worlds');
 const Servers  = require('../models/servers');
+const Uploads  = require('../models/uploads');
 const path     = require('path');
 const fs       = require('fs');
 const crypto   = require('crypto');
@@ -1600,6 +1601,7 @@ const createUser = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Creating new users through uploaded file
 const createUsersByFile = async (req, res, next) => 
 {
   // Setting up user message as arrays to allow for multiple messages
@@ -2060,6 +2062,232 @@ const deleteServer = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Rendering Uploaded Content page
+const serveUploadedContent = async (req, res, next) => 
+{
+  // Getting success and error messages
+  let successMessage = null;
+  let errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
+  // Getting valid file types
+  let validText = [];
+  let validImages = [];
+  let validVideos = [];
+  let valid3D = [];
+
+  for (const key in CIRCLES.VALID_TEXT_TYPES)
+  {
+    validText.push('.' + CIRCLES.VALID_TEXT_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_IMAGE_TYPES)
+  {
+    validImages.push('.' + CIRCLES.VALID_IMAGE_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_VIDEO_TYPES)
+  {
+    validVideos.push('.' + CIRCLES.VALID_VIDEO_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_3D_TYPES)
+  {
+    valid3D.push('.' + CIRCLES.VALID_3D_TYPES[key]);
+  }
+
+  // Getting user content
+  let content = [];
+
+  let currentUser = req.user;
+
+  content = await Uploads.find({user: currentUser}, 'name displayName category');
+
+  // Rendering the uploadedContent page
+  const userInfo = getUserInfo(req);
+
+  res.render(path.resolve(__dirname + '/../public/web/views/uploadedContent'), {
+    title: 'Uploaded Content',
+    userInfo: userInfo,
+    validText: validText,
+    validImages: validImages,
+    validVideos: validVideos,
+    valid3D: valid3D,
+    content: content,
+    successMessage: successMessage,
+    errorMessage: errorMessage,
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Storing content uploaded by user
+const newContent = (req, res, next) => 
+{
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  // Setting location to upload file to
+  form.uploadDir = path.join(__dirname, '/../uploads');
+
+  // TO-DO: SET FILE SIZE RESTRICTION
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'File could not be uploaded, please try again';
+      return res.redirect('/uploaded-content');
+    }
+
+    const file = files.contentFile;
+
+    console.log(file);
+
+    // Getting valid file types
+    let validFiles = [];
+
+    for (const key in CIRCLES.VALID_TEXT_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_TEXT_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_IMAGE_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_IMAGE_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_VIDEO_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_VIDEO_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_3D_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
+    }
+
+    // Checking that the file is of the correct type
+    // Otherwise, sending an error message
+
+    // file: fileContentType/fileType
+    // split result array: {"fileContentType", "fileType"}
+    const fileCategory = file.mimetype.split('/')[0];
+    const fileType = file.mimetype.split('/')[1];
+
+    if (validFiles.includes(fileType))
+    {
+      const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
+
+      // Renaming file to be valid
+      try
+      {
+        fs.renameSync(file.filepath, fileURL);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(file.filepath, {recursive: true});
+
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+        return res.redirect('/uploaded-content');
+      }
+      
+      // Storing the file in the database
+      const fileInfo = {
+        user: await User.findById(req.user._id).exec(),
+        displayName: file.originalFilename,
+        name: file.newFilename + '.' + fileType,
+        url: fileURL,
+        type: fileType,
+        category: fileCategory,
+      }
+
+      try
+      {
+        await Uploads.create(fileInfo);
+        req.session.successMessage = file.originalFilename + ' uploaded successfully';
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(fileURL, {recursive: true});
+
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+        return res.redirect('/uploaded-content');
+      }
+
+      return res.redirect('/uploaded-content');
+    }
+    // This file type means no file was uploaded
+    else if (fileType === 'octet-stream')
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'No file uploaded';
+      return res.redirect('/uploaded-content');
+    }
+    else
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed';
+      return res.redirect('/uploaded-content');
+    }
+
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Sending user uploaded file
+const serveUploadedFile = async (req, res, next) => 
+{
+  // url: /uploads/file_name
+  // split result array: {"", "uploads", "file_name"}
+  const fileName = req.url.split('/')[2];
+
+  // Getting file info from database
+  const file = await Uploads.findOne({name: fileName}).sort().exec();
+  const fileOwner = await User.findOne(file.user);
+
+  // Checking if the file belongs to the current user
+  const currentUser = await User.findById(req.user._id).sort().exec();
+
+  // If it does, send file
+  // If it doesn't, send file containing error message
+  if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+  {
+    res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+  }
+  else
+  {
+    res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   // getAllUsers,
   // getUser,
@@ -2093,4 +2321,7 @@ module.exports = {
   inactivateServer,
   activateServer,
   deleteServer,
+  serveUploadedContent,
+  newContent,
+  serveUploadedFile,
 };
