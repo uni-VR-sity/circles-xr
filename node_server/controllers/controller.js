@@ -1927,12 +1927,38 @@ const serveUploadedContent = async (req, res, next) =>
     req.session.errorMessage = null;
   }
 
+  // Getting valid file types
+  let validText = [];
+  let validImages = [];
+  let validVideos = [];
+  let valid3D = [];
+
+  for (const key in CIRCLES.VALID_TEXT_TYPES)
+  {
+    validText.push('.' + CIRCLES.VALID_TEXT_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_IMAGE_TYPES)
+  {
+    validImages.push('.' + CIRCLES.VALID_IMAGE_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_VIDEO_TYPES)
+  {
+    validVideos.push('.' + CIRCLES.VALID_VIDEO_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_3D_TYPES)
+  {
+    valid3D.push('.' + CIRCLES.VALID_3D_TYPES[key]);
+  }
+
   // Getting user content
   let content = [];
 
   let currentUser = req.user;
 
-  content = await Uploads.find({user: currentUser}, 'url displayName');
+  content = await Uploads.find({user: currentUser}, 'name displayName category');
 
   // Rendering the uploadedContent page
   const userInfo = getUserInfo(req);
@@ -1940,6 +1966,10 @@ const serveUploadedContent = async (req, res, next) =>
   res.render(path.resolve(__dirname + '/../public/web/views/uploadedContent'), {
     title: 'Uploaded Content',
     userInfo: userInfo,
+    validText: validText,
+    validImages: validImages,
+    validVideos: validVideos,
+    valid3D: valid3D,
     content: content,
     successMessage: successMessage,
     errorMessage: errorMessage,
@@ -1972,18 +2002,37 @@ const newContent = (req, res, next) =>
 
     const file = files.contentFile;
 
+    console.log(file);
+
+    // Getting valid file types
+    let validFiles = [];
+
+    for (const key in CIRCLES.VALID_TEXT_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_TEXT_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_IMAGE_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_IMAGE_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_VIDEO_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_VIDEO_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_3D_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
+    }
+
     // Checking that the file is of the correct type
     // Otherwise, sending an error message
 
-    let validFiles = [];
-
-    for (const key in CIRCLES.VALID_CONTENT_TYPES)
-    {
-      validFiles.push(CIRCLES.VALID_CONTENT_TYPES[key]);
-    }
-
     // file: fileContentType/fileType
     // split result array: {"fileContentType", "fileType"}
+    const fileCategory = file.mimetype.split('/')[0];
     const fileType = file.mimetype.split('/')[1];
 
     if (validFiles.includes(fileType))
@@ -2013,6 +2062,7 @@ const newContent = (req, res, next) =>
         name: file.newFilename + '.' + fileType,
         url: fileURL,
         type: fileType,
+        category: fileCategory,
       }
 
       try
@@ -2054,6 +2104,32 @@ const newContent = (req, res, next) =>
   });
 }
 
+// Sending user uploaded file
+const serveUploadedFile = async (req, res, next) => 
+{
+  // url: /uploads/file_name
+  // split result array: {"", "uploads", "file_name"}
+  const fileName = req.url.split('/')[2];
+
+  // Getting file info from database
+  const file = await Uploads.findOne({name: fileName}).sort().exec();
+  const fileOwner = await User.findOne(file.user);
+
+  // Checking if the file belongs to the current user
+  const currentUser = await User.findById(req.user._id).sort().exec();
+
+  // If it does, send file
+  // If it doesn't, send file containing error message
+  if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+  {
+    res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+  }
+  else
+  {
+    res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
+  }
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -2086,4 +2162,5 @@ module.exports = {
   serveMoreCircles,
   serveUploadedContent,
   newContent,
+  serveUploadedFile,
 };

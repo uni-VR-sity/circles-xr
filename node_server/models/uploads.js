@@ -32,6 +32,12 @@ const UploadSchema = new mongoose.Schema({
         required:   true,
         trim:       true
       },
+    category: {
+        type:       String,
+        unique:     false,
+        required:   true,
+        trim:       true
+      },
 });
 
 const Uploads = mongoose.model('uploads', UploadSchema);

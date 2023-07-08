@@ -160,7 +160,7 @@ function addWorldInput(aboveElementId)
 }
 
 // Creating a double check click before deleting the server ('moreCircles' page)
-function doubleCheckDelete(deleteLink)
+function doubleCheckDelete_Server(deleteLink)
 {
   // deleteLink: /delete-server/serverId
   // split result array: {"", "delete-server", "serverId"}
@@ -204,7 +204,7 @@ function doubleCheckDelete(deleteLink)
 }
 
 // Canceling the delete by user request ('moreCircles' page)
-function cancelDelete(elementId)
+function cancelDelete_Server(elementId)
 {
   // Deleting delete confirmation div
   let confirmation = document.getElementById('delete?' + elementId);

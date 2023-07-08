@@ -4,6 +4,8 @@ block append stylesheets
     link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 block content
+    - var file;
+    - var fileType;
 
     h1 Uploaded Content
   
@@ -17,27 +19,57 @@ block content
 
     form(action='/upload-content' method='post' enctype='multipart/form-data' class='pure-form')
 
+        // Getting valid file types to restrict the file upload form
+        - var validFiles = '';
+
+        for fileType of validText
+            - validFiles += (fileType + ',');
+
+        for fileType of validImages
+            - validFiles += (fileType + ',');
+
+        for fileType of validVideos
+            - validFiles += (fileType + ',');
+
+        for fileType of valid3D
+            - validFiles += (fileType + ',');
+
         label Upload new content: 
-        input(name='contentFile' type='file' accept='.pdf, .jpeg, .jpg, .png, .gif')
+        input(name='contentFile' type='file' accept=validFiles)
     
         div(style='margin:15 0 25 0').instruction-box
 
             p(style='margin-bottom:0') The acceptable file forms for 2D content are:
+            br
 
-            ul.user-type-list
-                li .pdf
-                li .png 
-                li .jpeg
-                li .jpg
-                li .gif
+            table.file-formats-table  
+                thead 
+                    tr 
+                        td Text 
+                        td Images 
+                        td Videos
+                        td 3D Models
+                tbody
+                    tr
+                        td
+                            ul
+                                for fileType of validText
+                                    li #{fileType}
 
-            p(style='margin-bottom:0') The acceptable file forms for 3D content are:
+                        td 
+                            ul
+                                for fileType of validImages
+                                    li #{fileType}
 
-            ul.user-type-list
-                li 
-                li 
-                li 
-                li
+                        td  
+                            ul
+                                for fileType of validVideos
+                                    li #{fileType}
+                        
+                        td
+                            ul
+                                for fileType of valid3D
+                                    li #{fileType}
 
         input(type='submit' value='Upload' class='pure-button pure-button-primary')
 
@@ -53,9 +85,60 @@ block content
 
     br
     hr
-    br
 
     if content.length > 0
+
+        // Displaying the content the user has uploaded
+        table.uploads-table
+            tbody
+                // Content displayed in rows of 3
+                - var numRows = Math.ceil(content.length / 3);
+                - for (var i = 0; i < numRows; i++)
+                    tr
+                        - for (var j = 0; j < 3; j++)
+
+                            - var fileNum = (3 * i) + j
+                            
+                            // Ensuring that there is still content to display
+                            if (fileNum < content.length)
+
+                                // Displaying the content in the appropriate way depending on the file type
+                                // 1. Image files
+                                // 2. Video files
+                                // 3. Text files
+                                if content[fileNum].category === 'image'
+
+                                    td
+                                        div.file-container
+                                            - var url = '/uploads/' + content[fileNum].name;
+                                            img(src=url) 
+                                            div.file-description-hover
+                                                i(class="fa-regular fa-image file-icon")
+                                                p #{content[fileNum].displayName}
+                                                i(class="fa-solid fa-trash fa-lg delete-file")
+
+                                else if content[fileNum].category === 'video'
+                            
+                                    td
+                                        div.file-container
+                                            - var url = '/uploads/' + content[fileNum].name;
+                                            video(muted autoplay loop)
+                                                source(src=url) 
+                                            div.file-description-hover
+                                                i(class="fa-solid fa-video file-icon")
+                                                p #{content[fileNum].displayName}
+                                                i(class="fa-solid fa-trash fa-lg delete-file")
+
+                                else 
+
+                                    td.other-file-type
+                                        div.file-container
+                                            i(class="fa-regular fa-file file-icon")
+                                            p #{content[fileNum].displayName}
+                                            div.file-description-hover
+                                                i(class="fa-regular fa-file file-icon")
+                                                p #{content[fileNum].displayName}
+                                                i(class="fa-solid fa-trash fa-lg delete-file")
 
     else
         br

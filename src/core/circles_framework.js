@@ -70,13 +70,28 @@ const USER_TYPE = {
   MAGIC_GUEST : 'Magic Guest',
 };
 
-const VALID_CONTENT_TYPES = {
+const VALID_TEXT_TYPES = {
+  PDF     : 'pdf',
+  PLAIN   : 'plain',
+  TEXT    : 'txt',
+}
+
+const VALID_IMAGE_TYPES = {
   PNG     : 'png',
   JPG     : 'jpg',
   JPEG    : 'jpeg',
   GIF     : 'gif',
-  PDF     : 'pdf',
-};
+}
+
+const VALID_VIDEO_TYPES = {
+  MP4     : 'mp4',
+  MOV     : 'mov',
+  AVI     : 'avi',
+}
+
+const VALID_3D_TYPES = {
+
+}
 
 const MODEL_HEAD_TYPE = {
   head_0   : '/global/assets/models/gltf/head/Head_Circle.glb',
@@ -320,7 +335,10 @@ module.exports = {
   MODEL_TYPE,
   MODEL_FORMAT,
   USER_TYPE,
-  VALID_CONTENT_TYPES,
+  VALID_TEXT_TYPES,
+  VALID_IMAGE_TYPES,
+  VALID_VIDEO_TYPES,
+  VALID_3D_TYPES,
   MODEL_HEAD_TYPE,
   MODEL_HAIR_TYPE,
   MODEL_BODY_TYPE,
