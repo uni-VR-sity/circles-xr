@@ -126,6 +126,10 @@ router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
 router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
+router.get('/uploaded-content', authenticated, controller.serveUploadedContent);
+router.get('/uploads/:file_name', authenticated, controller.serveUploadedFile);
+
+router.post('/upload-content', authenticated, controller.newContent);
 
 router.post('/add-server', authenticated, controller.addServer);
 
