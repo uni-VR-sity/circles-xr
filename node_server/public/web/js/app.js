@@ -184,7 +184,7 @@ function doubleCheckDelete_Server(deleteLink)
 
     let cancelButton = document.createElement('a');
     cancelButton.setAttribute('class', 'pure-button worldList no-delete');
-    cancelButton.setAttribute('onclick', 'cancelDelete("' + id + '")');
+    cancelButton.setAttribute('onclick', 'cancelDelete_Server("' + id + '")');
     cancelButton.innerHTML = 'Cancel';
     confirmationContainer.appendChild(cancelButton);
 
