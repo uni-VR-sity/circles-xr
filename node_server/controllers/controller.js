@@ -2104,6 +2104,8 @@ const newContent = (req, res, next) =>
   });
 }
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Sending user uploaded file
 const serveUploadedFile = async (req, res, next) => 
 {
@@ -2128,6 +2130,35 @@ const serveUploadedFile = async (req, res, next) =>
   {
     res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
   }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Deleting user uploaded file
+const deleteUploadedFile = async (req, res, next) => 
+{
+  // url: /delete-uploaded-content/file_name
+  // split result array: {"", "delete-uploaded-content", "file_name"}
+  const fileName = req.url.split('/')[2];
+
+  // Getting file info from database
+  const file = await Uploads.findOne({name: fileName}).sort().exec();
+  const fileOwner = await User.findOne(file.user);
+
+  // Checking if the file belongs to the current user
+  const currentUser = await User.findById(req.user._id).sort().exec();
+
+  // If it does, delete the file
+  if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+  {
+    // Deleting from database
+    await Uploads.deleteOne({name: fileName});
+
+    // Deleting from uploads folder
+    fs.rmSync(__dirname + '/../uploads/' + fileName, {recursive: true});
+  }
+
+  return res.redirect('/uploaded-content');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2163,4 +2194,5 @@ module.exports = {
   serveUploadedContent,
   newContent,
   serveUploadedFile,
+  deleteUploadedFile,
 };

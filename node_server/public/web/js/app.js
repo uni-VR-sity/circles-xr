@@ -103,3 +103,16 @@ function copyText(copyTextElem) {
   });
 }
 
+// Hiding information about file and displaying delete confirmation
+function doubleCheckDelete_UploadFile(fileName)
+{
+    document.getElementById('info' + fileName).style.display = 'none';
+    document.getElementById('deleteConfirmation' + fileName).style.display = 'block';
+}
+
+// Canceling delete by hiding delete confirmation and displaying information about the file again
+function cancelDelete_UploadFile(fileName)
+{
+  document.getElementById('info' + fileName).style.display = 'block';
+  document.getElementById('deleteConfirmation' + fileName).style.display = 'none';
+}
