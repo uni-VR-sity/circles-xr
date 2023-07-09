@@ -103,19 +103,29 @@ block content
                             if (fileNum < content.length)
 
                                 // Displaying the content in the appropriate way depending on the file type
-                                // 1. Image files
-                                // 2. Video files
-                                // 3. Text files
+                                // 1. Image files (with img tag)
+                                // 2. Video files (with video tag)
+                                // 3. Text files (just displaying name of file)
                                 if content[fileNum].category === 'image'
 
                                     td
                                         div.file-container
                                             - var url = '/uploads/' + content[fileNum].name;
                                             img(src=url) 
-                                            div.file-description-hover
+                                            div.file-description-hover(id='info'+content[fileNum].name)
                                                 i(class="fa-regular fa-image file-icon")
-                                                p #{content[fileNum].displayName}
-                                                i(class="fa-solid fa-trash fa-lg delete-file")
+                                                br
+                                                p.fileName #{content[fileNum].displayName}
+                                                br
+                                                i(class="fa-solid fa-trash fa-lg delete-file" onclick='doubleCheckDelete_UploadFile("' + content[fileNum].name + '")')
+                                            div.file-description-hover-delete(id='deleteConfirmation'+content[fileNum].name)
+                                                i(class="fa-solid fa-trash")
+                                                br
+                                                p Delete this file?
+                                                br
+                                                a(class="pure-button no-delete-content" onclick='cancelDelete_UploadFile("' + content[fileNum].name + '")') Cancel
+                                                - var deleteLink = '/delete-uploaded-content/' + content[fileNum].name;
+                                                a(class="pure-button delete-content" href=deleteLink) Delete
 
                                 else if content[fileNum].category === 'video'
                             
@@ -124,21 +134,45 @@ block content
                                             - var url = '/uploads/' + content[fileNum].name;
                                             video(muted autoplay loop)
                                                 source(src=url) 
-                                            div.file-description-hover
+                                            div.file-description-hover(id='info'+content[fileNum].name)
                                                 i(class="fa-solid fa-video file-icon")
-                                                p #{content[fileNum].displayName}
-                                                i(class="fa-solid fa-trash fa-lg delete-file")
+                                                br
+                                                p.fileName #{content[fileNum].displayName}
+                                                br
+                                                i(class="fa-solid fa-trash fa-lg delete-file" onclick='doubleCheckDelete_UploadFile("' + content[fileNum].name + '")')
+                                            div.file-description-hover-delete(id='deleteConfirmation'+content[fileNum].name)
+                                                i(class="fa-solid fa-trash")
+                                                br
+                                                p Delete this file?
+                                                br
+                                                a(class="pure-button no-delete-content" onclick='cancelDelete_UploadFile("' + content[fileNum].name + '")') Cancel
+                                                - var deleteLink = '/delete-uploaded-content/' + content[fileNum].name;
+                                                a(class="pure-button delete-content" href=deleteLink) Delete
 
                                 else 
 
                                     td.other-file-type
                                         div.file-container
                                             i(class="fa-regular fa-file file-icon")
-                                            p #{content[fileNum].displayName}
-                                            div.file-description-hover
+                                            br
+                                            p.fileName #{content[fileNum].displayName}
+                                            div.file-description-hover(id='info'+content[fileNum].name)
                                                 i(class="fa-regular fa-file file-icon")
-                                                p #{content[fileNum].displayName}
-                                                i(class="fa-solid fa-trash fa-lg delete-file")
+                                                br
+                                                p.fileName #{content[fileNum].displayName}
+                                                br
+                                                i(class="fa-solid fa-trash fa-lg delete-file" onclick='doubleCheckDelete_UploadFile("' + content[fileNum].name + '")')
+                                            div.file-description-hover-delete(id='deleteConfirmation'+content[fileNum].name)
+                                                i(class="fa-solid fa-trash")
+                                                br
+                                                p Delete this file?
+                                                br
+                                                a(class="pure-button no-delete-content" onclick='cancelDelete_UploadFile("' + content[fileNum].name + '")') Cancel
+                                                - var deleteLink = '/delete-uploaded-content/' + content[fileNum].name;
+                                                a(class="pure-button delete-content" href=deleteLink) Delete
+        
+        script
+            include includes/shortenNames.js
 
     else
         br
