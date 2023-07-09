@@ -9,8 +9,7 @@ const User     = require('../models/user');
 const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
 const Worlds   = require('../models/worlds');
-const Uploads  = require('../models/uploads');
-const Servers  = require('../models/servers');
+const Uploads  = require('../models/uploads')
 const path     = require('path');
 const fs       = require('fs');
 const crypto   = require('crypto');
@@ -1841,22 +1840,6 @@ const updateSessionName = function(req, res, next)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Getting list of servers from database
-const getServersList = async (req, res, next) =>
-{
-  try 
-  {
-    let servers = await Servers.find({});
-    res.json(servers);
-  }
-  catch(e)
-  {
-    res.json('ERROR');
-  }
-}
-
-// ------------------------------------------------------------------------------------------------------------------------------------------------------
-
 // Rendering Circles servers page
 const serveMoreCircles = (req, res, next) => 
 {
@@ -1924,143 +1907,6 @@ const serveMoreCircles = (req, res, next) =>
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Adding new server to database
-const addServer = async (req, res, next) => 
-{
-  // Making sure all required fields are there (owner's name, description, link to server, and worlds)
-  if (req.body.ownerName && req.body.link && req.body.description && req.body.worlds) 
-  {
-    let serverData = {
-      ownerName: req.body.ownerName,
-      description: req.body.description,
-      link: req.body.link,
-      worlds: [],
-    }
-
-    // Making sure all worlds in worlds array have text
-    for (const world of req.body.worlds)
-    {
-      if (world.length > 0)
-      {
-        serverData.worlds.push(world);
-      }
-    }
-
-    try
-    {
-      await Servers.create(serverData);
-      req.session.successMessage = serverData.ownerName + "'s server successfully added to database";
-
-    }
-    catch(e)
-    {
-      console.log(e);
-      req.session.errorMessage = 'Something went wrong, please try again';
-    }
-  }
-
-  return res.redirect('/more-circles');
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Setting a server as inactive by superuser or admin request
-const inactivateServer = async (req, res, next) => 
-{
-  // url: /inactivate-server/serverId
-  // split result array: {"", "inactivate-server", "serverId"}
-  const urlSplit = req.url.split('/');
-  const serverId = urlSplit[2];
-
-  // Finding server in database
-  let server = await Servers.findById(serverId);
-
-  // Updating active variable in server
-  if (server)
-  {
-    try
-    {
-      server.active = false;
-      await server.save();
-
-      console.log(server.ownerName + "'s server set to be inactive");
-    }
-    catch(e)
-    {
-      console.log("ERROR: Could not set " + server.ownerName + "'s server to be inactive");
-    }
-  }
-  else
-  {
-    console.log('ERROR: Could not get the server with following id from the database: ' + serverId);
-  }
-
-  return res.redirect('/more-circles');
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Setting a server as active by superuser or admin request
-const activateServer = async (req, res, next) => 
-{
-  // url: /activate-server/serverId
-  // split result array: {"", "activate-server", "serverId"}
-  const urlSplit = req.url.split('/');
-  const serverId = urlSplit[2];
-
-  // Finding server in database
-  let server = await Servers.findById(serverId);
-
-  // Updating active variable in server
-  if (server)
-  {
-    try
-    {
-      server.active = true;
-      await server.save();
-
-      console.log(server.ownerName + "'s server set to be active");
-    }
-    catch(e)
-    {
-      console.log("ERROR: Could not set " + server.ownerName + "'s server to be active");
-    }
-  }
-  else
-  {
-    console.log('ERROR: Could not get the server with following id from the database: ' + serverId);
-  }
-
-  return res.redirect('/more-circles');
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Deleting a server by superuser or admin request
-const deleteServer = async (req, res, next) => 
-{
-  // url: /delete-server/serverId
-  // split result array: {"", "delete-server", "serverId"}
-  const urlSplit = req.url.split('/');
-  const serverId = urlSplit[2];
-
-  // Deleting server
-  try
-  {
-    await Servers.findByIdAndDelete(serverId);
-
-    console.log('Server with the following id deleted: ' + serverId);
-  }
-  catch(e)
-  {
-    console.log('ERROR: The server with the following id could not be deleted: ' + serverId);
-  }
-
-  return res.redirect('/more-circles');
-}
-
-// ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering Uploaded Content page
 const serveUploadedContent = async (req, res, next) => 
@@ -2344,12 +2190,7 @@ module.exports = {
   createUsersByFile,
   updateUsertype,
   updateSessionName,
-  getServersList,
   serveMoreCircles,
-  addServer,
-  inactivateServer,
-  activateServer,
-  deleteServer,
   serveUploadedContent,
   newContent,
   serveUploadedFile,
