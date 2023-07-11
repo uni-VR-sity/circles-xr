@@ -32,12 +32,35 @@ const uploadAssets = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// When button is hovered, it gets slightly bigger
+const buttonHover = function(button, height, width)
+{
+    button.addEventListener('mouseenter', function()
+    {
+        button.setAttribute('geometry', {
+            height: height * 1.2,
+            width: width * 1.2,
+        }); 
+    });
+
+    button.addEventListener('mouseleave', function()
+    {
+        button.setAttribute('geometry', {
+            height: height,
+            width: width,
+        });
+    });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating upload button at the top of controller base
 // Takes the controller base (parentElement), and its dimensions
 const generateUpload = function(parentElement, height, width, depth)
 {
     var uploadButton = document.createElement('a-entity');
     uploadButton.setAttribute('id', 'upload');
+    uploadButton.setAttribute('class', 'interactive');
 
     // Position: Base is split into 3 sections (for 3 symbols)
     //           Upload symbol is at the top
@@ -68,6 +91,9 @@ const generateUpload = function(parentElement, height, width, depth)
     }); 
 
     parentElement.appendChild(uploadButton); 
+
+    // Adding effect when hovered
+    buttonHover(uploadButton, width / 3, width / 3);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -78,6 +104,7 @@ const generateMessage = function(parentElement, height, width, depth)
 {
     var messageButton = document.createElement('a-entity');
     messageButton.setAttribute('id', 'message');
+    messageButton.setAttribute('class', 'interactive');
 
     // Position: Base is split into 3 sections (for 3 symbols)
     //           Message symbol is in the middle
@@ -108,6 +135,9 @@ const generateMessage = function(parentElement, height, width, depth)
     }); 
 
     parentElement.appendChild(messageButton); 
+
+    // Adding effect when hovered
+    buttonHover(messageButton, width / 3, width / 3);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -118,6 +148,7 @@ const generateDraw = function(parentElement, height, width, depth)
 {
     var drawButton = document.createElement('a-entity');
     drawButton.setAttribute('id', 'draw');
+    drawButton.setAttribute('class', 'interactive');
 
     // Position: Base is split into 3 sections (for 3 symbols)
     //           Draw symbol is at the bottom
@@ -148,6 +179,9 @@ const generateDraw = function(parentElement, height, width, depth)
     }); 
 
     parentElement.appendChild(drawButton); 
+
+    // Adding effect when hovered
+    buttonHover(drawButton, width / 3, width / 3);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
