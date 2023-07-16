@@ -1,0 +1,302 @@
+'use strict';
+
+// Functions
+
+// Creating pop up element
+const generatePopUp = function()
+{
+    // Container
+    var container = document.createElement('div');
+
+    container.setAttribute('id', 'upload-content-container');
+    container.setAttribute('class', 'overlay');
+
+        // Title
+        var title = document.createElement('h1');
+
+        title.innerHTML = 'Insert File';
+
+        container.append(title);
+
+        // Close button container
+        var closeContainer = document.createElement('div');
+
+        closeContainer.setAttribute('class', 'close-upload');
+
+            // Close button
+            var closeButton = document.createElement('i');
+
+            closeButton.setAttribute('class', 'fa-solid fa-xmark fa-2xl');
+
+            closeContainer.append(closeButton);
+
+        closeContainer.addEventListener('click', function()
+        {
+            document.getElementById('upload-content-container').style.display = 'none';
+        });
+
+        container.appendChild(closeContainer);
+
+        // Line 
+        var line = document.createElement('hr');
+        container.appendChild(line);
+
+    document.getElementsByTagName('body')[0].appendChild(container);
+
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Displaying error message to user
+const renderError = function(message)
+{
+    // Getting pop up container
+    var container = document.getElementById('upload-content-container');
+
+    // Creating element to display error
+    var error = document.createElement('div');
+
+    error.setAttribute('class', 'error-message');
+    error.innerHTML = message;
+
+    container.appendChild(error);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adding upload button to uploud content to whiteboard
+const addButton = function()
+{
+    // Getting pop up container
+    var container = document.getElementById('upload-content-container');
+
+    var button = document.createElement('a');
+
+    button.setAttribute('class', 'upload-button active');
+    button.innerHTML = 'Insert';
+
+    container.appendChild(button);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// When user presses a file, 
+// - File is light up
+// - Insert button is made active
+const contentPress = function(contentElement)
+{
+
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Displaying content uploaded by the user in a table
+const displayContent = function(content)
+{
+    // Getting pop up container
+    var container = document.getElementById('upload-content-container');
+
+        // Creating table container
+        var tableContainer = document.createElement('div');
+        
+        tableContainer.setAttribute('class', 'table-overflow-container');
+
+            // Creating table to display content
+            var table = document.createElement('table');
+
+            table.setAttribute('class', 'uploads-table')
+
+            // Content is displayed in rows of 4
+            var numRows = Math.ceil(content.length / 4);
+
+            for (var i = 0; i < numRows; i++)
+            {
+                var row = document.createElement('tr');
+
+                    for (var j = 0; j < 4; j++)
+                    {
+                        var fileNum = (4 * i) + j;
+
+                        // Ensuring that there is still content to display
+                        if (fileNum < content.length)
+                        {
+                            var data = document.createElement('td');
+
+                                var fileContainer = document.createElement('div');
+
+                                fileContainer.setAttribute('class', 'file-container');
+
+                                    // Displaying the content in the appropriate way depending on the file type
+                                    // Image files (with img tag)
+                                    if (content[fileNum].category === 'image')
+                                    {
+                                        var image = document.createElement('img');
+
+                                        image.setAttribute('src', '/uploads/' + content[fileNum].name);
+
+                                        fileContainer.appendChild(image);
+                                    }
+                                    // Video files (with video tag)
+                                    else if (content[fileNum].category === 'video')
+                                    {
+                                        var video = document.createElement('video');
+
+                                        video.setAttribute('muted', 'muted');
+                                        video.setAttribute('autoplay', 'autoplay');
+                                        video.setAttribute('loop', 'loop');
+
+                                            var source = document.createElement('source');
+
+                                            source.setAttribute('src', '/uploads/' + content[fileNum].name);
+
+                                            video.appendChild(source);
+
+                                        fileContainer.appendChild(video);
+                                    }
+                                    // Text files (just displaying name of file)
+                                    else
+                                    {
+                                        data.setAttribute('class', 'other-file-type');
+
+                                        // Icon
+                                        var icon = document.createElement('i');
+
+                                        icon.setAttribute('class', 'fa-regular fa-file file-icon');
+
+                                        fileContainer.appendChild(icon);
+
+                                        // Space
+                                        var space = document.createElement('br');
+                                        fileContainer.appendChild(space);
+
+                                        // File name
+                                        var name = document.createElement('p');
+
+                                        name.setAttribute('class', 'fileName');
+                                        name.innerHTML = content[fileNum].displayName;
+
+                                        fileContainer.appendChild(name);
+                                    }
+                                
+                                fileContainer.addEventListener('click')
+                                {
+                                    contentPress(fileContainer);
+                                }
+
+                                data.appendChild(fileContainer);
+
+                            row.appendChild(data);
+                        }
+                    }
+                    
+                table.appendChild(row);
+            }
+
+        tableContainer.appendChild(table);
+    
+    container.appendChild(tableContainer);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const shortenNames = function()
+{
+    // Table section margins and padding sizes
+    let sectionMargin = 30 * 4;
+    let sectionPadding = 300;
+
+    // Showing pop up as program can not get dimensions when elements are hidden
+    document.getElementById('upload-content-container').style.display = 'block';
+
+    // Getting the width of the table sections
+    let sectionWidth = (document.getElementsByClassName('uploads-table')[0].getBoundingClientRect().width - sectionMargin - sectionPadding) / 4;
+
+    // Going through each table section and checking if the length of the file name is greater then the width of the section
+    // If it is, shorten it
+    let nameElements = document.getElementsByClassName('fileName');
+
+    for (let element of nameElements)
+    {
+        let name = element.innerHTML;
+        let nameLength = element.getBoundingClientRect().width;
+
+        if (nameLength > sectionWidth)
+        {
+            // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
+            
+            // Getting the file type
+            let splitName = name.split('.');
+            let type = splitName[splitName.length - 1];
+
+            let condensedName = name;
+            
+            // Taking a character off the file name until the length of the name is less then the section width
+            while (nameLength > sectionWidth)
+            {
+                // Getting the file name without the type
+                condensedName = condensedName.replace('...' + type, '');
+
+                // Removing the last character of the name
+                condensedName = condensedName.substring(0, condensedName.length - 1);
+                condensedName += '...' + type;
+
+                // Checking the length of the name
+                element.innerHTML = condensedName;
+                nameLength = element.getBoundingClientRect().width;
+            }
+        }
+    }
+
+    // Hiding pop up again
+    document.getElementById('upload-content-container').style.display = 'none';
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Component
+AFRAME.registerComponent('circles-upload-file', 
+{
+    schema: 
+    {
+      display: {type: 'boolean', default: false},
+    },
+    init: function () 
+    {
+        // Generating pop up base for displaying content
+        generatePopUp();
+
+        // Getting list of content uploaded by the user
+        let request = new XMLHttpRequest();
+        request.open('GET', '/get-user-uploaded-content');
+
+        request.onerror = function() 
+        {
+            // Generating error message
+            renderError("An error occurred, please try again");
+        }
+
+        request.onload = function() 
+        {
+            let content = JSON.parse(request.response);
+
+            if (content.length > 0)
+            {
+                // Displaying content the user uploaded
+                displayContent(content);
+
+                // Making sure file names fit the width of the table data
+                shortenNames();
+
+                // Adding upload button
+                addButton();
+            }
+            else
+            {
+                // Generating error message
+                renderError("<b>No content avaliable to insert</b><p>Upload content <a href='/uploaded-content' target='_blank'>here</a></p>");
+            }
+        };
+
+        request.send();
+    }
+});

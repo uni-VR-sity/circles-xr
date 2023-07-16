@@ -94,6 +94,13 @@ const generateUpload = function(parentElement, height, width, depth)
 
     // Adding effect when hovered
     buttonHover(uploadButton, width / 3, width / 3);
+
+    // UPDATE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Have it activate 'circles-upload-file' instead 
+    uploadButton.addEventListener('click', function()
+    {
+        document.getElementById('upload-content-container').style.display = 'block';
+    });
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -270,6 +277,9 @@ AFRAME.registerComponent('circles-whiteboard',
     {
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
+
+        // Creating element for uploading files
+        // TO-DO
 
         // Uploading assets needed for whiteboard
         uploadAssets();

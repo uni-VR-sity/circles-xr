@@ -9,7 +9,7 @@ const User     = require('../models/user');
 const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
 const Worlds   = require('../models/worlds');
-const Uploads  = require('../models/uploads')
+const Uploads  = require('../models/uploads');
 const path     = require('path');
 const fs       = require('fs');
 const crypto   = require('crypto');
@@ -2163,6 +2163,20 @@ const deleteUploadedFile = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Returning a list of the content the current user has uploaded
+const getUserFiles = async (req, res, next) => 
+{
+  let content = [];
+
+  let currentUser = req.user;
+
+  content = await Uploads.find({user: currentUser}, 'name category displayName');
+
+  res.json(content);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   // getAllUsers,
   // getUser,
@@ -2195,4 +2209,5 @@ module.exports = {
   newContent,
   serveUploadedFile,
   deleteUploadedFile,
+  getUserFiles,
 };
