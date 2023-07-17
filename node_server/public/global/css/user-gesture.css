@@ -226,32 +226,24 @@ div.grid2col {
 {
     height:70%;
     overflow-y:auto;
+    width:100%;
 }
 
 .uploads-table
 {
     width:100%;
-    height:100%;
     border-spacing:0 36px;
 }
 
-.uploads-table tr
-{
-    width:100%;
-}
+.uploads-table td:nth-child(1){padding: 0 20px;}
 
-.uploads-table td
-{
-    width:20%;
-}
+.uploads-table td:nth-child(2){padding: 0 20px;}
 
-.uploads-table td:nth-child(1){padding: 0 15px;}
+.uploads-table td:nth-child(3){padding: 0 20px;}
 
-.uploads-table td:nth-child(2){padding: 0 15px;}
+.uploads-table td:nth-child(4){padding: 0 20px;}
 
-.uploads-table td:nth-child(3){padding: 0 15px;}
-
-.uploads-table td:nth-child(4){padding: 0 15px;}
+.uploads-table td:nth-child(5){padding: 0 20px;}
 
 .uploads-table td img, .uploads-table td video
 {
@@ -262,8 +254,7 @@ div.grid2col {
 
 .file-container
 {
-    height:225px;
-    width:100%;
+    height:175px;
     text-align:center;
     box-sizing: border-box;
 }
@@ -277,14 +268,14 @@ div.grid2col {
 .uploads-table td.other-file-type 
 {
     background-color:#e7e7e7;
-    background-clip:content-box;
+    background-clip: content-box;
 }
 
 .uploads-table td.other-file-type i
 {
     font-size:250%;
     margin-bottom:15px;
-    margin-top:27%;
+    margin-top:23%;
 }
 
 .fileName
