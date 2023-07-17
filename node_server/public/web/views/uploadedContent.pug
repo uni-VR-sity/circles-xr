@@ -108,7 +108,7 @@ block content
                                 // 3. Text files (just displaying name of file)
                                 if content[fileNum].category === 'image'
 
-                                    td
+                                    td.file-table-section
                                         div.file-container
                                             - var url = '/uploads/' + content[fileNum].name;
                                             img(src=url) 
@@ -129,7 +129,7 @@ block content
 
                                 else if content[fileNum].category === 'video'
                             
-                                    td
+                                    td.file-table-section
                                         div.file-container
                                             - var url = '/uploads/' + content[fileNum].name;
                                             video(muted autoplay loop)
@@ -151,7 +151,7 @@ block content
 
                                 else 
 
-                                    td.other-file-type
+                                    td.other-file-type.file-table-section
                                         div.file-container
                                             i(class="fa-regular fa-file file-icon")
                                             br
@@ -173,6 +173,9 @@ block content
         
         script
             include includes/shortenNames.js
+
+        script
+            include includes/tableWidthAdjust.js
 
     else
         br

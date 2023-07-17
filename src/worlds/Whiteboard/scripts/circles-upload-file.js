@@ -178,6 +178,7 @@ const displayContent = function(content)
                                         fileContainer.appendChild(name);
                                     }
                                 
+                                // Action when file is clicked
                                 fileContainer.addEventListener('click')
                                 {
                                     contentPress(fileContainer);
