@@ -72,7 +72,8 @@ const addButton = function()
 
     var button = document.createElement('a');
 
-    button.setAttribute('class', 'upload-button active');
+    button.setAttribute('id', 'upload-button');
+    button.setAttribute('class', 'button-inactive');
     button.innerHTML = 'Insert';
 
     container.appendChild(button);
@@ -85,7 +86,35 @@ const addButton = function()
 // - Insert button is made active
 const contentPress = function(contentElement)
 {
+    // If the file is current active, deactivate it
+    // Otherwise, activate the file
+    if (contentElement.classList.contains('file-selected'))
+    {
+        contentElement.classList.remove('file-selected');
 
+        // Deactivating insert button
+        let button = document.getElementById('upload-button');
+        
+        button.setAttribute('class', 'button-inactive');
+    }
+    else
+    {
+        // If another file is active, deactivate it
+        let activeFiles = document.getElementsByClassName('file-selected');
+
+        for (let file of activeFiles)
+        {
+            file.classList.remove('file-selected');
+        }
+
+        // Activate current file
+        contentElement.classList.add('file-selected');
+
+        // Activating insert button with current file
+        let button = document.getElementById('upload-button');
+
+        button.setAttribute('class', 'button-active');
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -99,12 +128,12 @@ const displayContent = function(content)
         // Creating table container
         var tableContainer = document.createElement('div');
         
-        tableContainer.setAttribute('class', 'table-overflow-container');
+        tableContainer.setAttribute('id', 'table-overflow-container');
 
             // Creating table to display content
             var table = document.createElement('table');
 
-            table.setAttribute('class', 'uploads-table')
+            table.setAttribute('id', 'uploads-table')
 
             // Content is displayed in rows of 5
             var numRows = Math.ceil(content.length / 5);
@@ -127,6 +156,7 @@ const displayContent = function(content)
                                 var fileContainer = document.createElement('div');
 
                                 fileContainer.setAttribute('class', 'file-container');
+                                fileContainer.setAttribute('id', content[fileNum].name);
 
                                     // Displaying the content in the appropriate way depending on the file type
                                     // Image files (with img tag)
@@ -179,12 +209,6 @@ const displayContent = function(content)
 
                                         fileContainer.appendChild(name);
                                     }
-                                
-                                // Action when file is clicked
-                                fileContainer.addEventListener('click', function()
-                                {
-                                    contentPress(fileContainer);
-                                });
 
                                 data.appendChild(fileContainer);
 
@@ -209,7 +233,7 @@ const shortenNames = function()
     let sectionPadding = 300;
 
     // Getting the width of the table sections
-    let sectionWidth = (document.getElementsByClassName('uploads-table')[0].getBoundingClientRect().width - sectionMargin - sectionPadding) / 4;
+    let sectionWidth = (document.getElementById('uploads-table').getBoundingClientRect().width - sectionMargin - sectionPadding) / 4;
 
     // Going through each table section and checking if the length of the file name is greater then the width of the section
     // If it is, shorten it
@@ -253,7 +277,7 @@ const shortenNames = function()
 const adjustWidth = function()
 {
     // Getting the table
-    let table = document.getElementsByClassName('uploads-table')[0];
+    let table = document.getElementById('uploads-table');
 
     // Getting the width of the table sections
     let width = (table.getBoundingClientRect().width) / 5;
@@ -320,6 +344,20 @@ AFRAME.registerComponent('circles-upload-file',
 
                 // Adding upload button
                 addButton();
+
+                // Listening for when files are clicked to activate them to insert onto whiteboard
+
+                // Getting all file containers
+                let containers = document.getElementsByClassName('file-container');
+
+                // Adding event listeners to file containers
+                for (let container of containers)
+                {
+                    container.addEventListener('click', function()
+                    {
+                        contentPress(container);
+                    });
+                }
             }
             else
             {
