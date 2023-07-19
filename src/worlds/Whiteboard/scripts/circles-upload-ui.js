@@ -1,5 +1,9 @@
 'use strict';
 
+// Generates pop up UI for inserting files onto whiteboard(s)
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Functions
 
 // Creating pop up element
@@ -32,7 +36,7 @@ const generatePopUp = function()
 
         closeContainer.addEventListener('click', function()
         {
-            document.getElementById('upload-content-container').style.display = 'none';
+            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
         });
 
         container.appendChild(closeContainer);
@@ -64,17 +68,37 @@ const renderError = function(message)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Adding upload button to uploud content to whiteboard
-const addButton = function()
+// Inserting file into whiteboard
+const insertFile = function(whiteboard)
+{
+    // Finding the file that was selected
+    var file = document.querySelector('.file-selected').getAttribute('id');
+
+    console.log(file);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adding upload button to upload content to whiteboard
+const addButton = function(whiteboard)
 {
     // Getting pop up container
     var container = document.getElementById('upload-content-container');
 
     var button = document.createElement('a');
 
-    button.setAttribute('id', 'upload-button');
+    button.setAttribute('id', 'insert-button');
     button.setAttribute('class', 'button-inactive');
     button.innerHTML = 'Insert';
+
+    // When button is clicked, if it is active, add selected file to whiteboard
+    button.addEventListener('click', function() 
+    {
+        if (button.classList.contains('button-active'))
+        {
+            insertFile(whiteboard);
+        }
+    });
 
     container.appendChild(button);
 }
@@ -93,7 +117,7 @@ const contentPress = function(contentElement)
         contentElement.classList.remove('file-selected');
 
         // Deactivating insert button
-        let button = document.getElementById('upload-button');
+        let button = document.getElementById('insert-button');
         
         button.setAttribute('class', 'button-inactive');
     }
@@ -110,8 +134,8 @@ const contentPress = function(contentElement)
         // Activate current file
         contentElement.classList.add('file-selected');
 
-        // Activating insert button with current file
-        let button = document.getElementById('upload-button');
+        // Activating insert button
+        let button = document.getElementById('insert-button');
 
         button.setAttribute('class', 'button-active');
     }
@@ -119,7 +143,7 @@ const contentPress = function(contentElement)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Displaying content uploaded by the user in a table
+// Displaying content uploaded by the user in a table on the pop up
 const displayContent = function(content)
 {
     // Getting pop up container
@@ -226,6 +250,7 @@ const displayContent = function(content)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Shortening file names to fit the width of the table data
 const shortenNames = function()
 {
     // Table section margins and padding sizes
@@ -274,6 +299,8 @@ const shortenNames = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Adjusting table width
+// (For when there is only 1, 2, or 3 files uploaded, to still be displayed with the correct proportions)
 const adjustWidth = function()
 {
     // Getting the table
@@ -299,16 +326,26 @@ const adjustWidth = function()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Component
-AFRAME.registerComponent('circles-upload-file', 
+AFRAME.registerComponent('circles-upload-ui', 
 {
     schema: 
     {
-      display: {type: 'boolean', default: false},
+      active: {type: 'boolean', default: false},
+      whiteboardID: {type: 'string'},
     },
     init: function () 
     {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
         // Generating pop up base for displaying content
         generatePopUp();
+
+        // Showing pop up with user presses upload button on whiteboard
+        //document.getElementById('upload-button').addEventListener('click', function()
+        //{
+            //document.getElementById('upload-content-container').style.display = 'block';
+        //});
 
         // Getting list of content uploaded by the user
         let request = new XMLHttpRequest();
@@ -326,7 +363,7 @@ AFRAME.registerComponent('circles-upload-file',
 
             if (content.length > 0)
             {
-                // Displaying content the user uploaded
+                // Displaying content the user uploaded on pop up
                 displayContent(content);
 
                 // Showing pop up as program can not get dimensions when elements are hidden
@@ -336,14 +373,13 @@ AFRAME.registerComponent('circles-upload-file',
                     shortenNames();
 
                     // Adjusting table width
-                    // (For when there is only 1, 2, or 3 files uploaded, to still be displayed with the correct proportions)
                     adjustWidth();
 
                 // Hiding pop up again
                 document.getElementById('upload-content-container').style.display = 'none';
 
                 // Adding upload button
-                addButton();
+                addButton(CONTEXT_AF.data.whiteboardID);
 
                 // Listening for when files are clicked to activate them to insert onto whiteboard
 
@@ -367,5 +403,22 @@ AFRAME.registerComponent('circles-upload-file',
         };
 
         request.send();
+    },
+    update: function () 
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // If active was set to true, display the pop up
+        // If it was set to false, hide pop up
+
+        if (CONTEXT_AF.data.active === true)
+        {
+            document.getElementById('upload-content-container').style.display = 'block';
+        }
+        else
+        {
+            document.getElementById('upload-content-container').style.display = 'none';
+        }
     }
 });

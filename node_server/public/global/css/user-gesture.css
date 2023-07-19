@@ -271,13 +271,13 @@ div.grid2col {
     box-shadow: 0 0 15px #0078e7;
 }
 
-.uploads-table td.other-file-type 
+#uploads-table td.other-file-type 
 {
     background-color:#e7e7e7;
     background-clip: content-box;
 }
 
-.uploads-table td.other-file-type i
+#uploads-table td.other-file-type i
 {
     font-size:250%;
     margin-bottom:15px;
@@ -297,7 +297,7 @@ div.grid2col {
     margin-top:40px;
 }
 
-#upload-button
+#insert-button
 {
     position: absolute;
     display: inline-block;

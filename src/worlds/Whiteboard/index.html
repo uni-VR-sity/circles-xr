@@ -6,7 +6,7 @@
         <circles-start-scripts/>
 
         <script src="/worlds/Whiteboard/scripts/circles-whiteboard.js"></script>
-        <script src="/worlds/Whiteboard/scripts/circles-upload-file.js"></script>
+        <script src="/worlds/Whiteboard/scripts/circles-upload-ui.js"></script>
     </head>
 
     <body>
@@ -34,12 +34,31 @@
                         rotation="-90 0 0">
             </a-entity>
 
-            <!-- Whiteboard -->
-            <a-entity id="whiteboard"
+            <!-- Whiteboard 1 -->
+            <a-entity text="value:whiteboard1; color:#000000; align:center" 
+                      position="6 5 0" 
+                      rotation="0 -90 0" 
+                      scale="5 5 5">
+            </a-entity>
+
+            <a-entity id="whiteboard1"
                         circles-whiteboard
                         position="6 2 0"
-                        rotation="0 90 0"
-                        circles-upload-file>
+                        rotation="0 90 0">
+            </a-entity>
+
+            
+            <!-- Whiteboard 2 -->
+            <a-entity text="value:whiteboard2; color:#000000; align:center" 
+                      position="-6 5 0" 
+                      rotation="0 90 0" 
+                      scale="5 5 5">
+            </a-entity>
+
+            <a-entity id="whiteboard2"
+                        circles-whiteboard
+                        position="-6 2 0"
+                        rotation="0 -90 0">
             </a-entity>
 
         </a-scene>

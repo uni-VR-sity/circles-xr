@@ -1,5 +1,10 @@
 'use strict';
 
+// Generates and controls whiteboard
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 // Functions
 
 // Uploading assets for whiteboard into world
@@ -56,11 +61,10 @@ const buttonHover = function(button, height, width)
 
 // Creating upload button at the top of controller base
 // Takes the controller base (parentElement), and its dimensions
-const generateUpload = function(parentElement, height, width, depth)
+const generateUpload = function(whiteboardElement, parentElement, height, width, depth)
 {
     var uploadButton = document.createElement('a-entity');
-    uploadButton.setAttribute('id', 'upload');
-    uploadButton.setAttribute('class', 'interactive');
+    uploadButton.setAttribute('class', 'upload-button interactive');
 
     // Position: Base is split into 3 sections (for 3 symbols)
     //           Upload symbol is at the top
@@ -95,11 +99,10 @@ const generateUpload = function(parentElement, height, width, depth)
     // Adding effect when hovered
     buttonHover(uploadButton, width / 3, width / 3);
 
-    // UPDATE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Have it activate 'circles-upload-file' instead 
+    // When clicked, activate 'circles-upload-file' for the current whiteboard
     uploadButton.addEventListener('click', function()
     {
-        document.getElementById('upload-content-container').style.display = 'block';
+        document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:true; whiteboardID:' + whiteboardElement.getAttribute('id'));
     });
 }
 
@@ -110,8 +113,7 @@ const generateUpload = function(parentElement, height, width, depth)
 const generateMessage = function(parentElement, height, width, depth)
 {
     var messageButton = document.createElement('a-entity');
-    messageButton.setAttribute('id', 'message');
-    messageButton.setAttribute('class', 'interactive');
+    messageButton.setAttribute('class', 'message-button interactive');
 
     // Position: Base is split into 3 sections (for 3 symbols)
     //           Message symbol is in the middle
@@ -154,8 +156,7 @@ const generateMessage = function(parentElement, height, width, depth)
 const generateDraw = function(parentElement, height, width, depth)
 {
     var drawButton = document.createElement('a-entity');
-    drawButton.setAttribute('id', 'draw');
-    drawButton.setAttribute('class', 'interactive');
+    drawButton.setAttribute('class', 'draw-button interactive');
 
     // Position: Base is split into 3 sections (for 3 symbols)
     //           Draw symbol is at the bottom
@@ -198,7 +199,7 @@ const generateWhiteboard = function(parentElement, preferences)
 {
     // Base
     var boardBase = document.createElement('a-entity');
-    boardBase.setAttribute('id', 'board_base');
+    boardBase.setAttribute('class', 'board_base');
 
     boardBase.setAttribute('geometry', {
         primitive: 'box',
@@ -223,7 +224,7 @@ const generateWhiteboard = function(parentElement, preferences)
 
     // Controller base
     var boardControls = document.createElement('a-entity');
-    boardControls.setAttribute('id', 'board_controller');
+    boardControls.setAttribute('class', 'board_controller');
 
     var controllerWidth = preferences.width * 0.2;
 
@@ -255,7 +256,7 @@ const generateWhiteboard = function(parentElement, preferences)
     parentElement.appendChild(boardControls);
 
     // Buttons on controller base
-    generateUpload(boardControls, preferences.height, controllerWidth, preferences.depth);
+    generateUpload(parentElement, boardControls, preferences.height, controllerWidth, preferences.depth);
     generateMessage(boardControls, preferences.height, controllerWidth, preferences.depth);
     generateDraw(boardControls, preferences.height, controllerWidth, preferences.depth);
 }
@@ -278,11 +279,16 @@ AFRAME.registerComponent('circles-whiteboard',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
-        // Creating element for uploading files
-        // TO-DO
+        // Making sure this is the first circles-whiteboard component to the run
+        // If it is, running what only needs to be run once
+        if (document.querySelectorAll('[circles-whiteboard]')[0].getAttribute('id') === element.getAttribute('id'))
+        {
+            // Uploading assets needed for whiteboard
+            uploadAssets();
 
-        // Uploading assets needed for whiteboard
-        uploadAssets();
+            // Creating element for uploading files (there should only be 1 that all whiteboards use)
+            element.setAttribute('circles-upload-ui', '');
+        }
 
         // Generating whiteboard
         generateWhiteboard(element, CONTEXT_AF.data);
