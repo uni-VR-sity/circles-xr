@@ -2002,8 +2002,6 @@ const newContent = (req, res, next) =>
 
     const file = files.contentFile;
 
-    console.log(file);
-
     // Getting valid file types
     let validFiles = [];
 
@@ -2212,6 +2210,8 @@ const insertWhiteboardFile = async (req, res, next) =>
     {
       console.log(e);
     }
+
+    res.json(insertedFile);
   }
 
 }

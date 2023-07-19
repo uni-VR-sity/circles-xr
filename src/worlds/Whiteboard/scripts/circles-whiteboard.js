@@ -199,7 +199,7 @@ const generateWhiteboard = function(parentElement, preferences)
 {
     // Base
     var boardBase = document.createElement('a-entity');
-    boardBase.setAttribute('class', 'board_base');
+    boardBase.setAttribute('class', 'board-base');
 
     boardBase.setAttribute('geometry', {
         primitive: 'box',
@@ -222,9 +222,27 @@ const generateWhiteboard = function(parentElement, preferences)
 
     parentElement.appendChild(boardBase); 
 
+    // File Container
+    var fileContainer = document.createElement('a-entity');
+    fileContainer.setAttribute('class', 'board-files');
+
+    fileContainer.setAttribute('position', {
+        x: 0,
+        y: 0,
+        z: - ((preferences.depth / 2) + 0.001),
+    });
+
+    fileContainer.setAttribute('rotation', {
+        x: 0,
+        y: 180,
+        z: 0,
+    });
+
+    boardBase.appendChild(fileContainer);
+
     // Controller base
     var boardControls = document.createElement('a-entity');
-    boardControls.setAttribute('class', 'board_controller');
+    boardControls.setAttribute('class', 'board-controller');
 
     var controllerWidth = preferences.width * 0.2;
 
@@ -268,11 +286,11 @@ AFRAME.registerComponent('circles-whiteboard',
 {
     schema: 
     {
-      height: {type: 'number', default: 3},
-      width: {type: 'number', default: 5},
-      depth: {type: 'number', default: 0.25},
-      boardColor: {type: 'color', default: '#ffffff'},
-      shadows: {type: 'boolean', default: false},
+        height: {type: 'number', default: 3},
+        width: {type: 'number', default: 5},
+        depth: {type: 'number', default: 0.25},
+        boardColor: {type: 'color', default: '#ffffff'},
+        shadows: {type: 'boolean', default: false},
     },
     init: function () 
     {

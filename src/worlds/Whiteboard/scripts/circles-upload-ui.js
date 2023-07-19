@@ -68,11 +68,56 @@ const renderError = function(message)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Inserting file into whiteboard
+// Displaying file on whiteboard
+const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
+{
+    // Getting whiteboard to display file on 
+    var whiteboard = document.getElementById(whiteboardID);
+
+    // Getting file container in whiteboard
+    var container = whiteboard.querySelector('.board-files');
+
+    // Creating file entity to insert into container
+
+    // If file is an image or video, getting their dimensions
+    var height = -1;
+    var width = -1;
+
+    if (fileInfo.category === 'image')
+    {
+        height = fileElement.naturalHeight;
+        width = fileElement.naturalWidth;
+    }
+    else if (fileInfo.category === 'video')
+    {
+        height = fileElement.videoHeight;
+        width = fileElement.videoWidth;
+    }
+
+    var file = document.createElement('a-entity');
+    file.setAttribute('circles-whiteboard-file', {
+        type: fileInfo.category,
+        id: fileID,
+        originalHeight: height,
+        originalWidth: width,
+        boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
+        boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
+    });
+
+    container.appendChild(file);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Inserting file into world and world database
 const insertFile = function()
 {
+    // Closing pop up
+    document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+
     // Finding the file that was selected
-    var file = document.querySelector('.file-selected').getAttribute('id');
+    var fileContainer = document.querySelector('.file-selected');
+    var file = fileContainer.getAttribute('id');
 
     // Getting whiteboard to insert file to
     var whiteboard = document.querySelector('[circles-upload-ui]').getAttribute('circles-upload-ui').whiteboardID;
@@ -83,11 +128,56 @@ const insertFile = function()
     var world = window.location.href.split('/')[4];
 
     // Sending data to add selected file to world database array
-    let request = new XMLHttpRequest();
+    // (Will be sent back information about selcted file)
+    var request = new XMLHttpRequest();
     request.open('POST', '/insert-whiteboard-file');
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
+    // Will be sent back information about selected file to insert the file on whiteboard
+    request.onload = function() 
+    {
+        var fileInfo = JSON.parse(request.response);
+
+        // Getting Asset Management System
+        let assetManager = document.getElementsByTagName('a-assets')[0];
+
+        // Making sure this file doesn't already exist as an asset
+        // If it doesn't, create the asset
+        // If it does, just display it on the whiteboard
+        if (!document.getElementById('asset_' + fileInfo.name))
+        {
+            var asset;
+
+            // Adding asset to manager depending on the type of file it is
+            if (fileInfo.category === 'image')
+            {
+                asset = document.createElement('img');
+            }
+            else if (fileInfo.category === 'video')
+            {
+                asset = document.createElement('video');
+                asset.setAttribute('preload', 'auto');
+                asset.setAttribute('autoplay', '');
+            }
+            else
+            {
+                asset = document.createElement('a-asset-item');
+            }
+
+            asset.setAttribute('id', 'asset_' + fileInfo.name);
+            asset.setAttribute('src', '/uploads/' + fileInfo.name);
+
+            assetManager.appendChild(asset);
+        }
+
+        // Displaying file on whiteboard
+        displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo, fileContainer.firstChild);
+    }
+
     request.send('file=' + file + '&whiteboardID='+ whiteboard + '&world=' + world);
+
+    // Unselecting image
+    fileContainer.classList.remove('file-selected');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
