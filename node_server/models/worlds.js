@@ -26,12 +26,25 @@ const WorldSchema = new mongoose.Schema({
         default:    true
       },
     viewingPermissions: [{ 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'users' 
+        type:       mongoose.Schema.Types.ObjectId, 
+        ref:        'users' 
     }],
     editingPermissions: [{ 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'users' 
+        type:        mongoose.Schema.Types.ObjectId, 
+        ref:        'users'
+    }],
+    whiteboardFiles: [{
+      file: {
+        type:       mongoose.Schema.Types.ObjectId, 
+        ref:        'uploads',
+        required:   true,
+      },
+      whiteboardID: {
+        type:       String,
+        unique:     false,
+        required:   true,
+        trim:       true,
+      },
     }],
 });
 

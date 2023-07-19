@@ -2177,6 +2177,47 @@ const getUserFiles = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Adding sent file to world database entry (sent file was inserted by user to specified whiteboard)
+const insertWhiteboardFile = async (req, res, next) => 
+{
+  var insertedFile = null;
+  var world = null;
+
+  try
+  {
+    // Finding file in uploads database
+    insertedFile = await Uploads.findOne({name: req.body.file}).exec();
+
+    // Getting whiteboard from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (insertedFile && world)
+  {
+    var fileInfo = {
+      file: insertedFile,
+      whiteboardID: req.body.whiteboardID,
+    };
+
+    try
+    {
+      //world.whiteboardFiles.push(fileInfo);
+      //await world.save();
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   // getAllUsers,
   // getUser,
@@ -2210,4 +2251,5 @@ module.exports = {
   serveUploadedFile,
   deleteUploadedFile,
   getUserFiles,
+  insertWhiteboardFile,
 };

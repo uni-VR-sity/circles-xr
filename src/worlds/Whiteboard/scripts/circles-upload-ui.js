@@ -69,12 +69,25 @@ const renderError = function(message)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Inserting file into whiteboard
-const insertFile = function(whiteboard)
+const insertFile = function()
 {
     // Finding the file that was selected
     var file = document.querySelector('.file-selected').getAttribute('id');
 
-    console.log(file);
+    // Getting whiteboard to insert file to
+    var whiteboard = document.querySelector('[circles-upload-ui]').getAttribute('circles-upload-ui').whiteboardID;
+
+    // Getting current world
+    // url: http://domain/w/World
+    // split result array: {'http', '', 'domain', 'w', 'World'}
+    var world = window.location.href.split('/')[4];
+
+    // Sending data to add selected file to world database array
+    let request = new XMLHttpRequest();
+    request.open('POST', '/insert-whiteboard-file');
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    request.send('file=' + file + '&whiteboardID='+ whiteboard + '&world=' + world);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -379,7 +392,7 @@ AFRAME.registerComponent('circles-upload-ui',
                 document.getElementById('upload-content-container').style.display = 'none';
 
                 // Adding upload button
-                addButton(CONTEXT_AF.data.whiteboardID);
+                addButton();
 
                 // Listening for when files are clicked to activate them to insert onto whiteboard
 

@@ -132,6 +132,7 @@ router.get('/delete-uploaded-content/:file_name', authenticated, controller.dele
 router.get('/get-user-uploaded-content', authenticated, controller.getUserFiles);
 
 router.post('/upload-content', authenticated, controller.newContent);
+router.post('/insert-whiteboard-file', authenticated, controller.insertWhiteboardFile);
 
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);
