@@ -80,7 +80,6 @@ const VALID_IMAGE_TYPES = {
   PNG     : 'png',
   JPG     : 'jpg',
   JPEG    : 'jpeg',
-  GIF     : 'gif',
 }
 
 const VALID_VIDEO_TYPES = {
