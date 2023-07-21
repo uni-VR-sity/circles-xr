@@ -96,7 +96,7 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
 
     var file = document.createElement('a-entity');
     file.setAttribute('circles-whiteboard-file', {
-        type: fileInfo.category,
+        category: fileInfo.category,
         id: fileID,
         originalHeight: height,
         originalWidth: width,
@@ -357,11 +357,11 @@ const displayContent = function(content)
 const shortenNames = function()
 {
     // Table section margins and padding sizes
-    let sectionMargin = 30 * 4;
+    let sectionMargin = 40 * 5;
     let sectionPadding = 300;
 
     // Getting the width of the table sections
-    let sectionWidth = (document.getElementById('uploads-table').getBoundingClientRect().width - sectionMargin - sectionPadding) / 4;
+    let sectionWidth = (document.getElementById('uploads-table').getBoundingClientRect().width - sectionMargin - sectionPadding) / 5;
 
     // Going through each table section and checking if the length of the file name is greater then the width of the section
     // If it is, shorten it
@@ -403,7 +403,7 @@ const shortenNames = function()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Adjusting table width
-// (For when there is only 1, 2, or 3 files uploaded, to still be displayed with the correct proportions)
+// (For when there is only 1, 2, 3, or 4 files uploaded, to still be displayed with the correct proportions)
 const adjustWidth = function()
 {
     // Getting the table
@@ -419,10 +419,13 @@ const adjustWidth = function()
     // Getting all table sections
     let sections = table.querySelectorAll('.file-table-section');
 
-    // Adjusting width of all table sections to be a third of the width of the table
+    // Adjusting width of all table sections to be a fifth of the width of the table
     for (let section of sections)
     {
         section.style.width = width;
+        
+        // "Padding" between the file container and table section (the only way sections would stay of even width with padding)
+        section.querySelector('.file-container').style.width = width - 40;
     }
 }
 

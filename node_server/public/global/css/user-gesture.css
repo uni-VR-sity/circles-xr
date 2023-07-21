@@ -235,16 +235,6 @@ div.grid2col {
     border-spacing:0 36px;
 }
 
-.file-table-section:nth-child(1){padding: 0 20px;}
-
-.file-table-section:nth-child(2){padding: 0 20px;}
-
-.file-table-section:nth-child(3){padding: 0 20px;}
-
-.file-table-section:nth-child(4){padding: 0 20px;}
-
-.file-table-section:nth-child(5){padding: 0 20px;}
-
 .file-table-section img, .file-table-section video
 {
     width:100%;
@@ -257,6 +247,7 @@ div.grid2col {
     height:175px;
     text-align:center;
     box-sizing: border-box;
+    margin:auto;
 }
 
 .file-container:hover
@@ -271,7 +262,7 @@ div.grid2col {
     box-shadow: 0 0 15px #0078e7;
 }
 
-#uploads-table td.other-file-type 
+.other-file-type .file-container
 {
     background-color:#e7e7e7;
     background-clip: content-box;
