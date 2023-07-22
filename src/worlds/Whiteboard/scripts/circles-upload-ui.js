@@ -152,20 +152,28 @@ const insertFile = function()
             if (fileInfo.category === 'image')
             {
                 asset = document.createElement('img');
+
+                asset.setAttribute('src', '/uploads/' + fileInfo.name);
             }
             else if (fileInfo.category === 'video')
             {
                 asset = document.createElement('video');
+
                 asset.setAttribute('preload', 'auto');
                 asset.setAttribute('autoplay', '');
+                asset.setAttribute('muted', '');
+                asset.setAttribute('loop', '');
+
+                asset.setAttribute('src', '/uploads/' + fileInfo.name);
             }
             else
             {
-                asset = document.createElement('a-asset-item');
+                asset = document.createElement('canvas');
+
+                asset.setAttribute('crossorigin', 'anonymous');
             }
 
             asset.setAttribute('id', 'asset_' + fileInfo.name);
-            asset.setAttribute('src', '/uploads/' + fileInfo.name);
 
             assetManager.appendChild(asset);
         }
@@ -300,9 +308,12 @@ const displayContent = function(content)
                                     {
                                         var video = document.createElement('video');
 
-                                        video.setAttribute('muted', 'muted');
-                                        video.setAttribute('autoplay', 'autoplay');
-                                        video.setAttribute('loop', 'loop');
+                                        video.setAttribute('preload', 'auto');
+                                        video.setAttribute('autoplay', '');
+                                        video.setAttribute('muted', '');
+                                        video.setAttribute('loop', '');
+                                        video.setAttribute('playsinline', '');
+                                        video.setAttribute('webkit-playsinline', '');
 
                                             var source = document.createElement('source');
 
