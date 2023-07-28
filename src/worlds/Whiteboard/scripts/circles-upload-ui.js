@@ -94,7 +94,14 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
         width = fileElement.videoWidth;
     }
 
+    // Sending file dimensions to store in database
+    var request = new XMLHttpRequest();
+    request.open('POST', '/set-file-dimensions');
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.send('file='+ fileInfo.name + '&height=' + height + '&width=' + width);
+
     var file = document.createElement('a-entity');
+    
     file.setAttribute('circles-whiteboard-file', {
         category: fileInfo.category,
         id: fileID,

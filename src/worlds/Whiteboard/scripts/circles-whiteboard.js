@@ -37,28 +37,6 @@ const uploadAssets = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// When button is hovered, it gets slightly bigger
-const buttonHover = function(button, height, width)
-{
-    button.addEventListener('mouseenter', function()
-    {
-        button.setAttribute('geometry', {
-            height: height * 1.2,
-            width: width * 1.2,
-        }); 
-    });
-
-    button.addEventListener('mouseleave', function()
-    {
-        button.setAttribute('geometry', {
-            height: height,
-            width: width,
-        });
-    });
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
 // Creating upload button at the top of controller base
 // Takes the controller base (parentElement), and its dimensions
 const generateUpload = function(whiteboardElement, parentElement, height, width, depth)
@@ -97,7 +75,7 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
     parentElement.appendChild(uploadButton); 
 
     // Adding effect when hovered
-    buttonHover(uploadButton, width / 3, width / 3);
+    uploadButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
 
     // When clicked, activate 'circles-upload-file' for the current whiteboard
     uploadButton.addEventListener('click', function()
@@ -146,7 +124,7 @@ const generateMessage = function(parentElement, height, width, depth)
     parentElement.appendChild(messageButton); 
 
     // Adding effect when hovered
-    buttonHover(messageButton, width / 3, width / 3);
+    messageButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -189,7 +167,7 @@ const generateDraw = function(parentElement, height, width, depth)
     parentElement.appendChild(drawButton); 
 
     // Adding effect when hovered
-    buttonHover(drawButton, width / 3, width / 3);
+    drawButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -281,6 +259,103 @@ const generateWhiteboard = function(parentElement, preferences)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Adding the file asset to world
+const addFileAsset = function(name, category)
+{
+    // Getting Asset Management System
+    let assetManager = document.getElementsByTagName('a-assets')[0];
+
+    // Making sure this file doesn't already exist as an asset
+    // If it doesn't, create the asset
+    // If it does, just display it on the whiteboard
+    if (!document.getElementById('asset_' + name))
+    {
+        var asset;
+
+        // Adding asset to manager depending on the type of file it is
+        if (category === 'image')
+        {
+            asset = document.createElement('img');
+
+            asset.setAttribute('src', '/uploads/' + name);
+        }
+        else if (category === 'video')
+        {
+            asset = document.createElement('video');
+
+            asset.setAttribute('preload', 'auto');
+            asset.setAttribute('autoplay', '');
+            asset.setAttribute('muted', '');
+            asset.setAttribute('loop', '');
+
+            asset.setAttribute('src', '/uploads/' + name);
+        }
+        else
+        {
+            asset = document.createElement('canvas');
+
+            asset.setAttribute('crossorigin', 'anonymous');
+        }
+
+        asset.setAttribute('id', 'asset_' + name);
+
+        assetManager.appendChild(asset);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Getting previously inserted files
+const getFiles = function(whiteboard)
+{
+    // Getting whiteboard id
+    var id = whiteboard.getAttribute('id');
+
+    // Getting current world
+    // url: http://domain/w/World
+    // split result array: {'http', '', 'domain', 'w', 'World'}
+    var world = window.location.href.split('/')[4];
+
+    // Sending data to query the world database array
+    // (Will be sent back information about the files on the whiteboard)
+    var request = new XMLHttpRequest();
+    request.open('POST', '/get-whiteboard-files');
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    request.onload = function() 
+    {
+        var files = JSON.parse(request.response);
+
+        // Getting file container in whiteboard
+        var container = whiteboard.querySelector('.board-files');
+
+        // Displaying each file
+        for (const file of files)
+        {
+            addFileAsset(file.name, file.category);
+
+            // Creating file entity to insert into container
+
+            var fileObject = document.createElement('a-entity');
+
+            fileObject.setAttribute('circles-whiteboard-file', {
+                category: file.category,
+                id: 'asset_' + file.name,
+                originalHeight: file.height,
+                originalWidth: file.width,
+                boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
+                boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
+            });
+
+            container.appendChild(fileObject);
+        }
+    }
+
+    request.send('whiteboardID='+ id + '&world=' + world);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Component
 AFRAME.registerComponent('circles-whiteboard', 
 {
@@ -310,5 +385,8 @@ AFRAME.registerComponent('circles-whiteboard',
 
         // Generating whiteboard
         generateWhiteboard(element, CONTEXT_AF.data);
+
+        // Adding previously inserted files
+        getFiles(element);
     }
 });

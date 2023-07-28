@@ -2183,10 +2183,10 @@ const insertWhiteboardFile = async (req, res, next) =>
 
   try
   {
-    // Finding file in uploads database
+    // Finding file in database
     insertedFile = await Uploads.findOne({name: req.body.file}).exec();
 
-    // Getting whiteboard from database
+    // Getting world from database
     world = await Worlds.findOne({name: req.body.world});
   }
   catch(e)
@@ -2194,6 +2194,7 @@ const insertWhiteboardFile = async (req, res, next) =>
     console.log(e);
   }
 
+  // Saving file information to the world entry
   if (insertedFile && world)
   {
     var fileInfo = {
@@ -2203,17 +2204,92 @@ const insertWhiteboardFile = async (req, res, next) =>
 
     try
     {
-      //world.whiteboardFiles.push(fileInfo);
-      //await world.save();
+      world.whiteboardFiles.push(fileInfo);
+      await world.save();
     }
     catch(e)
     {
       console.log(e);
     }
 
+    // Sending back information on the file that was inserted
     res.json(insertedFile);
   }
 
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Returning the files the whiteboard in the world has
+const getWhiteboardFiles = async (req, res, next) => 
+{
+  var world = null;
+  var fileIDs = null;
+  var files = [];
+
+  try
+  {
+    // Getting world from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  // Find files that are in that world, on that whiteboard
+  if (world)
+  {
+    try
+    {
+      // Finding id of each file that is on that whiteboard
+      function matchID(file)
+      {
+        return file.whiteboardID === req.body.whiteboardID;
+      }
+
+      fileIDs = world.whiteboardFiles.filter(matchID);
+
+      // Getting file information
+      for (const id of fileIDs)
+      {
+        files.push(await Uploads.findById(id.file));
+      }
+
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+  res.json(files);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Setting file dimensions in Uploads database
+const setFileDimensions = async (req, res, next) => 
+{
+  var file = null;
+
+  try
+  {
+    // Getting file from database
+    file = await Uploads.findOne({name: req.body.file});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (file)
+  {
+    // Updating file dimensions
+    file.height = req.body.height;
+    file.width = req.body.width;
+    await file.save();
+  }
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2252,4 +2328,6 @@ module.exports = {
   deleteUploadedFile,
   getUserFiles,
   insertWhiteboardFile,
+  getWhiteboardFiles,
+  setFileDimensions,
 };

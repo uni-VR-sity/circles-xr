@@ -133,6 +133,8 @@ router.get('/get-user-uploaded-content', authenticated, controller.getUserFiles)
 
 router.post('/upload-content', authenticated, controller.newContent);
 router.post('/insert-whiteboard-file', authenticated, controller.insertWhiteboardFile);
+router.post('/get-whiteboard-files', authenticated, controller.getWhiteboardFiles);
+router.post('/set-file-dimensions', authenticated, controller.setFileDimensions);
 
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);

@@ -32,6 +32,8 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth, numFiles)
         y: 0,
         z: 0.001 * numFiles,
     });
+
+    return desiredHeight;
 }
 
 // Displaying PDF
@@ -80,7 +82,7 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, numFiles)
             fileElement.setAttribute('position', {
                 x: 0,
                 y: 0,
-                z: 0.001 * numFiles,
+                z: 0.002 * numFiles,
             });
 
             // Canvas and PDF dimensions are in pixels
@@ -105,6 +107,8 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, numFiles)
                 viewport: viewport,
                 transform: [resolution, 0, 0, resolution, 0, 0],
             });
+
+            return desiredHeight;
         });
     });
 }
@@ -128,8 +132,13 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
+        var dimensions = {
+            width: 0, 
+            height: 0,
+        };
+
         // Calculating desired width of file (1/6 of the whiteboard width)
-        var desiredWidth = CONTEXT_AF.data.boardWidth / 6;
+        dimensions.width = CONTEXT_AF.data.boardWidth / 6;
 
         // Getting number of files already displayed on the whiteboard (to calculate the overlap of files)
         var numFiles = element.parentElement.children.length;
@@ -137,11 +146,19 @@ AFRAME.registerComponent('circles-whiteboard-file',
         // Displaying file on whiteboard depending on the category of file
         if (CONTEXT_AF.data.category === 'image' || CONTEXT_AF.data.category === 'video')
         {
-            displayMedia(CONTEXT_AF.data, element, desiredWidth, numFiles);
+            dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width, numFiles);
         }
         else
         {
-            displayPDF(CONTEXT_AF.data, element, desiredWidth, numFiles);
+            dimensions.height = displayPDF(CONTEXT_AF.data, element, dimensions.width, numFiles);
         }
+
+        // Hover effect
+        element.classList.add('interactive');
+
+        element.setAttribute('circles-interactive-object',{type:'scale'});
+
+        // Click effect
+        
     }
 });

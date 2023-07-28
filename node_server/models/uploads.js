@@ -38,6 +38,18 @@ const UploadSchema = new mongoose.Schema({
         required:   true,
         trim:       true
       },
+    height: {
+      type:       Number,
+      unique:     false,
+      required:   false,
+      trim:       true
+    },
+    width: {
+      type:       Number,
+      unique:     false,
+      required:   false,
+      trim:       true
+    },
 });
 
 const Uploads = mongoose.model('uploads', UploadSchema);
