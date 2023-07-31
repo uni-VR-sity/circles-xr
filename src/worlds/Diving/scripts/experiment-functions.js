@@ -1,9 +1,9 @@
 // the list of physics objects that can be used in the scene (and their properties)
 const PHYSICS_OBJECTS = {
-  object1 : {name: "Profile1", mass: 0.3, assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
-  object2 : {name: "Profile2", mass: 0.3,  assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
-  object3 : {name: "Profile3", mass: 0.3, assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
-  object4 : {name: "Profile4", mass: 0.3,  assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
+  object1 : {name: "DiveProfile1", mass: 0.3, assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
+  object2 : {name: "DiveProfile2", mass: 0.3,  assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
+  object3 : {name: "DiveProfile3", mass: 0.3, assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
+  object4 : {name: "DiveProfile4", mass: 0.3,  assetId:"", height: 1.9, handHeight: 5.55, mesh: "sphere"},
 };
 
 // the gravity control that controls the physics of each object in the scene
@@ -11,6 +11,9 @@ let currentGravityStrength = 1;
 const gravityMaxStrength = 3;
 const gravityMinStrength = 0;
 const gravityIncrementAmount = 0.5;
+window['chosenprofile'] = "DiveProfile1";
+
+
 
 // to be called once the scene is loaded to perform setup tasks
 function setup () {
@@ -70,6 +73,39 @@ function startExperiment () {
   button.setAttribute("visible", "true");
   starttext.setAttribute("visible", "true");
 
+  console.log('chosen profile:', chosenprofile);
+
+    var profile = chosenprofile;
+
+    var profiletext = document.getElementById('diveprofile_result');
+    profiletext.setAttribute('text', 'value', profile);
+
+    var desc = document.getElementById('diveprofile_desc');
+
+    if(profile = "DiveProfile1")
+    {
+      
+      desc.setAttribute('text', 'value', "There was a major problem with this profile you may not of caught. Problem: BT > NDL");
+      
+    }
+    else if(profile = "DiveProfile2")
+    {
+      desc.setAttribute('text', 'value', "This dive profile had no initial issues, good job! Always check the data related to your dive!");
+      
+      
+    }
+    else if(profile = "DiveProfile3")
+    {
+      desc.setAttribute('text', 'value', "There was a problem with this profile you may have missed. Problem: NDL is 25 min for this depth (should be 20 min).");
+      
+      
+    }
+    else if(profile = "DiveProfile4")
+    {
+      desc.setAttribute('text', 'value', "This dive profile had no initial issues, good job! Always check the data related to your dive!");
+      
+    };
+
 };
 
 // called when the reset button is pressed
@@ -112,6 +148,7 @@ function resetExperiment () {
 function setNewObject (object, direction) {
   let newObject = PHYSICS_OBJECTS[object];
   console.log(`Setting ${direction} object to ${newObject.name}`);
+  window['chosenprofile'] =newObject.name;
 
   // get left object
   let sceneObject = document.querySelector(`#${direction}Object`);

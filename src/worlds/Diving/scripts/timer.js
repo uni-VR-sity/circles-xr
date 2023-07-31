@@ -4,6 +4,7 @@ AFRAME.registerComponent('timer_old', {
       const CONTEXT_AF  = this;
       const button_timer = document.getElementById('down_button');
       const second_button_timer = document.getElementById('second_down_button');
+      const end_button = document.getElementById('end_button');
       const timer = document.getElementById('timer');
       let greenbutton = 0;
       console.log("greenbutton is:" + greenbutton);
