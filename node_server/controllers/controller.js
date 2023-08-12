@@ -1252,8 +1252,16 @@ const createMagicLink = async (req, res, next) =>
   // Making sure there were worlds selected before creating the link, if not, outputting an error message
   if (worlds.length > 0)
   {
-    // Ignore req.protocol as it will try and re-direct to https anyhow.
-    const baseURL = req.get('host');
+    let baseURL;
+
+    if (env.DOMAIN)
+    {
+      baseURL = env.DOMAIN;
+    }
+    else
+    {
+      baseURL = req.get('host');
+    }
 
     const route = '/explore';
 
@@ -2220,6 +2228,64 @@ const insertWhiteboardFile = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Removing sent file to world database entry (sent file was deleted by user from a specified whiteboard)
+const removeWhiteboardFile = async (req, res, next) => 
+{
+  var deletedFile = null;
+  var world = null;
+
+  try
+  {
+    // Finding file in database
+    deletedFile = await Uploads.findOne({name: req.body.file}).exec();
+
+    // Getting world from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  // Deleting file from world entry
+  if (deletedFile && world)
+  {
+    // Finding the file in the world entry
+    async function findFile(entry)
+    {
+      try
+      {
+        var currentFile = await Uploads.findOne(entry.file).exec();
+
+        return (JSON.stringify(currentFile) === JSON.stringify(deletedFile)) && (entry.whiteboardID === req.body.whiteboardID);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        return false;
+      }
+    }
+
+    try
+    {
+      var toDelete = world.whiteboardFiles.find(findFile);
+      var index = world.whiteboardFiles.indexOf(toDelete);
+
+      world.whiteboardFiles.splice(index, 1);
+
+      await world.save();
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Returning the files the whiteboard in the world has
 const getWhiteboardFiles = async (req, res, next) => 
 {
@@ -2328,6 +2394,7 @@ module.exports = {
   deleteUploadedFile,
   getUserFiles,
   insertWhiteboardFile,
+  removeWhiteboardFile,
   getWhiteboardFiles,
   setFileDimensions,
 };

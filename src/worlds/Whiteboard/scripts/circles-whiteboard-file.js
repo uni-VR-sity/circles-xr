@@ -115,6 +115,38 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, numFiles)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// When file is clicked:
+// - Activate view on whiteboard
+// - Allow file to be dragged on whiteboard
+const fileClick = function(file)
+{
+    var whiteboard = file.parentElement.parentElement.parentElement;
+
+    file.addEventListener('click', function()
+    {
+        file.classList.add('selected-file');
+
+        // Activating file selected view on whiteboard
+        whiteboard.setAttribute('circles-whiteboard', {fileSelected: true});
+
+        // Putting event listener on the whiteboard
+        // When anything but the file is clicked, default view is set back on whiteboard
+        const fileUnselected = function(event)
+        {
+            if (event.target !== file)
+            {
+                file.classList.remove('selected-file');
+                whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
+                whiteboard.removeEventListener('click', fileUnselected);
+            }
+        }
+
+        whiteboard.addEventListener('click', fileUnselected);
+    });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Component
 AFRAME.registerComponent('circles-whiteboard-file', 
 {
@@ -156,9 +188,9 @@ AFRAME.registerComponent('circles-whiteboard-file',
         // Hover effect
         element.classList.add('interactive');
 
-        element.setAttribute('circles-interactive-object',{type:'scale'});
+        element.setAttribute('circles-interactive-object',{type:'scale', hover_scale: 1.05});
 
-        // Click effect
-        
+        // Onclick effect
+        fileClick(element);
     }
 });

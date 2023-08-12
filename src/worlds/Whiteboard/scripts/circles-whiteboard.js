@@ -33,6 +33,13 @@ const uploadAssets = function()
     message.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/comments-solid.svg');
 
     assetManager.appendChild(message);
+
+    // Trash symbol
+    let trash = document.createElement('img');
+    trash.setAttribute('id', 'trash_symbol');
+    trash.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/trash-solid.svg');
+
+    assetManager.appendChild(trash);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -172,12 +179,127 @@ const generateDraw = function(parentElement, height, width, depth)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Creating trash button at the bottom of controller base
+// Takes the controller base (parentElement), and its dimensions
+const generateTrash = function(parentElement, height, width, depth, whiteboard)
+{
+    var trashButton = document.createElement('a-entity');
+    trashButton.setAttribute('class', 'trash-button interactive');
+
+    // Position: Base is split into 3 sections (for 3 symbols)
+    //           Trash symbol is at the bottom
+    //           Therefore it is a section height down from the middle
+
+    trashButton.setAttribute('position', {
+        x: 0,
+        y: - (height / 3),
+        z: - ((depth / 2) + 0.001),
+    });
+
+    trashButton.setAttribute('rotation', {
+        x: 0,
+        y: 180,
+        z: 0,
+    }); 
+
+    // Dimensions: Symbols are 0.3 times the width of the base
+    trashButton.setAttribute('geometry', {
+        primitive: 'plane',
+        height: width / 3,
+        width: width / 3,
+    }); 
+
+    trashButton.setAttribute('material', {
+        src: '#trash_symbol',
+        transparent: true,
+        emissive: '#c70000',
+    }); 
+
+    parentElement.appendChild(trashButton); 
+
+    // Adding effect when hovered
+    trashButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
+
+    // Deleting selected file when clicked
+    trashButton.addEventListener('click', function()
+    {
+        // Getting selected file
+        var file = document.getElementsByClassName('selected-file')[0];
+        
+        // Getting file name
+        // id: asset_fileName
+        // split result array: {asset', 'fileName'}
+        var fileName = file.getAttribute('circles-whiteboard-file').id.split('_')[1];
+        
+        // Deleting file element
+        file.parentNode.removeChild(file);
+
+        // Sending data to remove selected file to world database array
+
+        // Getting current world
+        // url: http://domain/w/World
+        // split result array: {'http', '', 'domain', 'w', 'World'}
+        var world = window.location.href.split('/')[4];
+
+        var request = new XMLHttpRequest();
+        request.open('POST', '/remove-whiteboard-file');
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        request.send('file=' + fileName + '&whiteboardID='+ whiteboard.getAttribute('id') + '&world=' + world);
+    });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Generating default controller base
+const generateDefaultController = function(whiteboard, preferences)
+{
+    // Checking if the base doesn't already exist
+    if (!whiteboard.querySelector('.default-controller'))
+    {
+        var controllerBase = whiteboard.querySelector('.board-controller');
+
+        var controllerWidth = preferences.width * 0.2;
+
+        var defaultController = document.createElement('a-entity');
+        defaultController.setAttribute('class', 'default-controller');
+
+        generateUpload(whiteboard, defaultController, preferences.height, controllerWidth, preferences.depth);
+        generateMessage(defaultController, preferences.height, controllerWidth, preferences.depth);
+        generateDraw(defaultController, preferences.height, controllerWidth, preferences.depth);
+
+        controllerBase.appendChild(defaultController);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Generating default controller base
+const generateFileSelectedController = function(whiteboard, preferences)
+{
+    if (!whiteboard.querySelector('.file-selected-controller'))
+    {
+        var controllerBase = whiteboard.querySelector('.board-controller');
+
+        var controllerWidth = preferences.width * 0.2;
+
+        var fileSelectedController = document.createElement('a-entity');
+        fileSelectedController.setAttribute('class', 'file-selected-controller');
+
+        generateTrash(fileSelectedController, preferences.height, controllerWidth, preferences.depth, whiteboard);
+
+        controllerBase.appendChild(fileSelectedController);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating whiteboard element
 const generateWhiteboard = function(parentElement, preferences)
 {
     // Base
     var boardBase = document.createElement('a-entity');
-    boardBase.setAttribute('class', 'board-base');
+    boardBase.setAttribute('class', 'board-base interactive');
 
     boardBase.setAttribute('geometry', {
         primitive: 'box',
@@ -220,7 +342,7 @@ const generateWhiteboard = function(parentElement, preferences)
 
     // Controller base
     var boardControls = document.createElement('a-entity');
-    boardControls.setAttribute('class', 'board-controller');
+    boardControls.setAttribute('class', 'board-controller interactive');
 
     var controllerWidth = preferences.width * 0.2;
 
@@ -251,10 +373,8 @@ const generateWhiteboard = function(parentElement, preferences)
 
     parentElement.appendChild(boardControls);
 
-    // Buttons on controller base
-    generateUpload(parentElement, boardControls, preferences.height, controllerWidth, preferences.depth);
-    generateMessage(boardControls, preferences.height, controllerWidth, preferences.depth);
-    generateDraw(boardControls, preferences.height, controllerWidth, preferences.depth);
+    // Default controller base
+    generateDefaultController(parentElement, preferences);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -366,11 +486,15 @@ AFRAME.registerComponent('circles-whiteboard',
         depth: {type: 'number', default: 0.25},
         boardColor: {type: 'color', default: '#ffffff'},
         shadows: {type: 'boolean', default: false},
+
+        fileSelected: {type: 'boolean', default: false},
     },
     init: function () 
     {
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
+
+        CONTEXT_AF.data.fileSelected = false;
 
         // Making sure this is the first circles-whiteboard component to the run
         // If it is, running what only needs to be run once
@@ -388,5 +512,37 @@ AFRAME.registerComponent('circles-whiteboard',
 
         // Adding previously inserted files
         getFiles(element);
+    },
+    update: function() 
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // When file is selected or unselected
+
+        // If selected, show appropriate view on controller
+        // If unselected, show default view
+        if (CONTEXT_AF.data.fileSelected === true)
+        {
+            if (element.querySelector('.default-controller'))
+            {
+                var controllerToDelete = element.querySelector('.default-controller');
+            
+                controllerToDelete.parentNode.removeChild(controllerToDelete);
+            }
+
+            generateFileSelectedController(element, CONTEXT_AF.data);
+        }
+        else if (CONTEXT_AF.data.fileSelected === false)
+        {
+            if (element.querySelector('.file-selected-controller'))
+            {
+                var controllerToDelete = element.querySelector('.file-selected-controller');
+            
+                controllerToDelete.parentNode.removeChild(controllerToDelete);
+            }
+
+            generateDefaultController(element, CONTEXT_AF.data);
+        }
     }
 });

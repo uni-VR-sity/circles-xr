@@ -528,7 +528,7 @@ AFRAME.registerComponent('circles-upload-ui',
 
         request.send();
     },
-    update: function () 
+    update: function() 
     {
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
