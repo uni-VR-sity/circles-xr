@@ -465,12 +465,6 @@ AFRAME.registerComponent('circles-upload-ui',
         // Generating pop up base for displaying content
         generatePopUp();
 
-        // Showing pop up with user presses upload button on whiteboard
-        //document.getElementById('upload-button').addEventListener('click', function()
-        //{
-            //document.getElementById('upload-content-container').style.display = 'block';
-        //});
-
         // Getting list of content uploaded by the user
         let request = new XMLHttpRequest();
         request.open('GET', '/get-user-uploaded-content');

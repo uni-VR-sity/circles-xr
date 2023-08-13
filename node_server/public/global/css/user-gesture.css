@@ -1,3 +1,5 @@
+/* Enter World UI ****************************************************************************************************************************************/
+
 div.grid2col {
     display:grid;
     grid-template-columns: max-content max-content;
@@ -171,22 +173,7 @@ div.grid2col {
     margin-right: auto;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Whiteboard Insert File UI (circles-upload-ui) *********************************************************************************************************/
 
 #upload-content-container
 {
@@ -313,4 +300,61 @@ div.grid2col {
 .button-inactive
 {
     background-color:#b8b8b8;
+}
+
+/* Arrow UI (circles-drag-object) ************************************************************************************************************************/
+
+#arrow-ui-container
+{
+    z-index: 99;
+    position: absolute;
+    width: 290px;
+    right: 0;
+    bottom: 0;
+    padding: 0 3% 3% 0;
+}
+
+#arrow-container
+{
+    display: inline-block;
+    width: 230px;
+    background-color: #ffffff58;
+    border-radius: 50px;
+    padding: 30px;
+}
+
+.vertical-arrow
+{
+    text-align: center;
+}
+
+/* The clearfix Hack: https://www.w3schools.com/css/css_align.asp */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+.horizontal-arrow:has(#left-arrow)
+{
+    float: left;
+}
+
+.horizontal-arrow:has(#right-arrow)
+{
+    float: right;
+}
+
+.vertical-arrow i, .horizontal-arrow i
+{
+    font-size: 75px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color:#00000080;
+}
+
+.vertical-arrow i:hover, .horizontal-arrow i:hover
+{
+    color:#000000b1;
 }
