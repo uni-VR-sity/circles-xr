@@ -115,7 +115,7 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, orderPosition)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// To show file is clicked (enable is true), increase its scale, put to front, and decrease other files' opacity
+// To show file is clicked (enable is true), put to front, and decrease other files' opacity
 // When enable is false, reverse effects
 const fileClickEffect = function(file, originalPos, enable)
 {
@@ -125,24 +125,13 @@ const fileClickEffect = function(file, originalPos, enable)
     // File selected
     if (enable && !file.classList.contains('selected-file'))
     {
-        console.log('selected');
-        // Disabling hover effect
-        file.setAttribute('circles-interactive-object', {type:'none'});
-
-        // Increasing scale
-        file.setAttribute('scale', {
-            x: 1.05,
-            y: 1.05,
-            z: 1.05,
-        });
-
         // Getting number of files already displayed on the whiteboard (to calculate the overlap of files)
         var numFiles = file.parentElement.children.length;
 
         // Positioning file in front of all others on whiteboard
         file.setAttribute('position', {
-            x: 0,
-            y: 0,
+            x: file.getAttribute('position').x,
+            y: file.getAttribute('position').y,
             z: 0.001 * (numFiles + 2),
         });
 
@@ -179,27 +168,16 @@ const fileClickEffect = function(file, originalPos, enable)
     // File unselected
     else if (enable === false && file.classList.contains('selected-file'))
     {
-        console.log('remove');
-        // Returning scale
-        file.setAttribute('scale', {
-            x: 1,
-            y: 1,
-            z: 1,
-        });
-
         // Positioning file back in the position it was
         file.setAttribute('position', {
-            x: 0,
-            y: 0,
+            x: file.getAttribute('position').x,
+            y: file.getAttribute('position').y,
             z: 0.001 * originalPos,
         });
 
         // Removing overlay
         var overlay = fileContainer.querySelector('#selected-file-overlay');
         overlay.parentNode.removeChild(overlay);
-
-        // Enabling hover effect
-        file.setAttribute('circles-interactive-object', {type:'scale'});
 
         // Removing selected label
         file.classList.remove('selected-file');
@@ -215,41 +193,72 @@ const fileClick = function(file, originalPos)
 {
     var whiteboard = file.parentElement.parentElement.parentElement;
 
-    file.addEventListener('click', function()
+    var filePosition = {
+        x: null,
+        y: null,
+    };
+
+    // Making sure the file wasn't being dragged
+    // If it was, don't select
+
+    file.addEventListener('mousedown', function()
     {
+        filePosition.x = file.getAttribute('position').x;
+        filePosition.y = file.getAttribute('position').y;
+
         fileClickEffect(file, originalPos, true);
 
-        // Activating file selected view on whiteboard
-        whiteboard.setAttribute('circles-whiteboard', {fileSelected: true});
+        // Disabling hover effect
+        file.setAttribute('circles-interactive-object', {type:'none'});
 
-        var trash = whiteboard.querySelector('.trash-button');
+        file.setAttribute('scale', {
+            x: 1,
+            y: 1,
+            z: 1,
+        });
+    });
 
-        // Putting event listener on the whiteboard
-        // When anything but the file is clicked, unselect file and default view is set back on whiteboard
-        const fileUnselected = function(event)
+    file.addEventListener('mouseup', function()
+    {
+        // Enabling hover effect
+        file.setAttribute('circles-interactive-object', {type:'scale'});
+
+        if (file.getAttribute('position').x === filePosition.x && file.getAttribute('position').y === filePosition.y)
         {
-            if (event.target !== file)
+            fileClickEffect(file, originalPos, true);
+
+            // Activating file selected view on whiteboard
+            whiteboard.setAttribute('circles-whiteboard', {fileSelected: true});
+
+            var trash = whiteboard.querySelector('.trash-button');
+
+            // Putting event listener on the whiteboard
+            // When anything but the file is clicked, unselect file and default view is set back on whiteboard
+            const fileUnselected = function(event)
             {
-                if (event.target !== trash)
+                if (event.target !== file)
                 {
-                    fileClickEffect(file, originalPos, false);
+                    if (event.target !== trash)
+                    {
+                        fileClickEffect(file, originalPos, false);
 
-                    whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
-                    whiteboard.removeEventListener('click', fileUnselected);
-                }
-                else
-                {
-                    // Removing overlay
-                    var overlay = whiteboard.querySelector('#selected-file-overlay');
-                    overlay.parentNode.removeChild(overlay);
+                        whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
+                        whiteboard.removeEventListener('click', fileUnselected);
+                    }
+                    else
+                    {
+                        // Removing overlay
+                        var overlay = whiteboard.querySelector('#selected-file-overlay');
+                        overlay.parentNode.removeChild(overlay);
 
-                    whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
-                    whiteboard.removeEventListener('click', fileUnselected);
+                        whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
+                        whiteboard.removeEventListener('click', fileUnselected);
+                    }
                 }
             }
-        }
 
-        whiteboard.addEventListener('click', fileUnselected);
+            whiteboard.addEventListener('click', fileUnselected);
+        }
     });
 }
 
@@ -304,5 +313,18 @@ AFRAME.registerComponent('circles-whiteboard-file',
 
         // Onclick effect
         fileClick(element, orderPosition);
+
+        // Making file draggable
+
+        // Dragging boundries
+        var maxX = -1 * ((CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2));
+        var maxY = (CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2);
+        var minX = (CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2);
+        var minY = -1 * ((CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2));
+
+        element.setAttribute('circles-drag-object', {
+            maxCoordinate: {x: maxX, y: maxY},
+            minCoordinate: {x: minX, y: minY},
+        });
     }
 });
