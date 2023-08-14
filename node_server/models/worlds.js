@@ -45,6 +45,10 @@ const WorldSchema = new mongoose.Schema({
         required:   true,
         trim:       true,
       },
+      position: {
+        type: [Number],       // 3 values: [x, y, z]
+        required: true,
+      }
     }],
 });
 

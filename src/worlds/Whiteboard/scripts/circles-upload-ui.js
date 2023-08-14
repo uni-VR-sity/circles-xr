@@ -104,11 +104,18 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
     
     file.setAttribute('circles-whiteboard-file', {
         category: fileInfo.category,
-        id: fileID,
+        asset: fileID,
+        whiteboardID: whiteboardID,
+        fileID: fileInfo._id,
         originalHeight: height,
         originalWidth: width,
         boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
         boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
+        position: {
+            x: fileInfo.position[0],
+            y: fileInfo.position[1],
+            z: fileInfo.position[2],
+        },
     });
 
     container.appendChild(file);

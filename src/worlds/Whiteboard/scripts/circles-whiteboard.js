@@ -228,7 +228,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
         // Getting file name
         // id: asset_fileName
         // split result array: {asset', 'fileName'}
-        var fileName = file.getAttribute('circles-whiteboard-file').id.split('_')[1];
+        var fileName = file.getAttribute('circles-whiteboard-file').asset.split('_')[1];
         
         // Deleting file element
         file.parentNode.removeChild(file);
@@ -459,11 +459,18 @@ const getFiles = function(whiteboard)
 
             fileObject.setAttribute('circles-whiteboard-file', {
                 category: file.category,
-                id: 'asset_' + file.name,
+                asset: 'asset_' + file.name,
+                whiteboardID: whiteboard.getAttribute('id'),
+                fileID: file._id,
                 originalHeight: file.height,
                 originalWidth: file.width,
                 boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
                 boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
+                position: {
+                    x: file.position[0],
+                    y: file.position[1],
+                    z: file.position[2],
+                },
             });
 
             container.appendChild(fileObject);

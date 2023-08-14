@@ -136,6 +136,7 @@ router.post('/insert-whiteboard-file', authenticated, controller.insertWhiteboar
 router.post('/remove-whiteboard-file', authenticated, controller.removeWhiteboardFile);
 router.post('/get-whiteboard-files', authenticated, controller.getWhiteboardFiles);
 router.post('/set-file-dimensions', authenticated, controller.setFileDimensions);
+router.post('/update-whiteboard-file-position', authenticated, controller.updateFilePosition);
 
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);

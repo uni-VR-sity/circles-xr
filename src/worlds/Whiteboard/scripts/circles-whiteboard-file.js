@@ -7,7 +7,7 @@
 // Functions
 
 // Displaying image or video
-const displayMedia = function(fileInfo, fileElement, desiredWidth, orderPosition)
+const displayMedia = function(fileInfo, fileElement, desiredWidth)
 {
     // Getting image aspect ratio (r = w/h)
     var aspectRatio = fileInfo.originalWidth / fileInfo.originalHeight;
@@ -23,14 +23,14 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth, orderPosition
     });
 
     fileElement.setAttribute('material', {
-        src: '#' + fileInfo.id,
+        src: '#' + fileInfo.asset,
         shader: 'flat',
     });
 
     fileElement.setAttribute('position', {
-        x: 0,
-        y: 0,
-        z: 0.001 * orderPosition,
+        x: fileInfo.position.x,
+        y: fileInfo.position.y,
+        z: fileInfo.position.z,
     });
 
     return desiredHeight;
@@ -41,7 +41,7 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth, orderPosition
 // - https://mozilla.github.io/pdf.js/examples/
 // - https://webdesign.tutsplus.com/how-to-create-a-pdf-viewer-in-javascript--cms-32505t
 // - https://medium.com/geekculture/how-to-use-pdf-js-and-how-to-create-a-simple-pdf-viewer-for-your-web-in-javascript-5cff608a3a10
-const displayPDF = function(fileInfo, fileElement, desiredWidth, orderPosition)
+const displayPDF = function(fileInfo, fileElement, desiredWidth)
 {
     // Attaching canvas updater to render the PDF
     fileElement.setAttribute('circles-canvas-updater','');
@@ -49,7 +49,7 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, orderPosition)
     // Getting PDF name
     // id: asset_fileName
     // split result array: {asset', 'fileName'}
-    var fileName = fileInfo.id.split('_')[1];
+    var fileName = fileInfo.asset.split('_')[1];
 
     // Loading PDF in
     pdfjsLib.getDocument('/uploads/' + fileName).promise.then(function(pdf)
@@ -57,7 +57,7 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, orderPosition)
         // Getting first page
         pdf.getPage(1).then(function(page) 
         {
-            var canvas = document.getElementById(fileInfo.id);
+            var canvas = document.getElementById(fileInfo.asset);
             var ctx = canvas.getContext('2d');
             var viewport = page.getViewport({scale: 1.0});
 
@@ -75,14 +75,14 @@ const displayPDF = function(fileInfo, fileElement, desiredWidth, orderPosition)
             });
 
             fileElement.setAttribute('material', {
-                src: '#' + fileInfo.id,
+                src: '#' + fileInfo.asset,
                 shader: 'flat',
             });
         
             fileElement.setAttribute('position', {
-                x: 0,
-                y: 0,
-                z: 0.001 * orderPosition,
+                x: fileInfo.position.x,
+                y: fileInfo.position.y,
+                z: fileInfo.position.z
             });
 
             // Canvas and PDF dimensions are in pixels
@@ -172,7 +172,7 @@ const fileClickEffect = function(file, originalPos, enable)
         file.setAttribute('position', {
             x: file.getAttribute('position').x,
             y: file.getAttribute('position').y,
-            z: 0.001 * originalPos,
+            z: originalPos,
         });
 
         // Removing overlay
@@ -206,8 +206,6 @@ const fileClick = function(file, originalPos)
         filePosition.x = file.getAttribute('position').x;
         filePosition.y = file.getAttribute('position').y;
 
-        fileClickEffect(file, originalPos, true);
-
         // Disabling hover effect
         file.setAttribute('circles-interactive-object', {type:'none'});
 
@@ -220,9 +218,6 @@ const fileClick = function(file, originalPos)
 
     file.addEventListener('mouseup', function()
     {
-        // Enabling hover effect
-        file.setAttribute('circles-interactive-object', {type:'scale'});
-
         if (file.getAttribute('position').x === filePosition.x && file.getAttribute('position').y === filePosition.y)
         {
             fileClickEffect(file, originalPos, true);
@@ -240,6 +235,9 @@ const fileClick = function(file, originalPos)
                 {
                     if (event.target !== trash)
                     {
+                        // Enabling hover effect
+                        file.setAttribute('circles-interactive-object', {type:'scale'});
+
                         fileClickEffect(file, originalPos, false);
 
                         whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
@@ -259,6 +257,11 @@ const fileClick = function(file, originalPos)
 
             whiteboard.addEventListener('click', fileUnselected);
         }
+        else if (!file.classList.contains('selected-file'))
+        {
+            // Enabling hover effect
+            file.setAttribute('circles-interactive-object', {type:'scale'});
+        }
     });
 }
 
@@ -270,11 +273,14 @@ AFRAME.registerComponent('circles-whiteboard-file',
     schema: 
     {
         category: {type: 'string'},
-        id: {type: 'string'},
+        asset: {type: 'string'},
+        whiteboardID: {type: 'string'},
+        fileID: {type: 'string'},
         originalHeight: {type: 'number'},
         originalWidth: {type: 'number'},
         boardHeight: {type: 'number'},
         boardWidth: {type: 'number'},
+        position: {type: 'vec3'},
     },
     init: function () 
     {
@@ -289,17 +295,14 @@ AFRAME.registerComponent('circles-whiteboard-file',
         // Calculating desired width of file (1/6 of the whiteboard width)
         dimensions.width = CONTEXT_AF.data.boardWidth / 6;
 
-        // (to calculate the overlap of files)
-        var orderPosition = Array.prototype.indexOf.call(element.parentElement.children, element);
-
         // Displaying file on whiteboard depending on the category of file
         if (CONTEXT_AF.data.category === 'image' || CONTEXT_AF.data.category === 'video')
         {
-            dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width, orderPosition);
+            dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
         }
         else
         {
-            dimensions.height = displayPDF(CONTEXT_AF.data, element, dimensions.width, orderPosition);
+            dimensions.height = displayPDF(CONTEXT_AF.data, element, dimensions.width);
         }
 
         // Hover effect
@@ -312,7 +315,7 @@ AFRAME.registerComponent('circles-whiteboard-file',
         });
 
         // Onclick effect
-        fileClick(element, orderPosition);
+        fileClick(element, CONTEXT_AF.data.position.z);
 
         // Making file draggable
 
@@ -326,5 +329,71 @@ AFRAME.registerComponent('circles-whiteboard-file',
             maxCoordinate: {x: maxX, y: maxY},
             minCoordinate: {x: minX, y: minY},
         });
+
+        // Updating elements position when it is changed to update the database
+        // Using timeouts so that updates only occur when element stops moving
+
+        var timeout;
+        var timeoutStarted = false;
+
+        function updatePos()
+        {
+            timeout = false;
+
+            var elementPos = element.getAttribute('position');
+            var oldPosition = element.getAttribute('circles-whiteboard-file').position;
+
+            var newPos = {
+                x: elementPos.x,
+                y: elementPos.y,
+                z: oldPosition.z,
+            }
+
+            element.setAttribute('circles-whiteboard-file', {position: newPos});
+        }
+
+        element.addEventListener('componentchanged', function(event) 
+        {
+            if (event.detail.name === 'position')
+            {
+                if (timeoutStarted === false)
+                {
+                    timeoutStarted = true;
+
+                    timeout = setTimeout(updatePos, 1000);
+                }
+                else
+                {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(updatePos, 1000);
+                }
+            }
+        });
+
+    },
+    update: function(oldData) 
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // When file is moved
+        // Sending data to updated position of file in world database array
+
+        if (CONTEXT_AF.data.position !== oldData.position)
+        {
+            if (oldData.position && oldData.position)
+            {
+                // Getting current world
+                // url: http://domain/w/World
+                // split result array: {'http', '', 'domain', 'w', 'World'}
+                var world = window.location.href.split('/')[4];
+
+                var request = new XMLHttpRequest();
+                request.open('POST', '/update-whiteboard-file-position');
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                request.send('file=' + CONTEXT_AF.data.fileID + '&whiteboardID='+ CONTEXT_AF.data.whiteboardID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y + '&oldX=' + oldData.position.x + '&oldY=' + oldData.position.y);
+            }
+        }
     }
 });

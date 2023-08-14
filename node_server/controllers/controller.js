@@ -2205,9 +2205,24 @@ const insertWhiteboardFile = async (req, res, next) =>
   // Saving file information to the world entry
   if (insertedFile && world)
   {
+    // Getting the amount of files in that whiteboard to calculate current file z position
+    var maxZ = 0;
+
+    for(const file of world.whiteboardFiles)
+    {
+      if (file.whiteboardID === req.body.whiteboardID)
+      {
+        if (file.position[2] >= maxZ)
+        {
+          maxZ = file.position[2] + 0.001;
+        }
+      }
+    }
+
     var fileInfo = {
       file: insertedFile,
       whiteboardID: req.body.whiteboardID,
+      position: [0, 0, maxZ],
     };
 
     try
@@ -2221,7 +2236,12 @@ const insertWhiteboardFile = async (req, res, next) =>
     }
 
     // Sending back information on the file that was inserted
-    res.json(insertedFile);
+    
+    var file = JSON.parse(JSON.stringify(insertedFile));
+
+    file.position = fileInfo.position;
+
+    res.json(file);
   }
 
 }
@@ -2319,7 +2339,13 @@ const getWhiteboardFiles = async (req, res, next) =>
       // Getting file information
       for (const id of fileIDs)
       {
-        files.push(await Uploads.findById(id.file));
+        var file = await Uploads.findById(id.file);
+
+        var fileInfo = JSON.parse(JSON.stringify(file));
+
+        fileInfo.position = id.position;
+
+        files.push(fileInfo);
       }
 
     }
@@ -2355,6 +2381,55 @@ const setFileDimensions = async (req, res, next) =>
     file.height = req.body.height;
     file.width = req.body.width;
     await file.save();
+  }
+}
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Updating file position in its world database entry
+const updateFilePosition = async (req, res, next) =>
+{
+  var world = null;
+
+  try
+  {
+    // Getting world from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  // Find file entry
+  if (world)
+  {
+    for(const file of world.whiteboardFiles)
+    {
+      // If whiteboard ids match
+      if (file.whiteboardID === req.body.whiteboardID)
+      {
+        // If file ids match
+        if (JSON.stringify(file.file) === JSON.stringify(req.body.file))
+        {
+          // If old positions match
+          if (file.position[0] == req.body.oldX && file.position[1] == req.body.oldY)
+          {
+            // Update file position
+            try
+            {
+              file.position[0] = req.body.newX;
+              file.position[1] = req.body.newY;
+
+              await world.save();
+            }
+            catch(e)
+            {
+              console.log(e);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -2397,4 +2472,5 @@ module.exports = {
   removeWhiteboardFile,
   getWhiteboardFiles,
   setFileDimensions,
+  updateFilePosition,
 };

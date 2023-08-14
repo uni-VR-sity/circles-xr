@@ -46,7 +46,7 @@ const dragMove = function(object, max, min)
         prevY = event.clientY;
     }
 
-    object.addEventListener('mousedown', (event) =>
+    object.addEventListener('mousedown', function(event)
     {
         // Disabling look controls on camera
         camera.setAttribute('look-controls', {enabled: false});
@@ -147,7 +147,7 @@ const arrowUI = function()
 
 // Adding event listeners to arrows to move object within specified boundries
 // Returns event listeners to clear
-const arrowFunctionality = function(isMobile, object, max, min)
+const arrowFunctionality = function(object, max, min)
 {
     function move(direction)
     {
@@ -237,7 +237,7 @@ const arrowFunctionality = function(isMobile, object, max, min)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Moving object with arrow UI when selected
-const arrowMove = function(isMobile, object, max, min)
+const arrowMove = function(object, max, min)
 {
     var objectPosition = {
         x: null,
@@ -260,7 +260,7 @@ const arrowMove = function(isMobile, object, max, min)
             arrowUI();
 
             // Adding arrow functionality
-            arrowFunctionality(isMobile, object, max, min);
+            arrowFunctionality(object, max, min);
 
             // Removing arrow UI when anything else is clicked (has to be removed to remove all event listeners for current object)
             function hideUI(event)
@@ -338,7 +338,7 @@ AFRAME.registerComponent('circles-drag-object',
         // Mobile
         if (AFRAME.utils.device.isMobile() === true)
         {
-            arrowMove(true, element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
+            arrowMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
         }
         // Headset
         else if (AFRAME.utils.device.checkHeadsetConnected() === true)
@@ -350,7 +350,7 @@ AFRAME.registerComponent('circles-drag-object',
         else
         {
             dragMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
-            arrowMove(false, element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
+            arrowMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
         }
     }
 });
