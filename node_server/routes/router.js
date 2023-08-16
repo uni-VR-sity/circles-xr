@@ -185,4 +185,8 @@ router.get('/w/:world_id', authenticated, controller.serveWorld);
 // Serving relative links properly (this also means we can't use index.html) ...
 router.get('/w/:world_id/*', authenticated, controller.serveRelativeWorldContent);
 
+// For forwarding magic links
+// (Has to be last or routes below it will not work)
+router.get('/:forwarding_name', authenticated, controller.forwardMagicLink);
+
 module.exports = router;

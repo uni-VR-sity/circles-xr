@@ -90,22 +90,31 @@ block content
     div(id="MagicLinksWrapper" class="gutter-bottom-doubled" style='margin-top:55px;')
       h2 Magic Links
 
-      p Select the expiry and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[Create]</span> button below to generate a magic link to the selected world(s). Just copy and send the link to automatically give then access to the world(s) as a guest user.
+      p Select the expiry, forwarding group, and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[Create]</span> button below to generate a magic link to the selected world(s). Just copy and send the link to automatically give then access to the world(s) as a guest user.
 
       form(action="/create-magic-link" method="post" class='pure-form pure-form-aligned' style='margin-top:25px')
         fieldset
           legend(style='margin-bottom:15px') Create Magic Link
-          div(class='pure-left-control-group')
+
+          .pure-left-control-group
             - let n = 1;
             - let selected = false;
             - let val = 1;
             label Select Expiry in Days
-            select(name='linkExpiry' id='linkExpiry' class="pure-input-1-3")
+            select.field-select(name='linkExpiry' id='linkExpiry')
               while n < 365
                 - val = n++;
                 - selected = (val === 7)
                 option(value!= val, selected!= selected)!= val
                 - selected = false
+              option(value='never') Never
+
+          .pure-left-control-group
+            label Link Name 
+              span.required *
+              span.top-tooltip <i class="fa-solid fa-circle-info"></i>
+                p.top-tooltip-text(style='width:276px;margin-left:-138px;') What your magic link will look like <i>Ex. uni-vr-sity.ca/ClassVR</i>
+            input.field-long(type='text' name='forwardingName' placeholder='ClassVR' required)
 
           if worldEditingList.length > 0
             div(class='pure-left-control-group' style='margin-top:25px')
