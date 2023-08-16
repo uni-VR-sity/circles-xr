@@ -69,6 +69,17 @@ const dragMove = function(object, max, min)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Allowing object to be dragged when clicked and held
+const headsetDragMove = function()
+{
+    // Getting controller
+    document.querySelector(['[raycaster], [hand-controls], [laser-controls]']);
+
+    
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating and displaying arrow UI elements
 const arrowUI = function()
 {
@@ -333,7 +344,6 @@ AFRAME.registerComponent('circles-drag-object',
         //    - Arrow UI when object is selected
         // Headset:
         //    - Draggable when object is clicked and held
-        //    - Moveable with joystick when object is clicked and held
 
         // Mobile
         if (AFRAME.utils.device.isMobile() === true)
@@ -343,8 +353,7 @@ AFRAME.registerComponent('circles-drag-object',
         // Headset
         else if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
-            dragMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
-            joystickMove();
+            headsetDragMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
         }
         // Computer
         else
