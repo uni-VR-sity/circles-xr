@@ -139,6 +139,10 @@ router.get('/uploaded-content', authenticated, controller.serveUploadedContent);
 router.get('/uploads/:file_name', authenticated, controller.serveUploadedFile);
 router.get('/delete-uploaded-content/:file_name', authenticated, controller.deleteUploadedFile);
 
+router.get('/your-magic-links', authenticated, controller.serveMagicLinks);
+router.get('/delete-magic-link/:magic_link', authenticated, controller.deleteMagicLink);
+router.post('/renew-magic-link/:magic_link', authenticated, controller.renewMagicLink);
+
 router.post('/upload-content', authenticated, controller.newContent);
 
 router.post('/create-user', authenticated, controller.createUser);

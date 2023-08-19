@@ -77,7 +77,7 @@ block content
                                 - var inactivateLink = '/inactivate-server/' + server._id;
                                 - var deleteLink = '/delete-server/' + server._id;
                                 a(href=inactivateLink) Mark as inactive
-                                a(onclick='doubleCheckDelete_Server("' + deleteLink + '")' style='color:red') Delete server
+                                a(onclick='doubleCheckDelete_TableView("' + deleteLink + '", "server")' style='color:red') Delete server
 
                     table.circles-server-table
                         tbody
@@ -111,7 +111,7 @@ block content
                                 - var activateLink = '/activate-server/' + server._id;
                                 - var deleteLink = '/delete-server/' + server._id;
                                 a(href=activateLink) Mark as active
-                                a(onclick='doubleCheckDelete("' + deleteLink + '")' style='color:red') Delete server
+                                a(onclick='doubleCheckDelete_TableView("' + deleteLink + '", "server")' style='color:red') Delete server
                     
                     p.inactive-text INACTIVE
 
