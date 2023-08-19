@@ -1225,174 +1225,188 @@ const putWorldRestrictions = async (req, res, next) => {
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Creating magic link to user requested worlds
-const createMagicLink = async (req, res, next) => 
+// Creating jwt for magic link
+const createJWT_MagicLink = function(expiryTimeMin, worlds)
 {
-  // Checking that the entered forwarding name is unique
-  let forwardingExists;
+  const route = '/explore';
 
-  try
+  let jwtOptions;
+
+  if (expiryTimeMin)
   {
-    forwardingExists = await MagicLinks.findOne({forwardLink: req.body.forwardingName});
-  }
-  catch(e)
-  {
-    console.log(e);
-
-    req.session.magicLinkError = 'An error occurred while creating your magic link, please try again';
-    res.redirect('/explore');
-  }
-
-  if (!forwardingExists)
-  {
-    // Setting up success message for link creation
-    let successMessage;
-
-    // Getting expiry time of magic link (if there is one)
-    let expiryTimeMin;
-
-    if (req.body.linkExpiry === 'never')
-    {
-      successMessage = 'Constant magic link successfully created for the following world(s): ';
-      expiryTimeMin = null;
-    }
-    else
-    {
-      successMessage = req.body.linkExpiry + ' day magic link successfully created for the following world(s): ';
-      expiryTimeMin = req.body.linkExpiry * 24 * 60; // Convert days to mins
-    }
-
-    // Getting worlds to create magic link to
-    const worlds = [];
-    const worldNames = [];
-
-    for (const worldName in req.body)
-    {
-      if (worldName !== 'linkExpiry' && worldName !== 'forwardingName')
-      {
-        worldNames.push(worldName);
-
-        try 
-        {
-          worlds.push(await Worlds.findOne({name: worldName}));
-
-          successMessage = successMessage + worldName + ', ';
-        }
-        catch (err)
-        {
-          console.log(err);
-
-          req.session.magicLinkError = 'Could not create a magic link for ' + worldName + ', please try again';
-          res.redirect('/explore');
-        }
-      }
-    }
-
-    // Removing the last 2 characters (the ' ' and ',')
-    successMessage = successMessage.slice(0, -2);
-
-    // Making sure there were worlds selected before creating the link, if not, outputting an error message
-    if (worlds.length > 0)
-    {
-      let baseURL;
-
-      if (env.DOMAIN)
-      {
-        baseURL = env.DOMAIN;
-      }
-      else
-      {
-        baseURL = req.get('host');
-      }
-
-      const route = '/explore';
-
-      let jwtOptions;
-
-      if (expiryTimeMin)
-      {
-        jwtOptions = {
-          issuer: 'circlesxr.com',
-          audience: 'circlesxr.com',
-          algorithm: 'HS256',
-          expiresIn: expiryTimeMin + 'm',
-        };
-      }
-      else
-      {
-        jwtOptions = {
-          issuer: 'circlesxr.com',
-          audience: 'circlesxr.com',
-          algorithm: 'HS256',
-        };
-      }
-
-      const payload = {
-        worlds: worlds,
-      };
-
-      const token = jwt.sign(payload, env.JWT_SECRET, jwtOptions);
-
-      const magicLink = '/magic-login?token=' + token + '&route=' + route;
-      const forwardingLink = baseURL + '/' + req.body.forwardingName;
-
-      // Saving magic link in database
-      let linkInfo;
-
-      // Saving magic link in database
-      if (expiryTimeMin)
-      {
-        let expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + parseInt(req.body.linkExpiry));
-
-        linkInfo = {
-          creator: await User.findById(req.user._id).exec(),
-          forwardLink: req.body.forwardingName,
-          magicLink: magicLink,
-          expires: true,
-          expiryDate: expiryDate,
-          worlds: worldNames,
-        }
-      }
-      else
-      {
-        linkInfo = {
-          creator: await User.findById(req.user._id).exec(),
-          forwardLink: req.body.forwardingName,
-          magicLink: magicLink,
-          expires: false,
-          worlds: worldNames,
-        }
-      }
-
-      try
-      {
-        await MagicLinks.create(linkInfo);
-      }
-      catch(e)
-      {
-        console.log(e);
-
-        req.session.magicLinkError = 'An error occurred while creating your magic link, please try again';
-        res.redirect('/explore');
-      }
-
-      req.session.magicLink = forwardingLink;
-      req.session.magicLinkSuccess = successMessage;
-    }
-    else
-    {
-      req.session.magicLinkError = 'No worlds selected';
-      req.session.magicLink = null;
-      req.session.magicLinkSuccess = null;
-    }
-
-    res.redirect('/explore');
+    jwtOptions = {
+      issuer: 'circlesxr.com',
+      audience: 'circlesxr.com',
+      algorithm: 'HS256',
+      expiresIn: expiryTimeMin + 'm',
+    };
   }
   else
   {
-    req.session.magicLinkError = req.body.forwardingName + ' link name is already being used, please enter a new name';
-    res.redirect('/explore');
+    jwtOptions = {
+      issuer: 'circlesxr.com',
+      audience: 'circlesxr.com',
+      algorithm: 'HS256',
+    };
+  }
+
+  const payload = {
+    worlds: worlds,
+  };
+
+  const token = jwt.sign(payload, env.JWT_SECRET, jwtOptions);
+
+  const magicLink = '/magic-login?token=' + token + '&route=' + route;;
+
+  return magicLink;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating magic link to user requested worlds
+const createMagicLink = async (req, res, next) => 
+{
+  if (req.body.forwardingName && req.body.linkExpiry)
+  {
+    // Checking that the entered forwarding name is unique
+    let forwardingExists;
+
+    try
+    {
+      forwardingExists = await MagicLinks.findOne({forwardLink: req.body.forwardingName});
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      req.session.magicLinkError = 'An error occurred while creating your magic link, please try again';
+      res.redirect('/explore');
+    }
+
+    if (!forwardingExists)
+    {
+      // Setting up success message for link creation
+      let successMessage;
+
+      // Getting expiry time of magic link (if there is one)
+      let expiryTimeMin;
+
+      if (req.body.linkExpiry === 'never')
+      {
+        successMessage = 'Constant magic link successfully created for the following world(s): ';
+        expiryTimeMin = null;
+      }
+      else
+      {
+        successMessage = req.body.linkExpiry + ' day magic link successfully created for the following world(s): ';
+        expiryTimeMin = req.body.linkExpiry * 24 * 60; // Convert days to mins
+      }
+
+      // Getting worlds to create magic link to
+      const worlds = [];
+      const worldNames = [];
+
+      for (const worldName in req.body)
+      {
+        if (worldName !== 'linkExpiry' && worldName !== 'forwardingName')
+        {
+          worldNames.push(worldName);
+
+          try 
+          {
+            worlds.push(await Worlds.findOne({name: worldName}));
+
+            successMessage = successMessage + worldName + ', ';
+          }
+          catch (err)
+          {
+            console.log(err);
+
+            req.session.magicLinkError = 'Could not create a magic link for ' + worldName + ', please try again';
+            res.redirect('/explore');
+          }
+        }
+      }
+
+      // Removing the last 2 characters (the ' ' and ',')
+      successMessage = successMessage.slice(0, -2);
+
+      // Making sure there were worlds selected before creating the link, if not, outputting an error message
+      if (worlds.length > 0)
+      {
+        const magicLink = createJWT_MagicLink(expiryTimeMin, worlds);
+
+        let baseURL;
+
+        if (env.DOMAIN)
+        {
+          baseURL = env.DOMAIN;
+        }
+        else
+        {
+          baseURL = req.get('host');
+        }
+
+        const forwardingLink = baseURL + '/' + req.body.forwardingName
+
+        // Saving magic link in database
+        let linkInfo;
+
+        // Saving magic link in database
+        if (expiryTimeMin)
+        {
+          let expiryDate = new Date();
+          expiryDate.setDate(expiryDate.getDate() + parseInt(req.body.linkExpiry));
+
+          linkInfo = {
+            creator: await User.findById(req.user._id).exec(),
+            forwardLink: req.body.forwardingName,
+            magicLink: magicLink,
+            expires: true,
+            expiryDate: expiryDate,
+            worlds: worldNames,
+          }
+        }
+        else
+        {
+          linkInfo = {
+            creator: await User.findById(req.user._id).exec(),
+            forwardLink: req.body.forwardingName,
+            magicLink: magicLink,
+            expires: false,
+            worlds: worldNames,
+          }
+        }
+
+        try
+        {
+          await MagicLinks.create(linkInfo);
+        }
+        catch(e)
+        {
+          console.log(e);
+
+          req.session.magicLinkError = 'An error occurred while creating your magic link, please try again';
+          res.redirect('/explore');
+        }
+
+        req.session.magicLink = forwardingLink;
+        req.session.magicLinkSuccess = successMessage;
+      }
+      else
+      {
+        req.session.magicLinkError = 'No worlds selected';
+        req.session.magicLink = null;
+        req.session.magicLinkSuccess = null;
+      }
+
+      res.redirect('/explore');
+    }
+    else
+    {
+      req.session.magicLinkError = req.body.forwardingName + ' link name is already being used, please enter a new name';
+      res.redirect('/explore');
+    }
   }
 };
 
@@ -1432,6 +1446,197 @@ const forwardMagicLink = async (req, res, next) =>
     invalidAddress(req, res, next);
   }
 
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering the magic links page
+const serveMagicLinks = async (req, res, next) => 
+{
+  const userInfo = getUserInfo(req);
+
+  // Getting messages to output to user
+  let successMessage = null;
+  let errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
+  // Getting user's magic links
+  let magicLinks = [];
+
+  let currentUser = req.user;
+
+  magicLinks = await MagicLinks.find({creator: currentUser});
+
+  // Getting current domain
+  let baseURL;
+
+  if (env.DOMAIN)
+  {
+    baseURL = env.DOMAIN;
+  }
+  else
+  {
+    baseURL = req.get('host');
+  }
+
+  res.render(path.resolve(__dirname + '/../public/web/views/magicLinks'), {
+    title: "Your Magic Links",
+    userInfo: userInfo,
+    successMessage: successMessage,
+    errorMessage: errorMessage,
+    magicLinks: magicLinks,
+    baseURL: baseURL,
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Deleting magic link on user request
+const deleteMagicLink = async (req, res, next) =>
+{
+  // url: /delete-magic-link/:magic_link
+  // split result array: {"", "delete-magic-link", ":magic_link"}
+  const linkName = req.url.split('/')[2];
+
+  // Getting link from database
+  const link = await MagicLinks.findOne({forwardLink: linkName}).exec();
+  const linkCreator = await User.findOne(link.creator).exec();
+
+  // Checking if the link belongs to the current user
+  const currentUser = await User.findById(req.user._id).exec();
+
+  // If it does, delete the link
+  if (JSON.stringify(linkCreator) == JSON.stringify(currentUser))
+  {
+    // Deleting from database
+    try
+    {
+      await MagicLinks.deleteOne({forwardLink: linkName});
+      req.session.successMessage = linkName + ' successfully deleted';
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      req.session.errorMessage = linkName + ' could not be deleted, please try again';
+      return res.redirect('/your-magic-links');
+    }
+  }
+
+  return res.redirect('/your-magic-links');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Renewing magic link on user request
+const renewMagicLink = async (req, res, next) =>
+{
+  // url: /renew-magic-link/:magic_link
+  // split result array: {"", "renew-magic-link", ":magic_link"}
+  const linkName = req.url.split('/')[2];
+
+  if (req.body.linkExpiry)
+  {
+    // Getting expiry time of magic link (if there is one)
+    let expiryTimeMin;
+
+    if (req.body.linkExpiry === 'never')
+    {
+      expiryTimeMin = null;
+    }
+    else
+    {
+      expiryTimeMin = req.body.linkExpiry * 24 * 60; // Convert days to mins
+    }
+
+    let link = null;
+
+    // Getting link from database
+    try
+    {
+      link = await MagicLinks.findOne({forwardLink: linkName}).exec();
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (link)
+    {
+      let worlds = [];
+
+      // Getting worlds for magic link
+      for (const worldName of link.worlds)
+      {
+        try 
+        {
+          worlds.push(await Worlds.findOne({name: worldName}));
+        }
+        catch (err)
+        {
+          console.log(err);
+
+          req.session.errorMessage = linkName + ' could not be renewed, please try again';
+          return res.redirect('/your-magic-links');
+        }
+      }
+
+      const magicLink = createJWT_MagicLink(expiryTimeMin, worlds);
+
+      // Saving new magic link in database
+      link.magicLink = magicLink;
+
+      if (expiryTimeMin)
+      {
+        let expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + parseInt(req.body.linkExpiry));
+
+        link.expires = true;
+        link.expiryDate = expiryDate;
+
+        link.markModified('expiryDate');
+      }
+      else
+      {
+        link.expires = false;
+      }
+
+      try
+      {
+        await link.save();
+        req.session.successMessage = linkName + ' successfully renewed for ' + req.body.linkExpiry + ' days';
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        req.session.errorMessage = linkName + ' could not be renewed, please try again';
+      }
+    }
+    else
+    {
+      req.session.errorMessage = linkName + ' could not be renewed, please try again';
+      return res.redirect('/your-magic-links');
+    }
+  }
+  else
+  {
+    req.session.errorMessage = linkName + ' could not be renewed, please try again';
+    return res.redirect('/your-magic-links');
+  }
+
+  return res.redirect('/your-magic-links');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2599,6 +2804,9 @@ module.exports = {
   putWorldRestrictions,
   createMagicLink,
   forwardMagicLink,
+  serveMagicLinks,
+  deleteMagicLink,
+  renewMagicLink,
   getWorldsList,
   serveUserManager,
   createUser,

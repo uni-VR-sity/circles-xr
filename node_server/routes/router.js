@@ -131,6 +131,10 @@ router.get('/uploads/:file_name', authenticated, controller.serveUploadedFile);
 router.get('/delete-uploaded-content/:file_name', authenticated, controller.deleteUploadedFile);
 router.get('/get-user-uploaded-content', authenticated, controller.getUserFiles);
 
+router.get('/your-magic-links', authenticated, controller.serveMagicLinks);
+router.get('/delete-magic-link/:magic_link', authenticated, controller.deleteMagicLink);
+router.post('/renew-magic-link/:magic_link', authenticated, controller.renewMagicLink);
+
 router.post('/upload-content', authenticated, controller.newContent);
 router.post('/insert-whiteboard-file', authenticated, controller.insertWhiteboardFile);
 router.post('/remove-whiteboard-file', authenticated, controller.removeWhiteboardFile);
