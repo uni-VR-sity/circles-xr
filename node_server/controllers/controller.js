@@ -1615,7 +1615,14 @@ const renewMagicLink = async (req, res, next) =>
       try
       {
         await link.save();
-        req.session.successMessage = linkName + ' successfully renewed for ' + req.body.linkExpiry + ' days';
+        if (expiryTimeMin)
+        {
+          req.session.successMessage = linkName + ' successfully renewed for ' + req.body.linkExpiry + ' days';
+        }
+        else
+        {
+          req.session.successMessage = linkName + ' successfully renewed to never expire';
+        }
       }
       catch(e)
       {

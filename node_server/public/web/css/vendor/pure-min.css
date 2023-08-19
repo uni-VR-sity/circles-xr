@@ -111,11 +111,9 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 
 .circles-link-table .link-worlds ul {margin:0; padding:0;}
 
-.circles-link-table li i{font-size:4px; padding-right:7px; vertical-align:middle; text-align:left}
+.circles-link-table li{display:block; margin-bottom:8px;}
 
-.circles-link-table li{display:block; margin-bottom:4px;}
-
-.circles-link-table .link-control{width:32%; vertical-align: middle;}
+.circles-link-table .link-control{width:32%; vertical-align: top;}
 
 .circles-link-table .link-control div{display:grid; grid-template-columns: auto auto; align-items:start;}
 
