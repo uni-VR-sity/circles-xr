@@ -69,17 +69,6 @@ const dragMove = function(object, max, min)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Allowing object to be dragged when clicked and held
-const headsetDragMove = function()
-{
-    // Getting controller
-    document.querySelector(['[raycaster], [hand-controls], [laser-controls]']);
-
-    
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
 // Creating and displaying arrow UI elements
 const arrowUI = function()
 {
@@ -177,7 +166,7 @@ const arrowFunctionality = function(object, max, min)
         }
         else if (direction === 'right')
         {
-            newX += moveBy
+            newX += moveBy;
         }
         else if (direction === 'down')
         {
@@ -314,11 +303,71 @@ const arrowMove = function(object, max, min)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Moving object with joystick when clicked and held
-// When object is clicked down on, look controls are disabled. When object is released, look controls are enabled again
-const joystickMove = function()
+// Moving object with joystick when selected
+const joystickMove = function(object, max, min)
 {
-    
+    // Getting controller and camera
+    var controller = document.querySelector(['[raycaster], [hand-controls], [laser-controls]']);
+    var camera = document.querySelector('[circles-snap-turning]');
+
+    // Moving object when user moves joystick
+    function move(event)
+    {
+        const moveBy = 0.01;
+
+        var newX = object.getAttribute('position').x;
+        var newY = object.getAttribute('position').y;
+
+        // (0.2 for less sensitivity)
+        if (event.detail.y < -0.2)
+        {
+            newY += moveBy;
+        }
+        else if (event.detail.y > 0.2)
+        {
+            newY -= moveBy;
+        }
+
+        if (event.detail.x < -0.2)
+        {
+            newX -= moveBy;
+        }
+        else if (event.detail.x > 0.2)
+        {
+            newX += moveBy;
+        }
+
+        moveObject(object, newX, newY, max, min);
+    }
+
+    // Disabling object movement
+    function disableMove(event)
+    {
+        controller.removeEventListener('thumbstickmoved', move);
+
+        camera.setAttribute('circles-snap-turning', {enabled: true});
+        //camera.setAttribute('gamepad-controls', {enabled: true});
+
+        window.removeEventListener('click', disableMove);
+    }
+
+    // Getting when object is clicked
+    object.addEventListener('click', function()
+    {
+        // Putting event listener on controller joystick
+        controller.addEventListener('thumbstickmoved', move);
+
+        camera.setAttribute('circles-snap-turning', {enabled: false});
+        //camera.setAttribute('gamepad-controls', {enabled: false});
+
+        // To not be triggered right away
+        setTimeout(function()
+        {
+            // Adding event listener for when anywhere else is clicked, joystick is disabled
+            window.addEventListener('click', disableMove);
+
+        }, 100);;
+    });
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -343,7 +392,7 @@ AFRAME.registerComponent('circles-drag-object',
         // Mobile:
         //    - Arrow UI when object is selected
         // Headset:
-        //    - Draggable when object is clicked and held
+        //    - Moving object with joystick when selected
 
         // Mobile
         if (AFRAME.utils.device.isMobile() === true)
@@ -353,7 +402,7 @@ AFRAME.registerComponent('circles-drag-object',
         // Headset
         else if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
-            headsetDragMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
+            joystickMove(element, CONTEXT_AF.data.maxCoordinate, CONTEXT_AF.data.minCoordinate);
         }
         // Computer
         else

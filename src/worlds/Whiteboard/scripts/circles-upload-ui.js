@@ -6,8 +6,8 @@
 
 // Functions
 
-// Creating pop up element
-const generatePopUp = function()
+// Creating pop up element (for computer and mobile)
+const generatePopUp_Computer_Mobile = function()
 {
     // Container
     var container = document.createElement('div');
@@ -47,6 +47,14 @@ const generatePopUp = function()
 
     document.getElementsByTagName('body')[0].appendChild(container);
 
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating pop up element (for headset)
+const generatePopUp_Headset = function()
+{
+    
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -470,7 +478,31 @@ AFRAME.registerComponent('circles-upload-ui',
         const element = CONTEXT_AF.el;
 
         // Generating pop up base for displaying content
-        generatePopUp();
+
+        // The way it is displayed depends on the device
+        // Computer:
+        //    - UI overlay
+        // Mobile:
+        //    - UI overlay
+        // Headset:
+        //    - Virtual UI
+
+        // Mobile
+        if (AFRAME.utils.device.isMobile() === true)
+        {
+            generatePopUp_Computer_Mobile();
+        }
+        // Headset
+        else if (AFRAME.utils.device.checkHeadsetConnected() === true)
+        {
+            generatePopUp_Headset();
+            generatePopUp_Computer_Mobile();
+        }
+        // Computer
+        else
+        {
+            generatePopUp_Computer_Mobile();
+        }
 
         // Getting list of content uploaded by the user
         let request = new XMLHttpRequest();
