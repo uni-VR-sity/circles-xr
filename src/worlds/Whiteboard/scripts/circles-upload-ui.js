@@ -504,12 +504,6 @@ const insertFile = function()
 
                 asset.setAttribute('src', '/uploads/' + fileInfo.name);
             }
-            else
-            {
-                asset = document.createElement('canvas');
-
-                asset.setAttribute('crossorigin', 'anonymous');
-            }
 
             asset.setAttribute('id', 'asset_' + fileInfo.name);
 
@@ -661,30 +655,6 @@ const displayContent = function(content)
 
                                         fileContainer.appendChild(video);
                                     }
-                                    // Text files (just displaying name of file)
-                                    else
-                                    {
-                                        data.setAttribute('class', 'other-file-type file-table-section');
-
-                                        // Icon
-                                        var icon = document.createElement('i');
-
-                                        icon.setAttribute('class', 'fa-regular fa-file file-icon');
-
-                                        fileContainer.appendChild(icon);
-
-                                        // Space
-                                        var space = document.createElement('br');
-                                        fileContainer.appendChild(space);
-
-                                        // File name
-                                        var name = document.createElement('p');
-
-                                        name.setAttribute('class', 'fileName');
-                                        name.innerHTML = content[fileNum].displayName;
-
-                                        fileContainer.appendChild(name);
-                                    }
 
                                 data.appendChild(fileContainer);
 
@@ -698,55 +668,6 @@ const displayContent = function(content)
         tableContainer.appendChild(table);
     
     container.appendChild(tableContainer);
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Shortening file names to fit the width of the table data
-const shortenNames = function()
-{
-    // Table section margins and padding sizes
-    let sectionMargin = 40 * 5;
-    let sectionPadding = 300;
-
-    // Getting the width of the table sections
-    let sectionWidth = (document.getElementById('uploads-table').getBoundingClientRect().width - sectionMargin - sectionPadding) / 5;
-
-    // Going through each table section and checking if the length of the file name is greater then the width of the section
-    // If it is, shorten it
-    let nameElements = document.getElementsByClassName('fileName');
-
-    for (let element of nameElements)
-    {
-        let name = element.innerHTML;
-        let nameLength = element.getBoundingClientRect().width;
-
-        if (nameLength > sectionWidth)
-        {
-            // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
-            
-            // Getting the file type
-            let splitName = name.split('.');
-            let type = splitName[splitName.length - 1];
-
-            let condensedName = name;
-            
-            // Taking a character off the file name until the length of the name is less then the section width
-            while (nameLength > sectionWidth)
-            {
-                // Getting the file name without the type
-                condensedName = condensedName.replace('...' + type, '');
-
-                // Removing the last character of the name
-                condensedName = condensedName.substring(0, condensedName.length - 1);
-                condensedName += '...' + type;
-
-                // Checking the length of the name
-                element.innerHTML = condensedName;
-                nameLength = element.getBoundingClientRect().width;
-            }
-        }
-    }
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -844,9 +765,6 @@ AFRAME.registerComponent('circles-upload-ui',
 
                     // Showing pop up as program can not get dimensions when elements are hidden
                     document.getElementById('upload-content-container').style.display = 'block';
-
-                        // Making sure file names fit the width of the table data
-                        shortenNames();
 
                         // Adjusting table width
                         adjustWidth();

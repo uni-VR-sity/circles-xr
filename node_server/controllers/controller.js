@@ -2289,15 +2289,9 @@ const serveUploadedContent = async (req, res, next) =>
   }
 
   // Getting valid file types
-  let validText = [];
   let validImages = [];
   let validVideos = [];
   let valid3D = [];
-
-  for (const key in CIRCLES.VALID_TEXT_TYPES)
-  {
-    validText.push('.' + CIRCLES.VALID_TEXT_TYPES[key]);
-  }
 
   for (const key in CIRCLES.VALID_IMAGE_TYPES)
   {
@@ -2327,7 +2321,6 @@ const serveUploadedContent = async (req, res, next) =>
   res.render(path.resolve(__dirname + '/../public/web/views/uploadedContent'), {
     title: 'Uploaded Content',
     userInfo: userInfo,
-    validText: validText,
     validImages: validImages,
     validVideos: validVideos,
     valid3D: valid3D,
@@ -2365,11 +2358,6 @@ const newContent = (req, res, next) =>
 
     // Getting valid file types
     let validFiles = [];
-
-    for (const key in CIRCLES.VALID_TEXT_TYPES)
-    {
-      validFiles.push(CIRCLES.VALID_TEXT_TYPES[key]);
-    }
 
     for (const key in CIRCLES.VALID_IMAGE_TYPES)
     {

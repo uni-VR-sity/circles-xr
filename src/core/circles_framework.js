@@ -70,12 +70,6 @@ const USER_TYPE = {
   MAGIC_GUEST : 'Magic Guest',
 };
 
-const VALID_TEXT_TYPES = {
-  PDF     : 'pdf',
-  PLAIN   : 'plain',
-  TEXT    : 'txt',
-}
-
 const VALID_IMAGE_TYPES = {
   PNG     : 'png',
   JPG     : 'jpg',
@@ -334,7 +328,6 @@ module.exports = {
   MODEL_TYPE,
   MODEL_FORMAT,
   USER_TYPE,
-  VALID_TEXT_TYPES,
   VALID_IMAGE_TYPES,
   VALID_VIDEO_TYPES,
   VALID_3D_TYPES,
