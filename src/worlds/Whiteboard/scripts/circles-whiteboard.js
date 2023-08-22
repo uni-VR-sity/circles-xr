@@ -57,14 +57,8 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
     uploadButton.setAttribute('position', {
         x: 0,
         y: height / 3,
-        z: - ((depth / 2) + 0.001),
+        z: (depth / 2) + 0.001,
     });
-
-    uploadButton.setAttribute('rotation', {
-        x: 0,
-        y: 180,
-        z: 0,
-    }); 
 
     // Dimensions: Symbols are 0.3 times the width of the base
     uploadButton.setAttribute('geometry', {
@@ -106,14 +100,8 @@ const generateMessage = function(parentElement, height, width, depth)
     messageButton.setAttribute('position', {
         x: 0,
         y: 0,
-        z: - ((depth / 2) + 0.001),
+        z: (depth / 2) + 0.001,
     });
-
-    messageButton.setAttribute('rotation', {
-        x: 0,
-        y: 180,
-        z: 0,
-    }); 
 
     // Dimensions: Symbols are 0.3 times the width of the base
     messageButton.setAttribute('geometry', {
@@ -149,14 +137,8 @@ const generateDraw = function(parentElement, height, width, depth)
     drawButton.setAttribute('position', {
         x: 0,
         y: - (height / 3),
-        z: - ((depth / 2) + 0.001),
+        z: (depth / 2) + 0.001,
     });
-
-    drawButton.setAttribute('rotation', {
-        x: 0,
-        y: 180,
-        z: 0,
-    }); 
 
     // Dimensions: Symbols are 0.3 times the width of the base
     drawButton.setAttribute('geometry', {
@@ -192,14 +174,8 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
     trashButton.setAttribute('position', {
         x: 0,
         y: - (height / 3),
-        z: - ((depth / 2) + 0.001),
+        z: (depth / 2) + 0.001,
     });
-
-    trashButton.setAttribute('rotation', {
-        x: 0,
-        y: 180,
-        z: 0,
-    }); 
 
     // Dimensions: Symbols are 0.3 times the width of the base
     trashButton.setAttribute('geometry', {
@@ -328,13 +304,7 @@ const generateWhiteboard = function(parentElement, preferences)
     fileContainer.setAttribute('position', {
         x: 0,
         y: 0,
-        z: - ((preferences.depth / 2) + 0.001),
-    });
-
-    fileContainer.setAttribute('rotation', {
-        x: 0,
-        y: 180,
-        z: 0,
+        z: ((preferences.depth / 2) + 0.001),
     });
 
     boardBase.appendChild(fileContainer);
@@ -365,7 +335,7 @@ const generateWhiteboard = function(parentElement, preferences)
     }); 
 
     boardControls.setAttribute('position', {
-        x: - ((preferences.width / 2) + (controllerWidth / 2)),
+        x: (preferences.width / 2) + (controllerWidth / 2),
         y: 0,
         z: 0,
     });

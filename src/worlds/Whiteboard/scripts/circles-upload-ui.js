@@ -51,10 +51,326 @@ const generatePopUp_Computer_Mobile = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Uploading assets for UI (for headset)
+const uploadAssets_Headset = function()
+{
+    // Getting Asset Management System
+    let assetManager = document.getElementsByTagName('a-assets')[0];
+
+    // X symbol
+    let x = document.createElement('img');
+    x.setAttribute('id', 'x_symbol');
+    x.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/xmark.svg');
+
+    assetManager.appendChild(x);
+
+    // Left arrow symbol
+    let leftArrow = document.createElement('img');
+    leftArrow.setAttribute('id', 'left_arrow_symbol');
+    leftArrow.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/angle-left.svg');
+
+    assetManager.appendChild(leftArrow);
+
+    // Right arrow symbol
+    let rightArrow = document.createElement('img');
+    rightArrow.setAttribute('id', 'right_arrow_symbol');
+    rightArrow.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/angle-right.svg');
+
+    assetManager.appendChild(rightArrow);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating pop up element (for headset)
 const generatePopUp_Headset = function()
 {
+    uploadAssets_Headset();
+
+    // Container
+    let container = document.createElement('a-entity');
+    container.setAttribute('id', 'upload-content-container');
+
+    container.setAttribute('visible', 'false');
+
+    container.setAttribute('geometry', {
+        primitive: 'plane', 
+        height: 2, 
+        width: 3,
+    });
+
+    container.setAttribute('material', {
+        emissive: '#d1d1d1', 
+        side: 'double', 
+        color: '#d1d1d1',
+    });
+
+        // Title
+        let title = document.createElement('a-entity');
+
+        title.setAttribute('text', {
+            align: 'center',
+            color: '#000000',
+            value: 'Insert File',
+        });
+
+        title.setAttribute('position', {
+            x: -1,
+            y: 0.75, 
+            z: 0.001,
+        });
+
+        title.setAttribute('scale', {
+            x: 2.5, 
+            y: 2.5,
+            z: 2.5,
+        });
+
+        container.appendChild(title);
+
+        // Page indicator
+        let page = document.createElement('a-entity');
+        page.setAttribute('id', 'page-indicator');
+
+        page.setAttribute('text', {
+            align: 'center',
+            color: '#000000',
+        });
+
+        page.setAttribute('position', {
+            x: 0,
+            y: 0.75, 
+            z: 0.005,
+        });
+
+        page.setAttribute('scale', {
+            x: 2.5, 
+            y: 2.5,
+            z: 2.5,
+        });
+
+        container.appendChild(page);
+
+        // X
+        let x = document.createElement('a-entity');
+
+        x.setAttribute('geometry', {
+            primitive: 'plane', 
+            height: 0.15, 
+            width: 0.125,
+        });
     
+        x.setAttribute('material', {
+            transparent: true,
+            src: '#x_symbol',
+        });
+
+        x.setAttribute('position', {
+            x: 1.11,
+            y: 0.75, 
+            z: 0.005,
+        });
+
+        container.appendChild(x);
+
+        // Title divider
+        let divider = document.createElement('a-entity');
+
+        divider.setAttribute('geometry', {
+            primitive: 'plane', 
+            height: 0.006, 
+            width: 2.5,
+        });
+    
+        divider.setAttribute('material', {
+            shader: 'flat',
+            color: '#000000',
+        });
+
+        divider.setAttribute('position', {
+            x: 0,
+            y: 0.6, 
+            z: 0.005,
+        });
+
+        container.appendChild(divider);
+
+        // File container
+        let fileContainer = document.createElement('a-entity');
+        fileContainer.setAttribute('id', 'file-container');
+
+            // File 1
+            let file1 = document.createElement('a-entity');
+
+            file1.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file1.setAttribute('material', {
+                transparent: true,
+            });
+    
+            file1.setAttribute('position', {
+                x: -0.7,
+                y: 0.17,
+                z: 0.005,
+            });
+    
+            container.appendChild(file1);
+
+            // File 2
+            let file2 = document.createElement('a-entity');
+
+            file2.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file2.setAttribute('material', {
+                transparent: true,
+            });
+    
+            file2.setAttribute('position', {
+                x: 0,
+                y: 0.17,
+                z: 0.005,
+            });
+    
+            container.appendChild(file2);
+
+            // File 3
+            let file3 = document.createElement('a-entity');
+
+            file3.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file3.setAttribute('material', {
+                transparent: true,
+            });
+    
+            file3.setAttribute('position', {
+                x: 0.7,
+                y: 0.17,
+                z: 0.005,
+            });
+    
+            container.appendChild(file3);
+
+            // File 4
+            let file4 = document.createElement('a-entity');
+
+            file4.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file4.setAttribute('material', {
+                transparent: true,
+            });
+    
+            file4.setAttribute('position', {
+                x: -0.7,
+                y: -0.5,
+                z: 0.005,
+            });
+    
+            container.appendChild(file4);
+
+            // File 5
+            let file5 = document.createElement('a-entity');
+
+            file5.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file5.setAttribute('material', {
+                transparent: true,
+            });
+    
+            file5.setAttribute('position', {
+                x: 0,
+                y: -0.5,
+                z: 0.005,
+            });
+    
+            container.appendChild(file5);
+
+            // File 6
+            let file6 = document.createElement('a-entity');
+
+            file6.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file6.setAttribute('material', {
+                transparent: true,
+            });
+    
+            file6.setAttribute('position', {
+                x: 0.7,
+                y: -0.5,
+                z: 0.005,
+            });
+    
+            container.appendChild(file6);
+
+        container.appendChild(fileContainer);
+    
+        // Left arrow
+        let leftArrow = document.createElement('a-entity');
+
+        leftArrow.setAttribute('geometry', {
+            primitive: 'plane', 
+            height: 0.2, 
+            width: 0.15,
+        });
+
+        leftArrow.setAttribute('material', {
+            transparent: true,
+            src: '#left_arrow_symbol',
+        });
+
+        leftArrow.setAttribute('position', {
+            x: -1.25,
+            y: -0.145,
+            z: 0.005,
+        });
+
+        container.appendChild(leftArrow);
+
+        // Right arrow
+        let rightArrow = document.createElement('a-entity');
+
+        rightArrow.setAttribute('geometry', {
+            primitive: 'plane', 
+            height: 0.2, 
+            width: 0.15,
+        });
+
+        rightArrow.setAttribute('material', {
+            transparent: true,
+            src: '#right_arrow_symbol',
+        });
+
+        rightArrow.setAttribute('position', {
+            x: 1.25,
+            y: -0.145,
+            z: 0.005,
+        });
+
+        container.appendChild(rightArrow);
+
+    document.getElementsByTagName('a-scene')[0].appendChild(container);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -487,21 +803,16 @@ AFRAME.registerComponent('circles-upload-ui',
         // Headset:
         //    - Virtual UI
 
-        // Mobile
-        if (AFRAME.utils.device.isMobile() === true)
-        {
-            generatePopUp_Computer_Mobile();
-        }
         // Headset
-        else if (AFRAME.utils.device.checkHeadsetConnected() === true)
+        if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
             generatePopUp_Headset();
-            generatePopUp_Computer_Mobile();
         }
-        // Computer
+        // Computer and mobile
         else
         {
-            generatePopUp_Computer_Mobile();
+            //generatePopUp_Computer_Mobile();
+            generatePopUp_Headset();
         }
 
         // Getting list of content uploaded by the user
@@ -520,42 +831,60 @@ AFRAME.registerComponent('circles-upload-ui',
 
             if (content.length > 0)
             {
-                // Displaying content the user uploaded on pop up
-                displayContent(content);
-
-                // Showing pop up as program can not get dimensions when elements are hidden
-                document.getElementById('upload-content-container').style.display = 'block';
-
-                    // Making sure file names fit the width of the table data
-                    shortenNames();
-
-                    // Adjusting table width
-                    adjustWidth();
-
-                // Hiding pop up again
-                document.getElementById('upload-content-container').style.display = 'none';
-
-                // Adding upload button
-                addButton();
-
-                // Listening for when files are clicked to activate them to insert onto whiteboard
-
-                // Getting all file containers
-                let containers = document.getElementsByClassName('file-container');
-
-                // Adding event listeners to file containers
-                for (let container of containers)
+                // Headset
+                if (AFRAME.utils.device.checkHeadsetConnected() === true)
                 {
-                    container.addEventListener('click', function()
+
+                }
+                // Computer and mobile
+                else
+                {
+                    // Displaying content the user uploaded on pop up
+                    displayContent(content);
+
+                    // Showing pop up as program can not get dimensions when elements are hidden
+                    document.getElementById('upload-content-container').style.display = 'block';
+
+                        // Making sure file names fit the width of the table data
+                        shortenNames();
+
+                        // Adjusting table width
+                        adjustWidth();
+
+                    // Hiding pop up again
+                    document.getElementById('upload-content-container').style.display = 'none';
+
+                    // Adding upload button
+                    addButton();
+
+                    // Listening for when files are clicked to activate them to insert onto whiteboard
+
+                    // Getting all file containers
+                    let containers = document.getElementsByClassName('file-container');
+
+                    // Adding event listeners to file containers
+                    for (let container of containers)
                     {
-                        contentPress(container);
-                    });
+                        container.addEventListener('click', function()
+                        {
+                            contentPress(container);
+                        });
+                    }
                 }
             }
             else
             {
-                // Generating error message
-                renderError("<b>No content avaliable to insert</b><p>Upload content <a href='/uploaded-content' target='_blank'>here</a></p>");
+                // Headset
+                if (AFRAME.utils.device.checkHeadsetConnected() === true)
+                {
+
+                }
+                // Computer and mobile
+                else
+                {
+                    // Generating error message
+                    renderError("<b>No content avaliable to insert</b><p>Upload content <a href='/uploaded-content' target='_blank'>here</a></p>");
+                }
             }
         };
 
@@ -569,13 +898,53 @@ AFRAME.registerComponent('circles-upload-ui',
         // If active was set to true, display the pop up
         // If it was set to false, hide pop up
 
-        if (CONTEXT_AF.data.active === true)
+        // Headset
+        if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
         {
-            document.getElementById('upload-content-container').style.display = 'block';
+            if (CONTEXT_AF.data.active === true)
+            {
+                let popUp = document.getElementById('upload-content-container');
+
+                popUp.setAttribute('visible', 'true');
+
+                // Getting information about where the user is to display pop up (for its position)
+                let user = document.querySelector('[camera]');
+
+                let position = new THREE.Vector3();
+                user.querySelector('.UI-position').object3D.getWorldPosition(position);
+
+                // Position
+                popUp.setAttribute('position', {
+                    x: position['x'],
+                    y:  1.75,
+                    z: position['z'],
+                });
+
+                // Rotation
+                popUp.setAttribute('rotation', {
+                    x: -10,
+                    y: user.getAttribute('rotation').y,
+                    z: user.getAttribute('rotation').z,
+                });
+            }
+            else
+            {
+                document.getElementById('upload-content-container').setAttribute('visible', 'false');
+            }
         }
+        // Computer and mobile
         else
         {
-            document.getElementById('upload-content-container').style.display = 'none';
+            /*
+            if (CONTEXT_AF.data.active === true)
+            {
+                document.getElementById('upload-content-container').style.display = 'block';
+            }
+            else
+            {
+                document.getElementById('upload-content-container').style.display = 'none';
+            }
+            */
         }
     }
 });
