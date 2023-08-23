@@ -10,31 +10,31 @@
 const uploadAssets = function()
 {
     // Getting Asset Management System
-    let assetManager = document.getElementsByTagName('a-assets')[0];
+    var assetManager = document.getElementsByTagName('a-assets')[0];
 
     // Upload symbol
-    let upload = document.createElement('img');
+    var upload = document.createElement('img');
     upload.setAttribute('id', 'upload_symbol');
     upload.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/arrow-up-from-bracket-solid.svg');
 
     assetManager.appendChild(upload);
 
     // Draw symbol
-    let draw = document.createElement('img');
+    var draw = document.createElement('img');
     draw.setAttribute('id', 'draw_symbol');
     draw.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/pencil-solid.svg');
 
     assetManager.appendChild(draw);
 
     // Message symbol
-    let message = document.createElement('img');
+    var message = document.createElement('img');
     message.setAttribute('id', 'message_symbol');
     message.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/comments-solid.svg');
 
     assetManager.appendChild(message);
 
     // Trash symbol
-    let trash = document.createElement('img');
+    var trash = document.createElement('img');
     trash.setAttribute('id', 'trash_symbol');
     trash.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/trash-solid.svg');
 
@@ -195,7 +195,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
     // Adding effect when hovered
     trashButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
 
-    // Deleting selected file when clicked
+    // Devaring selected file when clicked
     trashButton.addEventListener('click', function()
     {
         // Getting selected file
@@ -206,7 +206,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
         // split result array: {asset', 'fileName'}
         var fileName = file.getAttribute('circles-whiteboard-file').asset.split('_')[1];
         
-        // Deleting file element
+        // Devaring file element
         file.parentNode.removeChild(file);
 
         // Sending data to remove selected file to world database array
@@ -352,7 +352,7 @@ const generateWhiteboard = function(parentElement, preferences)
 const addFileAsset = function(name, category)
 {
     // Getting Asset Management System
-    let assetManager = document.getElementsByTagName('a-assets')[0];
+    var assetManager = document.getElementsByTagName('a-assets')[0];
 
     // Making sure this file doesn't already exist as an asset
     // If it doesn't, create the asset
@@ -502,9 +502,9 @@ AFRAME.registerComponent('circles-whiteboard',
         {
             if (element.querySelector('.default-controller'))
             {
-                var controllerToDelete = element.querySelector('.default-controller');
+                var controllerToDevare = element.querySelector('.default-controller');
             
-                controllerToDelete.parentNode.removeChild(controllerToDelete);
+                controllerToDevare.parentNode.removeChild(controllerToDevare);
             }
 
             generateFileSelectedController(element, CONTEXT_AF.data);
@@ -513,9 +513,9 @@ AFRAME.registerComponent('circles-whiteboard',
         {
             if (element.querySelector('.file-selected-controller'))
             {
-                var controllerToDelete = element.querySelector('.file-selected-controller');
+                var controllerToDevare = element.querySelector('.file-selected-controller');
             
-                controllerToDelete.parentNode.removeChild(controllerToDelete);
+                controllerToDevare.parentNode.removeChild(controllerToDevare);
             }
 
             generateDefaultController(element, CONTEXT_AF.data);

@@ -200,3 +200,30 @@ function checkOtherButtons(link, buttonClicked)
     }
   }
 }
+
+// Get dimensions of files to save in database (uploadedContent page)
+function getDimensions(fileID)
+{
+  let file = document.getElementById(fileID);
+
+  let height;
+  let width;
+
+  // Image
+  if (file.tagName === 'IMG')
+  {
+    height = file.naturalHeight;
+    width = file.naturalWidth;
+  }
+  // Video
+  else
+  {
+    height = file.videoHeight;
+    width = file.videoWidth;
+  }
+
+  var request = new XMLHttpRequest();
+  request.open('POST', '/set-file-dimensions');
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  request.send('file='+ fileID + '&height=' + height + '&width=' + width);
+}

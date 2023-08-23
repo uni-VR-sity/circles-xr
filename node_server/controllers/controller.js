@@ -2313,7 +2313,7 @@ const serveUploadedContent = async (req, res, next) =>
 
   let currentUser = req.user;
 
-  content = await Uploads.find({user: currentUser}, 'name displayName category');
+  content = await Uploads.find({user: currentUser});
 
   // Rendering the uploadedContent page
   const userInfo = getUserInfo(req);
@@ -2517,7 +2517,7 @@ const getUserFiles = async (req, res, next) =>
 
   let currentUser = req.user;
 
-  content = await Uploads.find({user: currentUser}, 'name category displayName');
+  content = await Uploads.find({user: currentUser});
 
   res.json(content);
 }

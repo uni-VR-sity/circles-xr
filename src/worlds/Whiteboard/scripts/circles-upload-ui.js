@@ -6,6 +6,45 @@
 
 // Functions
 
+// Creating file asset for displaying
+const createAsset = function(file)
+{
+    // Getting Asset Management System
+    var assetManager = document.getElementsByTagName('a-assets')[0];
+
+    // Making sure this file doesn't already exist as an asset
+    // If it doesn't, create the asset
+    if (!document.getElementById('asset_' + file.name))
+    {
+        var asset;
+
+        // Adding asset to manager depending on the type of file it is
+        if (file.category === 'image')
+        {
+            asset = document.createElement('img');
+
+            asset.setAttribute('src', '/uploads/' + file.name);
+        }
+        else if (file.category === 'video')
+        {
+            asset = document.createElement('video');
+
+            asset.setAttribute('preload', 'auto');
+            asset.setAttribute('autoplay', '');
+            asset.setAttribute('muted', '');
+            asset.setAttribute('loop', '');
+
+            asset.setAttribute('src', '/uploads/' + file.name);
+        }
+
+        asset.setAttribute('id', 'asset_' + file.name);
+
+        assetManager.appendChild(asset);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating pop up element (for computer and mobile)
 const generatePopUp_Computer_Mobile = function()
 {
@@ -55,24 +94,24 @@ const generatePopUp_Computer_Mobile = function()
 const uploadAssets_Headset = function()
 {
     // Getting Asset Management System
-    let assetManager = document.getElementsByTagName('a-assets')[0];
+    var assetManager = document.getElementsByTagName('a-assets')[0];
 
     // X symbol
-    let x = document.createElement('img');
+    var x = document.createElement('img');
     x.setAttribute('id', 'x_symbol');
     x.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/xmark.svg');
 
     assetManager.appendChild(x);
 
     // Left arrow symbol
-    let leftArrow = document.createElement('img');
+    var leftArrow = document.createElement('img');
     leftArrow.setAttribute('id', 'left_arrow_symbol');
     leftArrow.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/angle-left.svg');
 
     assetManager.appendChild(leftArrow);
 
     // Right arrow symbol
-    let rightArrow = document.createElement('img');
+    var rightArrow = document.createElement('img');
     rightArrow.setAttribute('id', 'right_arrow_symbol');
     rightArrow.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/angle-right.svg');
 
@@ -87,7 +126,7 @@ const generatePopUp_Headset = function()
     uploadAssets_Headset();
 
     // Container
-    let container = document.createElement('a-entity');
+    var container = document.createElement('a-entity');
     container.setAttribute('id', 'upload-content-container');
 
     container.setAttribute('visible', 'false');
@@ -105,7 +144,7 @@ const generatePopUp_Headset = function()
     });
 
         // Title
-        let title = document.createElement('a-entity');
+        var title = document.createElement('a-entity');
 
         title.setAttribute('text', {
             align: 'center',
@@ -128,7 +167,7 @@ const generatePopUp_Headset = function()
         container.appendChild(title);
 
         // Page indicator
-        let page = document.createElement('a-entity');
+        var page = document.createElement('a-entity');
         page.setAttribute('id', 'page-indicator');
 
         page.setAttribute('text', {
@@ -151,7 +190,8 @@ const generatePopUp_Headset = function()
         container.appendChild(page);
 
         // X
-        let x = document.createElement('a-entity');
+        var x = document.createElement('a-entity');
+        x.setAttribute('class', 'interactive');
 
         x.setAttribute('geometry', {
             primitive: 'plane', 
@@ -170,10 +210,21 @@ const generatePopUp_Headset = function()
             z: 0.005,
         });
 
+        x.setAttribute('circles-interactive-object', {
+            type:'scale', 
+            hover_scale: 1.15, 
+            click_scale: 1.15,
+        });
+
+        x.addEventListener('click', function()
+        {
+            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+        });
+
         container.appendChild(x);
 
         // Title divider
-        let divider = document.createElement('a-entity');
+        var divider = document.createElement('a-entity');
 
         divider.setAttribute('geometry', {
             primitive: 'plane', 
@@ -195,139 +246,57 @@ const generatePopUp_Headset = function()
         container.appendChild(divider);
 
         // File container
-        let fileContainer = document.createElement('a-entity');
+        var fileContainer = document.createElement('a-entity');
         fileContainer.setAttribute('id', 'file-container');
 
-            // File 1
-            let file1 = document.createElement('a-entity');
+            var xPos = -0.7;
+            var yPos = 0.17;
 
-            file1.setAttribute('geometry', {
-                primitive: 'plane', 
-                height: 0.5, 
-                width: 0.5,
-            });
+            // 6 files on a page
+            for (var i = 0; i < 6; i++)
+            {
+                if (xPos === 0.7)
+                {
+                    xPos = -0.7;
+                    yPos = -0.5;
+                }
+                else if (i !== 0)
+                {
+                    xPos += 0.7;
+                }
+
+                var file = document.createElement('a-entity');
+
+                file.setAttribute('geometry', {
+                    primitive: 'plane', 
+                    height: 0.5, 
+                    width: 0.5,
+                });
+            
+                file.setAttribute('material', {
+                    shader: 'flat',
+                });
         
-            file1.setAttribute('material', {
-                transparent: true,
-            });
-    
-            file1.setAttribute('position', {
-                x: -0.7,
-                y: 0.17,
-                z: 0.005,
-            });
-    
-            container.appendChild(file1);
+                file.setAttribute('position', {
+                    x: xPos,
+                    y: yPos,
+                    z: 0.005,
+                });
 
-            // File 2
-            let file2 = document.createElement('a-entity');
-
-            file2.setAttribute('geometry', {
-                primitive: 'plane', 
-                height: 0.5, 
-                width: 0.5,
-            });
+                file.setAttribute('circles-interactive-object', {
+                    type:'none', 
+                    hover_scale: 1.10, 
+                    click_scale: 1.10,
+                });
         
-            file2.setAttribute('material', {
-                transparent: true,
-            });
-    
-            file2.setAttribute('position', {
-                x: 0,
-                y: 0.17,
-                z: 0.005,
-            });
-    
-            container.appendChild(file2);
-
-            // File 3
-            let file3 = document.createElement('a-entity');
-
-            file3.setAttribute('geometry', {
-                primitive: 'plane', 
-                height: 0.5, 
-                width: 0.5,
-            });
-        
-            file3.setAttribute('material', {
-                transparent: true,
-            });
-    
-            file3.setAttribute('position', {
-                x: 0.7,
-                y: 0.17,
-                z: 0.005,
-            });
-    
-            container.appendChild(file3);
-
-            // File 4
-            let file4 = document.createElement('a-entity');
-
-            file4.setAttribute('geometry', {
-                primitive: 'plane', 
-                height: 0.5, 
-                width: 0.5,
-            });
-        
-            file4.setAttribute('material', {
-                transparent: true,
-            });
-    
-            file4.setAttribute('position', {
-                x: -0.7,
-                y: -0.5,
-                z: 0.005,
-            });
-    
-            container.appendChild(file4);
-
-            // File 5
-            let file5 = document.createElement('a-entity');
-
-            file5.setAttribute('geometry', {
-                primitive: 'plane', 
-                height: 0.5, 
-                width: 0.5,
-            });
-        
-            file5.setAttribute('material', {
-                transparent: true,
-            });
-    
-            file5.setAttribute('position', {
-                x: 0,
-                y: -0.5,
-                z: 0.005,
-            });
-    
-            container.appendChild(file5);
-
-            // File 6
-            let file6 = document.createElement('a-entity');
-
-            file6.setAttribute('geometry', {
-                primitive: 'plane', 
-                height: 0.5, 
-                width: 0.5,
-            });
-        
-            file6.setAttribute('material', {
-                transparent: true,
-            });
-    
-            file6.setAttribute('position', {
-                x: 0.7,
-                y: -0.5,
-                z: 0.005,
-            });
-    
-            container.appendChild(file6);
+                fileContainer.appendChild(file);
+            }
 
         container.appendChild(fileContainer);
     
         // Left arrow
-        let leftArrow = document.createElement('a-entity');
+        var leftArrow = document.createElement('a-entity');
+        leftArrow.setAttribute('class', 'interactive');
 
         leftArrow.setAttribute('geometry', {
             primitive: 'plane', 
@@ -346,10 +315,17 @@ const generatePopUp_Headset = function()
             z: 0.005,
         });
 
+        leftArrow.setAttribute('circles-interactive-object', {
+            type:'scale', 
+            hover_scale: 1.15, 
+            click_scale: 1.15,
+        });
+
         container.appendChild(leftArrow);
 
         // Right arrow
-        let rightArrow = document.createElement('a-entity');
+        var rightArrow = document.createElement('a-entity');
+        rightArrow.setAttribute('class', 'interactive');
 
         rightArrow.setAttribute('geometry', {
             primitive: 'plane', 
@@ -368,6 +344,12 @@ const generatePopUp_Headset = function()
             z: 0.005,
         });
 
+        rightArrow.setAttribute('circles-interactive-object', {
+            type:'scale', 
+            hover_scale: 1.15, 
+            click_scale: 1.15,
+        });
+
         container.appendChild(rightArrow);
 
     document.getElementsByTagName('a-scene')[0].appendChild(container);
@@ -375,7 +357,7 @@ const generatePopUp_Headset = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Displaying error message to user
+// Displaying error message to user (for computer and mobile)
 const renderError = function(message)
 {
     // Getting pop up container
@@ -392,7 +374,7 @@ const renderError = function(message)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Displaying file on whiteboard
+// Displaying file on whiteboard (for computer and mobile)
 const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
 {
     // Getting whiteboard to display file on 
@@ -402,28 +384,6 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
     var container = whiteboard.querySelector('.board-files');
 
     // Creating file entity to insert into container
-
-    // If file is an image or video, getting their dimensions
-    var height = -1;
-    var width = -1;
-
-    if (fileInfo.category === 'image')
-    {
-        height = fileElement.naturalHeight;
-        width = fileElement.naturalWidth;
-    }
-    else if (fileInfo.category === 'video')
-    {
-        height = fileElement.videoHeight;
-        width = fileElement.videoWidth;
-    }
-
-    // Sending file dimensions to store in database
-    var request = new XMLHttpRequest();
-    request.open('POST', '/set-file-dimensions');
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send('file='+ fileInfo.name + '&height=' + height + '&width=' + width);
-
     var file = document.createElement('a-entity');
     
     file.setAttribute('circles-whiteboard-file', {
@@ -431,8 +391,8 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
         asset: fileID,
         whiteboardID: whiteboardID,
         fileID: fileInfo._id,
-        originalHeight: height,
-        originalWidth: width,
+        originalHeight: fileInfo.height,
+        originalWidth: fileInfo.width,
         boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
         boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
         position: {
@@ -476,39 +436,8 @@ const insertFile = function()
     {
         var fileInfo = JSON.parse(request.response);
 
-        // Getting Asset Management System
-        let assetManager = document.getElementsByTagName('a-assets')[0];
-
-        // Making sure this file doesn't already exist as an asset
-        // If it doesn't, create the asset
-        // If it does, just display it on the whiteboard
-        if (!document.getElementById('asset_' + fileInfo.name))
-        {
-            var asset;
-
-            // Adding asset to manager depending on the type of file it is
-            if (fileInfo.category === 'image')
-            {
-                asset = document.createElement('img');
-
-                asset.setAttribute('src', '/uploads/' + fileInfo.name);
-            }
-            else if (fileInfo.category === 'video')
-            {
-                asset = document.createElement('video');
-
-                asset.setAttribute('preload', 'auto');
-                asset.setAttribute('autoplay', '');
-                asset.setAttribute('muted', '');
-                asset.setAttribute('loop', '');
-
-                asset.setAttribute('src', '/uploads/' + fileInfo.name);
-            }
-
-            asset.setAttribute('id', 'asset_' + fileInfo.name);
-
-            assetManager.appendChild(asset);
-        }
+        // Creating asset
+        createAsset(fileInfo);
 
         // Displaying file on whiteboard
         displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo, fileContainer.firstChild);
@@ -522,7 +451,7 @@ const insertFile = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Adding upload button to upload content to whiteboard
+// Adding upload button to upload content to whiteboard (for computer and mobile)
 const addButton = function(whiteboard)
 {
     // Getting pop up container
@@ -548,6 +477,7 @@ const addButton = function(whiteboard)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// (for computer and mobile)
 // When user presses a file, 
 // - File is light up
 // - Insert button is made active
@@ -560,16 +490,16 @@ const contentPress = function(contentElement)
         contentElement.classList.remove('file-selected');
 
         // Deactivating insert button
-        let button = document.getElementById('insert-button');
+        var button = document.getElementById('insert-button');
         
         button.setAttribute('class', 'button-inactive');
     }
     else
     {
         // If another file is active, deactivate it
-        let activeFiles = document.getElementsByClassName('file-selected');
+        var activeFiles = document.getElementsByClassName('file-selected');
 
-        for (let file of activeFiles)
+        for (var file of activeFiles)
         {
             file.classList.remove('file-selected');
         }
@@ -578,7 +508,7 @@ const contentPress = function(contentElement)
         contentElement.classList.add('file-selected');
 
         // Activating insert button
-        let button = document.getElementById('insert-button');
+        var button = document.getElementById('insert-button');
 
         button.setAttribute('class', 'button-active');
     }
@@ -586,7 +516,7 @@ const contentPress = function(contentElement)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Displaying content uploaded by the user in a table on the pop up
+// Displaying content uploaded by the user in a table on the pop up (for computer and mobile)
 const displayContent = function(content)
 {
     // Getting pop up container
@@ -672,25 +602,146 @@ const displayContent = function(content)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Adjusting table width
+// Getting content on pages for pop up (for headset)
+const getPages = function(content)
+{
+    var length = content.length;
+    var numPages = Math.ceil(length / 6);
+
+    // Getting what content will be on each page
+    // (6 files per page)
+    var pages = {};
+
+    for (var i = 0; i < numPages; i++)
+    {
+        // Getting files for page i
+        var files = [];
+
+        for (var j = i * 6; j < (i * 6) + 6; j++)
+        {
+            if (j < length)
+            {
+                files.push(content[j]);
+            }
+            else
+            {
+                files.push(null);
+            }
+        }
+        
+        // Adding files to pages object for page i
+        pages['page_' + (i + 1)] = files;
+    }
+
+    return pages;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Displaying files on specified page (pageNum) (for headset)
+const displayPage = function(pages, pageNum)
+{
+    // Getting files for the page
+    var files = pages['page_' + pageNum];
+
+    // Getting UI and updating page indicator
+    var UI = document.getElementById('upload-content-container');
+    UI.querySelector('#page-indicator').setAttribute('text', {value: pageNum + ' / ' + Object.keys(pages).length});
+    
+    // Getting file display elements
+    var fileElements = UI.querySelector('#file-container').children;
+
+    // Displaying files
+    for (var i = 0; i < files.length; i++)
+    {
+        // If there is a file to display, display it
+        // Otherwise, hide element
+        if (files[i])
+        {
+            // Getting image aspect ratio (r = w/h)
+            var aspectRatio = files[i].width / files[i].height;
+
+            // Getting proper width if height is 0.5 (w = rh)
+            var width = aspectRatio * 0.5;
+
+            // Displaying element with proper proportions
+            var repeat = {x: 1, y: 1};
+            var offset = {x: 0, y: 0};
+            
+            // Element width is 0.5
+            // If the ideal width is less then 0.5 (portrait image), then the image height needs to be stretched
+            // Otherwise (landscape image), the image width needs to be stretched
+            if (width < 0.5)
+            {
+                // Getting proper width if width is 0.5 (h = w/r)
+                var height = 0.5 / aspectRatio;
+
+                // Getting the amount of image that would be displayed in a height of 0.5
+                var ratioDisplayed = 0.5 / height;
+
+                repeat.y = ratioDisplayed;
+
+                offset.y = (1 - ratioDisplayed) / 2;
+            }
+            else if (width > 0.5)
+            {
+                // Getting the amount of image that would be displayed in a width of 0.5
+                var ratioDisplayed = 0.5 / width;
+
+                repeat.x = ratioDisplayed;
+
+                offset.x = (1 - ratioDisplayed) / 2;
+            }
+
+            console.log(fileElements[i].getAttribute('material').repeat);
+
+            // Displaying file on element
+            fileElements[i].setAttribute('material', { 
+                src: '#asset_' + files[i].name,
+                repeat: repeat,
+                offset: offset,
+            });
+
+            // Making element interactive
+            fileElements[i].setAttribute('circles-interactive-object', {
+                type:'scale', 
+            });
+        }
+        else
+        {
+            // Hiding element
+            fileElements[i].setAttribute('circles-interactive-object', {
+                type:'none', 
+            });
+
+            fileElements[i].classList.remove('interactive');
+
+            fileElements[i].setAttribute('visible', false);
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adjusting table width (for computer and mobile)
 // (For when there is only 1, 2, 3, or 4 files uploaded, to still be displayed with the correct proportions)
 const adjustWidth = function()
 {
     // Getting the table
-    let table = document.getElementById('uploads-table');
+    var table = document.getElementById('uploads-table');
 
     // Getting the width of the table sections
-    let width = (table.getBoundingClientRect().width) / 5;
+    var width = (table.getBoundingClientRect().width) / 5;
 
     // Changing the table to have a max width of 100% 
     table.style.width = 'auto';
     table.style.maxWidth = '100%';
 
     // Getting all table sections
-    let sections = table.querySelectorAll('.file-table-section');
+    var sections = table.querySelectorAll('.file-table-section');
 
     // Adjusting width of all table sections to be a fifth of the width of the table
-    for (let section of sections)
+    for (var section of sections)
     {
         section.style.width = width;
         
@@ -725,19 +776,18 @@ AFRAME.registerComponent('circles-upload-ui',
         //    - Virtual UI
 
         // Headset
-        if (AFRAME.utils.device.checkHeadsetConnected() === true)
+        if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
         {
             generatePopUp_Headset();
         }
         // Computer and mobile
         else
         {
-            //generatePopUp_Computer_Mobile();
-            generatePopUp_Headset();
+            generatePopUp_Computer_Mobile();
         }
 
         // Getting list of content uploaded by the user
-        let request = new XMLHttpRequest();
+        var request = new XMLHttpRequest();
         request.open('GET', '/get-user-uploaded-content');
 
         request.onerror = function() 
@@ -748,14 +798,24 @@ AFRAME.registerComponent('circles-upload-ui',
 
         request.onload = function() 
         {
-            let content = JSON.parse(request.response);
+            var content = JSON.parse(request.response);
 
             if (content.length > 0)
             {
                 // Headset
-                if (AFRAME.utils.device.checkHeadsetConnected() === true)
+                if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
                 {
+                    // Creating content assets for displaying
+                    for (var file of content)
+                    {
+                        createAsset(file);
+                    }
 
+                    // Organizing files into pages
+                    var pages = getPages(content);
+
+                    // Displaying first page
+                    displayPage(pages, 1);
                 }
                 // Computer and mobile
                 else
@@ -778,10 +838,10 @@ AFRAME.registerComponent('circles-upload-ui',
                     // Listening for when files are clicked to activate them to insert onto whiteboard
 
                     // Getting all file containers
-                    let containers = document.getElementsByClassName('file-container');
+                    var containers = document.getElementsByClassName('file-container');
 
                     // Adding event listeners to file containers
-                    for (let container of containers)
+                    for (var container of containers)
                     {
                         container.addEventListener('click', function()
                         {
@@ -793,7 +853,7 @@ AFRAME.registerComponent('circles-upload-ui',
             else
             {
                 // Headset
-                if (AFRAME.utils.device.checkHeadsetConnected() === true)
+                if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
                 {
 
                 }
@@ -821,14 +881,14 @@ AFRAME.registerComponent('circles-upload-ui',
         {
             if (CONTEXT_AF.data.active === true)
             {
-                let popUp = document.getElementById('upload-content-container');
+                var popUp = document.getElementById('upload-content-container');
 
                 popUp.setAttribute('visible', 'true');
 
                 // Getting information about where the user is to display pop up (for its position)
-                let user = document.querySelector('[camera]');
+                var user = document.querySelector('[camera]');
 
-                let position = new THREE.Vector3();
+                var position = new THREE.Vector3();
                 user.querySelector('.UI-position').object3D.getWorldPosition(position);
 
                 // Position

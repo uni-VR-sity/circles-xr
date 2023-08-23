@@ -16,8 +16,7 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 .uploads-table td:nth-child(2){padding-left:12px; padding-right:12px}
 .uploads-table td:nth-child(3){padding-left:24px}
 .uploads-table td img,.uploads-table td video{width:100%;height:100%;object-fit:cover;}
-.uploads-table td.other-file-type {background-color:#e7e7e7;background-clip:content-box;}
-.uploads-table td.other-file-type p, .file-description-hover p, .file-description-hover-delete p{padding:0;display:inline-block;}
+.file-description-hover p, .file-description-hover-delete p{padding:0;display:inline-block;white-space:nowrap;}
 
 .file-container{height:225px;width:100%;position:relative;text-align:center;}
 .file-description-hover, .file-description-hover-delete{position:absolute;bottom:100%;left:0;right:0;background-color:#fffffff4;overflow:hidden;width:100%;height:0;transition:.4s ease;}
