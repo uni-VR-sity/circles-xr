@@ -25,6 +25,7 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth)
     fileElement.setAttribute('material', {
         src: '#' + fileInfo.asset,
         shader: 'flat',
+        transparent: true,
     });
 
     fileElement.setAttribute('position', {
@@ -132,7 +133,7 @@ const fileClickEffect = function(file, originalPos, enable)
         file.setAttribute('position', {
             x: file.getAttribute('position').x,
             y: file.getAttribute('position').y,
-            z: 0.001 * (numFiles + 2),
+            z: 0.005 * (numFiles + 2),
         });
 
         // Adding overlay to decrease opacity of other files
@@ -143,7 +144,7 @@ const fileClickEffect = function(file, originalPos, enable)
         overlay.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 0.001 * (numFiles + 1),
+            z: 0.005 * (numFiles + 1),
         });
 
         overlay.setAttribute('geometry', {
@@ -381,7 +382,7 @@ AFRAME.registerComponent('circles-whiteboard-file',
 
         if (CONTEXT_AF.data.position !== oldData.position)
         {
-            if (oldData.position && oldData.position)
+            if (CONTEXT_AF.data.position && oldData.position)
             {
                 // Getting current world
                 // url: http://domain/w/World
@@ -392,7 +393,7 @@ AFRAME.registerComponent('circles-whiteboard-file',
                 request.open('POST', '/update-whiteboard-file-position');
                 request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-                request.send('file=' + CONTEXT_AF.data.fileID + '&whiteboardID='+ CONTEXT_AF.data.whiteboardID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y + '&oldX=' + oldData.position.x + '&oldY=' + oldData.position.y);
+                request.send('file=' + CONTEXT_AF.data.fileID + '&whiteboardID='+ CONTEXT_AF.data.whiteboardID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y + '&oldX=' + oldData.position.x + '&oldY=' + oldData.position.y + '&z=' + CONTEXT_AF.data.position.z);
             }
         }
     }

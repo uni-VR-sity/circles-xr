@@ -5,9 +5,11 @@ AFRAME.registerComponent('circles-lookat', {
     targetElement:  {type:'selector', default:null},
     enabled:        {type:'boolean',  default:true},
     constrainYAxis: {type:'boolean',  default:true},
+      contraintedX:   {type:'number',   default:0},
+      contraintedZ:   {type:'number',   default:0},
     updateRate:     {type:'number',   default:200},   //in ms
     smoothingOn:    {type:'boolean',  default:true},
-    smoothingAlpha: {type:'float',    default:0.05}
+    smoothingAlpha: {type:'float',    default:0.05},
   },
   init: function() {
     const CONTEXT_AF  = this;
@@ -39,9 +41,6 @@ AFRAME.registerComponent('circles-lookat', {
 
         if (this.data.smoothingOn !== true) {
           this.worldPos.set(this.targetWorldPos.x, this.targetWorldPos.y, this.targetWorldPos.z);
-          if (this.data.constrainYAxis === true) {
-            this.worldPos.y = this.originalPos.y;
-          }
           this.el.object3D.lookAt(this.worldPos);
         }
         
@@ -49,10 +48,15 @@ AFRAME.registerComponent('circles-lookat', {
       }
       else if (this.data.smoothingOn === true) {
         this.worldPos.lerp(this.targetWorldPos, this.data.smoothingAlpha);
-        if (this.data.constrainYAxis === true) {
-          this.worldPos.y = this.originalPos.y;
-        }
         this.el.object3D.lookAt(this.worldPos);
+        }
+
+      if (this.data.constrainYAxis === true) {
+        this.el.setAttribute('rotation', {
+          x: this.data.contraintedX,
+          y: this.el.getAttribute('rotation').y,
+          z: this.data.contraintedZ,
+        });
       }
     }
   },

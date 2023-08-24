@@ -2555,7 +2555,7 @@ const insertWhiteboardFile = async (req, res, next) =>
       {
         if (file.position[2] >= maxZ)
         {
-          maxZ = file.position[2] + 0.001;
+          maxZ = file.position[2] + 0.005;
         }
       }
     }
@@ -2611,26 +2611,21 @@ const removeWhiteboardFile = async (req, res, next) =>
   // Deleting file from world entry
   if (deletedFile && world)
   {
-    // Finding the file in the world entry
-    async function findFile(entry)
-    {
-      try
-      {
-        var currentFile = await Uploads.findOne(entry.file).exec();
-
-        return (JSON.stringify(currentFile) === JSON.stringify(deletedFile)) && (entry.whiteboardID === req.body.whiteboardID);
-      }
-      catch(e)
-      {
-        console.log(e);
-
-        return false;
-      }
-    }
-
     try
-    {
-      var toDelete = world.whiteboardFiles.find(findFile);
+    { 
+      var toDelete = null;
+
+      for (const file of world.whiteboardFiles)
+      {
+        var currentFile = await Uploads.findOne(file.file).exec();
+
+        if ((JSON.stringify(currentFile) === JSON.stringify(deletedFile)) && (file.whiteboardID === req.body.whiteboardID))
+        {
+          toDelete = file;
+          break;
+        }
+      }
+
       var index = world.whiteboardFiles.indexOf(toDelete);
 
       world.whiteboardFiles.splice(index, 1);
@@ -2729,43 +2724,49 @@ const setFileDimensions = async (req, res, next) =>
 // Updating file position in its world database entry
 const updateFilePosition = async (req, res, next) =>
 {
-  var world = null;
 
-  try
+  if (req.body.world && req.body.file && req.body.whiteboardID && req.body.newX && req.body.newY && req.body.oldX && req.body.oldY && req.body.z)
   {
-    // Getting world from database
-    world = await Worlds.findOne({name: req.body.world});
-  }
-  catch(e)
-  {
-    console.log(e);
-  }
+    var world = null;
 
-  // Find file entry
-  if (world)
-  {
-    for(const file of world.whiteboardFiles)
+    try
     {
-      // If whiteboard ids match
-      if (file.whiteboardID === req.body.whiteboardID)
-      {
-        // If file ids match
-        if (JSON.stringify(file.file) === JSON.stringify(req.body.file))
-        {
-          // If old positions match
-          if (file.position[0] == req.body.oldX && file.position[1] == req.body.oldY)
-          {
-            // Update file position
-            try
-            {
-              file.position[0] = req.body.newX;
-              file.position[1] = req.body.newY;
+      // Getting world from database
+      world = await Worlds.findOne({name: req.body.world});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
 
-              await world.save();
-            }
-            catch(e)
+    // Find file entry
+    if (world)
+    {
+      for(const file of world.whiteboardFiles)
+      {
+        // If whiteboard ids match
+        if (file.whiteboardID === req.body.whiteboardID)
+        {
+          // If file ids match
+          if (JSON.stringify(file.file) === JSON.stringify(req.body.file))
+          {
+            // If old positions match
+            if (file.position[0] == req.body.oldX && file.position[1] == req.body.oldY && file.position[2] == req.body.z)
             {
-              console.log(e);
+              // Update file position
+              try
+              {
+                file.position[0] = req.body.newX;
+                file.position[1] = req.body.newY;
+
+                await world.save();
+
+                break;
+              }
+              catch(e)
+              {
+                console.log(e);
+              }
             }
           }
         }

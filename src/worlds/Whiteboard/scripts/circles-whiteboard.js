@@ -57,7 +57,7 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
     uploadButton.setAttribute('position', {
         x: 0,
         y: height / 3,
-        z: (depth / 2) + 0.001,
+        z: (depth / 2) + 0.005,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -100,7 +100,7 @@ const generateMessage = function(parentElement, height, width, depth)
     messageButton.setAttribute('position', {
         x: 0,
         y: 0,
-        z: (depth / 2) + 0.001,
+        z: (depth / 2) + 0.005,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -137,7 +137,7 @@ const generateDraw = function(parentElement, height, width, depth)
     drawButton.setAttribute('position', {
         x: 0,
         y: - (height / 3),
-        z: (depth / 2) + 0.001,
+        z: (depth / 2) + 0.005,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -174,7 +174,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
     trashButton.setAttribute('position', {
         x: 0,
         y: - (height / 3),
-        z: (depth / 2) + 0.001,
+        z: (depth / 2) + 0.005,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -195,18 +195,18 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
     // Adding effect when hovered
     trashButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
 
-    // Devaring selected file when clicked
+    // Deleting selected file when clicked
     trashButton.addEventListener('click', function()
     {
         // Getting selected file
-        var file = document.getElementsByClassName('selected-file')[0];
+        var file = whiteboard.getElementsByClassName('selected-file')[0];
         
         // Getting file name
         // id: asset_fileName
         // split result array: {asset', 'fileName'}
         var fileName = file.getAttribute('circles-whiteboard-file').asset.split('_')[1];
         
-        // Devaring file element
+        // Deleting file element
         file.parentNode.removeChild(file);
 
         // Sending data to remove selected file to world database array
@@ -304,7 +304,7 @@ const generateWhiteboard = function(parentElement, preferences)
     fileContainer.setAttribute('position', {
         x: 0,
         y: 0,
-        z: ((preferences.depth / 2) + 0.001),
+        z: ((preferences.depth / 2) + 0.005),
     });
 
     boardBase.appendChild(fileContainer);

@@ -193,10 +193,10 @@ const insertFileElement = function(event)
         // When button is clicked, insert file to whiteboard
         button.addEventListener('click', function()
         {
+            insertFile();
+
             // Closing pop up
             document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
-
-            insertFile();
         });
 
             // Button text
@@ -231,18 +231,24 @@ const insertFileElement = function(event)
 
     const fileUnselected = function(event)
     {
-        file.classList.remove('file-selected');
+        if (event.target !== button)
+        {
+            file.classList.remove('file-selected');
+        }
+
+        if (event.target !== button && event.target !== UI.querySelector('#close-pop-up'))
+        {
+            // Enabling element
+            file.setAttribute('circles-interactive-object', {
+                enabled: true,
+            });
+        }
 
         // Deleting overlay
         overlay.parentNode.removeChild(overlay);
 
         // Adding element event listener back
         file.addEventListener('click', insertFileElement);
-
-        // Enabling element
-        file.setAttribute('circles-interactive-object', {
-            enabled: true,
-        });
 
         UI.removeEventListener('click', fileUnselected);
     }
@@ -268,6 +274,14 @@ const generatePopUp_Headset = function()
     container.setAttribute('class', 'interactive');
 
     container.setAttribute('visible', 'false');
+
+    container.setAttribute('circles-lookat', {
+        targetElement: document.querySelector('[camera]'),
+        constrainYAxis: true,
+        contraintedX: -10,
+        contraintedZ: 0,
+        smoothingAlpha: 0.01,
+    });
 
     container.setAttribute('geometry', {
         primitive: 'plane', 
@@ -384,60 +398,71 @@ const generatePopUp_Headset = function()
 
         container.appendChild(divider);
 
-        // File container
-        var fileContainer = document.createElement('a-entity');
-        fileContainer.setAttribute('id', 'file-container');
+    document.getElementsByTagName('a-scene')[0].appendChild(container);
+}
 
-            var xPos = -0.7;
-            var yPos = 0.17;
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            // 6 files on a page
-            for (var i = 0; i < 6; i++)
+// Creating file container with element to display files (for headset)
+const createFileContainer = function()
+{
+    var UI = document.getElementById('upload-content-container');
+
+    // File container
+    var fileContainer = document.createElement('a-entity');
+    fileContainer.setAttribute('id', 'file-container');
+
+        var xPos = -0.7;
+        var yPos = 0.17;
+
+        // 6 files on a page
+        for (var i = 0; i < 6; i++)
+        {
+            if (xPos === 0.7)
             {
-                if (xPos === 0.7)
-                {
-                    xPos = -0.7;
-                    yPos = -0.5;
-                }
-                else if (i !== 0)
-                {
-                    xPos += 0.7;
-                }
-
-                var file = document.createElement('a-entity');
-                file.setAttribute('class', 'file-element');
-
-                file.setAttribute('geometry', {
-                    primitive: 'plane', 
-                    height: 0.5, 
-                    width: 0.5,
-                });
-            
-                file.setAttribute('material', {
-                    shader: 'flat',
-                });
-        
-                file.setAttribute('position', {
-                    x: xPos,
-                    y: yPos,
-                    z: 0.005,
-                });
-
-                file.setAttribute('circles-interactive-object', {
-                    type:'none', 
-                    hover_scale: 1.10, 
-                    click_scale: 1.10,
-                    enabled: false,
-                });
-
-                // Adding event listener to select file
-                file.addEventListener('click', insertFileElement);
-        
-                fileContainer.appendChild(file);
+                xPos = -0.7;
+                yPos = -0.5;
+            }
+            else if (i !== 0)
+            {
+                xPos += 0.7;
             }
 
-        container.appendChild(fileContainer);
+            var file = document.createElement('a-entity');
+            file.setAttribute('class', 'file-element');
+
+            file.setAttribute('geometry', {
+                primitive: 'plane', 
+                height: 0.5, 
+                width: 0.5,
+            });
+        
+            file.setAttribute('material', {
+                shader: 'flat',
+                transparent: true,
+            });
     
+            file.setAttribute('position', {
+                x: xPos,
+                y: yPos,
+                z: 0.005,
+            });
+
+            file.setAttribute('circles-interactive-object', {
+                type: 'scale',
+                hover_scale: 1.10, 
+                click_scale: 1.10,
+                enabled: false,
+            });
+
+            // Adding event listener to select file
+            file.addEventListener('click', insertFileElement);
+    
+            fileContainer.appendChild(file);
+        }
+
+        UI.appendChild(fileContainer);
+
         // Left arrow
         var leftArrow = document.createElement('a-entity');
         leftArrow.setAttribute('id', 'back-arrow');
@@ -466,7 +491,7 @@ const generatePopUp_Headset = function()
             enabled: false,
         });
 
-        container.appendChild(leftArrow);
+        UI.appendChild(leftArrow);
 
         // Right arrow
         var rightArrow = document.createElement('a-entity');
@@ -496,15 +521,13 @@ const generatePopUp_Headset = function()
             enabled: false,
         });
 
-        container.appendChild(rightArrow);
-
-    document.getElementsByTagName('a-scene')[0].appendChild(container);
+        UI.appendChild(rightArrow);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Displaying error message to user (for computer and mobile)
-const renderError = function(message)
+const renderError_Computer_Mobile = function(message)
 {
     // Getting pop up container
     var container = document.getElementById('upload-content-container');
@@ -516,6 +539,37 @@ const renderError = function(message)
     error.innerHTML = message;
 
     container.appendChild(error);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Displaying error message to user (for headset)
+const renderError_Headset = function(message)
+{
+    var UI = document.getElementById('upload-content-container');
+
+    // Error message
+    var error = document.createElement('a-entity');
+
+    error.setAttribute('text', {
+        align: 'center',
+        color: '#000000',
+        value: message,
+    });
+
+    error.setAttribute('position', {
+        x: 0,
+        y: 0.3, 
+        z: 0.005,
+    });
+
+    error.setAttribute('scale', {
+        x: 2, 
+        y: 2,
+        z: 2,
+    });
+
+    UI.appendChild(error);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -853,7 +907,6 @@ const displayPage = function(pages, pageNum)
                 fileElements[i].setAttribute('visible', true);
 
                 fileElements[i].setAttribute('circles-interactive-object', {
-                    type:'scale', 
                     enabled: true,
                 });
 
@@ -958,6 +1011,8 @@ AFRAME.registerComponent('circles-upload-ui',
         var request = new XMLHttpRequest();
         request.open('GET', '/get-user-uploaded-content');
 
+        CONTEXT_AF.pages = {};
+
         request.onerror = function() 
         {
             // Generating error message
@@ -965,12 +1020,12 @@ AFRAME.registerComponent('circles-upload-ui',
             // Headset
             if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
             {
-                
+                renderError_Headset('An error occurred, please try again');
             }
             // Computer and mobile
             else
             {
-                renderError("An error occurred, please try again");
+                renderError_Computer_Mobile('An error occurred, please try again');
             }
         }
 
@@ -989,13 +1044,14 @@ AFRAME.registerComponent('circles-upload-ui',
                         createAsset(file);
                     }
 
+                    // Creating elements to display content
+                    createFileContainer();
+
                     // Organizing files into pages
                     CONTEXT_AF.pages = getPages(content);
 
                     // Displaying first page
                     CONTEXT_AF.currentPage = 1;
-
-                    displayPage(CONTEXT_AF.pages, CONTEXT_AF.currentPage);
 
                     // Creating arrow event listeners for scrolling through pages
                     var UI = document.getElementById('upload-content-container');
@@ -1055,13 +1111,13 @@ AFRAME.registerComponent('circles-upload-ui',
                 // Headset
                 if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
                 {
-
+                    renderError_Headset('No content avaliable to insert');
                 }
                 // Computer and mobile
                 else
                 {
                     // Generating error message
-                    renderError("<b>No content avaliable to insert</b><p>Upload content <a href='/uploaded-content' target='_blank'>here</a></p>");
+                    renderError_Computer_Mobile("<b>No content avaliable to insert</b><p>Upload content <a href='/uploaded-content' target='_blank'>here</a></p>");
                 }
             }
         };
@@ -1096,14 +1152,20 @@ AFRAME.registerComponent('circles-upload-ui',
                     });
 
                     // Back arrow
-                    UI.querySelector('#back-arrow').setAttribute('circles-interactive-object', {
-                        enabled: true,
-                    });
+                    if (UI.querySelector('#back-arrow'))
+                    {
+                        UI.querySelector('#back-arrow').setAttribute('circles-interactive-object', {
+                            enabled: true,
+                        });
+                    }
 
                     // Forward arrow
-                    UI.querySelector('#forward-arrow').setAttribute('circles-interactive-object', {
-                        enabled: true,
-                    });
+                    if (UI.querySelector('#forward-arrow'))
+                    {
+                        UI.querySelector('#forward-arrow').setAttribute('circles-interactive-object', {
+                            enabled: true,
+                        });
+                    }
 
                 // Getting information about where the user is to display pop up (for its position)
                 var user = document.querySelector('[camera]');
@@ -1111,19 +1173,11 @@ AFRAME.registerComponent('circles-upload-ui',
                 var position = new THREE.Vector3();
                 user.querySelector('.UI-position').object3D.getWorldPosition(position);
 
-                    // Position
-                    UI.setAttribute('position', {
-                        x: position['x'],
-                        y:  1.75,
-                        z: position['z'],
-                    });
-
-                    // Rotation
-                    UI.setAttribute('rotation', {
-                        x: -10,
-                        y: user.getAttribute('rotation').y,
-                        z: user.getAttribute('rotation').z,
-                    });
+                UI.setAttribute('position', {
+                    x: position['x'],
+                    y:  1.75,
+                    z: position['z'],
+                });
             }
             else
             {
@@ -1150,15 +1204,20 @@ AFRAME.registerComponent('circles-upload-ui',
                     });
 
                     // Back arrow
-                    UI.querySelector('#back-arrow').setAttribute('circles-interactive-object', {
-                        enabled: false,
-                    });
+                    if (UI.querySelector('#back-arrow'))
+                    {
+                        UI.querySelector('#back-arrow').setAttribute('circles-interactive-object', {
+                            enabled: false,
+                        });
+                    }
 
                     // Forward arrow
-                    UI.querySelector('#forward-arrow').setAttribute('circles-interactive-object', {
-                        enabled: false,
-                    });
-
+                    if (UI.querySelector('#forward-arrow'))
+                    {
+                        UI.querySelector('#forward-arrow').setAttribute('circles-interactive-object', {
+                            enabled: false,
+                        });
+                    }
             }
         }
         // Computer and mobile
