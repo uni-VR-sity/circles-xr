@@ -502,9 +502,9 @@ AFRAME.registerComponent('circles-whiteboard',
         {
             if (element.querySelector('.default-controller'))
             {
-                var controllerToDevare = element.querySelector('.default-controller');
+                var controllerToDelete = element.querySelector('.default-controller');
             
-                controllerToDevare.parentNode.removeChild(controllerToDevare);
+                controllerToDelete.parentNode.removeChild(controllerToDelete);
             }
 
             generateFileSelectedController(element, CONTEXT_AF.data);
@@ -513,9 +513,9 @@ AFRAME.registerComponent('circles-whiteboard',
         {
             if (element.querySelector('.file-selected-controller'))
             {
-                var controllerToDevare = element.querySelector('.file-selected-controller');
+                var controllerToDelete = element.querySelector('.file-selected-controller');
             
-                controllerToDevare.parentNode.removeChild(controllerToDevare);
+                controllerToDelete.parentNode.removeChild(controllerToDelete);
             }
 
             generateDefaultController(element, CONTEXT_AF.data);

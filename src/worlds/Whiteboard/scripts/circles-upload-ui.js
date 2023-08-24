@@ -120,6 +120,143 @@ const uploadAssets_Headset = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Selecting file
+// Adding insert button to insert content to whiteboard (for headset)
+const insertFileElement = function(event)
+{
+    // Getting element that was clicked
+    var file = event.target;
+
+    file.classList.add('file-selected');
+
+    // Removing element event listener
+    file.removeEventListener('click', insertFileElement);
+
+    // Disabling element
+    file.setAttribute('circles-interactive-object', {
+        enabled: false,
+    });
+
+    file.setAttribute('scale', {
+        x: 1.10,
+        y: 1.10,
+        z: 1.10,
+    });
+
+    // Creating insert button and adding on top of the file
+    var overlay = document.createElement('a-entity');
+
+    overlay.setAttribute('geometry', {
+        primitive: 'plane',
+        height: 0.5,
+        width: 0.5,
+    });
+    
+    overlay.setAttribute('material', {
+        shader: 'flat',
+        color: '#FFFFFF',
+        opacity: '0.5',
+    });
+
+    overlay.setAttribute('position', {
+        x: 0,
+        y: 0,
+        z: 0.005,
+    });
+
+        // Button
+        var button = document.createElement('a-entity');
+
+        button.setAttribute('geometry', {
+            primitive: 'plane',
+            height: 0.15,
+            width: 0.3,
+        });
+        
+        button.setAttribute('material', {
+            shader: 'flat',
+            color: '#0078e7',
+        });
+    
+        button.setAttribute('position', {
+            x: 0,
+            y: 0,
+            z: 0.005,
+        });
+
+        button.setAttribute('circles-interactive-object', {
+            type:'scale', 
+            hover_scale: 1.05, 
+            click_scale: 1.05,
+        });
+
+        // When button is clicked, insert file to whiteboard
+        button.addEventListener('click', function()
+        {
+            // Closing pop up
+            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+
+            insertFile();
+        });
+
+            // Button text
+            var text = document.createElement('a-entity');
+
+            text.setAttribute('text', {
+                value: 'Insert',
+                color: '#FFFFFF',
+                align: 'center',
+            });
+
+            text.setAttribute('scale', {
+                x: 1.3,
+                y: 1.3,
+                z: 1.3,
+            });
+        
+            text.setAttribute('position', {
+                x: 0,
+                y: 0,
+                z: 0.005,
+            });
+
+            button.appendChild(text);
+
+        overlay.appendChild(button);
+
+    file.appendChild(overlay);
+
+    // When anything but the insert button is clicked, unselect file
+    var UI = document.getElementById('upload-content-container');
+
+    const fileUnselected = function(event)
+    {
+        file.classList.remove('file-selected');
+
+        // Deleting overlay
+        overlay.parentNode.removeChild(overlay);
+
+        // Adding element event listener back
+        file.addEventListener('click', insertFileElement);
+
+        // Enabling element
+        file.setAttribute('circles-interactive-object', {
+            enabled: true,
+        });
+
+        UI.removeEventListener('click', fileUnselected);
+    }
+
+    // To not be triggered right away
+    setTimeout(function()
+    {
+        UI.addEventListener('click', fileUnselected);
+
+    }, 100);;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating pop up element (for headset)
 const generatePopUp_Headset = function()
 {
@@ -128,6 +265,7 @@ const generatePopUp_Headset = function()
     // Container
     var container = document.createElement('a-entity');
     container.setAttribute('id', 'upload-content-container');
+    container.setAttribute('class', 'interactive');
 
     container.setAttribute('visible', 'false');
 
@@ -191,7 +329,7 @@ const generatePopUp_Headset = function()
 
         // X
         var x = document.createElement('a-entity');
-        x.setAttribute('class', 'interactive');
+        x.setAttribute('id', 'close-pop-up');
 
         x.setAttribute('geometry', {
             primitive: 'plane', 
@@ -214,6 +352,7 @@ const generatePopUp_Headset = function()
             type:'scale', 
             hover_scale: 1.15, 
             click_scale: 1.15,
+            enabled: false,
         });
 
         x.addEventListener('click', function()
@@ -266,6 +405,7 @@ const generatePopUp_Headset = function()
                 }
 
                 var file = document.createElement('a-entity');
+                file.setAttribute('class', 'file-element');
 
                 file.setAttribute('geometry', {
                     primitive: 'plane', 
@@ -287,7 +427,11 @@ const generatePopUp_Headset = function()
                     type:'none', 
                     hover_scale: 1.10, 
                     click_scale: 1.10,
+                    enabled: false,
                 });
+
+                // Adding event listener to select file
+                file.addEventListener('click', insertFileElement);
         
                 fileContainer.appendChild(file);
             }
@@ -297,7 +441,6 @@ const generatePopUp_Headset = function()
         // Left arrow
         var leftArrow = document.createElement('a-entity');
         leftArrow.setAttribute('id', 'back-arrow');
-        leftArrow.setAttribute('class', 'interactive');
 
         leftArrow.setAttribute('geometry', {
             primitive: 'plane', 
@@ -320,6 +463,7 @@ const generatePopUp_Headset = function()
             type:'scale', 
             hover_scale: 1.15, 
             click_scale: 1.15,
+            enabled: false,
         });
 
         container.appendChild(leftArrow);
@@ -327,7 +471,6 @@ const generatePopUp_Headset = function()
         // Right arrow
         var rightArrow = document.createElement('a-entity');
         rightArrow.setAttribute('id', 'forward-arrow');
-        rightArrow.setAttribute('class', 'interactive');
 
         rightArrow.setAttribute('geometry', {
             primitive: 'plane', 
@@ -350,6 +493,7 @@ const generatePopUp_Headset = function()
             type:'scale', 
             hover_scale: 1.15, 
             click_scale: 1.15,
+            enabled: false,
         });
 
         container.appendChild(rightArrow);
@@ -412,11 +556,10 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
 // Inserting file into world and world database
 const insertFile = function()
 {
-    // Closing pop up
-    document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+    var UI = document.getElementById('upload-content-container');
 
     // Finding the file that was selected
-    var fileContainer = document.querySelector('.file-selected');
+    var fileContainer = UI.querySelector('.file-selected');
     var file = fileContainer.getAttribute('id');
 
     // Getting whiteboard to insert file to
@@ -453,7 +596,7 @@ const insertFile = function()
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Adding upload button to upload content to whiteboard (for computer and mobile)
+// Adding insert button to insert content to whiteboard (for computer and mobile)
 const addButton = function(whiteboard)
 {
     // Getting pop up container
@@ -470,6 +613,10 @@ const addButton = function(whiteboard)
     {
         if (button.classList.contains('button-active'))
         {
+            // Closing pop up
+            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+
+            // Inserting file
             insertFile(whiteboard);
         }
     });
@@ -705,10 +852,9 @@ const displayPage = function(pages, pageNum)
                 // Making element interactive
                 fileElements[i].setAttribute('visible', true);
 
-                fileElements[i].classList.add('interactive');
-
                 fileElements[i].setAttribute('circles-interactive-object', {
                     type:'scale', 
+                    enabled: true,
                 });
 
                 // Displaying file on element
@@ -717,15 +863,15 @@ const displayPage = function(pages, pageNum)
                     repeat: repeat,
                     offset: offset,
                 });
+
+                fileElements[i].setAttribute('id', files[i].name);
             }
             else
             {
                 // Hiding element
                 fileElements[i].setAttribute('circles-interactive-object', {
-                    type:'none', 
+                    enabled: false,
                 });
-
-                fileElements[i].classList.remove('interactive');
 
                 fileElements[i].setAttribute('visible', false);
             }
@@ -815,7 +961,17 @@ AFRAME.registerComponent('circles-upload-ui',
         request.onerror = function() 
         {
             // Generating error message
-            renderError("An error occurred, please try again");
+
+            // Headset
+            if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
+            {
+                
+            }
+            // Computer and mobile
+            else
+            {
+                renderError("An error occurred, please try again");
+            }
         }
 
         request.onload = function() 
@@ -834,12 +990,12 @@ AFRAME.registerComponent('circles-upload-ui',
                     }
 
                     // Organizing files into pages
-                    var pages = getPages(content);
+                    CONTEXT_AF.pages = getPages(content);
 
                     // Displaying first page
-                    var currentPage = 1;
+                    CONTEXT_AF.currentPage = 1;
 
-                    displayPage(pages, currentPage);
+                    displayPage(CONTEXT_AF.pages, CONTEXT_AF.currentPage);
 
                     // Creating arrow event listeners for scrolling through pages
                     var UI = document.getElementById('upload-content-container');
@@ -847,20 +1003,19 @@ AFRAME.registerComponent('circles-upload-ui',
                     var backArrow = UI.querySelector('#back-arrow');
                     var forwardArrow = UI.querySelector('#forward-arrow');
 
-                    // Back arrow
-                    backArrow.addEventListener('click', function()
-                    {
-                        currentPage --;
-                        currentPage = displayPage(pages, currentPage);
-                    });
+                        // Back arrow
+                        backArrow.addEventListener('click', function()
+                        {
+                            CONTEXT_AF.currentPage --;
+                            CONTEXT_AF.currentPage = displayPage(CONTEXT_AF.pages, CONTEXT_AF.currentPage);
+                        });
 
-                    // Forward arrow
-                    forwardArrow.addEventListener('click', function()
-                    {
-                        currentPage ++;
-                        currentPage = displayPage(pages, currentPage);
-                    });
-
+                        // Forward arrow
+                        forwardArrow.addEventListener('click', function()
+                        {
+                            CONTEXT_AF.currentPage ++;
+                            CONTEXT_AF.currentPage = displayPage(CONTEXT_AF.pages, CONTEXT_AF.currentPage);
+                        });
                 }
                 // Computer and mobile
                 else
@@ -926,9 +1081,29 @@ AFRAME.registerComponent('circles-upload-ui',
         {
             if (CONTEXT_AF.data.active === true)
             {
-                var popUp = document.getElementById('upload-content-container');
+                // Displaying UI
+                CONTEXT_AF.currentPage = displayPage(CONTEXT_AF.pages, 1);
 
-                popUp.setAttribute('visible', 'true');
+                var UI = document.getElementById('upload-content-container');
+                UI.setAttribute('visible', 'true');
+
+                // Enabling UI interaction (file element are enabled in displayPage() already)
+                UI.classList.add('interactive');
+
+                    // X element
+                    UI.querySelector('#close-pop-up').setAttribute('circles-interactive-object', {
+                        enabled: true,
+                    });
+
+                    // Back arrow
+                    UI.querySelector('#back-arrow').setAttribute('circles-interactive-object', {
+                        enabled: true,
+                    });
+
+                    // Forward arrow
+                    UI.querySelector('#forward-arrow').setAttribute('circles-interactive-object', {
+                        enabled: true,
+                    });
 
                 // Getting information about where the user is to display pop up (for its position)
                 var user = document.querySelector('[camera]');
@@ -936,23 +1111,54 @@ AFRAME.registerComponent('circles-upload-ui',
                 var position = new THREE.Vector3();
                 user.querySelector('.UI-position').object3D.getWorldPosition(position);
 
-                // Position
-                popUp.setAttribute('position', {
-                    x: position['x'],
-                    y:  1.75,
-                    z: position['z'],
-                });
+                    // Position
+                    UI.setAttribute('position', {
+                        x: position['x'],
+                        y:  1.75,
+                        z: position['z'],
+                    });
 
-                // Rotation
-                popUp.setAttribute('rotation', {
-                    x: -10,
-                    y: user.getAttribute('rotation').y,
-                    z: user.getAttribute('rotation').z,
-                });
+                    // Rotation
+                    UI.setAttribute('rotation', {
+                        x: -10,
+                        y: user.getAttribute('rotation').y,
+                        z: user.getAttribute('rotation').z,
+                    });
             }
             else
             {
-                document.getElementById('upload-content-container').setAttribute('visible', 'false');
+                // Hiding UI
+                var UI = document.getElementById('upload-content-container');
+                UI.setAttribute('visible', 'false');
+
+                // Disabling UI so user can't click on it when it is hidden (raycaster still picks up hidden objects)
+                UI.classList.remove('interactive');
+
+                    // File elements
+                    var fileElements = UI.querySelectorAll('.file-element');
+
+                    for (var file of fileElements)
+                    {
+                        file.setAttribute('circles-interactive-object', {
+                            enabled: false,
+                        });
+                    }
+
+                    // X element
+                    UI.querySelector('#close-pop-up').setAttribute('circles-interactive-object', {
+                        enabled: false,
+                    });
+
+                    // Back arrow
+                    UI.querySelector('#back-arrow').setAttribute('circles-interactive-object', {
+                        enabled: false,
+                    });
+
+                    // Forward arrow
+                    UI.querySelector('#forward-arrow').setAttribute('circles-interactive-object', {
+                        enabled: false,
+                    });
+
             }
         }
         // Computer and mobile
