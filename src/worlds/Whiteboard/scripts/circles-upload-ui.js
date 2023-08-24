@@ -296,6 +296,7 @@ const generatePopUp_Headset = function()
     
         // Left arrow
         var leftArrow = document.createElement('a-entity');
+        leftArrow.setAttribute('id', 'back-arrow');
         leftArrow.setAttribute('class', 'interactive');
 
         leftArrow.setAttribute('geometry', {
@@ -325,6 +326,7 @@ const generatePopUp_Headset = function()
 
         // Right arrow
         var rightArrow = document.createElement('a-entity');
+        rightArrow.setAttribute('id', 'forward-arrow');
         rightArrow.setAttribute('class', 'interactive');
 
         rightArrow.setAttribute('geometry', {
@@ -606,13 +608,13 @@ const displayContent = function(content)
 const getPages = function(content)
 {
     var length = content.length;
-    var numPages = Math.ceil(length / 6);
+    var totalPages = Math.ceil(length / 6);
 
     // Getting what content will be on each page
     // (6 files per page)
     var pages = {};
 
-    for (var i = 0; i < numPages; i++)
+    for (var i = 0; i < totalPages; i++)
     {
         // Getting files for page i
         var files = [];
@@ -639,85 +641,105 @@ const getPages = function(content)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Displaying files on specified page (pageNum) (for headset)
+// Returning current page being displayed
 const displayPage = function(pages, pageNum)
 {
-    // Getting files for the page
-    var files = pages['page_' + pageNum];
+    var totalPages = Object.keys(pages).length;
 
-    // Getting UI and updating page indicator
-    var UI = document.getElementById('upload-content-container');
-    UI.querySelector('#page-indicator').setAttribute('text', {value: pageNum + ' / ' + Object.keys(pages).length});
-    
-    // Getting file display elements
-    var fileElements = UI.querySelector('#file-container').children;
-
-    // Displaying files
-    for (var i = 0; i < files.length; i++)
+    // Ensuring pageNum is a valid page to display (between 1 and totalPages)
+    // Otherwise not displaying anything
+    if (pageNum > 0 && pageNum <= totalPages)
     {
-        // If there is a file to display, display it
-        // Otherwise, hide element
-        if (files[i])
+        // Getting files for the page
+        var files = pages['page_' + pageNum];
+
+        // Getting UI and updating page indicator
+        var UI = document.getElementById('upload-content-container');
+        UI.querySelector('#page-indicator').setAttribute('text', {value: pageNum + ' / ' + totalPages});
+        
+        // Getting file display elements
+        var fileElements = UI.querySelector('#file-container').children;
+
+        // Displaying files
+        for (var i = 0; i < files.length; i++)
         {
-            // Getting image aspect ratio (r = w/h)
-            var aspectRatio = files[i].width / files[i].height;
-
-            // Getting proper width if height is 0.5 (w = rh)
-            var width = aspectRatio * 0.5;
-
-            // Displaying element with proper proportions
-            var repeat = {x: 1, y: 1};
-            var offset = {x: 0, y: 0};
-            
-            // Element width is 0.5
-            // If the ideal width is less then 0.5 (portrait image), then the image height needs to be stretched
-            // Otherwise (landscape image), the image width needs to be stretched
-            if (width < 0.5)
+            // If there is a file to display, display it
+            // Otherwise, hide element
+            if (files[i])
             {
-                // Getting proper width if width is 0.5 (h = w/r)
-                var height = 0.5 / aspectRatio;
+                // Getting image aspect ratio (r = w/h)
+                var aspectRatio = files[i].width / files[i].height;
 
-                // Getting the amount of image that would be displayed in a height of 0.5
-                var ratioDisplayed = 0.5 / height;
+                // Getting proper width if height is 0.5 (w = rh)
+                var width = aspectRatio * 0.5;
 
-                repeat.y = ratioDisplayed;
+                // Displaying element with proper proportions
+                var repeat = {x: 1, y: 1};
+                var offset = {x: 0, y: 0};
+                
+                // Element width is 0.5
+                // If the ideal width is less then 0.5 (portrait image), then the image height needs to be stretched
+                // Otherwise (landscape image), the image width needs to be stretched
+                if (width < 0.5)
+                {
+                    // Getting proper width if width is 0.5 (h = w/r)
+                    var height = 0.5 / aspectRatio;
 
-                offset.y = (1 - ratioDisplayed) / 2;
+                    // Getting the amount of image that would be displayed in a height of 0.5
+                    var ratioDisplayed = 0.5 / height;
+
+                    repeat.y = ratioDisplayed;
+
+                    offset.y = (1 - ratioDisplayed) / 2;
+                }
+                else if (width > 0.5)
+                {
+                    // Getting the amount of image that would be displayed in a width of 0.5
+                    var ratioDisplayed = 0.5 / width;
+
+                    repeat.x = ratioDisplayed;
+
+                    offset.x = (1 - ratioDisplayed) / 2;
+                }
+
+                // Making element interactive
+                fileElements[i].setAttribute('visible', true);
+
+                fileElements[i].classList.add('interactive');
+
+                fileElements[i].setAttribute('circles-interactive-object', {
+                    type:'scale', 
+                });
+
+                // Displaying file on element
+                fileElements[i].setAttribute('material', { 
+                    src: '#asset_' + files[i].name,
+                    repeat: repeat,
+                    offset: offset,
+                });
             }
-            else if (width > 0.5)
+            else
             {
-                // Getting the amount of image that would be displayed in a width of 0.5
-                var ratioDisplayed = 0.5 / width;
+                // Hiding element
+                fileElements[i].setAttribute('circles-interactive-object', {
+                    type:'none', 
+                });
 
-                repeat.x = ratioDisplayed;
+                fileElements[i].classList.remove('interactive');
 
-                offset.x = (1 - ratioDisplayed) / 2;
+                fileElements[i].setAttribute('visible', false);
             }
-
-            console.log(fileElements[i].getAttribute('material').repeat);
-
-            // Displaying file on element
-            fileElements[i].setAttribute('material', { 
-                src: '#asset_' + files[i].name,
-                repeat: repeat,
-                offset: offset,
-            });
-
-            // Making element interactive
-            fileElements[i].setAttribute('circles-interactive-object', {
-                type:'scale', 
-            });
         }
-        else
-        {
-            // Hiding element
-            fileElements[i].setAttribute('circles-interactive-object', {
-                type:'none', 
-            });
 
-            fileElements[i].classList.remove('interactive');
-
-            fileElements[i].setAttribute('visible', false);
-        }
+        return pageNum;
+    }
+    else if (!(pageNum > 0))
+    {
+        return 1;
+    }
+    else if (!(pageNum <= totalPages))
+    {
+        return totalPages;
     }
 }
 
@@ -815,7 +837,30 @@ AFRAME.registerComponent('circles-upload-ui',
                     var pages = getPages(content);
 
                     // Displaying first page
-                    displayPage(pages, 1);
+                    var currentPage = 1;
+
+                    displayPage(pages, currentPage);
+
+                    // Creating arrow event listeners for scrolling through pages
+                    var UI = document.getElementById('upload-content-container');
+
+                    var backArrow = UI.querySelector('#back-arrow');
+                    var forwardArrow = UI.querySelector('#forward-arrow');
+
+                    // Back arrow
+                    backArrow.addEventListener('click', function()
+                    {
+                        currentPage --;
+                        currentPage = displayPage(pages, currentPage);
+                    });
+
+                    // Forward arrow
+                    forwardArrow.addEventListener('click', function()
+                    {
+                        currentPage ++;
+                        currentPage = displayPage(pages, currentPage);
+                    });
+
                 }
                 // Computer and mobile
                 else
