@@ -288,6 +288,27 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
+        CONTEXT_AF.elementID = 'whiteboardFile_' + CONTEXT_AF.data.whiteboardID + '_' + CONTEXT_AF.data.position.z + '_' + CONTEXT_AF.data.fileID;
+
+        CONTEXT_AF.networkMove = false;
+
+        // Setting up networking
+        if (CIRCLES.isCirclesWebsocketReady()) 
+        {
+            CONTEXT_AF.setUpNetworking();
+        }
+        else 
+        {
+            const wsReadyFunc = function() 
+            {
+                CONTEXT_AF.setUpNetworking();
+
+                CONTEXT_AF.el.sceneEl.removeEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
+            }
+
+            CONTEXT_AF.el.sceneEl.addEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
+        }
+
         var dimensions = {
             width: 0, 
             height: 0,
@@ -344,29 +365,36 @@ AFRAME.registerComponent('circles-whiteboard-file',
             var elementPos = element.getAttribute('position');
             var oldPosition = element.getAttribute('circles-whiteboard-file').position;
 
-            var newPos = {
-                x: elementPos.x,
-                y: elementPos.y,
-                z: oldPosition.z,
+            // Only updating if the x or y position have been changed (if only z position changed, the file was selected, not moved)
+            if (elementPos.x !== oldPosition.x || elementPos.y !== oldPosition.y)
+            {
+                var newPos = {
+                    x: elementPos.x,
+                    y: elementPos.y,
+                    z: oldPosition.z,
+                }
+    
+                element.setAttribute('circles-whiteboard-file', {position: newPos});
+    
+                // (NETWORKING) Emiting that file has been moved to update for all users
+                CONTEXT_AF.socket.emit(CONTEXT_AF.fileMoveEvent, {elementID:CONTEXT_AF.elementID, newPos:newPos, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
             }
-
-            element.setAttribute('circles-whiteboard-file', {position: newPos});
         }
 
         element.addEventListener('componentchanged', function(event) 
         {
-            if (event.detail.name === 'position')
+            if (event.detail.name === 'position' && CONTEXT_AF.networkMove === false)
             {
                 if (timeoutStarted === false)
                 {
                     timeoutStarted = true;
 
-                    timeout = setTimeout(updatePos, 1000);
+                    timeout = setTimeout(updatePos, 500);
                 }
                 else
                 {
                     clearTimeout(timeout);
-                    timeout = setTimeout(updatePos, 1000);
+                    timeout = setTimeout(updatePos, 500);
                 }
             }
         });
@@ -377,10 +405,10 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
-        // When file is moved
+        // When file is moved by the current user
         // Sending data to updated position of file in world database array
 
-        if (CONTEXT_AF.data.position !== oldData.position)
+        if (CONTEXT_AF.data.position !== oldData.position && CONTEXT_AF.networkMove === false)
         {
             if (CONTEXT_AF.data.position && oldData.position)
             {
@@ -396,5 +424,44 @@ AFRAME.registerComponent('circles-whiteboard-file',
                 request.send('file=' + CONTEXT_AF.data.fileID + '&whiteboardID='+ CONTEXT_AF.data.whiteboardID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y + '&oldX=' + oldData.position.x + '&oldY=' + oldData.position.y + '&z=' + CONTEXT_AF.data.position.z);
             }
         }
+    },
+    setUpNetworking: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        CONTEXT_AF.socket = CIRCLES.getCirclesWebsocket();
+        CONTEXT_AF.fileMoveEvent = 'whiteboard_file_move_event';
+        CONTEXT_AF.fileSelectedEvent = 'whiteboard_file_selected_event';
+        CONTEXT_AF.fileUnselectedEvent = 'whiteboard_file_unselected_event';
+        CONTEXT_AF.fileDeletedEvent = 'whiteboard_file_unselected_event';
+        CONTEXT_AF.fileInsertedEvent = 'whiteboard_file_unselected_event';
+            
+        // Listening for networking events to move files
+        CONTEXT_AF.socket.on(CONTEXT_AF.fileMoveEvent, function(data) 
+        {
+            if (data.elementID === CONTEXT_AF.elementID)
+            {
+                console.log('moving');
+
+                // Signaling that the file is moving from a different user to not send an update to the database
+                CONTEXT_AF.networkMove = true;
+
+                var newPos = {
+                    x: data.newPos.x,
+                    y: data.newPos.y,
+                    z: data.newPos.z,
+                }
+    
+                element.setAttribute('circles-whiteboard-file', {position: newPos});
+
+                element.setAttribute('position', newPos);
+
+                setTimeout(function()
+                {
+                    CONTEXT_AF.networkMove = false;
+                }, 100);
+            }
+        });
     }
 });

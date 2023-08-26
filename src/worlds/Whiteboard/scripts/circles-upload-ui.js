@@ -997,7 +997,7 @@ AFRAME.registerComponent('circles-upload-ui',
         //    - Virtual UI
 
         // Headset
-        if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
+        if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
             generatePopUp_Headset();
         }
@@ -1018,7 +1018,7 @@ AFRAME.registerComponent('circles-upload-ui',
             // Generating error message
 
             // Headset
-            if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
+            if (AFRAME.utils.device.checkHeadsetConnected() === true)
             {
                 renderError_Headset('An error occurred, please try again');
             }
@@ -1036,7 +1036,7 @@ AFRAME.registerComponent('circles-upload-ui',
             if (content.length > 0)
             {
                 // Headset
-                if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
+                if (AFRAME.utils.device.checkHeadsetConnected() === true)
                 {
                     // Creating content assets for displaying
                     for (var file of content)
@@ -1109,7 +1109,7 @@ AFRAME.registerComponent('circles-upload-ui',
             else
             {
                 // Headset
-                if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
+                if (AFRAME.utils.device.checkHeadsetConnected() === true)
                 {
                     renderError_Headset('No content avaliable to insert');
                 }
@@ -1133,7 +1133,7 @@ AFRAME.registerComponent('circles-upload-ui',
         // If it was set to false, hide pop up
 
         // Headset
-        if (/*AFRAME.utils.device.checkHeadsetConnected() ===*/ true)
+        if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
             if (CONTEXT_AF.data.active === true)
             {
@@ -1223,7 +1223,6 @@ AFRAME.registerComponent('circles-upload-ui',
         // Computer and mobile
         else
         {
-            /*
             if (CONTEXT_AF.data.active === true)
             {
                 document.getElementById('upload-content-container').style.display = 'block';
@@ -1232,7 +1231,6 @@ AFRAME.registerComponent('circles-upload-ui',
             {
                 document.getElementById('upload-content-container').style.display = 'none';
             }
-            */
         }
     }
 });
