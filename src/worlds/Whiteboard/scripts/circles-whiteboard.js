@@ -57,7 +57,7 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
     uploadButton.setAttribute('position', {
         x: 0,
         y: height / 3,
-        z: (depth / 2) + 0.005,
+        z: (depth / 2) + 0.001,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -100,7 +100,7 @@ const generateMessage = function(parentElement, height, width, depth)
     messageButton.setAttribute('position', {
         x: 0,
         y: 0,
-        z: (depth / 2) + 0.005,
+        z: (depth / 2) + 0.001,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -137,7 +137,7 @@ const generateDraw = function(parentElement, height, width, depth)
     drawButton.setAttribute('position', {
         x: 0,
         y: - (height / 3),
-        z: (depth / 2) + 0.005,
+        z: (depth / 2) + 0.001,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -174,7 +174,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
     trashButton.setAttribute('position', {
         x: 0,
         y: - (height / 3),
-        z: (depth / 2) + 0.005,
+        z: (depth / 2) + 0.001,
     });
 
     // Dimensions: Symbols are 0.3 times the width of the base
@@ -307,7 +307,7 @@ const generateWhiteboard = function(parentElement, preferences)
     fileContainer.setAttribute('position', {
         x: 0,
         y: 0,
-        z: ((preferences.depth / 2) + 0.005),
+        z: ((preferences.depth / 2) + 0.001),
     });
 
     boardBase.appendChild(fileContainer);

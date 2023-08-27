@@ -163,7 +163,7 @@ const insertFileElement = function(event)
     overlay.setAttribute('position', {
         x: 0,
         y: 0,
-        z: 0.005,
+        z: 0.001,
     });
 
         // Button
@@ -183,7 +183,7 @@ const insertFileElement = function(event)
         button.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 0.005,
+            z: 0.001,
         });
 
         button.setAttribute('circles-interactive-object', {
@@ -219,7 +219,7 @@ const insertFileElement = function(event)
             text.setAttribute('position', {
                 x: 0,
                 y: 0,
-                z: 0.005,
+                z: 0.001,
             });
 
             button.appendChild(text);
@@ -333,7 +333,7 @@ const generatePopUp_Headset = function()
         page.setAttribute('position', {
             x: 0,
             y: 0.75, 
-            z: 0.005,
+            z: 0.001,
         });
 
         page.setAttribute('scale', {
@@ -362,7 +362,7 @@ const generatePopUp_Headset = function()
         x.setAttribute('position', {
             x: 1.11,
             y: 0.75, 
-            z: 0.005,
+            z: 0.001,
         });
 
         x.setAttribute('circles-interactive-object', {
@@ -396,7 +396,7 @@ const generatePopUp_Headset = function()
         divider.setAttribute('position', {
             x: 0,
             y: 0.6, 
-            z: 0.005,
+            z: 0.001,
         });
 
         container.appendChild(divider);
@@ -448,7 +448,7 @@ const createFileContainer = function(CONTEXT_AF)
             file.setAttribute('position', {
                 x: xPos,
                 y: yPos,
-                z: 0.005,
+                z: 0.001,
             });
 
             file.setAttribute('circles-interactive-object', {
@@ -485,7 +485,7 @@ const createFileContainer = function(CONTEXT_AF)
         leftArrow.setAttribute('position', {
             x: -1.25,
             y: -0.145,
-            z: 0.005,
+            z: 0.001,
         });
 
         leftArrow.setAttribute('circles-interactive-object', {
@@ -515,7 +515,7 @@ const createFileContainer = function(CONTEXT_AF)
         rightArrow.setAttribute('position', {
             x: 1.25,
             y: -0.145,
-            z: 0.005,
+            z: 0.001,
         });
 
         rightArrow.setAttribute('circles-interactive-object', {
@@ -564,7 +564,7 @@ const renderError_Headset = function(message)
     error.setAttribute('position', {
         x: 0,
         y: 0.3, 
-        z: 0.005,
+        z: 0.001,
     });
 
     error.setAttribute('scale', {

@@ -133,7 +133,7 @@ const fileClickEffect = function(file, originalPos, enable)
         file.setAttribute('position', {
             x: file.getAttribute('position').x,
             y: file.getAttribute('position').y,
-            z: 0.005 * (numFiles + 2),
+            z: 0.001 * (numFiles + 2),
         });
 
         // Adding overlay to decrease opacity of other files
@@ -144,7 +144,7 @@ const fileClickEffect = function(file, originalPos, enable)
         overlay.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 0.005 * (numFiles + 1),
+            z: 0.001 * (numFiles + 1),
         });
 
         overlay.setAttribute('geometry', {

@@ -2555,7 +2555,7 @@ const insertWhiteboardFile = async (req, res, next) =>
       {
         if (file.position[2] >= maxZ)
         {
-          maxZ = file.position[2] + 0.005;
+          maxZ = file.position[2] + 0.001;
         }
       }
     }
