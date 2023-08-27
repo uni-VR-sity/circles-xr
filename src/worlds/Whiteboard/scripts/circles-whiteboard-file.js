@@ -190,8 +190,10 @@ const fileClickEffect = function(file, originalPos, enable)
 // When file is clicked:
 // - Activate view on whiteboard
 // - Allow file to be dragged on whiteboard
-const fileClick = function(file, originalPos)
+const fileClick = function(file, originalPos, CONTEXT_AF)
 {
+    const user = document.querySelector('#' + CIRCLES.CONSTANTS.PRIMARY_USER_ID).getAttribute('circles-visiblename');
+
     var whiteboard = file.parentElement.parentElement.parentElement;
 
     var filePosition = {
@@ -204,6 +206,9 @@ const fileClick = function(file, originalPos)
 
     file.addEventListener('mousedown', function()
     {
+        // (NETWORKING) Emiting that file has been selected to update for all users
+        CONTEXT_AF.socket.emit(CONTEXT_AF.fileSelectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
         filePosition.x = file.getAttribute('position').x;
         filePosition.y = file.getAttribute('position').y;
 
@@ -221,6 +226,9 @@ const fileClick = function(file, originalPos)
     {
         if (file.getAttribute('position').x === filePosition.x && file.getAttribute('position').y === filePosition.y)
         {
+            // (NETWORKING) Emiting that file has been selected to update for all users
+            CONTEXT_AF.socket.emit(CONTEXT_AF.fileSelectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
             fileClickEffect(file, originalPos, true);
 
             // Activating file selected view on whiteboard
@@ -253,6 +261,13 @@ const fileClick = function(file, originalPos)
                         whiteboard.setAttribute('circles-whiteboard', {fileSelected: false});
                         whiteboard.removeEventListener('click', fileUnselected);
                     }
+
+                    // (NETWORKING) Emiting that file has been unselected to update for all users
+                    // Delayed to give time for database to update
+                    setTimeout(function()
+                    {
+                        CONTEXT_AF.socket.emit(CONTEXT_AF.fileUnselectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                    }, CONTEXT_AF.fileUnselectedDelay);
                 }
             }
 
@@ -262,6 +277,13 @@ const fileClick = function(file, originalPos)
         {
             // Enabling hover effect
             file.setAttribute('circles-interactive-object', {type:'scale'});
+
+            // (NETWORKING) Emiting that file has been unselected to update for all users
+            // Delayed to give time for database to update
+            setTimeout(function()
+            {
+                CONTEXT_AF.socket.emit(CONTEXT_AF.fileUnselectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+            }, CONTEXT_AF.fileUnselectedDelay);
         }
     });
 }
@@ -291,6 +313,10 @@ AFRAME.registerComponent('circles-whiteboard-file',
         CONTEXT_AF.elementID = 'whiteboardFile_' + CONTEXT_AF.data.whiteboardID + '_' + CONTEXT_AF.data.position.z + '_' + CONTEXT_AF.data.fileID;
 
         CONTEXT_AF.networkMove = false;
+        CONTEXT_AF.networkSelected = false;
+
+        CONTEXT_AF.positionDatabaseDelay = 500
+        CONTEXT_AF.fileUnselectedDelay = CONTEXT_AF.positionDatabaseDelay + 200;
 
         // Setting up networking
         if (CIRCLES.isCirclesWebsocketReady()) 
@@ -328,8 +354,6 @@ AFRAME.registerComponent('circles-whiteboard-file',
         }
 
         // Hover effect
-        element.classList.add('interactive');
-
         element.setAttribute('circles-interactive-object', {
             type:'scale', 
             hover_scale: 1.05, 
@@ -337,7 +361,7 @@ AFRAME.registerComponent('circles-whiteboard-file',
         });
 
         // Onclick effect
-        fileClick(element, CONTEXT_AF.data.position.z);
+        fileClick(element, CONTEXT_AF.data.position.z, this);
 
         // Making file draggable
 
@@ -375,9 +399,9 @@ AFRAME.registerComponent('circles-whiteboard-file',
                 }
     
                 element.setAttribute('circles-whiteboard-file', {position: newPos});
-    
+
                 // (NETWORKING) Emiting that file has been moved to update for all users
-                CONTEXT_AF.socket.emit(CONTEXT_AF.fileMoveEvent, {elementID:CONTEXT_AF.elementID, newPos:newPos, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                CONTEXT_AF.socket.emit(CONTEXT_AF.fileMoveEvent, {elementID:CONTEXT_AF.elementID, newPos:element.getAttribute('position'), room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
             }
         }
 
@@ -389,12 +413,12 @@ AFRAME.registerComponent('circles-whiteboard-file',
                 {
                     timeoutStarted = true;
 
-                    timeout = setTimeout(updatePos, 500);
+                    timeout = setTimeout(updatePos, CONTEXT_AF.positionDatabaseDelay);
                 }
                 else
                 {
                     clearTimeout(timeout);
-                    timeout = setTimeout(updatePos, 500);
+                    timeout = setTimeout(updatePos, CONTEXT_AF.positionDatabaseDelay);
                 }
             }
         });
@@ -431,6 +455,13 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const element = CONTEXT_AF.el;
 
         CONTEXT_AF.socket = CIRCLES.getCirclesWebsocket();
+
+        // Moved: File position is updated
+        // Selected: Shown that file is selected by another user and other users can not select it
+        // Unselected: Normal view of file returns and other users can select it
+        // Inserted: File is inserted to whiteboard
+        // Deleted: File is deleted from whiteboard
+
         CONTEXT_AF.fileMoveEvent = 'whiteboard_file_move_event';
         CONTEXT_AF.fileSelectedEvent = 'whiteboard_file_selected_event';
         CONTEXT_AF.fileUnselectedEvent = 'whiteboard_file_unselected_event';
@@ -462,6 +493,61 @@ AFRAME.registerComponent('circles-whiteboard-file',
                     CONTEXT_AF.networkMove = false;
                 }, 100);
             }
+        });
+
+        // Listening for networking events to select files
+        // If file is selected, other users can not interact with it
+        CONTEXT_AF.socket.on(CONTEXT_AF.fileSelectedEvent, function(data)
+        {
+            if (data.elementID === CONTEXT_AF.elementID && !element.querySelector('#selected-by-' + data.user))
+            {
+                CONTEXT_AF.networkSelected = true;
+
+                // Visual indication that file is selected
+                element.setAttribute('material', {color: '#949494'});
+
+                var selectedText = document.createElement('a-entity');
+                selectedText.setAttribute('id', 'selected-by-' + data.user);
+
+                selectedText.setAttribute('text', {
+                    value: 'Selected by ' + data.user,
+                    align: 'center',
+                    wrapCount: 10,
+                    lineHeight: 60,
+                });
+
+                selectedText.setAttribute('scale', {
+                    x: 0.6,
+                    y: 0.6,
+                    z: 0.6,
+                });
+
+                element.appendChild(selectedText);
+
+                // Disabling interaction
+                element.setAttribute('circles-interactive-object', {enabled: false});
+            }
+
+        });
+
+        // Listening for networking events to select files
+        CONTEXT_AF.socket.on(CONTEXT_AF.fileUnselectedEvent, function(data) 
+        {
+            if (data.elementID === CONTEXT_AF.elementID)
+            {
+                // Removing visuals of selection
+                CONTEXT_AF.networkSelected = false;
+
+                element.setAttribute('material', {color: '#FFFFFF'});
+
+                var selectedText = element.querySelector('#selected-by-' + data.user);
+
+                selectedText.parentNode.removeChild(selectedText);
+
+                // Enabling interaction
+                element.setAttribute('circles-interactive-object', {enabled: true});;
+            }
+
         });
     }
 });
