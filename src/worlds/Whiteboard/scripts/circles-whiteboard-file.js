@@ -310,7 +310,10 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
+        // Setting element ID
         CONTEXT_AF.elementID = 'whiteboardFile_' + CONTEXT_AF.data.whiteboardID + '_' + CONTEXT_AF.data.position.z + '_' + CONTEXT_AF.data.fileID;
+
+        element.setAttribute('id', CONTEXT_AF.elementID);
 
         CONTEXT_AF.networkMove = false;
         CONTEXT_AF.networkSelected = false;

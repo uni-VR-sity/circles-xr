@@ -645,7 +645,7 @@ const insertFile = function(CONTEXT_AF)
         // Displaying file on whiteboard
         displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo);
 
-        // (NETWORKING) Emiting that file has been moved to update for all users
+        // (NETWORKING) Emiting that a file has been inserted to update for all users
         CONTEXT_AF.socket.emit(CONTEXT_AF.fileInsertedEvent, {fileInfo:fileInfo, whiteboardID:whiteboard, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
     }
 

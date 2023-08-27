@@ -162,7 +162,7 @@ const generateDraw = function(parentElement, height, width, depth)
 
 // Creating trash button at the bottom of controller base
 // Takes the controller base (parentElement), and its dimensions
-const generateTrash = function(parentElement, height, width, depth, whiteboard)
+const generateTrash = function(parentElement, height, width, depth, whiteboard, CONTEXT_AF)
 {
     var trashButton = document.createElement('a-entity');
     trashButton.setAttribute('class', 'trash-button interactive');
@@ -221,6 +221,9 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard)
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         request.send('file=' + fileName + '&whiteboardID='+ whiteboard.getAttribute('id') + '&world=' + world);
+
+        // (NETWORKING) Emiting that a file has been deleted to update for all users
+        CONTEXT_AF.socket.emit(CONTEXT_AF.fileDeletedEvent, {fileID:file.getAttribute('id'), whiteboardID:whiteboard.getAttribute('id'), room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
     });
 }
 
@@ -250,7 +253,7 @@ const generateDefaultController = function(whiteboard, preferences)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Generating default controller base
-const generateFileSelectedController = function(whiteboard, preferences)
+const generateFileSelectedController = function(whiteboard, preferences, CONTEXT_AF)
 {
     if (!whiteboard.querySelector('.file-selected-controller'))
     {
@@ -261,7 +264,7 @@ const generateFileSelectedController = function(whiteboard, preferences)
         var fileSelectedController = document.createElement('a-entity');
         fileSelectedController.setAttribute('class', 'file-selected-controller');
 
-        generateTrash(fileSelectedController, preferences.height, controllerWidth, preferences.depth, whiteboard);
+        generateTrash(fileSelectedController, preferences.height, controllerWidth, preferences.depth, whiteboard, CONTEXT_AF);
 
         controllerBase.appendChild(fileSelectedController);
     }
@@ -524,7 +527,7 @@ AFRAME.registerComponent('circles-whiteboard',
                 controllerToDelete.parentNode.removeChild(controllerToDelete);
             }
 
-            generateFileSelectedController(element, CONTEXT_AF.data);
+            generateFileSelectedController(element, CONTEXT_AF.data, CONTEXT_AF);
         }
         else if (CONTEXT_AF.data.fileSelected === false)
         {
@@ -549,11 +552,15 @@ AFRAME.registerComponent('circles-whiteboard',
 
         CONTEXT_AF.fileDeletedEvent = 'whiteboard_file_delete_event';
             
-
         // Listening for networking events to delete a file
         CONTEXT_AF.socket.on(CONTEXT_AF.fileDeletedEvent, function(data)
         {
-
+            if (element.getAttribute('id') === data.whiteboardID)
+            {
+                var file = document.getElementById(data.fileID);
+                
+                file.parentNode.removeChild(file);
+            }
         });
     },
 });
