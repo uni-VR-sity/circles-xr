@@ -473,8 +473,6 @@ AFRAME.registerComponent('circles-whiteboard-file',
         {
             if (data.elementID === CONTEXT_AF.elementID)
             {
-                console.log('moving');
-
                 // Signaling that the file is moving from a different user to not send an update to the database
                 CONTEXT_AF.networkMove = true;
 
@@ -549,5 +547,5 @@ AFRAME.registerComponent('circles-whiteboard-file',
             }
 
         });
-    }
+    },
 });

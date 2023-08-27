@@ -80,7 +80,7 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
     // When clicked, activate 'circles-upload-file' for the current whiteboard
     uploadButton.addEventListener('click', function()
     {
-        document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:true; whiteboardID:' + whiteboardElement.getAttribute('id'));
+        document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:true; whiteboardID:' + whiteboardElement.getAttribute('id'));
     });
 }
 
@@ -470,6 +470,23 @@ AFRAME.registerComponent('circles-whiteboard',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
+        // Setting up networking
+        if (CIRCLES.isCirclesWebsocketReady()) 
+        {
+            CONTEXT_AF.setUpNetworking();
+        }
+        else 
+        {
+            const wsReadyFunc = function() 
+            {
+                CONTEXT_AF.setUpNetworking();
+
+                CONTEXT_AF.el.sceneEl.removeEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
+            }
+
+            CONTEXT_AF.el.sceneEl.addEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
+        }
+
         CONTEXT_AF.data.fileSelected = false;
 
         // Making sure this is the first circles-whiteboard component to the run
@@ -480,7 +497,7 @@ AFRAME.registerComponent('circles-whiteboard',
             uploadAssets();
 
             // Creating element for uploading files (there should only be 1 that all whiteboards use)
-            element.setAttribute('circles-upload-ui', '');
+            element.setAttribute('circles-upload-whiteboard-ui', '');
         }
 
         // Generating whiteboard
@@ -520,5 +537,23 @@ AFRAME.registerComponent('circles-whiteboard',
 
             generateDefaultController(element, CONTEXT_AF.data);
         }
-    }
+    },
+    setUpNetworking: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        CONTEXT_AF.socket = CIRCLES.getCirclesWebsocket();
+
+        // Deleted: File is deleted from whiteboard
+
+        CONTEXT_AF.fileDeletedEvent = 'whiteboard_file_delete_event';
+            
+
+        // Listening for networking events to delete a file
+        CONTEXT_AF.socket.on(CONTEXT_AF.fileDeletedEvent, function(data)
+        {
+
+        });
+    },
 });

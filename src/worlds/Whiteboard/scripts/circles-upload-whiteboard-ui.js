@@ -75,7 +75,7 @@ const generatePopUp_Computer_Mobile = function()
 
         closeContainer.addEventListener('click', function()
         {
-            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
         });
 
         container.appendChild(closeContainer);
@@ -126,6 +126,8 @@ const insertFileElement = function(event)
 {
     // Getting element that was clicked
     var file = event.target;
+
+    var CONTEXT_AF = file.CONTEXT_AF;
 
     file.classList.add('file-selected');
 
@@ -193,10 +195,10 @@ const insertFileElement = function(event)
         // When button is clicked, insert file to whiteboard
         button.addEventListener('click', function()
         {
-            insertFile();
+            insertFile(CONTEXT_AF);
 
             // Closing pop up
-            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
         });
 
             // Button text
@@ -248,6 +250,7 @@ const insertFileElement = function(event)
         overlay.parentNode.removeChild(overlay);
 
         // Adding element event listener back
+        file.CONTEXT_AF = CONTEXT_AF;
         file.addEventListener('click', insertFileElement);
 
         UI.removeEventListener('click', fileUnselected);
@@ -371,7 +374,7 @@ const generatePopUp_Headset = function()
 
         x.addEventListener('click', function()
         {
-            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
         });
 
         container.appendChild(x);
@@ -404,7 +407,7 @@ const generatePopUp_Headset = function()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Creating file container with element to display files (for headset)
-const createFileContainer = function()
+const createFileContainer = function(CONTEXT_AF)
 {
     var UI = document.getElementById('upload-content-container');
 
@@ -456,6 +459,7 @@ const createFileContainer = function()
             });
 
             // Adding event listener to select file
+            file.CONTEXT_AF = CONTEXT_AF;
             file.addEventListener('click', insertFileElement);
     
             fileContainer.appendChild(file);
@@ -575,7 +579,7 @@ const renderError_Headset = function(message)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Displaying file on whiteboard (for computer and mobile)
-const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
+const displayFile = function(whiteboardID, fileID, fileInfo)
 {
     // Getting whiteboard to display file on 
     var whiteboard = document.getElementById(whiteboardID);
@@ -608,7 +612,7 @@ const displayFile = function(whiteboardID, fileID, fileInfo, fileElement)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Inserting file into world and world database
-const insertFile = function()
+const insertFile = function(CONTEXT_AF)
 {
     var UI = document.getElementById('upload-content-container');
 
@@ -617,7 +621,7 @@ const insertFile = function()
     var file = fileContainer.getAttribute('id');
 
     // Getting whiteboard to insert file to
-    var whiteboard = document.querySelector('[circles-upload-ui]').getAttribute('circles-upload-ui').whiteboardID;
+    var whiteboard = document.querySelector('[circles-upload-whiteboard-ui]').getAttribute('circles-upload-whiteboard-ui').whiteboardID;
 
     // Getting current world
     // url: http://domain/w/World
@@ -639,7 +643,10 @@ const insertFile = function()
         createAsset(fileInfo);
 
         // Displaying file on whiteboard
-        displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo, fileContainer.firstChild);
+        displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo);
+
+        // (NETWORKING) Emiting that file has been moved to update for all users
+        CONTEXT_AF.socket.emit(CONTEXT_AF.fileInsertedEvent, {fileInfo:fileInfo, whiteboardID:whiteboard, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
     }
 
     request.send('file=' + file + '&whiteboardID='+ whiteboard + '&world=' + world);
@@ -651,7 +658,7 @@ const insertFile = function()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Adding insert button to insert content to whiteboard (for computer and mobile)
-const addButton = function(whiteboard)
+const addButton = function(CONTEXT_AF)
 {
     // Getting pop up container
     var container = document.getElementById('upload-content-container');
@@ -668,10 +675,10 @@ const addButton = function(whiteboard)
         if (button.classList.contains('button-active'))
         {
             // Closing pop up
-            document.querySelector('[circles-upload-ui]').setAttribute('circles-upload-ui', 'active:false');
+            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
 
             // Inserting file
-            insertFile(whiteboard);
+            insertFile(CONTEXT_AF);
         }
     });
 
@@ -974,7 +981,7 @@ const adjustWidth = function()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Component
-AFRAME.registerComponent('circles-upload-ui', 
+AFRAME.registerComponent('circles-upload-whiteboard-ui', 
 {
     schema: 
     {
@@ -985,6 +992,23 @@ AFRAME.registerComponent('circles-upload-ui',
     {
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
+
+        // Setting up networking
+        if (CIRCLES.isCirclesWebsocketReady()) 
+        {
+            CONTEXT_AF.setUpNetworking();
+        }
+        else 
+        {
+            const wsReadyFunc = function() 
+            {
+                CONTEXT_AF.setUpNetworking();
+
+                CONTEXT_AF.el.sceneEl.removeEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
+            }
+
+            CONTEXT_AF.el.sceneEl.addEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
+        }
 
         // Generating pop up base for displaying content
 
@@ -1045,7 +1069,7 @@ AFRAME.registerComponent('circles-upload-ui',
                     }
 
                     // Creating elements to display content
-                    createFileContainer();
+                    createFileContainer(CONTEXT_AF);
 
                     // Organizing files into pages
                     CONTEXT_AF.pages = getPages(content);
@@ -1089,7 +1113,7 @@ AFRAME.registerComponent('circles-upload-ui',
                     document.getElementById('upload-content-container').style.display = 'none';
 
                     // Adding upload button
-                    addButton();
+                    addButton(CONTEXT_AF);
 
                     // Listening for when files are clicked to activate them to insert onto whiteboard
 
@@ -1232,5 +1256,26 @@ AFRAME.registerComponent('circles-upload-ui',
                 document.getElementById('upload-content-container').style.display = 'none';
             }
         }
-    }
+    },
+    setUpNetworking: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        CONTEXT_AF.socket = CIRCLES.getCirclesWebsocket();
+
+        // Inserted: File is inserted to whiteboard
+
+        CONTEXT_AF.fileInsertedEvent = 'whiteboard_file_insert_event';
+            
+        // Listening for networking events to insert a file
+        CONTEXT_AF.socket.on(CONTEXT_AF.fileInsertedEvent, function(data) 
+        {
+            // Creating asset
+            createAsset(data.fileInfo);
+
+            // Displaying file on whiteboard
+            displayFile(data.whiteboardID, 'asset_' + data.fileInfo.name, data.fileInfo);
+        });
+    },
 });
