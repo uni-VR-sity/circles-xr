@@ -201,10 +201,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
         // Getting selected file
         var file = whiteboard.getElementsByClassName('selected-file')[0];
         
-        // Getting file name
-        // id: asset_fileName
-        // split result array: {asset', 'fileName'}
-        var fileName = file.getAttribute('circles-whiteboard-file').asset.split('_')[1];
+        var fileName = file.getAttribute('circles-whiteboard-file').fileID;
         
         // Deleting file element
         file.parentNode.removeChild(file);
@@ -220,7 +217,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
         request.open('POST', '/remove-whiteboard-file');
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        request.send('file=' + fileName + '&whiteboardID='+ whiteboard.getAttribute('id') + '&world=' + world);
+        request.send('file=' + fileName + '&world=' + world);
 
         // (NETWORKING) Emiting that a file has been deleted to update for all users
         CONTEXT_AF.socket.emit(CONTEXT_AF.fileDeletedEvent, {fileID:file.getAttribute('id'), whiteboardID:whiteboard.getAttribute('id'), room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});

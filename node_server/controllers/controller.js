@@ -2665,33 +2665,32 @@ const removeWhiteboardFile = async (req, res, next) =>
   // Deleting file from world entry
   if (world)
   {
+    // Finding deleted file in world entry
+    function findFile(file)
+    {
+      return file.name === req.body.file;
+    }
+
+    var toDelete = world.whiteboardFiles.find(findFile);
+
+    // Deleting
     try
     { 
-      var toDelete = null;
-
-      for (const file of world.whiteboardFiles)
-      {
-        var currentFile = await Uploads.findOne(file.file).exec();
-
-        if ((JSON.stringify(currentFile) === JSON.stringify(deletedFile)) && (file.whiteboardID === req.body.whiteboardID))
-        {
-          toDelete = file;
-          break;
-        }
-      }
-
+      // Deleting from database
       var index = world.whiteboardFiles.indexOf(toDelete);
 
       world.whiteboardFiles.splice(index, 1);
 
       await world.save();
+
+      // Deleting from folder
+      fs.rmSync(__dirname + '/../whiteboardFiles/' + req.body.file, {recursive: true});
     }
     catch(e)
     {
       console.log(e);
     }
   }
-
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2718,24 +2717,13 @@ const getWhiteboardFiles = async (req, res, next) =>
   // Find files that are in that world, on that whiteboard
   if (world)
   {
-    try
+    // Finding id of each file that is on that whiteboard
+    function matchID(file)
     {
-      // Finding id of each file that is on that whiteboard
-      function matchID(file)
-      {
-        return file.whiteboardID === req.body.whiteboardID;
-      }
-
-      files = world.whiteboardFiles.filter(matchID);
-
+      return file.whiteboardID === req.body.whiteboardID;
     }
-    catch(e)
-    {
-      console.log(e);
-      
-      res.json(null);
-      return;
-    }
+
+    files = world.whiteboardFiles.filter(matchID);
   }
 
   res.json(JSON.parse(JSON.stringify(files)));
