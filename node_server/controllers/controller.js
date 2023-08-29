@@ -2605,8 +2605,10 @@ const insertWhiteboardFile = async (req, res, next) =>
     }
 
     var fileInfo = {
-      uploadedFile: insertedFile,
-      storedFileName: name + numFiles + '.' + type,
+      name: name + numFiles + '.' + type,
+      category: insertedFile.category,
+      height: insertedFile.height,
+      width: insertedFile.width,
       whiteboardID: req.body.whiteboardID,
       position: [0, 0, maxZ],
     };
@@ -2625,9 +2627,7 @@ const insertWhiteboardFile = async (req, res, next) =>
     }
 
     // Sending back information on the file that was inserted
-    var file = JSON.parse(JSON.stringify(insertedFile));
-
-    file.position = fileInfo.position;
+    var file = JSON.parse(JSON.stringify(fileInfo));
 
     res.json(file);
   }
@@ -2638,14 +2638,10 @@ const insertWhiteboardFile = async (req, res, next) =>
 // Removing sent file to world database entry (sent file was deleted by user from a specified whiteboard)
 const removeWhiteboardFile = async (req, res, next) => 
 {
-  var deletedFile = null;
   var world = null;
 
   try
   {
-    // Finding file in database
-    deletedFile = await Uploads.findOne({name: req.body.file}).exec();
-
     // Getting world from database
     world = await Worlds.findOne({name: req.body.world});
   }
@@ -2655,7 +2651,7 @@ const removeWhiteboardFile = async (req, res, next) =>
   }
 
   // Deleting file from world entry
-  if (deletedFile && world)
+  if (world)
   {
     try
     { 
@@ -2692,8 +2688,7 @@ const removeWhiteboardFile = async (req, res, next) =>
 const getWhiteboardFiles = async (req, res, next) => 
 {
   var world = null;
-  var fileIDs = null;
-  var files = [];
+  var files = null;
 
   try
   {
@@ -2703,6 +2698,9 @@ const getWhiteboardFiles = async (req, res, next) =>
   catch(e)
   {
     console.log(e);
+
+    res.json(null);
+    return;
   }
 
   // Find files that are in that world, on that whiteboard
@@ -2716,28 +2714,19 @@ const getWhiteboardFiles = async (req, res, next) =>
         return file.whiteboardID === req.body.whiteboardID;
       }
 
-      fileIDs = world.whiteboardFiles.filter(matchID);
-
-      // Getting file information
-      for (const id of fileIDs)
-      {
-        var file = await Uploads.findById(id.file);
-
-        var fileInfo = JSON.parse(JSON.stringify(file));
-
-        fileInfo.position = id.position;
-
-        files.push(fileInfo);
-      }
+      files = world.whiteboardFiles.filter(matchID);
 
     }
     catch(e)
     {
       console.log(e);
+      
+      res.json(null);
+      return;
     }
   }
 
-  res.json(files);
+  res.json(JSON.parse(JSON.stringify(files)));
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------

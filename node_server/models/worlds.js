@@ -34,16 +34,29 @@ const WorldSchema = new mongoose.Schema({
         ref:        'users'
     }],
     whiteboardFiles: [{
-      uploadedFile: {
-        type:       mongoose.Schema.Types.ObjectId, 
-        ref:        'uploads',
-        required:   true,
-      },
-      storedFileName: {
+      name: {
         type:       String,
         unique:     true,
         required:   true,
         trim:       true,
+      },
+      category: {
+        type:       String,
+        unique:     false,
+        required:   true,
+        trim:       true
+      },
+      height: {
+        type:       Number,
+        unique:     false,
+        required:   false,
+        trim:       true
+      },
+      width: {
+        type:       Number,
+        unique:     false,
+        required:   false,
+        trim:       true
       },
       whiteboardID: {
         type:       String,

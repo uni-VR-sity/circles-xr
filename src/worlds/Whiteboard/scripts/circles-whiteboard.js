@@ -369,7 +369,7 @@ const addFileAsset = function(name, category)
         {
             asset = document.createElement('img');
 
-            asset.setAttribute('src', '/uploads/' + name);
+            asset.setAttribute('src', '/whiteboardFiles/' + name);
         }
         else if (category === 'video')
         {
@@ -380,7 +380,7 @@ const addFileAsset = function(name, category)
             asset.setAttribute('muted', '');
             asset.setAttribute('loop', '');
 
-            asset.setAttribute('src', '/uploads/' + name);
+            asset.setAttribute('src', '/whiteboardFiles/' + name);
         }
         else
         {
@@ -418,35 +418,38 @@ const getFiles = function(whiteboard)
     {
         var files = JSON.parse(request.response);
 
-        // Getting file container in whiteboard
-        var container = whiteboard.querySelector('.board-files');
-
-        // Displaying each file
-        for (const file of files)
+        if (files)
         {
-            addFileAsset(file.name, file.category);
+            // Getting file container in whiteboard
+            var container = whiteboard.querySelector('.board-files');
 
-            // Creating file entity to insert into container
+            // Displaying each file
+            for (const file of files)
+            {
+                addFileAsset(file.name, file.category);
 
-            var fileObject = document.createElement('a-entity');
+                // Creating file entity to insert into container
 
-            fileObject.setAttribute('circles-whiteboard-file', {
-                category: file.category,
-                asset: 'asset_' + file.name,
-                whiteboardID: whiteboard.getAttribute('id'),
-                fileID: file._id,
-                originalHeight: file.height,
-                originalWidth: file.width,
-                boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
-                boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
-                position: {
-                    x: file.position[0],
-                    y: file.position[1],
-                    z: file.position[2],
-                },
-            });
+                var fileObject = document.createElement('a-entity');
 
-            container.appendChild(fileObject);
+                fileObject.setAttribute('circles-whiteboard-file', {
+                    category: file.category,
+                    asset: 'asset_' + file.name,
+                    whiteboardID: whiteboard.getAttribute('id'),
+                    fileID: file.name,
+                    originalHeight: file.height,
+                    originalWidth: file.width,
+                    boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
+                    boardWidth: whiteboard.getAttribute('circles-whiteboard').width,
+                    position: {
+                        x: file.position[0],
+                        y: file.position[1],
+                        z: file.position[2],
+                    },
+                });
+
+                container.appendChild(fileObject);
+            }
         }
     }
 

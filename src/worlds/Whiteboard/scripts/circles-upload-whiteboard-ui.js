@@ -579,7 +579,7 @@ const renderError_Headset = function(message)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Displaying file on whiteboard (for computer and mobile)
-const displayFile = function(whiteboardID, fileID, fileInfo)
+const displayFile = function(whiteboardID, assetID, fileInfo)
 {
     // Getting whiteboard to display file on 
     var whiteboard = document.getElementById(whiteboardID);
@@ -592,9 +592,9 @@ const displayFile = function(whiteboardID, fileID, fileInfo)
     
     file.setAttribute('circles-whiteboard-file', {
         category: fileInfo.category,
-        asset: fileID,
+        asset: assetID,
         whiteboardID: whiteboardID,
-        fileID: fileInfo._id,
+        fileID: fileInfo.name,
         originalHeight: fileInfo.height,
         originalWidth: fileInfo.width,
         boardHeight: whiteboard.getAttribute('circles-whiteboard').height,
@@ -641,7 +641,6 @@ const insertFile = function(CONTEXT_AF)
 
         if (fileInfo)
         {
-            console.log(fileInfo);
             // Creating asset
             createAsset(fileInfo);
 
