@@ -2772,7 +2772,7 @@ const setFileDimensions = async (req, res, next) =>
 const updateFilePosition = async (req, res, next) =>
 {
 
-  if (req.body.world && req.body.file && req.body.whiteboardID && req.body.newX && req.body.newY && req.body.oldX && req.body.oldY && req.body.z)
+  if (req.body.world && req.body.file && req.body.newX && req.body.newY)
   {
     var world = null;
 
@@ -2791,30 +2791,21 @@ const updateFilePosition = async (req, res, next) =>
     {
       for(const file of world.whiteboardFiles)
       {
-        // If whiteboard ids match
-        if (file.whiteboardID === req.body.whiteboardID)
+        if (file.name === req.body.file)
         {
-          // If file ids match
-          if (JSON.stringify(file.file) === JSON.stringify(req.body.file))
+          // Update file position
+          try
           {
-            // If old positions match
-            if (file.position[0] == req.body.oldX && file.position[1] == req.body.oldY && file.position[2] == req.body.z)
-            {
-              // Update file position
-              try
-              {
-                file.position[0] = req.body.newX;
-                file.position[1] = req.body.newY;
+            file.position[0] = req.body.newX;
+            file.position[1] = req.body.newY;
 
-                await world.save();
+            await world.save();
 
-                break;
-              }
-              catch(e)
-              {
-                console.log(e);
-              }
-            }
+            break;
+          }
+          catch(e)
+          {
+            console.log(e);
           }
         }
       }

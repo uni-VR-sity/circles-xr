@@ -364,7 +364,7 @@ AFRAME.registerComponent('circles-whiteboard-file',
                 request.open('POST', '/update-whiteboard-file-position');
                 request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-                request.send('file=' + CONTEXT_AF.data.fileID + '&whiteboardID='+ CONTEXT_AF.data.whiteboardID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y + '&oldX=' + oldData.position.x + '&oldY=' + oldData.position.y + '&z=' + CONTEXT_AF.data.position.z);
+                request.send('file=' + CONTEXT_AF.data.fileID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y);
             }
         }
     },
