@@ -205,10 +205,10 @@ const checkWhiteboardFiles = async function()
   }
   catch (e)
   {
-    console.log(e.message);
+    console.log(e);
   }
 
-  // Getting all whiteboard files
+  // Getting all whiteboard files in folder
   let whiteboardFiles = [];
 
   try
@@ -217,7 +217,7 @@ const checkWhiteboardFiles = async function()
   }
   catch (e) 
   {
-    console.log(e.message);
+    console.log(e);
   }
 
   // For each world, making sure their whiteboard files are in the folder
@@ -243,7 +243,7 @@ const checkWhiteboardFiles = async function()
           }
           catch (e) 
           {
-            console.log(e.message);
+            console.log(e);
           }
         }
       }
