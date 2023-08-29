@@ -23,7 +23,7 @@ const createAsset = function(file)
         {
             asset = document.createElement('img');
 
-            asset.setAttribute('src', '/uploads/' + file.name);
+            asset.setAttribute('src', '/whiteboard-file/' + file.name);
         }
         else if (file.category === 'video')
         {
@@ -34,7 +34,7 @@ const createAsset = function(file)
             asset.setAttribute('muted', '');
             asset.setAttribute('loop', '');
 
-            asset.setAttribute('src', '/uploads/' + file.name);
+            asset.setAttribute('src', '/whiteboard-file/' + file.name);
         }
 
         asset.setAttribute('id', 'asset_' + file.name);

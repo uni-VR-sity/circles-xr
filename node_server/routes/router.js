@@ -128,6 +128,7 @@ router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
 router.get('/uploaded-content', authenticated, controller.serveUploadedContent);
 router.get('/uploads/:file_name', authenticated, controller.serveUploadedFile);
+router.get('/whiteboard-file/:file_name', authenticated, controller.serveWhiteboardFile);
 router.get('/delete-uploaded-content/:file_name', authenticated, controller.deleteUploadedFile);
 router.get('/get-user-uploaded-content', authenticated, controller.getUserFiles);
 

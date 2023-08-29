@@ -369,7 +369,7 @@ const addFileAsset = function(name, category)
         {
             asset = document.createElement('img');
 
-            asset.setAttribute('src', '/whiteboardFiles/' + name);
+            asset.setAttribute('src', '/whiteboard-file/' + name);
         }
         else if (category === 'video')
         {
@@ -380,7 +380,7 @@ const addFileAsset = function(name, category)
             asset.setAttribute('muted', '');
             asset.setAttribute('loop', '');
 
-            asset.setAttribute('src', '/whiteboardFiles/' + name);
+            asset.setAttribute('src', '/whiteboard-file/' + name);
         }
         else
         {

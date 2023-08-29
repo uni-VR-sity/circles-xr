@@ -2524,6 +2524,18 @@ const getUserFiles = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Sending requested whiteboard file
+const serveWhiteboardFile = async (req, res, next) => 
+{
+  // url: /uploads/file_name
+  // split result array: {"", "uploads", "file_name"}
+  const fileName = req.url.split('/')[2];
+
+  res.sendFile(path.resolve(__dirname + '/../whiteboardFiles/' + fileName));
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Adding sent file to world database entry (sent file was inserted by user to specified whiteboard)
 const insertWhiteboardFile = async (req, res, next) => 
 {
@@ -2850,6 +2862,7 @@ module.exports = {
   serveUploadedFile,
   deleteUploadedFile,
   getUserFiles,
+  serveWhiteboardFile,
   insertWhiteboardFile,
   removeWhiteboardFile,
   getWhiteboardFiles,
