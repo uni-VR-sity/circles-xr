@@ -37,83 +37,6 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth)
     return desiredHeight;
 }
 
-// Displaying PDF
-// Resources: 
-// - https://mozilla.github.io/pdf.js/examples/
-// - https://webdesign.tutsplus.com/how-to-create-a-pdf-viewer-in-javascript--cms-32505t
-// - https://medium.com/geekculture/how-to-use-pdf-js-and-how-to-create-a-simple-pdf-viewer-for-your-web-in-javascript-5cff608a3a10
-const displayPDF = function(fileInfo, fileElement, desiredWidth)
-{
-    // Attaching canvas updater to render the PDF
-    fileElement.setAttribute('circles-canvas-updater','');
-
-    // Getting PDF name
-    // id: asset_fileName
-    // split result array: {asset', 'fileName'}
-    var fileName = fileInfo.asset.split('_')[1];
-
-    // Loading PDF in
-    pdfjsLib.getDocument('/uploads/' + fileName).promise.then(function(pdf)
-    {
-        // Getting first page
-        pdf.getPage(1).then(function(page) 
-        {
-            var canvas = document.getElementById(fileInfo.asset);
-            var ctx = canvas.getContext('2d');
-            var viewport = page.getViewport({scale: 1.0});
-
-            // Aspect ratio of PDF (r = w/h)
-            var aspectRatio = viewport.width / viewport.height;
-
-            // Calculating height of file to maintain its aspect ratio (h = w/r)
-            var desiredHeight = desiredWidth / aspectRatio;
-
-            // Setting file canvas container attributes to display it
-            fileElement.setAttribute('geometry', {
-                primitive: 'plane',
-                width: desiredWidth,
-                height: desiredHeight,
-            });
-
-            fileElement.setAttribute('material', {
-                src: '#' + fileInfo.asset,
-                shader: 'flat',
-            });
-        
-            fileElement.setAttribute('position', {
-                x: fileInfo.position.x,
-                y: fileInfo.position.y,
-                z: fileInfo.position.z
-            });
-
-            // Canvas and PDF dimensions are in pixels
-            // All other dimensions are in meters
-            // Conversion (from own calculation): 1m = 150px
-
-            // Resolution (the higher, the slower the world)
-            // Resolving blurry PDF: https://stackoverflow.com/questions/49426385/pdf-js-displays-pdf-documents-in-really-low-resolution-blurry-almost-is-this-h
-            var resolution = 1;
-
-            // Adjusting canvas dimensions (conversion to pixels)
-            canvas.width =  resolution * viewport.width;
-            canvas.height = resolution * viewport.height;
-
-            canvas.style.height = desiredHeight * 150;
-            canvas.style.width = desiredWidth * 150;
-
-            // Rendering PDF
-            page.render(
-            {
-                canvasContext: ctx,
-                viewport: viewport,
-                transform: [resolution, 0, 0, resolution, 0, 0],
-            });
-
-            return desiredHeight;
-        });
-    });
-}
-
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // To show file is clicked (enable is true), put to front, and decrease other files' opacity
@@ -346,15 +269,8 @@ AFRAME.registerComponent('circles-whiteboard-file',
         // Calculating desired width of file (1/6 of the whiteboard width)
         dimensions.width = CONTEXT_AF.data.boardWidth / 6;
 
-        // Displaying file on whiteboard depending on the category of file
-        if (CONTEXT_AF.data.category === 'image' || CONTEXT_AF.data.category === 'video')
-        {
-            dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
-        }
-        else
-        {
-            dimensions.height = displayPDF(CONTEXT_AF.data, element, dimensions.width);
-        }
+        // Displaying file on whiteboard
+        dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
 
         // Hover effect
         element.setAttribute('circles-interactive-object', {
