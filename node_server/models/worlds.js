@@ -87,59 +87,61 @@ const addWorlds = async function()
     console.log(e.message);
   }
 
-  for (const file of files) 
+  if (files)
   {
-    // Skipping over Wardrobe world as everyone has access to it
-    if (file != 'Wardrobe')
+    for (const file of files) 
     {
-      const path = __dirname + '/../public/worlds/' + file;
-
-      let stat = null;
-
-      // Checking if path is a directory
-      try
+      // Skipping over Wardrobe world as everyone has access to it
+      if (file != 'Wardrobe')
       {
-        stat = await fs.promises.stat(path);
-      }
-      catch (e)
-      {
-        console.log(e.message);
-      }
+        const path = __dirname + '/../public/worlds/' + file;
 
-      // If path is a directory,
-      // If the world is not already in the database,
-      // Add it to the database
-      if (stat.isDirectory())
-      {
-        let world = null;
+        let stat = null;
 
+        // Checking if path is a directory
         try
         {
-          world = await Worlds.findOne({ name: file }).exec();
+          stat = await fs.promises.stat(path);
         }
         catch (e)
         {
           console.log(e.message);
         }
 
-        if (world === null)
+        // If path is a directory,
+        // If the world is not already in the database,
+        // Add it to the database
+        if (stat.isDirectory())
         {
-          const worldData = {
-            name: file,
-            url: path,
-          };
+          let world = null;
 
-          try 
+          try
           {
-            await Worlds.create(worldData);
-            console.log(file + ' added to database');
-          } 
-          catch(err) 
+            world = await Worlds.findOne({ name: file }).exec();
+          }
+          catch (e)
           {
-            throw file + " creation error: " + err.message;
+            console.log(e.message);
+          }
+
+          if (world === null)
+          {
+            const worldData = {
+              name: file,
+              url: path,
+            };
+
+            try 
+            {
+              await Worlds.create(worldData);
+              console.log(file + ' added to database');
+            } 
+            catch(err) 
+            {
+              throw file + " creation error: " + err.message;
+            }
           }
         }
-      
       }
     }
   }
@@ -191,7 +193,66 @@ const removeDeletedWorlds = async function()
   }
 }
 
+// Checking that all whiteboard files are in the folder
+const checkWhiteboardFiles = async function()
+{
+  // Getting all worlds in the database
+  let databaseWorlds = null;
+
+  try
+  {
+    databaseWorlds = await Worlds.find({});
+  }
+  catch (e)
+  {
+    console.log(e.message);
+  }
+
+  // Getting all whiteboard files
+  let whiteboardFiles = [];
+
+  try
+  {
+    whiteboardFiles = await fs.promises.readdir(__dirname + '/../whiteboardFiles');
+  }
+  catch (e) 
+  {
+    console.log(e.message);
+  }
+
+  // For each world, making sure their whiteboard files are in the folder
+  // If not, delete their entry in the database
+  if (databaseWorlds)
+  {
+    // Going through each world
+    for (const world of databaseWorlds)
+    {
+      // Going through each whiteboard file
+      for (const file of world.whiteboardFiles)
+      {
+        if (!whiteboardFiles.includes(file.name))
+        {
+          try
+          {
+            console.log('deleting ' + file.name);
+
+            var index = world.whiteboardFiles.indexOf(file);
+            world.whiteboardFiles.splice(index, 1);
+
+            await world.save();
+          }
+          catch (e) 
+          {
+            console.log(e.message);
+          }
+        }
+      }
+    }
+  }
+}
+
 addWorlds();
 removeDeletedWorlds();
+checkWhiteboardFiles();
 
 module.exports = Worlds;
