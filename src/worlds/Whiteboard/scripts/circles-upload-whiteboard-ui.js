@@ -639,14 +639,18 @@ const insertFile = function(CONTEXT_AF)
     {
         var fileInfo = JSON.parse(request.response);
 
-        // Creating asset
-        createAsset(fileInfo);
+        if (fileInfo)
+        {
+            console.log(fileInfo);
+            // Creating asset
+            createAsset(fileInfo);
 
-        // Displaying file on whiteboard
-        displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo);
+            // Displaying file on whiteboard
+            displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo);
 
-        // (NETWORKING) Emiting that a file has been inserted to update for all users
-        CONTEXT_AF.socket.emit(CONTEXT_AF.fileInsertedEvent, {fileInfo:fileInfo, whiteboardID:whiteboard, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+            // (NETWORKING) Emiting that a file has been inserted to update for all users
+            CONTEXT_AF.socket.emit(CONTEXT_AF.fileInsertedEvent, {fileInfo:fileInfo, whiteboardID:whiteboard, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+        }
     }
 
     request.send('file=' + file + '&whiteboardID='+ whiteboard + '&world=' + world);
@@ -1121,7 +1125,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
                     var containers = document.getElementsByClassName('file-container');
 
                     // Adding event listeners to file containers
-                    for (var container of containers)
+                    for (const container of containers)
                     {
                         container.addEventListener('click', function()
                         {

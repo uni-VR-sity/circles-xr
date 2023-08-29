@@ -2497,7 +2497,7 @@ const deleteUploadedFile = async (req, res, next) =>
 
   // If it does, delete the file
   if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
-  {
+  { 
     // Deleting from database
     await Uploads.deleteOne({name: fileName});
 
@@ -2541,6 +2541,9 @@ const insertWhiteboardFile = async (req, res, next) =>
   catch(e)
   {
     console.log(e);
+
+    res.json(null);
+    return;
   }
 
   // Saving file information to the world entry
@@ -2560,8 +2563,50 @@ const insertWhiteboardFile = async (req, res, next) =>
       }
     }
 
+    // Saving file in whiteboardFiles folder
+    const uploadsPath = path.join(__dirname, '/../uploads');
+    const whiteboardFilesPath = path.join(__dirname, '/../whiteboardFiles');
+
+    var numFiles = 0;
+
+    // Getting number of files in folder to create a unique name
+    try
+    {
+      numFiles = fs.readdirSync(whiteboardFilesPath).length;
+    }
+    catch(e)
+    {
+      console.log(e);
+      
+      res.json(null);
+      return;
+    }
+
+    // Creating unique name
+
+    // name: name.type
+    // split result array: {"name", "type"}
+    var name = insertedFile.name.split('.')[0];
+    var type = insertedFile.name.split('.')[1];
+
+    const uploadedFile = path.join(uploadsPath, insertedFile.name);
+    const whiteboardFile = path.join(whiteboardFilesPath, name + numFiles + '.' + type);
+
+    try
+    {
+      fs.copyFileSync(uploadedFile, whiteboardFile);
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      res.json(null);
+      return;
+    }
+
     var fileInfo = {
-      file: insertedFile,
+      uploadedFile: insertedFile,
+      storedFileName: name + numFiles + '.' + type,
       whiteboardID: req.body.whiteboardID,
       position: [0, 0, maxZ],
     };
@@ -2574,17 +2619,18 @@ const insertWhiteboardFile = async (req, res, next) =>
     catch(e)
     {
       console.log(e);
+
+      res.json(null);
+      return;
     }
 
     // Sending back information on the file that was inserted
-    
     var file = JSON.parse(JSON.stringify(insertedFile));
 
     file.position = fileInfo.position;
 
     res.json(file);
   }
-
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
