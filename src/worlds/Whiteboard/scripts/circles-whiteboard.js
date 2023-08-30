@@ -460,18 +460,26 @@ const generateWhiteboard = function(parentElement, preferences, restrictions)
         value: 'File upload limit reached',
         color: '#bf0000',
         align: 'center',
+        wrapCount: 25,
+    });
+
+    warningMessage.setAttribute('geometry', {
+        primitive: 'plane',
+        height: 0.4,
+        width: 2,
+    });
+
+    warningMessage.setAttribute('material', {
+        color: preferences.boardColor,
+        emissive: preferences.boardColor,
+        emissiveIntensity: 0.5,
+        roughness: 0.5,
     });
 
     warningMessage.setAttribute('position', {
         x: 0,
-        y: (preferences.height / 2) + 0.4,
+        y: (preferences.height / 2) + 0.5,
         z: 0,
-    });
-
-    warningMessage.setAttribute('scale', {
-        x: 3,
-        y: 3,
-        z: 3,
     });
 
     boardBase.appendChild(warningMessage);
