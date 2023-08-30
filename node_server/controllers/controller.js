@@ -2339,19 +2339,25 @@ const newContent = (req, res, next) =>
   // Getting file
   const form = new formidable.IncomingForm();
 
+  // Setting file size restriction
+  form.options.maxFileSize = CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE * 1024 * 1024;
+
   // Setting location to upload file to
   form.uploadDir = path.join(__dirname, '/../uploads');
-
-  // TO-DO: SET FILE SIZE RESTRICTION
 
   form.parse(req, async (err, fields, files) => 
   {
     if (err)
     {
-      // Deleting file from folder
-      fs.rmSync(file.filepath, {recursive: true});
+      if (err.code === formidable.errors.biggerThanMaxFileSize)
+      {
+        req.session.errorMessage = 'File is too large, please ensure your file is under ' + CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE + 'MB';
+      }
+      else
+      {
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+      }
 
-      req.session.errorMessage = 'File could not be uploaded, please try again';
       return res.redirect('/uploaded-content');
     }
 

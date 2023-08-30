@@ -62,6 +62,9 @@ block content
                                 for fileType of valid3D
                                     li #{fileType}
 
+            br
+            p(style='margin-bottom:0;font-style:italic;') Maximum file size: #{CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE}MB
+
         input(type='submit' value='Upload' class='pure-button pure-button-primary')
 
     if successMessage
