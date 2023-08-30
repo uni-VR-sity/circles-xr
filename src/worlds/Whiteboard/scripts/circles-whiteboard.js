@@ -55,6 +55,12 @@ const getUserRestrictions = function(uploadingRestrictions, editingRestrictions,
         userRestrictions.canUpload = false;
     }
 
+    // Guests can't upload files
+    if (userInfo.usertype === 'guest' || userInfo.usertype === 'magic guest')
+    {
+        userRestrictions.canUpload = false;
+    }
+
     // Configuring editing restrictions
     if (editingRestrictions.includes('all'))
     {

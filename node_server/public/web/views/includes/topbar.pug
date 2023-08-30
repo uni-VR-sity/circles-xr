@@ -1,7 +1,8 @@
 header.profile-header
   - var adminUser = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
   - var hasMagicLinks = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
-  
+  - var notGuest = userInfo.userType !== CIRCLES.USER_TYPE.GUEST && userInfo.userType !== CIRCLES.USER_TYPE.MAGIC_GUEST;
+
   h1.profile-heading
     a(href="/explore" class="profile-logo")
       include ./circles_logo.svg
@@ -24,7 +25,8 @@ header.profile-header
         if hasMagicLinks
           li
             a(href="/your-magic-links" style='white-space:nowrap') Your Magic Links
-        li
-          a(href="/uploaded-content") Uploaded Content
+        if notGuest
+          li
+            a(href="/uploaded-content") Uploaded Content
         li 
           a(href="/logout") Log out
