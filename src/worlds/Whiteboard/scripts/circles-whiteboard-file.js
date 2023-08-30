@@ -139,6 +139,7 @@ const fileClick = function(file, originalPos, CONTEXT_AF)
     file.addEventListener('mousedown', function()
     {
         // (NETWORKING) Emiting that file has been selected to update for all users
+        CONTEXT_AF.fileSelected = true;
         CONTEXT_AF.socket.emit(CONTEXT_AF.fileSelectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
 
         filePosition.x = file.getAttribute('position').x;
@@ -158,9 +159,6 @@ const fileClick = function(file, originalPos, CONTEXT_AF)
     {
         if (file.getAttribute('position').x === filePosition.x && file.getAttribute('position').y === filePosition.y)
         {
-            // (NETWORKING) Emiting that file has been selected to update for all users
-            CONTEXT_AF.socket.emit(CONTEXT_AF.fileSelectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
-
             fileClickEffect(file, originalPos, true);
 
             // Activating file selected view on whiteboard
@@ -198,7 +196,9 @@ const fileClick = function(file, originalPos, CONTEXT_AF)
                     // Delayed to give time for database to update
                     setTimeout(function()
                     {
+                        CONTEXT_AF.fileSelected = false;
                         CONTEXT_AF.socket.emit(CONTEXT_AF.fileUnselectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                    
                     }, CONTEXT_AF.fileUnselectedDelay);
                 }
             }
@@ -249,6 +249,8 @@ AFRAME.registerComponent('circles-whiteboard-file',
         CONTEXT_AF.elementID = 'whiteboardFile_' + CONTEXT_AF.data.fileID;
 
         element.setAttribute('id', CONTEXT_AF.elementID);
+
+        CONTEXT_AF.fileSelected = false;
 
         CONTEXT_AF.networkMove = false;
         CONTEXT_AF.networkSelected = false;
@@ -399,13 +401,14 @@ AFRAME.registerComponent('circles-whiteboard-file',
         //    - Moved: File position is updated
 
         // Only showed if current user can edit files:
-        //    - Selected: Shown that file is selected by another user and other users can not select it
+        //    - Selected && Sync Selected: Shown that file is selected by another user and other users can not select it
         //    - Unselected: Normal view of file returns and other users can select it
 
         CONTEXT_AF.fileMoveEvent = 'whiteboard_file_move_event';
         CONTEXT_AF.fileSelectedEvent = 'whiteboard_file_selected_event';
         CONTEXT_AF.fileUnselectedEvent = 'whiteboard_file_unselected_event';
-            
+        CONTEXT_AF.fileSelectedSync = 'whiteboard_file_selected_sync';
+
         // Listening for networking events to move files
         CONTEXT_AF.socket.on(CONTEXT_AF.fileMoveEvent, function(data) 
         {
@@ -485,7 +488,32 @@ AFRAME.registerComponent('circles-whiteboard-file',
                     // Enabling interaction
                     element.setAttribute('circles-interactive-object', {enabled: true});;
                 }
+            });
 
+            // Sync networking for when users enter the world 
+
+            // Request other user's state so we can sync up
+            // (So that if the user enters the world and the file is selected, it appears selected for them)
+            setTimeout(function() 
+            {
+                CONTEXT_AF.socket.emit(CIRCLES.EVENTS.REQUEST_DATA_SYNC, {request:CONTEXT_AF.fileSelectedSync, elementID:CONTEXT_AF.elementID, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+            }, THREE.MathUtils.randInt(0,1200));
+
+            // Sending if current file is selected by current user
+            CONTEXT_AF.socket.on(CIRCLES.EVENTS.REQUEST_DATA_SYNC, function(data) 
+            {
+                // If the same world as the one requesting
+                // And the request is for this object
+                if (data.world === CIRCLES.getCirclesWorldName() && data.request === CONTEXT_AF.fileSelectedSync && data.elementID === CONTEXT_AF.elementID) 
+                {
+                    if (CONTEXT_AF.fileSelected)
+                    {
+                        const user = document.querySelector('#' + CIRCLES.CONSTANTS.PRIMARY_USER_ID).getAttribute('circles-visiblename');
+
+                        CONTEXT_AF.socket.emit(CONTEXT_AF.fileSelectedEvent, {elementID:CONTEXT_AF.elementID, user:user, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                    }
+                }
             });
         }
     },
