@@ -227,6 +227,9 @@ AFRAME.registerComponent('circles-whiteboard-file',
         boardHeight: {type: 'number'},
         boardWidth: {type: 'number'},
         position: {type: 'vec3'},
+        editable: {type: 'boolean'},
+
+        selectedBy: {type: 'string'},
     },
     init: function () 
     {
@@ -234,7 +237,7 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const element = CONTEXT_AF.el;
 
         // Setting element ID
-        CONTEXT_AF.elementID = 'whiteboardFile_' + CONTEXT_AF.data.whiteboardID + '_' + CONTEXT_AF.data.position.z + '_' + CONTEXT_AF.data.fileID;
+        CONTEXT_AF.elementID = 'whiteboardFile_' + CONTEXT_AF.data.fileID;
 
         element.setAttribute('id', CONTEXT_AF.elementID);
 
@@ -272,75 +275,79 @@ AFRAME.registerComponent('circles-whiteboard-file',
         // Displaying file on whiteboard
         dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
 
-        // Hover effect
-        element.setAttribute('circles-interactive-object', {
-            type:'scale', 
-            hover_scale: 1.05, 
-            click_scale: 1.05,
-        });
-
-        // Onclick effect
-        fileClick(element, CONTEXT_AF.data.position.z, this);
-
-        // Making file draggable
-
-        // Dragging boundries
-        var maxX = -1 * ((CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2));
-        var maxY = (CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2);
-        var minX = (CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2);
-        var minY = -1 * ((CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2));
-
-        element.setAttribute('circles-drag-object', {
-            maxCoordinate: {x: maxX, y: maxY},
-            minCoordinate: {x: minX, y: minY},
-        });
-
-        // Updating elements position when it is changed to update the database
-        // Using timeouts so that updates only occur when element stops moving
-
-        var timeout;
-        var timeoutStarted = false;
-
-        function updatePos()
+        // Adding interactivity if current user can edit files
+        if (CONTEXT_AF.data.editable)
         {
-            timeout = false;
+            // Hover effect
+            element.setAttribute('circles-interactive-object', {
+                type:'scale', 
+                hover_scale: 1.05, 
+                click_scale: 1.05,
+            });
 
-            var elementPos = element.getAttribute('position');
-            var oldPosition = element.getAttribute('circles-whiteboard-file').position;
+             // Onclick effect
+            fileClick(element, CONTEXT_AF.data.position.z, this);
 
-            // Only updating if the x or y position have been changed (if only z position changed, the file was selected, not moved)
-            if (elementPos.x !== oldPosition.x || elementPos.y !== oldPosition.y)
+            // Making file draggable
+
+            // Dragging boundries
+            var maxX = -1 * ((CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2));
+            var maxY = (CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2);
+            var minX = (CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2);
+            var minY = -1 * ((CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2));
+
+            element.setAttribute('circles-drag-object', {
+                maxCoordinate: {x: maxX, y: maxY},
+                minCoordinate: {x: minX, y: minY},
+            });
+
+            // Updating elements position when it is changed to update the database
+            // Using timeouts so that updates only occur when element stops moving
+
+            var timeout;
+            var timeoutStarted = false;
+
+            function updatePos()
             {
-                var newPos = {
-                    x: elementPos.x,
-                    y: elementPos.y,
-                    z: oldPosition.z,
-                }
-    
-                element.setAttribute('circles-whiteboard-file', {position: newPos});
+                timeout = false;
 
-                // (NETWORKING) Emiting that file has been moved to update for all users
-                CONTEXT_AF.socket.emit(CONTEXT_AF.fileMoveEvent, {elementID:CONTEXT_AF.elementID, newPos:element.getAttribute('position'), room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                var elementPos = element.getAttribute('position');
+                var oldPosition = element.getAttribute('circles-whiteboard-file').position;
+
+                // Only updating if the x or y position have been changed (if only z position changed, the file was selected, not moved)
+                if (elementPos.x !== oldPosition.x || elementPos.y !== oldPosition.y)
+                {
+                    var newPos = {
+                        x: elementPos.x,
+                        y: elementPos.y,
+                        z: oldPosition.z,
+                    }
+        
+                    element.setAttribute('circles-whiteboard-file', {position: newPos});
+
+                    // (NETWORKING) Emiting that file has been moved to update for all users
+                    CONTEXT_AF.socket.emit(CONTEXT_AF.fileMoveEvent, {elementID:CONTEXT_AF.elementID, newPos:element.getAttribute('position'), room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                }
             }
+
+            element.addEventListener('componentchanged', function(event) 
+            {
+                if (event.detail.name === 'position' && CONTEXT_AF.networkMove === false)
+                {
+                    if (timeoutStarted === false)
+                    {
+                        timeoutStarted = true;
+
+                        timeout = setTimeout(updatePos, CONTEXT_AF.positionDatabaseDelay);
+                    }
+                    else
+                    {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(updatePos, CONTEXT_AF.positionDatabaseDelay);
+                    }
+                }
+            });
         }
-
-        element.addEventListener('componentchanged', function(event) 
-        {
-            if (event.detail.name === 'position' && CONTEXT_AF.networkMove === false)
-            {
-                if (timeoutStarted === false)
-                {
-                    timeoutStarted = true;
-
-                    timeout = setTimeout(updatePos, CONTEXT_AF.positionDatabaseDelay);
-                }
-                else
-                {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(updatePos, CONTEXT_AF.positionDatabaseDelay);
-                }
-            }
-        });
 
     },
     update: function(oldData) 
@@ -348,23 +355,27 @@ AFRAME.registerComponent('circles-whiteboard-file',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
 
+        // If the file can be edited by the current user
         // When file is moved by the current user
         // Sending data to updated position of file in world database array
 
-        if (CONTEXT_AF.data.position !== oldData.position && CONTEXT_AF.networkMove === false)
+        if (CONTEXT_AF.data.editable)
         {
-            if (CONTEXT_AF.data.position && oldData.position)
+            if (CONTEXT_AF.data.position !== oldData.position && CONTEXT_AF.networkMove === false)
             {
-                // Getting current world
-                // url: http://domain/w/World
-                // split result array: {'http', '', 'domain', 'w', 'World'}
-                var world = window.location.href.split('/')[4];
+                if (CONTEXT_AF.data.position && oldData.position)
+                {
+                    // Getting current world
+                    // url: http://domain/w/World
+                    // split result array: {'http', '', 'domain', 'w', 'World'}
+                    var world = window.location.href.split('/')[4];
 
-                var request = new XMLHttpRequest();
-                request.open('POST', '/update-whiteboard-file-position');
-                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    var request = new XMLHttpRequest();
+                    request.open('POST', '/update-whiteboard-file-position');
+                    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-                request.send('file=' + CONTEXT_AF.data.fileID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y);
+                    request.send('file=' + CONTEXT_AF.data.fileID + '&world=' + world + '&newX=' + CONTEXT_AF.data.position.x + '&newY=' + CONTEXT_AF.data.position.y);
+                }
             }
         }
     },
@@ -375,17 +386,16 @@ AFRAME.registerComponent('circles-whiteboard-file',
 
         CONTEXT_AF.socket = CIRCLES.getCirclesWebsocket();
 
-        // Moved: File position is updated
-        // Selected: Shown that file is selected by another user and other users can not select it
-        // Unselected: Normal view of file returns and other users can select it
-        // Inserted: File is inserted to whiteboard
-        // Deleted: File is deleted from whiteboard
+        // Always showed:
+        //    - Moved: File position is updated
+
+        // Only showed if current user can edit files:
+        //    - Selected: Shown that file is selected by another user and other users can not select it
+        //    - Unselected: Normal view of file returns and other users can select it
 
         CONTEXT_AF.fileMoveEvent = 'whiteboard_file_move_event';
         CONTEXT_AF.fileSelectedEvent = 'whiteboard_file_selected_event';
         CONTEXT_AF.fileUnselectedEvent = 'whiteboard_file_unselected_event';
-        CONTEXT_AF.fileDeletedEvent = 'whiteboard_file_unselected_event';
-        CONTEXT_AF.fileInsertedEvent = 'whiteboard_file_unselected_event';
             
         // Listening for networking events to move files
         CONTEXT_AF.socket.on(CONTEXT_AF.fileMoveEvent, function(data) 
@@ -412,59 +422,62 @@ AFRAME.registerComponent('circles-whiteboard-file',
             }
         });
 
-        // Listening for networking events to select files
-        // If file is selected, other users can not interact with it
-        CONTEXT_AF.socket.on(CONTEXT_AF.fileSelectedEvent, function(data)
+        if (CONTEXT_AF.data.editable)
         {
-            if (data.elementID === CONTEXT_AF.elementID && !element.querySelector('#selected-by-' + data.user))
+            // Listening for networking events to select files
+            // If file is selected, other users can not interact with it
+            CONTEXT_AF.socket.on(CONTEXT_AF.fileSelectedEvent, function(data)
             {
-                CONTEXT_AF.networkSelected = true;
+                if (data.elementID === CONTEXT_AF.elementID && !element.querySelector('#selected-by-user'))
+                {
+                    CONTEXT_AF.networkSelected = true;
 
-                // Visual indication that file is selected
-                element.setAttribute('material', {color: '#949494'});
+                    // Visual indication that file is selected
+                    element.setAttribute('material', {color: '#949494'});
 
-                var selectedText = document.createElement('a-entity');
-                selectedText.setAttribute('id', 'selected-by-' + data.user);
+                    var selectedText = document.createElement('a-entity');
+                    selectedText.setAttribute('id', 'selected-by-user');
 
-                selectedText.setAttribute('text', {
-                    value: 'Selected by ' + data.user,
-                    align: 'center',
-                    wrapCount: 10,
-                    lineHeight: 60,
-                });
+                    selectedText.setAttribute('text', {
+                        value: 'Selected by ' + data.user,
+                        align: 'center',
+                        wrapCount: 10,
+                        lineHeight: 60,
+                    });
 
-                selectedText.setAttribute('scale', {
-                    x: 0.6,
-                    y: 0.6,
-                    z: 0.6,
-                });
+                    selectedText.setAttribute('scale', {
+                        x: 0.6,
+                        y: 0.6,
+                        z: 0.6,
+                    });
 
-                element.appendChild(selectedText);
+                    element.appendChild(selectedText);
 
-                // Disabling interaction
-                element.setAttribute('circles-interactive-object', {enabled: false});
-            }
+                    // Disabling interaction
+                    element.setAttribute('circles-interactive-object', {enabled: false});
+                }
 
-        });
+            });
 
-        // Listening for networking events to select files
-        CONTEXT_AF.socket.on(CONTEXT_AF.fileUnselectedEvent, function(data) 
-        {
-            if (data.elementID === CONTEXT_AF.elementID)
+            // Listening for networking events to select files
+            CONTEXT_AF.socket.on(CONTEXT_AF.fileUnselectedEvent, function(data) 
             {
-                // Removing visuals of selection
-                CONTEXT_AF.networkSelected = false;
+                if (data.elementID === CONTEXT_AF.elementID)
+                {
+                    // Removing visuals of selection
+                    CONTEXT_AF.networkSelected = false;
 
-                element.setAttribute('material', {color: '#FFFFFF'});
+                    element.setAttribute('material', {color: '#FFFFFF'});
 
-                var selectedText = element.querySelector('#selected-by-' + data.user);
+                    var selectedText = element.querySelector('#selected-by-user');
 
-                selectedText.parentNode.removeChild(selectedText);
+                    selectedText.parentNode.removeChild(selectedText);
 
-                // Enabling interaction
-                element.setAttribute('circles-interactive-object', {enabled: true});;
-            }
+                    // Enabling interaction
+                    element.setAttribute('circles-interactive-object', {enabled: true});;
+                }
 
-        });
+            });
+        }
     },
 });

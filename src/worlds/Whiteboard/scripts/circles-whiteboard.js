@@ -6,6 +6,81 @@
 
 // Functions
 
+// Getting information on current user
+const getUserRestrictions = function(uploadingRestrictions, editingRestrictions, customUploading, customEditing)
+{
+    var userRestrictions = {
+        canUpload: false,
+        canEdit: false,
+    }
+
+    // Getting user information
+    const userElement = document.getElementsByClassName('user_cam_rig')[0];
+
+    const userInfo = {
+        username: userElement.getAttribute('circles-username'),
+        usertype: userElement.getAttribute('circles-usertype').toLowerCase(),
+    }
+
+    // Filtering uploading restrictions to all be lowercase
+    for (var i = 0; i < uploadingRestrictions.length; i++)
+    {
+        uploadingRestrictions[i] = uploadingRestrictions[i].toLowerCase();
+    }
+
+    // Filtering editing restrictions to all be lowercase
+    for (var i = 0; i < editingRestrictions.length; i++)
+    {
+        editingRestrictions[i] = editingRestrictions[i].toLowerCase();
+    }
+
+    // Configuring uploading restrictions
+    if (uploadingRestrictions.includes('all'))
+    {
+        userRestrictions.canUpload = true;
+    }
+    else if (uploadingRestrictions.includes(userInfo.usertype))
+    {
+        userRestrictions.canUpload = true;
+    }
+    else if (uploadingRestrictions.includes('custom'))
+    {
+        if (customUploading.includes(userInfo.username))
+        {
+            userRestrictions.canUpload = true;
+        }
+    }
+    else if (uploadingRestrictions.includes('none'))
+    {
+        userRestrictions.canUpload = false;
+    }
+
+    // Configuring editing restrictions
+    if (editingRestrictions.includes('all'))
+    {
+        userRestrictions.canEdit = true;
+    }
+    else if (editingRestrictions.includes(userInfo.usertype))
+    {
+        userRestrictions.canEdit = true;
+    }
+    else if (uploadingRestrictions.includes('custom'))
+    {
+        if (customEditing.includes(userInfo.username))
+        {
+            userRestrictions.canEdit = true;
+        }
+    }
+    else if (uploadingRestrictions.includes('none'))
+    {
+        userRestrictions.canEdit = false;
+    }
+
+    return userRestrictions;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Uploading assets for whiteboard into world
 const uploadAssets = function()
 {
@@ -45,7 +120,7 @@ const uploadAssets = function()
 
 // Creating upload button at the top of controller base
 // Takes the controller base (parentElement), and its dimensions
-const generateUpload = function(whiteboardElement, parentElement, height, width, depth)
+const generateUpload = function(whiteboardElement, parentElement, height, width, depth, canUpload)
 {
     var uploadButton = document.createElement('a-entity');
     uploadButton.setAttribute('class', 'upload-button interactive');
@@ -67,21 +142,37 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
         width: width / 3,
     }); 
 
-    uploadButton.setAttribute('material', {
-        src: '#upload_symbol',
-        transparent: true,
-    }); 
+    // If user can't upload files then symbol is greyed out
+    if (canUpload)
+    {
+        uploadButton.setAttribute('material', {
+            src: '#upload_symbol',
+            transparent: true,
+        }); 
+    }
+    else 
+    {
+        uploadButton.setAttribute('material', {
+            src: '#upload_symbol',
+            transparent: true,
+            opacity: 0.3,
+        }); 
+    }
 
     parentElement.appendChild(uploadButton); 
 
-    // Adding effect when hovered
-    uploadButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
-
-    // When clicked, activate 'circles-upload-file' for the current whiteboard
-    uploadButton.addEventListener('click', function()
+    // Only adding interactivity is user can upload files
+    if (canUpload)
     {
-        document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:true; whiteboardID:' + whiteboardElement.getAttribute('id'));
-    });
+        // Adding effect when hovered
+        uploadButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
+
+        // When clicked, activate 'circles-upload-file' for the current whiteboard
+        uploadButton.addEventListener('click', function()
+        {
+            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:true; whiteboardID:' + whiteboardElement.getAttribute('id'));
+        });
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -227,7 +318,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Generating default controller base
-const generateDefaultController = function(whiteboard, preferences)
+const generateDefaultController = function(whiteboard, preferences, restrictions)
 {
     // Checking if the base doesn't already exist
     if (!whiteboard.querySelector('.default-controller'))
@@ -239,7 +330,7 @@ const generateDefaultController = function(whiteboard, preferences)
         var defaultController = document.createElement('a-entity');
         defaultController.setAttribute('class', 'default-controller');
 
-        generateUpload(whiteboard, defaultController, preferences.height, controllerWidth, preferences.depth);
+        generateUpload(whiteboard, defaultController, preferences.height, controllerWidth, preferences.depth, restrictions.canUpload);
         generateMessage(defaultController, preferences.height, controllerWidth, preferences.depth);
         generateDraw(defaultController, preferences.height, controllerWidth, preferences.depth);
 
@@ -270,7 +361,7 @@ const generateFileSelectedController = function(whiteboard, preferences, CONTEXT
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Creating whiteboard element
-const generateWhiteboard = function(parentElement, preferences)
+const generateWhiteboard = function(parentElement, preferences, restrictions)
 {
     // Base
     var boardBase = document.createElement('a-entity');
@@ -343,7 +434,7 @@ const generateWhiteboard = function(parentElement, preferences)
     parentElement.appendChild(boardControls);
 
     // Default controller base
-    generateDefaultController(parentElement, preferences);
+    generateDefaultController(parentElement, preferences, restrictions);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -395,7 +486,7 @@ const addFileAsset = function(name, category)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Getting previously inserted files
-const getFiles = function(whiteboard)
+const getFiles = function(whiteboard, restrictions)
 {
     // Getting whiteboard id
     var id = whiteboard.getAttribute('id');
@@ -443,6 +534,7 @@ const getFiles = function(whiteboard)
                         y: file.position[1],
                         z: file.position[2],
                     },
+                    editable: restrictions.canEdit,
                 });
 
                 container.appendChild(fileObject);
@@ -465,6 +557,10 @@ AFRAME.registerComponent('circles-whiteboard',
         depth: {type: 'number', default: 0.25},
         boardColor: {type: 'color', default: '#ffffff'},
         shadows: {type: 'boolean', default: false},
+        uploadingRestrictions: {type: 'array', default: ['all']},
+        editingRestrictions: {type: 'array', default: ['all']},
+        customUploading: {type: 'array'},
+        customEditing: {type: 'array'},
 
         fileSelected: {type: 'boolean', default: false},
     },
@@ -472,6 +568,8 @@ AFRAME.registerComponent('circles-whiteboard',
     {
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
+
+        CONTEXT_AF.data.fileSelected = false;
 
         // Setting up networking
         if (CIRCLES.isCirclesWebsocketReady()) 
@@ -490,7 +588,10 @@ AFRAME.registerComponent('circles-whiteboard',
             CONTEXT_AF.el.sceneEl.addEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
         }
 
-        CONTEXT_AF.data.fileSelected = false;
+        // Getting username and type of current user
+        CONTEXT_AF.userRestrictions = getUserRestrictions(CONTEXT_AF.data.uploadingRestrictions, CONTEXT_AF.data.editingRestrictions, CONTEXT_AF.data.customUploading, CONTEXT_AF.data.customEditing);
+
+        console.log(CONTEXT_AF.userRestrictions);
 
         // Making sure this is the first circles-whiteboard component to the run
         // If it is, running what only needs to be run once
@@ -504,10 +605,10 @@ AFRAME.registerComponent('circles-whiteboard',
         }
 
         // Generating whiteboard
-        generateWhiteboard(element, CONTEXT_AF.data);
+        generateWhiteboard(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions);
 
         // Adding previously inserted files
-        getFiles(element);
+        getFiles(element, CONTEXT_AF.userRestrictions);
     },
     update: function() 
     {
@@ -538,7 +639,7 @@ AFRAME.registerComponent('circles-whiteboard',
                 controllerToDelete.parentNode.removeChild(controllerToDelete);
             }
 
-            generateDefaultController(element, CONTEXT_AF.data);
+            generateDefaultController(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions);
         }
     },
     setUpNetworking: function()

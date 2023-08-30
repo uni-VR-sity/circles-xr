@@ -467,6 +467,7 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
 
       let result = data.replace(/__WORLDNAME__/g, world_id);
       result = result.replace(/__USERTYPE__/g, user.usertype);
+      result = result.replace(/__USERNAME__/g, user.username);
       result = result.replace(/__VISIBLENAME__/g, u_name + specialStatus);
       result = result.replace(/__FACE_MAP__/g, CIRCLES.CONSTANTS.DEFAULT_FACE_HAPPY_MAP);
 
@@ -2803,6 +2804,19 @@ const updateFilePosition = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Returns current user's username and type
+const getUser = async (req, res, next) =>
+{
+  const user = {
+    username: req.user.username,
+    usertype: req.user.usertype,
+  }
+
+  res.json(JSON.parse(JSON.stringify(user)));
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   invalidAddress,
   // getAllUsers,
@@ -2847,4 +2861,5 @@ module.exports = {
   getWhiteboardFiles,
   setFileDimensions,
   updateFilePosition,
+  getUser,
 };

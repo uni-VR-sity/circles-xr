@@ -42,14 +42,17 @@
             </a-entity>
 
             <!-- Whiteboard 1 -->
-            <a-entity text="value:whiteboard1; color:#000000; align:center" 
+            <a-entity text="value:whiteboard1; color:#000000; align:center;" 
                       position="6 5 0" 
                       rotation="0 -90 0" 
                       scale="5 5 5">
             </a-entity>
 
             <a-entity id="whiteboard1"
-                        circles-whiteboard
+                        circles-whiteboard="uploadingRestrictions: admin, Teacher, Custom;
+                                            editingRestrictions: Admin, Teacher, custom;
+                                            customUploading: Student2;
+                                            customEditing: Student2;"
                         position="6 2 0"
                         rotation="0 -90 0">
             </a-entity>

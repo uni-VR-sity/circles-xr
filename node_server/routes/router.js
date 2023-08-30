@@ -120,6 +120,7 @@ router.get('/logout', authenticated, (req, res, next) => {
 });
 
 router.post('/update-session-name', authenticated, controller.updateSessionName);
+router.post('/get-user-info', authenticated, controller.getUser);
 
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
