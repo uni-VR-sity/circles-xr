@@ -61,6 +61,12 @@ const getUserRestrictions = function(uploadingRestrictions, editingRestrictions,
         userRestrictions.canUpload = false;
     }
 
+    // Superuser can always upload files
+    if (userInfo.usertype === 'superuser')
+    {
+        userRestrictions.canUpload = true;
+    }
+
     // Configuring editing restrictions
     if (editingRestrictions.includes('all'))
     {
@@ -80,6 +86,12 @@ const getUserRestrictions = function(uploadingRestrictions, editingRestrictions,
     else if (uploadingRestrictions.includes('none'))
     {
         userRestrictions.canEdit = false;
+    }
+
+    // Superuser can always edit files
+    if (userInfo.usertype === 'superuser')
+    {
+        userRestrictions.canEdit = true;
     }
 
     return userRestrictions;
@@ -126,7 +138,7 @@ const uploadAssets = function()
 
 // Creating upload button at the top of controller base
 // Takes the controller base (parentElement), and its dimensions
-const generateUpload = function(whiteboardElement, parentElement, height, width, depth, canUpload)
+const generateUpload = function(whiteboardElement, parentElement, height, width, depth, canUpload, maxUploadReached)
 {
     var uploadButton = document.createElement('a-entity');
     uploadButton.setAttribute('class', 'upload-button interactive');
@@ -149,14 +161,24 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
     }); 
 
     // If user can't upload files then symbol is greyed out
-    if (canUpload)
+    // If the max upload is reached then symbol is red
+    if (canUpload && !maxUploadReached)
     {
         uploadButton.setAttribute('material', {
             src: '#upload_symbol',
             transparent: true,
         }); 
     }
-    else 
+    else if (canUpload && maxUploadReached)
+    {
+        uploadButton.setAttribute('material', {
+            src: '#upload_symbol',
+            transparent: true,
+            emissive: '#bf0000',
+            opacity: 0.3,
+        }); 
+    }
+    else
     {
         uploadButton.setAttribute('material', {
             src: '#upload_symbol',
@@ -167,8 +189,9 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
 
     parentElement.appendChild(uploadButton); 
 
-    // Only adding interactivity is user can upload files
-    if (canUpload)
+    // Only adding interactivity is user can upload files and the max upload has not been reached
+    // If the max upload has been reached, when upload button is hovered, warning is displayed
+    if (canUpload && !maxUploadReached)
     {
         // Adding effect when hovered
         uploadButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
@@ -177,6 +200,20 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
         uploadButton.addEventListener('click', function()
         {
             document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:true; whiteboardID:' + whiteboardElement.getAttribute('id'));
+        });
+    }
+    else if (maxUploadReached)
+    {
+        var warningMessage = whiteboardElement.querySelector('.warning');
+
+        uploadButton.addEventListener('mouseenter', function()
+        {
+            warningMessage.setAttribute('visible', true);
+        });
+
+        uploadButton.addEventListener('mouseleave', function()
+        {
+            warningMessage.setAttribute('visible', false);
         });
     }
 }
@@ -295,6 +332,8 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
     // Deleting selected file when clicked
     trashButton.addEventListener('click', function()
     {
+        whiteboard.setAttribute('circles-whiteboard', {fileDeleted: true});
+
         // Getting selected file
         var file = whiteboard.getElementsByClassName('selected-file')[0];
         
@@ -324,7 +363,7 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Generating default controller base
-const generateDefaultController = function(whiteboard, preferences, restrictions)
+const generateDefaultController = function(whiteboard, preferences, restrictions, maxUploadReached)
 {
     // Checking if the base doesn't already exist
     if (!whiteboard.querySelector('.default-controller'))
@@ -336,12 +375,29 @@ const generateDefaultController = function(whiteboard, preferences, restrictions
         var defaultController = document.createElement('a-entity');
         defaultController.setAttribute('class', 'default-controller');
 
-        generateUpload(whiteboard, defaultController, preferences.height, controllerWidth, preferences.depth, restrictions.canUpload);
+        generateUpload(whiteboard, defaultController, preferences.height, controllerWidth, preferences.depth, restrictions.canUpload, maxUploadReached);
         generateMessage(defaultController, preferences.height, controllerWidth, preferences.depth);
         generateDraw(defaultController, preferences.height, controllerWidth, preferences.depth);
 
         controllerBase.appendChild(defaultController);
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Regenerating upload button to update it status (If user can upload files or not - If file limit has been reached)
+const regenerateUpload = function(whiteboard, preferences, restrictions, maxUploadReached)
+{
+    var defaultController = whiteboard.querySelector('.default-controller');
+
+    var controllerWidth = preferences.width * 0.2;
+
+    // Deleting old upload button
+    var uploadButton = defaultController.querySelector('.upload-button');    
+    uploadButton.parentNode.removeChild(uploadButton);
+
+    // Generating new upload button
+    generateUpload(whiteboard, defaultController, preferences.height, controllerWidth, preferences.depth, restrictions.canUpload, maxUploadReached);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -394,6 +450,32 @@ const generateWhiteboard = function(parentElement, preferences, restrictions)
 
     parentElement.appendChild(boardBase); 
 
+    // Warning message
+    var warningMessage = document.createElement('a-entity');
+    warningMessage.setAttribute('class', 'warning');
+
+    warningMessage.setAttribute('visible', false);
+
+    warningMessage.setAttribute('text', {
+        value: 'File upload limit reached',
+        color: '#bf0000',
+        align: 'center',
+    });
+
+    warningMessage.setAttribute('position', {
+        x: 0,
+        y: (preferences.height / 2) + 0.4,
+        z: 0,
+    });
+
+    warningMessage.setAttribute('scale', {
+        x: 3,
+        y: 3,
+        z: 3,
+    });
+
+    boardBase.appendChild(warningMessage);
+
     // File Container
     var fileContainer = document.createElement('a-entity');
     fileContainer.setAttribute('class', 'board-files');
@@ -440,7 +522,7 @@ const generateWhiteboard = function(parentElement, preferences, restrictions)
     parentElement.appendChild(boardControls);
 
     // Default controller base
-    generateDefaultController(parentElement, preferences, restrictions);
+    generateDefaultController(parentElement, preferences, restrictions, false);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -492,7 +574,7 @@ const addFileAsset = function(name, category)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Getting previously inserted files
-const getFiles = function(whiteboard, restrictions)
+const getFiles = function(whiteboard, CONTEXT_AF)
 {
     // Getting whiteboard id
     var id = whiteboard.getAttribute('id');
@@ -540,11 +622,23 @@ const getFiles = function(whiteboard, restrictions)
                         y: file.position[1],
                         z: file.position[2],
                     },
-                    editable: restrictions.canEdit,
+                    editable: CONTEXT_AF.userRestrictions.canEdit,
                 });
 
                 container.appendChild(fileObject);
             }
+
+            CONTEXT_AF.numFiles = files.length;
+        }
+        else
+        {
+            CONTEXT_AF.numFiles = 0;
+        }
+
+        // If the whiteboard already has the file limit, restricting uploads
+        if (CONTEXT_AF.numFiles >= CONTEXT_AF.data.maxFiles)
+        {
+            regenerateUpload(whiteboard, CONTEXT_AF.data, CONTEXT_AF.userRestrictions, true);
         }
     }
 
@@ -563,12 +657,15 @@ AFRAME.registerComponent('circles-whiteboard',
         depth: {type: 'number', default: 0.25},
         boardColor: {type: 'color', default: '#ffffff'},
         shadows: {type: 'boolean', default: false},
+        maxFiles: {type: 'number', default: 5},
         uploadingRestrictions: {type: 'array', default: ['all']},
         editingRestrictions: {type: 'array', default: ['all']},
         customUploading: {type: 'array'},
         customEditing: {type: 'array'},
 
         fileSelected: {type: 'boolean', default: false},
+        fileInserted: {type: 'boolean', default: false},
+        fileDeleted: {type: 'boolean', default: false},
     },
     init: function () 
     {
@@ -597,8 +694,6 @@ AFRAME.registerComponent('circles-whiteboard',
         // Getting username and type of current user
         CONTEXT_AF.userRestrictions = getUserRestrictions(CONTEXT_AF.data.uploadingRestrictions, CONTEXT_AF.data.editingRestrictions, CONTEXT_AF.data.customUploading, CONTEXT_AF.data.customEditing);
 
-        console.log(CONTEXT_AF.userRestrictions);
-
         // Making sure this is the first circles-whiteboard component to the run
         // If it is, running what only needs to be run once
         if (document.querySelectorAll('[circles-whiteboard]')[0].getAttribute('id') === element.getAttribute('id'))
@@ -614,7 +709,7 @@ AFRAME.registerComponent('circles-whiteboard',
         generateWhiteboard(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions);
 
         // Adding previously inserted files
-        getFiles(element, CONTEXT_AF.userRestrictions);
+        getFiles(element, CONTEXT_AF);
     },
     update: function() 
     {
@@ -645,7 +740,53 @@ AFRAME.registerComponent('circles-whiteboard',
                 controllerToDelete.parentNode.removeChild(controllerToDelete);
             }
 
-            generateDefaultController(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions);
+            var maxUploadReached = CONTEXT_AF.numFiles === CONTEXT_AF.data.maxFiles;
+
+            generateDefaultController(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions, maxUploadReached);
+        }
+
+        // When file is inserted
+
+        // Updating count of files on board
+        // If maximum is reached, setting warning message and disabling uploads
+        if (CONTEXT_AF.data.fileInserted === true)
+        {
+            CONTEXT_AF.numFiles ++;
+
+            if (CONTEXT_AF.numFiles === CONTEXT_AF.data.maxFiles)
+            {
+                // Checking if the default controller is activated
+                // If it is, regenerate upload button to disable it
+                // If it isn't, uploads will be disabled when default controller returned
+                if (element.querySelector('.default-controller'))
+                {
+                    regenerateUpload(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions, true);
+                }
+            }
+
+            element.setAttribute('circles-whiteboard', {fileInserted: false});
+        }
+
+        // When file is deleted
+
+        // Updating count of files on board
+        // If upload was at its maximum before deletion, enable uploading again 
+        if (CONTEXT_AF.data.fileDeleted === true)
+        {
+            if (CONTEXT_AF.numFiles === CONTEXT_AF.data.maxFiles)
+            {
+                // Checking if the default controller is activated
+                // If it is, regenerate upload button to enable it
+                // If it isn't, uploads will be enabled when default controller returned
+                if (element.querySelector('.default-controller'))
+                {
+                    regenerateUpload(element, CONTEXT_AF.data, CONTEXT_AF.userRestrictions, false);
+                }
+            }
+
+            CONTEXT_AF.numFiles --;
+
+            element.setAttribute('circles-whiteboard', {fileDeleted: false});
         }
     },
     setUpNetworking: function()
@@ -667,7 +808,15 @@ AFRAME.registerComponent('circles-whiteboard',
                 var file = document.getElementById(data.fileID);
                 
                 file.parentNode.removeChild(file);
+
+                element.setAttribute('circles-whiteboard', {fileDeleted: true});
             }
         });
     },
+    getUserRestrictions: function()
+    {
+        const CONTEXT_AF = this;
+
+        return CONTEXT_AF.userRestrictions;
+    }
 });

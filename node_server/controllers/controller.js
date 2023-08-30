@@ -21,6 +21,7 @@ const jwt      = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
+const uniqueFilename = require('unique-filename');
 
 //load in config
 let env = dotenv.config({})
@@ -2586,34 +2587,19 @@ const insertWhiteboardFile = async (req, res, next) =>
     const uploadsPath = path.join(__dirname, '/../uploads');
     const whiteboardFilesPath = path.join(__dirname, '/../whiteboardFiles');
 
-    var numFiles = 0;
-
-    // Getting number of files in folder to create a unique name
-    try
-    {
-      numFiles = fs.readdirSync(whiteboardFilesPath).length;
-    }
-    catch(e)
-    {
-      console.log(e);
-      
-      res.json(null);
-      return;
-    }
-
     // Creating unique name
+    var uniqueFilePath = uniqueFilename(whiteboardFilesPath);
 
     // name: name.type
     // split result array: {"name", "type"}
-    var name = insertedFile.name.split('.')[0];
     var type = insertedFile.name.split('.')[1];
 
     const uploadedFile = path.join(uploadsPath, insertedFile.name);
-    const whiteboardFile = path.join(whiteboardFilesPath, name + numFiles + '.' + type);
+    const whiteboardFile = uniqueFilePath + '.' + type;
 
     try
     {
-      fs.copyFileSync(uploadedFile, whiteboardFile);
+      fs.copyFileSync(uploadedFile, whiteboardFile, fs.constants.COPYFILE_EXCL);
     }
     catch(e)
     {
@@ -2623,8 +2609,11 @@ const insertWhiteboardFile = async (req, res, next) =>
       return;
     }
 
+    var brokenPath = whiteboardFile.split('\\');
+    var name = brokenPath[brokenPath.length - 1];
+
     var fileInfo = {
-      name: name + numFiles + '.' + type,
+      name: name,
       category: insertedFile.category,
       height: insertedFile.height,
       width: insertedFile.width,

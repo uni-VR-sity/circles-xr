@@ -209,11 +209,11 @@ const checkWhiteboardFiles = async function()
   }
 
   // Getting all whiteboard files in folder
-  let whiteboardFiles = [];
+  let folderFiles = [];
 
   try
   {
-    whiteboardFiles = await fs.promises.readdir(__dirname + '/../whiteboardFiles');
+    folderFiles = await fs.promises.readdir(__dirname + '/../whiteboardFiles');
   }
   catch (e) 
   {
@@ -223,30 +223,27 @@ const checkWhiteboardFiles = async function()
   // For each world, making sure their whiteboard files are in the folder
   // If not, delete their entry in the database
   if (databaseWorlds)
-  {
+  { 
     // Going through each world
     for (const world of databaseWorlds)
     {
+      var existingFiles = [];
+      
       // Going through each whiteboard file
       for (const file of world.whiteboardFiles)
-      {
-        if (!whiteboardFiles.includes(file.name))
+      { 
+        if (folderFiles.includes(file.name))
         {
-          try
-          {
-            console.log('deleting ' + file.name);
-
-            var index = world.whiteboardFiles.indexOf(file);
-            world.whiteboardFiles.splice(index, 1);
-
-            await world.save();
-          }
-          catch (e) 
-          {
-            console.log(e);
-          }
+          existingFiles.push(file);
+        }
+        else
+        {
+          console.log('deleting ' + file.name);
         }
       }
+      
+      world.whiteboardFiles = existingFiles;
+      await world.save();
     }
   }
 }

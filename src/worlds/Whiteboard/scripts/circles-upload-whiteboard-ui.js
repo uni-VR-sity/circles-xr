@@ -584,6 +584,8 @@ const displayFile = function(whiteboardID, assetID, fileInfo)
     // Getting whiteboard to display file on 
     var whiteboard = document.getElementById(whiteboardID);
 
+    whiteboard.setAttribute('circles-whiteboard', {fileInserted: true});
+
     // Getting file container in whiteboard
     var container = whiteboard.querySelector('.board-files');
 
@@ -604,6 +606,7 @@ const displayFile = function(whiteboardID, assetID, fileInfo)
             y: fileInfo.position[1],
             z: fileInfo.position[2],
         },
+        editable: whiteboard.components['circles-whiteboard'].getUserRestrictions().canEdit,
     });
 
     container.appendChild(file);

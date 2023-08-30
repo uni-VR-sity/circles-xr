@@ -49,14 +49,23 @@ const fileClickEffect = function(file, originalPos, enable)
     // File selected
     if (enable && !file.classList.contains('selected-file'))
     {
-        // Getting number of files already displayed on the whiteboard (to calculate the overlap of files)
-        var numFiles = file.parentElement.children.length;
+        // Getting the highest z value of files (to calculate the overlap of files)
+        var files = file.parentElement.children;
+        var maxZ = 0;
+
+        for (const file of files)
+        {
+            if (file.getAttribute('position').z >= maxZ)
+            {
+                maxZ = file.getAttribute('position').z + 0.001;
+            }
+        }
 
         // Positioning file in front of all others on whiteboard
         file.setAttribute('position', {
             x: file.getAttribute('position').x,
             y: file.getAttribute('position').y,
-            z: 0.001 * (numFiles + 2),
+            z: maxZ + 0.001,
         });
 
         // Adding overlay to decrease opacity of other files
@@ -67,7 +76,7 @@ const fileClickEffect = function(file, originalPos, enable)
         overlay.setAttribute('position', {
             x: 0,
             y: 0,
-            z: 0.001 * (numFiles + 1),
+            z: maxZ,
         });
 
         overlay.setAttribute('geometry', {
