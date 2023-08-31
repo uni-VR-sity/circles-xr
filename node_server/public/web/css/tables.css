@@ -1,26 +1,38 @@
-/* Default style for tables ****************************************/
+/* Default style for tables ******************************************************************************************************************************/
 
-/********************************************************************
+/*********************************************************************************************************************************************************
 
 Basic Layout:
 
 div.table-top-bar
 
-    p *** Your Headings ***
-    p
-    p
+    h3 *** Your Headings ***
+    h3
+    h3
+
+div.table-group-selector
 
 
 
+**********************************************************************************************************************************************************/
 
-*********************************************************************/
+/* Top Bar ***********************************************************************************************************************************************/
 
-/* Colors ***********************************************************/
-
-.table-top-bar { width:100%; background-color:var(--GREY); }
+.table-top-bar { width:100%; background-color:var(--GREY); padding:0; margin:0 0 20px 0; }
 
 .table-top-bar h3 { padding:20px 30px; margin:0; display:inline-block; }
 .table-top-bar h3:hover {  background-color:var(--HOVER_GREY); cursor:pointer; }
 
 .table-top-bar .selected { background-color:var(--DARK_GREY); color:var(--WHITE);  cursor:pointer; }
 .table-top-bar .selected:hover { background-color:var(--DARK_GREY); color:var(--WHITE); }
+
+/* Table Container ***************************************************************************************************************************************/
+
+.table-container { display:none; }
+
+/* Group Selector ****************************************************************************************************************************************/
+
+.table-group-selector { width:100%;}
+
+.table-group-selector select { width:200px }
+.table-group-selector select:first-child { margin-right:20px; }

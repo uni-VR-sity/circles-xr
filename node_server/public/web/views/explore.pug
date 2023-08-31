@@ -47,20 +47,74 @@ block content
 
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    // Top bar
     div#circles-bar.table-top-bar
 
+        // Magic circles
         if magicGuest
             h3#magic-circles(onclick='showCirclesSection("magic-circles")') Magic Circles
 
+        // Your circles
         if adminUser || managerUser || standardUser
             h3#your-circles(onclick='showCirclesSection("your-circles")') Your Circles
 
+        // Public circles
         h3#public-circles(onclick='showCirclesSection("public-circles")') Public Circles
 
+        // Editable
         if adminUser || managerUser
             h3#editable-circles(onclick='showCirclesSection("editable-circles")') Editable Circles
 
-    
+    // Magic circles container
+    if magicGuest
+
+        div#magic-circles-container.table-container
+
+    // Your circles container
+    if adminUser || managerUser || standardUser
+
+        div#your-circles-container.table-container
+
+            // Group selectors
+            div.table-group-selector
+
+                // Groups
+                select#your-groups(name='your-groups')
+                    option(value='all') All
+                    option(value='Group1') Group 1
+                    option(value='Group2') Group 2
+
+            script.
+                document.getElementById('your-groups').addEventListener('change', function(event)
+                {
+                    console.log(event.target.value);
+                });
+
+    // Public circles container
+    div#public-circles-container.table-container
+
+        // Group selectors
+        div.table-group-selector
+
+            // Groups
+            select#public-groups(name='public-groups')
+                option(value='all') All
+                option(value='Group1') Group 1
+                option(value='Group2') Group 2
+
+    // Editable circles container
+    if adminUser || managerUser
+
+        div#editable-circles-container.table-container
+
+            // Group selectors
+            div.table-group-selector
+
+                // Groups
+                select#editable-groups(name='editable-groups')
+                    option(value='Group1') All
+                    option(value='Group1') Public
+                    option(value='Group1') Private
 
     script.
         selectCircleGroup('#{userInfo.userType}');
