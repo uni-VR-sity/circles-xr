@@ -8,6 +8,7 @@ const app      = express();
 const User     = require('../models/user');
 const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
+const WorldGroups = require('../models/worldGroups');
 const Worlds   = require('../models/worlds');
 const Uploads  = require('../models/uploads');
 const MagicLinks  = require('../models/magicLinks');
