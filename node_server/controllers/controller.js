@@ -24,8 +24,8 @@ const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
 
-//load in config
-let env = dotenv.config({})
+//load in config  
+var env = dotenv.config({})
 if (env.error) {
   throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
 }
@@ -74,7 +74,7 @@ env = dotenvParseVariables(env.parsed);
 
 const getUserInfo = function(req)
 {
-  let user = req.user;
+  var user = req.user;
 
   const userInfo = {
     userName: user.username,
@@ -121,7 +121,7 @@ const renderRegister = (req, res, next) =>
 const renderProfile = function(req, res, renderMessageSuccess, renderMessageError)
 {
   // Route now authenticates and ensures a user is logged in by this point
-  let user = req.user;
+  var user = req.user;
 
   //Mongoose promises http://mongoosejs.com/docs/promises.html
   const promises = [
@@ -137,12 +137,12 @@ const renderProfile = function(req, res, renderMessageSuccess, renderMessageErro
   ];
 
   Promise.all(promises).then((results) => {
-    let optionStrs = [];   //save all option str to replace after ...
+    var optionStrs = [];   //save all option str to replace after ...
 
-    for ( let r = 0; r < results.length; r++ ) {
-      let optionsStr  = '';
-      let models = results[r];
-      for ( let i = 0; i < models.length; i++ ) {
+    for ( var r = 0; r < results.length; r++ ) {
+      var optionsStr  = '';
+      var models = results[r];
+      for ( var i = 0; i < models.length; i++ ) {
         if (models[i].url === queryChecks[r]) {
           optionsStr += '<option selected>' + models[i].name + '</option>';
         }
@@ -185,9 +185,9 @@ const updateUserInfo = (req, res, next) => {
   {
     console.log('Updating user info');
 
-    let errorMessage = '';
-    let accountUpdated = false;
-    let avatarUpdated = false;
+    var errorMessage = '';
+    var accountUpdated = false;
+    var avatarUpdated = false;
 
     //Mongoose promises http://mongoosejs.com/docs/promises.html
     const promises = [
@@ -340,8 +340,8 @@ const updateUserInfo = (req, res, next) => {
         }
       }
 
-      let doc   = null;
-      let error = null;
+      var doc   = null;
+      var error = null;
 
       async function updateItems() 
       {
@@ -373,7 +373,7 @@ const updateUserInfo = (req, res, next) => {
         } 
         else 
         {
-          let successMessage = '';
+          var successMessage = '';
 
           if (avatarUpdated && accountUpdated)
           {
@@ -412,14 +412,14 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
       return res.redirect('/profile');
     }
     else {
-      let specialStatus = '';
+      var specialStatus = '';
 
       const u_name = ((searchParamsObj.has('name')) ? searchParamsObj.get('name') : req.session.sessionName);
       const u_height = ((searchParamsObj.has('height')) ? searchParamsObj.get('height') : CIRCLES.CONSTANTS.DEFAULT_USER_HEIGHT);
 
       //need to get types if available in params
       //if not valid in params set to "nothing". Could be fun to be a floating head l ;)
-      let head_type = ''
+      var head_type = ''
       if (searchParamsObj.has('head')) {
         head_type = CIRCLES.MODEL_HEAD_TYPE['head_' + searchParamsObj.get('head')];
         if (!head_type) {
@@ -430,7 +430,7 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
         head_type = user.gltf_head_url;
       }
 
-      let hair_type = ''
+      var hair_type = ''
       if (searchParamsObj.has('hair')) {
         hair_type = CIRCLES.MODEL_HAIR_TYPE['hair_' + searchParamsObj.get('hair')];
         if (!hair_type) {
@@ -441,7 +441,7 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
         hair_type = user.gltf_hair_url;
       }
 
-      let body_type = ''
+      var body_type = ''
       if (searchParamsObj.has('body')) {
         body_type = CIRCLES.MODEL_BODY_TYPE['body_' + searchParamsObj.get('body')];
         if (!body_type) {
@@ -467,7 +467,7 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
         specialStatus = ' (R)';
       }
 
-      let result = data.replace(/__WORLDNAME__/g, world_id);
+      var result = data.replace(/__WORLDNAME__/g, world_id);
       result = result.replace(/__USERTYPE__/g, user.usertype);
       result = result.replace(/__USERNAME__/g, user.username);
       result = result.replace(/__VISIBLENAME__/g, u_name + specialStatus);
@@ -542,8 +542,8 @@ const serveRelativeWorldContent = (req, res, next) => {
 // Getting success and error messages and then rendering the profile page
 const serveProfile = (req, res, next) => 
 {
-  let successMessage = null;
-  let errorMessage = null;
+  var successMessage = null;
+  var errorMessage = null;
 
   if (req.session.successMessage)
   {
@@ -584,8 +584,8 @@ const registerUser = (req, res, next) => {
         displayName: req.body.username,                                 // By default, display name is the same as the username
       };
 
-      let user = null;
-      let error = null;
+      var user = null;
+      var error = null;
 
       // Creating new user in database
       async function createNewUser(newUser) 
@@ -642,7 +642,7 @@ const registerUser = (req, res, next) => {
 // Getting success and error messages and then rendering the register page
 const serveRegister = (req, res, next) => 
 {
-  let errorMessage = null;
+  var errorMessage = null;
 
   if (req.session.errorMessage)
   {
@@ -657,22 +657,22 @@ const serveRegister = (req, res, next) =>
 
 // Getting certain worlds from the world database
 // Permission Types:
-//    - all                 Returns all worlds in world database
-//    - freeViewing         Returns all worlds that have no viewing restrictions
+//    - public              Returns all worlds that have no viewing restrictions
+//    - private             Returns all worlds that have viewing restrictions
 //    - specialViewing      Returns all worlds that the user has viewing access to
 //    - editing             Returns all worlds that the user has editing access to
 //    - magic               Returns all worlds that the user has viewing access to from a magic link
 const getWorlds = async function(user, permissionType)
 {
-  let worlds = []
+  var worlds = []
 
-  if (permissionType === "all")
-  {
-    worlds = await Worlds.find({});
-  }
-  else if (permissionType === "freeViewing")
+  if (permissionType === "public")
   {
     worlds = await Worlds.find({viewingRestrictions: false});
+  }
+  else if (permissionType === "private")
+  {
+    worlds = await Worlds.find({viewingRestrictions: true});
   }
   else if (permissionType === "specialViewing")
   {
@@ -695,13 +695,116 @@ const getWorlds = async function(user, permissionType)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Rendering the explore page after the user has logged in according to what they have access
-const serveExplore = async (req, res, next) => {
+// Organizing worlds into their groups and subgroups
+// Return object structure:
+//  {
+//    groups: [                             --> Array of group objects
+//      {
+//        name: GROUP_NAME,                 --> Group name
+//        subgroups: [                      --> Array of subgroup objects in the group
+//          {
+//            name: SUBGROUP_NAME,          --> Subgroup name
+//            worlds: [...],                --> Worlds in the subgroup
+//          }
+//        ],
+//        noGroup: [...],                   --> Worlds that are not in a subgroup
+//      },
+//    ],
+//    noGroup: [...],                       --> Worlds that are not in a group
+//  }
+const organizeToGroups = function(worlds, databaseGroups)
+{
+  var organizedWorlds = {
+    groups: [],
+    noGroup: [],
+  };
 
+  // Going through each world
+  for (const world of worlds)
+  {
+    // Checking if world is in a group
+    // If it is, add it to group
+    // If it is not, add it to no group array
+    if (world.group)
+    {
+      // Getting group from database
+      var databaseGroup = databaseGroups.find((group) => JSON.stringify(world.group) === JSON.stringify(group._id));
+
+      // Checking if group already exists in group object array
+      // If it does, get it
+      // If it doesn't, create the group object
+      var group = organizedWorlds.groups.find((group) => databaseGroup.name === group.name);
+
+      var index;
+
+      if (group)
+      {
+        index = organizedWorlds.groups.indexOf(group);
+      }
+      else
+      {
+        // Creating new group
+        var newGroup = {
+          name: databaseGroup.name,
+          subgroups: [],
+          noGroup: [],
+        };
+
+        // If the group has subgroups, adding the subgroups
+        if (databaseGroup.subgroups)
+        {
+          for (const subgroup of databaseGroup.subgroups)
+          {
+            var newSubgroup = {
+              name: subgroup.name,
+              worlds: [],
+            };
+
+            newGroup.subgroups.push(newSubgroup);
+          }
+        }
+
+        organizedWorlds.groups.push(newGroup);
+
+        index = organizedWorlds.groups.indexOf(newGroup);
+      }
+
+      // Checking if world is in a subgroup
+      // If it is, add it to subgroup
+      // If it is not, add it to no group array
+      if (world.subgroup)
+      {
+        var databaseSubgroup = databaseGroup.subgroups.find((subgroup) => JSON.stringify(world.subgroup) === JSON.stringify(subgroup._id));
+
+        var subgroup = organizedWorlds.groups[index].subgroups.find((subgroup) => databaseSubgroup.name === subgroup.name);
+
+        var subIndex = organizedWorlds.groups[index].subgroups.indexOf(subgroup);
+
+        organizedWorlds.groups[index].subgroups[subIndex].worlds.push(world.name);
+      }
+      else
+      {
+        organizedWorlds.groups[index].noGroup.push(world.name);
+      }
+    }
+    else
+    {
+      organizedWorlds.noGroup.push(world.name);
+    }
+  }
+
+  return organizedWorlds;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering the explore page after the user has logged in according to what they have access
+const serveExplore = async (req, res, next) => 
+{
   // Getting success and error messages
-  let successMessage = null;
-  let errorMessage = null;
-  let magicLinkError = null;
+  var successMessage = null;
+  var errorMessage = null;
+  var magicLinkError = null;
 
   if (req.session.successMessage)
   {
@@ -722,104 +825,92 @@ const serveExplore = async (req, res, next) => {
   }
 
   // Route now authenticates and ensures a user is logged in by this point
-  let user = req.user;
+  var user = req.user;
 
   // Gathering information on the user to send to explore page
   const userInfo = getUserInfo(req);
 
   // Getting all worlds the user has access to and putting their names into an array
-  // - If user is a superuser or admin, viewing and editing access is given to all worlds
-  // - If user is a teacher or researcher:
-  //      - Viewing access is given to to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
+  // - All users are given access to worlds with no restrictions (public worlds)
+  // - If user is an admin user, viewing and editing access is given to all worlds
+  // - If user is a manager user:
+  //      - Viewing access is given to to specific worlds (ones that they have been given viewing access to)
   //      - Editing access is given to specific worlds (ones that they have been given editing access to)
-  // - If user is a student, participant, or tester:
-  //      - Viewing access is given to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
+  // - If user is a standard user:
+  //      - Viewing access is given to specific worlds (ones that they have been given viewing access to)
   //      - No editing access is given
   // - If user is a magic guest
   //      - Viewing access is given to worlds in magicLinkWorlds array
-  //      - Viewing access is given to worlds with no restictions
   //      - No editing access is given
   // - If user is a guest
-  //      - Viewing access is given to worlds with no restictions
   //      - No editing access is given
 
-  let viewingWorlds = [];
-  let magicWorlds = [];
-  let editingWorlds = [];
+  var magicWorlds = [];
+  var publicWorlds = [];
+  var userWorlds = [];
+  var editableWorlds = [];
 
-  if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
+  publicWorlds.push(await getWorlds(user, 'public'));
+
+  if (CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(user.usertype))
   { 
-    editingWorlds.push(await getWorlds(user, "all"));
+    userWorlds.push(await getWorlds(user, 'private'));
+
+    editableWorlds.push(await getWorlds(user, 'public'));
+    editableWorlds.push(await getWorlds(user, 'private'));
   }
-  else if (user.usertype === CIRCLES.USER_TYPE.TEACHER || user.usertype === CIRCLES.USER_TYPE.RESEARCHER)
+  else if (CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype))
   {
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
-    viewingWorlds.push(await getWorlds(user, "specialViewing"));
-    editingWorlds.push(await getWorlds(user, "editing"));
+    userWorlds.push(await getWorlds(user, 'specialViewing'));
+    editableWorlds.push(await getWorlds(user, 'editing'));
   }
-  else if (user.usertype === CIRCLES.USER_TYPE.STUDENT || user.usertype === CIRCLES.USER_TYPE.PARTICIPANT || user.usertype === CIRCLES.USER_TYPE.TESTER)
+  else if (CIRCLES.USER_CATEGORIES.STANDARD_USERS.includes(user.usertype))
   {
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
-    viewingWorlds.push(await getWorlds(user, "specialViewing"));
+    userWorlds.push(await getWorlds(user, 'specialViewing'));
   }
   else if (user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
   {
     magicWorlds.push(await getWorlds(user, "magic"));
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
-  }
-  else // Guest
-  {
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
   }
 
   // Flattening the arrays
-  viewingWorlds = viewingWorlds.flat(2);
   magicWorlds = magicWorlds.flat(2);
-  editingWorlds = editingWorlds.flat(2);
+  publicWorlds = publicWorlds.flat(2);
+  userWorlds = userWorlds.flat(2);
+  editableWorlds = editableWorlds.flat(2);
 
+  // Organizing worlds in each array into their groups and subgroups
+  var groups = await WorldGroups.find({});
 
-  // Getting all world names the user can view
-  let viewingArray = [];
+  publicWorlds = organizeToGroups(publicWorlds, groups);
+  userWorlds = organizeToGroups(userWorlds, groups);
 
-  for (const world of viewingWorlds)
+  // Getting only the world names
+  function getNames(worldArray)
   {
-    viewingArray.push(world.name);
-  }
+    var nameArray = [];
 
-  // Getting all world names the user can view from the magic link
-  let magicArray = [];
-
-  for (const world of magicWorlds)
-  {
-    magicArray.push(world.name);
-  }
-
-  // Getting all world names the user can edit
-  let editingArray = [];
-
-  for (const world of editingWorlds)
-  {
-    editingArray.push(world.name);
-  }
-
-  // Making sure there are no duplicates between the viewing and editing arrays
-  // If there are, the world is kept in editing and removed from viewing
-  for (const world of editingArray)
-  {
-    if (viewingArray.includes(world))
+    for (const world of worldArray)
     {
-      const index = viewingArray.indexOf(world);
-      viewingArray.splice(index, 1);
+      nameArray.push(world.name);
     }
+
+    return nameArray;
   }
+
+  var magicArray = getNames(magicWorlds);
+  var publicArray = getNames(publicWorlds);
+  var userArray = getNames(userWorlds);
+  var editableArray = getNames(editableWorlds);
 
   // Rendering the explore page
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
     userInfo: userInfo,
-    worldViewingList: viewingArray,
-    worldMagicList: magicArray,
-    worldEditingList: editingArray,
+    magicWorlds: magicArray,
+    //publicWorlds: publicArray,
+    //userWorlds: userArray,
+    //editableWorlds: editableArray,
     sessionName: req.session.sessionName,
     successMessage: successMessage,
     errorMessage: errorMessage,
@@ -827,7 +918,7 @@ const serveExplore = async (req, res, next) => {
     magicLinkError: magicLinkError,
     magicLink: req.session.magicLink,
   });
-};
+}
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1233,7 +1324,7 @@ const createJWT_MagicLink = function(expiryTimeMin, worlds)
 {
   const route = '/explore';
 
-  let jwtOptions;
+  var jwtOptions;
 
   if (expiryTimeMin)
   {
@@ -1272,7 +1363,7 @@ const createMagicLink = async (req, res, next) =>
   if (req.body.forwardingName && req.body.linkExpiry)
   {
     // Checking that the entered forwarding name is unique
-    let forwardingExists;
+    var forwardingExists;
 
     try
     {
@@ -1289,10 +1380,10 @@ const createMagicLink = async (req, res, next) =>
     if (!forwardingExists)
     {
       // Setting up success message for link creation
-      let successMessage;
+      var successMessage;
 
       // Getting expiry time of magic link (if there is one)
-      let expiryTimeMin;
+      var expiryTimeMin;
 
       if (req.body.linkExpiry === 'never')
       {
@@ -1339,7 +1430,7 @@ const createMagicLink = async (req, res, next) =>
       {
         const magicLink = createJWT_MagicLink(expiryTimeMin, worlds);
 
-        let baseURL;
+        var baseURL;
 
         if (env.DOMAIN)
         {
@@ -1353,12 +1444,12 @@ const createMagicLink = async (req, res, next) =>
         const forwardingLink = baseURL + '/' + req.body.forwardingName
 
         // Saving magic link in database
-        let linkInfo;
+        var linkInfo;
 
         // Saving magic link in database
         if (expiryTimeMin)
         {
-          let expiryDate = new Date();
+          var expiryDate = new Date();
           expiryDate.setDate(expiryDate.getDate() + parseInt(req.body.linkExpiry));
 
           linkInfo = {
@@ -1427,7 +1518,7 @@ const forwardMagicLink = async (req, res, next) =>
   // If it is, redirect the user
   // If it isn't direct them to an error page
 
-  let magicLink;
+  var magicLink;
 
   try
   {
@@ -1459,8 +1550,8 @@ const serveMagicLinks = async (req, res, next) =>
   const userInfo = getUserInfo(req);
 
   // Getting messages to output to user
-  let successMessage = null;
-  let errorMessage = null;
+  var successMessage = null;
+  var errorMessage = null;
 
   if (req.session.successMessage)
   {
@@ -1475,14 +1566,14 @@ const serveMagicLinks = async (req, res, next) =>
   }
 
   // Getting user's magic links
-  let magicLinks = [];
+  var magicLinks = [];
 
-  let currentUser = req.user;
+  var currentUser = req.user;
 
   magicLinks = await MagicLinks.find({creator: currentUser});
 
   // Getting current domain
-  let baseURL;
+  var baseURL;
 
   if (env.DOMAIN)
   {
@@ -1552,7 +1643,7 @@ const renewMagicLink = async (req, res, next) =>
   if (req.body.linkExpiry)
   {
     // Getting expiry time of magic link (if there is one)
-    let expiryTimeMin;
+    var expiryTimeMin;
 
     if (req.body.linkExpiry === 'never')
     {
@@ -1563,7 +1654,7 @@ const renewMagicLink = async (req, res, next) =>
       expiryTimeMin = req.body.linkExpiry * 24 * 60; // Convert days to mins
     }
 
-    let link = null;
+    var link = null;
 
     // Getting link from database
     try
@@ -1577,7 +1668,7 @@ const renewMagicLink = async (req, res, next) =>
 
     if (link)
     {
-      let worlds = [];
+      var worlds = [];
 
       // Getting worlds for magic link
       for (const worldName of link.worlds)
@@ -1602,7 +1693,7 @@ const renewMagicLink = async (req, res, next) =>
 
       if (expiryTimeMin)
       {
-        let expiryDate = new Date();
+        var expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + parseInt(req.body.linkExpiry));
 
         link.expires = true;
@@ -1652,9 +1743,9 @@ const renewMagicLink = async (req, res, next) =>
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const loopAndGetFolderNames =  async (folderPath) => {
-  let allSubFolderNames = [];
+  var allSubFolderNames = [];
   // Get the files as an array
-  let files = null;
+  var files = null;
   try{
     files = await fs.promises.readdir(folderPath);
   }
@@ -1664,7 +1755,7 @@ const loopAndGetFolderNames =  async (folderPath) => {
   }
 
   // Loop them all with the new for...of
-  let worldName = "";
+  var worldName = "";
   for( const file of files ) {
       // Get the full paths
       const fullPath = path.join( folderPath, file );
@@ -1702,16 +1793,16 @@ const serveUserManager = async (req, res, next) =>
   const userInfo = getUserInfo(req);
 
   // Getting messages to output to user
-  let successMessage = null;            // Success message for user creation
-  let errorMessage = null;              // Error message for user creation
-  let Bulk_SuccessMessage = [];         // Success message for user creation
-  let Bulk_ErrorMessage = [];           // Error message for user creation
-  let A_SuccessMessage = [];            // Success message for admin usertype change
-  let A_ErrorMessage = [];              // Error message for admin usertype change
-  let T_R_SuccessMessage = [];          // Success message for teacher and researcher usertype change
-  let T_R_ErrorMessage = [];            // Error message for teacher and researcher usertype change
-  let S_P_T_SuccessMessage = [];        // Success message for student, participant, and tester usertype change
-  let S_P_T_ErrorMessage = [];          // Error message for student, participant, and tester usertype change
+  var successMessage = null;            // Success message for user creation
+  var errorMessage = null;              // Error message for user creation
+  var Bulk_SuccessMessage = [];         // Success message for user creation
+  var Bulk_ErrorMessage = [];           // Error message for user creation
+  var A_SuccessMessage = [];            // Success message for admin usertype change
+  var A_ErrorMessage = [];              // Error message for admin usertype change
+  var T_R_SuccessMessage = [];          // Success message for teacher and researcher usertype change
+  var T_R_ErrorMessage = [];            // Error message for teacher and researcher usertype change
+  var S_P_T_SuccessMessage = [];        // Success message for student, participant, and tester usertype change
+  var S_P_T_ErrorMessage = [];          // Error message for student, participant, and tester usertype change
 
   if (req.session.successMessage)
   {
@@ -1776,7 +1867,7 @@ const serveUserManager = async (req, res, next) =>
   // Getting a list of user types for forms, with a certain user type selected (depending on lookingFor)
   function getUserTypes(lookingFor)
   {
-    let usertypesList = '';
+    var usertypesList = '';
 
     for (const key in CIRCLES.USER_TYPE)
     {
@@ -1799,7 +1890,7 @@ const serveUserManager = async (req, res, next) =>
 
   // 1. Ignoring the current user
   // 2. Getting all admin users
-  let A_Users = await User.aggregate([
+  var A_Users = await User.aggregate([
     {
       $match:
         // 1
@@ -1824,7 +1915,7 @@ const serveUserManager = async (req, res, next) =>
 
   // 1. Ignoring the current user
   // 2. Getting all instructor and researcher users
-  let T_R_Users = await User.aggregate([
+  var T_R_Users = await User.aggregate([
     {
       $match:
         // 1
@@ -1849,7 +1940,7 @@ const serveUserManager = async (req, res, next) =>
 
   // 1. Ignoring the current user
   // 2. Getting all student, participant, and tester users
-  let S_P_T_Users = await User.aggregate([
+  var S_P_T_Users = await User.aggregate([
     {
       $match:
         // 1
@@ -1874,7 +1965,7 @@ const serveUserManager = async (req, res, next) =>
 
   // Rendering the user manager page
   
-  let usertypes = getUserTypes(null);
+  var usertypes = getUserTypes(null);
 
   res.render(path.resolve(__dirname + '/../public/web/views/manageUsers'), {
     title: 'Manage Users',
@@ -1911,8 +2002,8 @@ const createUser = async (req, res, next) =>
       displayName: req.body.username,                                 // By default, display name is the same as the username
     };
 
-    let user = null;
-    let error = null;
+    var user = null;
+    var error = null;
 
     // Creating new user in database
     async function createNewUser(newUser) 
@@ -1972,7 +2063,7 @@ const createUsersByFile = async (req, res, next) =>
   req.session.Bulk_ErrorMessage = [];
 
   // Variable to count how many users were created
-  let numCreated = 0;
+  var numCreated = 0;
 
   // Getting file
   const form = new formidable.IncomingForm();
@@ -2026,7 +2117,7 @@ const createUsersByFile = async (req, res, next) =>
             }
             
             // Ensuring usertype is valid
-            let validUsertypes = [];
+            var validUsertypes = [];
 
             for (const key in CIRCLES.USER_TYPE)
             {
@@ -2040,7 +2131,7 @@ const createUsersByFile = async (req, res, next) =>
             {
               try 
               {
-                let user = null;
+                var user = null;
 
                 user = await User.create(userInfo);
 
@@ -2210,8 +2301,8 @@ const serveMoreCircles = (req, res, next) =>
   const userInfo = getUserInfo(req);
 
   // Getting success and error messages
-  let successMessage = null;
-  let errorMessage = null;
+  var successMessage = null;
+  var errorMessage = null;
 
   if (req.session.successMessage)
   {
@@ -2225,7 +2316,7 @@ const serveMoreCircles = (req, res, next) =>
     req.session.errorMessage = null;
   }
 
-  let request = new XMLHttpRequest();
+  var request = new XMLHttpRequest();
   request.open('GET', env.CENTRAL_SERVER + '/get-servers');
 
   const renderError = function (message)
@@ -2248,7 +2339,7 @@ const serveMoreCircles = (req, res, next) =>
 
   request.onload = function() 
   {
-    let serverData = JSON.parse(request.response);
+    var serverData = JSON.parse(request.response);
     
     // Checking that the server data was able the be collected, if not, outputting an error message
     if (serverData === 'ERROR')
@@ -2276,8 +2367,8 @@ const serveMoreCircles = (req, res, next) =>
 const serveUploadedContent = async (req, res, next) => 
 {
   // Getting success and error messages
-  let successMessage = null;
-  let errorMessage = null;
+  var successMessage = null;
+  var errorMessage = null;
 
   if (req.session.successMessage)
   {
@@ -2292,9 +2383,9 @@ const serveUploadedContent = async (req, res, next) =>
   }
 
   // Getting valid file types
-  let validImages = [];
-  let validVideos = [];
-  let valid3D = [];
+  var validImages = [];
+  var validVideos = [];
+  var valid3D = [];
 
   for (const key in CIRCLES.VALID_IMAGE_TYPES)
   {
@@ -2312,9 +2403,9 @@ const serveUploadedContent = async (req, res, next) =>
   }
 
   // Getting user content
-  let content = [];
+  var content = [];
 
-  let currentUser = req.user;
+  var currentUser = req.user;
 
   content = await Uploads.find({user: currentUser});
 
@@ -2366,7 +2457,7 @@ const newContent = (req, res, next) =>
     const file = files.contentFile;
 
     // Getting valid file types
-    let validFiles = [];
+    var validFiles = [];
 
     for (const key in CIRCLES.VALID_IMAGE_TYPES)
     {
@@ -2522,9 +2613,9 @@ const deleteUploadedFile = async (req, res, next) =>
 // Returning a list of the content the current user has uploaded
 const getUserFiles = async (req, res, next) => 
 {
-  let content = [];
+  var content = [];
 
-  let currentUser = req.user;
+  var currentUser = req.user;
 
   content = await Uploads.find({user: currentUser});
 

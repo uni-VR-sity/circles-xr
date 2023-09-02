@@ -32,7 +32,7 @@ div.table-group-selector
 
 /* Group Selector ****************************************************************************************************************************************/
 
-.table-group-selector { width:100%;}
+.table-group-selector { width:100%; margin:0 0 30px 0; }
 
 .table-group-selector select { width:200px }
 .table-group-selector select:first-child { margin-right:20px; }

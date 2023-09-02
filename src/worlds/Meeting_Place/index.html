@@ -1,0 +1,208 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <!-- circles_HEADER_SCRIPTS -->
+  <circles-start-scripts />
+
+  <!-- add your custom scripts here -->
+  <!-- <script src="/worlds/hub/scripts/fire.js"></script> -->
+  <script src="/worlds/Meeting_Place/assets/scripts/main.js"></script>
+  <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+  <!-- <script src="/worlds/hub/scripts/hub.js"></script> -->
+</head>
+
+<body>
+
+  <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+  <circles-start-ui />
+
+  <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+  <a-scene circles_scene_properties>
+    <a-assets>
+      <img id='silhouettesMap' src='/worlds/hub/assets/textures/Silhouettes.png' crossorigin="anonymous">
+      <img id='moonMap' src='/worlds/hub/assets/textures/moonmap.jpg' crossorigin="anonymous">
+      <img id='silhouettesMap' src='/worlds/hub/assets/textures/Silhouettes.png' crossorigin="anonymous">
+      <img id='moonMap' src='/worlds/hub/assets/textures/moonmap.jpg' crossorigin="anonymous">
+     
+
+      <!-- models -->
+      <a-asset-item id="meeting-place-gltf"
+      src="/worlds/Meeting_Place/assets/models/environment/meeting-place/new_world_06.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="instrument-flute-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/instrument-flute/instrument-flute.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="instrument-great-drum-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/instrument-great-drum/instrument-great-drum.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="instrument-horn-rattle-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/instrument-horn-rattle/instrument-horn-rattle.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="painting-canadian-indians-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/painting-canadian-indians/painting-canadian-indians.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="painting-canadian-squaw-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/painting-canadian-squaw/painting-canadian-squaw.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="painting-turtle-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/painting-turtle/painting-turtle.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="sculpture-bear-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/sculpture-bear/sculpture-bear.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="sculpture-owl-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/sculpture-owl/sculpture-owl.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="sculpture-totem-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/artobjects/sculpture-totem/sculpture-totem.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="painting-canvas-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/baseobjects/painting-canvas/painting-canvas.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="painting-easel-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/baseobjects/painting-easel/painting-easel.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="sculpture-stand-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/baseobjects/sculpture-stand/sculpture-stand.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="meeting-chairs-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/meetingobjects/meeting-chairs/meeting-chairs.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="meeting-projector-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/meetingobjects/meeting-projector/meeting-projector.glb"
+        response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="meeting-rock-gltf"
+        src="/worlds/Meeting_Place/assets/models/objects/meetingobjects/meeting-rock/meeting-rock.glb"
+        response-type="arraybuffer"></a-asset-item>
+
+      <a-asset-item id="enviro-gltf" src="/worlds/hub/assets/models/hubenviro.glb" response-type="arraybuffer">
+      </a-asset-item>
+      <a-asset-item id="moon-gltf" src="/worlds/hub/assets/models/moon.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="campfire-gltf" src="/worlds/hub/assets/models/campfire.glb" response-type="arraybuffer">
+      </a-asset-item>
+      <a-asset-item id="navmesh_gltf" src="/worlds/hub/assets/models/campfire-nav.glb" response-type="arraybuffer"
+        crossorigin="anonymous"></a-asset-item>
+      <audio id="fireCrackling-snd" src="/worlds/hub/assets/audio/fire.mp3" preload="true"></audio>
+      <!-- <audio id="click_sound" src="assets/audio/click.wav" preload="true"></audio>
+      <audio id="hover_sound" src="assets/audio/hover.wav" preload="true"></audio> -->
+
+      <!-- Circles' built-in assets [REQUIRED] -->
+      <circles-assets />
+    </a-assets>
+    <a-entity id="GameManager" campfire-interactive></a-entity>
+
+    <!-- Circles' built-in manager and avatar [REQUIRED] -->
+    <circles-manager-avatar />
+
+    <!-- fire FX -->
+    <a-entity id="fireRig" position="0.0 0.0 0.0" visible="false">
+      <a-entity id="fireParticlesSound" class="ambient-music" fire="particles:200;" position="0.0 0.6 0.0"
+        sound="src:#fireCrackling-snd; autoplay:false; loop:true; refDistance:1.0; rolloffFactor:3.0; volume:1.0; distanceModel:exponential;">
+      </a-entity>
+
+      <a-entity animation="property:position; dur:223; to:0.0 0.0 0.05; loop:true; dir:alternate; easing:easeInOutExpo">
+        <a-entity position="0.0 1.5 0.0"
+          animation="property:position; dur:163; to:0.0 1.55 0.0; loop:true; dir:alternate; easing:linear">
+          <a-entity
+            light="type: point; color: #FFA200; intensity: 3.5; distance: 20.0; castShadow: true; shadowMapHeight: 256; shadowMapWidth: 256;"
+            animation="property:light.intensity; dur:293; dir:alternate; to:3.6; loop:true; easing:easeInOutExpo">
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+    </a-entity>
+
+    <a-entity id="campfire" class="interactive" position="0.0 0.698 -0.138" scale="1.5 1.5 1.5" gltf-model="#campfire-gltf"
+      shadow="receive: true; cast: true" circles-interactive-object></a-entity>
+    <a-entity id="meeting-place" gltf-model="#meeting-place-gltf" position="0.0 0.0 0.0" scale="0.3 0.3 0.3"></a-entity>
+
+    <!-- <a-entity id="projector" gltf-model="#meeting-projector-gltf" position="0.0 2.47 33" scale="0.3 0.3 0.3"></a-entity>
+    <a-entity id="meeting-rock" gltf-model="#meeting-rock-gltf" shadow="receive: true; cast: true"
+      position="0.0 2.25 0.0"></a-entity>
+    <a-entity id="painting-canadian-indians-wall-left" gltf-model="#painting-canadian-indians-gltf"
+      position="15.0 2.47 33"></a-entity>
+    <a-entity id="painting-canadian-squaw-wall-right" gltf-model="#painting-canadian-squaw-gltf"
+      position="-15.0 2.47 33"></a-entity> -->
+    <!-- <a-entity id="chair_001" gltf-model="#meeting-chairs-gltf" scale="0.4 0.4 0.4" position="0 0 -17" rotation="-180 60 -180"></a-entity>
+    <a-entity id="chair_002" gltf-model="#meeting-chairs-gltf" scale="0.4 0.4 0.4" position="-14.370 0 7.986"></a-entity> -->
+    <!-- <a-entity id="chair_003" gltf-model="#meeting-chairs-gltf" scale="0.4 0.4 0.4" position="13.115 0 6.481" rotation="0 122 0"></a-entity> -->
+    <!-- left side 1 - 6 -->
+    <!-- <a-entity id="stand_001" gltf-model="#sculpture-stand-gltf" position="27.610 1.061 8.466" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="sculpture-owl" gltf-model="#sculpture-owl-gltf" position="27.621 2.843 8.542" rotation="0 -50.798 0" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="easel_001" gltf-model="#painting-easel-gltf" position="26.325 -0.010 4.151" rotation="0.000 -90.000 0" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="painting-turtle" gltf-model="#painting-turtle-gltf" position="25.768 0.053 4.098" rotation="-11.048 -90.000 0" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="stand_002" gltf-model="#sculpture-stand-gltf" position="31.170 0 0.439" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="instrument-flute" gltf-model="#instrument-flute-gltf" position="30.944 1.967 0.579" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="stand_003" gltf-model="#sculpture-stand-gltf" position="23.370 1.916 -18.765" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="sculpture-totem" gltf-model="#sculpture-totem-gltf" position="23.534 1.916 -18.306" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="easel_002" gltf-model="#painting-easel-gltf" position="20.228 0 -25.471" rotation="0 -43.421 0" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="painting-turtle" gltf-model="#painting-turtle-gltf" position="20.026 -0.017 -25.333" rotation="-5.154 -43.421 0" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="stand_004" gltf-model="#sculpture-stand-gltf" position="13.163 0.000 -24.935" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="sculpture-bear" gltf-model="#sculpture-bear-gltf" position="13.118 1.819 -24.772" scale="0.5 0.5 0.5"></a-entity> -->
+
+    <!-- right side 7 - 12-->
+    <!-- <a-entity id="stand_005" gltf-model="#sculpture-stand-gltf" position="-8.763 0 -31.306" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="instrument-great-drum" gltf-model="#instrument-great-drum-gltf" position="-8.743 1.779 -31.207" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="easel_003" gltf-model="#painting-easel-gltf" position="-14.686 0 -26.108" rotation="0 24.435 0" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="painting-turtle" gltf-model="#painting-turtle-gltf" position="-14.535 0.020 -25.786" rotation="-8.467 24.435 0" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="stand_006" gltf-model="#sculpture-stand-gltf" position="-22.333 0 -25.033" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="sculpture-bear" gltf-model="#sculpture-bear-gltf" position="-22.367 1.788 -24.877" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="stand_007" gltf-model="#sculpture-stand-gltf" position="-32.458 0.000 3.660" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="sculpture-totem" gltf-model="#sculpture-totem-gltf" position="-32.465 1.784 3.855" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="easel_004" gltf-model="#painting-easel-gltf" position="-29.436 0.000 -1.367" rotation="0 89.096 0" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="painting-turtle" gltf-model="#painting-turtle-gltf" position="-29.176 0.043 -1.347" rotation="-5.495 89.096 0" scale="0.5 0.5 0.5"></a-entity>
+
+    <a-entity id="stand_008" gltf-model="#sculpture-stand-gltf" position="-31.229 0 -7.026" scale="0.4 0.4 0.4"></a-entity>
+    <a-entity id="instrument-horn-rattle" gltf-model="#instrument-horn-rattle-gltf" position="-31.201 2.395 -6.839" scale="0.5 0.5 0.5"></a-entity> -->
+
+    <a-entity id="decorations" gltf-model="/worlds/Meeting_Place/assets/models/decor3.gltf" position="" scale="0.3 0.3 0.3"></a-entity>
+    
+
+    <!-- sky and lights -->
+    <a-entity light="intensity: 1.41" id="interior-light" position="0 4.49 0"></a-entity>
+    <a-entity light="intensity: 2.22; type: point" scale="" position="9.62474 0 6.41306" id="interior-light-2"></a-entity>
+    <!-- spawn point -->
+    <a-entity id="spawnPoint" position="4.2 6.05 0.0"></a-entity>
+
+    <!-- checkpoints -->
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="-8.35035 0.13238 -9.11362" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="-3.34318 0.13238 -12.0131" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="4.27512 0.13238 -12.9193" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="8.04075 0.13238 -9.82036" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="12.91233 0.13238 -1.24301" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="12.2791 0.13238 4.4178" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="8.27086 0.13238 10.0111" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="4.40824 0.13238 12.53312" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+    
+    <a-entity circles-checkpoint="" circles-spawnpoint="" position="2.41175 0.13238 1.69811" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+
+  
+      <!-- <a-entity environment="preset: default; ground:none;"></a-entity> -->
+      <a-sky src="/worlds/Meeting_Place/assets/lights.jpg"></a-sky>
+
+    <!-- <a-entity id="navmesh" gltf-model="#navmesh_gltf" visible='false' nav-mesh></a-entity> -->
+
+
+
+  </a-scene>
+
+
+
+
+
+  <!-- circles_END_SCRIPTS -->
+  <circles-end-scripts />
+</body>
+
+</html>

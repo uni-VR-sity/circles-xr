@@ -90,6 +90,15 @@ block content
                     console.log(event.target.value);
                 });
 
+            // Worlds
+            div.table-content
+
+                if userWorlds.length > 0
+                    for world of userWorlds
+                        - var worldUrl = '/w/' + world;  // Making url to world
+                        li 
+                            a(class="pure-button worldList" href=worldUrl)= world
+
     // Public circles container
     div#public-circles-container.table-container
 
@@ -101,6 +110,15 @@ block content
                 option(value='all') All
                 option(value='Group1') Group 1
                 option(value='Group2') Group 2
+
+        // Worlds
+        div.table-content
+
+            if publicWorlds.length > 0
+                for world of publicWorlds
+                    - var worldUrl = '/w/' + world;  // Making url to world
+                    li 
+                        a(class="pure-button worldList" href=worldUrl)= world
 
     // Editable circles container
     if adminUser || managerUser
@@ -115,6 +133,15 @@ block content
                     option(value='Group1') All
                     option(value='Group1') Public
                     option(value='Group1') Private
+
+            // Worlds
+            div.table-content
+
+                if editableWorlds.length > 0
+                    for world of editableWorlds
+                        - var worldUrl = '/w/' + world;  // Making url to world
+                        li 
+                            a(class="pure-button worldList" href=worldUrl)= world
 
     script.
         selectCircleGroup('#{userInfo.userType}');
