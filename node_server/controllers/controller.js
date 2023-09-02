@@ -885,32 +885,32 @@ const serveExplore = async (req, res, next) =>
   publicWorlds = organizeToGroups(publicWorlds, groups);
   userWorlds = organizeToGroups(userWorlds, groups);
 
-  // Getting only the world names
-  function getNames(worldArray)
-  {
-    var nameArray = [];
-
-    for (const world of worldArray)
-    {
-      nameArray.push(world.name);
-    }
-
-    return nameArray;
+  // Organizing editable worlds into private and public groups
+  var groupedEditableWorld = {
+    public: [],
+    private: [],
   }
 
-  var magicArray = getNames(magicWorlds);
-  var publicArray = getNames(publicWorlds);
-  var userArray = getNames(userWorlds);
-  var editableArray = getNames(editableWorlds);
+  for (const world of editableWorlds)
+  {
+    if (world.viewingRestrictions)
+    {
+      groupedEditableWorld.private.push(world.name);
+    }
+    else
+    {
+      groupedEditableWorld.public.push(world.name);
+    }
+  }
 
   // Rendering the explore page
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
     userInfo: userInfo,
-    magicWorlds: magicArray,
-    //publicWorlds: publicArray,
-    //userWorlds: userArray,
-    //editableWorlds: editableArray,
+    magicWorlds: magicWorlds,
+    publicWorlds: publicWorlds,
+    userWorlds: userWorlds,
+    editableWorlds: groupedEditableWorld,
     sessionName: req.session.sessionName,
     successMessage: successMessage,
     errorMessage: errorMessage,
