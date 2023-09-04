@@ -79,7 +79,7 @@ block content
                     option(value=value)= group.name
 
         script.
-            detectCurrentGroup('#{name}');
+            detectCurrentGroup('#{name}', '!{JSON.stringify(sectionGroups)}');
 
     // Reusable block to display worlds
     mixin displayWorlds(sectionWorlds, editButton)

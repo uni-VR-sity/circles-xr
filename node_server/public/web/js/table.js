@@ -54,23 +54,16 @@ function selectCircleSection(usertype)
     }
 }
 
-// Displaying worlds in specified group in specified circle section
-function displayWorldsInGroup(sectionID, group)
+// Displaying worlds in specified subgroup of specified group in specified section
+function displayWorldsInSubgroup(sectionName, group, subgroup)
 {
     // Getting all worlds in the section
-    var worlds = document.getElementById(sectionID).querySelectorAll('.worldList');
+    var worlds = document.getElementById(sectionName + '-circles-container').querySelectorAll('.worldList');
 
-    // If group is "all", display all worlds in the section
-    if (group === 'all')
+    // If subgroup is "all", display all worlds in the group in the section
+    if (subgroup === 'all')
     {
-        for (const world of worlds)
-        {
-            world.style.display = 'inline-block';
-        }
-    }
-    else 
-    {
-        var groupClass = 'GROUP_' + group.replaceAll(' ', '-');
+        var groupClass = 'GROUP_' + group;
 
         for (const world of worlds)
         {
@@ -84,10 +77,129 @@ function displayWorldsInGroup(sectionID, group)
             }
         }
     }
+    else 
+    {
+        var groupClass = 'GROUP_' + group;
+        var subgroupClass = 'SUBGROUP_' + subgroup;
+
+        for (const world of worlds)
+        {
+            if (world.classList.contains(groupClass) && world.classList.contains(subgroupClass))
+            {
+                world.style.display = 'inline-block';
+            }
+            else
+            {
+                world.style.display = 'none';
+            }
+        }
+    }
+}
+
+// Creating subgroup selector for specified subgroup in specified circle section
+function createSubgroupSelector(sectionName, subgroups, group)
+{
+    // Getting section group selector container
+    var sectionSelector = document.getElementById(sectionName + '-circles-container').querySelector('.table-group-selector');
+
+    // Creating selector
+    var selector = document.createElement('select');
+
+    selector.setAttribute('id', sectionName + '-subgroups');
+    selector.setAttribute('name', sectionName + '-subgroups');
+
+        // Setting selector options
+
+        // "All"
+        var allOption = document.createElement('option');
+
+        allOption.setAttribute('value', 'all');
+        allOption.innerHTML = 'All'
+
+        selector.appendChild(allOption);
+
+        // Subgroups
+        for (const subgroup of subgroups)
+        {
+            var option = document.createElement('option');
+
+            option.setAttribute('value', subgroup.name.replaceAll(' ', '-'));
+            option.innerHTML = subgroup.name;
+
+            selector.appendChild(option);
+        }
+
+    sectionSelector.appendChild(selector);
+
+    // Putting event listener on selector to detect what subgroup is selected to display appropriate worlds
+    selector.addEventListener('change', function(event)
+    {
+        displayWorldsInSubgroup(sectionName, group, event.target.value);
+    });
+}
+
+// Displaying worlds in specified group in specified circle section
+function displayWorldsInGroup(sectionName, group, sectionWorldInfo)
+{
+    // Getting section
+    var section = document.getElementById(sectionName + '-circles-container');
+
+    // Getting all worlds in the section
+    var worlds = section.querySelectorAll('.worldList');
+
+    // If group is "all", display all worlds in the section
+    if (group === 'all')
+    {
+        for (const world of worlds)
+        {
+            world.style.display = 'inline-block';
+        }
+    }
+    else 
+    {
+        var groupClass = 'GROUP_' + group;
+
+        for (const world of worlds)
+        {
+            if (world.classList.contains(groupClass))
+            {
+                world.style.display = 'inline-block';
+            }
+            else
+            {
+                world.style.display = 'none';
+            }
+        }
+    }
+
+    // Deleting current subgroup selector
+    var oldSubgroupSelector = section.querySelector('#' + sectionName + '-subgroups');
+
+    if (oldSubgroupSelector)
+    {
+        oldSubgroupSelector.remove();
+    }
+
+    // Creating new subgroup selector according to the subgroups in the group
+
+    var groupInfo;
+
+    // Getting current group
+    for (const sectionGroup of sectionWorldInfo.groups)
+    {
+        if (sectionGroup.name === group.replaceAll('-', ' '))
+        {
+            // If group has subgroups, create subgroup selector
+            if (sectionGroup.subgroups.length > 0)
+            {
+                createSubgroupSelector(sectionName, sectionGroup.subgroups, group);
+            }
+        }
+    }
 }
 
 // Detecting what group is selected to display appropriate worlds
-function detectCurrentGroup(sectionName)
+function detectCurrentGroup(sectionName, sectionWorldInfo)
 {
     // Getting group selection element
     var section = document.getElementById(sectionName + '-groups');
@@ -95,6 +207,6 @@ function detectCurrentGroup(sectionName)
     // Putting event listener to detect when a new group is selected
     section.addEventListener('change', function(event)
     {
-        displayWorldsInGroup(sectionName + '-circles-container', event.target.value);
+        displayWorldsInGroup(sectionName, event.target.value, JSON.parse(sectionWorldInfo));
     });
 }
