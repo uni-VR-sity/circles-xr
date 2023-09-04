@@ -68,7 +68,7 @@ block content
             h3#editable-circles(onclick='showCirclesSection("editable-circles")') Editable Circles
 
     // Reusable block to display groups and subgroups
-    mixin displayGroups(sectionGroups, name)
+    mixin displayGroups(sectionGroups, name, canEdit)
         
         select(id=name + '-groups' name=name + '-groups')
             option(value='all') All
@@ -77,6 +77,9 @@ block content
                 for group of sectionGroups.groups
                     - var value = group.name.replaceAll(' ', '-');
                     option(value=value)= group.name
+
+        if canEdit && adminUser
+            i(class="table-group-settings fa-solid fa-gear fa-lg")
 
         script.
             detectCurrentGroup('#{name}', '!{JSON.stringify(sectionGroups)}');
@@ -140,7 +143,7 @@ block content
 
             // Group selectors
             div.table-group-selector
-                +displayGroups(userWorlds, 'your')
+                +displayGroups(userWorlds, 'your', true)
 
             // Worlds
             div.table-content
@@ -153,7 +156,7 @@ block content
         div.table-group-selector
 
             // Groups
-            +displayGroups(publicWorlds, 'public')
+            +displayGroups(publicWorlds, 'public', true)
 
         // Worlds
         div.table-content
@@ -168,13 +171,14 @@ block content
             div.table-group-selector
 
                 // Groups
-                +displayGroups(editableWorlds, 'editable')
+                +displayGroups(editableWorlds, 'editable', false)
 
             // Worlds
             div.table-content
                 +displayWorlds(editableWorlds, true)
 
     script.
+        setUpSettings();
         selectCircleSection('#{userInfo.userType}');
 
     // Magic Links ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -243,7 +247,7 @@ block content
                         div(style='margin-bottom:10px')
                             i(class='fa-solid fa-circle-check success-icon')
                             span.success-message #{magicLinkSuccess}
-                        <i class="fa-solid fa-link" style='position:absolute; padding:12px 15px;'></i>
+                        i(class="fa-solid fa-link" style='position:absolute; padding:12px 15px;')
                         input(type='text' id='linkCopy' value=magicLink readonly style='width:90%; background-color:white; color:black; padding-left:50px; padding-right:20px; border-radius: 4px 0 0 4px; height:40px;')
                         span
                             input(type='button' class='pure-button pure-button-primary' value='Copy' onclick='copyText(linkCopy)' style='width:80px; border-radius: 0 4px 4px 0; height:40px;')

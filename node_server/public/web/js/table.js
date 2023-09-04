@@ -210,3 +210,33 @@ function detectCurrentGroup(sectionName, sectionWorldInfo)
         displayWorldsInGroup(sectionName, event.target.value, JSON.parse(sectionWorldInfo));
     });
 }
+
+// Setting up group settings button
+function setUpSettings()
+{
+    // Getting settings buttons
+    var buttons = document.getElementsByClassName('table-group-settings');
+
+    // Adding hover effects to buttons (increase in size when hovered)
+    for (const button of buttons)
+    {
+        button.addEventListener('mouseenter', function()
+        {
+            button.classList.remove('fa-lg');
+            button.classList.add('fa-xl');
+
+            button.style.marginRight = '13px';
+        });
+
+        button.addEventListener('mouseleave', function()
+        {
+            button.classList.remove('fa-xl');
+            button.classList.add('fa-lg');
+
+            button.style.marginRight = '15px';
+        });
+    }
+
+    // Adding event listeners to buttons for when pressed
+    // When pressed, 
+}

@@ -42,10 +42,12 @@ div.table-content
 
 /* Group Selector ****************************************************************************************************************************************/
 
-.table-group-selector { width:100%; margin:20px 0 0 0; }
+.table-group-selector { width:100%; margin:20px 0 0 0;}
 
 .table-group-selector select { width:200px }
 .table-group-selector select:first-child { margin-right:20px; }
+
+.table-group-settings { height:22px; padding-top:10px; margin:7px 15px 0 0; float:right; }
 
 /* Table Content *****************************************************************************************************************************************/
 
