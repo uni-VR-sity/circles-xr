@@ -10,6 +10,8 @@ block content
     - var standardUser            = CIRCLES.USER_CATEGORIES.STANDARD_USERS.includes(userInfo.userType);
     - var guest                   = userInfo.userType === CIRCLES.USER_TYPE.GUEST;
     - var magicGuest              = userInfo.userType === CIRCLES.USER_TYPE.MAGIC_GUEST;
+    - var group;
+    - var subgroup;
     - var world;
 
     // Updating session display name ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -65,10 +67,71 @@ block content
         if adminUser || managerUser
             h3#editable-circles(onclick='showCirclesSection("editable-circles")') Editable Circles
 
+    // Reusable block to display groups and subgroups
+    mixin displayGroups(sectionGroups, name)
+        
+        select(id=name + '-groups' name=name + '-groups')
+            option(value='all') All
+            
+            if sectionGroups.groups.length > 0
+                for group of sectionGroups.groups
+                    - var value = group.name.replaceAll(' ', '-');
+                    option(value=value)= group.name
+
+        script.
+            detectCurrentGroup('#{name}');
+
+    // Reusable block to display worlds
+    mixin displayWorlds(sectionWorlds, editButton)
+
+        ul(class="pure-menu-list")
+
+            // Worlds with no groups
+            if sectionWorlds.noGroup.length > 0
+                for world of sectionWorlds.noGroup
+                    - var worldUrl = '/w/' + world; // Making url to world
+                    li 
+                        if editButton
+                            - var editUrl = '/edit-access/' + world;
+                            a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+                        a(class="pure-button worldList" href=worldUrl)= world
+
+            // Worlds with groups
+            if sectionWorlds.groups.length > 0
+                for group of sectionWorlds.groups
+
+                    // Worlds with no subgroups
+                    if group.noGroup.length > 0
+                        for world of group.noGroup
+                            - var worldUrl = '/w/' + world; // Making url to world
+                            - var groupName = group.name.replaceAll(' ', '-');
+                            li 
+                                if editButton
+                                    - var editUrl = '/edit-access/' + world;
+                                    a(class="pure-button worldList GROUP_" + groupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+                                a(class="pure-button worldList GROUP_" + groupName href=worldUrl)= world
+
+                    // Worlds with subgroups
+                    if group.subgroups.length > 0
+                        for subgroup of group.subgroups
+                            for world of subgroup.worlds
+                                - var worldUrl = '/w/' + world; // Making url to world
+                                - var groupName = group.name.replaceAll(' ', '-');
+                                - var subgroupName = subgroup.name.replaceAll(' ', '-');
+                                li 
+                                    if editButton
+                                        - var editUrl = '/edit-access/' + world;
+                                        a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+                                    a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName href=worldUrl)= world
+
     // Magic circles container
     if magicGuest
 
         div#magic-circles-container.table-container
+
+            // Worlds
+            div.table-content
+                +displayWorlds(magicWorlds, false)
 
     // Your circles container
     if adminUser || managerUser || standardUser
@@ -77,28 +140,12 @@ block content
 
             // Group selectors
             div.table-group-selector
-
-                // Groups
-                select#your-groups(name='your-groups')
-                    option(value='all') All
-                    option(value='Group1') Group 1
-                    option(value='Group2') Group 2
-
-            script.
-                document.getElementById('your-groups').addEventListener('change', function(event)
-                {
-                    console.log(event.target.value);
-                });
+                +displayGroups(userWorlds, 'your')
 
             // Worlds
-            //div.table-content
-
-                if userWorlds.length > 0
-                    for world of userWorlds
-                        - var worldUrl = '/w/' + world;  // Making url to world
-                        li 
-                            a(class="pure-button worldList" href=worldUrl)= world
-
+            div.table-content
+                +displayWorlds(userWorlds, false)
+                
     // Public circles container
     div#public-circles-container.table-container
 
@@ -106,19 +153,11 @@ block content
         div.table-group-selector
 
             // Groups
-            select#public-groups(name='public-groups')
-                option(value='all') All
-                option(value='Group1') Group 1
-                option(value='Group2') Group 2
+            +displayGroups(publicWorlds, 'public')
 
         // Worlds
-        //div.table-content
-
-            if publicWorlds.length > 0
-                for world of publicWorlds
-                    - var worldUrl = '/w/' + world;  // Making url to world
-                    li 
-                        a(class="pure-button worldList" href=worldUrl)= world
+        div.table-content
+            +displayWorlds(publicWorlds, false)
 
     // Editable circles container
     if adminUser || managerUser
@@ -129,19 +168,82 @@ block content
             div.table-group-selector
 
                 // Groups
-                select#editable-groups(name='editable-groups')
-                    option(value='Group1') All
-                    option(value='Group1') Public
-                    option(value='Group1') Private
+                +displayGroups(editableWorlds, 'editable')
 
             // Worlds
-            //div.table-content
-
-                if editableWorlds.length > 0
-                    for world of editableWorlds
-                        - var worldUrl = '/w/' + world;  // Making url to world
-                        li 
-                            a(class="pure-button worldList" href=worldUrl)= world
+            div.table-content
+                +displayWorlds(editableWorlds, true)
 
     script.
-        selectCircleGroup('#{userInfo.userType}');
+        selectCircleSection('#{userInfo.userType}');
+
+    // Magic Links ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    if adminUser || managerUser
+
+        div(id="MagicLinksWrapper" class="gutter-bottom-doubled" style='margin-top:60px;')
+            h2 Magic Links
+
+            p Select the expiry, forwarding group, and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[Create]</span> button below to generate a magic link to the selected world(s). Just copy and send the link to automatically give then access to the world(s) as a guest user.
+
+            form(action="/create-magic-link" method="post" class='pure-form pure-form-aligned' style='margin-top:25px')
+                fieldset
+                    legend(style='margin-bottom:15px') Create Magic Link
+
+                    .pure-left-control-group
+                        - let n = 1;
+                        - let selected = false;
+                        - let val = 1;
+                        label Select Expiry in Days
+                        select.field-select(name='linkExpiry' id='linkExpiry')
+                            while n < 365
+                                - val = n++;
+                                - selected = (val === 7)
+                                option(value!= val, selected!= selected)!= val
+                                - selected = false
+                            option(value='never') Never
+
+                    .pure-left-control-group
+                        label Link Name 
+                            span.required *
+                            span.top-tooltip <i class="fa-solid fa-circle-info"></i>
+                                p.top-tooltip-text(style='width:276px;margin-left:-138px;') What your magic link will look like <i>Ex. uni-vr-sity.ca/ClassVR</i>
+                        input.field-long(type='text' name='forwardingName' placeholder='ClassVR' required)
+
+                    if editableWorlds.groups[0].noGroup || editableWorlds.groups[1].noGroup > 0
+                        div(class='pure-left-control-group' style='margin-top:25px')
+
+                            // Users can only create magic links for worlds that they have editing access to
+                            for group of editableWorlds.groups
+                                for world of group.noGroup
+                                    div(style='margin-bottom:10px;display:inline-block;')
+                                        input(type='checkbox', name=world style='margin-right:10px')
+                                        label(style='white-space:nowrap')=world
+
+                            div(class='pure-controls' style='margin:20px 0 20px 0')
+                                input(type='submit' class="pure-button pure-button-primary" value='Create')
+                    
+                    else
+                        div(style='margin-top:25px')
+                        
+                            if adminUser
+                                p You currently have no worlds in your server to create a magic link for
+
+                            else
+                                p You currently have no worlds available to create a magic link for
+
+                    if magicLinkError
+                        div(style='margin-top:25px')
+                        i(class='fa-solid fa-triangle-exclamation error-icon')
+                        span.error-message #{magicLinkError}
+
+                    if magicLink
+                        div(style='margin-top:30px')
+                        if magicLinkSuccess
+                        div(style='margin-bottom:10px')
+                            i(class='fa-solid fa-circle-check success-icon')
+                            span.success-message #{magicLinkSuccess}
+                        <i class="fa-solid fa-link" style='position:absolute; padding:12px 15px;'></i>
+                        input(type='text' id='linkCopy' value=magicLink readonly style='width:90%; background-color:white; color:black; padding-left:50px; padding-right:20px; border-radius: 4px 0 0 4px; height:40px;')
+                        span
+                            input(type='button' class='pure-button pure-button-primary' value='Copy' onclick='copyText(linkCopy)' style='width:80px; border-radius: 0 4px 4px 0; height:40px;')

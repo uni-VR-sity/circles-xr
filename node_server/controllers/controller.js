@@ -870,7 +870,7 @@ const serveExplore = async (req, res, next) =>
   }
   else if (user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
   {
-    magicWorlds.push(await getWorlds(user, "magic"));
+    magicWorlds.push(await getWorlds(user, 'magic'));
   }
 
   // Flattening the arrays
@@ -886,31 +886,55 @@ const serveExplore = async (req, res, next) =>
   userWorlds = organizeToGroups(userWorlds, groups);
 
   // Organizing editable worlds into private and public groups
-  var groupedEditableWorld = {
-    public: [],
-    private: [],
+  // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
+  var groupedEditableWorlds = {
+    groups: [
+      {
+        name: 'Private',
+        subgroups: [],
+        noGroup: [],
+      }, 
+      {
+        name: 'Public',
+        subgroups: [],
+        noGroup: [],
+      }
+    ],
+    noGroup: [],
   }
 
   for (const world of editableWorlds)
   {
     if (world.viewingRestrictions)
     {
-      groupedEditableWorld.private.push(world.name);
+      groupedEditableWorlds.groups[0].noGroup.push(world.name);
     }
     else
     {
-      groupedEditableWorld.public.push(world.name);
+      groupedEditableWorlds.groups[1].noGroup.push(world.name);
     }
+  }
+
+  // Organizing editable worlds into private and public groups
+  // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
+  var groupedMagicWorlds = {
+    groups: [],
+    noGroup: [],
+  }
+
+  for (const world of magicWorlds)
+  {
+    groupedMagicWorlds.noGroup.push(world.name);
   }
 
   // Rendering the explore page
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
     userInfo: userInfo,
-    magicWorlds: magicWorlds,
+    magicWorlds: groupedMagicWorlds,
     publicWorlds: publicWorlds,
     userWorlds: userWorlds,
-    editableWorlds: groupedEditableWorld,
+    editableWorlds: groupedEditableWorlds,
     sessionName: req.session.sessionName,
     successMessage: successMessage,
     errorMessage: errorMessage,

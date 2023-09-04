@@ -29,11 +29,11 @@ function showCirclesSection(section)
 
 }
 
-// Selecting initial group to be displayed on page load
+// Selecting initial section to be displayed on page load
 // Magic Guests start with 'Magic Circles'
 // Guests start with 'Public Circles'
 // All other users start with 'Your Circles'
-function selectCircleGroup(usertype)
+function selectCircleSection(usertype)
 {
     switch(usertype)
     {
@@ -52,4 +52,49 @@ function selectCircleGroup(usertype)
             showCirclesSection('your-circles');
             break
     }
+}
+
+// Displaying worlds in specified group in specified circle section
+function displayWorldsInGroup(sectionID, group)
+{
+    // Getting all worlds in the section
+    var worlds = document.getElementById(sectionID).querySelectorAll('.worldList');
+
+    // If group is "all", display all worlds in the section
+    if (group === 'all')
+    {
+        for (const world of worlds)
+        {
+            world.style.display = 'inline-block';
+        }
+    }
+    else 
+    {
+        var groupClass = 'GROUP_' + group.replaceAll(' ', '-');
+
+        for (const world of worlds)
+        {
+            if (world.classList.contains(groupClass))
+            {
+                world.style.display = 'inline-block';
+            }
+            else
+            {
+                world.style.display = 'none';
+            }
+        }
+    }
+}
+
+// Detecting what group is selected to display appropriate worlds
+function detectCurrentGroup(sectionName)
+{
+    // Getting group selection element
+    var section = document.getElementById(sectionName + '-groups');
+
+    // Putting event listener to detect when a new group is selected
+    section.addEventListener('change', function(event)
+    {
+        displayWorldsInGroup(sectionName + '-circles-container', event.target.value);
+    });
 }

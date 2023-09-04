@@ -117,7 +117,6 @@ const jwtOptions = {
 // Creates a magic guest user that expires in 24 hours and has access to specified worlds
 passport.use('jwt', new JwtStrategy(jwtOptions, async (req, token, done) => 
 {
-  console.log(token);
   let user = null;
   let error = null;
 
