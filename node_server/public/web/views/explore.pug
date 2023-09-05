@@ -47,6 +47,42 @@ block content
     br
     br
 
+    // Manage Groups Overlay --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    if adminUser
+        div#manage-groups-overlay.overlay-container
+
+            div.overlay-block
+
+                h2 Manage Groups
+
+                i.overlay-exit.xl-icon.icon-background(class="fa-solid fa-xmark")
+
+                script.
+                    exitOverlay('manage-groups-overlay');
+                
+                hr
+
+                form(action='/create-group' method='post')
+                    table.table.manage-groups-table
+                        thead 
+                            th 
+                                input(type='text' name='group' placeholder='Group name...' required)
+
+                            th.stacked-inputs(colspan="2") 
+                                div
+                                    input(type='text' name='subgroups' placeholder='Subgroup name...')
+                                    i.plus-button.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
+
+                            th
+                                input(type='submit' value='Add Group' class='pure-button')
+
+                        tbody 
+                            tr
+                                td x
+                                td y 
+                                td z 
+                                td 0
+
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Top bar
@@ -79,7 +115,7 @@ block content
                     option(value=value)= group.name
 
         if canEdit && adminUser
-            i(class="table-group-settings fa-solid fa-gear fa-lg")
+            i.table-group-settings.lg-icon.icon-background(class='fa-solid fa-gear')
 
         script.
             detectCurrentGroup('#{name}', '!{JSON.stringify(sectionGroups)}');
@@ -133,7 +169,7 @@ block content
         div#magic-circles-container.table-container
 
             // Worlds
-            div.table-content
+            div.table
                 +displayWorlds(magicWorlds, false)
 
     // Your circles container
@@ -146,7 +182,7 @@ block content
                 +displayGroups(userWorlds, 'your', true)
 
             // Worlds
-            div.table-content
+            div.table
                 +displayWorlds(userWorlds, false)
                 
     // Public circles container
@@ -159,7 +195,7 @@ block content
             +displayGroups(publicWorlds, 'public', true)
 
         // Worlds
-        div.table-content
+        div.table
             +displayWorlds(publicWorlds, false)
 
     // Editable circles container
@@ -174,15 +210,14 @@ block content
                 +displayGroups(editableWorlds, 'editable', false)
 
             // Worlds
-            div.table-content
+            div.table
                 +displayWorlds(editableWorlds, true)
 
     script.
-        setUpSettings();
+        setUpSettings('manage-groups-overlay');
         selectCircleSection('#{userInfo.userType}');
 
     // Magic Links ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     if adminUser || managerUser
 
         div(id="MagicLinksWrapper" class="gutter-bottom-doubled" style='margin-top:60px;')

@@ -135,3 +135,48 @@ function getDimensions(fileID)
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   request.send('file='+ fileID + '&height=' + height + '&width=' + width);
 }
+
+// explore page ------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adding another input into the group form
+function addSubgroupInput(element)
+{
+  var previousInput = element.parentElement;
+  var parentElement = previousInput.parentElement;
+  var addButton = element.cloneNode(true);
+
+  // Deleting current plus button
+  element.remove();
+
+  // Adding removing input button next to previous input
+  var minusButton = document.createElement('i');
+
+  minusButton.classList.add('fa-solid', 'fa-minus', 'icon-background', 'lg-icon');
+
+  minusButton.setAttribute('onclick', 'removeSubgroupInput(this)');
+
+  previousInput.appendChild(minusButton);
+
+  // Creating new input
+  var inputContainer =  document.createElement('div');
+  
+    var newInput = document.createElement('input');
+
+    newInput.setAttribute('class', 'stacked-input');
+    newInput.setAttribute('type', 'text');
+    newInput.setAttribute('name', 'subgroups');
+    newInput.setAttribute('placeholder', 'Subgroup name...');
+
+    inputContainer.appendChild(newInput);
+    inputContainer.appendChild(addButton);
+
+  parentElement.appendChild(inputContainer);
+}
+
+// Removing input from the group form
+function removeSubgroupInput(element)
+{
+  var input = element.parentElement;
+
+  input.remove();
+}

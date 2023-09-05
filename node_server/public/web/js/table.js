@@ -212,31 +212,20 @@ function detectCurrentGroup(sectionName, sectionWorldInfo)
 }
 
 // Setting up group settings button
-function setUpSettings()
+function setUpSettings(overlayID)
 {
+    // Getting overlay
+    var overlay = document.getElementById(overlayID);
+
     // Getting settings buttons
     var buttons = document.getElementsByClassName('table-group-settings');
 
-    // Adding hover effects to buttons (increase in size when hovered)
+    // When buttons are clicked, display manage groups overlay
     for (const button of buttons)
     {
-        button.addEventListener('mouseenter', function()
+        button.addEventListener('click', function()
         {
-            button.classList.remove('fa-lg');
-            button.classList.add('fa-xl');
-
-            button.style.marginRight = '13px';
-        });
-
-        button.addEventListener('mouseleave', function()
-        {
-            button.classList.remove('fa-xl');
-            button.classList.add('fa-lg');
-
-            button.style.marginRight = '15px';
+            overlay.style.display = 'block';
         });
     }
-
-    // Adding event listeners to buttons for when pressed
-    // When pressed, 
 }
