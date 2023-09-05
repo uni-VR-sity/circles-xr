@@ -125,6 +125,9 @@ router.post('/get-user-info', authenticated, controller.getUser);
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
+
+router.get('/delete-group/:group_name', authenticated, controller.deleteGroup);
+
 router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
 router.get('/uploaded-content', authenticated, controller.serveUploadedContent);

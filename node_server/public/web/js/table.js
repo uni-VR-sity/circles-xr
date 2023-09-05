@@ -21,7 +21,12 @@ function showCirclesSection(section)
     // Make sure all containers are hidden
     for (var container of document.getElementsByClassName('table-container'))
     {
-        container.style.display = 'none';
+        var id = container.getAttribute('id');
+
+        if (id === 'magic-circles-container' || id === 'your-circles-container' || id === 'public-circles-container' || id === 'editable-circles-container')
+        {
+            container.style.display = 'none';
+        }
     }
 
     // Displaying the container on the specified section
@@ -225,7 +230,7 @@ function setUpSettings(overlayID)
     {
         button.addEventListener('click', function()
         {
-            overlay.style.display = 'block';
+            overlay.style.display = 'flex';
         });
     }
 }

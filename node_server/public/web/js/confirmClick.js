@@ -2,6 +2,78 @@
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------------
 
+// Creating delete confirmation pop up before deleting something
+function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID)
+{
+  // Overlay
+  var overlay = document.createElement('div');
+  overlay.classList.add('overlay-container');
+
+    // Pop up
+    var popup = document.createElement('div');
+    popup.classList.add('overlay-delete-confirmation');
+
+      // Icon
+      var icon = document.createElement('i');
+      icon.classList.add('fa-solid', 'fa-circle-exclamation', 'icon', 'xxl-icon');
+
+      popup.appendChild(icon);
+
+      // Title
+      var title = document.createElement('h2');
+      title.innerHTML = 'Delete ' + item + '?';
+
+      popup.appendChild(title);
+
+      // Description
+      var description = document.createElement('p');
+      description.innerHTML = 'Are you sure you want to delete ' + name + '? This action can not be undone.';
+
+      popup.appendChild(description);
+
+      // Cancel button
+      var cancelButton = document.createElement('a');
+      cancelButton.classList.add('pure-button');
+      
+      cancelButton.innerHTML = 'Cancel';
+      cancelButton.setAttribute('onclick', 'cancelPopupDelete(this)');
+
+      popup.appendChild(cancelButton);
+
+      // Delete button
+      var deleteButton = document.createElement('a');
+      deleteButton.classList.add('pure-button');
+      
+      deleteButton.innerHTML = 'Delete';
+      deleteButton.setAttribute('onclick', 'popupDelete(this, "' + deleteLink + '", "' + deleteElementID + '")');
+
+      popup.appendChild(deleteButton);
+
+    overlay.appendChild(popup);
+
+  document.getElementsByTagName('body')[0].appendChild(overlay);
+}
+
+// Closing delete confirmation pop up
+function cancelPopupDelete(element)
+{
+  element.parentElement.parentElement.remove();
+}
+
+// Sending message to server to delete group
+function popupDelete(element, deleteLink, deleteElementID)
+{
+  // Deleting element from page
+  document.getElementById(deleteElementID).remove();
+
+  // Closing pop up
+  element.parentElement.parentElement.remove();
+
+  var request = new XMLHttpRequest();
+  request.open('GET', deleteLink);
+  request.send();
+}
+
 // Creating a double check click before deleting something
 function doubleCheckDelete_TableView(deleteLink, item)
 {
@@ -16,21 +88,21 @@ function doubleCheckDelete_TableView(deleteLink, item)
     // Creating elements to confirm the delete
 
     // DIV that holds elements
-    let confirmationContainer = document.createElement('div');
+    var confirmationContainer = document.createElement('div');
     confirmationContainer.setAttribute('class', 'confirm-wrapper');
     confirmationContainer.setAttribute('id', 'delete?' + id);
 
-      let confirmationText = document.createElement('p');
+      var confirmationText = document.createElement('p');
       confirmationText.innerHTML = 'Delete this ' + item + '?';
       confirmationContainer.appendChild(confirmationText);
 
-      let cancelButton = document.createElement('a');
+      var cancelButton = document.createElement('a');
       cancelButton.setAttribute('class', 'pure-button worldList no-delete');
       cancelButton.setAttribute('onclick', 'cancelDelete("' + id + '")');
       cancelButton.innerHTML = 'Cancel';
       confirmationContainer.appendChild(cancelButton);
 
-      let deleteButton = document.createElement('a');
+      var deleteButton = document.createElement('a');
       deleteButton.setAttribute('class', 'pure-button worldList delete');
       deleteButton.setAttribute('href', deleteLink);
       deleteButton.innerHTML = 'Delete';
@@ -38,7 +110,7 @@ function doubleCheckDelete_TableView(deleteLink, item)
 
     // Finding the div with the id of this server id to put the check message in
     
-    let parentElement = document.getElementById(id);
+    var parentElement = document.getElementById(id);
     
     parentElement.insertBefore(confirmationContainer, parentElement.lastElementChild);
   }
@@ -49,7 +121,7 @@ function doubleCheckDelete_TableView(deleteLink, item)
 function cancelDelete(elementId)
 {
   // Deleting delete confirmation div
-  let confirmation = document.getElementById('delete?' + elementId);
+  var confirmation = document.getElementById('delete?' + elementId);
   confirmation.remove();
 }
 
@@ -91,7 +163,7 @@ function checkOtherButtons(link, buttonClicked)
   {
     if (document.getElementById('delete?' + link))
     {
-      let confirmation = document.getElementById('delete?' + link);
+      var confirmation = document.getElementById('delete?' + link);
       confirmation.remove();
     }
   }

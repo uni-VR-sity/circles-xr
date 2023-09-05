@@ -48,7 +48,7 @@ block content
     br
 
     // Manage Groups Overlay --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    if adminUser
+    if adminUser || managerUser
         div#manage-groups-overlay.overlay-container
 
             div.overlay-block
@@ -62,26 +62,43 @@ block content
                 
                 hr
 
-                form(action='/create-group' method='post')
-                    table.table.manage-groups-table
-                        thead 
-                            th 
-                                input(type='text' name='group' placeholder='Group name...' required)
+                div.table-overflow-container
+                    form(action='/create-group' method='post')
+                        table.table.manage-groups-table
+                            thead
+                                th 
+                                    input(type='text' name='group' placeholder='Group name...' required)
 
-                            th.stacked-inputs(colspan="2") 
-                                div
-                                    input(type='text' name='subgroups' placeholder='Subgroup name...')
-                                    i.plus-button.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
+                                th.stacked-inputs(colspan="2") 
+                                    div
+                                        input(type='text' name='subgroups' placeholder='Subgroup name...')
+                                        i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
 
-                            th
-                                input(type='submit' value='Add Group' class='pure-button')
+                                th
+                                    input(type='submit' value='Add Group' class='pure-button')
 
-                        tbody 
-                            tr
-                                td x
-                                td y 
-                                td z 
-                                td 0
+                            tbody 
+                                for group of groupedWorlds.groups
+                                    tr(id=group.name)
+                                        - var numCircles = group.noGroup.length;
+
+                                        for subgroup of group.subgroups
+                                            - numCircles += subgroup.worlds.length;
+
+                                        td= group.name
+                                        td.greyed-out= group.subgroups.length 
+                                            if group.subgroups.length === 1
+                                                span  subgroup
+                                            else 
+                                                span  subgroups
+                                        td.greyed-out= numCircles
+                                            if numCircles === 1
+                                                span  circle
+                                            else 
+                                                span  circles
+                                        td 
+                                            - var deleteLink = '/delete-group/' + group.name;
+                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + group.name + '")')
 
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -114,7 +131,7 @@ block content
                     - var value = group.name.replaceAll(' ', '-');
                     option(value=value)= group.name
 
-        if canEdit && adminUser
+        if canEdit && (adminUser || managerUser)
             i.table-group-settings.lg-icon.icon-background(class='fa-solid fa-gear')
 
         script.

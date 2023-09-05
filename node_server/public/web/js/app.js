@@ -152,6 +152,7 @@ function addSubgroupInput(element)
   var minusButton = document.createElement('i');
 
   minusButton.classList.add('fa-solid', 'fa-minus', 'icon-background', 'lg-icon');
+  minusButton.style.marginLeft = '-6px';
 
   minusButton.setAttribute('onclick', 'removeSubgroupInput(this)');
 

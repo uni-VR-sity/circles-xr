@@ -40,7 +40,8 @@ div.table-container
 
 /* Table Container ***************************************************************************************************************************************/
 
-.table-container { display:none; }
+.table-container { display:block; }
+.table-overflow-container { display:block; overflow-y:auto; height:90%; scrollbar-gutter:stable both-edges; }
 
 /* Group Selector ****************************************************************************************************************************************/
 
@@ -54,16 +55,27 @@ div.table-container
 
 /* Actual Table ******************************************************************************************************************************************/
 
-.table { width:100%; margin:30px 0 0 0; border:0px; border-collapse: collapse; }
+.table { width:100%; margin:30px 0 0 0; border-collapse:seperate; border-spacing:0px; }
 
-.table th, .table td { text-align:left; vertical-align:top; padding:15px 10px; width:30%; border-bottom:1px solid var(--DARK_GREY) }
-.table td { padding:20px 15px; }
+.table tbody tr:hover { background-color:var(--GREY); cursor:pointer; }
+
+.table th, .table td { text-align:left; border-bottom:1px solid var(--MEDIUM_GREY); }
 .table th:last-child, table td:last-child { text-align:right; }
 
+.table th { position:sticky; top:0; vertical-align:top; padding:15px 10px; background-color:var(--WHITE); }
+
+.table td { padding:20px 15px; vertical-align:middle; }
+
 table input[type=text] { width:175px; margin-right:15px}
+
+table .garbage-icon { margin-top:-8.5px; margin-bottom:-8.5px }
+table .garbage-icon:hover { background-color: var(--LIGHT_GREY); }
+
+table { overflow-y:auto; }
 
 /* Manange Groups Table **********************************************************************************************************************************/
 
 .manage-groups-table { margin-top:20px; }
 
-.manage-groups-table th, .manage-groups-table td { width:25%; }
+.manage-groups-table th:nth-child(-n + 2), .manage-groups-table td:nth-child(-n + 3) { width:30%; }
+.manage-groups-table th:nth-child(3), .manage-groups-table td:nth-child(4) { width:10%; }

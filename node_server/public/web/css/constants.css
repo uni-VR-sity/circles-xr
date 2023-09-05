@@ -6,10 +6,12 @@
     --LIGHT_GREY: #ececec;
     --GREY: #D7D7D7;
     --HOVER_GREY: #c5c5c5;
+    --MEDIUM_GREY: #8f8f8f;
     --DARK_GREY: #575757;
     --BLUE: #157AD8;
     --DARK_BLUE: #104C84;
     --CONTRAST_COLOR: #E85D75;
+    --RED: #cb0000;
 
     font-family: Arial, sans-serif;
 }

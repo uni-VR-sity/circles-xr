@@ -884,6 +884,7 @@ const serveExplore = async (req, res, next) =>
 
   publicWorlds = organizeToGroups(publicWorlds, groups);
   userWorlds = organizeToGroups(userWorlds, groups);
+  var groupedWorlds = organizeToGroups(editableWorlds, groups);     // For managing groups
 
   // Organizing editable worlds into private and public groups
   // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
@@ -935,6 +936,7 @@ const serveExplore = async (req, res, next) =>
     publicWorlds: publicWorlds,
     userWorlds: userWorlds,
     editableWorlds: groupedEditableWorlds,
+    groupedWorlds: groupedWorlds,
     sessionName: req.session.sessionName,
     successMessage: successMessage,
     errorMessage: errorMessage,
@@ -2928,6 +2930,14 @@ const getUser = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Deleting group on user request
+const deleteGroup = async (req, res, next) =>
+{
+  
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   invalidAddress,
   // getAllUsers,
@@ -2973,4 +2983,5 @@ module.exports = {
   setFileDimensions,
   updateFilePosition,
   getUser,
+  deleteGroup,
 };
