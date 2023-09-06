@@ -48,8 +48,8 @@ block content
     br
 
     // Manage Groups Overlay --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    if adminUser || managerUser
-        div#manage-groups-overlay.overlay-container
+    if adminUser
+        div#manage-groups-overlay.overlay-container(style='display:' + popUpActive)
 
             div.overlay-block
 
@@ -66,16 +66,23 @@ block content
                     form(action='/create-group' method='post')
                         table.table.manage-groups-table
                             thead
-                                th 
-                                    input(type='text' name='group' placeholder='Group name...' required)
+                                tr
+                                    th 
+                                        input(type='text' name='group' placeholder='Group name...' required)
 
-                                th.stacked-inputs(colspan="2") 
-                                    div
-                                        input(type='text' name='subgroups' placeholder='Subgroup name...')
-                                        i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
+                                    th.stacked-inputs(colspan='2') 
+                                        div
+                                            input(type='text' name='subgroups' placeholder='Subgroup name...')
+                                            i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
 
-                                th
-                                    input(type='submit' value='Add Group' class='pure-button')
+                                    th
+                                        input(type='submit' value='Add Group' class='pure-button')
+
+                                if groupErrorMessage
+                                    tr 
+                                        th.table-error-cell(colspan='4')
+                                            i(class='fa-solid fa-triangle-exclamation error-icon')
+                                            span.error-message #{groupErrorMessage}
 
                             tbody 
                                 for group of groupedWorlds.groups
@@ -98,7 +105,8 @@ block content
                                                 span  circles
                                         td 
                                             - var deleteLink = '/delete-group/' + group.name.replaceAll(' ', '-');
-                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + group.name + '")')
+                                            - var note = 'Circles in group will NOT be deleted';
+                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + group.name + '", "' + note + '")')
 
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -131,7 +139,7 @@ block content
                     - var value = group.name.replaceAll(' ', '-');
                     option(value=value)= group.name
 
-        if canEdit && (adminUser || managerUser)
+        if canEdit && adminUser
             i.table-group-settings.lg-icon.icon-background(class='fa-solid fa-gear')
 
         script.

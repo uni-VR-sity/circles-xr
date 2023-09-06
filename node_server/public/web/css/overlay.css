@@ -29,7 +29,7 @@ div.overlay-container
 
 .overlay-delete-confirmation, .overlay-block { background-color: var(--WHITE); position: absolute; box-shadow: 0px 0px 15px #0000003b; }
 
-.overlay-delete-confirmation { height:60%; width:25%; border-radius:10px; text-align:center; display: inline; padding: 60px 50px; }
+.overlay-delete-confirmation { height:65%; width:25%; border-radius:10px; text-align:center; display: inline; padding: 60px 50px; }
 
 .overlay-block { width:70%; height:80%; padding:60px; border-radius:20px; }
 
@@ -41,7 +41,7 @@ div.overlay-container
 
 .overlay-delete-confirmation h2 { padding:30px 0 15px 0 }
 
-
+.overlay-delete-confirmation .delete-note { font-style: italic; }
 
 .overlay-delete-confirmation a { width: 100px; position:absolute; bottom:60 }
 

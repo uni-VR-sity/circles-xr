@@ -59,19 +59,22 @@ div.table-container
 
 .table tbody tr:hover { background-color:var(--GREY); cursor:pointer; }
 
-.table th, .table td { text-align:left; border-bottom:1px solid var(--MEDIUM_GREY); }
-.table th:last-child, table td:last-child { text-align:right; }
+.table th, .table td { text-align:left }
+.table:not(:has(.table-error-cell)) th, .table td, .table-error-cell { border-bottom:1px solid var(--MEDIUM_GREY); }
+.table th:last-child:not(.table-error-cell), table td:last-child { text-align:right; }
 
-.table th { position:sticky; top:0; vertical-align:top; padding:15px 10px; background-color:var(--WHITE); }
+.table thead { position:sticky; top:0; background-color:var(--WHITE); }
+
+.table tr:not(:has(.table-error-cell)) th { vertical-align:top; padding:15px 10px; }
+
+.table .table-error-cell { padding:0 10px 15px 10px; }
 
 .table td { padding:20px 15px; vertical-align:middle; }
 
-table input[type=text] { width:175px; margin-right:15px}
+.table input[type=text] { width:175px; margin-right:15px}
 
-table .garbage-icon { margin-top:-8.5px; margin-bottom:-8.5px }
-table .garbage-icon:hover { background-color: var(--LIGHT_GREY); }
-
-table { overflow-y:auto; }
+.table .garbage-icon { margin-top:-8.5px; margin-bottom:-8.5px }
+.table .garbage-icon:hover { background-color: var(--LIGHT_GREY); }
 
 /* Manange Groups Table **********************************************************************************************************************************/
 

@@ -127,6 +127,7 @@ router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
 
 router.get('/delete-group/:group_name', authenticated, controller.deleteGroup);
+router.post('/create-group', authenticated, controller.createGroup);
 
 router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);

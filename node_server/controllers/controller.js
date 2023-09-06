@@ -805,6 +805,8 @@ const serveExplore = async (req, res, next) =>
   var successMessage = null;
   var errorMessage = null;
   var magicLinkError = null;
+  var groupErrorMessage = null;
+  var popUpActive = 'none';
 
   if (req.session.successMessage)
   {
@@ -822,6 +824,18 @@ const serveExplore = async (req, res, next) =>
   {
     magicLinkError = req.session.magicLinkError;
     req.session.magicLinkError = null;
+  }
+
+  if (req.session.groupErrorMessage)
+  {
+    groupErrorMessage = req.session.groupErrorMessage;
+    req.session.groupErrorMessage = null;
+  }
+
+  if (req.session.popUpActive)
+  {
+    popUpActive = req.session.popUpActive;
+    req.session.popUpActive = null;
   }
 
   // Route now authenticates and ensures a user is logged in by this point
@@ -904,6 +918,16 @@ const serveExplore = async (req, res, next) =>
         noGroup: [],
       };
 
+      for (const subgroup of group.subgroups)
+      {
+        var noWorldSubgroup = {
+          name: subgroup.name,
+          worlds: [],
+        };
+
+        noWorldGroup.subgroups.push(noWorldSubgroup);
+      }
+
       groupedWorlds.groups.push(noWorldGroup);
     }
   }
@@ -954,6 +978,8 @@ const serveExplore = async (req, res, next) =>
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
     userInfo: userInfo,
+    popUpActive: popUpActive,
+    groupErrorMessage: groupErrorMessage,
     magicWorlds: groupedMagicWorlds,
     publicWorlds: publicWorlds,
     userWorlds: userWorlds,
@@ -2986,6 +3012,82 @@ const deleteGroup = async (req, res, next) =>
       console.log(e);
     }
   }
+
+  // Manage group pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+
+  return res.redirect('/explore');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating group on user request
+const createGroup = async (req, res, next) =>
+{
+  // Manage groups pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+
+  console.log(req.body);
+
+  if (req.body.group) 
+  {
+    // Checking if the group already exists
+    // If it does, send an error message
+    // If it doesn't, create the group
+    if (await WorldGroups.findOne({name: req.body.group}))
+    {
+      req.session.groupErrorMessage = req.body.group + ' already exists';
+      return res.redirect('/explore');
+    }
+    else
+    {
+      var group = {
+        name: req.body.group,
+        subgroups: [],
+      }
+      
+      // Adding subgroups
+      // req.body.subgroups will either be:
+      //    - ''                                    --> Nothing (won't trigger if statment)
+      //    - 'subgroup'                            --> Not array (only 1 subgroup and will add that)
+      //    - ['subgroup1', 'subgroup2', ...]       --> Array (will loop through and add each subgroup)
+      if (req.body.subgroups && req.body.subgroups.length > 0)
+      {
+        if (Array.isArray(req.body.subgroups))
+        {
+          for(const subgroup of req.body.subgroups)
+          {
+            group.subgroups.push({name: subgroup});
+          }
+        }
+        else
+        {
+          group.subgroups.push({name: req.body.subgroups});
+        }
+      }
+
+      // Adding group to database
+      try
+      {
+        await WorldGroups.create(group);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        req.session.groupErrorMessage = 'Something went wrong, please try again';
+        return res.redirect('/explore');
+      }
+    }
+  }
+  else
+  {
+    req.session.groupErrorMessage = 'No group name entered';
+    return res.redirect('/explore');
+  }
+
+  req.session.popUpActive = 'flex';
+  return res.redirect('/explore');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3036,4 +3138,5 @@ module.exports = {
   updateFilePosition,
   getUser,
   deleteGroup,
+  createGroup,
 };

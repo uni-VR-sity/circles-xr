@@ -3,7 +3,7 @@
 // General -----------------------------------------------------------------------------------------------------------------------------------------------
 
 // Creating delete confirmation pop up before deleting something
-function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID)
+function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID, deleteNote = '')
 {
   // Overlay
   var overlay = document.createElement('div');
@@ -31,6 +31,17 @@ function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID)
 
       popup.appendChild(description);
 
+      // Note (if there is one)
+      if (deleteNote.length > 0)
+      {
+        var note = document.createElement('p');
+        note.classList.add('delete-note');
+
+        note.innerHTML = deleteNote;
+
+        popup.appendChild(note);
+      }
+
       // Cancel button
       var cancelButton = document.createElement('a');
       cancelButton.classList.add('pure-button');
@@ -45,7 +56,8 @@ function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID)
       deleteButton.classList.add('pure-button');
       
       deleteButton.innerHTML = 'Delete';
-      deleteButton.setAttribute('onclick', 'popupDelete(this, "' + deleteLink + '", "' + deleteElementID + '")');
+      deleteButton.setAttribute('onclick', 'cancelPopupDelete(this)');
+      deleteButton.setAttribute('href', deleteLink);
 
       popup.appendChild(deleteButton);
 
@@ -58,20 +70,6 @@ function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID)
 function cancelPopupDelete(element)
 {
   element.parentElement.parentElement.remove();
-}
-
-// Sending message to server to delete group
-function popupDelete(element, deleteLink, deleteElementID)
-{
-  // Deleting element from page
-  document.getElementById(deleteElementID).remove();
-
-  // Closing pop up
-  element.parentElement.parentElement.remove();
-
-  var request = new XMLHttpRequest();
-  request.open('GET', deleteLink);
-  request.send();
 }
 
 // Creating a double check click before deleting something
