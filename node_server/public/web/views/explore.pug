@@ -97,7 +97,7 @@ block content
                                             else 
                                                 span  circles
                                         td 
-                                            - var deleteLink = '/delete-group/' + group.name;
+                                            - var deleteLink = '/delete-group/' + group.name.replaceAll(' ', '-');
                                             i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + group.name + '")')
 
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -886,6 +886,28 @@ const serveExplore = async (req, res, next) =>
   userWorlds = organizeToGroups(userWorlds, groups);
   var groupedWorlds = organizeToGroups(editableWorlds, groups);     // For managing groups
 
+  // Getting groups with no worlds in them
+  var groupsWithWorlds = [];
+  
+  for (const group of groupedWorlds.groups)
+  {
+    groupsWithWorlds.push(group.name);
+  }
+
+  for (const group of groups)
+  {
+    if (!groupsWithWorlds.includes(group.name))
+    {
+      var noWorldGroup = {
+        name: group.name,
+        subgroups: [],
+        noGroup: [],
+      };
+
+      groupedWorlds.groups.push(noWorldGroup);
+    }
+  }
+
   // Organizing editable worlds into private and public groups
   // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
   var groupedEditableWorlds = {
@@ -2933,7 +2955,37 @@ const getUser = async (req, res, next) =>
 // Deleting group on user request
 const deleteGroup = async (req, res, next) =>
 {
-  
+  // url: /delete-group/group_name
+  // split result array: {"", "delete-group", "group_name"}
+  const groupName = req.url.split('/')[2];
+
+  // Getting group from database
+  var group = await WorldGroups.findOne({name: groupName.replaceAll('-', ' ')});
+
+  if (group)
+  {
+    // Finding all worlds that are in the group
+    var worlds = await Worlds.find({group: group._id});
+
+    // Removing the worlds from the group
+    for (const world of worlds)
+    {
+      world.group = null;
+      world.subgroup = null;
+
+      await world.save();
+    }
+
+    // Deleting group
+    try
+    {
+      await WorldGroups.deleteOne({_id: group._id});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
