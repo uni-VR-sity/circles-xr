@@ -57,7 +57,11 @@ div.table-container
 
 .table { width:100%; margin:30px 0 0 0; border-collapse:seperate; border-spacing:0px; }
 
-.table tbody tr:hover { background-color:var(--GREY); cursor:pointer; }
+.table tbody tr { background-color:var(--WHITE) }
+.table tbody tr:not(.table-level2).selected { background-color:var(--GREY) }
+.table tbody tr:not(.table-level3):hover { background-color:var(--GREY); cursor:pointer; }
+
+.table .table-level2 { background-color:var(--LIGHT_GREY) }
 
 .table th, .table td { text-align:left }
 .table:not(:has(.table-error-cell)) th, .table td, .table-error-cell { border-bottom:1px solid var(--MEDIUM_GREY); }

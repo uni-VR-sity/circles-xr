@@ -3092,6 +3092,75 @@ const createGroup = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Deleting subgroup on user request 
+const deleteSubgroup = async (req, res, next) =>
+{
+  // url: /delete-subgroup/group_name/subgroup_name
+  // split result array: {"", "delete-suubgroup", "subgroup_name"}
+  const groupName = req.url.split('/')[2];
+  const subgroupName = req.url.split('/')[3];
+
+  // Getting group from database
+  var group = await WorldGroups.findOne({name: groupName.replaceAll('-', ' ')});
+  
+  if (group)
+  {
+    // Finding subgroup and deleting it
+    var deletedSubgroup;
+
+    for (const subgroup of group.subgroups)
+    {
+      if (subgroup.name === subgroupName)
+      {
+        deletedSubgroup = subgroup;
+
+        try
+        {
+          var index = group.subgroups.indexOf(subgroup);
+          group.subgroups.splice(index, 1);
+
+          await group.save();
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+
+        break;
+      }
+    }
+
+    // Finding all worlds that are in the group
+    var worlds = await Worlds.find({group: group._id});
+
+    // Removing the worlds from the subgroup
+    for (const world of worlds)
+    {
+      if (JSON.stringify(world.subgroup) === JSON.stringify(deletedSubgroup._id))
+      {
+        world.subgroup = null;
+      }
+
+      await world.save();
+    }
+  }
+
+  // Manage group pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+
+  return res.redirect('/explore');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating subgroup on user request
+const createSubgroup = async (req, res, next) =>
+{
+
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   invalidAddress,
   // getAllUsers,
@@ -3139,4 +3208,6 @@ module.exports = {
   getUser,
   deleteGroup,
   createGroup,
+  deleteSubgroup,
+  createSubgroup,
 };

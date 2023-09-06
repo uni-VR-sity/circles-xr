@@ -86,13 +86,14 @@ block content
 
                             tbody 
                                 for group of groupedWorlds.groups
-                                    tr(id=group.name)
+                                    tr(id=group.name onclick='showSubgroupDetails(event, ' + JSON.stringify(group) + ')')
                                         - var numCircles = group.noGroup.length;
 
                                         for subgroup of group.subgroups
                                             - numCircles += subgroup.worlds.length;
 
                                         td= group.name
+
                                         td.greyed-out= group.subgroups.length 
                                             if group.subgroups.length === 1
                                                 span  subgroup
@@ -106,7 +107,24 @@ block content
                                         td 
                                             - var deleteLink = '/delete-group/' + group.name.replaceAll(' ', '-');
                                             - var note = 'Circles in group will NOT be deleted';
-                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + group.name + '", "' + note + '")')
+                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + note + '")')
+
+                                    for subgroup of group.subgroups
+                                        tr(class='table-level2 info-row-' + group.name)
+
+                                            td
+
+                                            td= subgroup.name
+
+                                            td.greyed-out= subgroup.worlds.length
+                                                if subgroup.worlds.length === 1
+                                                    span  circle
+                                                else 
+                                                    span  circles
+                                            td 
+                                                - var deleteLink = '/delete-subgroup/' + group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-');
+                                                - var note = 'Circles in subgroup will NOT be deleted';
+                                                i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Subgroup", "' + subgroup.name + '", "' + deleteLink + '", "' + note + '")')
 
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

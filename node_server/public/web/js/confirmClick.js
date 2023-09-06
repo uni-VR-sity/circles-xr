@@ -3,7 +3,7 @@
 // General -----------------------------------------------------------------------------------------------------------------------------------------------
 
 // Creating delete confirmation pop up before deleting something
-function deleteConfirmationPopUp(item, name, deleteLink, deleteElementID, deleteNote = '')
+function deleteConfirmationPopUp(item, name, deleteLink, deleteNote = '')
 {
   // Overlay
   var overlay = document.createElement('div');

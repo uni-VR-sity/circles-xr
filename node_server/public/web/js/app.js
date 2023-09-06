@@ -181,3 +181,24 @@ function removeSubgroupInput(element)
 
   input.remove();
 }
+
+// Showing subgroup details of clicked group row
+function showSubgroupDetails(event, groupInfo)
+{
+  // Making sure the trash button was not clicked
+  if (!event.target.classList.contains('garbage-icon'))
+  {
+    var row = event.target.parentElement;
+
+    // If row is already selected, unselect it
+    // Otherwise, select it
+    if (row.classList.contains('selected'))
+    {
+      row.classList.remove('selected');
+    }
+    else
+    {
+      row.classList.add('selected');
+    }
+  }
+}
