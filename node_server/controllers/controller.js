@@ -2299,15 +2299,21 @@ const addServer = async (req, res, next) =>
       link: req.body.link,
       worlds: [],
     }
-
-    // Making sure all worlds in worlds array have text
-    for (const world of req.body.worlds)
-    {
-      if (world.length > 0)
+      // Adding worlds
+      // req.body.worlds will either be:
+      //    - 'worlds'                          --> Not array (only 1 subgroup and will add that)
+      //    - ['worlds1', 'worlds2', ...]       --> Array (will loop through and add each subgroup)
+      if (Array.isArray(req.body.worlds))
       {
-        serverData.worlds.push(world);
+        for(const world of req.body.worlds)
+        {
+          serverData.worlds.push(world);
+        }
       }
-    }
+      else
+      {
+        serverData.worlds.push(req.body.worlds);
+      }
 
     try
     {
