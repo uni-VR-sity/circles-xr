@@ -59,13 +59,14 @@ block content
 
                 script.
                     exitOverlay('manage-groups-overlay');
+                    unselectAll('manage-groups-overlay');
                 
                 hr
 
                 div.table-overflow-container
-                    form(action='/create-group' method='post')
-                        table.table.manage-groups-table
-                            thead
+                    table.table.manage-groups-table
+                        thead
+                            form(action='/create-group' method='post')
                                 tr
                                     th 
                                         input(type='text' name='group' placeholder='Group name...' required)
@@ -78,53 +79,72 @@ block content
                                     th
                                         input(type='submit' value='Add Group' class='pure-button')
 
-                                if groupErrorMessage
-                                    tr 
-                                        th.table-error-cell(colspan='4')
-                                            i(class='fa-solid fa-triangle-exclamation error-icon')
-                                            span.error-message #{groupErrorMessage}
+                            if groupErrorMessage
+                                tr 
+                                    th.table-error-cell(colspan='4')
+                                        i(class='fa-solid fa-triangle-exclamation error-icon')
+                                        span.error-message #{groupErrorMessage}
 
-                            tbody 
-                                for group of groupedWorlds.groups
-                                    tr(id=group.name onclick='showSubgroupDetails(event, ' + JSON.stringify(group) + ')')
-                                        - var numCircles = group.noGroup.length;
+                        tbody 
+                            for group of groupedWorlds.groups
+                                tr(id=group.name.replaceAll(' ', '-') onclick='groupRowClick(event, ' + JSON.stringify(group) + ')')
+                                    - var numCircles = group.noGroup.length;
 
-                                        for subgroup of group.subgroups
-                                            - numCircles += subgroup.worlds.length;
+                                    for subgroup of group.subgroups
+                                        - numCircles += subgroup.worlds.length;
 
-                                        td= group.name
+                                    td= group.name
 
-                                        td.greyed-out= group.subgroups.length 
-                                            if group.subgroups.length === 1
-                                                span  subgroup
-                                            else 
-                                                span  subgroups
-                                        td.greyed-out= numCircles
-                                            if numCircles === 1
+                                    td.greyed-out= group.subgroups.length 
+                                        if group.subgroups.length === 1
+                                            span  subgroup
+                                        else 
+                                            span  subgroups
+                                    td.greyed-out= numCircles
+                                        if numCircles === 1
+                                            span  circle
+                                        else 
+                                            span  circles
+                                    td 
+                                        - var deleteLink = '/delete-group/' + group.name.replaceAll(' ', '-');
+                                        - var note = 'Circles in group will NOT be deleted';
+                                        i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + note + '")')
+
+                                for subgroup of group.subgroups
+                                    tr(class='table-level2 info-row-' + group.name.replaceAll(' ', '-'))
+
+                                        td 
+
+                                        td= subgroup.name
+
+                                        td.greyed-out= subgroup.worlds.length
+                                            if subgroup.worlds.length === 1
                                                 span  circle
                                             else 
                                                 span  circles
                                         td 
-                                            - var deleteLink = '/delete-group/' + group.name.replaceAll(' ', '-');
-                                            - var note = 'Circles in group will NOT be deleted';
-                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + note + '")')
+                                            - var deleteLink = '/delete-subgroup/' + group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-');
+                                            - var note = 'Circles in subgroup will NOT be deleted';
+                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Subgroup", "' + subgroup.name + '", "' + deleteLink + '", "' + note + '")')
 
-                                    for subgroup of group.subgroups
-                                        tr(class='table-level2 info-row-' + group.name)
+                                form(action='/create-subgroup' method='post')
+                                    tr(class='table-level2 info-row-' + group.name.replaceAll(' ', '-'))
+                                        
+                                        th 
+                                            input(type='text' name='group' value=group.name style='display:none')
 
-                                            td
+                                        th.stacked-inputs(colspan='2') 
+                                            div
+                                                input(type='text' name='subgroup' placeholder='Subgroup name...' required)
+                                                label
+                                                    input(type='submit' style='display:none')
+                                                    i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus')
 
-                                            td= subgroup.name
+                                        th
 
-                                            td.greyed-out= subgroup.worlds.length
-                                                if subgroup.worlds.length === 1
-                                                    span  circle
-                                                else 
-                                                    span  circles
-                                            td 
-                                                - var deleteLink = '/delete-subgroup/' + group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-');
-                                                - var note = 'Circles in subgroup will NOT be deleted';
-                                                i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Subgroup", "' + subgroup.name + '", "' + deleteLink + '", "' + note + '")')
+                if groupInfoCollapse
+                    script.
+                        showGroupInfo('#{groupInfoCollapse}', true);
 
     // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -183,7 +183,7 @@ function removeSubgroupInput(element)
 }
 
 // Showing subgroup details of clicked group row
-function showSubgroupDetails(event, groupInfo)
+function groupRowClick(event, groupInfo)
 {
   // Making sure the trash button was not clicked
   if (!event.target.classList.contains('garbage-icon'))
@@ -192,13 +192,44 @@ function showSubgroupDetails(event, groupInfo)
 
     // If row is already selected, unselect it
     // Otherwise, select it
-    if (row.classList.contains('selected'))
+    if (row.classList.contains('selected-level1'))
     {
-      row.classList.remove('selected');
+      showGroupInfo(groupInfo.name, false);
     }
     else
     {
-      row.classList.add('selected');
+      showGroupInfo(groupInfo.name, true);
+    }
+  }
+}
+
+// Showing or hiding (depending is 'show' is true or false) group subgroup information
+function showGroupInfo(groupName, show)
+{
+  var groupRow = document.getElementById(groupName.replaceAll(' ', '-'));
+
+  if (show)
+  {
+    groupRow.classList.add('selected-level1');
+  }
+  else
+  {
+    groupRow.classList.remove('selected-level1');
+  }
+
+  // Getting all subgroups under the group
+  var subgroupRows = document.getElementsByClassName('info-row-' + groupName.replaceAll(' ', '-'));
+
+  // Displaying rows
+  for (const row of subgroupRows)
+  {
+    if (show)
+    {
+      row.style.display = 'table-row';
+    }
+    else
+    {
+      row.style.display = 'none';
     }
   }
 }

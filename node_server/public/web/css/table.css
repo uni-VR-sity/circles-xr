@@ -58,10 +58,11 @@ div.table-container
 .table { width:100%; margin:30px 0 0 0; border-collapse:seperate; border-spacing:0px; }
 
 .table tbody tr { background-color:var(--WHITE) }
-.table tbody tr:not(.table-level2).selected { background-color:var(--GREY) }
-.table tbody tr:not(.table-level3):hover { background-color:var(--GREY); cursor:pointer; }
+.table tbody tr { cursor:pointer; }
+.table tbody tr.selected-level1 { background-color:var(--GREY) }
+.table tbody tr:not(.table-level2):not(.table-level3):hover { background-color:var(--GREY); }
 
-.table .table-level2 { background-color:var(--LIGHT_GREY) }
+.table .table-level2 { background-color:var(--LIGHT_GREY); display:none }
 
 .table th, .table td { text-align:left }
 .table:not(:has(.table-error-cell)) th, .table td, .table-error-cell { border-bottom:1px solid var(--MEDIUM_GREY); }
@@ -78,7 +79,8 @@ div.table-container
 .table input[type=text] { width:175px; margin-right:15px}
 
 .table .garbage-icon { margin-top:-8.5px; margin-bottom:-8.5px }
-.table .garbage-icon:hover { background-color: var(--LIGHT_GREY); }
+.table tr .garbage-icon:hover { background-color: var(--LIGHT_GREY); }
+.table .table-level2 .garbage-icon:hover { background-color: var(--WHITE); }
 
 /* Manange Groups Table **********************************************************************************************************************************/
 

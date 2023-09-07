@@ -807,6 +807,7 @@ const serveExplore = async (req, res, next) =>
   var magicLinkError = null;
   var groupErrorMessage = null;
   var popUpActive = 'none';
+  var groupInfoCollapse = null;
 
   if (req.session.successMessage)
   {
@@ -836,6 +837,12 @@ const serveExplore = async (req, res, next) =>
   {
     popUpActive = req.session.popUpActive;
     req.session.popUpActive = null;
+  }
+
+  if (req.session.groupInfoCollapse)
+  {
+    groupInfoCollapse = req.session.groupInfoCollapse;
+    req.session.groupInfoCollapse = null;
   }
 
   // Route now authenticates and ensures a user is logged in by this point
@@ -979,6 +986,7 @@ const serveExplore = async (req, res, next) =>
     title: "Explore Worlds",
     userInfo: userInfo,
     popUpActive: popUpActive,
+    groupInfoCollapse: groupInfoCollapse,
     groupErrorMessage: groupErrorMessage,
     magicWorlds: groupedMagicWorlds,
     publicWorlds: publicWorlds,
@@ -3027,8 +3035,6 @@ const createGroup = async (req, res, next) =>
   // Manage groups pop up should remain displayed when page reloads
   req.session.popUpActive = 'flex';
 
-  console.log(req.body);
-
   if (req.body.group) 
   {
     // Checking if the group already exists
@@ -3147,6 +3153,7 @@ const deleteSubgroup = async (req, res, next) =>
 
   // Manage group pop up should remain displayed when page reloads
   req.session.popUpActive = 'flex';
+  req.session.groupInfoCollapse = groupName;
 
   return res.redirect('/explore');
 }
@@ -3156,7 +3163,41 @@ const deleteSubgroup = async (req, res, next) =>
 // Creating subgroup on user request
 const createSubgroup = async (req, res, next) =>
 {
+  // Manage groups pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
 
+  if (req.body.group && req.body.subgroup) 
+  {
+    req.session.groupInfoCollapse = req.body.group;
+
+    // Getting group from database
+    var group;
+
+    try
+    {
+      group = await WorldGroups.findOne({name: req.body.group});
+    }
+    catch(e)
+    {
+      console.log(e)
+    }
+
+    if (group)
+    {
+      // Adding subgroup to group
+      try
+      {
+        group.subgroups.push({name: req.body.subgroup})
+        await group.save();
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+  }
+
+  return res.redirect('/explore');
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
