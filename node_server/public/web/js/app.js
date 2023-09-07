@@ -195,10 +195,38 @@ function groupRowClick(event, groupInfo)
     if (row.classList.contains('selected-level1'))
     {
       showGroupInfo(groupInfo.name, false);
+      showSubgroupInfo(groupInfo.name, 'noGroup', false);
+
+      for (const subgroup of groupInfo.subgroups)
+      {
+        showSubgroupInfo(groupInfo.name, subgroup.name, false);
+      }
     }
     else
     {
       showGroupInfo(groupInfo.name, true);
+      showSubgroupInfo(groupInfo.name, 'noGroup', true);
+    }
+  }
+}
+
+// Showing world details of clicked subgroup row
+function subgroupRowClick(event, groupInfo, subgroupInfo)
+{
+  // Making sure the trash button was not clicked
+  if (!event.target.classList.contains('garbage-icon'))
+  {
+    var row = event.target.parentElement;
+
+    // If row is already selected, unselect it
+    // Otherwise, select it
+    if (row.classList.contains('selected-level2'))
+    {
+      showSubgroupInfo(groupInfo.name, subgroupInfo.name, false);
+    }
+    else
+    {
+      showSubgroupInfo(groupInfo.name, subgroupInfo.name, true);
     }
   }
 }
@@ -222,6 +250,40 @@ function showGroupInfo(groupName, show)
 
   // Displaying rows
   for (const row of subgroupRows)
+  {
+    if (show)
+    {
+      row.style.display = 'table-row';
+    }
+    else
+    {
+      row.style.display = 'none';
+    }
+  }
+}
+
+// Showing or hiding (depending is 'show' is true or false) subgroup world information
+function showSubgroupInfo(groupName, subgroupName, show)
+{
+  if (subgroupName !== 'noGroup')
+  {
+    var subgroupRow = document.getElementById(groupName.replaceAll(' ', '-') + '/' + subgroupName.replaceAll(' ', '-'));
+
+    if (show)
+    {
+      subgroupRow.classList.add('selected-level2');
+    }
+    else
+    {
+      subgroupRow.classList.remove('selected-level2');
+    }
+  }
+
+  // Getting all subgroups under the group
+  var worldRows = document.getElementsByClassName('world-row-' + subgroupName.replaceAll(' ', '-') + '-' + groupName.replaceAll(' ', '-'));
+
+  // Displaying rows
+  for (const row of worldRows)
   {
     if (show)
     {

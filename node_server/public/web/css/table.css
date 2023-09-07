@@ -63,10 +63,11 @@ div.table-container
 .table tbody tr:not(.table-level2):not(.table-level3):hover { background-color:var(--GREY); }
 
 .table .table-level2 { background-color:var(--LIGHT_GREY); display:none }
+.table .table-level3 { background-color:var(--WHITE); display:none }
 
 .table th, .table td { text-align:left }
 .table:not(:has(.table-error-cell)) th, .table td, .table-error-cell { border-bottom:1px solid var(--MEDIUM_GREY); }
-.table th:last-child:not(.table-error-cell), table td:last-child { text-align:right; }
+.table th:last-child:not(.table-error-cell), .table td:last-child { text-align:right; }
 
 .table thead { position:sticky; top:0; background-color:var(--WHITE); }
 

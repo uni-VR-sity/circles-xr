@@ -163,6 +163,9 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 
 .garbage-icon { color: var(--RED); }
 
+.external-link-icon { margin-left: 10px; color: var(--BLACK); }
+.external-link-icon:hover { color: var(--BLUE); }
+
 .icon, .icon-background { vertical-align:middle; }
 .icon:hover, .icon-background:hover { cursor:pointer; }
 

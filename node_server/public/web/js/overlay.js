@@ -45,7 +45,12 @@ function unselectAll(overlayID)
         // Unselecting all level 2 rows (subgroup rows)
         for (const row of selectedRows_level2)
         {
-            
+            // id: groupName/subgroupName
+            // split result array: {"groupName", "subgroupName"}
+            const groupName = row.getAttribute('id').split('/')[0].replaceAll('-', ' ');
+            const subgroupName = row.getAttribute('id').split('/')[1].replaceAll('-', ' ');
+
+            showSubgroupInfo(groupName, subgroupName, false);
         }
     });
 }

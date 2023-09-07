@@ -110,8 +110,21 @@ block content
                                         - var note = 'Circles in group will NOT be deleted';
                                         i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + note + '")')
 
+                                for world of group.noGroup
+                                    tr(class='table-level3 world-row-noGroup-' + group.name.replaceAll(' ', '-'))
+
+                                        td 
+
+                                        td
+
+                                        td= world
+                                            span
+                                                i(class='fa-solid fa-arrow-up-right-from-square external-link-icon')
+
+                                        td 
+
                                 for subgroup of group.subgroups
-                                    tr(class='table-level2 info-row-' + group.name.replaceAll(' ', '-'))
+                                    tr(id=group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-') class='table-level2 info-row-' + group.name.replaceAll(' ', '-') onclick='subgroupRowClick(event, ' + JSON.stringify(group) + ', ' + JSON.stringify(subgroup) + ')')
 
                                         td 
 
@@ -126,6 +139,21 @@ block content
                                             - var deleteLink = '/delete-subgroup/' + group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-');
                                             - var note = 'Circles in subgroup will NOT be deleted';
                                             i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Subgroup", "' + subgroup.name + '", "' + deleteLink + '", "' + note + '")')
+
+                                    for world of subgroup.worlds
+                                        tr(class='table-level3 world-row-' + subgroup.name.replaceAll(' ', '-') + '-' + group.name.replaceAll(' ', '-'))
+
+                                            td 
+
+                                            td
+
+                                            td= world
+                                                span
+                                                    - var worldUrl = '/edit-access/' + world
+                                                    a(href=worldUrl target='_blank')
+                                                        i(class='fa-solid fa-arrow-up-right-from-square external-link-icon')
+
+                                            td 
 
                                 form(action='/create-subgroup' method='post')
                                     tr(class='table-level2 info-row-' + group.name.replaceAll(' ', '-'))
