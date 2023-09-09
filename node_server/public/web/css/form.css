@@ -17,3 +17,6 @@ input[type=submit] {background-color:var(--BLUE); color:var(--WHITE);}
 
 .stacked-inputs div:not(:first-of-type) input, .stacked-inputs div:not(:first-of-type) i { margin-top: 10px; }
 
+
+.nothing-selected { color:var(--GREY); }
+

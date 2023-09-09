@@ -6,12 +6,40 @@ block append stylesheets
 block content
     - var permittedUser;
     - var restrictedUser;
+    - var group;
 
     h1= world.name
 
     hr
     br
     br
+
+    form(action="/update-world-group" method="post" class="pure-form pure-form-aligned")
+        fieldset
+            .pure-left-control-group
+                label Group
+
+                select.field-select(id='currentGroup' name='group')
+                    if world.group
+                        option(value='No-Group' id='no-group' style='color:var(--GREY)') No Group
+                    else 
+                        option.nothing-selected(value='No-Group' id='no-group' style='color:var(--GREY)') No Group
+
+                    for group of allGroups
+                        - selected = (group.name === world.group);
+                        option(value!= group.name.replaceAll(' ', '-') selected!=selected)!= group.name
+                        - selected = false;
+
+            .pure-left-control-group
+                label Subgroup
+                select.field-select(id='currentSubgroup' name='subgroup')
+
+            script.
+                displaySubgroups('!{JSON.stringify(allGroups)}', '#{world.group}', '#{world.subgroup}');
+                listenForGroupUpdate('!{JSON.stringify(allGroups)}');
+
+            .pure-controls(style='margin-top:30')
+                input(type='submit' value='Update' class='pure-button pure-button-primary')
 
     h2 Viewing
 

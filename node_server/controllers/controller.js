@@ -1012,8 +1012,25 @@ const serveAccessEdit = async (req, res, next) => {
   // Getting world to send to worldAccess page
   const world = await Worlds.findOne({name: worldName});
 
+  // Getting information of all existing groups
+  const allGroups = await WorldGroups.find({});
+
   if (world)
   {
+    var worldGroup = await WorldGroups.findById(world.group);
+    var worldSubgroup = null;
+
+    for (const subgroup of worldGroup.subgroups)
+    {
+      if (JSON.stringify(subgroup._id) === JSON.stringify(world.subgroup))
+      {
+        worldSubgroup = subgroup.name;
+      }
+    }
+
+    console.log(worldGroup);
+    console.log(worldSubgroup);
+
     const worldInfo = {
       name: world.name,
       viewingRestrictions: world.viewingRestrictions,
@@ -1021,6 +1038,8 @@ const serveAccessEdit = async (req, res, next) => {
       viewingDenied: [],
       editingPermission: [],
       editingDenied: [],
+      group: worldGroup.name,
+      subgroup: worldSubgroup,
     }
   
     // Getting usernames and usertypes of all users that have permission to view world
@@ -1178,7 +1197,8 @@ const serveAccessEdit = async (req, res, next) => {
     res.render(path.resolve(__dirname + '/../public/web/views/worldAccess'), {
       title: world.name + ' Access',
       userInfo: userInfo,
-      world: worldInfo
+      world: worldInfo,
+      allGroups: allGroups,
     });
   }
 }

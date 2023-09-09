@@ -295,3 +295,102 @@ function showSubgroupInfo(groupName, subgroupName, show)
     }
   }
 }
+
+// worldAccess page --------------------------------------------------------------------------------------------------------------------------------------
+
+// Displaying subgroups according to the selected group
+function displaySubgroups(allGroups, currentGroup, currentSubgroup = null)
+{
+  var groups = JSON.parse(allGroups);
+
+  // Getting subgroups in the current group
+  var subgroups = [];
+
+  for (const group of allGroups)
+  {
+    if (group.name === currentGroup)
+    {
+      for (const subgroup of group.subgroups)
+      {
+        subgroups.push(subgroup.name);
+      }
+    }
+  }
+
+  // Getting subgroup form
+  var subgroupSelector = document.getElementById('currentSubgroup');
+
+  // Deleting current form options
+  var child = subgroupSelector.firstElementChild ;
+  
+  while(child)
+  {
+    child.remove();
+    child = subgroupSelector.firstElementChild ;
+  }
+
+  // Creating form option for current group
+  function createOption(subgroup)
+  {
+    var option = document.createElement('option');
+
+    option.setAttribute('value', subgroup.replaceAll(' ', '-'));
+    option.innerHTML = subgroup;
+
+    if (subgroup === currentSubgroup)
+    {
+      option.setAttribute('selected', 'true');
+    }
+
+    subgroupSelector.appendChild(option);
+  }
+
+  // Creating no subgroup option
+  createOption('No Subgroup');
+
+  // Dispaying all subgroup options in subgroup form
+  for (const subgroup of subgroups)
+  {
+    createOption(subgroup);
+  }
+
+  // Greying out form if there is no subgroup selected
+  if (currentSubgroup)
+  {
+    subgroupSelector.classList.remove('nothing-selected');
+  }
+  else
+  {
+    subgroupSelector.classList.add('nothing-selected');
+  }
+}
+
+// Detecting when the world group is updated
+function listenForGroupUpdate(allGroups)
+{
+  var groups = JSON.parse(allGroups);
+
+  // Getting group form
+  var groupSelector = document.getElementById('currentGroup');
+
+  // Greying out form when no group is selected (or reversing it)
+  function greyForm(selected)
+  {
+    if (selected)
+    {
+      groupSelector.classList.add('nothing-selected');
+    }
+    else
+    {
+      groupSelector.classList.remove('nothing-selected');
+    }
+  }
+
+  // Putting event listener to detect when a new group is selected
+  groupSelector.addEventListener('change', function(event)
+  {
+    greyForm((event.target.value === 'No-Group'));
+    
+    displaySubgroups(groups, event.target.value);
+  });
+}
