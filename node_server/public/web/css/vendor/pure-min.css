@@ -152,3 +152,36 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 
 .confirm-wrapper .link-renewal-form input{min-width:100px; margin-right:16px;}
 
+
+
+
+/********************************/
+
+
+
+.plus-icon { color: var(--BLUE); }
+.plus-icon:hover { color: var(--DARK_BLUE); }
+
+.garbage-icon { color: var(--RED); }
+
+.external-link-icon { margin-left: 10px; color: var(--BLACK); }
+.external-link-icon:hover { color: var(--BLUE); }
+
+.icon, .icon-background { vertical-align:middle; }
+.icon:hover, .icon-background:hover { cursor:pointer; }
+
+.lg-icon { font-size:large; }
+.xl-icon { font-size:x-large; }
+.xxl-icon { font-size:xx-large }
+
+.icon-background { border-radius:50%;}
+
+.lg-icon.icon-background { padding: 8px 9px; }
+.xl-icon.icon-background { padding: 8.5px 11px;}
+
+
+.icon-background:hover { background-color:var(--LIGHT_GREY); }
+
+
+.greyed-out { color:var(--MEDIUM_GREY) }
+

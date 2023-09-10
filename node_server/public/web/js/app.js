@@ -103,156 +103,323 @@ function copyText(copyTextElem) {
   });
 }
 
-// Adding another input into the server form ('moreCircles' page)
-function addWorldInput(aboveElementId)
+// uploadedContent page ----------------------------------------------------------------------------------------------------------------------------------
+
+// Get dimensions of files to save in database
+function getDimensions(fileID)
 {
-  // Generating a random work to be a placeholder in the input
-  function randomWord()
+  let file = document.getElementById(fileID);
+
+  let height;
+  let width;
+
+  // Image
+  if (file.tagName === 'IMG')
   {
-    let num = Math.floor(Math.random() * 10);
+    height = file.naturalHeight;
+    width = file.naturalWidth;
+  }
+  // Video
+  else
+  {
+    height = file.videoHeight;
+    width = file.videoWidth;
+  }
 
-    switch(num)
+  var request = new XMLHttpRequest();
+  request.open('POST', '/set-file-dimensions');
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  request.send('file='+ fileID + '&height=' + height + '&width=' + width);
+}
+
+// explore page ------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adding another input into the group form
+function addSubgroupInput(element)
+{
+  var previousInput = element.parentElement;
+  var parentElement = previousInput.parentElement;
+  var addButton = element.cloneNode(true);
+
+  // Deleting current plus button
+  element.remove();
+
+  // Adding removing input button next to previous input
+  var minusButton = document.createElement('i');
+
+  minusButton.classList.add('fa-solid', 'fa-minus', 'icon-background', 'lg-icon');
+  minusButton.style.marginLeft = '-6px';
+
+  minusButton.setAttribute('onclick', 'removeSubgroupInput(this)');
+
+  previousInput.appendChild(minusButton);
+
+  // Creating new input
+  var inputContainer =  document.createElement('div');
+  
+    var newInput = document.createElement('input');
+
+    newInput.setAttribute('type', 'text');
+    newInput.setAttribute('form', 'createGroup');
+    newInput.setAttribute('name', 'subgroups');
+    newInput.setAttribute('placeholder', 'Subgroup name...');
+
+    inputContainer.appendChild(newInput);
+    inputContainer.appendChild(addButton);
+
+  parentElement.appendChild(inputContainer);
+}
+
+// Removing input from the group form
+function removeSubgroupInput(element)
+{
+  var input = element.parentElement;
+
+  input.remove();
+}
+
+// Showing subgroup details of clicked group row
+function groupRowClick(event, groupInfo)
+{
+  // Making sure the trash button was not clicked
+  if (!event.target.classList.contains('garbage-icon'))
+  {
+    var row = event.target.parentElement;
+
+    // If row is already selected, unselect it
+    // Otherwise, select it
+    if (row.classList.contains('selected-level1'))
     {
-      case 0:
-        return 'Technology';
+      showGroupInfo(groupInfo.name, false);
+      showSubgroupInfo(groupInfo.name, 'noGroup', false);
 
-      case 1:
-        return 'Workplace';
+      for (const subgroup of groupInfo.subgroups)
+      {
+        showSubgroupInfo(groupInfo.name, subgroup.name, false);
+      }
+    }
+    else
+    {
+      showGroupInfo(groupInfo.name, true);
+      showSubgroupInfo(groupInfo.name, 'noGroup', true);
+    }
+  }
+}
 
-      case 2:
-        return 'Art Gallery';
+// Showing world details of clicked subgroup row
+function subgroupRowClick(event, groupInfo, subgroupInfo)
+{
+  // Making sure the trash button was not clicked
+  if (!event.target.classList.contains('garbage-icon'))
+  {
+    var row = event.target.parentElement;
 
-      case 3:
-        return 'Restaurant';
+    // If row is already selected, unselect it
+    // Otherwise, select it
+    if (row.classList.contains('selected-level2'))
+    {
+      showSubgroupInfo(groupInfo.name, subgroupInfo.name, false);
+    }
+    else
+    {
+      showSubgroupInfo(groupInfo.name, subgroupInfo.name, true);
+    }
+  }
+}
 
-      case 4:
-        return 'Theatre';
+// Showing or hiding (depending is 'show' is true or false) group subgroup information
+function showGroupInfo(groupName, show)
+{
+  var groupRow = document.getElementById(groupName.replaceAll(' ', '-'));
 
-      case 5:
-        return 'Police Station';
+  if (show)
+  {
+    groupRow.classList.add('selected-level1');
+  }
+  else
+  {
+    groupRow.classList.remove('selected-level1');
+  }
 
-      case 6:
-        return 'Fishing Boat';
+  // Getting all subgroups under the group
+  var subgroupRows = document.getElementsByClassName('info-row-' + groupName.replaceAll(' ', '-'));
 
-      case 7:
-        return 'Kitchen';
+  // Displaying rows
+  for (const row of subgroupRows)
+  {
+    if (show)
+    {
+      row.style.display = 'table-row';
+    }
+    else
+    {
+      row.style.display = 'none';
+    }
+  }
+}
 
-      case 8:
-        return 'Farm';
+// Showing or hiding (depending is 'show' is true or false) subgroup world information
+function showSubgroupInfo(groupName, subgroupName, show)
+{
+  if (subgroupName !== 'noGroup')
+  {
+    var subgroupRow = document.getElementById(groupName.replaceAll(' ', '-') + '/' + subgroupName.replaceAll(' ', '-'));
 
-      case 9:
-        return 'Plane';
-
-      case 10:
-        return 'Church';
+    if (show)
+    {
+      subgroupRow.classList.add('selected-level2');
+    }
+    else
+    {
+      subgroupRow.classList.remove('selected-level2');
     }
   }
 
-  let newInput = document.createElement('input');
-  let aboveElement = document.getElementById(aboveElementId);
+  // Getting all subgroups under the group
+  var worldRows = document.getElementsByClassName('world-row-' + subgroupName.replaceAll(' ', '-') + '-' + groupName.replaceAll(' ', '-'));
 
-  newInput.setAttribute('class', 'field-long');
-  newInput.setAttribute('type', 'text');
-  newInput.setAttribute('name', 'worlds');
-  newInput.setAttribute('placeholder', randomWord());
-
-  aboveElement.parentNode.insertBefore(newInput, aboveElement);
-}
-
-// Creating a double check click before deleting something
-function doubleCheckDelete_TableView(deleteLink, item)
-{
-  // deleteLink: /delete-address/id
-  // split result array: {"", "delete-address", "id"}
-  const urlSplit = deleteLink.split('/');
-  const id = urlSplit[2];
-
-  // Making sure there is not already a delete confirmation (they have an id of the id)
-  if (!document.getElementById('delete?' + id))
+  // Displaying rows
+  for (const row of worldRows)
   {
-    // Creating elements to confirm the delete
-
-    // DIV that holds elements
-    let confirmationContainer = document.createElement('div');
-    confirmationContainer.setAttribute('class', 'confirm-wrapper');
-    confirmationContainer.setAttribute('id', 'delete?' + id);
-
-      let confirmationText = document.createElement('p');
-      confirmationText.innerHTML = 'Delete this ' + item + '?';
-      confirmationContainer.appendChild(confirmationText);
-
-      let cancelButton = document.createElement('a');
-      cancelButton.setAttribute('class', 'pure-button worldList no-delete');
-      cancelButton.setAttribute('onclick', 'cancelDelete_TableView("' + id + '")');
-      cancelButton.innerHTML = 'Cancel';
-      confirmationContainer.appendChild(cancelButton);
-
-      let deleteButton = document.createElement('a');
-      deleteButton.setAttribute('class', 'pure-button worldList delete');
-      deleteButton.setAttribute('href', deleteLink);
-      deleteButton.innerHTML = 'Delete';
-      confirmationContainer.appendChild(deleteButton);
-
-    // Finding the div with the id of this server id to put the check message in
-    
-    let parentElement = document.getElementById(id);
-    
-    parentElement.insertBefore(confirmationContainer, parentElement.lastElementChild);
-  }
-
-}
-
-// Canceling the delete by user request
-function cancelDelete_TableView(elementId)
-{
-  // Deleting delete confirmation div
-  let confirmation = document.getElementById('delete?' + elementId);
-  confirmation.remove();
-}
-
-// Hiding information about file and displaying delete confirmation (uploadedContent page)
-function doubleCheckDelete_UploadFile(fileName)
-{
-    document.getElementById('info' + fileName).style.display = 'none';
-    document.getElementById('deleteConfirmation' + fileName).style.display = 'block';
-}
-
-// Canceling delete by hiding delete confirmation and displaying information about the file again (uploadedContent page)
-function cancelDelete_UploadFile(fileName)
-{
-  document.getElementById('info' + fileName).style.display = 'block';
-  document.getElementById('deleteConfirmation' + fileName).style.display = 'none';
-}
-
-// Showing information to renew the magic link (magicLinks page)
-function renewLink(link)
-{
-  document.getElementById('renew:' + link).style.display = 'block';
-}
-
-// Hiding information to renew the magic link (magicLinks page)
-function cancelRenewLink(link)
-{
-  document.getElementById('renew:' + link).style.display = 'none';
-}
-
-// Checking if any other buttons are currently active (magicLinks page)
-// If they are, deactivate them
-function checkOtherButtons(link, buttonClicked)
-{
-  if (buttonClicked === 'renew')
-  {
-    if (document.getElementById('delete?' + link))
+    if (show)
     {
-      let confirmation = document.getElementById('delete?' + link);
-      confirmation.remove();
+      row.style.display = 'table-row';
+    }
+    else
+    {
+      row.style.display = 'none';
     }
   }
-  else if (buttonClicked = 'delete')
+}
+
+// worldAccess page --------------------------------------------------------------------------------------------------------------------------------------
+
+// Displaying subgroups according to the selected group
+function displaySubgroups(allGroups, currentGroup, currentSubgroup = null)
+{
+  var groups = JSON.parse(allGroups);
+
+  // Getting subgroups in the current group
+  var subgroups = [];
+
+  for (const group of groups)
   {
-    if (document.getElementById('renew:' + link).style.display === 'block')
+    if (group.name === currentGroup.replaceAll('-', ' '))
     {
-      document.getElementById('renew:' + link).style.display = 'none';
+      for (const subgroup of group.subgroups)
+      {
+        subgroups.push(subgroup.name);
+      }
     }
   }
+
+  // Getting subgroup form
+  var subgroupSelector = document.getElementById('currentSubgroup');
+
+  // Deleting current form options
+  var child = subgroupSelector.firstElementChild ;
+  
+  while(child)
+  {
+    child.remove();
+    child = subgroupSelector.firstElementChild ;
+  }
+
+  // Creating form option for current group
+  function createOption(subgroup)
+  {
+    var option = document.createElement('option');
+
+    option.setAttribute('value', subgroup.replaceAll(' ', '-'));
+    option.innerHTML = subgroup;
+
+    if (subgroup === 'No Subgroup')
+    {
+      option.style.color = 'var(--GREY)';
+    }
+
+    if (subgroup === currentSubgroup)
+    {
+      option.setAttribute('selected', 'true');
+    }
+
+    subgroupSelector.appendChild(option);
+  }
+
+  // Creating no subgroup option
+  createOption('No Subgroup');
+
+  // Dispaying all subgroup options in subgroup form
+  for (const subgroup of subgroups)
+  {
+    createOption(subgroup);
+  }
+
+  // Greying out form if there is no subgroup selected
+  if (currentSubgroup)
+  {
+    subgroupSelector.classList.remove('nothing-selected');
+  }
+  else
+  {
+    subgroupSelector.classList.add('nothing-selected');
+  }
+}
+
+// Detecting when the world group is updated
+function listenForGroupUpdate(allGroups, currentGroup)
+{
+  // Getting group form
+  var groupSelector = document.getElementById('currentGroup');
+
+  // Greying out form when no group is selected (or reversing it)
+  function greyForm(selected)
+  {
+    if (selected)
+    {
+      groupSelector.classList.add('nothing-selected');
+    }
+    else
+    {
+      groupSelector.classList.remove('nothing-selected');
+    }
+  }
+
+  if (!currentGroup)
+  {
+    greyForm(true);
+  }
+
+  // Putting event listener to detect when a new group is selected
+  groupSelector.addEventListener('change', function(event)
+  {
+    greyForm((event.target.value === 'No-Group'));
+    displaySubgroups(allGroups, event.target.value);
+  });
+}
+
+// Detecting when the world subgroup is updated
+function listenForSubgroupUpdate()
+{
+  // Getting group form
+  var subgroupSelector = document.getElementById('currentSubgroup');
+
+  // Greying out form when no subgroup is selected (or reversing it)
+  function greyForm(selected)
+  {
+    if (selected)
+    {
+      subgroupSelector.classList.add('nothing-selected');
+    }
+    else
+    {
+      subgroupSelector.classList.remove('nothing-selected');
+    }
+  }
+
+  // Putting event listener to detect when a new group is selected
+  subgroupSelector.addEventListener('change', function(event)
+  {
+    greyForm((event.target.value === 'No-Subgroup'));
+  });
 }

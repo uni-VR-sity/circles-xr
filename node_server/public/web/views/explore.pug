@@ -1,154 +1,387 @@
 extends layout.pug
 
 block append stylesheets
-  link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+    link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
 
 
 block content
-  - var adminUser               = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN;
-  - var userCanGenMagicLinks    = userInfo.userType === CIRCLES.USER_TYPE.SUPERUSER || userInfo.userType === CIRCLES.USER_TYPE.ADMIN || userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
-  - var magicGuest              = userInfo.userType === CIRCLES.USER_TYPE.MAGIC_GUEST
-  - var world;
+    - var adminUser               = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(userInfo.userType);
+    - var managerUser             = CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(userInfo.userType);
+    - var standardUser            = CIRCLES.USER_CATEGORIES.STANDARD_USERS.includes(userInfo.userType);
+    - var guest                   = userInfo.userType === CIRCLES.USER_TYPE.GUEST;
+    - var magicGuest              = userInfo.userType === CIRCLES.USER_TYPE.MAGIC_GUEST;
+    - var group;
+    - var subgroup;
+    - var world;
 
+    // Updating session display name ------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    form(action="/update-session-name" method="post" class="pure-form pure-form-aligned")
+        fieldset
+            .pure-left-control-group
+                label(style='white-space:nowrap') Session Display Name
+                    span.top-tooltip <i class="fa-solid fa-circle-info"></i>
+                        p.top-tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
+                    input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 30px' value=sessionName)
+                    span 
+                        input(type='submit' value='Set Name' class='pure-button pure-button-primary')
 
-  form(action="/update-session-name" method="post" class="pure-form pure-form-aligned")
-    fieldset
-      .pure-left-control-group
-        label(style='white-space:nowrap') Session Display Name
-          span.top-tooltip <i class="fa-solid fa-circle-info"></i>
-            p.top-tooltip-text(style='width:310px;margin-left:-155px;') Set your display name for this session. Change it permanently on the Profile page
-        input.field-long(type='text' name='sessionName' placeholder='SuperFriend99' style='margin:0 10px 0 30px' value=sessionName)
-        span 
-          input(type='submit' value='Set Name' class='pure-button pure-button-primary')
+        if successMessage
+            div(style='margin:20px 0 10px 0')
+                i(class='fa-solid fa-circle-check success-icon')
+                span.success-message #{successMessage}
 
-      if successMessage
-        div(style='margin:20px 0 10px 0')
-          i(class='fa-solid fa-circle-check success-icon')
-          span.success-message #{successMessage}
+        if errorMessage
+            div(style='margin:20px 0 10px 0')
+                i(class='fa-solid fa-triangle-exclamation error-icon')
+                span.error-message #{errorMessage}
 
-      if errorMessage
-        div(style='margin:20px 0 10px 0')
-          i(class='fa-solid fa-triangle-exclamation error-icon')
-          span.error-message #{errorMessage}
+    // Updating session avatar ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    div(style='margin:20px 0 30px 0;')
+        p(style='display:inline-block;') Customize avatar appearance for the session: 
+        a(class="pure-button worldList" style='margin:0 8px 0 15px; vertical-align:middle;' href='/w/Wardrobe') Wardrobe
+        span.right-tooltip <i class="fa-solid fa-circle-info"></i>
+            p.right-tooltip-text(style='width:auto;white-space:nowrap') Change it permanently on the Profile page
 
-  div(style='margin:20px 0 30px 0;')
-    p(style='display:inline-block;') Customize avatar appearance for the session: 
-    a(class="pure-button worldList" style='margin:0 8px 0 15px; vertical-align:middle;' href='/w/Wardrobe') Wardrobe
-    span.right-tooltip <i class="fa-solid fa-circle-info"></i>
-      p.right-tooltip-text(style='width:auto;white-space:nowrap') Change it permanently on the Profile page
+    br
+    br
 
-  if magicGuest
+    // Manage Groups Overlay --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    if adminUser
+        div#manage-groups-overlay.overlay-container(style='display:' + popUpActive)
 
-    h2 Magic Link Worlds
-    div(class="gutter-bottom-doubled")
-      div(id="worlds_list_wrapper" class="pure-menu gutter-bottom") 
+            div.overlay-block
 
-        // Rendering list of world buttons according to what the user has access to
+                h2 Manage Groups
+
+                i.overlay-exit.xl-icon.icon-background(class="fa-solid fa-xmark")
+
+                script.
+                    exitOverlay('manage-groups-overlay');
+                    unselectAll('manage-groups-overlay');
+                
+                hr
+
+                div.table-overflow-container
+                    table.table.manage-groups-table
+                        thead
+                            form(id='createGroup' action='/create-group' method='post')
+                                tr
+                                    th 
+                                        input(type='text' name='group' placeholder='Group name...' required)
+
+                                    th.stacked-inputs 
+                                        div
+                                            input(type='text' name='subgroups' placeholder='Subgroup name...')
+                                            i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
+
+                                    th
+
+                                    th
+                                        input(type='submit' value='Add Group' class='pure-button')
+
+                            if groupErrorMessage
+                                tr 
+                                    th.table-error-cell(colspan='4')
+                                        i(class='fa-solid fa-triangle-exclamation error-icon')
+                                        span.error-message #{groupErrorMessage}
+
+                        tbody 
+                            for group of groupedWorlds.groups
+                                tr(id=group.name.replaceAll(' ', '-') onclick='groupRowClick(event, ' + JSON.stringify(group) + ')')
+                                    - var numCircles = group.noGroup.length;
+
+                                    for subgroup of group.subgroups
+                                        - numCircles += subgroup.worlds.length;
+
+                                    td= group.name
+
+                                    td.greyed-out= group.subgroups.length 
+                                        if group.subgroups.length === 1
+                                            span  subgroup
+                                        else 
+                                            span  subgroups
+                                    td.greyed-out= numCircles
+                                        if numCircles === 1
+                                            span  circle
+                                        else 
+                                            span  circles
+                                    td 
+                                        - var deleteLink = '/delete-group/' + group.name.replaceAll(' ', '-');
+                                        - var note = 'Circles in group will NOT be deleted';
+                                        i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Group", "' + group.name + '", "' + deleteLink + '", "' + note + '")')
+
+                                for world of group.noGroup
+                                    tr(class='table-level3 world-row-noGroup-' + group.name.replaceAll(' ', '-'))
+
+                                        td 
+
+                                        td
+
+                                        td= world
+                                            span
+                                                i(class='fa-solid fa-arrow-up-right-from-square external-link-icon')
+
+                                        td 
+
+                                for subgroup of group.subgroups
+                                    tr(id=group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-') class='table-level2 info-row-' + group.name.replaceAll(' ', '-') onclick='subgroupRowClick(event, ' + JSON.stringify(group) + ', ' + JSON.stringify(subgroup) + ')')
+
+                                        td 
+
+                                        td= subgroup.name
+
+                                        td.greyed-out= subgroup.worlds.length
+                                            if subgroup.worlds.length === 1
+                                                span  circle
+                                            else 
+                                                span  circles
+                                        td 
+                                            - var deleteLink = '/delete-subgroup/' + group.name.replaceAll(' ', '-') + '/' + subgroup.name.replaceAll(' ', '-');
+                                            - var note = 'Circles in subgroup will NOT be deleted';
+                                            i.garbage-icon.icon.xl-icon.icon-background(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp("Subgroup", "' + subgroup.name + '", "' + deleteLink + '", "' + note + '")')
+
+                                    for world of subgroup.worlds
+                                        tr(class='table-level3 world-row-' + subgroup.name.replaceAll(' ', '-') + '-' + group.name.replaceAll(' ', '-'))
+
+                                            td 
+
+                                            td
+
+                                            td= world
+                                                span
+                                                    - var worldUrl = '/edit-access/' + world
+                                                    a(href=worldUrl target='_blank')
+                                                        i(class='fa-solid fa-arrow-up-right-from-square external-link-icon')
+
+                                            td 
+
+                                form(action='/create-subgroup' method='post')
+                                    tr(class='table-level2 info-row-' + group.name.replaceAll(' ', '-'))
+                                        
+                                        td 
+                                            input(type='text' name='group' value=group.name style='display:none')
+
+                                        td.stacked-inputs(colspan='2') 
+                                            div
+                                                input(type='text' name='subgroup' placeholder='Subgroup name...' required)
+                                                label
+                                                    input(type='submit' style='display:none')
+                                                    i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus')
+
+                                            if subgroupErrorMessage
+                                                if subgroupErrorMessage.hasOwnProperty(group.name.replaceAll(' ', '-') + '-errorMessage')
+                                                    div
+                                                        i(class='fa-solid fa-triangle-exclamation error-icon')
+                                                        span.error-message #{subgroupErrorMessage[group.name.replaceAll(' ', '-') + '-errorMessage']}
+
+                                        td
+
+                if groupInfoCollapse
+                    script.
+                        showGroupInfo('#{groupInfoCollapse}', true);
+
+    // Circles ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Top bar
+    div#circles-bar.table-top-bar
+
+        // Magic circles
+        if magicGuest
+            h3#magic-circles(onclick='showCirclesSection("magic-circles")') Magic Circles
+
+        // Your circles
+        if adminUser || managerUser || standardUser
+            h3#your-circles(onclick='showCirclesSection("your-circles")') Your Circles
+
+        // Public circles
+        h3#public-circles(onclick='showCirclesSection("public-circles")') Public Circles
+
+        // Editable
+        if adminUser || managerUser
+            h3#editable-circles(onclick='showCirclesSection("editable-circles")') Editable Circles
+
+    // Reusable block to display groups and subgroups
+    mixin displayGroups(sectionGroups, name, canEdit)
+        
+        select(id=name + '-groups' name=name + '-groups')
+            option(value='all') All
+            
+            if sectionGroups.groups.length > 0
+                for group of sectionGroups.groups
+                    - var value = group.name.replaceAll(' ', '-');
+                    option(value=value)= group.name
+
+        if canEdit && adminUser
+            i.table-group-settings.lg-icon.icon-background(class='fa-solid fa-gear')
+
+        script.
+            detectCurrentGroup('#{name}', '!{JSON.stringify(sectionGroups)}');
+
+    // Reusable block to display worlds
+    mixin displayWorlds(sectionWorlds, editButton)
+
         ul(class="pure-menu-list")
 
-          // Rendering all the worlds the user can view from the magic link
-          for world of worldMagicList
-            - var worldUrl = '/w/' + world; // Making url to world
-            li 
-              a(class="pure-button worldList" href=worldUrl)= world
+            // Worlds with no groups
+            if sectionWorlds.noGroup.length > 0
+                for world of sectionWorlds.noGroup
+                    - var worldUrl = '/w/' + world; // Making url to world
+                    li 
+                        if editButton
+                            - var editUrl = '/edit-access/' + world;
+                            a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+                        a(class="pure-button worldList" href=worldUrl)= world
 
-  h2 Worlds
-  div(class="gutter-bottom-doubled")
-    div(id="worlds_list_wrapper" class="pure-menu gutter-bottom") 
+            // Worlds with groups
+            if sectionWorlds.groups.length > 0
+                for group of sectionWorlds.groups
 
-      // Rendering list of world buttons according to what the user has access to
-      ul(class="pure-menu-list")
+                    // Worlds with no subgroups
+                    if group.noGroup.length > 0
+                        for world of group.noGroup
+                            - var worldUrl = '/w/' + world; // Making url to world
+                            - var groupName = group.name.replaceAll(' ', '-');
+                            li 
+                                if editButton
+                                    - var editUrl = '/edit-access/' + world;
+                                    a(class="pure-button worldList GROUP_" + groupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+                                a(class="pure-button worldList GROUP_" + groupName href=worldUrl)= world
 
-        // Checking if there are worlds to render
-        // If there are not, outputting message to user to indicate there are no worlds for them to access
-        if worldViewingList.length > 0 || worldEditingList.length > 0
+                    // Worlds with subgroups
+                    if group.subgroups.length > 0
+                        for subgroup of group.subgroups
+                            for world of subgroup.worlds
+                                - var worldUrl = '/w/' + world; // Making url to world
+                                - var groupName = group.name.replaceAll(' ', '-');
+                                - var subgroupName = subgroup.name.replaceAll(' ', '-');
+                                li 
+                                    if editButton
+                                        - var editUrl = '/edit-access/' + world;
+                                        a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
+                                    a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName href=worldUrl)= world
 
-          // Rendering all the worlds the user can view
-          for world of worldViewingList
-            - var worldUrl = '/w/' + world; // Making url to world
-            li 
-              a(class="pure-button worldList" href=worldUrl)= world
+    // Magic circles container
+    if magicGuest
 
-          // Rendering all the worlds the user can edit (with an edit button)
-          for world of worldEditingList
-            - var worldUrl = '/w/' + world; // Making url to world
-            li 
-              - var editUrl = '/edit-access/' + world;
-              a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-              a(class="pure-button worldList" href=worldUrl)= world
+        div#magic-circles-container.table-container
 
-        else
+            // Worlds
+            div.table
+                +displayWorlds(magicWorlds, false)
 
-          if adminUser
-            p You currently have no worlds in your server
+    // Your circles container
+    if adminUser || managerUser || standardUser
 
-          else
-            p You currently have no worlds available to you
+        div#your-circles-container.table-container
 
-  if userCanGenMagicLinks
+            // Group selectors
+            div.table-group-selector
+                +displayGroups(userWorlds, 'your', true)
 
-    div(id="MagicLinksWrapper" class="gutter-bottom-doubled" style='margin-top:55px;')
-      h2 Magic Links
+            // Worlds
+            div.table
+                +displayWorlds(userWorlds, false)
+                
+    // Public circles container
+    div#public-circles-container.table-container
 
-      p Select the expiry, forwarding group, and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[Create]</span> button below to generate a magic link to the selected world(s). Just copy and send the link to automatically give then access to the world(s) as a guest user.
+        // Group selectors
+        div.table-group-selector
 
-      form(action="/create-magic-link" method="post" class='pure-form pure-form-aligned' style='margin-top:25px')
-        fieldset
-          legend(style='margin-bottom:15px') Create Magic Link
+            // Groups
+            +displayGroups(publicWorlds, 'public', true)
 
-          .pure-left-control-group
-            - let n = 1;
-            - let selected = false;
-            - let val = 1;
-            label Select Expiry in Days
-            select.field-select(name='linkExpiry' id='linkExpiry')
-              while n < 365
-                - val = n++;
-                - selected = (val === 7)
-                option(value!= val, selected!= selected)!= val
-                - selected = false
-              option(value='never') Never
+        // Worlds
+        div.table
+            +displayWorlds(publicWorlds, false)
 
-          .pure-left-control-group
-            label Link Name 
-              span.required *
-              span.top-tooltip <i class="fa-solid fa-circle-info"></i>
-                p.top-tooltip-text(style='width:276px;margin-left:-138px;') What your magic link will look like <i>Ex. uni-vr-sity.ca/ClassVR</i>
-            input.field-long(type='text' name='forwardingName' placeholder='ClassVR' required)
+    // Editable circles container
+    if adminUser || managerUser
 
-          if worldEditingList.length > 0
-            div(class='pure-left-control-group' style='margin-top:25px')
+        div#editable-circles-container.table-container
 
-              // Users can only create magic links for worlds that they have editing access to
-              for world of worldEditingList
-                div(style='margin-bottom:10px;display:inline-block;')
-                  input(type='checkbox', name=world style='margin-right:10px')
-                  label(style='white-space:nowrap')=world
+            // Group selectors
+            div.table-group-selector
 
-            div(class='pure-controls' style='margin:20px 0 20px 0')
-              input(type='submit' class="pure-button pure-button-primary" value='Create')
-          
-          else
-            div(style='margin-top:25px')
-              
-              if adminUser
-                p You currently have no worlds in your server to create a magic link for
+                // Groups
+                +displayGroups(editableWorlds, 'editable', false)
 
-              else
-                p You currently have no worlds available to create a magic link for
+            // Worlds
+            div.table
+                +displayWorlds(editableWorlds, true)
 
-          if magicLinkError
-            div(style='margin-top:25px')
-              i(class='fa-solid fa-triangle-exclamation error-icon')
-              span.error-message #{magicLinkError}
+    script.
+        setUpSettings('manage-groups-overlay');
+        selectCircleSection('#{userInfo.userType}');
 
-          if magicLink
-            div(style='margin-top:30px')
-            if magicLinkSuccess
-              div(style='margin-bottom:10px')
-                i(class='fa-solid fa-circle-check success-icon')
-                span.success-message #{magicLinkSuccess}
-              <i class="fa-solid fa-link" style='position:absolute; padding:12px 15px;'></i>
-              input(type='text' id='linkCopy' value=magicLink readonly style='width:90%; background-color:white; color:black; padding-left:50px; padding-right:20px; border-radius: 4px 0 0 4px; height:40px;')
-              span
-                input(type='button' class='pure-button pure-button-primary' value='Copy' onclick='copyText(linkCopy)' style='width:80px; border-radius: 0 4px 4px 0; height:40px;')
+    // Magic Links ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    if adminUser || managerUser
+
+        div(id="MagicLinksWrapper" class="gutter-bottom-doubled" style='margin-top:60px;')
+            h2 Magic Links
+
+            p Select the expiry, forwarding group, and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[Create]</span> button below to generate a magic link to the selected world(s). Just copy and send the link to automatically give then access to the world(s) as a guest user.
+
+            form(action="/create-magic-link" method="post" class='pure-form pure-form-aligned' style='margin-top:25px')
+                fieldset
+                    legend(style='margin-bottom:15px') Create Magic Link
+
+                    .pure-left-control-group
+                        - let n = 1;
+                        - let selected = false;
+                        - let val = 1;
+                        label Select Expiry in Days
+                        select.field-select(name='linkExpiry' id='linkExpiry')
+                            while n < 365
+                                - val = n++;
+                                - selected = (val === 7)
+                                option(value!= val, selected!= selected)!= val
+                                - selected = false
+                            option(value='never') Never
+
+                    .pure-left-control-group
+                        label Link Name 
+                            span.required *
+                            span.top-tooltip <i class="fa-solid fa-circle-info"></i>
+                                p.top-tooltip-text(style='width:276px;margin-left:-138px;') What your magic link will look like <i>Ex. uni-vr-sity.ca/ClassVR</i>
+                        input.field-long(type='text' name='forwardingName' placeholder='ClassVR' required)
+
+                    if editableWorlds.groups[0].noGroup || editableWorlds.groups[1].noGroup > 0
+                        div(class='pure-left-control-group' style='margin-top:25px')
+
+                            // Users can only create magic links for worlds that they have editing access to
+                            for group of editableWorlds.groups
+                                for world of group.noGroup
+                                    div(style='margin-bottom:10px;display:inline-block;')
+                                        input(type='checkbox', name=world style='margin-right:10px')
+                                        label(style='white-space:nowrap')=world
+
+                            div(class='pure-controls' style='margin:20px 0 20px 0')
+                                input(type='submit' class="pure-button pure-button-primary" value='Create')
+                    
+                    else
+                        div(style='margin-top:25px')
+                        
+                            if adminUser
+                                p You currently have no worlds in your server to create a magic link for
+
+                            else
+                                p You currently have no worlds available to create a magic link for
+
+                    if magicLinkError
+                        div(style='margin-top:25px')
+                        i(class='fa-solid fa-triangle-exclamation error-icon')
+                        span.error-message #{magicLinkError}
+
+                    if magicLink
+                        div(style='margin-top:30px')
+                        if magicLinkSuccess
+                        div(style='margin-bottom:10px')
+                            i(class='fa-solid fa-circle-check success-icon')
+                            span.success-message #{magicLinkSuccess}
+                        i(class="fa-solid fa-link" style='position:absolute; padding:12px 15px;')
+                        input(type='text' id='linkCopy' value=magicLink readonly style='width:90%; background-color:white; color:black; padding-left:50px; padding-right:20px; border-radius: 4px 0 0 4px; height:40px;')
+                        span
+                            input(type='button' class='pure-button pure-button-primary' value='Copy' onclick='copyText(linkCopy)' style='width:80px; border-radius: 0 4px 4px 0; height:40px;')

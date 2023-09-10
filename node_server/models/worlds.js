@@ -7,24 +7,32 @@ const fs       = require('fs');
 
 const WorldSchema = new mongoose.Schema({
     name: {
-        type:       String,
-        unique:     true,
-        required:   true,
-        trim:       true
-      },
+      type:       String,
+      unique:     true,
+      required:   true,
+      trim:       true
+    },
     url: {
-        type:       String,
-        unique:     false,
-        required:   true,
-        trim:       true
-      },
+      type:       String,
+      unique:     false,
+      required:   true,
+      trim:       true
+    },
+    group: {
+      type:       mongoose.Schema.Types.ObjectId, 
+      ref:        'worldGroups',
+    },
+    subgroup: {
+      type:       mongoose.Schema.Types.ObjectId, 
+      ref:        'worldGroups.subgroups',
+    },
     viewingRestrictions: {
-        type:       Boolean,
-        unique:     false,
-        required:   false,
-        trim:       true,
-        default:    true
-      },
+      type:       Boolean,
+      unique:     false,
+      required:   false,
+      trim:       true,
+      default:    true
+    },
     viewingPermissions: [{ 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'users' 

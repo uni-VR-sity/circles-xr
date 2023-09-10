@@ -124,6 +124,13 @@ router.post('/update-session-name', authenticated, controller.updateSessionName)
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
 router.get('/explore', authenticated, controller.serveExplore);
+
+router.get('/delete-group/:group_name', authenticated, controller.deleteGroup);
+router.post('/create-group', authenticated, controller.createGroup);
+router.get('/delete-subgroup/:group_name/:subgroup_name', authenticated, controller.deleteSubgroup);
+router.post('/create-subgroup', authenticated, controller.createSubgroup);
+router.post('/update-world-group', authenticated, controller.updateWorldGroup);
+
 router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
 

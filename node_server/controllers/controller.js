@@ -8,6 +8,7 @@ const app      = express();
 const User     = require('../models/user');
 const Guest    = require('../models/guest');
 const Model3D  = require('../models/model3D');
+const WorldGroups = require('../models/worldGroups');
 const Worlds   = require('../models/worlds');
 const Uploads  = require('../models/uploads');
 const Servers  = require('../models/servers');
@@ -655,22 +656,22 @@ const serveRegister = (req, res, next) =>
 
 // Getting certain worlds from the world database
 // Permission Types:
-//    - all                 Returns all worlds in world database
-//    - freeViewing         Returns all worlds that have no viewing restrictions
+//    - public              Returns all worlds that have no viewing restrictions
+//    - private             Returns all worlds that have viewing restrictions
 //    - specialViewing      Returns all worlds that the user has viewing access to
 //    - editing             Returns all worlds that the user has editing access to
 //    - magic               Returns all worlds that the user has viewing access to from a magic link
 const getWorlds = async function(user, permissionType)
 {
-  let worlds = []
+  var worlds = []
 
-  if (permissionType === "all")
-  {
-    worlds = await Worlds.find({});
-  }
-  else if (permissionType === "freeViewing")
+  if (permissionType === "public")
   {
     worlds = await Worlds.find({viewingRestrictions: false});
+  }
+  else if (permissionType === "private")
+  {
+    worlds = await Worlds.find({viewingRestrictions: true});
   }
   else if (permissionType === "specialViewing")
   {
@@ -693,13 +694,120 @@ const getWorlds = async function(user, permissionType)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Rendering the explore page after the user has logged in according to what they have access
-const serveExplore = async (req, res, next) => {
+// Organizing worlds into their groups and subgroups
+// Return object structure:
+//  {
+//    groups: [                             --> Array of group objects
+//      {
+//        name: GROUP_NAME,                 --> Group name
+//        subgroups: [                      --> Array of subgroup objects in the group
+//          {
+//            name: SUBGROUP_NAME,          --> Subgroup name
+//            worlds: [...],                --> Worlds in the subgroup
+//          }
+//        ],
+//        noGroup: [...],                   --> Worlds that are not in a subgroup
+//      },
+//    ],
+//    noGroup: [...],                       --> Worlds that are not in a group
+//  }
+const organizeToGroups = function(worlds, databaseGroups)
+{
+  var organizedWorlds = {
+    groups: [],
+    noGroup: [],
+  };
 
+  // Going through each world
+  for (const world of worlds)
+  {
+    // Checking if world is in a group
+    // If it is, add it to group
+    // If it is not, add it to no group array
+    if (world.group && databaseGroups.length > 0)
+    {
+      // Getting group from database
+      var databaseGroup = databaseGroups.find((group) => JSON.stringify(world.group) === JSON.stringify(group._id));
+
+      // Checking if group already exists in group object array
+      // If it does, get it
+      // If it doesn't, create the group object
+      var group = organizedWorlds.groups.find((group) => databaseGroup.name === group.name);
+
+      var index;
+
+      if (group)
+      {
+        index = organizedWorlds.groups.indexOf(group);
+      }
+      else
+      {
+        // Creating new group
+        var newGroup = {
+          name: databaseGroup.name,
+          subgroups: [],
+          noGroup: [],
+        };
+
+        // If the group has subgroups, adding the subgroups
+        if (databaseGroup.subgroups)
+        {
+          for (const subgroup of databaseGroup.subgroups)
+          {
+            var newSubgroup = {
+              name: subgroup.name,
+              worlds: [],
+            };
+
+            newGroup.subgroups.push(newSubgroup);
+          }
+        }
+
+        organizedWorlds.groups.push(newGroup);
+
+        index = organizedWorlds.groups.indexOf(newGroup);
+      }
+
+      // Checking if world is in a subgroup
+      // If it is, add it to subgroup
+      // If it is not, add it to no group array
+      if (world.subgroup)
+      {
+        var databaseSubgroup = databaseGroup.subgroups.find((subgroup) => JSON.stringify(world.subgroup) === JSON.stringify(subgroup._id));
+
+        var subgroup = organizedWorlds.groups[index].subgroups.find((subgroup) => databaseSubgroup.name === subgroup.name);
+
+        var subIndex = organizedWorlds.groups[index].subgroups.indexOf(subgroup);
+
+        organizedWorlds.groups[index].subgroups[subIndex].worlds.push(world.name);
+      }
+      else
+      {
+        organizedWorlds.groups[index].noGroup.push(world.name);
+      }
+    }
+    else
+    {
+      organizedWorlds.noGroup.push(world.name);
+    }
+  }
+
+  return organizedWorlds;
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering the explore page after the user has logged in according to what they have access
+const serveExplore = async (req, res, next) => 
+{
   // Getting success and error messages
-  let successMessage = null;
-  let errorMessage = null;
-  let magicLinkError = null;
+  var successMessage = null;
+  var errorMessage = null;
+  var magicLinkError = null;
+  var groupErrorMessage = null;
+  var subgroupErrorMessage = null;
+  var popUpActive = 'none';
+  var groupInfoCollapse = null;
 
   if (req.session.successMessage)
   {
@@ -719,105 +827,178 @@ const serveExplore = async (req, res, next) => {
     req.session.magicLinkError = null;
   }
 
+  if (req.session.groupErrorMessage)
+  {
+    groupErrorMessage = req.session.groupErrorMessage;
+    req.session.groupErrorMessage = null;
+  }
+  if (req.session.subgroupErrorMessage)
+  {
+    subgroupErrorMessage = req.session.subgroupErrorMessage;
+    req.session.subgroupErrorMessage = null;
+  }
+
+  if (req.session.popUpActive)
+  {
+    popUpActive = req.session.popUpActive;
+    req.session.popUpActive = null;
+  }
+
+  if (req.session.groupInfoCollapse)
+  {
+    groupInfoCollapse = req.session.groupInfoCollapse;
+    req.session.groupInfoCollapse = null;
+  }
+
   // Route now authenticates and ensures a user is logged in by this point
-  let user = req.user;
+  var user = req.user;
 
   // Gathering information on the user to send to explore page
   const userInfo = getUserInfo(req);
 
   // Getting all worlds the user has access to and putting their names into an array
-  // - If user is a superuser or admin, viewing and editing access is given to all worlds
-  // - If user is a teacher or researcher:
-  //      - Viewing access is given to to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
+  // - All users are given access to worlds with no restrictions (public worlds)
+  // - If user is an admin user, viewing and editing access is given to all worlds
+  // - If user is a manager user:
+  //      - Viewing access is given to to specific worlds (ones that they have been given viewing access to)
   //      - Editing access is given to specific worlds (ones that they have been given editing access to)
-  // - If user is a student, participant, or tester:
-  //      - Viewing access is given to specific worlds (ones with no restrictions and ones that they have been given viewing access to)
+  // - If user is a standard user:
+  //      - Viewing access is given to specific worlds (ones that they have been given viewing access to)
   //      - No editing access is given
   // - If user is a magic guest
   //      - Viewing access is given to worlds in magicLinkWorlds array
-  //      - Viewing access is given to worlds with no restictions
   //      - No editing access is given
   // - If user is a guest
-  //      - Viewing access is given to worlds with no restictions
   //      - No editing access is given
 
-  let viewingWorlds = [];
-  let magicWorlds = [];
-  let editingWorlds = [];
+  var magicWorlds = [];
+  var publicWorlds = [];
+  var userWorlds = [];
+  var editableWorlds = [];
 
-  if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.ADMIN)
+  publicWorlds.push(await getWorlds(user, 'public'));
+
+  if (CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(user.usertype))
   { 
-    editingWorlds.push(await getWorlds(user, "all"));
+    userWorlds.push(await getWorlds(user, 'private'));
+
+    editableWorlds.push(await getWorlds(user, 'public'));
+    editableWorlds.push(await getWorlds(user, 'private'));
   }
-  else if (user.usertype === CIRCLES.USER_TYPE.TEACHER || user.usertype === CIRCLES.USER_TYPE.RESEARCHER)
+  else if (CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype))
   {
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
-    viewingWorlds.push(await getWorlds(user, "specialViewing"));
-    editingWorlds.push(await getWorlds(user, "editing"));
+    userWorlds.push(await getWorlds(user, 'specialViewing'));
+    editableWorlds.push(await getWorlds(user, 'editing'));
   }
-  else if (user.usertype === CIRCLES.USER_TYPE.STUDENT || user.usertype === CIRCLES.USER_TYPE.PARTICIPANT || user.usertype === CIRCLES.USER_TYPE.TESTER)
+  else if (CIRCLES.USER_CATEGORIES.STANDARD_USERS.includes(user.usertype))
   {
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
-    viewingWorlds.push(await getWorlds(user, "specialViewing"));
+    userWorlds.push(await getWorlds(user, 'specialViewing'));
   }
   else if (user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
   {
-    magicWorlds.push(await getWorlds(user, "magic"));
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
-  }
-  else // Guest
-  {
-    viewingWorlds.push(await getWorlds(user, "freeViewing"));
+    magicWorlds.push(await getWorlds(user, 'magic'));
   }
 
   // Flattening the arrays
-  viewingWorlds = viewingWorlds.flat(2);
   magicWorlds = magicWorlds.flat(2);
-  editingWorlds = editingWorlds.flat(2);
+  publicWorlds = publicWorlds.flat(2);
+  userWorlds = userWorlds.flat(2);
+  editableWorlds = editableWorlds.flat(2);
 
+  // Organizing worlds in each array into their groups and subgroups
+  var groups = await WorldGroups.find({});
 
-  // Getting all world names the user can view
-  let viewingArray = [];
+  publicWorlds = organizeToGroups(publicWorlds, groups);
+  userWorlds = organizeToGroups(userWorlds, groups);
+  var groupedWorlds = organizeToGroups(editableWorlds, groups);     // For managing groups
 
-  for (const world of viewingWorlds)
+  // Getting groups with no worlds in them
+  var groupsWithWorlds = [];
+  
+  for (const group of groupedWorlds.groups)
   {
-    viewingArray.push(world.name);
+    groupsWithWorlds.push(group.name);
   }
 
-  // Getting all world names the user can view from the magic link
-  let magicArray = [];
+  for (const group of groups)
+  {
+    if (!groupsWithWorlds.includes(group.name))
+    {
+      var noWorldGroup = {
+        name: group.name,
+        subgroups: [],
+        noGroup: [],
+      };
+
+      for (const subgroup of group.subgroups)
+      {
+        var noWorldSubgroup = {
+          name: subgroup.name,
+          worlds: [],
+        };
+
+        noWorldGroup.subgroups.push(noWorldSubgroup);
+      }
+
+      groupedWorlds.groups.push(noWorldGroup);
+    }
+  }
+
+  // Organizing editable worlds into private and public groups
+  // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
+  var groupedEditableWorlds = {
+    groups: [
+      {
+        name: 'Private',
+        subgroups: [],
+        noGroup: [],
+      }, 
+      {
+        name: 'Public',
+        subgroups: [],
+        noGroup: [],
+      }
+    ],
+    noGroup: [],
+  }
+
+  for (const world of editableWorlds)
+  {
+    if (world.viewingRestrictions)
+    {
+      groupedEditableWorlds.groups[0].noGroup.push(world.name);
+    }
+    else
+    {
+      groupedEditableWorlds.groups[1].noGroup.push(world.name);
+    }
+  }
+
+  // Organizing editable worlds into private and public groups
+  // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
+  var groupedMagicWorlds = {
+    groups: [],
+    noGroup: [],
+  }
 
   for (const world of magicWorlds)
   {
-    magicArray.push(world.name);
-  }
-
-  // Getting all world names the user can edit
-  let editingArray = [];
-
-  for (const world of editingWorlds)
-  {
-    editingArray.push(world.name);
-  }
-
-  // Making sure there are no duplicates between the viewing and editing arrays
-  // If there are, the world is kept in editing and removed from viewing
-  for (const world of editingArray)
-  {
-    if (viewingArray.includes(world))
-    {
-      const index = viewingArray.indexOf(world);
-      viewingArray.splice(index, 1);
-    }
+    groupedMagicWorlds.noGroup.push(world.name);
   }
 
   // Rendering the explore page
   res.render(path.resolve(__dirname + '/../public/web/views/explore'), {
     title: "Explore Worlds",
     userInfo: userInfo,
-    worldViewingList: viewingArray,
-    worldMagicList: magicArray,
-    worldEditingList: editingArray,
+    popUpActive: popUpActive,
+    groupInfoCollapse: groupInfoCollapse,
+    groupErrorMessage: groupErrorMessage,
+    subgroupErrorMessage: subgroupErrorMessage,
+    magicWorlds: groupedMagicWorlds,
+    publicWorlds: publicWorlds,
+    userWorlds: userWorlds,
+    editableWorlds: groupedEditableWorlds,
+    groupedWorlds: groupedWorlds,
     sessionName: req.session.sessionName,
     successMessage: successMessage,
     errorMessage: errorMessage,
@@ -825,7 +1006,7 @@ const serveExplore = async (req, res, next) => {
     magicLinkError: magicLinkError,
     magicLink: req.session.magicLink,
   });
-};
+}
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -837,8 +1018,33 @@ const serveAccessEdit = async (req, res, next) => {
   // Getting world to send to worldAccess page
   const world = await Worlds.findOne({name: worldName});
 
+  // Getting information of all existing groups
+  const allGroups = await WorldGroups.find({});
+
   if (world)
   {
+    var group = null;
+    var groupName = null;
+    var subgroupName = null;
+
+    if (world.group)
+    {
+      group = await WorldGroups.findById(world.group);
+
+      groupName = group.name;
+
+      if (group.subgroups)
+      {
+        for (const subgroup of group.subgroups)
+        {
+          if (JSON.stringify(subgroup._id) === JSON.stringify(world.subgroup))
+          {
+            subgroupName = subgroup.name;
+          }
+        }
+      }
+    }
+
     const worldInfo = {
       name: world.name,
       viewingRestrictions: world.viewingRestrictions,
@@ -846,6 +1052,8 @@ const serveAccessEdit = async (req, res, next) => {
       viewingDenied: [],
       editingPermission: [],
       editingDenied: [],
+      group: groupName,
+      subgroup: subgroupName,
     }
   
     // Getting usernames and usertypes of all users that have permission to view world
@@ -1003,7 +1211,8 @@ const serveAccessEdit = async (req, res, next) => {
     res.render(path.resolve(__dirname + '/../public/web/views/worldAccess'), {
       title: world.name + ' Access',
       userInfo: userInfo,
-      world: worldInfo
+      world: worldInfo,
+      allGroups: allGroups,
     });
   }
 }
@@ -2685,6 +2894,352 @@ const deleteUploadedFile = async (req, res, next) =>
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Deleting group on user request
+const deleteGroup = async (req, res, next) =>
+{
+  // url: /delete-group/group_name
+  // split result array: {"", "delete-group", "group_name"}
+  const groupName = req.url.split('/')[2];
+
+  // Getting group from database
+  var group = await WorldGroups.findOne({name: groupName.replaceAll('-', ' ')});
+
+  if (group)
+  {
+    // Finding all worlds that are in the group
+    var worlds = await Worlds.find({group: group._id});
+
+    // Removing the worlds from the group
+    for (const world of worlds)
+    {
+      world.group = null;
+      world.subgroup = null;
+
+      await world.save();
+    }
+
+    // Deleting group
+    try
+    {
+      await WorldGroups.deleteOne({_id: group._id});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+  // Manage group pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+
+  return res.redirect('/explore');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating group on user request
+const createGroup = async (req, res, next) =>
+{
+  // Manage groups pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+
+  if (req.body.group) 
+  {
+    // Checking if the group already exists
+    // If it does, send an error message
+    // If it doesn't, create the group
+    if (await WorldGroups.findOne({name: req.body.group}))
+    {
+      req.session.groupErrorMessage = req.body.group + ' already exists';
+      return res.redirect('/explore');
+    }
+    // Checking for invalid subgroup names
+    else if (req.body.group === 'No Group')
+    {
+      req.session.groupErrorMessage = 'Invalid group name';
+      return res.redirect('/explore');
+    }
+    else
+    {
+      var group = {
+        name: req.body.group,
+        subgroups: [],
+      }
+
+      // Validating subgroup value 
+      // Subgroup can't be named 'No Subgroup' or have a repeat value
+      function validateSubgroup(name, subgroupsAdded)
+      {
+        if (name === 'No Subgroup')
+        {
+          return false;
+        }
+
+        for (const subgroup of subgroupsAdded)
+        {
+          if (name === subgroup.name)
+          {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      // Adding subgroups
+      // req.body.subgroups will either be:
+      //    - ''                                    --> Nothing (won't trigger if statment)
+      //    - 'subgroup'                            --> Not array (only 1 subgroup and will add that)
+      //    - ['subgroup1', 'subgroup2', ...]       --> Array (will loop through and add each subgroup)
+      if (req.body.subgroups && req.body.subgroups.length > 0)
+      {
+        if (Array.isArray(req.body.subgroups))
+        {
+          for(const subgroup of req.body.subgroups)
+          {
+            if (subgroup.length > 0 && validateSubgroup(subgroup, group.subgroups))
+            {
+              group.subgroups.push({name: subgroup});
+            }
+          }
+        }
+        else
+        {
+          if (validateSubgroup(req.body.subgroups, group.subgroups))
+          {
+            group.subgroups.push({name: req.body.subgroups});
+          }
+        }
+      }
+
+      // Adding group to database
+      try
+      {
+        await WorldGroups.create(group);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        req.session.groupErrorMessage = 'Something went wrong, please try again';
+        return res.redirect('/explore');
+      }
+    }
+  }
+  else
+  {
+    req.session.groupErrorMessage = 'No group name entered';
+    return res.redirect('/explore');
+  }
+
+  req.session.popUpActive = 'flex';
+  return res.redirect('/explore');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Deleting subgroup on user request 
+const deleteSubgroup = async (req, res, next) =>
+{
+  // url: /delete-subgroup/group_name/subgroup_name
+  // split result array: {"", "delete-suubgroup", "subgroup_name"}
+  const groupName = req.url.split('/')[2];
+  const subgroupName = req.url.split('/')[3];
+
+  // Getting group from database
+  var group = await WorldGroups.findOne({name: groupName.replaceAll('-', ' ')});
+  
+  if (group)
+  {
+    // Finding subgroup and deleting it
+    var deletedSubgroup;
+
+    for (const subgroup of group.subgroups)
+    {
+      if (subgroup.name === subgroupName)
+      {
+        deletedSubgroup = subgroup;
+
+        try
+        {
+          var index = group.subgroups.indexOf(subgroup);
+          group.subgroups.splice(index, 1);
+
+          await group.save();
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+
+        break;
+      }
+    }
+
+    // Finding all worlds that are in the group
+    var worlds = await Worlds.find({group: group._id});
+
+    // Removing the worlds from the subgroup
+    for (const world of worlds)
+    {
+      if (JSON.stringify(world.subgroup) === JSON.stringify(deletedSubgroup._id))
+      {
+        world.subgroup = null;
+      }
+
+      await world.save();
+    }
+  }
+
+  // Manage group pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+  req.session.groupInfoCollapse = groupName;
+
+  return res.redirect('/explore');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Creating subgroup on user request
+const createSubgroup = async (req, res, next) =>
+{
+  // Manage groups pop up should remain displayed when page reloads
+  req.session.popUpActive = 'flex';
+
+  if (req.body.group && req.body.subgroup) 
+  {
+    req.session.groupInfoCollapse = req.body.group;
+
+    // Checking for invalid subgroup names
+    if (req.body.subgroup === 'No Subgroup')
+    {
+      req.session.subgroupErrorMessage = {};
+      req.session.subgroupErrorMessage[req.body.group.replaceAll(' ', '-') + '-errorMessage'] = 'Invalid subgroup name';
+
+      return res.redirect('/explore');
+    }
+    else
+    {
+      // Getting group from database
+      var group;
+
+      try
+      {
+        group = await WorldGroups.findOne({name: req.body.group});
+      }
+      catch(e)
+      {
+        console.log(e)
+      }
+
+      if (group)
+      {
+        // Checking that a subgroup of that name doesn't already exist
+        for (const subgroup of group.subgroups)
+        {
+          if (subgroup.name === req.body.subgroup)
+          {
+            req.session.subgroupErrorMessage = {};
+            req.session.subgroupErrorMessage[req.body.group.replaceAll(' ', '-') + '-errorMessage'] = 'Subgroup already exists';
+
+            return res.redirect('/explore');
+          }
+        }
+
+        // Adding subgroup to group
+        try
+        {
+          group.subgroups.push({name: req.body.subgroup})
+          await group.save();
+        }
+        catch(e)
+        {
+          console.log(e);
+
+          req.session.subgroupErrorMessage = {};
+          req.session.subgroupErrorMessage[req.body.group.replaceAll(' ', '-') + '-errorMessage'] = '';
+        }
+      }
+    }
+  }
+
+  return res.redirect('/explore');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Updates world group and subgroup on user request
+const updateWorldGroup = async (req, res, next) =>
+{
+  if (req.body.world && req.body.group && req.body.subgroup)
+  {
+    // Getting world from database
+    var world = null;
+
+    try
+    {
+      world = await Worlds.findOne({name: req.body.world});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (world)
+    {
+      // If 'No Group' was selected, removing world from any group
+      // Otherwise, adding world to selected group
+      if (req.body.group.replaceAll('-', ' ') === 'No Group')
+      {
+        world.group = null;
+        world.subgroup = null;
+      }
+      else
+      {
+        // Getting group from database
+        var group = null;
+
+        try
+        {
+          group = await WorldGroups.findOne({name: req.body.group.replaceAll('-', ' ')});
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+
+        if (group)
+        {
+          world.group = group._id;
+
+          // If 'No Subgroup' was selected, removing world from any subgroup
+          // Otherwise, adding world to selected subgroup
+          if (req.body.subgroup.replaceAll('-', ' ') === 'No Subgroup')
+          {
+            world.subgroup = null;
+          }
+          else
+          {
+            for (const subgroup of group.subgroups)
+            {
+              if (subgroup.name === req.body.subgroup.replaceAll('-', ' '))
+              {
+                world.subgroup = subgroup._id;
+              }
+            }
+          }
+        }
+      }
+
+      await world.save();
+    }
+  }
+
+  return res.redirect('/edit-access/' + req.body.world);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 module.exports = {
   invalidAddress,
   // getAllUsers,
@@ -2727,4 +3282,9 @@ module.exports = {
   newContent,
   serveUploadedFile,
   deleteUploadedFile,
+  deleteGroup,
+  createGroup,
+  deleteSubgroup,
+  createSubgroup,
+  updateWorldGroup,
 };

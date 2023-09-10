@@ -1,0 +1,93 @@
+/* Default style for tables ******************************************************************************************************************************/
+
+/*********************************************************************************************************************************************************
+
+Basic Layout:
+
+div.table-top-bar
+
+    h3 *** Your Headings ***
+    h3
+    h3
+
+div.table-group-selector
+
+    select
+        option *** Your Groups ***
+        option
+        option
+
+    select
+        option *** Your Subgroups ***
+        option
+        option
+
+    i(class="table-group-settings fa-solid fa-gear fa-lg"
+
+div.table-container
+
+**********************************************************************************************************************************************************/
+
+/* Top Bar ***********************************************************************************************************************************************/
+
+.table-top-bar { width:100%; background-color:var(--GREY); padding:0; margin:0; }
+
+.table-top-bar h3 { padding:20px 30px; margin:0; display:inline-block; }
+.table-top-bar h3:hover {  background-color:var(--HOVER_GREY); cursor:pointer; }
+
+.table-top-bar .selected { background-color:var(--DARK_GREY); color:var(--WHITE);  cursor:pointer; }
+.table-top-bar .selected:hover { background-color:var(--DARK_GREY); color:var(--WHITE); }
+
+/* Table Container ***************************************************************************************************************************************/
+
+.table-container { display:block; }
+.table-overflow-container { display:block; overflow-y:auto; height:90%; scrollbar-gutter:stable both-edges; }
+
+/* Group Selector ****************************************************************************************************************************************/
+
+.table-group-selector { width:100%; margin:20px 0 0 0;}
+
+.table-group-selector select { width:200px }
+.table-group-selector select:first-child { margin-right:20px; }
+
+.table-group-settings { margin:0 12px 0 0; float:right; }
+.table-group-settings:hover { background-color:var(--LIGHT_GREY); }
+
+/* Actual Table ******************************************************************************************************************************************/
+
+.table { width:100%; margin:30px 0 0 0; border-collapse:seperate; border-spacing:0px; }
+
+.table tbody tr { background-color:var(--WHITE) }
+.table tbody tr { cursor:pointer; }
+.table tbody tr.selected-level1 { background-color:var(--GREY) }
+.table tbody tr:not(.table-level2):not(.table-level3):hover { background-color:var(--GREY); }
+
+.table .table-level2 { background-color:var(--LIGHT_GREY); display:none; }
+.table .table-level3 { background-color:var(--WHITE); display:none; }
+
+.table .table-level2 td, .table .table-level3 td { padding:15px 15px; }
+
+.table th, .table td { text-align:left }
+.table:not(:has(.table-error-cell)) th, .table td, .table-error-cell { border-bottom:1px solid var(--MEDIUM_GREY); }
+.table th:last-child:not(.table-error-cell), .table td:last-child { text-align:right; }
+
+.table thead { position:sticky; top:0; background-color:var(--WHITE); }
+
+.table tr:not(:has(.table-error-cell)) th { vertical-align:top; padding:15px 10px; }
+
+.table .table-error-cell { padding:0 10px 15px 10px; }
+
+.table td { padding:20px 15px; vertical-align:middle; }
+
+.table input[type=text] { width:175px; margin-right:15px}
+
+.table .garbage-icon { margin-top:-8.5px; margin-bottom:-8.5px }
+.table tr .garbage-icon:hover { background-color: var(--LIGHT_GREY); }
+.table .table-level2 .garbage-icon:hover { background-color: var(--WHITE); }
+
+/* Manange Groups Table **********************************************************************************************************************************/
+
+.manage-groups-table { margin-top:20px; }
+
+.manage-groups-table th:nth-child(-n + 2), .manage-groups-table td:nth-child(-n + 3) { width:30%; }
+.manage-groups-table th:nth-child(3), .manage-groups-table td:nth-child(4) { width:10%; }
