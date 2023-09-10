@@ -13,7 +13,9 @@ const WorldGroupsSchema = new mongoose.Schema({
       trim:       true
     },
     subgroups: [{
-        name: {type: String},
+        name: { 
+                type: String,
+              },
     }]
 });
 

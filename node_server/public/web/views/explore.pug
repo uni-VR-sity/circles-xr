@@ -66,15 +66,17 @@ block content
                 div.table-overflow-container
                     table.table.manage-groups-table
                         thead
-                            form(action='/create-group' method='post')
+                            form(id='createGroup' action='/create-group' method='post')
                                 tr
                                     th 
                                         input(type='text' name='group' placeholder='Group name...' required)
 
-                                    th.stacked-inputs(colspan='2') 
+                                    th.stacked-inputs 
                                         div
                                             input(type='text' name='subgroups' placeholder='Subgroup name...')
                                             i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
+
+                                    th
 
                                     th
                                         input(type='submit' value='Add Group' class='pure-button')
@@ -158,17 +160,23 @@ block content
                                 form(action='/create-subgroup' method='post')
                                     tr(class='table-level2 info-row-' + group.name.replaceAll(' ', '-'))
                                         
-                                        th 
+                                        td 
                                             input(type='text' name='group' value=group.name style='display:none')
 
-                                        th.stacked-inputs(colspan='2') 
+                                        td.stacked-inputs(colspan='2') 
                                             div
                                                 input(type='text' name='subgroup' placeholder='Subgroup name...' required)
                                                 label
                                                     input(type='submit' style='display:none')
                                                     i.plus-icon.icon.xl-icon(class='fa-solid fa-square-plus')
 
-                                        th
+                                            if subgroupErrorMessage
+                                                if subgroupErrorMessage.hasOwnProperty(group.name.replaceAll(' ', '-') + '-errorMessage')
+                                                    div
+                                                        i(class='fa-solid fa-triangle-exclamation error-icon')
+                                                        span.error-message #{subgroupErrorMessage[group.name.replaceAll(' ', '-') + '-errorMessage']}
+
+                                        td
 
                 if groupInfoCollapse
                     script.

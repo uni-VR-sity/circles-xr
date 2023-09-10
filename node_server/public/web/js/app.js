@@ -163,8 +163,8 @@ function addSubgroupInput(element)
   
     var newInput = document.createElement('input');
 
-    newInput.setAttribute('class', 'stacked-input');
     newInput.setAttribute('type', 'text');
+    newInput.setAttribute('form', 'createGroup');
     newInput.setAttribute('name', 'subgroups');
     newInput.setAttribute('placeholder', 'Subgroup name...');
 
@@ -306,9 +306,9 @@ function displaySubgroups(allGroups, currentGroup, currentSubgroup = null)
   // Getting subgroups in the current group
   var subgroups = [];
 
-  for (const group of allGroups)
+  for (const group of groups)
   {
-    if (group.name === currentGroup)
+    if (group.name === currentGroup.replaceAll('-', ' '))
     {
       for (const subgroup of group.subgroups)
       {
@@ -336,6 +336,11 @@ function displaySubgroups(allGroups, currentGroup, currentSubgroup = null)
 
     option.setAttribute('value', subgroup.replaceAll(' ', '-'));
     option.innerHTML = subgroup;
+
+    if (subgroup === 'No Subgroup')
+    {
+      option.style.color = 'var(--GREY)';
+    }
 
     if (subgroup === currentSubgroup)
     {
@@ -366,10 +371,8 @@ function displaySubgroups(allGroups, currentGroup, currentSubgroup = null)
 }
 
 // Detecting when the world group is updated
-function listenForGroupUpdate(allGroups)
+function listenForGroupUpdate(allGroups, currentGroup)
 {
-  var groups = JSON.parse(allGroups);
-
   // Getting group form
   var groupSelector = document.getElementById('currentGroup');
 
@@ -386,11 +389,41 @@ function listenForGroupUpdate(allGroups)
     }
   }
 
+  if (!currentGroup)
+  {
+    greyForm(true);
+  }
+
   // Putting event listener to detect when a new group is selected
   groupSelector.addEventListener('change', function(event)
   {
     greyForm((event.target.value === 'No-Group'));
-    
-    displaySubgroups(groups, event.target.value);
+    displaySubgroups(allGroups, event.target.value);
+  });
+}
+
+// Detecting when the world subgroup is updated
+function listenForSubgroupUpdate()
+{
+  // Getting group form
+  var subgroupSelector = document.getElementById('currentSubgroup');
+
+  // Greying out form when no subgroup is selected (or reversing it)
+  function greyForm(selected)
+  {
+    if (selected)
+    {
+      subgroupSelector.classList.add('nothing-selected');
+    }
+    else
+    {
+      subgroupSelector.classList.remove('nothing-selected');
+    }
+  }
+
+  // Putting event listener to detect when a new group is selected
+  subgroupSelector.addEventListener('change', function(event)
+  {
+    greyForm((event.target.value === 'No-Subgroup'));
   });
 }

@@ -19,4 +19,4 @@ input[type=submit] {background-color:var(--BLUE); color:var(--WHITE);}
 
 
 .nothing-selected { color:var(--GREY); }
-
+.nothing-selected option { color:var(--BLACK); }
