@@ -296,7 +296,7 @@ const arrowMove = function(object, max, min)
                 // Adding event listener for when anywhere else is clicked, arrow UI is hidden
                 window.addEventListener('click', hideUI);
 
-            }, 100);;
+            }, 100);
         }
     });
 }

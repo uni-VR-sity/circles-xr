@@ -55,6 +55,17 @@ AFRAME.registerComponent('circles-enter-ui', {
             ambientSounds.forEach(function(soundEntity) {
                 soundEntity.setAttribute('circles-sound', {state:'play'});
             });
+
+            // Start all videos that are on autoplay
+            const videos = document.querySelectorAll('[circles-video-controls]');
+            
+            for (const video of videos)
+            {
+                if (video.getAttribute('circles-video-controls').autoplay)
+                {
+                    video.getAttribute('material').src.play();
+                }
+            }
         });
 
         //clicking on customize avatar brings user to wardobe world

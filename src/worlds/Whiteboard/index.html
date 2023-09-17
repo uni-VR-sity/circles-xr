@@ -9,6 +9,7 @@
         <script src="/worlds/Whiteboard/scripts/circles-upload-whiteboard-ui.js"></script>
         <script src="/worlds/Whiteboard/scripts/circles-whiteboard-file.js"></script>
         <script src="/worlds/Whiteboard/scripts/circles-drag-object.js"></script>
+        <script src="/worlds/Whiteboard/scripts/circles-video-controls.js"></script>
     </head>
 
     <body>
@@ -22,6 +23,9 @@
 
                 <!-- Circles' built-in assets [REQUIRED] -->
                 <circles-assets/>
+
+                <video src="/uploads/3057188ca874f4e0aaaf1d800.mp4" id="asset_3057188ca874f4e0aaaf1d800.mp4"></video>
+                <video src="/uploads/e327cf7533527d9aa10138a01.mp4" id="asset_e327cf7533527d9aa10138a01.mp4"></video>
 
             </a-assets>
 
@@ -39,6 +43,22 @@
                         material="color:#757575; roughness:1"
                         position="0 0.01 0"
                         rotation="-90 0 0">
+            </a-entity>
+
+            <!-- Tester Video Horizontal -->
+            <a-entity class='interactive' 
+                      position='1.5 2 -3.3' 
+                      geometry='primitive:plane; height:1.5; width:3' 
+                      material='src:#asset_3057188ca874f4e0aaaf1d800.mp4; shader:flat'
+                      circles-video-controls>
+            </a-entity>
+
+            <!-- Tester Video Vertical -->
+            <a-entity class='interactive' 
+                      position='-1.5 2 -3.3' 
+                      geometry='primitive:plane; height:3; width:1.5' 
+                      material='src:#asset_e327cf7533527d9aa10138a01.mp4; shader:flat'
+                      circles-video-controls>
             </a-entity>
 
             <!-- Whiteboard 1 -->

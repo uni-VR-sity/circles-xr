@@ -7,7 +7,7 @@
 // Functions
 
 // Creating file asset for displaying
-const createAsset = function(file)
+const createAsset = function(file, location)
 {
     // Getting Asset Management System
     var assetManager = document.getElementsByTagName('a-assets')[0];
@@ -23,18 +23,13 @@ const createAsset = function(file)
         {
             asset = document.createElement('img');
 
-            asset.setAttribute('src', '/whiteboard-file/' + file.name);
+            asset.setAttribute('src', '/' + location + '/' + file.name);
         }
         else if (file.category === 'video')
         {
             asset = document.createElement('video');
 
-            asset.setAttribute('preload', 'auto');
-            asset.setAttribute('autoplay', '');
-            asset.setAttribute('muted', '');
-            asset.setAttribute('loop', '');
-
-            asset.setAttribute('src', '/whiteboard-file/' + file.name);
+            asset.setAttribute('src', '/' + location + '/' + file.name);
         }
 
         asset.setAttribute('id', 'asset_' + file.name);
@@ -645,7 +640,7 @@ const insertFile = function(CONTEXT_AF)
         if (fileInfo)
         {
             // Creating asset
-            createAsset(fileInfo);
+            createAsset(fileInfo, 'whiteboard-file');
 
             // Displaying file on whiteboard
             displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo);
@@ -930,6 +925,22 @@ const displayPage = function(pages, pageNum)
                     offset: offset,
                 });
 
+                // If file is a video, setting up video controller
+                // Otherwise, removing video controller if element has it (if another page had a video on that element)
+                if (files[i].category === 'video')
+                {
+                    fileElements[i].setAttribute('circles-video-controls', {
+                        controls: false,
+                    });
+                }
+                else
+                {
+                    if (fileElements[i].hasAttribute('circles-video-controls'))
+                    {
+                        fileElements[i].removeAttribute('circles-video-controls');
+                    }
+                }
+
                 fileElements[i].setAttribute('id', files[i].name);
             }
             else
@@ -1071,7 +1082,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
                     // Creating content assets for displaying
                     for (var file of content)
                     {
-                        createAsset(file);
+                        createAsset(file, 'uploads');
                     }
 
                     // Creating elements to display content
@@ -1278,7 +1289,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         CONTEXT_AF.socket.on(CONTEXT_AF.fileInsertedEvent, function(data) 
         {
             // Creating asset
-            createAsset(data.fileInfo);
+            createAsset(data.fileInfo, 'whiteboard-file');
 
             // Displaying file on whiteboard
             displayFile(data.whiteboardID, 'asset_' + data.fileInfo.name, data.fileInfo);

@@ -100,7 +100,7 @@ const getUserRestrictions = function(uploadingRestrictions, editingRestrictions,
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Uploading assets for whiteboard into world
-const uploadAssets = function()
+const uploadWhiteboardAssets = function()
 {
     // Getting Asset Management System
     var assetManager = document.getElementsByTagName('a-assets')[0];
@@ -559,11 +559,6 @@ const addFileAsset = function(name, category)
         {
             asset = document.createElement('video');
 
-            asset.setAttribute('preload', 'auto');
-            asset.setAttribute('autoplay', '');
-            asset.setAttribute('muted', '');
-            asset.setAttribute('loop', '');
-
             asset.setAttribute('src', '/whiteboard-file/' + name);
         }
         else
@@ -707,7 +702,7 @@ AFRAME.registerComponent('circles-whiteboard',
         if (document.querySelectorAll('[circles-whiteboard]')[0].getAttribute('id') === element.getAttribute('id'))
         {
             // Uploading assets needed for whiteboard
-            uploadAssets();
+            uploadWhiteboardAssets();
 
             // Creating element for uploading files (there should only be 1 that all whiteboards use)
             element.setAttribute('circles-upload-whiteboard-ui', '');

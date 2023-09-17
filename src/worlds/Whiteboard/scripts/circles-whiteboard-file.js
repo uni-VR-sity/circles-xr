@@ -34,6 +34,14 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth)
         z: fileInfo.position.z,
     });
 
+    if (fileInfo.category === 'video')
+    {
+        fileElement.setAttribute('circles-video-controls', {
+            controlsDisplayed: 'onclick',
+            parentElementID: fileInfo.whiteboardID,
+        });
+    }
+
     return desiredHeight;
 }
 
@@ -167,10 +175,10 @@ const fileClick = function(file, originalPos, CONTEXT_AF)
             var trash = whiteboard.querySelector('.trash-button');
 
             // Putting event listener on the whiteboard
-            // When anything but the file is clicked, unselect file and default view is set back on whiteboard
+            // When anything but the file is clicked (or if it has a video controller, its buttons), unselect file and default view is set back on whiteboard
             const fileUnselected = function(event)
             {
-                if (event.target !== file)
+                if (event.target !== file && !event.target.classList.contains('video-controller-button'))
                 {
                     if (event.target !== trash)
                     {
