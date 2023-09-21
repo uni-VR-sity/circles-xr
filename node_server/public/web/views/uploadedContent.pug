@@ -134,10 +134,10 @@ block content
 
                                             // If file does not have a height and width saved in the database, save it
                                             if content[fileNum].height && content[fileNum].width
-                                                video(muted autoplay loop)
+                                                video(muted)
                                                     source(src=url) 
                                             else 
-                                                video(id=content[fileNum].name muted autoplay loop onloadedmetadata='getDimensions("' + content[fileNum].name + '")')
+                                                video(id=content[fileNum].name muted onloadedmetadata='getDimensions("' + content[fileNum].name + '")')
                                                     source(src=url)
 
                                             div.file-description-hover(id='info'+content[fileNum].name)
