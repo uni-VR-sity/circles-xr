@@ -2664,7 +2664,6 @@ const newContent = (req, res, next) =>
       req.session.errorMessage = 'Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed';
       return res.redirect('/uploaded-content');
     }
-
   });
 }
 

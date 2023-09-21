@@ -6,53 +6,71 @@
 
 // Functions
 
-// Uploading assets for video controller
+// Uploading assets for video controller (if assets don't exist)
 const uploadVideoAssets = function()
 {
     // Getting Asset Management System
     var assetManager = document.getElementsByTagName('a-assets')[0];
 
     // Pause symbol
-    var pause = document.createElement('img');
-    pause.setAttribute('id', 'pause_symbol');
-    pause.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/pause.svg');
+    if (!assetManager.querySelector('#pause_symbol'))
+    {
+        var pause = document.createElement('img');
+        pause.setAttribute('id', 'pause_symbol');
+        pause.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/pause.svg');
 
-    assetManager.appendChild(pause);
+        assetManager.appendChild(pause);
+    }
 
     // Play symbol
-    var play = document.createElement('img');
-    play.setAttribute('id', 'play_symbol');
-    play.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/play.svg');
-
-    assetManager.appendChild(play);
+    if (!assetManager.querySelector('#play_symbol'))
+    {
+        var play = document.createElement('img');
+        play.setAttribute('id', 'play_symbol');
+        play.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/play.svg');
+    
+        assetManager.appendChild(play);
+    }
 
     // Fast forward symbol
-    var forward = document.createElement('img');
-    forward.setAttribute('id', 'fast-forward_symbol');
-    forward.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/forward-step.svg');
+    if (!assetManager.querySelector('#fast-forward_symbol'))
+    {
+        var forward = document.createElement('img');
+        forward.setAttribute('id', 'fast-forward_symbol');
+        forward.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/forward-step.svg');
 
-    assetManager.appendChild(forward);
+        assetManager.appendChild(forward);
+    }
 
     // Rewind symbol
-    var rewind = document.createElement('img');
-    rewind.setAttribute('id', 'rewind_symbol');
-    rewind.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/backward-step.svg');
-
-    assetManager.appendChild(rewind);
+    if (!assetManager.querySelector('#rewind_symbol'))
+    {
+        var rewind = document.createElement('img');
+        rewind.setAttribute('id', 'rewind_symbol');
+        rewind.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/backward-step.svg');
+    
+        assetManager.appendChild(rewind);
+    }
 
     // Sound on symbol
-    var soundOn = document.createElement('img');
-    soundOn.setAttribute('id', 'sound-on_symbol');
-    soundOn.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-high.svg');
-
-    assetManager.appendChild(soundOn);
+    if (!assetManager.querySelector('#sound-on_symbol'))
+    {
+        var soundOn = document.createElement('img');
+        soundOn.setAttribute('id', 'sound-on_symbol');
+        soundOn.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-high.svg');
+    
+        assetManager.appendChild(soundOn);
+    }
 
     // Sound off symbol
-    var soundOff = document.createElement('img');
-    soundOff.setAttribute('id', 'sound-off_symbol');
-    soundOff.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-off.svg');
-
-    assetManager.appendChild(soundOff);
+    if (!assetManager.querySelector('#sound-off_symbol'))
+    {
+        var soundOff = document.createElement('img');
+        soundOff.setAttribute('id', 'sound-off_symbol');
+        soundOff.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-off.svg');
+    
+        assetManager.appendChild(soundOff);
+    }
 }
 
 // Creating button
@@ -490,13 +508,8 @@ AFRAME.registerComponent('circles-video-controls',
         const element = CONTEXT_AF.el;
         const videoAsset = element.getAttribute('material').src;
 
-        // Making sure this is the first circles-video-controls component to the run
-        // If it is, running what only needs to be run once
-        if (document.querySelectorAll('[circles-video-controls')[0] === element)
-        {
-            // Uploading assets needed for video controller
-            uploadVideoAssets();
-        }
+        // Uploading assets needed for video controller
+        uploadVideoAssets();
 
         // Needs to have autoplay or some mobile browsers won't show video
         if (AFRAME.utils.device.isMobile())
@@ -505,8 +518,7 @@ AFRAME.registerComponent('circles-video-controls',
         }
 
         // Muting video
-        videoAsset.defaultMuted = true;
-        videoAsset.muted = true;
+        videoAsset.setAttribute('muted', '');
 
         // Setting up video loop
         if (CONTEXT_AF.data.loop)
@@ -514,45 +526,57 @@ AFRAME.registerComponent('circles-video-controls',
             videoAsset.setAttribute('loop', '');
         }
 
+        // When video has loaded,
+        // Muting sound
         // If the video has controls, activating them
-        if (CONTEXT_AF.data.controls === true)
+        // If skipSeconds was set to a negative number, setting it to be a 5th of the video's length
+        if (videoAsset.readyState >= 2)
         {
-            // Making sure element is interactive
-            element.classList.add('interactive');
+            CONTEXT_AF.soundOff();
 
-            // Putting event listener on video element to display controls
-            if (CONTEXT_AF.data.controlsDisplayed === 'onhover' && !AFRAME.utils.device.isMobile())
+            if (CONTEXT_AF.data.controls === true)
             {
-                element.controlsDisplayed = CONTEXT_AF.data.controlsDisplayed;
-                element.soundAvailable = CONTEXT_AF.data.soundAvailable;
-                element.addEventListener('mouseenter', displayControls);
+                CONTEXT_AF.activateControls();
             }
-            else (CONTEXT_AF.data.UIdisplayed === 'onclick')
+
+            if (CONTEXT_AF.data.skipSeconds < 0)
             {
-                element.controlsDisplayed = CONTEXT_AF.data.controlsDisplayed;
-                element.soundAvailable = CONTEXT_AF.data.soundAvailable;
-                element.parentElementID = CONTEXT_AF.data.parentElementID;
-                element.addEventListener('click', displayControls);
+                CONTEXT_AF.calculatedSkipSeconds = videoAsset.duration / 5;
             }
         }
-
-        // Muting video for onload
-        // If skipSeconds was set to a negative number, setting it to be a 5th of the video's length
-        // (when video has loaded)
-        if (CONTEXT_AF.data.skipSeconds < 0)
+        else
         {
-            if (videoAsset.readyState >= 2)
+            videoAsset.addEventListener('loadeddata', function()
             {
-                CONTEXT_AF.data.skipSeconds = videoAsset.duration / 5;
-            }
-            else
-            {
-                videoAsset.addEventListener('loadeddata', function()
+                CONTEXT_AF.soundOff();
+
+                if (CONTEXT_AF.data.controls === true)
+                {
+                    CONTEXT_AF.activateControls();
+                }
+
+                if (CONTEXT_AF.data.skipSeconds < 0)
                 {
                     CONTEXT_AF.calculatedSkipSeconds = videoAsset.duration / 5;
-                });
-            }
+                }
+            });
         }
+
+        // Adding event listener for video error
+        // If there is an error loading the video, display an error message
+        videoAsset.addEventListener('error', function() 
+        {
+            var message = document.createElement('a-entity');
+
+            message.setAttribute('text', {
+                align: 'center',
+                height: element.getAttribute('geometry').height,
+                width: element.getAttribute('geometry').width,
+                value: 'Error loading video',
+            });
+
+            element.appendChild(message);
+        });
     },
     update: function(oldData) 
     {
@@ -605,6 +629,29 @@ AFRAME.registerComponent('circles-video-controls',
             {
                 
             }
+        }
+    },
+    activateControls: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // Making sure element is interactive
+        element.classList.add('interactive');
+
+        // Putting event listener on video element to display controls
+        if (CONTEXT_AF.data.controlsDisplayed === 'onhover' && !AFRAME.utils.device.isMobile())
+        {
+            element.controlsDisplayed = CONTEXT_AF.data.controlsDisplayed;
+            element.soundAvailable = CONTEXT_AF.data.soundAvailable;
+            element.addEventListener('mouseenter', displayControls);
+        }
+        else (CONTEXT_AF.data.UIdisplayed === 'onclick')
+        {
+            element.controlsDisplayed = CONTEXT_AF.data.controlsDisplayed;
+            element.soundAvailable = CONTEXT_AF.data.soundAvailable;
+            element.parentElementID = CONTEXT_AF.data.parentElementID;
+            element.addEventListener('click', displayControls);
         }
     },
     // Setting countdown of inactivity to hide controller (only used when controller is displayed onhover)
@@ -714,7 +761,6 @@ AFRAME.registerComponent('circles-video-controls',
         const videoAsset = element.getAttribute('material').src;
 
         videoAsset.muted = false;
-        console.log(videoAsset.muted);
 
         // If the video controller is display, deleted sound off button and create sound on button
         if (element.classList.contains('video-controls-active'))
@@ -736,7 +782,6 @@ AFRAME.registerComponent('circles-video-controls',
         const videoAsset = element.getAttribute('material').src;
 
         videoAsset.muted = true;
-        console.log(videoAsset.muted);
 
         // If the video controller is display, deleted sound on button and create sound off button
         if (element.classList.contains('video-controls-active'))

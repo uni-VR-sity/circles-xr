@@ -781,10 +781,8 @@ const displayContent = function(content)
                                     {
                                         var video = document.createElement('video');
 
+                                        video.muted = true;
                                         video.setAttribute('preload', 'auto');
-                                        video.setAttribute('autoplay', '');
-                                        video.setAttribute('muted', '');
-                                        video.setAttribute('loop', '');
                                         video.setAttribute('playsinline', '');
                                         video.setAttribute('webkit-playsinline', '');
 
