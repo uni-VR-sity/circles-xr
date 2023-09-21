@@ -43,23 +43,16 @@ const uploadVideoAssets = function()
     // Sound on symbol
     var soundOn = document.createElement('img');
     soundOn.setAttribute('id', 'sound-on_symbol');
-    soundOn.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-off.svg');
+    soundOn.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-high.svg');
 
     assetManager.appendChild(soundOn);
 
     // Sound off symbol
     var soundOff = document.createElement('img');
     soundOff.setAttribute('id', 'sound-off_symbol');
-    soundOff.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-xmark.svg');
+    soundOff.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-off.svg');
 
     assetManager.appendChild(soundOff);
-
-    // Sound muted symbol
-    var soundMuted = document.createElement('img');
-    soundMuted.setAttribute('id', 'sound-muted_symbol');
-    soundMuted.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-high.svg');
-
-    assetManager.appendChild(soundMuted);
 }
 
 // Creating button
@@ -71,22 +64,70 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
     var position = {x:0, y:0};
 
         // Setting button y position depending on video dimensions (should be just above the bar)
-        var y;
+        // Sound buttons should be at the top
 
         // Landscape video
         if (controllerWidth > controllerHeight)
         {
-            y = 0 - ((controllerHeight / 3.2) - height); 
+            if (type === 'sound-on' || type === 'sound-off')
+            {
+                position.y = controllerHeight / 3.2;
+
+                if (type === 'sound-on')
+                {
+                    position.x = controllerWidth / 2.5;
+                }
+                else
+                {
+                    position.x = controllerWidth / 2.7;
+                }
+            }
+            else
+            {
+                position.y = 0 - ((controllerHeight / 2.68) - height); 
+            }
         }
         // Square or square-like video
         else if ((controllerWidth * 1.5) > controllerHeight)
         {
-            y = 0 - ((controllerHeight / 2.75) - height); 
+            if (type === 'sound-on' || type === 'sound-off')
+            {
+                position.y = controllerHeight / 2.65;
+
+                if (type === 'sound-on')
+                {
+                    position.x = controllerWidth / 2.8;
+                }
+                else
+                {
+                    position.x = controllerWidth / 3;
+                }
+            }
+            else
+            {
+                position.y = 0 - ((controllerHeight / 2.45) - height); 
+            }
         }
         // Portrait video
         else
         {
-            y = 0 - ((controllerHeight / 2.5) - height); 
+            if (type === 'sound-on' || type === 'sound-off')
+            {
+                position.y = controllerHeight / 2.3;
+
+                if (type === 'sound-on')
+                {
+                    position.x = controllerWidth / 2.7;
+                }
+                else
+                {
+                    position.x = controllerWidth / 2.9;
+                }
+            }
+            else
+            {
+                position.y = 0 - ((controllerHeight / 2.35) - height);
+            } 
         }
 
     switch(type)
@@ -94,29 +135,26 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
         case 'play':
         case 'pause':
             // Have buttons at the bottom (a bit above the progress bar)
-            // X position is at 0
-            position.y = y;
             break;
 
         case 'fast-forward':
             // Dimensions are default
-            position.x = controllerWidth / 3.5;
-            position.y = y;
+            position.x = controllerWidth / 4;
             break;
 
         case 'rewind':
             // Dimensions are default
-            position.x = - (controllerWidth / 3.5);
-            position.y = y;
+            position.x = - (controllerWidth / 4);
             break;
 
         case 'sound-on':
+            height = controllerWidth / 12;
+            width = controllerWidth / 9;
+            break;
+
         case 'sound-off':
-        case 'sound-muted':
-            height = controllerWidth / 5;
-            width = controllerWidth / 6;
-            position.x = 0;
-            position.y = 0;
+            height = controllerWidth / 12;
+            width = controllerWidth / 18;
             break;
     }
 
@@ -142,61 +180,50 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
         shader: 'flat',
     }); 
 
-    // If it is not the mute button, add interactivity
-    // If it is, greying it out
-    if (type !== 'sound-muted')
-    {
-        // Hover effect
-        button.setAttribute('circles-interactive-object', {
-            type:'scale', 
-            hover_scale: 1.1, 
-            click_scale: 1.1,
-        });
+    // Hover effect
+    button.setAttribute('circles-interactive-object', {
+        type:'scale', 
+        hover_scale: 1.1, 
+        click_scale: 1.1,
+    });
 
-        // Click effect
-        button.addEventListener('click', function()
+    // Click effect
+    button.addEventListener('click', function()
+    {
+        // If controls are displayed onhover, resetting the countdown for inactivity
+        if (controlsDisplayed === 'onhover')
         {
-            // If controls are displayed onhover, resetting the countdown for inactivity
-            if (controlsDisplayed === 'onhover')
-            {
-                controllerComponent.deactivationCountdown();
-            }
+            controllerComponent.deactivationCountdown();
+        }
 
-            // Adding functionality depending on the type of button
-            switch(type)
-            {
-                case 'play':
-                    controllerComponent.playVideo();
-                    break;
+        // Adding functionality depending on the type of button
+        switch(type)
+        {
+            case 'play':
+                controllerComponent.playVideo();
+                break;
 
-                case 'pause':
-                    controllerComponent.pauseVideo();
-                    break;
+            case 'pause':
+                controllerComponent.pauseVideo();
+                break;
 
-                case 'fast-forward':
-                    controllerComponent.fastForwardVideo();
-                    break;
+            case 'fast-forward':
+                controllerComponent.fastForwardVideo();
+                break;
 
-                case 'rewind':
-                    controllerComponent.rewindVideo();
-                    break;
+            case 'rewind':
+                controllerComponent.rewindVideo();
+                break;
 
-                case 'sound-on':
-                    controllerComponent.soundOn();
-                    break;
+            case 'sound-on':
+                controllerComponent.soundOff();
+                break;
 
-                case 'sound-off':
-                    controllerComponent.soundOff();
-                    break;
-            }
-        });
-    }
-    else
-    {
-        button.setAttribute('material', {
-            color: '#9c9c9c',
-        }); 
-    }
+            case 'sound-off':
+                controllerComponent.soundOn();
+                break;
+        }
+    });
 
     return button;
 }
@@ -260,18 +287,16 @@ const createControls = function(parentElement, controlsDisplayed, hasSound)
         {
             // If video sound is currently on, creating sound on button
             // Otherwise, creating sound off
-            if (videoAsset.volume > 0.0)
+            if (videoAsset.muted)
             {
-                
+                var soundOffButton = createButton('sound-off', controllerWidth, controllerHeight, controlsDisplayed, controllerComponent);
+                background.appendChild(soundOffButton);
             }
             else
             {
-                
+                var soundOnButton = createButton('sound-on', controllerWidth, controllerHeight, controlsDisplayed, controllerComponent);
+                background.appendChild(soundOnButton);
             }
-        }
-        else
-        {
-            
         }
 
         // Progress bar background
@@ -457,7 +482,7 @@ AFRAME.registerComponent('circles-video-controls',
         skipSeconds: {type: 'number', default: -1},
         autoplay: {type: 'boolean', default: false},
         loop: {type: 'boolean', default: false},
-        soundAvailable: {type: 'boolean', default: false},
+        soundAvailable: {type: 'boolean', default: true},
     },
     init: function () 
     {
@@ -473,16 +498,15 @@ AFRAME.registerComponent('circles-video-controls',
             uploadVideoAssets();
         }
 
-        // If sound is avaliable, turning the sound off
-        // Otherwise, muting the video
-        if (CONTEXT_AF.data.soundAvailable)
+        // Needs to have autoplay or some mobile browsers won't show video
+        if (AFRAME.utils.device.isMobile())
         {
-            CONTEXT_AF.soundOff();
+            videoAsset.setAttribute('autoplay', '');
         }
-        else
-        {
-            videoAsset.muted = true;
-        }
+
+        // Muting video
+        videoAsset.defaultMuted = true;
+        videoAsset.muted = true;
 
         // Setting up video loop
         if (CONTEXT_AF.data.loop)
@@ -512,7 +536,9 @@ AFRAME.registerComponent('circles-video-controls',
             }
         }
 
-        // If skipSeconds was set to a negative number, setting it to be a 5th of the video's length (when video has loaded)
+        // Muting video for onload
+        // If skipSeconds was set to a negative number, setting it to be a 5th of the video's length
+        // (when video has loaded)
         if (CONTEXT_AF.data.skipSeconds < 0)
         {
             if (videoAsset.readyState >= 2)
@@ -687,7 +713,20 @@ AFRAME.registerComponent('circles-video-controls',
         const element = CONTEXT_AF.el;
         const videoAsset = element.getAttribute('material').src;
 
-        console.log('sound on');
+        videoAsset.muted = false;
+        console.log(videoAsset.muted);
+
+        // If the video controller is display, deleted sound off button and create sound on button
+        if (element.classList.contains('video-controls-active'))
+        {
+            var controller = element.querySelector('.video-controller');
+
+            var soundOffButton = controller.querySelector('.sound-off-button');
+            soundOffButton.remove();
+
+            var soundOnButton = createButton('sound-on', element.getAttribute('geometry').width, element.getAttribute('geometry').height, CONTEXT_AF.data.controlsDisplayed, element.components['circles-video-controls']);
+            controller.appendChild(soundOnButton);
+        }
     },
     // Turns video sound off
     soundOff: function()
@@ -696,6 +735,19 @@ AFRAME.registerComponent('circles-video-controls',
         const element = CONTEXT_AF.el;
         const videoAsset = element.getAttribute('material').src;
 
-        console.log('sound off');
+        videoAsset.muted = true;
+        console.log(videoAsset.muted);
+
+        // If the video controller is display, deleted sound on button and create sound off button
+        if (element.classList.contains('video-controls-active'))
+        {
+            var controller = element.querySelector('.video-controller');
+
+            var soundOnButton = controller.querySelector('.sound-on-button');
+            soundOnButton.remove();
+
+            var soundOffButton = createButton('sound-off', element.getAttribute('geometry').width, element.getAttribute('geometry').height, CONTEXT_AF.data.controlsDisplayed, element.components['circles-video-controls']);
+            controller.appendChild(soundOffButton);
+        }
     },
 });

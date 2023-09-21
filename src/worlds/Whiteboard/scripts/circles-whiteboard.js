@@ -558,7 +558,7 @@ const addFileAsset = function(name, category)
         else if (category === 'video')
         {
             asset = document.createElement('video');
-
+            
             asset.setAttribute('src', '/whiteboard-file/' + name);
         }
         else
