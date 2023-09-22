@@ -16,7 +16,8 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 .uploads-table td:nth-child(2){padding-left:12px; padding-right:12px}
 .uploads-table td:nth-child(3){padding-left:24px}
 .uploads-table td img,.uploads-table td video{width:100%;height:100%;object-fit:cover;}
-.file-description-hover p, .file-description-hover-delete p{padding:0;display:inline-block;white-space:nowrap;}
+.uploads-table td.other-file-type {background-color:#e7e7e7;background-clip:content-box;}
+.uploads-table td.other-file-type p, .file-description-hover p, .file-description-hover-delete p{padding:0;display:inline-block;white-space:nowrap;}
 
 .file-container{height:225px;width:100%;position:relative;text-align:center;}
 .file-description-hover, .file-description-hover-delete{position:absolute;bottom:100%;left:0;right:0;background-color:#fffffff4;overflow:hidden;width:100%;height:0;transition:.4s ease;}
@@ -31,7 +32,7 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 .file-formats-table td{vertical-align:top;padding:10px 40px;width:25%}
 .file-formats-table li{padding:3px 0}.file-formats-table ul{padding:0;margin:0}
 
-.file-formats-table td:nth-child(1),.file-formats-table th:nth-child(1),.file-formats-table td:nth-child(2), .file-formats-table th:nth-child(2){border-right:black solid 2px;}
+.file-formats-table td:nth-child(1),.file-formats-table th:nth-child(1),.file-formats-table td:nth-child(2), .file-formats-table th:nth-child(2),.file-formats-table td:nth-child(3), .file-formats-table th:nth-child(3){border-right:black solid 2px;}
 
 .file-description-hover-delete .no-delete-content, .file-description-hover-delete .delete-content{font-size:14px;display:inline-block; vertical-align:middle; padding:7px 12px; margin:0;}
 
@@ -39,7 +40,6 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 
 .file-description-hover{display:block}
 .file-description-hover-delete{display:none}
-
 
 
 

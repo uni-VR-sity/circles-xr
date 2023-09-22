@@ -22,6 +22,9 @@ block content
         // Getting valid file types to restrict the file upload form
         - var validFiles = '';
 
+        for fileType of validText
+            - validFiles += (fileType + ',');
+
         for fileType of validImages
             - validFiles += (fileType + ',');
 
@@ -42,11 +45,17 @@ block content
             table.file-formats-table  
                 thead 
                     tr 
+                        td Text
                         td Images 
                         td Videos
                         td 3D Models
                 tbody
                     tr
+                        td
+                            ul
+                                for fileType of validText
+                                    li #{fileType}
+
                         td 
                             ul
                                 for fileType of validImages
@@ -99,6 +108,7 @@ block content
                                 // Displaying the content in the appropriate way depending on the file type
                                 // 1. Image files (with img tag)
                                 // 2. Video files (with video tag)
+                                // 3. Text files (just displaying name of file)
                                 if content[fileNum].category === 'image'
 
                                     td.file-table-section
@@ -142,6 +152,28 @@ block content
 
                                             div.file-description-hover(id='info'+content[fileNum].name)
                                                 i(class="fa-solid fa-video file-icon")
+                                                br
+                                                p.fileName #{content[fileNum].displayName}
+                                                br
+                                                i(class="fa-solid fa-trash fa-lg delete-file" onclick='doubleCheckDelete_UploadFile("' + content[fileNum].name + '")')
+                                            div.file-description-hover-delete(id='deleteConfirmation'+content[fileNum].name)
+                                                i(class="fa-solid fa-trash")
+                                                br
+                                                p Delete this file?
+                                                br
+                                                a(class="pure-button no-delete-content" onclick='cancelDelete_UploadFile("' + content[fileNum].name + '")') Cancel
+                                                - var deleteLink = '/delete-uploaded-content/' + content[fileNum].name;
+                                                a(class="pure-button delete-content" href=deleteLink) Delete
+
+                                else 
+
+                                    td.other-file-type.file-table-section
+                                        div.file-container
+                                            i(class="fa-regular fa-file file-icon")
+                                            br
+                                            p.fileName #{content[fileNum].displayName}
+                                            div.file-description-hover(id='info'+content[fileNum].name)
+                                                i(class="fa-regular fa-file file-icon")
                                                 br
                                                 p.fileName #{content[fileNum].displayName}
                                                 br
