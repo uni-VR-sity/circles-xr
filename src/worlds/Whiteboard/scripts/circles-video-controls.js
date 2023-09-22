@@ -150,18 +150,11 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
 
     switch(type)
     {
-        case 'play':
-        case 'pause':
-            // Have buttons at the bottom (a bit above the progress bar)
-            break;
-
         case 'fast-forward':
-            // Dimensions are default
             position.x = controllerWidth / 4;
             break;
 
         case 'rewind':
-            // Dimensions are default
             position.x = - (controllerWidth / 4);
             break;
 
@@ -247,7 +240,7 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
 }
 
 // Creating control element
-const createControls = function(parentElement, controlsDisplayed, hasSound)
+const createControls = function(parentElement, controlsDisplayed, hasSound, looping)
 {
     var controllerComponent = parentElement.components['circles-video-controls'];
 
@@ -376,6 +369,7 @@ const createControls = function(parentElement, controlsDisplayed, hasSound)
             progressBar.setAttribute('geometry', {
                 primitive: 'plane',
                 height: barHeight,
+                width: 0,
             }); 
     
             progressBar.setAttribute('material', {
@@ -384,6 +378,7 @@ const createControls = function(parentElement, controlsDisplayed, hasSound)
             }); 
 
             var updatingInterval = null;
+            var prevProgress = 0;
 
             // Updating progress bar length (and position) according to video current time
             function updateProgress()
@@ -395,15 +390,27 @@ const createControls = function(parentElement, controlsDisplayed, hasSound)
                 // Otherwise clear interval
                 if (parentElement.classList.contains('video-controls-active'))
                 {
-                    progressBar.setAttribute('geometry', {
-                        width: barWidth * percentProgress,
-                    }); 
+                    // Not continously running when progress has not changed
+                    if (percentProgress !== prevProgress)
+                    {
+                        prevProgress = percentProgress;
 
-                    progressBar.setAttribute('position', {
-                        x: 0 - ((remainingProgress * barWidth) / 2),
-                        y: 0,
-                        z: 0.001,
-                    }); 
+                        progressBar.setAttribute('geometry', {
+                            width: barWidth * percentProgress,
+                        }); 
+
+                        progressBar.setAttribute('position', {
+                            x: 0 - ((remainingProgress * barWidth) / 2),
+                            y: 0,
+                            z: 0.001,
+                        }); 
+
+                        // When video has ended (and loop is not on), display the play button
+                        if (!looping && percentProgress >= 1)
+                        {
+                            controllerComponent.pauseVideo();
+                        }
+                    }
                 }
                 else
                 {
@@ -438,7 +445,7 @@ const displayControls = function(event)
             element.classList.add('video-controls-active');
 
             // Creating control element
-            createControls(element, element.controlsDisplayed, element.soundAvailable);
+            createControls(element, element.controlsDisplayed, element.soundAvailable, element.loop);
 
             // Calling function to hide UI
             function hide(e)
@@ -590,19 +597,26 @@ AFRAME.registerComponent('circles-video-controls',
             // If controls variable was updated...
             if (CONTEXT_AF.data.controls !== oldData.controls)
             {
-                
+                // Removing event listeners
+                element.removeEventListener('mouseenter', displayControls);
+                element.removeEventListener('click', displayControls);
+
+                // If controls are active, activating control event listeners
+                if (CONTEXT_AF.data.controls)
+                {
+                    CONTEXT_AF.activateControls();
+                }
             }
 
             // If controlsDisplayed variable was updated...
             if (CONTEXT_AF.data.controlsDisplayed !== oldData.controlsDisplayed)
             {
-                
-            }
+                // Removing event listeners
+                element.removeEventListener('mouseenter', displayControls);
+                element.removeEventListener('click', displayControls);
 
-            // If parentElementID variable was updated...
-            if (CONTEXT_AF.data.parentElementID !== oldData.parentElementID)
-            {
-                
+                // Reactivating controls
+                CONTEXT_AF.activateControls();
             }
 
             // If loop variable was updated...
@@ -622,12 +636,6 @@ AFRAME.registerComponent('circles-video-controls',
                 {
                     videoAsset.removeAttribute('loop');
                 }
-            }
-
-            // If soundAvailable variable was updated...
-            if (CONTEXT_AF.data.soundAvailable !== oldData.soundAvailable)
-            {
-                
             }
         }
     },
@@ -725,11 +733,14 @@ AFRAME.registerComponent('circles-video-controls',
         {
             var controller = element.querySelector('.video-controller');
 
-            var pauseButton = controller.querySelector('.pause-button');
-            pauseButton.remove();
+            if (controller)
+            {
+                var pauseButton = controller.querySelector('.pause-button');
+                pauseButton.remove();
 
-            var playButton = createButton('play', element.getAttribute('geometry').width, element.getAttribute('geometry').height, CONTEXT_AF.data.controlsDisplayed, element.components['circles-video-controls']);
-            controller.appendChild(playButton);
+                var playButton = createButton('play', element.getAttribute('geometry').width, element.getAttribute('geometry').height, CONTEXT_AF.data.controlsDisplayed, element.components['circles-video-controls']);
+                controller.appendChild(playButton);
+            }
         }
     },
     // Plays video
