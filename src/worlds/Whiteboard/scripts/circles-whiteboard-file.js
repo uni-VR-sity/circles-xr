@@ -47,6 +47,14 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Displaying PDF
+const displayPDF = function(fileInfo, fileElement, desiredWidth)
+{
+    
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // To show file is clicked (enable is true), put to front, and decrease other files' opacity
 // When enable is false, reverse effects
 const fileClickEffect = function(file, originalPos, enable)
@@ -292,7 +300,14 @@ AFRAME.registerComponent('circles-whiteboard-file',
         dimensions.width = CONTEXT_AF.data.boardWidth / 6;
 
         // Displaying file on whiteboard
-        dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
+        if (CONTEXT_AF.data.category === 'image' || CONTEXT_AF.data.category === 'video')
+        {
+            dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
+        }
+        else
+        {
+            dimensions.height = displayPDF(CONTEXT_AF.data, element, dimensions.width);
+        }
 
         // Adding interactivity if current user can edit files
         if (CONTEXT_AF.data.editable)
