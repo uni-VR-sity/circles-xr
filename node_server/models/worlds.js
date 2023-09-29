@@ -218,20 +218,16 @@ const removeDeletedWorlds = async function()
     console.log(e.message);
   }
 
-  console.log(databaseWorlds);
   // Comparing the worlds in the database to the worlds in public/worlds
   // If a world in the database is not in public/worlds, delete it
   for (var i = 0; i < databaseWorlds.length; i++)
   {
-    console.log(databaseWorlds.length);
-    console.log(i);
     var world = databaseWorlds[i];
 
     if (!serverWorlds.includes(world.name))
     {
       try
       {
-        console.log('deleting ' + world.name);
         await Worlds.deleteOne({name: world.name});
       }
       catch (e) 
