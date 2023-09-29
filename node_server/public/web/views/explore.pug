@@ -227,12 +227,12 @@ block content
             // Worlds with no groups
             if sectionWorlds.noGroup.length > 0
                 for world of sectionWorlds.noGroup
-                    - var worldUrl = '/w/' + world; // Making url to world
+                    - var worldUrl = '/w/' + world.name; // Making url to world
                     li 
                         if editButton
-                            - var editUrl = '/edit-access/' + world;
+                            - var editUrl = '/edit-access/' + world.name;
                             a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-                        a(class="pure-button worldList" href=worldUrl)= world.replaceAll('-', ' ')
+                        a(class="pure-button worldList" href=worldUrl)= world.displayName
 
             // Worlds with groups
             if sectionWorlds.groups.length > 0
@@ -241,26 +241,26 @@ block content
                     // Worlds with no subgroups
                     if group.noGroup.length > 0
                         for world of group.noGroup
-                            - var worldUrl = '/w/' + world; // Making url to world
+                            - var worldUrl = '/w/' + world.name; // Making url to world
                             - var groupName = group.name.replaceAll(' ', '-');
                             li 
                                 if editButton
-                                    - var editUrl = '/edit-access/' + world;
+                                    - var editUrl = '/edit-access/' + world.name;
                                     a(class="pure-button worldList GROUP_" + groupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-                                a(class="pure-button worldList GROUP_" + groupName href=worldUrl)= world.replaceAll('-', ' ')
+                                a(class="pure-button worldList GROUP_" + groupName href=worldUrl)= world.displayName
 
                     // Worlds with subgroups
                     if group.subgroups.length > 0
                         for subgroup of group.subgroups
                             for world of subgroup.worlds
-                                - var worldUrl = '/w/' + world; // Making url to world
+                                - var worldUrl = '/w/' + world.name; // Making url to world
                                 - var groupName = group.name.replaceAll(' ', '-');
                                 - var subgroupName = subgroup.name.replaceAll(' ', '-');
                                 li 
                                     if editButton
-                                        - var editUrl = '/edit-access/' + world;
+                                        - var editUrl = '/edit-access/' + world.name;
                                         a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-                                    a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName href=worldUrl)= world.replaceAll('-', ' ')
+                                    a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName href=worldUrl)= world.displayName
 
     // Magic circles container
     if magicGuest
@@ -356,7 +356,7 @@ block content
                                 for world of group.noGroup
                                     div(style='margin-bottom:10px;display:inline-block;')
                                         input(type='checkbox', name=world style='margin-right:10px')
-                                        label(style='white-space:nowrap')=world
+                                        label(style='white-space:nowrap')=world.displayName
 
                             div(class='pure-controls' style='margin:20px 0 20px 0')
                                 input(type='submit' class="pure-button pure-button-primary" value='Create')

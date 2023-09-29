@@ -12,6 +12,12 @@ const WorldSchema = new mongoose.Schema({
       required:   true,
       trim:       true
     },
+    displayName: {
+      type:       String,
+      unique:     false,
+      required:   true,
+      trim:       true
+    },
     url: {
       type:       String,
       unique:     false,
@@ -85,7 +91,7 @@ const Worlds = mongoose.model('worlds', WorldSchema);
 const addWorlds = async function()
 {
   // Getting all world folders under public/worlds
-  let files = null;
+  var files = null;
   try
   {
     files = await fs.promises.readdir(__dirname + '/../public/worlds/');
@@ -104,7 +110,7 @@ const addWorlds = async function()
       {
         const path = __dirname + '/../public/worlds/' + file;
 
-        let stat = null;
+        var stat = null;
 
         // Checking if path is a directory
         try
@@ -117,11 +123,11 @@ const addWorlds = async function()
         }
 
         // If path is a directory,
-        // If the world is not already in the database,
-        // Add it to the database
+        // If the world is not already in the database, add it
+        // If it is, check that the settings are still the name (if something changed, update it)
         if (stat.isDirectory())
         {
-          let world = null;
+          var world = null;
 
           try
           {
@@ -132,10 +138,32 @@ const addWorlds = async function()
             console.log(e.message);
           }
 
+          // Getting settings folder
+          var displayName;
+
+          try
+          {
+            var settings = JSON.parse(fs.readFileSync(path + '/settings.JSON', 'utf8'));
+            
+            if (settings.world.name)
+            {
+              displayName = settings.world.name;
+            }
+            else
+            {
+              displayName = file;
+            }
+          }
+          catch(e)
+          {
+            displayName = file;
+          }
+
           if (world === null)
           {
             const worldData = {
               name: file,
+              displayName: displayName,
               url: path,
             };
 
@@ -149,6 +177,14 @@ const addWorlds = async function()
               throw file + " creation error: " + err.message;
             }
           }
+          else
+          {
+            if (world.displayName !== displayName)
+            {
+              world.displayName = displayName;
+              await world.save();
+            }
+          }
         }
       }
     }
@@ -159,7 +195,7 @@ const addWorlds = async function()
 const removeDeletedWorlds = async function()
 {
   // Getting all worlds in the database
-  let databaseWorlds = [];
+  var databaseWorlds = [];
 
   try
   {
@@ -171,7 +207,7 @@ const removeDeletedWorlds = async function()
   }
 
   // Getting all worlds in public/worlds
-  let serverWorlds = [];
+  var serverWorlds = [];
 
   try
   {
@@ -205,7 +241,7 @@ const removeDeletedWorlds = async function()
 const checkWhiteboardFiles = async function()
 {
   // Getting all worlds in the database
-  let databaseWorlds = null;
+  var databaseWorlds = null;
 
   try
   {
@@ -217,7 +253,7 @@ const checkWhiteboardFiles = async function()
   }
 
   // Getting all whiteboard files in folder
-  let folderFiles = [];
+  var folderFiles = [];
 
   try
   {
