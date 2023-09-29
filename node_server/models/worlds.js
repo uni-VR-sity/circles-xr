@@ -181,15 +181,8 @@ const addWorlds = async function()
           {
             if (world.displayName !== displayName)
             {
-              try
-              {
-                world.displayName = displayName;
-                await world.save();
-              }
-              catch(e)
-              {
-                console.log(e);
-              }
+              world.displayName = displayName;
+              await world.save();
             }
           }
         }
@@ -227,13 +220,14 @@ const removeDeletedWorlds = async function()
 
   // Comparing the worlds in the database to the worlds in public/worlds
   // If a world in the database is not in public/worlds, delete it
-  for (const world of databaseWorlds)
+  for (var i = 0; i < databaseWorlds.length; i++)
   {
+    var world = databaseWorlds[i];
+
     if (!serverWorlds.includes(world.name))
     {
       try
       {
-        console.log('deleting ' + world.name);
         await Worlds.deleteOne({name: world.name});
       }
       catch (e) 
@@ -299,8 +293,14 @@ const checkWhiteboardFiles = async function()
   }
 }
 
-addWorlds();
-removeDeletedWorlds();
-checkWhiteboardFiles();
+// Calling functions one by one (errors occur if async functions run together)
+const execute = async function()
+{
+  await addWorlds();
+  await removeDeletedWorlds();
+  await checkWhiteboardFiles();
+}
+
+execute();
 
 module.exports = Worlds;
