@@ -232,7 +232,7 @@ block content
                         if editButton
                             - var editUrl = '/edit-access/' + world;
                             a(class="pure-button worldList" style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-                        a(class="pure-button worldList" href=worldUrl)= world
+                        a(class="pure-button worldList" href=worldUrl)= world.replaceAll('-', ' ')
 
             // Worlds with groups
             if sectionWorlds.groups.length > 0
@@ -247,7 +247,7 @@ block content
                                 if editButton
                                     - var editUrl = '/edit-access/' + world;
                                     a(class="pure-button worldList GROUP_" + groupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-                                a(class="pure-button worldList GROUP_" + groupName href=worldUrl)= world
+                                a(class="pure-button worldList GROUP_" + groupName href=worldUrl)= world.replaceAll('-', ' ')
 
                     // Worlds with subgroups
                     if group.subgroups.length > 0
@@ -260,7 +260,7 @@ block content
                                     if editButton
                                         - var editUrl = '/edit-access/' + world;
                                         a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName style='background-color:#0078e7; color:white' href=editUrl) Edit Access
-                                    a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName href=worldUrl)= world
+                                    a(class="pure-button worldList GROUP_" + groupName + " SUBGROUP_" + subgroupName href=worldUrl)= world.replaceAll('-', ' ')
 
     // Magic circles container
     if magicGuest
