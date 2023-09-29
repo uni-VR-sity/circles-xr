@@ -703,13 +703,28 @@ const getWorlds = async function(user, permissionType)
 //        subgroups: [                      --> Array of subgroup objects in the group
 //          {
 //            name: SUBGROUP_NAME,          --> Subgroup name
-//            worlds: [...],                --> Worlds in the subgroup
+//            worlds: [                     --> Worlds in the subgroup
+//              {
+//                name: WORLD_NAME,
+//                displayName: DISPLAY_NAME,
+//              }
+//            ],
 //          }
 //        ],
-//        noGroup: [...],                   --> Worlds that are not in a subgroup
+//        noGroup: [                        --> Worlds that are not in a subgroup
+//          {
+//            name: WORLD_NAME,
+//            displayName: DISPLAY_NAME,
+//          }
+//        ],                   
 //      },
 //    ],
-//    noGroup: [...],                       --> Worlds that are not in a group
+//    noGroup: [                            --> Worlds that are not in a group
+//      {
+//        name: WORLD_NAME,
+//        displayName: DISPLAY_NAME,
+//      }
+//    ],
 //  }
 const organizeToGroups = function(worlds, databaseGroups)
 {
@@ -779,16 +794,16 @@ const organizeToGroups = function(worlds, databaseGroups)
 
         var subIndex = organizedWorlds.groups[index].subgroups.indexOf(subgroup);
 
-        organizedWorlds.groups[index].subgroups[subIndex].worlds.push(world.name);
+        organizedWorlds.groups[index].subgroups[subIndex].worlds.push({name: world.name, displayName: world.displayName});
       }
       else
       {
-        organizedWorlds.groups[index].noGroup.push(world.name);
+        organizedWorlds.groups[index].noGroup.push({name: world.name, displayName: world.displayName});
       }
     }
     else
     {
-      organizedWorlds.noGroup.push(world.name);
+      organizedWorlds.noGroup.push({name: world.name, displayName: world.displayName});
     }
   }
 
@@ -966,11 +981,11 @@ const serveExplore = async (req, res, next) =>
   {
     if (world.viewingRestrictions)
     {
-      groupedEditableWorlds.groups[0].noGroup.push(world.name);
+      groupedEditableWorlds.groups[0].noGroup.push({name: world.name, displayName: world.displayName});
     }
     else
     {
-      groupedEditableWorlds.groups[1].noGroup.push(world.name);
+      groupedEditableWorlds.groups[1].noGroup.push({name: world.name, displayName: world.displayName});
     }
   }
 
@@ -983,7 +998,7 @@ const serveExplore = async (req, res, next) =>
 
   for (const world of magicWorlds)
   {
-    groupedMagicWorlds.noGroup.push(world.name);
+    groupedMagicWorlds.noGroup.push({name: world.name, displayName: world.displayName});
   }
 
   // Rendering the explore page
