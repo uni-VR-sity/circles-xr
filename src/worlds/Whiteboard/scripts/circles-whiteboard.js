@@ -543,7 +543,6 @@ const addFileAsset = function(name, category)
 
     // Making sure this file doesn't already exist as an asset
     // If it doesn't, create the asset
-    // If it does, just display it on the whiteboard
     if (!document.getElementById('asset_' + name))
     {
         var asset;
@@ -552,25 +551,26 @@ const addFileAsset = function(name, category)
         if (category === 'image')
         {
             asset = document.createElement('img');
-
             asset.setAttribute('src', '/whiteboard-file/' + name);
+
+            asset.setAttribute('id', 'asset_' + name);
+            assetManager.appendChild(asset);
+
+            return ('asset_' + name);
         }
         else if (category === 'video')
         {
             asset = document.createElement('video');
-            
             asset.setAttribute('src', '/whiteboard-file/' + name);
+
+            asset.setAttribute('id', 'asset_' + name);
+            assetManager.appendChild(asset);
+
+            return ('asset_' + name);
         }
-        else
-        {
-            asset = document.createElement('canvas');
 
-            asset.setAttribute('crossorigin', 'anonymous');
-        }
-
-        asset.setAttribute('id', 'asset_' + name);
-
-        assetManager.appendChild(asset);
+        // (Return for PDF files)
+        return name;
     }
 }
 
@@ -605,7 +605,7 @@ const getFiles = function(whiteboard, CONTEXT_AF)
             // Displaying each file
             for (const file of files)
             {
-                addFileAsset(file.name, file.category);
+                var asset = addFileAsset(file.name, file.category);
 
                 // Creating file entity to insert into container
 
@@ -613,7 +613,7 @@ const getFiles = function(whiteboard, CONTEXT_AF)
 
                 fileObject.setAttribute('circles-whiteboard-file', {
                     category: file.category,
-                    asset: 'asset_' + file.name,
+                    asset: asset,
                     whiteboardID: whiteboard.getAttribute('id'),
                     fileID: file.name,
                     originalHeight: file.height,

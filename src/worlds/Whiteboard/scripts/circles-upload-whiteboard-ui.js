@@ -22,25 +22,26 @@ const createAsset = function(file, location)
         if (file.category === 'image')
         {
             asset = document.createElement('img');
-
             asset.setAttribute('src', '/' + location + '/' + file.name);
+
+            asset.setAttribute('id', 'asset_' + file.name);
+            assetManager.appendChild(asset);
+
+            return ('asset_' + file.name);
         }
         else if (file.category === 'video')
         {
             asset = document.createElement('video');
-
             asset.setAttribute('src', '/' + location + '/' + file.name);
+
+            asset.setAttribute('id', 'asset_' + file.name);
+            assetManager.appendChild(asset);
+
+            return ('asset_' + file.name);
         }
-        else
-        {
-            asset = document.createElement('canvas');
 
-            asset.setAttribute('crossorigin', 'anonymous');
-        }
-
-        asset.setAttribute('id', 'asset_' + file.name);
-
-        assetManager.appendChild(asset);
+        // (Return for PDF files)
+        return file.name;
     }
 }
 
@@ -646,10 +647,10 @@ const insertFile = function(CONTEXT_AF)
         if (fileInfo)
         {
             // Creating asset
-            createAsset(fileInfo, 'whiteboard-file');
+            var asset = createAsset(fileInfo, 'whiteboard-file');
 
             // Displaying file on whiteboard
-            displayFile(whiteboard, 'asset_' + fileInfo.name, fileInfo);
+            displayFile(whiteboard, asset, fileInfo);
 
             // (NETWORKING) Emiting that a file has been inserted to update for all users
             CONTEXT_AF.socket.emit(CONTEXT_AF.fileInsertedEvent, {fileInfo:fileInfo, whiteboardID:whiteboard, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
@@ -1369,10 +1370,10 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         CONTEXT_AF.socket.on(CONTEXT_AF.fileInsertedEvent, function(data) 
         {
             // Creating asset
-            createAsset(data.fileInfo, 'whiteboard-file');
+            var asset = createAsset(data.fileInfo, 'whiteboard-file');
 
             // Displaying file on whiteboard
-            displayFile(data.whiteboardID, 'asset_' + data.fileInfo.name, data.fileInfo);
+            displayFile(data.whiteboardID, asset, data.fileInfo);
         });
     },
 });

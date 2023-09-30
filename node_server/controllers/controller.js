@@ -2705,17 +2705,33 @@ const serveUploadedFile = async (req, res, next) =>
   const fileName = req.url.split('/')[2];
 
   // Getting file info from database
-  const file = await Uploads.findOne({name: fileName}).sort().exec();
-  const fileOwner = await User.findOne(file.user);
-
-  // Checking if the file belongs to the current user
-  const currentUser = await User.findById(req.user._id).sort().exec();
-
-  // If it does, send file
-  // If it doesn't, send file containing error message
-  if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+  var file = null;
+  var fileOwner = null;
+  try
   {
-    res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+    file = await Uploads.findOne({name: fileName}).sort().exec();
+    fileOwner = await User.findOne(file.user);
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (file && fileOwner)
+  {
+    // Checking if the file belongs to the current user
+    const currentUser = await User.findById(req.user._id).sort().exec();
+
+    // If it does, send file
+    // If it doesn't, send file containing error message
+    if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+    {
+      res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+    }
+    else
+    {
+      res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
+    }
   }
   else
   {

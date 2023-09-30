@@ -48,9 +48,31 @@ const displayMedia = function(fileInfo, fileElement, desiredWidth)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Displaying PDF
-const displayPDF = function(fileInfo, fileElement, desiredWidth)
+const displayPDF = function(fileInfo, fileElement, desiredWidth, CONTEXT_AF)
 {
+    fileElement.setAttribute('circles-pdf-loader', {
+        src:'/whiteboard-file/' + fileInfo.asset,
+        width: desiredWidth,
+    });
     
+    // Setting height when component updates it
+    var getHeight = setInterval(function()
+    {
+        if (fileElement.getAttribute('circles-pdf-loader').height !== -1)
+        {
+            CONTEXT_AF.dimensions.height = fileElement.getAttribute('circles-pdf-loader').height;
+            CONTEXT_AF.dimensions.controlHeight = fileElement.getAttribute('circles-pdf-loader').controlHeight;
+            clearInterval(getHeight);
+        }
+    }, 100);
+
+    fileElement.setAttribute('position', {
+        x: fileInfo.position.x,
+        y: fileInfo.position.y,
+        z: fileInfo.position.z,
+    });
+
+    return;
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -186,7 +208,7 @@ const fileClick = function(file, originalPos, CONTEXT_AF)
             // When anything but the file is clicked (or if it has a video controller, its buttons), unselect file and default view is set back on whiteboard
             const fileUnselected = function(event)
             {
-                if (event.target !== file && !event.target.classList.contains('video-controller-button'))
+                if (event.target !== file && !event.target.classList.contains('video-controller-button') && !event.target.classList.contains('pdfControllerButton'))
                 {
                     if (event.target !== trash)
                     {
@@ -291,22 +313,22 @@ AFRAME.registerComponent('circles-whiteboard-file',
             CONTEXT_AF.el.sceneEl.addEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
         }
 
-        var dimensions = {
+        CONTEXT_AF.dimensions = {
             width: 0, 
             height: 0,
         };
 
         // Calculating desired width of file (1/6 of the whiteboard width)
-        dimensions.width = CONTEXT_AF.data.boardWidth / 6;
+        CONTEXT_AF.dimensions.width = CONTEXT_AF.data.boardWidth / 6;
 
         // Displaying file on whiteboard
         if (CONTEXT_AF.data.category === 'image' || CONTEXT_AF.data.category === 'video')
         {
-            dimensions.height = displayMedia(CONTEXT_AF.data, element, dimensions.width);
+            CONTEXT_AF.dimensions.height = displayMedia(CONTEXT_AF.data, element, CONTEXT_AF.dimensions.width);
         }
         else
         {
-            dimensions.height = displayPDF(CONTEXT_AF.data, element, dimensions.width);
+            displayPDF(CONTEXT_AF.data, element, CONTEXT_AF.dimensions.width, CONTEXT_AF);
         }
 
         // Adding interactivity if current user can edit files
@@ -325,15 +347,31 @@ AFRAME.registerComponent('circles-whiteboard-file',
             // Making file draggable
 
             // Dragging boundries
-            var maxX = -1 * ((CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2));
-            var maxY = (CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2);
-            var minX = (CONTEXT_AF.data.boardWidth / 2) - (dimensions.width / 2);
-            var minY = -1 * ((CONTEXT_AF.data.boardHeight / 2) - (dimensions.height / 2));
+            // If the height variable has been set, make draggable
+            // Otherwise wait for it to be set
+            var makeDraggable = setInterval(function()
+            {
+                if (CONTEXT_AF.dimensions.height)
+                {
+                    var maxX = -1 * ((CONTEXT_AF.data.boardWidth / 2) - (CONTEXT_AF.dimensions.width / 2));
+                    var maxY = (CONTEXT_AF.data.boardHeight / 2) - (CONTEXT_AF.dimensions.height / 2);
+                    var minX = (CONTEXT_AF.data.boardWidth / 2) - (CONTEXT_AF.dimensions.width / 2);
+                    var minY = -1 * ((CONTEXT_AF.data.boardHeight / 2) - (CONTEXT_AF.dimensions.height / 2));
 
-            element.setAttribute('circles-drag-object', {
-                maxCoordinate: {x: maxX, y: maxY},
-                minCoordinate: {x: minX, y: minY},
-            });
+                    // If file is a pdf, adjusting min y to account for controls
+                    if (CONTEXT_AF.data.category === 'application')
+                    {
+                        minY += (CONTEXT_AF.dimensions.controlHeight);
+                    }
+
+                    element.setAttribute('circles-drag-object', {
+                        maxCoordinate: {x: maxX, y: maxY},
+                        minCoordinate: {x: minX, y: minY},
+                    });
+
+                    clearInterval(makeDraggable);
+                }
+            }, 100);
 
             // Updating elements position when it is changed to update the database
             // Using timeouts so that updates only occur when element stops moving

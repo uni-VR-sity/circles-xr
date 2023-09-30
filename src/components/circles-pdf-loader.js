@@ -88,10 +88,13 @@ class MediaPDFOculusFix {
 AFRAME.registerComponent("circles-pdf-loader", {
     schema: {
         src: { type: "string" },
-        scale: {type: 'number', default: 1.5},
-        minimumDimension: {type:'number', default: 1},
-        controlColor: {type: 'color', default: '#FFFFFF'},
-        doubleSided: {type: 'boolean', default: false},
+        scale: { type: 'number', default: 1.5 },
+        minimumDimension: { type:'number', default: 1 },
+        width: { type:'number', default: -1 },
+        height: { type:'number', default: -1 },
+        controlHeight: { type:'number', default: 0 },
+        controlColor: { type: 'color', default: '#FFFFFF'},
+        doubleSided: { type: 'boolean', default: false },
         projection: { type: "string", default: "flat" },
         contentType: { type: "string" },
         index: { default: 0 },
@@ -120,25 +123,39 @@ AFRAME.registerComponent("circles-pdf-loader", {
     },
     createControls: function() {
         const CONTEXT_AF = this;
+
+        var maxDimension;
+
+        if (CONTEXT_AF.height > CONTEXT_AF.width)
+        {
+            maxDimension = CONTEXT_AF.height;
+        }
+        else
+        {
+            maxDimension = CONTEXT_AF.width;
+        }
+
+        const CONTROL_BUTTON_SIZE = maxDimension / 6;
+        
         CONTEXT_AF.controls = true;
+
+        // If using width override, storing height of element in schema
+        if (CONTEXT_AF.data.height <= 0 && CONTEXT_AF.data.width > 0)
+        {
+            if (CONTEXT_AF.pdf.numPages > 1)
+            {
+                CONTEXT_AF.data.controlHeight = CONTROL_BUTTON_SIZE + ((0.15 * CONTEXT_AF.height) - (CONTROL_BUTTON_SIZE / 2));
+                CONTEXT_AF.data.height = CONTEXT_AF.height;
+            }
+            else
+            {
+                CONTEXT_AF.data.height = CONTEXT_AF.height;
+            }
+        }
 
         // If there is more then 1 page, make controls
         if (CONTEXT_AF.pdf.numPages > 1)
         {
-            var maxDimension;
-
-            if (CONTEXT_AF.height > CONTEXT_AF.width)
-            {
-                maxDimension = CONTEXT_AF.height;
-            }
-            else
-            {
-                maxDimension = CONTEXT_AF.width;
-            }
-
-            const CONTROL_BUTTON_SIZE = maxDimension / 6;
-            CONTEXT_AF.controls = true;
-
             CONTEXT_AF.controlsWrapper = document.createElement('a-entity');
             CONTEXT_AF.controlsWrapper.setAttribute('id', 'pdf_controls_wrapper');
             CONTEXT_AF.controlsWrapper.setAttribute('position', {x:0, y:(CONTEXT_AF.height/-2) - (0.15 * CONTEXT_AF.height), z:0});
@@ -146,7 +163,7 @@ AFRAME.registerComponent("circles-pdf-loader", {
 
             CONTEXT_AF.nextBtn = document.createElement('a-entity');
             CONTEXT_AF.nextBtn.setAttribute('id', 'pdfNextBtn');
-            CONTEXT_AF.nextBtn.setAttribute('class', 'button');
+            CONTEXT_AF.nextBtn.setAttribute('class', 'button pdfControllerButton');
             CONTEXT_AF.nextBtn.setAttribute('position', {x:CONTEXT_AF.width/6, y:0, z:0});
             CONTEXT_AF.nextBtn.setAttribute('rotation', {x:0, y:0, z:90});
             CONTEXT_AF.nextBtn.setAttribute('geometry', {primitive:'plane', width:CONTROL_BUTTON_SIZE, height:CONTROL_BUTTON_SIZE});
@@ -180,7 +197,7 @@ AFRAME.registerComponent("circles-pdf-loader", {
 
             CONTEXT_AF.prevBtn = document.createElement('a-entity');
             CONTEXT_AF.prevBtn.setAttribute('id', 'pdfPrevBtn');
-            CONTEXT_AF.prevBtn.setAttribute('class', 'button');
+            CONTEXT_AF.prevBtn.setAttribute('class', 'button pdfControllerButton');
             CONTEXT_AF.prevBtn.setAttribute('position', {x:CONTEXT_AF.width/-6, y:0, z:0});
             CONTEXT_AF.prevBtn.setAttribute('rotation', {x:0, y:0, z:-90});
             CONTEXT_AF.prevBtn.setAttribute('geometry', {primitive:'plane', width:CONTROL_BUTTON_SIZE, height:CONTROL_BUTTON_SIZE});
@@ -267,16 +284,24 @@ AFRAME.registerComponent("circles-pdf-loader", {
                 CONTEXT_AF.canvas.width = viewport.width;
                 ratio = CONTEXT_AF.canvas.width / CONTEXT_AF.canvas.height;
 
-                // Potrait
-                if (ratio > 1)
+                if (CONTEXT_AF.data.width <= 0)
                 {
-                    CONTEXT_AF.height = CONTEXT_AF.data.minimumDimension;
-                    CONTEXT_AF.width = width = ratio * CONTEXT_AF.height;
+                    // Potrait
+                    if (ratio > 1)
+                    {
+                        CONTEXT_AF.height = CONTEXT_AF.data.minimumDimension;
+                        CONTEXT_AF.width = width = ratio * CONTEXT_AF.height;
+                    }
+                    // Landscape
+                    else
+                    {
+                        CONTEXT_AF.width = CONTEXT_AF.data.minimumDimension;
+                        CONTEXT_AF.height = CONTEXT_AF.width / ratio;
+                    }
                 }
-                // Landscape
                 else
                 {
-                    CONTEXT_AF.width = CONTEXT_AF.data.minimumDimension;
+                    CONTEXT_AF.width = CONTEXT_AF.data.width;
                     CONTEXT_AF.height = CONTEXT_AF.width / ratio;
                 }
             
