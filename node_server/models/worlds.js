@@ -228,6 +228,7 @@ const removeDeletedWorlds = async function()
     {
       try
       {
+        console.log('deleting ' + world.name);
         await Worlds.deleteOne({name: world.name});
       }
       catch (e) 
