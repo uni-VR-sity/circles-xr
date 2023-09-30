@@ -1062,6 +1062,7 @@ const serveAccessEdit = async (req, res, next) => {
 
     const worldInfo = {
       name: world.name,
+      displayName: world.displayName,
       viewingRestrictions: world.viewingRestrictions,
       viewingPermission: [],
       viewingDenied: [],

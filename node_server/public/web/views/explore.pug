@@ -355,8 +355,8 @@ block content
                             for group of editableWorlds.groups
                                 for world of group.noGroup
                                     div(style='margin-bottom:10px;display:inline-block;')
-                                        input(type='checkbox', name=world style='margin-right:10px')
-                                        label(style='white-space:nowrap')=world
+                                        input(type='checkbox', name=world.name style='margin-right:10px')
+                                        label(style='white-space:nowrap')=world.displayName
 
                             div(class='pure-controls' style='margin:20px 0 20px 0')
                                 input(type='submit' class="pure-button pure-button-primary" value='Create')
