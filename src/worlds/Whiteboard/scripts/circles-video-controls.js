@@ -602,7 +602,7 @@ AFRAME.registerComponent('circles-video-controls',
                 element.removeEventListener('click', displayControls);
 
                 // If controls are active, activating control event listeners
-                if (CONTEXT_AF.data.controls)
+                if (CONTEXT_AF.data.controls === true)
                 {
                     CONTEXT_AF.activateControls();
                 }
@@ -615,8 +615,11 @@ AFRAME.registerComponent('circles-video-controls',
                 element.removeEventListener('mouseenter', displayControls);
                 element.removeEventListener('click', displayControls);
 
-                // Reactivating controls
-                CONTEXT_AF.activateControls();
+                // If controls are active, reactivating control event listeners
+                if (CONTEXT_AF.data.controls === true)
+                {
+                    CONTEXT_AF.activateControls();
+                }
             }
 
             // If loop variable was updated...

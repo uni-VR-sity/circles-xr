@@ -125,6 +125,13 @@ const uploadAssets_Headset = function()
     file.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/file.svg');
 
     assetManager.appendChild(file);
+
+    // Video symbol
+    var video = document.createElement('img');
+    video.setAttribute('id', 'video_symbol');
+    video.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/video.svg');
+
+    assetManager.appendChild(video);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -481,14 +488,6 @@ const createFileContainer = function(CONTEXT_AF)
 
                 symbol.setAttribute('geometry', { 
                     primitive: 'plane',
-                    height: 0.115,
-                    width: 0.09,
-                });
-
-                symbol.setAttribute('position', { 
-                    x: 0, 
-                    y: 0.05,
-                    z: 0.001,
                 });
 
                 symbol.setAttribute('visible', false);
@@ -850,6 +849,20 @@ const displayContent = function(content)
                                             video.appendChild(source);
 
                                         fileContainer.appendChild(video);
+
+                                        // Adding overlay to video to display symbol
+                                        var overlay = document.createElement('div');
+
+                                        overlay.setAttribute('class', 'video-symbol-overlay');
+
+                                            // Icon
+                                            var icon = document.createElement('i');
+
+                                            icon.setAttribute('class', 'fa-solid fa-video');
+
+                                            overlay.appendChild(icon);
+
+                                        fileContainer.appendChild(overlay);
                                     }
                                     // Text files (just displaying name of file)
                                     else
@@ -1013,15 +1026,28 @@ const displayPage = function(pages, pageNum)
                         transparent: false,
                         repeat: {x: 1, y: 1},
                         offset: {x: 0, y: 0},
+                        opacity: 1,
                     });
 
                     // Displaying document symbol
                     var symbolElement = fileElements[i].querySelector('.file-element-symbol');
                     symbolElement.setAttribute('visible', true);
 
+                    symbolElement.setAttribute('position', { 
+                        x: 0, 
+                        y: 0.05,
+                        z: 0.001,
+                    });
+
+                    symbolElement.setAttribute('geometry', { 
+                        height: 0.115,
+                        width: 0.09,
+                    });
+
                     symbolElement.setAttribute('material', {
                         transparent: true,
                         src: '#file_symbol',
+                        alphaTest: 0,
                     });
 
                     // Displaying document name
@@ -1091,15 +1117,47 @@ const displayPage = function(pages, pageNum)
                         transparent: true,
                         repeat: repeat,
                         offset: offset,
+                        opacity: 1,
                     });
 
-                    // Hiding symbol element
-                    var symbol = fileElements[i].querySelector('.file-element-symbol');
-                    symbol.setAttribute('visible', false);
+                    // Displaying video symbol if video element
+                    // Otherwise hiding symbol element
+                    if (files[i].category === 'video')
+                    {
+                        // Displaying file on element
+                        fileElements[i].setAttribute('material', { 
+                            opacity: 0.3,
+                        });
+
+                        var symbolElement = fileElements[i].querySelector('.file-element-symbol');
+                        symbolElement.setAttribute('visible', true);
+
+                        symbolElement.setAttribute('position', { 
+                            x: 0, 
+                            y: 0,
+                            z: 0.001,
+                        });
+
+                        symbolElement.setAttribute('geometry', { 
+                            height: 0.135,
+                            width: 0.15,
+                        });
+
+                        symbolElement.setAttribute('material', {
+                            transparent: true,
+                            src: '#video_symbol',
+                            alphaTest: 0.1,
+                        });
+                    }
+                    else
+                    {
+                        var symbolElement = fileElements[i].querySelector('.file-element-symbol');
+                        symbolElement.setAttribute('visible', false);
+                    }
 
                     // Hiding name element
-                    var name = fileElements[i].querySelector('.file-element-name');
-                    name.setAttribute('visible', false);
+                    var nameElement = fileElements[i].querySelector('.file-element-name');
+                    nameElement.setAttribute('visible', false);
                 }
 
                 // Making element interactive
@@ -1222,7 +1280,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         //    - Virtual UI
 
         // Headset
-        if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
+        if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
             generatePopUp_Headset();
         }
@@ -1243,7 +1301,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
             // Generating error message
 
             // Headset
-            if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
+            if (AFRAME.utils.device.checkHeadsetConnected() === true)
             {
                 renderError_Headset('An error occurred, please try again');
             }
@@ -1261,7 +1319,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
             if (content.length > 0)
             {
                 // Headset
-                if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
+                if (AFRAME.utils.device.checkHeadsetConnected() === true)
                 {
                     // Creating content assets for displaying
                     for (var file of content)
@@ -1337,7 +1395,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
             else
             {
                 // Headset
-                if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
+                if (AFRAME.utils.device.checkHeadsetConnected() === true)
                 {
                     renderError_Headset('No content avaliable to insert');
                 }
@@ -1361,7 +1419,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         // If it was set to false, hide pop up
 
         // Headset
-        if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
+        if (AFRAME.utils.device.checkHeadsetConnected() === true)
         {
             if (CONTEXT_AF.data.active === true)
             {

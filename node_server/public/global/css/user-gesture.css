@@ -231,10 +231,11 @@ div.grid2col {
 
 .file-container
 {
-    height:175px;
-    text-align:center;
+    height: 175px;
+    text-align: center;
     box-sizing: border-box;
-    margin:auto;
+    margin: auto;
+    position: relative;
 }
 
 .file-container:hover
@@ -253,6 +254,25 @@ div.grid2col {
 {
     background-color:#e7e7e7;
     background-clip: content-box;
+}
+
+.video-symbol-overlay
+{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #ffffffb6;
+}
+
+#uploads-table .video-symbol-overlay i
+{
+    font-size:300%;
+    margin-bottom:15px;
+    margin-top:35%;
 }
 
 #uploads-table td.other-file-type i
