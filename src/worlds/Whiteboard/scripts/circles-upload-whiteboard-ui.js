@@ -118,6 +118,13 @@ const uploadAssets_Headset = function()
     rightArrow.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/angle-right.svg');
 
     assetManager.appendChild(rightArrow);
+
+    // File symbol
+    var file = document.createElement('img');
+    file.setAttribute('id', 'file_symbol');
+    file.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/file.svg');
+
+    assetManager.appendChild(file);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -165,7 +172,7 @@ const insertFileElement = function(event)
     overlay.setAttribute('position', {
         x: 0,
         y: 0,
-        z: 0.001,
+        z: 0.002,
     });
 
         // Button
@@ -444,7 +451,6 @@ const createFileContainer = function(CONTEXT_AF)
         
             file.setAttribute('material', {
                 shader: 'flat',
-                transparent: true,
             });
     
             file.setAttribute('position', {
@@ -463,6 +469,50 @@ const createFileContainer = function(CONTEXT_AF)
             // Adding event listener to select file
             file.CONTEXT_AF = CONTEXT_AF;
             file.addEventListener('click', insertFileElement);
+
+                // Symbol element (for video and document display)
+                var symbol = document.createElement('a-entity');
+                symbol.classList.add('file-element-symbol');
+
+                symbol.setAttribute('material', { 
+                    alphaTest: 0.1,
+                    shader: 'flat',
+                });
+
+                symbol.setAttribute('geometry', { 
+                    primitive: 'plane',
+                    height: 0.115,
+                    width: 0.09,
+                });
+
+                symbol.setAttribute('position', { 
+                    x: 0, 
+                    y: 0.05,
+                    z: 0.001,
+                });
+
+                symbol.setAttribute('visible', false);
+                
+                file.appendChild(symbol);
+
+                // File name element (for document display)
+                var name = document.createElement('a-entity');
+                name.classList.add('file-element-name');
+
+                name.setAttribute('text', {
+                    align: 'center',
+                    color: '#000000',
+                });
+
+                name.setAttribute('position', { 
+                    x: 0, 
+                    y: -0.085,
+                    z: 0,
+                });
+
+                name.setAttribute('visible', false);
+
+                file.appendChild(name);
     
             fileContainer.appendChild(file);
         }
@@ -954,39 +1004,102 @@ const displayPage = function(pages, pageNum)
             // Otherwise, hide element
             if (files[i])
             {
-                // Getting image aspect ratio (r = w/h)
-                var aspectRatio = files[i].width / files[i].height;
-
-                // Getting proper width if height is 0.5 (w = rh)
-                var width = aspectRatio * 0.5;
-
-                // Displaying element with proper proportions
-                var repeat = {x: 1, y: 1};
-                var offset = {x: 0, y: 0};
-                
-                // Element width is 0.5
-                // If the ideal width is less then 0.5 (portrait image), then the image height needs to be stretched
-                // Otherwise (landscape image), the image width needs to be stretched
-                if (width < 0.5)
+                if (files[i].category === 'application')
                 {
-                    // Getting proper width if width is 0.5 (h = w/r)
-                    var height = 0.5 / aspectRatio;
+                    // Displaying file on element
+                    fileElements[i].setAttribute('material', { 
+                        src: null,
+                        color: '#d9d9d9',
+                        transparent: false,
+                        repeat: {x: 1, y: 1},
+                        offset: {x: 0, y: 0},
+                    });
 
-                    // Getting the amount of image that would be displayed in a height of 0.5
-                    var ratioDisplayed = 0.5 / height;
+                    // Displaying document symbol
+                    var symbolElement = fileElements[i].querySelector('.file-element-symbol');
+                    symbolElement.setAttribute('visible', true);
 
-                    repeat.y = ratioDisplayed;
+                    symbolElement.setAttribute('material', {
+                        transparent: true,
+                        src: '#file_symbol',
+                    });
 
-                    offset.y = (1 - ratioDisplayed) / 2;
+                    // Displaying document name
+                    var nameElement = fileElements[i].querySelector('.file-element-name');
+                    nameElement.setAttribute('visible', true);
+
+                    var displayName;
+
+                    // Shortening name to fit in element (18 characters)
+                    if (files[i].displayName.length > 18)
+                    {
+                        var name = files[i].displayName.replace('.pdf', '');
+
+                        // 18 characters total
+                        // 12 characters after 'pdf' and '...'
+                        displayName = name.substring(0, 12) + '...pdf';
+                    }
+                    else
+                    {
+                        displayName = files[i].displayName;
+                    }
+
+                    nameElement.setAttribute('text', {
+                        value: displayName,
+                    });
                 }
-                else if (width > 0.5)
+                else
                 {
-                    // Getting the amount of image that would be displayed in a width of 0.5
-                    var ratioDisplayed = 0.5 / width;
+                    // Getting image aspect ratio (r = w/h)
+                    var aspectRatio = files[i].width / files[i].height;
 
-                    repeat.x = ratioDisplayed;
+                    // Getting proper width if height is 0.5 (w = rh)
+                    var width = aspectRatio * 0.5;
 
-                    offset.x = (1 - ratioDisplayed) / 2;
+                    // Displaying element with proper proportions
+                    var repeat = {x: 1, y: 1};
+                    var offset = {x: 0, y: 0};
+                    
+                    // Element width is 0.5
+                    // If the ideal width is less then 0.5 (portrait image), then the image height needs to be stretched
+                    // Otherwise (landscape image), the image width needs to be stretched
+                    if (width < 0.5)
+                    {
+                        // Getting proper width if width is 0.5 (h = w/r)
+                        var height = 0.5 / aspectRatio;
+
+                        // Getting the amount of image that would be displayed in a height of 0.5
+                        var ratioDisplayed = 0.5 / height;
+
+                        repeat.y = ratioDisplayed;
+
+                        offset.y = (1 - ratioDisplayed) / 2;
+                    }
+                    else if (width > 0.5)
+                    {
+                        // Getting the amount of image that would be displayed in a width of 0.5
+                        var ratioDisplayed = 0.5 / width;
+
+                        repeat.x = ratioDisplayed;
+
+                        offset.x = (1 - ratioDisplayed) / 2;
+                    }
+
+                    // Displaying file on element
+                    fileElements[i].setAttribute('material', { 
+                        src: '#asset_' + files[i].name,
+                        transparent: true,
+                        repeat: repeat,
+                        offset: offset,
+                    });
+
+                    // Hiding symbol element
+                    var symbol = fileElements[i].querySelector('.file-element-symbol');
+                    symbol.setAttribute('visible', false);
+
+                    // Hiding name element
+                    var name = fileElements[i].querySelector('.file-element-name');
+                    name.setAttribute('visible', false);
                 }
 
                 // Making element interactive
@@ -994,13 +1107,6 @@ const displayPage = function(pages, pageNum)
 
                 fileElements[i].setAttribute('circles-interactive-object', {
                     enabled: true,
-                });
-
-                // Displaying file on element
-                fileElements[i].setAttribute('material', { 
-                    src: '#asset_' + files[i].name,
-                    repeat: repeat,
-                    offset: offset,
                 });
 
                 // If file is a video, setting up video controller
@@ -1116,7 +1222,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         //    - Virtual UI
 
         // Headset
-        if (AFRAME.utils.device.checkHeadsetConnected() === true)
+        if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
         {
             generatePopUp_Headset();
         }
@@ -1137,7 +1243,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
             // Generating error message
 
             // Headset
-            if (AFRAME.utils.device.checkHeadsetConnected() === true)
+            if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
             {
                 renderError_Headset('An error occurred, please try again');
             }
@@ -1155,7 +1261,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
             if (content.length > 0)
             {
                 // Headset
-                if (AFRAME.utils.device.checkHeadsetConnected() === true)
+                if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
                 {
                     // Creating content assets for displaying
                     for (var file of content)
@@ -1231,7 +1337,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
             else
             {
                 // Headset
-                if (AFRAME.utils.device.checkHeadsetConnected() === true)
+                if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
                 {
                     renderError_Headset('No content avaliable to insert');
                 }
@@ -1255,7 +1361,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         // If it was set to false, hide pop up
 
         // Headset
-        if (AFRAME.utils.device.checkHeadsetConnected() === true)
+        if (/*AFRAME.utils.device.checkHeadsetConnected() === */true)
         {
             if (CONTEXT_AF.data.active === true)
             {
