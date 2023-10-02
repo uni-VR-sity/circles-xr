@@ -45,7 +45,7 @@ block content
             table.file-formats-table  
                 thead 
                     tr 
-                        td Text 
+                        td Text
                         td Images 
                         td Videos
                         td 3D Models
@@ -70,6 +70,9 @@ block content
                             ul
                                 for fileType of valid3D
                                     li #{fileType}
+
+            br
+            p(style='margin-bottom:0;font-style:italic;') Maximum file size: #{CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE}MB
 
         input(type='submit' value='Upload' class='pure-button pure-button-primary')
 
@@ -108,10 +111,16 @@ block content
                                 // 3. Text files (just displaying name of file)
                                 if content[fileNum].category === 'image'
 
-                                    td
+                                    td.file-table-section
                                         div.file-container
                                             - var url = '/uploads/' + content[fileNum].name;
-                                            img(src=url) 
+
+                                            // If file does not have a height and width saved in the database, save it
+                                            if content[fileNum].height && content[fileNum].width
+                                                img(src=url) 
+                                            else 
+                                                img(id=content[fileNum].name src=url onload='getDimensions("' + content[fileNum].name + '")')
+
                                             div.file-description-hover(id='info'+content[fileNum].name)
                                                 i(class="fa-regular fa-image file-icon")
                                                 br
@@ -129,11 +138,18 @@ block content
 
                                 else if content[fileNum].category === 'video'
                             
-                                    td
-                                        div.file-container
+                                    td.file-table-section
+                                        div.file-container(id='container:' + content[fileNum].name)
                                             - var url = '/uploads/' + content[fileNum].name;
-                                            video(muted autoplay loop)
-                                                source(src=url) 
+
+                                            // If file does not have a height and width saved in the database, save it
+                                            if content[fileNum].height && content[fileNum].width
+                                                video(muted)
+                                                    source(src=url) 
+                                            else 
+                                                video(id=content[fileNum].name muted onloadedmetadata='getDimensions("' + content[fileNum].name + '")')
+                                                    source(src=url)
+
                                             div.file-description-hover(id='info'+content[fileNum].name)
                                                 i(class="fa-solid fa-video file-icon")
                                                 br
@@ -151,7 +167,7 @@ block content
 
                                 else 
 
-                                    td.other-file-type
+                                    td.other-file-type.file-table-section
                                         div.file-container
                                             i(class="fa-regular fa-file file-icon")
                                             br
@@ -170,9 +186,12 @@ block content
                                                 a(class="pure-button no-delete-content" onclick='cancelDelete_UploadFile("' + content[fileNum].name + '")') Cancel
                                                 - var deleteLink = '/delete-uploaded-content/' + content[fileNum].name;
                                                 a(class="pure-button delete-content" href=deleteLink) Delete
-        
+
         script
             include includes/shortenNames.js
+
+        script
+            include includes/tableWidthAdjust.js
 
     else
         br

@@ -23,6 +23,7 @@ const jwt      = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
+const uniqueFilename = require('unique-filename');
 
 //load in config
 let env = dotenv.config({})
@@ -2731,28 +2732,32 @@ const newContent = (req, res, next) =>
   // Getting file
   const form = new formidable.IncomingForm();
 
+  // Setting file size restriction
+  form.options.maxFileSize = CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE * 1024 * 1024;
+
   // Setting location to upload file to
   form.uploadDir = path.join(__dirname, '/../uploads');
-
-  // TO-DO: SET FILE SIZE RESTRICTION
 
   form.parse(req, async (err, fields, files) => 
   {
     if (err)
     {
-      // Deleting file from folder
-      fs.rmSync(file.filepath, {recursive: true});
+      if (err.code === formidable.errors.biggerThanMaxFileSize)
+      {
+        req.session.errorMessage = 'File is too large, please ensure your file is under ' + CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE + 'MB';
+      }
+      else
+      {
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+      }
 
-      req.session.errorMessage = 'File could not be uploaded, please try again';
       return res.redirect('/uploaded-content');
     }
 
     const file = files.contentFile;
 
-    console.log(file);
-
     // Getting valid file types
-    let validFiles = [];
+    var validFiles = [];
 
     for (const key in CIRCLES.VALID_TEXT_TYPES)
     {
@@ -2847,7 +2852,6 @@ const newContent = (req, res, next) =>
       req.session.errorMessage = 'Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed';
       return res.redirect('/uploaded-content');
     }
-
   });
 }
 
@@ -2861,17 +2865,33 @@ const serveUploadedFile = async (req, res, next) =>
   const fileName = req.url.split('/')[2];
 
   // Getting file info from database
-  const file = await Uploads.findOne({name: fileName}).sort().exec();
-  const fileOwner = await User.findOne(file.user);
-
-  // Checking if the file belongs to the current user
-  const currentUser = await User.findById(req.user._id).sort().exec();
-
-  // If it does, send file
-  // If it doesn't, send file containing error message
-  if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+  var file = null;
+  var fileOwner = null;
+  try
   {
-    res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+    file = await Uploads.findOne({name: fileName}).sort().exec();
+    fileOwner = await User.findOne(file.user);
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (file && fileOwner)
+  {
+    // Checking if the file belongs to the current user
+    const currentUser = await User.findById(req.user._id).sort().exec();
+
+    // If it does, send file
+    // If it doesn't, send file containing error message
+    if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+    {
+      res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+    }
+    else
+    {
+      res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
+    }
   }
   else
   {
@@ -2897,7 +2917,7 @@ const deleteUploadedFile = async (req, res, next) =>
 
   // If it does, delete the file
   if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
-  {
+  { 
     // Deleting from database
     await Uploads.deleteOne({name: fileName});
 
@@ -2906,6 +2926,300 @@ const deleteUploadedFile = async (req, res, next) =>
   }
 
   return res.redirect('/uploaded-content');
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Returning a list of the content the current user has uploaded
+const getUserFiles = async (req, res, next) => 
+{
+  var content = [];
+
+  var currentUser = req.user;
+
+  content = await Uploads.find({user: currentUser});
+
+  res.json(content);
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Sending requested whiteboard file
+const serveWhiteboardFile = async (req, res, next) => 
+{
+  // url: /uploads/file_name
+  // split result array: {"", "uploads", "file_name"}
+  const fileName = req.url.split('/')[2];
+
+  res.sendFile(path.resolve(__dirname + '/../whiteboardFiles/' + fileName));
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Adding sent file to world database entry (sent file was inserted by user to specified whiteboard)
+const insertWhiteboardFile = async (req, res, next) => 
+{
+  var insertedFile = null;
+  var world = null;
+
+  try
+  {
+    // Finding file in database
+    insertedFile = await Uploads.findOne({name: req.body.file}).exec();
+
+    // Getting world from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+
+    res.json(null);
+    return;
+  }
+
+  // Saving file information to the world entry
+  if (insertedFile && world)
+  {
+    // Getting the amount of files in that whiteboard to calculate current file z position
+    var maxZ = 0;
+
+    for(const file of world.whiteboardFiles)
+    {
+      if (file.whiteboardID === req.body.whiteboardID)
+      {
+        if (file.position[2] >= maxZ)
+        {
+          maxZ = file.position[2] + 0.001;
+        }
+      }
+    }
+
+    // Saving file in whiteboardFiles folder
+    const uploadsPath = path.join(__dirname, '/../uploads');
+    const whiteboardFilesPath = path.join(__dirname, '/../whiteboardFiles');
+
+    // Creating unique name
+    var uniqueFilePath = uniqueFilename(whiteboardFilesPath);
+
+    // name: name.type
+    // split result array: {"name", "type"}
+    var type = insertedFile.name.split('.')[1];
+
+    const uploadedFile = path.join(uploadsPath, insertedFile.name);
+    const whiteboardFile = uniqueFilePath + '.' + type;
+
+    try
+    {
+      fs.copyFileSync(uploadedFile, whiteboardFile, fs.constants.COPYFILE_EXCL);
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      res.json(null);
+      return;
+    }
+
+    var brokenPath = whiteboardFile.split('\\');
+    var name = brokenPath[brokenPath.length - 1];
+
+    var fileInfo = {
+      name: name,
+      category: insertedFile.category,
+      height: insertedFile.height,
+      width: insertedFile.width,
+      whiteboardID: req.body.whiteboardID,
+      position: [0, 0, maxZ],
+    };
+
+    try
+    {
+      world.whiteboardFiles.push(fileInfo);
+      await world.save();
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      res.json(null);
+      return;
+    }
+
+    // Sending back information on the file that was inserted
+    var file = JSON.parse(JSON.stringify(fileInfo));
+
+    res.json(file);
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Removing sent file to world database entry (sent file was deleted by user from a specified whiteboard)
+const removeWhiteboardFile = async (req, res, next) => 
+{
+  var world = null;
+
+  try
+  {
+    // Getting world from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  // Deleting file from world entry
+  if (world)
+  {
+    // Finding deleted file in world entry
+    function findFile(file)
+    {
+      return file.name === req.body.file;
+    }
+
+    var toDelete = world.whiteboardFiles.find(findFile);
+
+    // Deleting
+    try
+    { 
+      // Deleting from database
+      var index = world.whiteboardFiles.indexOf(toDelete);
+
+      world.whiteboardFiles.splice(index, 1);
+
+      await world.save();
+
+      // Deleting from folder
+      fs.rmSync(__dirname + '/../whiteboardFiles/' + req.body.file, {recursive: true});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Returning the files the whiteboard in the world has
+const getWhiteboardFiles = async (req, res, next) => 
+{
+  var world = null;
+  var files = null;
+
+  try
+  {
+    // Getting world from database
+    world = await Worlds.findOne({name: req.body.world});
+  }
+  catch(e)
+  {
+    console.log(e);
+
+    res.json(null);
+    return;
+  }
+
+  // Find files that are in that world, on that whiteboard
+  if (world)
+  {
+    // Finding id of each file that is on that whiteboard
+    function matchID(file)
+    {
+      return file.whiteboardID === req.body.whiteboardID;
+    }
+
+    files = world.whiteboardFiles.filter(matchID);
+  }
+
+  res.json(JSON.parse(JSON.stringify(files)));
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Setting file dimensions in Uploads database
+const setFileDimensions = async (req, res, next) => 
+{
+  var file = null;
+
+  try
+  {
+    // Getting file from database
+    file = await Uploads.findOne({name: req.body.file});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (file)
+  {
+    // Updating file dimensions
+    file.height = req.body.height;
+    file.width = req.body.width;
+    await file.save();
+  }
+}
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Updating file position in its world database entry
+const updateFilePosition = async (req, res, next) =>
+{
+
+  if (req.body.world && req.body.file && req.body.newX && req.body.newY)
+  {
+    var world = null;
+
+    try
+    {
+      // Getting world from database
+      world = await Worlds.findOne({name: req.body.world});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    // Find file entry
+    if (world)
+    {
+      for(const file of world.whiteboardFiles)
+      {
+        if (file.name === req.body.file)
+        {
+          // Update file position
+          try
+          {
+            file.position[0] = req.body.newX;
+            file.position[1] = req.body.newY;
+
+            await world.save();
+
+            break;
+          }
+          catch(e)
+          {
+            console.log(e);
+          }
+        }
+      }
+    }
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Returns current user's username and type
+const getUser = async (req, res, next) =>
+{
+  const user = {
+    username: req.user.username,
+    usertype: req.user.usertype,
+  }
+
+  res.json(JSON.parse(JSON.stringify(user)));
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3298,6 +3612,14 @@ module.exports = {
   newContent,
   serveUploadedFile,
   deleteUploadedFile,
+  getUserFiles,
+  serveWhiteboardFile,
+  insertWhiteboardFile,
+  removeWhiteboardFile,
+  getWhiteboardFiles,
+  setFileDimensions,
+  updateFilePosition,
+  getUser,
   deleteGroup,
   createGroup,
   deleteSubgroup,

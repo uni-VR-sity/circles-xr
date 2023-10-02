@@ -120,6 +120,7 @@ router.get('/logout', authenticated, (req, res, next) => {
 });
 
 router.post('/update-session-name', authenticated, controller.updateSessionName);
+router.post('/get-user-info', authenticated, controller.getUser);
 
 router.get('/register', controller.serveRegister);
 router.get('/profile', authenticated, controller.serveProfile);
@@ -135,7 +136,6 @@ router.get('/manage-users', authenticated, controller.serveUserManager);
 router.get('/more-circles', authenticated, controller.serveMoreCircles);
 
 router.post('/add-server', authenticated, controller.addServer);
-
 router.get('/get-servers', controller.getServersList); // This is requested from outside servers and can not have authenticated access only
 
 router.get('/inactivate-server/:server_id', authenticated, controller.inactivateServer);
@@ -144,13 +144,20 @@ router.get('/delete-server/:server_id', authenticated, controller.deleteServer);
 
 router.get('/uploaded-content', authenticated, controller.serveUploadedContent);
 router.get('/uploads/:file_name', authenticated, controller.serveUploadedFile);
+router.get('/whiteboard-file/:file_name', authenticated, controller.serveWhiteboardFile);
 router.get('/delete-uploaded-content/:file_name', authenticated, controller.deleteUploadedFile);
+router.get('/get-user-uploaded-content', authenticated, controller.getUserFiles);
 
 router.get('/your-magic-links', authenticated, controller.serveMagicLinks);
 router.get('/delete-magic-link/:magic_link', authenticated, controller.deleteMagicLink);
 router.post('/renew-magic-link/:magic_link', authenticated, controller.renewMagicLink);
 
 router.post('/upload-content', authenticated, controller.newContent);
+router.post('/insert-whiteboard-file', authenticated, controller.insertWhiteboardFile);
+router.post('/remove-whiteboard-file', authenticated, controller.removeWhiteboardFile);
+router.post('/get-whiteboard-files', authenticated, controller.getWhiteboardFiles);
+router.post('/set-file-dimensions', authenticated, controller.setFileDimensions);
+router.post('/update-whiteboard-file-position', authenticated, controller.updateFilePosition);
 
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);

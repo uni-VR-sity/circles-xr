@@ -78,26 +78,23 @@ const USER_CATEGORIES = {
 
 const VALID_TEXT_TYPES = {
   PDF     : 'pdf',
-  PLAIN   : 'plain',
-  TEXT    : 'txt',
-}
+};
 
 const VALID_IMAGE_TYPES = {
   PNG     : 'png',
   JPG     : 'jpg',
   JPEG    : 'jpeg',
-  GIF     : 'gif',
-}
+};
 
 const VALID_VIDEO_TYPES = {
   MP4     : 'mp4',
   MOV     : 'mov',
   AVI     : 'avi',
-}
+};
 
 const VALID_3D_TYPES = {
 
-}
+};
 
 const MODEL_HEAD_TYPE = {
   head_0   : '/global/assets/models/gltf/head/Head_Circle.glb',
