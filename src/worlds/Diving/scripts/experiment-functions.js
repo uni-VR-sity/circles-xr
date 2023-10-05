@@ -88,19 +88,19 @@ function startExperiment () {
       desc.setAttribute('text', 'value', "There was a major problem with this profile you may not of caught. Problem: BT > NDL");
       
     }
-    else if(profile = "DiveProfile2")
+    if(profile = "DiveProfile2")
     {
       desc.setAttribute('text', 'value', "This dive profile had no initial issues, good job! Always check the data related to your dive!");
       
       
     }
-    else if(profile = "DiveProfile3")
+    if(profile = "DiveProfile3")
     {
       desc.setAttribute('text', 'value', "There was a problem with this profile you may have missed. Problem: NDL is 25 min for this depth (should be 20 min).");
       
       
     }
-    else if(profile = "DiveProfile4")
+    if(profile = "DiveProfile4")
     {
       desc.setAttribute('text', 'value', "This dive profile had no initial issues, good job! Always check the data related to your dive!");
       

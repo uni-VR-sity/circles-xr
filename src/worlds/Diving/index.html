@@ -50,8 +50,8 @@
 
       <!-- MUSIC -->
       
-      <a-entity circles-sound="type:music; src:#music; autoplay:true; loop:true; volume:0.1;"></a-entity>
-      <a-entity circles-sound="type:music; src:#waves; autoplay:true; loop:true; volume:0.4;"></a-entity>
+      <!-- <a-entity circles-sound="type:music; src:#music; autoplay:true; loop:true; volume:0.1;"></a-entity>
+      <a-entity circles-sound="type:music; src:#waves; autoplay:true; loop:true; volume:0.4;"></a-entity> -->
 
       <a-camera position="0 1.4 3" rotation="-1 0 0"></a-camera>
       <!-- assets -->
@@ -75,11 +75,11 @@
         <a-asset-item id="Coral-gltf" src="/worlds/Diving/assets/models/Coral.glb"></a-asset-item>
         <a-asset-item id="Orca-gltf" src="/worlds/Diving/assets/models/Orca.glb"></a-asset-item>
 
-        <audio id="divesfx" src="/worlds/Diving/assets/minecraftsfx.mp3" preload="auto"></audio>
+        <!-- <audio id="divesfx" src="/worlds/Diving/assets/minecraftsfx.mp3" preload="auto"></audio>
         <audio id="music" src="/worlds/Diving/assets/Axolotl.mp3" preload="auto"></audio>
         <audio id="appclick" src="/worlds/Diving/assets/appbutton.mp3" preload="auto"></audio>
         <audio id="menuclick" src="/worlds/Diving/assets/menuclick.mp3" preload="auto"></audio>
-        <audio id="waves" src="/worlds/Diving/assets/moonbeach.mp3" preload="auto"></audio>
+        <audio id="waves" src="/worlds/Diving/assets/moonbeach.mp3" preload="auto"></audio> -->
 
         <!-- Circles' built-in assets [REQUIRED] -->
         <circles-assets/>
@@ -95,14 +95,14 @@
       
         
       <!-- Experiment Objects -->
-      <a-entity gltf-model="#Profile1-gltf" id="rightObject" physics-object="initialPosition: 0 1.9 -9.7; mass: 0.43;" scale="0.6 0.6 0.6" rotation="0 0 90"></a-entity>
+      <a-entity gltf-model="#Profile1-gltf" id="rightObject" physics-object="initialPosition: 0 1.9 -10.196; mass: 0.43;" scale="0.6 0.6 0.6" rotation="0 0 90"></a-entity>
 
       <!-- Control station -->
       <a-entity id="controlStation" geometry="primitive: box; width:5.5; height: 3; depth: 0.15" material="color: #035AF7;" position="0 0.68 -10.5" rotation="-30 180 0" scale="0.4 0.4 0.4">
         <a-entity id="controlStationButtons" rotation="90 0 0">
           <!-- Experiment control buttons -->
           <a-entity id="startButtonGroup" position="0.7 0.1 0.9" scale="1.5 1.5 1.5">
-            <a-entity id="startButton" onclick="startExperiment()" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)" sound="src: #menuclick; on: click"></a-entity>
+            <a-entity id="startButton" onclick="startExperiment()" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)"></a-entity>
             <a-entity id="startText" text="value: SELECT; color: white; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="2.2 2.2 2.2" position="0 0 -0.45" rotation="-90 0 0"></a-entity>
           </a-entity>
 
@@ -113,22 +113,22 @@
 
           <!-- Dive profile selection buttons -->
           <a-entity id="rightObject1ButtonGroup" position="-2.3 0.1 -0.9">
-            <a-entity id="rightObject1Button" onclick="setNewObject('object1', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)"  sound="src: #appclick; on: click"></a-entity>
+            <a-entity id="rightObject1Button" onclick="setNewObject('object1', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)" ></a-entity>
             <a-entity id="rightObject1Text" text="value: Dive Profile 1; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="1.0 0 0.0" rotation="-90 0 0"></a-entity>
           </a-entity>
 
           <a-entity id="rightObject2ButtonGroup" position="-2.3 0.1 0">
-            <a-entity id="rightObject2Button" onclick="setNewObject('object2', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)" sound="src: #appclick; on: click"></a-entity>
+            <a-entity id="rightObject2Button" onclick="setNewObject('object2', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)" ></a-entity>
             <a-entity id="rightObject2Text" text="value: Dive Profile 2; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="1.0 0 0.0" rotation="-90 0 0"></a-entity>
           </a-entity>
 
           <a-entity id="leftObject1ButtonGroup" position="2.3 0.1 -0.9">
-            <a-entity id="leftObject1Button" onclick="setNewObject('object3', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)" sound="src: #appclick; on: click"></a-entity>
+            <a-entity id="leftObject1Button" onclick="setNewObject('object3', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)"></a-entity>
             <a-entity id="leftObject1Text" text="value: Dive Profile 3; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="-1.0 0 0.0" rotation="-90 0 0"></a-entity>
           </a-entity>
 
           <a-entity id="leftObject2ButtonGroup" position="2.3 0.1 0">
-            <a-entity id="leftObject2Button" onclick="setNewObject('object4', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)"  sound="src: #appclick; on: click"></a-entity>
+            <a-entity id="leftObject2Button" onclick="setNewObject('object4', 'right')" circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)" ></a-entity>
             <a-entity id="leftObject2Text" text="value: Dive Profile 4; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="-1.0 0 0.0" rotation="-90 0 0"></a-entity>
           </a-entity>
 
@@ -198,22 +198,22 @@
                             geometry="primitive:plane; width:0.136; height:0.25;"
                             material="src:#TableA_img;"
     
-                            animation__mouseenter="property:scale; to:3.0 3.0 3.0; startEvents:mouseenter; dur:200"
+                            animation__mouseenter="property:scale; to:5 5 5; startEvents:mouseenter; dur:200"
     
                             animation__mouseleave="property:scale; to:1.0 1.0 1.0; startEvents:mouseleave; dur:200">
                           </a-entity>
                         </a-entity>
-        <a-entity timer id="start_dive" visible="false" class="button interactive" geometry="primitive: triangle" material="color: blue" animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 1.0 1.0 1.0; startEvents: mouseleave; dur: 200"  rotation="0 0 180"></a-entity>
+        <a-entity timer id="start_dive" visible="false" class="button interactive" geometry="primitive: triangle" position="-3.685 0 0" material="color: blue" animation__mouseenter="property: scale; to: 0.9 0.9 0.9; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.8 0.8 0.8; startEvents: mouseleave; dur: 200"  rotation="0 0 180"></a-entity>
         
-        <a-entity timer id="down_button" visible="false" class="button" geometry="primitive: triangle" material="color: red" animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 1.0 1.0 1.0; startEvents: mouseleave; dur: 200"  rotation="0 0 180"     sound="src: #divesfx; on: click"></a-entity>
-        <a-entity timer="" id="up_button" visible="false" class="button" geometry="primitive: triangle" material="color: white" animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 1.0 1.0 1.0; startEvents: mouseleave; dur: 200" position="-0.17371 2.55471 0.22084" rotation="" scale="0.8 0.8 0.8"  sound="src: #divesfx; on: click"></a-entity>
-        <a-entity timer="" id="end_button" visible="false" class="button" geometry="primitive: triangle" material="color: yellow" animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 1.0 1.0 1.0; startEvents: mouseleave; dur: 200" position="-0.17371 2.55471 0.22084" rotation="" scale="0.8 0.8 0.8"  sound="src: #divesfx; on: click"></a-entity>
-        <a-entity attach-ui-to-camera="" visible="false" safetyclick id="safety-check" circles-interactive-object visible="" class="button" geometry="primitive: circle" material="color: green" animation__mouseenter="property: scale; to: 0.5 0.4 0.5; startEvents: mouseenter; dur: 200"animation__mouseleave="property: scale; to: 0.4 0.3 0.4; startEvents: mouseleave; dur: 200" position="-0.89371 2.475 0.22084" rotation="" scale="0.4 0.3 0.4"></a-entity>
-         <a-entity attach-ui-to-camera="" id="safety-text" text="value: Safety Check; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="0.5 0.5 0.5" position="-1.55449 2.33039 1.04593" rotation="" visible="false"></a-entity>
+        <a-entity timer id="down_button" visible="false" class="button" geometry="primitive: triangle" material="color: red" position = "-2.131 0 0" animation__mouseenter="property: scale; to: 0.9 0.9 0.9; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.8 0.8 0.8; startEvents: mouseleave; dur: 200"  rotation="0 0 180" ></a-entity>
+        <a-entity timer="" id="up_button" visible="false" class="button" geometry="primitive: triangle" material="color: white" animation__mouseenter="property: scale; to: 0.8 0.8 0.8; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.7 0.7 0.7; startEvents: mouseleave; dur: 200" position="-4.849 0.2 0.221" rotation="" scale="0.7 0.7 0.7" ></a-entity>
+        <a-entity timer="" id="end_button" visible="false" class="button interactive" geometry="primitive: triangle" material="color: yellow" animation__mouseenter="property: scale; to: 0.8 0.8 0.8; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.7 0.7 0.7; startEvents: mouseleave; dur: 200" position="-4.849 0.2 0.221" rotation="" scale="0.7 0.7 0.7"></a-entity>
+        <a-entity attach-ui-to-camera="" visible="false" safetyclick="" id="safety-check" circles-interactive-object="" class="button interactive" geometry="primitive: circle" material="color: green" animation__mouseenter="property: scale; to: 0.3 0.25 0.3; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.25 0.2 0.25; startEvents: mouseleave; dur: 200" position="-2.63659 1.35127 1.10889" rotation="" scale="0.25 0.2 0.25" circles-material-extend-fresnel="fresnelOpacity: 0; fresnelPow: 2" sound="volume: 0.5" animation__highlightanim="property: circles-material-extend-fresnel.fresnelOpacity; to: 0; dur: 100"></a-entity>
+         <a-entity attach-ui-to-camera="" id="safety-text" text="value: Safety Check; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="0.5 0.5 0.5"  position="-2.63659 1.35127 1.10889" rotation="" visible="false"></a-entity>
 
         <a-entity attach-ui-to-camera="" id="Time Title" text="value: Timer:; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="" position="-1.74595 3.74345 0.7298" rotation="" visible=""></a-entity>
-         <a-entity  attach-ui-to-camera="" id="start_text" text="value: click here to start dive; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font:sourcecodepro; negate: false; lineHeight: 60" scale="1 1 1" position="-0.25449 0.71217 0.18593" rotation="" visible="false"></a-entity> 
-        <a-entity  attach-ui-to-camera="" id="timer" text="value: 0; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font:sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="-0.25449 4.12623 0.18593" rotation="" visible="" timer=""></a-entity>
+        <a-entity attach-ui-to-camera="" id="start_text" text="value: click here to start dive; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="" position="-3.47283 0.71217 0.18593" rotation="" visible="false"></a-entity>
+          <a-entity  attach-ui-to-camera="" id="timer" text="value: 0; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font:sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="-0.25449 4.12623 0.18593" rotation="" visible="" timer=""></a-entity>
         
 
       <!-- END SCREEN -->
@@ -231,8 +231,8 @@
     </a-entity>
 
 
-      <a-entity  attach-ui-to-camera="" id="end_text" text="value: Click up to end the dive; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font:sourcecodepro; negate: false; lineHeight: 60" scale="1.2 1.2 1.2" position="-0.25449 1.862 0.18593" rotation="" visible="false"></a-entity> 
-      <a-entity timer="" id="end_bg" visible="false" geometry="primitive: plane" material="color: black; opacity: 0.9" position="-3.41324 1.65556 0.22084" rotation="" scale="5.18042 3.86279 0.8"></a-entity>
+    <a-entity attach-ui-to-camera="" id="end_text" text="value: Click up to end the dive; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="0.4 0.4 0.4" position="-3.48731 1.14126 1.8635" rotation="" visible="false"></a-entity>
+    <a-entity timer="" id="end_bg" visible="false" geometry="primitive: plane" material="color: black; opacity: 0.9" position="-3.41324 1.65556 0.22084" rotation="" scale="5.18042 3.86279 0.8"></a-entity>
             
       
       
