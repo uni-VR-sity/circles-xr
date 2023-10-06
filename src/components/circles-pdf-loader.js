@@ -362,5 +362,18 @@ AFRAME.registerComponent("circles-pdf-loader", {
                 });
             });
         }
+    },
+    remove: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // Removing controllers
+        var controllers = element.querySelector('#pdf_controls_wrapper');
+        
+        if (controllers)
+        {
+            controllers.remove();
+        }
     }
 });
