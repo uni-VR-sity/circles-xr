@@ -104,7 +104,7 @@
     }
   ],
   "asset": {
-    "generator": "Adobe Substance 3D Painter 7.4.1",
+    "generator": "Adobe Substance 3D Painter 7.4.2",
     "version": "2.0"
   },
   "bufferViews": [
@@ -188,37 +188,37 @@
   ],
   "images": [
     {
-      "uri": "initialShadingGroup_baseColor.png"
+      "uri": "drum-hide_baseColor.jpg"
     },
     {
-      "uri": "initialShadingGroup_occlusionRoughnessMetallic.png"
+      "uri": "drum-hide_occlusionRoughnessMetallic.jpg"
     },
     {
-      "uri": "initialShadingGroup_normal.png"
+      "uri": "drum-hide_normal.jpg"
     },
     {
-      "uri": "lambert2SG_baseColor.png"
+      "uri": "drum-hide-rope_baseColor.jpg"
     },
     {
-      "uri": "lambert2SG_occlusionRoughnessMetallic.png"
+      "uri": "drum-hide-rope_occlusionRoughnessMetallic.jpg"
     },
     {
-      "uri": "lambert2SG_normal.png"
+      "uri": "drum-hide-rope_normal.jpg"
     },
     {
-      "uri": "lambert6SG_baseColor.png"
+      "uri": "drum-wood_baseColor.jpg"
     },
     {
-      "uri": "lambert6SG_occlusionRoughnessMetallic.png"
+      "uri": "drum-wood_occlusionRoughnessMetallic.jpg"
     },
     {
-      "uri": "lambert6SG_normal.png"
+      "uri": "drum-wood_normal.jpg"
     }
   ],
   "materials": [
     {
       "alphaMode": "OPAQUE",
-      "name": "initialShadingGroup",
+      "name": "drum-hide",
       "normalTexture": {
         "index": 2
       },
@@ -236,7 +236,7 @@
     },
     {
       "alphaMode": "OPAQUE",
-      "name": "lambert2SG",
+      "name": "drum-hide-rope",
       "normalTexture": {
         "index": 5
       },
@@ -254,7 +254,7 @@
     },
     {
       "alphaMode": "OPAQUE",
-      "name": "lambert6SG",
+      "name": "drum-wood",
       "normalTexture": {
         "index": 8
       },
@@ -282,7 +282,7 @@
             "TEXCOORD_0": 3
           },
           "indices": 0,
-          "material": 2,
+          "material": 1,
           "mode": 4
         }
       ]
@@ -297,7 +297,7 @@
             "TEXCOORD_0": 7
           },
           "indices": 4,
-          "material": 0,
+          "material": 2,
           "mode": 4
         }
       ]
@@ -312,7 +312,7 @@
             "TEXCOORD_0": 11
           },
           "indices": 8,
-          "material": 1,
+          "material": 0,
           "mode": 4
         }
       ]
