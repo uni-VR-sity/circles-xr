@@ -322,7 +322,12 @@ AFRAME.registerComponent("circles-pdf-loader", {
                     if (CONTEXT_AF.mesh)
                     {
                         CONTEXT_AF.el.getObject3D('mesh').geometry.dispose();
-                        CONTEXT_AF.el.getObject3D('mesh').material.map.dispose();
+
+                        if (CONTEXT_AF.el.getObject3D('mesh').material.map)
+                        {
+                            CONTEXT_AF.el.getObject3D('mesh').material.map.dispose();
+                        }
+
                         CONTEXT_AF.el.getObject3D('mesh').material.dispose();
                     }
 
@@ -356,6 +361,19 @@ AFRAME.registerComponent("circles-pdf-loader", {
                     CONTEXT_AF.pageRendering = false;
                 });
             });
+        }
+    },
+    remove: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // Removing controllers
+        var controllers = element.querySelector('#pdf_controls_wrapper');
+        
+        if (controllers)
+        {
+            controllers.remove();
         }
     }
 });

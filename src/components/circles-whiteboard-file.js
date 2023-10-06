@@ -501,9 +501,16 @@ AFRAME.registerComponent('circles-whiteboard-file',
             // If file is selected, other users can not interact with it
             CONTEXT_AF.socket.on(CONTEXT_AF.fileSelectedEvent, function(data)
             {
-                if (data.elementID === CONTEXT_AF.elementID && !element.querySelector('#selected-by-user'))
+                if (data.elementID === CONTEXT_AF.elementID && !element.querySelector('#selected-by-user') && !CONTEXT_AF.networkSelected)
                 {
                     CONTEXT_AF.networkSelected = true;
+
+                    if (CONTEXT_AF.data.category === 'application')
+                    {
+                        // Disabling pdf
+                        element.removeAttribute('circles-pdf-loader');
+                        element.removeAttribute('material');
+                    }
 
                     // Visual indication that file is selected
                     element.setAttribute('material', {color: '#949494'});
@@ -532,15 +539,22 @@ AFRAME.registerComponent('circles-whiteboard-file',
 
             });
 
-            // Listening for networking events to select files
+            // Listening for networking events to unselect files
             CONTEXT_AF.socket.on(CONTEXT_AF.fileUnselectedEvent, function(data) 
             {
-                if (data.elementID === CONTEXT_AF.elementID)
+                if (data.elementID === CONTEXT_AF.elementID && CONTEXT_AF.networkSelected)
                 {
+                    if (CONTEXT_AF.data.category === 'application')
+                    {
+                        displayPDF(CONTEXT_AF.data, element, CONTEXT_AF.dimensions.width, CONTEXT_AF);
+                    }
+                    else
+                    {
+                        element.setAttribute('material', {color: '#FFFFFF'});
+                    }
+
                     // Removing visuals of selection
                     CONTEXT_AF.networkSelected = false;
-
-                    element.setAttribute('material', {color: '#FFFFFF'});
 
                     var selectedText = element.querySelector('#selected-by-user');
 
