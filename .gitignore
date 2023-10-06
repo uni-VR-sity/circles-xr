@@ -18,6 +18,12 @@
 # Ignore compiled worlds
 node_server/public/worlds
 
+# Ignore uploaded files
+node_server/uploads
+
+# Ignore uploaded files
+node_server/whiteboardFiles
+
 =======
 # ignore vscode
 .vscode
