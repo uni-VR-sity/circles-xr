@@ -322,7 +322,12 @@ AFRAME.registerComponent("circles-pdf-loader", {
                     if (CONTEXT_AF.mesh)
                     {
                         CONTEXT_AF.el.getObject3D('mesh').geometry.dispose();
-                        CONTEXT_AF.el.getObject3D('mesh').material.map.dispose();
+
+                        if (CONTEXT_AF.el.getObject3D('mesh').material.map)
+                        {
+                            CONTEXT_AF.el.getObject3D('mesh').material.map.dispose();
+                        }
+
                         CONTEXT_AF.el.getObject3D('mesh').material.dispose();
                     }
 

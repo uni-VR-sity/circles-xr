@@ -1455,7 +1455,6 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
 
                 // Getting information about where the user is to display pop up (for its position)
                 var user = document.querySelector('[camera]');
-
                 var position = new THREE.Vector3();
                 user.querySelector('.UI-position').object3D.getWorldPosition(position);
 

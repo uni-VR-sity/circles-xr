@@ -505,6 +505,14 @@ AFRAME.registerComponent('circles-whiteboard-file',
                 {
                     CONTEXT_AF.networkSelected = true;
 
+                    if (CONTEXT_AF.data.category === 'application')
+                    {
+                        // Disabling pdf
+                        element.setAttribute('circles-pdf-loader', {
+                            src: '',
+                        });
+                    }
+
                     // Visual indication that file is selected
                     element.setAttribute('material', {color: '#949494'});
 
@@ -532,15 +540,25 @@ AFRAME.registerComponent('circles-whiteboard-file',
 
             });
 
-            // Listening for networking events to select files
+            // Listening for networking events to unselect files
             CONTEXT_AF.socket.on(CONTEXT_AF.fileUnselectedEvent, function(data) 
             {
                 if (data.elementID === CONTEXT_AF.elementID)
                 {
+                    if (CONTEXT_AF.data.category === 'application')
+                    {
+                        // Enabling pdf
+                        element.setAttribute('circles-pdf-loader', {
+                            src: '/whiteboard-file/' + CONTEXT_AF.data.asset,
+                        });
+                    }
+                    else
+                    {
+                        element.setAttribute('material', {color: '#FFFFFF'});
+                    }
+
                     // Removing visuals of selection
                     CONTEXT_AF.networkSelected = false;
-
-                    element.setAttribute('material', {color: '#FFFFFF'});
 
                     var selectedText = element.querySelector('#selected-by-user');
 
