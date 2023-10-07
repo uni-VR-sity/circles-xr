@@ -355,17 +355,17 @@ div.grid2col {
     display: table;
   }
 
-.horizontal-arrow:has(#left-arrow)
+.horizontal-left-arrow
 {
     float: left;
 }
 
-.horizontal-arrow:has(#right-arrow)
+.horizontal-right-arrow
 {
     float: right;
 }
 
-.vertical-arrow i, .horizontal-arrow i
+.vertical-arrow i, .horizontal-left-arrow i, .horizontal-right-arrow i
 {
     font-size: 75px;
     -webkit-user-select: none;
@@ -374,7 +374,7 @@ div.grid2col {
     color:#00000080;
 }
 
-.vertical-arrow i:hover, .horizontal-arrow i:hover
+.vertical-arrow i:hover, .horizontal-left-arrow i:hover, .horizontal-right-arrow i:hover
 {
     color:#000000b1;
 }

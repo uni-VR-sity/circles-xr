@@ -99,7 +99,7 @@ const arrowUI = function()
 
                 // Left arrow container
                 var leftContainer = document.createElement('div');
-                leftContainer.setAttribute('class', 'horizontal-arrow');
+                leftContainer.setAttribute('class', 'horizontal-left-arrow');
 
                     // Left arrow
                     var leftArrow = document.createElement('i');
@@ -112,7 +112,7 @@ const arrowUI = function()
 
                 // Right arrow container
                 var rightContainer = document.createElement('div');
-                rightContainer.setAttribute('class', 'horizontal-arrow');
+                rightContainer.setAttribute('class', 'horizontal-right-arrow');
 
                     // Right arrow
                     var rightArrow = document.createElement('i');

@@ -108,30 +108,14 @@ const uploadWhiteboardAssets = function()
     // Upload symbol
     var upload = document.createElement('img');
     upload.setAttribute('id', 'upload_symbol');
-    upload.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/arrow-up-from-bracket-solid.svg');
+    upload.setAttribute('src', '/global/assets/textures/icons/icon-upload.png');
 
     assetManager.appendChild(upload);
-
-    /*
-    // Draw symbol
-    var draw = document.createElement('img');
-    draw.setAttribute('id', 'draw_symbol');
-    draw.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/pencil-solid.svg');
-
-    assetManager.appendChild(draw);
-
-    // Message symbol
-    var message = document.createElement('img');
-    message.setAttribute('id', 'message_symbol');
-    message.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/comments-solid.svg');
-
-    assetManager.appendChild(message);
-    */
 
     // Trash symbol
     var trash = document.createElement('img');
     trash.setAttribute('id', 'trash_symbol');
-    trash.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/trash-solid.svg');
+    trash.setAttribute('src', '/global/assets/textures/icons/icon-trash.png');
 
     assetManager.appendChild(trash);
 }
@@ -169,6 +153,8 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
         uploadButton.setAttribute('material', {
             src: '#upload_symbol',
             transparent: true,
+            shader: 'flat',
+            color: '#000000',
         }); 
     }
     else if (canUpload && maxUploadReached)
@@ -222,80 +208,6 @@ const generateUpload = function(whiteboardElement, parentElement, height, width,
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Creating message button in the middle of controller base
-// Takes the controller base (parentElement), and its dimensions
-const generateMessage = function(parentElement, height, width, depth)
-{
-    var messageButton = document.createElement('a-entity');
-    messageButton.setAttribute('class', 'message-button interactive');
-
-    // Position: Base is split into 3 sections (for 3 symbols)
-    //           Message symbol is in the middle
-    //           Therefore it is at (0,0)
-
-    messageButton.setAttribute('position', {
-        x: 0,
-        y: 0,
-        z: (depth / 2) + 0.001,
-    });
-
-    // Dimensions: Symbols are 0.3 times the width of the base
-    messageButton.setAttribute('geometry', {
-        primitive: 'plane',
-        height: width / 3,
-        width: width / 3,
-    }); 
-
-    messageButton.setAttribute('material', {
-        src: '#message_symbol',
-        transparent: true,
-    }); 
-
-    parentElement.appendChild(messageButton); 
-
-    // Adding effect when hovered
-    messageButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Creating draw button at the bottom of controller base
-// Takes the controller base (parentElement), and its dimensions
-const generateDraw = function(parentElement, height, width, depth)
-{
-    var drawButton = document.createElement('a-entity');
-    drawButton.setAttribute('class', 'draw-button interactive');
-
-    // Position: Base is split into 3 sections (for 3 symbols)
-    //           Draw symbol is at the bottom
-    //           Therefore it is a section height down from the middle
-
-    drawButton.setAttribute('position', {
-        x: 0,
-        y: - (height / 3),
-        z: (depth / 2) + 0.001,
-    });
-
-    // Dimensions: Symbols are 0.3 times the width of the base
-    drawButton.setAttribute('geometry', {
-        primitive: 'plane',
-        height: width / 3,
-        width: width / 3,
-    }); 
-
-    drawButton.setAttribute('material', {
-        src: '#draw_symbol',
-        transparent: true,
-    }); 
-
-    parentElement.appendChild(drawButton); 
-
-    // Adding effect when hovered
-    drawButton.setAttribute('circles-interactive-object', {type:'scale', hover_scale: 1.15});
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
 // Creating trash button at the bottom of controller base
 // Takes the controller base (parentElement), and its dimensions
 const generateTrash = function(parentElement, height, width, depth, whiteboard, CONTEXT_AF)
@@ -323,7 +235,8 @@ const generateTrash = function(parentElement, height, width, depth, whiteboard, 
     trashButton.setAttribute('material', {
         src: '#trash_symbol',
         transparent: true,
-        emissive: '#c70000',
+        shader: 'flat',
+        color: '#c70000',
     }); 
 
     parentElement.appendChild(trashButton); 

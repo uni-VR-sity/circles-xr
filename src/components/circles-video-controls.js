@@ -17,7 +17,7 @@ const uploadVideoAssets = function()
     {
         var pause = document.createElement('img');
         pause.setAttribute('id', 'pause_symbol');
-        pause.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/pause.svg');
+        pause.setAttribute('src', '/global/assets/textures/icons/icon-pause.png');
 
         assetManager.appendChild(pause);
     }
@@ -27,7 +27,7 @@ const uploadVideoAssets = function()
     {
         var play = document.createElement('img');
         play.setAttribute('id', 'play_symbol');
-        play.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/play.svg');
+        play.setAttribute('src', '/global/assets/textures/icons/icon-play.png');
     
         assetManager.appendChild(play);
     }
@@ -37,7 +37,7 @@ const uploadVideoAssets = function()
     {
         var forward = document.createElement('img');
         forward.setAttribute('id', 'fast-forward_symbol');
-        forward.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/forward-step.svg');
+        forward.setAttribute('src', '/global/assets/textures/icons/icon-skipForward.png');
 
         assetManager.appendChild(forward);
     }
@@ -47,7 +47,7 @@ const uploadVideoAssets = function()
     {
         var rewind = document.createElement('img');
         rewind.setAttribute('id', 'rewind_symbol');
-        rewind.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/backward-step.svg');
+        rewind.setAttribute('src', '/global/assets/textures/icons/icon-skipBakwards.png');
     
         assetManager.appendChild(rewind);
     }
@@ -57,7 +57,7 @@ const uploadVideoAssets = function()
     {
         var soundOn = document.createElement('img');
         soundOn.setAttribute('id', 'sound-on_symbol');
-        soundOn.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-high.svg');
+        soundOn.setAttribute('src', '/global/assets/textures/icons/icon-sound.png');
     
         assetManager.appendChild(soundOn);
     }
@@ -67,7 +67,7 @@ const uploadVideoAssets = function()
     {
         var soundOff = document.createElement('img');
         soundOff.setAttribute('id', 'sound-off_symbol');
-        soundOff.setAttribute('src', '/global/assets/textures/icons/font_awesome_icons/volume-off.svg');
+        soundOff.setAttribute('src', '/global/assets/textures/icons/icon-muted.png');
     
         assetManager.appendChild(soundOff);
     }
@@ -78,7 +78,7 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
 {
     // Getting button height, width and position depending on type
     var height = controllerWidth / 6;
-    var width = controllerWidth / 8;
+    var width = controllerWidth / 6;
     var position = {x:0, y:0};
 
         // Setting button y position depending on video dimensions (should be just above the bar)
@@ -93,11 +93,11 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
 
                 if (type === 'sound-on')
                 {
-                    position.x = controllerWidth / 2.5;
+                    position.x = controllerWidth / 2.6;
                 }
                 else
                 {
-                    position.x = controllerWidth / 2.7;
+                    position.x = controllerWidth / 2.825;
                 }
             }
             else
@@ -118,7 +118,7 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
                 }
                 else
                 {
-                    position.x = controllerWidth / 3;
+                    position.x = controllerWidth / 3.075;
                 }
             }
             else
@@ -135,11 +135,11 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
 
                 if (type === 'sound-on')
                 {
-                    position.x = controllerWidth / 2.7;
+                    position.x = controllerWidth / 2.6;
                 }
                 else
                 {
-                    position.x = controllerWidth / 2.9;
+                    position.x = controllerWidth / 2.825;
                 }
             }
             else
@@ -159,13 +159,13 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
             break;
 
         case 'sound-on':
-            height = controllerWidth / 12;
-            width = controllerWidth / 9;
+            height = controllerWidth / 10;
+            width = controllerWidth / 8.5;
             break;
 
         case 'sound-off':
             height = controllerWidth / 12;
-            width = controllerWidth / 18;
+            width = controllerWidth / 10;
             break;
     }
 
@@ -189,6 +189,7 @@ const createButton = function(type, controllerWidth, controllerHeight, controlsD
         transparent: true,
         alphaTest: 0.1,
         shader: 'flat',
+        color: '#FFFFFF',
     }); 
 
     // Hover effect
