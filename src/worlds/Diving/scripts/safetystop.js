@@ -25,6 +25,8 @@ AFRAME.registerComponent('safetyclick', {
             //console.log("add minute now:",   window['addminute'] );
          
             final_safetytext.setAttribute("text", "value", "Yes");
+
+            updateRaycaster();
          
 
 

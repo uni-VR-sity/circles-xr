@@ -136,8 +136,8 @@
 
         <a-entity id="controlStationUI" position="0 0 0.1" rotation="90 0 0">
           <!-- Control panel label -->
-          <a-entity class="controlLabel" position="0 -0.2 -0.75" rotation="90 90 -90" scale="7 7 7" text="value:Control; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; font: /worlds/KIN_ShootAndDrop/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60"></a-entity>
-          <a-entity class="panelLabel" position="0 -0.2 0.2" rotation="90 90 -90" scale="7 7 7" text="value:Panel; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; font: /worlds/KIN_ShootAndDrop/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60"></a-entity>
+          <a-entity class="controlLabel" position="0 -0.2 -0.75" rotation="90 90 -90" scale="7 7 7" text="value:Control; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43;  negate: false; lineHeight: 60"></a-entity>
+          <a-entity class="panelLabel" position="0 -0.2 0.2" rotation="90 90 -90" scale="7 7 7" text="value:Panel; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43;  negate: false; lineHeight: 60"></a-entity>
 
         </a-entity>
       </a-entity>
@@ -189,18 +189,28 @@
 
      
 
-      <!-- BUTTON UP AND DOWN UI -->
+      <!-- BUTTON UP AND DOWN UI 
+      animation__mouseleave__2="property:position; to:-0.65 1.6 -0.5; startEvents:mouseleave; dur:200">
+     animation__mouseenter__2="property:position; to:0.023 1.6 -0.483; startEvents:mouseenter; dur:200"
+    
+      
+      -->
     
       <a-entity id="custom_ui" position="0.71901 1.28191 -0.59158" scale="0.20618 0.17248 0.17248" attach-ui-to-camera="">
         <a-entity id="table_ui" attach-ui-to-camera scale="2 2 2" position="-3.46 -1.46 2.75">
-          <a-entity id="tableA_button" position="-0.65 1.6 -0.5"  
+          <a-entity id="divetable_button" divetable position="-0.624 1.6 -1"  
                             class="button interactive" 
                             geometry="primitive:plane; width:0.136; height:0.25;"
                             material="src:#TableA_img;"
-    
-                            animation__mouseenter="property:scale; to:5 5 5; startEvents:mouseenter; dur:200"
-    
-                            animation__mouseleave="property:scale; to:1.0 1.0 1.0; startEvents:mouseleave; dur:200">
+
+                            animation__mouseenter="property:scale; to:7 7 7; startEvents:mouseenter; dur:200"
+                            
+
+                            animation__mouseleave="property:scale; to:1.0 1.0 1.0; startEvents:mouseleave; dur:200"
+                            
+                        >
+
+                        
                           </a-entity>
                         </a-entity>
         <a-entity timer id="start_dive" visible="false" class="button interactive" geometry="primitive: triangle" position="-3.685 0 0" material="color: blue" animation__mouseenter="property: scale; to: 0.9 0.9 0.9; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.8 0.8 0.8; startEvents: mouseleave; dur: 200"  rotation="0 0 180"></a-entity>
@@ -211,9 +221,9 @@
         <a-entity attach-ui-to-camera="" visible="false" safetyclick="" id="safety-check" circles-interactive-object="" class="button interactive" geometry="primitive: circle" material="color: green" animation__mouseenter="property: scale; to: 0.3 0.25 0.3; startEvents: mouseenter; dur: 200" animation__mouseleave="property: scale; to: 0.25 0.2 0.25; startEvents: mouseleave; dur: 200" position="-2.63659 1.35127 1.10889" rotation="" scale="0.25 0.2 0.25" circles-material-extend-fresnel="fresnelOpacity: 0; fresnelPow: 2" sound="volume: 0.5" animation__highlightanim="property: circles-material-extend-fresnel.fresnelOpacity; to: 0; dur: 100"></a-entity>
          <a-entity attach-ui-to-camera="" id="safety-text" text="value: Safety Check; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="0.5 0.5 0.5"  position="-2.63659 1.35127 1.10889" rotation="" visible="false"></a-entity>
 
-        <a-entity attach-ui-to-camera="" id="Time Title" text="value: Timer:; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="" position="-1.74595 3.74345 0.7298" rotation="" visible=""></a-entity>
+        <a-entity attach-ui-to-camera="" id="Time Title" text="value: Timer:; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="" position="-4.2 3.6 0.73" rotation="" visible=""></a-entity>
         <a-entity attach-ui-to-camera="" id="start_text" text="value: click here to start dive; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font: sourcecodepro; negate: false; lineHeight: 60" scale="" position="-3.47283 0.71217 0.18593" rotation="" visible="false"></a-entity>
-          <a-entity  attach-ui-to-camera="" id="timer" text="value: 0; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font:sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="-0.25449 4.12623 0.18593" rotation="" visible="" timer=""></a-entity>
+          <a-entity  attach-ui-to-camera="" id="timer" text="value: 0; color: white; width: 2; wrapCount: 30; align: center; tabSize: 4.43; font:sourcecodepro; negate: false; lineHeight: 60" scale="1.5 1.5 1.5" position="-3.16 4 0.09" rotation="" visible="" timer=""></a-entity>
         
 
       <!-- END SCREEN -->
