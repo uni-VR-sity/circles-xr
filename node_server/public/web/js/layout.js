@@ -6,7 +6,7 @@ var previousWindowWidth = window.innerWidth;
 window.addEventListener('resize', function(event)
 {
     // Change from mobile width to tablet width
-    if (previousWindowWidth < 650 && window.innerWidth >= 650)
+    if (previousWindowWidth < 750 && window.innerWidth >= 750)
     {
         document.getElementsByTagName('nav')[0].removeAttribute('style');
         document.getElementsByClassName('nav-items-container')[0].removeAttribute('style');

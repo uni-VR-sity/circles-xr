@@ -119,10 +119,30 @@ router.get('/logout', authenticated, (req, res, next) => {
   });
 });
 
+// DELETE ----------------------------------------------------------------------------------------------------------------------------
 router.get('/template', function(req, res, next) {
+  var user = req.user;
+
+  const userInfo = {
+    username: user.username,
+    usertype: user.usertype,
+    email: user.email,
+    displayName: user.displayName,
+    headUrl: user.gltf_head_url,
+    hairUrl: user.gltf_hair_url,
+    bodyUrl: user.gltf_body_url,
+    headColor: user.color_head,
+    hairColor: user.color_hair,
+    bodyColor: user.color_body,
+    handLeftColor: user.color_hand_left,
+    handRightColor: user.color_hand_right,
+  }
+
   res.render(path.resolve(__dirname + '/../public/web/views/template'), {
+    userInfo: userInfo,
   });
 });
+// DELETE ----------------------------------------------------------------------------------------------------------------------------
 
 router.post('/update-session-name', authenticated, controller.updateSessionName);
 router.post('/get-user-info', authenticated, controller.getUser);
