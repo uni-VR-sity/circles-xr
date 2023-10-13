@@ -1,0 +1,305 @@
+/* Body *************************************************************************************************************************************************/
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation Bar ***************************************************************************************************************************************/
+
+/* DEFAULT *****************************************************************/
+
+/* Nav bar */
+nav {
+    background-color: var(--WHITE);
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    grid-template-areas: "nav-logo nav-items nav-profile";
+}
+
+/* Logo */
+.logo-container {
+    grid-area: nav-logo;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    padding: 0 30px;
+}
+
+.logo-container a {
+    width: 125px;
+}
+
+/* Hamburger icon */
+.nav-hamburger {
+    grid-area: nav-hamburger;
+    display: none;
+}
+
+/* Nav items */
+.nav-items-container {
+    grid-area: nav-items;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-items li {
+    display: inline-block;
+    background-color: var(--WHITE);
+}
+
+.nav-items li:hover {
+    background-color: var(--LIGHT_GREY);
+    cursor: pointer;
+}
+
+.nav-items li a {
+    display: inline-block;
+    text-decoration: none;
+    line-height: var(--DEFAULT_NAV_HEIGHT);
+    padding: 0 50px;
+    color: var(--BLACK);
+}
+
+/* Profile */
+.profile-container {
+    grid-area: nav-profile;
+    justify-self: end;
+    position: relative;
+}
+
+.profile-information {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0 50px 0 35px;
+    margin: 0;
+}
+
+.profile-container:hover {
+    background-color: var(--LIGHT_GREY);
+    cursor: pointer;
+}
+
+.profile-container:hover .profile-dropdown {
+    display: block;
+}
+
+.profile-container .icon-container {
+    margin-right: 17px;
+}
+
+.profile-container .icon-container i {
+    font-size: 25px;
+}
+
+.profile-container .username {
+    margin: 0;
+    display: inline-block;
+}
+
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    min-width: 100%;
+    z-index: 1;
+    background-color: var(--WHITE);
+    display: none;
+    box-shadow: 0px 8px 15px 0px rgba(0,0,0,0.1);
+}
+
+.profile-dropdown ul {
+    list-style: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-dropdown li:hover {
+    background-color: var(--LIGHT_GREY);
+}
+
+.profile-dropdown a {
+    display: block;
+    padding: 15px 35px;
+    text-decoration: none;
+    color: var(--BLACK);
+    text-wrap: nowrap;
+}
+
+.profile-dropdown a.red {
+    color: var(--RED);
+}
+
+/* TABLET ******************************************************************/
+@media only screen and (max-width: 950px) 
+{   
+    /* Nav bar */
+    nav {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "nav-logo nav-profile"
+                             "nav-items nav-items";
+    }
+
+    /* Logo */
+    .logo-container {
+        padding: 10px 30px;
+    }
+
+    /* Nav items */
+    .nav-items-container, .nav-items-container li{
+        background-color: var(--LIGHT_GREY);
+    }
+
+    .nav-items-container li:hover{
+        background-color: var(--GREY);
+    }
+
+    .nav-items li a {
+        padding: 0px 60px;
+        line-height: var(--TABLET_NAV_HEIGHT);
+    }
+
+    /* Profile */
+    .profile-information {
+        padding: 0 45px 0 35px;
+    }
+    
+    .profile-dropdown a {
+        padding: 15px 32px;
+    }
+}
+
+/* MOBILE ******************************************************************/
+@media only screen and (max-width: 650px) 
+{   
+    /* Nav bar */
+    nav {
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas: "nav-logo nav-hamburger"
+                             "nav-items nav-items"
+                             "nav-profile nav-profile";
+    }
+
+    /* Logo */
+    .logo-container {
+
+        padding: 10px 20px;
+    }
+
+    .logo-container a {
+        width: 125px;
+    }
+
+    /* Hamburger icon */
+    .nav-hamburger {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-self: end;
+        padding: 0 25px;
+        margin: 0;
+    }
+
+    .nav-hamburger i {
+        font-size: 26px;
+    }
+
+    /* Nav items */
+    .nav-items-container {
+        display: none;
+    }
+
+    .nav-items {
+        width: 100%;
+    }
+
+    .nav-items li {
+        display: block;
+        background-color: var(--WHITE);
+        padding-left: 65px;
+        font-size: 15px;
+    }
+
+    .nav-items li:hover {
+        background-color: var(--LIGHT_GREY);
+    }
+
+    .nav-items li a {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: var(--MOBILE_NAV_HEIGHT);
+    }
+
+    /* Profile */
+    .profile-container {
+        width: 100%;
+        position: static;
+        display: none;
+    }
+
+    .profile-container:hover {
+        background-color: var(--GREY);
+        cursor: default;
+    }
+
+    .profile-information {
+        background-color: var(--LIGHT_GREY);
+        justify-content: start;
+        padding: 0 28px;
+        height: auto;
+    }
+
+    .profile-container .username {
+        line-height: calc(var(--MOBILE_NAV_HEIGHT) - 2px);
+    }
+
+    .profile-container .icon-container i {
+        font-size: 22.5px;
+    }
+
+    .profile-dropdown {
+        position: static;
+        width: 100%;
+        display: block;
+    }
+
+    .profile-dropdown li {
+        background-color: var(--WHITE);
+        padding-left: 65px;
+        font-size: 15px;
+    }
+
+    .profile-dropdown li:hover {
+        background-color: var(--LIGHT_GREY);
+    }
+
+    .profile-dropdown a {
+        padding: 0;
+        width: 100%;
+        line-height: var(--MOBILE_NAV_HEIGHT);
+    }
+}
+
+/* Page sections ****************************************************************************************************************************************/
+
+section {
+    width: 100%;
+    margin: 0;
+}
+
+.content-container {
+    max-width: var(--MAX_CONTENT_WIDTH);
+    margin: 0 auto;
+}

@@ -1,0 +1,72 @@
+/* Session information *******************************************/
+
+.session-information-container .content-container {
+    background-color: plum;
+    height: 200px;
+    /***/
+}
+
+/* Circles *******************************************************/
+
+.circles-top-bar-container {
+    background-color: gray;
+    width: 100%;
+}
+
+/* COMPUTER */
+.circles-top-bar {
+    max-width: var(--MAX_CONTENT_WIDTH);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: "circles-tabs circles-tabs circles-tabs circles-search";
+}
+
+/* TABLET / MOBILE */
+@media only screen and (max-width: 900px) 
+{   
+    .circles-top-bar {
+        grid-template-areas: "circles-tabs circles-tabs circles-tabs circles-tabs"
+                             "circles-search circles-search circles-search circles-search";
+    }
+}
+
+.circles-tabs {
+    grid-area: circles-tabs;
+    background-color: lightsteelblue;
+    height: 75px;
+    /***/
+}
+
+.circles-search-bar {
+    grid-area: circles-search;
+    background-color: lightgreen;
+    height: 75px;
+    /***/
+}
+
+.circles-groups .content-container {
+    background-color: lightyellow;
+    height: 75px;
+    /***/
+}
+
+.circles-display .content-container {
+    background-color: lightsalmon;
+    height: 500px;
+    /***/
+}
+
+.circles-page-selector .content-container {
+    background-color: lightblue;
+    height: 50px;
+    /***/
+}
+
+/* Magic links ***************************************************/
+
+.magic-links-container .content-container {
+    background-color: lightcoral;
+    height: 500px;
+    /***/
+}

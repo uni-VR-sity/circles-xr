@@ -107,7 +107,7 @@ const invalidAddress = function(req, res, next)
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering the register user page with a specific message to the user about their registration (ex. error messages, success messages)
-const renderRegister = (req, res, next) =>
+const renderRegister = (res, renderMessage) =>
 {
     res.render(path.resolve(__dirname + '/../public/web/views/register'), {
       title: `Register for Circles`,

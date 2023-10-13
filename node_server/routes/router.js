@@ -119,6 +119,11 @@ router.get('/logout', authenticated, (req, res, next) => {
   });
 });
 
+router.get('/template', function(req, res, next) {
+  res.render(path.resolve(__dirname + '/../public/web/views/template'), {
+  });
+});
+
 router.post('/update-session-name', authenticated, controller.updateSessionName);
 router.post('/get-user-info', authenticated, controller.getUser);
 

@@ -1,0 +1,64 @@
+html
+
+  head
+
+    title CIRCLES - #{title}
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+    block stylesheets
+        link(rel='stylesheet' type='text/css' href='/web/css/constants.css')
+        link(rel='stylesheet' type='text/css' href='/web/css/layout.css')
+        link(rel='stylesheet' type='text/css' href='/web/css/general.css')
+        link(rel='stylesheet' type='text/css' href='/web/css/views/explore.css')
+
+    block scripts
+        script(src='/web/js/layout.js')
+        script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+  body
+    
+    // Navigation bar -----------------------------------------------------------------------
+    include includes/navigation-bar
+
+    // Page content -------------------------------------------------------------------------
+    main
+
+        //h1 heading 1
+        //h2 heading 2
+        //h3 heading 3
+        //h4 heading 4
+        //h5 heading 5
+        //h6 heading 6
+
+        // Session information --------------------------------------------------------------
+        section.session-information-container
+            .content-container
+
+        // Circles --------------------------------------------------------------------------
+        section.circles-container
+
+            // Top bar ----------------------------------------------------------------------
+            .circles-top-bar-container
+                .circles-top-bar
+
+                    // Tabs -----------------------------------------------------------------
+                    .circles-tabs
+
+                    // Search bar -----------------------------------------------------------
+                    .circles-search-bar
+
+            // Group selection --------------------------------------------------------------
+            .circles-groups
+                .content-container
+
+            // All circles ------------------------------------------------------------------
+            .circles-display
+                .content-container
+
+            // Page selector ----------------------------------------------------------------
+            .circles-page-selector
+                .content-container
+
+        // Magic links ----------------------------------------------------------------------
+        section.magic-links-container
+            .content-container
