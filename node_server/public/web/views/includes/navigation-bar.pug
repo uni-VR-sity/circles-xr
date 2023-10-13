@@ -1,0 +1,35 @@
+nav
+    .logo-container
+        a.logo(href='/explore')
+            include ./circles-logo.svg
+
+    .nav-hamburger(onclick='displayNavigation()')
+        .icon-container
+            i(class='fa-solid fa-bars')
+
+    .nav-items-container
+        ul.nav-items
+            li
+                a(href='/explore') Explore
+            li
+                a(href='/more-circles') More Circles
+            li
+                a(href='/more-circles') Manage Circles
+
+    .profile-container
+        .profile-information
+            .icon-container
+                i(class='fa-solid fa-user')
+            p.username Username
+        .profile-dropdown 
+            ul
+                li
+                    a(href='/manage-users') Manage users
+                li
+                    a(href='/profile') Profile
+                li
+                    a(href='/your-magic-links') Your Magic Links
+                li
+                    a(href='/uploaded-content') Uploaded Content
+                li 
+                    a.red(href='/logout') Log out
