@@ -1,0 +1,577 @@
+// Session Information -----------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------
+
+.session-information-container {
+
+    .content-container {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        grid-template-areas: "description session-wardrobe-button"
+                             "session-name-form session-wardrobe-button";
+    
+        // Description
+        .session-information-description {
+            grid-area: description;
+            margin-bottom: $LARGE_MARGIN;
+        }
+
+        // Display name form
+        .session-name-form {
+            grid-area: session-name-form;
+        }
+    
+        // Display name button
+        .session-name-button {
+            grid-area: session-name-button;
+            display: none;
+        }
+    
+        // Session wardrobe button
+        .session-wardrobe-button {
+            @include start-flex;
+            grid-area: session-wardrobe-button;
+            margin-left: calc($LARGE_MARGIN * 2);
+
+            div {
+                display: grid;
+                grid-template-rows: 1fr 1fr;
+                justify-items: center;
+                background-color: $DARK_GREY;
+                height: 100%;
+                aspect-ratio: 1/1;
+                border-radius: 200px;
+
+                .icon-container {
+                    @include center-flex;
+                    align-items: end;
+                    height: 100%;
+                    outline: none;
+                    background-color: #ffffff00;
+
+                    i {
+                        color: $WHITE;
+                        font-size: $DEFAULT_LARGE_ICON;
+                        margin-bottom: $SMALL_MARGIN / 3;
+                    }
+
+                    i::after {
+                        font: var(--fa-font-solid);
+                        content: '\f553';
+                    }
+                }
+
+                p {
+                    color: $WHITE;
+                    font-weight: 500;
+                    margin-top: $SMALL_MARGIN;
+                }
+            }
+
+            div:hover {
+                background-color: $HOVER_DARK_GREY;
+                cursor: pointer;
+
+                .icon-container {
+
+                    i::after {
+                        content: '\e085';
+                    }
+                }
+            }
+        }
+    }
+}
+
+// TABLET (AND MOBILE) ----------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
+{   
+    .session-information-container {
+
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas: "description description"
+                                    "session-name-button session-wardrobe-button"
+                                    "session-name-form session-name-form";
+
+            // Display name form
+            .session-name-form {
+                display: none;
+                margin-top: $X_LARGE_MARGIN;
+                margin-left: calc(-1 * $SECTION_PADDING);
+                margin-right: calc(-1 * $SECTION_PADDING);
+                padding: $LARGE_MARGIN $SECTION_PADDING;
+                background-color: $LIGHT_GREY;
+
+                label {
+                    width: 150px;
+                }
+            }
+            
+            // Display name button
+            .session-name-button {
+                @include center-flex;
+                @include primary-button(inline-block, 80%, 0);
+            }
+
+            // Session wardrobe button
+            .session-wardrobe-button {
+                @include no-spacing;
+                @include center-flex;
+
+                    div {
+                        @include center-flex;
+                        width: 80%;
+                        aspect-ratio: auto;
+                        border-radius: $BORDER_RADIUS;
+                        line-height: $FORM_HEIGHT;
+                        flex-wrap: wrap;
+
+                        .icon-container {
+                            display: inline-block;
+                            height: auto;
+                            width: auto;
+                            margin-right: calc($SMALL_MARGIN + 2px);
+
+                            i {
+                                @include no-spacing;
+                                font-size: calc($MEDIUM_ICON - 4px);
+                            }
+                        }
+
+                        p {
+                            @include no-spacing;
+                            display: inline-block;
+                            font-weight: 400;
+                        }
+                    }
+
+                    div:hover {
+                        background-color: $DARK_GREY;
+
+                        .icon-container {
+
+                            i::after {
+                                content: '\f553';
+                            }
+                        }
+                    }
+
+                    div:active {
+                        background-color: $HOVER_DARK_GREY;
+                    }
+            }
+        }
+    }
+}
+
+
+// Circles -----------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------
+
+.circles-container {
+
+    // Top bar
+    .circles-top-bar-container {
+        background-color: $GREY;
+        width: 100%;
+
+        .circles-top-bar {
+            @include no-selection;
+            max-width: calc($MAX_CONTENT_WIDTH + ($SECTION_PADDING * 2));
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas: "circles-tabs circles-search";
+            
+            // Tabs
+            .circles-tabs {
+                background-color: $GREY;
+                grid-area: circles-tabs;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-areas: "public-circles your-circles editable-circles";
+                margin-left: $SECTION_PADDING;
+
+                .selected-tab {
+                    background-color: $DARK_GREY;
+                    color: $WHITE;
+                }
+
+                .public-circles, .your-circles, .editable-circles {
+                    padding: $MEDIUM_MARGIN 0;
+                    text-align: center;
+                }
+
+                .public-circles:not(.selected-tab):hover, .your-circles:not(.selected-tab):hover, .editable-circles:not(.selected-tab):hover
+                {
+                    background-color: $HOVER_GREY;
+                    cursor: pointer;
+                }
+
+                .public-circles {
+                    grid-area: public-circles;
+                }
+
+                .your-circles {
+                    grid-area: your-circles;
+                }
+
+                .editable-circles {
+                    grid-area: editable-circles;
+                }
+
+                .mobile-tabs-icon {
+                    display: none;
+                }
+            }
+
+            // Search bar
+            .circles-search-bar {
+                @include end-flex;
+                grid-area: circles-search;
+                padding: 0 $SECTION_PADDING;
+                
+                input {
+                    width: 60%;
+                    border: none;
+                }
+            }
+        }
+    }
+
+    // Group selection
+    .circles-groups {
+        margin-bottom: $SMALL_MARGIN;
+
+        .content-container {
+            display: grid;
+            grid-template-columns: 2fr 0.5fr;
+            padding-top: $MEDIUM_MARGIN;
+            padding-bottom: $MEDIUM_MARGIN;
+
+            select {
+                width: 200px;
+                margin-right: $LARGE_MARGIN;
+            }
+
+            .icon-container {
+                @include end-flex;
+                @include icon-button($MEDIUM_ICON);
+                margin-right: -1px;
+            }
+        }
+    }
+
+    // All circles
+    .circles-display {
+        max-width: calc($MAX_CONTENT_WIDTH + (2 * $SECTION_PADDING));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+
+        .circle {
+            margin: $SMALL_MARGIN $SECTION_PADDING;
+            text-align: center;
+            cursor: pointer;
+
+            img {
+                aspect-ratio: 1 / 1;
+                width: 100%;
+                object-fit: cover;
+                border-radius: $BORDER_RADIUS;
+            }
+
+            .circle-info-with-settings {
+                margin-top: $X_SMALL_MARGIN;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+
+                .icon-container
+                {
+                    @include center-flex;
+                    @include icon-button($MEDIUM_ICON);
+                }
+
+                p {
+                    @include start-flex;
+                }
+            }
+
+            .circle-info-no-settings {
+                margin-top: calc($X_SMALL_MARGIN * 2);
+                margin-bottom: calc($X_SMALL_MARGIN);
+                text-align: center;
+            }
+        }
+    }
+
+    // Page selector
+    .circles-page-selector {
+        margin-top: $MEDIUM_MARGIN;
+
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+
+            .icon-container{
+                @include icon-button($MEDIUM_ICON, $WHITE, 8px 13px);
+            }
+
+            .icon-container:first-of-type {
+                @include end-flex;
+            }
+
+            .icon-container:last-of-type {
+                @include start-flex;
+            }
+
+            .page-number-container {
+                @include center-flex;
+
+                .page-number, .page-number-seperator {
+                    padding: 6px 14px;
+                    border-radius: 50px;
+                    margin: 0 10px;
+                }
+
+                .page-number:hover {
+                    @include icon-button-hover;
+                }
+
+                .current-page {
+                    background-color: $LIGHT_GREY;
+                }
+            }
+        }
+    }
+
+    // View more circles
+    .circles-view-more {
+        display: none;
+    }
+}
+
+// TABLET -----------------------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
+{       
+    .circles-container {
+
+        // Top bar
+        .circles-top-bar-container {
+            background-color: $WHITE;
+    
+            .circles-top-bar {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-areas: "circles-tabs circles-tabs circles-tabs"
+                                     "circles-search circles-search circles-search";
+                
+                // Tabs
+                .circles-tabs {
+                    margin: 0;
+
+                    .public-circles:not(.selected-tab):hover, .your-circles:not(.selected-tab):hover, .editable-circles:not(.selected-tab):hover
+                    {
+                        background-color: $GREY;
+                    }
+
+                    .public-circles:not(.selected-tab):active, .your-circles:not(.selected-tab):active, .editable-circles:not(.selected-tab):active
+                    {
+                        background-color: $HOVER_GREY;
+                    }
+                }
+    
+                // Search bar
+                .circles-search-bar {
+                    @include center-flex;
+                    padding: $MEDIUM_MARGIN $SECTION_PADDING;
+                
+                    input {
+                        width: calc(100% - 40px);
+                        border: $FORM_BORDER;
+                        border-right: none;
+                    }
+                }
+            }
+        }
+    
+        // Group selection
+        .circles-groups {
+            margin-bottom: 0;
+
+            .content-container {
+                padding-top: 0;
+                padding-bottom: $MEDIUM_MARGIN;
+
+                select {
+                    margin-right: $MEDIUM_MARGIN;
+                }
+
+                .icon-container {
+                    margin-right: -2px;
+                }
+            }
+        }
+    
+        // All circles
+        .circles-display {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    
+        // Page selector
+        .circles-page-selector {
+            display: none;
+        }
+    
+        // View more circles
+        .circles-view-more {
+            display: block;
+            margin-top: $MEDIUM_MARGIN;
+
+            .content-container {
+                @include center-flex;
+                @include primary-button(inline-block, 100%);
+            }
+        }
+    }
+}
+
+// MOBILE -----------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK) 
+{   
+    .circles-container {
+
+        // Top bar
+        .circles-top-bar-container {
+    
+            .circles-top-bar {
+                
+                // Tabs
+                .circles-tabs {
+                    grid-template-columns: 4fr 1fr;
+                    grid-template-areas: "public-circles mobile-tabs-icon"
+                                         "your-circles mobile-tabs-icon"
+                                         "editable-circles mobile-tabs-icon";
+
+                    .selected-tab {
+                        background-color: $GREY;
+                        color: $BLACK;
+                    }
+    
+                    .public-circles, .your-circles, .editable-circles {
+                        padding: $MEDIUM_MARGIN $SECTION_PADDING;
+                        text-align: start;
+                        margin: auto 0;
+                    }
+    
+                    .your-circles {
+                        display: none;
+                    }
+    
+                    .editable-circles {
+                        display: none;
+                    }
+
+                    .mobile-tabs-icon {
+                        display: block;
+                        padding: $MEDIUM_MARGIN $SECTION_PADDING;
+                        text-align: end;
+                        
+                        .icon-container {
+
+                            i {
+                                font-size: $DEFAULT_LARGE_ICON;
+                            }
+                        }
+                    }
+                }
+
+                .circles-tabs:active .selected-tab, .circles-tabs:active .mobile-tabs-icon {
+                    background-color: $HOVER_GREY;
+                }
+            }
+        }
+    
+        // Group selection
+        .circles-groups {
+
+            .content-container {
+
+                select {
+                    width: 40%;
+                    margin-right: $SMALL_MARGIN;
+                }
+
+                .icon-container {
+                    margin-right: -1.5px;
+                }
+            }
+        }
+    
+        // All circles
+        .circles-display {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}
+
+// Magic Links -------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT (AND TABLET) ---------------------------------------
+
+.magic-links-container {
+
+    // Create link
+    .create-link {
+
+        .content-container {
+            @include outline-button(inline-block, 175px);
+
+            p {
+                margin-bottom: $MEDIUM_MARGIN;
+            }
+
+            a {
+                margin-bottom: $X_LARGE_MARGIN;
+            }
+
+            .num-selected {
+                margin-left: $SMALL_MARGIN;
+            }
+        }
+    }
+
+    // Display created link
+    .display-link {
+
+        .content-container {
+            margin-top: $X_LARGE_MARGIN;
+
+            .copy-magic-link {
+                display: none;
+                width: 100%;
+
+                p {
+                    margin-bottom: $X_SMALL_MARGIN;
+                }
+            }
+        }
+    }
+}
+
+// MOBILE -----------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK) 
+{   
+    .magic-links-container {
+
+        // Create link
+        .create-link {
+    
+            .content-container {
+                @include outline-button(inline-block, 100%, 0);
+            }
+        }
+    }
+}

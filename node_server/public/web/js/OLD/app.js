@@ -1,3 +1,7 @@
+// General JS for pages
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 window.onload = function () {
   //have something in the group field when opening page
   //let's not as "explore" will be used if field is blank

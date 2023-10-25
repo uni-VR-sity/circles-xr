@@ -1,0 +1,43 @@
+html
+
+  head
+
+    title CIRCLES - #{title}
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+    block stylesheets
+        link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+        link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
+
+    block scripts
+        script(src='/web/js/layout.js')
+        script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+  body
+
+    // Mixins ------------------------------------------------------------------------------
+
+    // Search bar 
+    mixin searchBar()
+      input(type='search' name='search-for-circle' placeholder='Search...')
+
+      .search-button
+        .icon-container
+            i(class='fa-solid fa-magnifying-glass')
+
+    // Copy link input 
+    mixin copyLink()
+      input.copy-link-input(type='text' name='copy-link' disabled)
+
+      .copy-link-button
+        .icon-container
+              i(class='fa-regular fa-copy')
+
+    
+    // Navigation bar -----------------------------------------------------------------------
+    include ../includes/NEW/navigation-bar
+
+    // Page content -------------------------------------------------------------------------
+    main
+
+        block content

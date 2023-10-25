@@ -29,8 +29,9 @@ node_server/whiteboardFiles
 .vscode
 
 #Ignore compiles SASS
-node_server/public/web/css/app.css
-node_server/public/web/css/color-picker.css
+node_server/public/web/css/OLD/app.css
+node_server/public/web/css/OLD/color-picker.css
+node_server/public/web/css/styles.css
 
 *.DS_Store
 .AppleDouble
