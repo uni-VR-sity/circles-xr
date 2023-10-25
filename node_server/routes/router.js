@@ -120,7 +120,8 @@ router.get('/logout', authenticated, (req, res, next) => {
 });
 
 // DELETE ----------------------------------------------------------------------------------------------------------------------------
-router.get('/template', function(req, res, next) {
+router.get('/newExplore', function(req, res, next) 
+{
   var user = req.user;
 
   const userInfo = {
@@ -138,8 +139,10 @@ router.get('/template', function(req, res, next) {
     handRightColor: user.color_hand_right,
   }
 
-  res.render(path.resolve(__dirname + '/../public/web/views/template'), {
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/newExplore'), {
+    title: 'Explore',
     userInfo: userInfo,
+    sessionName: req.session.sessionName,
   });
 });
 // DELETE ----------------------------------------------------------------------------------------------------------------------------

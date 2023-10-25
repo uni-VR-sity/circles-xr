@@ -1,0 +1,258 @@
+// Form Layout -------------------------------------------------------------------------------------------------------------------------------------------
+
+form, fieldset {
+    @include reset;
+}
+
+// (If there is more then 1 field)
+.form-field:has(~ .form-field) {
+    display: block;
+    margin-bottom: $MEDIUM_MARGIN;
+}
+
+.inline-field {
+    display: inline;
+    margin-left: 20px;
+}
+
+// More space between fields for mobile
+// No inline fields on mobile
+@media only screen and (max-width: $MOBILE_BREAK) 
+{
+    .form-field:has(~ .form-field) {
+        margin-bottom: calc($MEDIUM_MARGIN + 6px);
+    }
+
+    .inline-field {
+        display: block;
+        margin: 10px 0 0 0;
+    }
+}
+
+// General Form ------------------------------------------------------------------------------------------------------------------------------------------
+
+// LABEL ------------------------------------------------------
+
+label {
+    display: inline-block;
+    width: 150px;
+    vertical-align: middle;
+}
+
+.required-form-label::after {
+    content: ' *';
+    color: $RED;
+}
+
+// Label on its own line for mobile
+@media only screen and (max-width: $MOBILE_BREAK) 
+{
+    label {
+        display: block;
+        margin-bottom: 12px;
+    }
+}
+
+// INPUTS -----------------------------------------------------
+
+input:not([type=submit],[type=button]), select {
+    padding: 0 15px;
+    height: $FORM_HEIGHT;
+    width: 200px;
+    border: $FORM_BORDER;
+    border-radius: $BORDER_RADIUS;
+    vertical-align: middle;
+    background-color: $WHITE;
+}
+
+input:not([type=submit],[type=button]):active, input:not([type=submit],[type=button]):focus, select:active, select:focus { 
+    outline:none;
+    border: $FORM_ACTIVE_BORDER;
+}
+
+input:disabled:active, input:disabled:focus {
+    border: $FORM_BORDER;
+}
+
+// Longer fields on mobile
+@media only screen and (max-width: $MOBILE_BREAK) 
+{
+    input:not([type=submit],[type=button]), select {
+        width: 100%;
+    }
+}
+
+// SUBMIT -----------------------------------------------------
+
+.form-field:has(> input[type=submit]:not(.inline-submit))
+{
+    padding-top: $SMALL_MARGIN;
+}
+
+input[type=submit] {
+    @include reset;
+    @include primary-button-regular(block);
+}
+
+input[type=submit]:hover {
+    @include primary-button-hover;
+}
+
+input[type=submit].inline-submit {
+    display: inline-block;
+    vertical-align: middle;
+    min-height: $FORM_HEIGHT;
+    margin: 0 0 0 15px;
+    text-wrap: wrap;
+}
+
+// Tablet buttons have no hover state, only active
+@media only screen and (max-width: $TABLET_BREAK) 
+{
+    input[type=submit]:hover {
+        @include primary-button-regular(block);
+    }
+
+    input[type=submit].inline-submit:hover {
+        @include primary-button-regular(inline-block);
+    }
+
+    input[type=submit]:active, input[type=submit].inline-submit:active {
+        @include primary-button-hover;
+    }
+}
+
+// Ajusting length of regular submit button on mobile
+// Adjusting field length if .inline-submit is used on mobile
+// Mobile buttons have no hover state, only active
+@media only screen and (max-width: $MOBILE_BREAK) 
+{
+    input[type=submit] {
+        @include primary-button-regular(block, 100%);
+    }
+
+    input[type=submit]:hover {
+        @include primary-button-regular(block, 100%);
+    }
+
+    input:not([type=submit],[type=button]):has(~ .inline-submit), select:has(~ .inline-submit) {
+        width: calc(100% - 20% - 10px);
+    }
+
+    input[type=submit].inline-submit {
+        @include primary-button-regular(inline-block, 20%, 0);
+        margin: 0 0 0 10px;
+    }
+
+    input[type=submit].inline-submit:hover {
+        @include primary-button-regular(inline-block, 20%, 0);
+    }
+
+    input[type=submit]:active, input[type=submit].inline-submit:active {
+        @include primary-button-hover;
+    }
+}
+
+// BUTTON -----------------------------------------------------
+
+input[type=button] {
+    @include reset;
+    @include secondary-button-regular;
+}
+
+input[type=button]:hover {
+    @include secondary-button-hover;
+}
+
+// Tablet and mobile buttons have no hover state, only active
+@media only screen and (max-width: $TABLET_BREAK) 
+{
+    input[type=button]:hover {
+        @include secondary-button-regular;
+    }
+
+    input[type=button]:active {
+        @include secondary-button-hover;
+    }
+}
+
+
+// Search Form -------------------------------------------------------------------------------------------------------------------------------------------
+
+input[type=search] {
+    height: 40px;
+    border-radius: $BORDER_RADIUS 0 0 $BORDER_RADIUS;
+    border-right: none;
+}
+
+.search-button {
+    @include center-flex;
+    display: inline-flex;
+    color: $WHITE;
+    background-color: $DARK_GREY;
+    height: 40px;
+    width: 40px;
+    border-radius: 0 $BORDER_RADIUS $BORDER_RADIUS 0;
+
+    i {
+        font-size: $SMALL_ICON;
+    }
+}
+
+.search-button:hover {
+    background-color: $HOVER_DARK_GREY;
+    cursor: pointer;
+}
+
+// Tablet and mobile buttons have no hover state, only active
+@media only screen and (max-width: $TABLET_BREAK) 
+{
+    .search-button:hover {
+        background-color: $DARK_GREY;
+    }
+
+    .search-button:active {
+        background-color: $HOVER_DARK_GREY;
+    }
+}
+
+
+// Copy Link ---------------------------------------------------------------------------------------------------------------------------------------------
+
+input[type=text].copy-link-input {
+    width: calc(100% - $FORM_HEIGHT);
+    border-radius: $BORDER_RADIUS 0 0 $BORDER_RADIUS;
+    border-right: none;
+}
+
+.copy-link-button {
+    @include center-flex;
+    display: inline-flex;
+    color: $WHITE;
+    background-color: $BLUE;
+    height: $FORM_HEIGHT;
+    width: $FORM_HEIGHT;
+    border-radius: 0 $BORDER_RADIUS $BORDER_RADIUS 0;
+    vertical-align: middle;
+
+    i {
+        font-size: $SMALL_ICON;
+    }
+}
+
+.copy-link-button:hover {
+    background-color: $HOVER_BLUE;
+    cursor: pointer;
+}
+
+// Tablet and mobile buttons have no hover state, only active
+@media only screen and (max-width: $TABLET_BREAK) 
+{
+    .copy-link-button:hover {
+        background-color: $BLUE;
+    }
+
+    .copy-link-button:active {
+        background-color: $HOVER_BLUE;
+    }
+}

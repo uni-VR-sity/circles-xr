@@ -84,10 +84,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(sassMiddleware({
   src: __dirname + '/scss',
-  dest: __dirname + '/public/web/css',
+  dest: __dirname + '/public/web/css/OLD',
   debug: true,
   outputStyle: 'compressed',
-  prefix: '/web/css',
+  prefix: '/web/css/OLD',
+}));
+
+app.use(sassMiddleware({
+  src: __dirname + '/newSCSS/root.scss',
+  dest: __dirname + '/public/web/css/styles.css',
+  debug: true,
+  outputStyle: 'compressed',
+  prefix: '/web/css/styles.css',
 }));
 
 app.use(function (req, res, next) {
