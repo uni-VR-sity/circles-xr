@@ -75,35 +75,36 @@ function startExperiment () {
 
   console.log('chosen profile:', chosenprofile);
 
-    var profile = chosenprofile;
+    //var profile = chosenprofile;
 
     var profiletext = document.getElementById('diveprofile_result');
-    profiletext.setAttribute('text', 'value', profile);
+    profiletext.setAttribute('text', 'value', chosenprofile);
 
     var desc = document.getElementById('diveprofile_desc');
 
-    if(profile = "DiveProfile1")
+    if(chosenprofile == "DiveProfile1")
     {
       
-      desc.setAttribute('text', 'value', "There was a major problem with this profile you may not of caught. Problem: BT > NDL");
+      desc.setAttribute('text', 'value', 'There was a major problem with this profile you may not of caught. Problem: BT > NDL');
+      console.log("changed profile text 1");
       
     }
-    if(profile = "DiveProfile2")
+    if(chosenprofile == "DiveProfile2")
     {
       desc.setAttribute('text', 'value', "This dive profile had no initial issues, good job! Always check the data related to your dive!");
-      
+      console.log("changed profile text 2");
       
     }
-    if(profile = "DiveProfile3")
+    if(chosenprofile == "DiveProfile3")
     {
       desc.setAttribute('text', 'value', "There was a problem with this profile you may have missed. Problem: NDL is 25 min for this depth (should be 20 min).");
-      
+      console.log("changed profile text 3");
       
     }
-    if(profile = "DiveProfile4")
+    if(chosenprofile == "DiveProfile4")
     {
       desc.setAttribute('text', 'value', "This dive profile had no initial issues, good job! Always check the data related to your dive!");
-      
+      console.log("changed profile text 4");
     };
 
 };
