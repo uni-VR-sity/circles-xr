@@ -41,8 +41,16 @@
 
       <!-- <a-entity geometry="primitive: plane" position="0 0.033 0"scale="30 30 30" material="src: #wood" rotation="-90 0 0"></a-entity> -->
 
+        <!-- BIO TEXT     -->
+    <a-entity geometry="primitive: box" material="color: #737373" id="text-box" position="-1.72 1.62 -5.370" scale="4.166 2.3 0.243"></a-entity>
+    <a-entity id="text" position="-1.13898 2.49139 -5.24735" scale="3.3873 3.3873 3.3873" text__headline="value:  Artist Showcase: Tyler Compton"></a-entity>
+  
+    <a-entity id="text_body" position="-1.69714 1.72386 -5.24328" scale="2.92671 2.92671 2.92671" text__body="value:  
+    In collaboration with the Carleton Interactive Media Lab, we aspired to bring Tyler's art to a 3D setting. 
+    By taking inspiration from his use of layered colours and shapes, 
+    we created 3D models based on his original art.; color: #9c9c9c; align: center"></a-entity>
 
-       
+    <a-entity id="text_email" position="-1.697 0.71701 -5.243" scale="2.927 2.927 2.927" text__body="value: tcompton91@gmail.com; color: #4d4d4d; align: center"></a-entity>
 
       <a-entity position="-1.25731 0 6.13929" rotation="0 90 0" scale="0.4 0.4 0.4" gltf-model="/worlds/Tyler-Compton-Art/assets/deer.glb"></a-entity>
 
@@ -52,6 +60,11 @@
        <a-image id="bear_img_plane" position="-6.678 1.81105 -2.44136" src="#bear_img" material="" geometry="" rotation="0 90 0" scale="2 2 2"></a-image>
       
       <a-entity environment="preset: forest; grid: none"></a-entity>
+
+       <!-- layerd art -->
+       <a-entity id="bear layed" position="-7.18452 1.04929 3.06268" rotation="0 90 0" scale="0.015 0.015 0.015" gltf-model="/worlds/Tyler-Compton-Art/assets/bear_layered_light.glb"></a-entity>
+       <a-entity id="deer layered" position="1.14386 1.56091 6.82408" rotation="90 180 0" scale="0.03 0.03 0.03" gltf-model="/worlds/Tyler-Compton-Art/assets/deer_layer_light.glb"></a-entity>
+
 
     <!-- Circles' end scripts [REQUIRED] -->
     <circles-end-scripts/>
