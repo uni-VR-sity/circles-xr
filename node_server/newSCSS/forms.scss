@@ -5,7 +5,7 @@ form, fieldset {
 }
 
 // (If there is more then 1 field)
-.form-field:has(~ .form-field) {
+.form-field:not(.last-field) {
     display: block;
     margin-bottom: $MEDIUM_MARGIN;
 }
@@ -15,11 +15,12 @@ form, fieldset {
     margin-left: 20px;
 }
 
+
 // More space between fields for mobile
 // No inline fields on mobile
 @media only screen and (max-width: $MOBILE_BREAK) 
 {
-    .form-field:has(~ .form-field) {
+    .form-field:not(.last-field) {
         margin-bottom: calc($MEDIUM_MARGIN + 6px);
     }
 
@@ -55,7 +56,7 @@ label {
 
 // INPUTS -----------------------------------------------------
 
-input:not([type=submit],[type=button]), select {
+input:not([type=submit],[type=button],[type=checkbox]), select {
     padding: 0 15px;
     height: $FORM_HEIGHT;
     width: 200px;
@@ -65,8 +66,8 @@ input:not([type=submit],[type=button]), select {
     background-color: $WHITE;
 }
 
-input:not([type=submit],[type=button]):active, input:not([type=submit],[type=button]):focus, select:active, select:focus { 
-    outline:none;
+input:not([type=submit],[type=button],[type=checkbox]):active, input:not([type=submit],[type=button],[type=checkbox]):focus, select:active, select:focus { 
+    outline: none;
     border: $FORM_ACTIVE_BORDER;
 }
 
@@ -77,9 +78,56 @@ input:disabled:active, input:disabled:focus {
 // Longer fields on mobile
 @media only screen and (max-width: $MOBILE_BREAK) 
 {
-    input:not([type=submit],[type=button]), select {
+    input:not([type=submit],[type=button],[type=checkbox]), select {
         width: 100%;
     }
+}
+
+// CHECKBOX ---------------------------------------------------
+// Checkbox restyle solution: https://stackoverflow.com/questions/58571600/how-to-change-bordercolor-on-html-input-field-checkbox-through-javascript
+
+.checkbox-container, .horizontal-checkbox-container {
+    margin: $SMALL_MARGIN 0;
+}
+
+.horizontal-checkbox-container {
+    display: inline-block;
+
+    label {
+        width: 100%;
+    }
+}
+
+input[type=checkbox] { 
+    display:none;
+}
+
+input[type=checkbox] + label {
+    padding-left: calc(20px + $SMALL_MARGIN);
+    position: relative;
+}
+
+input[type=checkbox] + label::before {
+    display: block;
+    position: absolute;
+    border: $FORM_BORDER;
+    border-radius: 4px;
+    left: 3px;
+    top: 2.5px;
+    height: 15px;
+    width: 15px;
+    content: '';
+}
+
+input[type=checkbox]:checked + label::before 
+{
+    @include center-flex;
+    font: var(--fa-font-solid);
+    content: '\f00c';
+    font-size: 13px;
+    color: $WHITE;
+    background-color: $BLUE;
+    border-color: $BLUE;
 }
 
 // SUBMIT -----------------------------------------------------
@@ -153,6 +201,7 @@ input[type=submit].inline-submit {
     }
 }
 
+
 // BUTTON -----------------------------------------------------
 
 input[type=button] {
@@ -176,46 +225,26 @@ input[type=button]:hover {
     }
 }
 
-
 // Search Form -------------------------------------------------------------------------------------------------------------------------------------------
 
 input[type=search] {
     height: 40px;
-    border-radius: $BORDER_RADIUS 0 0 $BORDER_RADIUS;
-    border-right: none;
+    padding-left: 30px + $SMALL_ICON;
 }
 
-.search-button {
-    @include center-flex;
-    display: inline-flex;
-    color: $WHITE;
-    background-color: $DARK_GREY;
-    height: 40px;
-    width: 40px;
-    border-radius: 0 $BORDER_RADIUS $BORDER_RADIUS 0;
+input[type=search]::-webkit-search-decoration, input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-results-button, input[type=search]::-webkit-search-results-decoration { 
+    display: none;
+}
 
+.search-icon {
     i {
+        color: $MEDIUM_GREY;
         font-size: $SMALL_ICON;
+        position: absolute;
+        padding: 0 15px;
+        margin-top: calc($SMALL_ICON / -2);
     }
 }
-
-.search-button:hover {
-    background-color: $HOVER_DARK_GREY;
-    cursor: pointer;
-}
-
-// Tablet and mobile buttons have no hover state, only active
-@media only screen and (max-width: $TABLET_BREAK) 
-{
-    .search-button:hover {
-        background-color: $DARK_GREY;
-    }
-
-    .search-button:active {
-        background-color: $HOVER_DARK_GREY;
-    }
-}
-
 
 // Copy Link ---------------------------------------------------------------------------------------------------------------------------------------------
 

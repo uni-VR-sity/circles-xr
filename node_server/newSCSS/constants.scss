@@ -19,6 +19,7 @@ $HOVER_BLUE: #0f5da7;
 $DARK_BLUE: #104C84;
 $CONTRAST_COLOR: #E85D75;
 $RED: #cb0000;
+$GREEN: #008000;
 
 // Dimensions
 $MAX_CONTENT_WIDTH: 1200px;
@@ -28,7 +29,7 @@ $MOBILE_NAV_HEIGHT: 58px;
 
 // Margins and Padding
 $NAVIGATION_MARGIN: 60px;
-$SECTION_MARGIN: 100px;
+$SECTION_MARGIN: 80px;
 $SECTION_PADDING: 30px;
 $X_SMALL_MARGIN: 10px;
 $SMALL_MARGIN: 15px;
@@ -48,7 +49,6 @@ $DEFAULT_LARGE_ICON: 25px;
 $MOBILE_LARGE_ICON: 22.5px;
 $MEDIUM_ICON: 22px;
 $SMALL_ICON: 14px;
-
 
 // Mixins ------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -170,6 +170,41 @@ $SMALL_ICON: 14px;
     }
 }
 
+// Dark button (dark grey)
+@mixin dark-button-regular($display: inline-block, $width: auto, $padding: 0 20px) {
+    @include primary-button-regular($display, $width, $padding);
+    background-color: $DARK_GREY; 
+    color: $WHITE;
+}
+
+@mixin dark-button-hover {
+    @include primary-button-hover;
+    background-color: $HOVER_DARK_GREY;
+}
+
+@mixin dark-button($display: inline-block, $width: auto, $padding: 0 20px) {
+
+    a {
+        @include dark-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include dark-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover {
+            @include dark-button-regular($display, $width, $padding);
+        }
+
+        a:active {
+            @include dark-button-hover;
+        }
+    }
+}
+
 // Outline button (dark grey border)
 @mixin outline-button-regular($display: inline-block, $width: 100px, $padding: 0 35px) {
     @include primary-button-regular($display, $width, $padding);
@@ -237,6 +272,14 @@ $SMALL_ICON: 14px;
         @include icon-button-hover;
     }
 
+    a {
+        @include icon-button-regular($font-size, $background-colour, $padding);
+    }
+
+    a:hover {
+        @include icon-button-hover;
+    }
+
     // Tablet and mobile buttons have no hover state, only active
     @media only screen and (max-width: $TABLET_BREAK) 
     {
@@ -245,6 +288,14 @@ $SMALL_ICON: 14px;
         }
 
         i:active {
+            @include icon-button-hover;
+        }
+
+        a:hover {
+            @include icon-button-regular($font-size, $background-colour, $padding);
+        }
+
+        a:active {
             @include icon-button-hover;
         }
     }

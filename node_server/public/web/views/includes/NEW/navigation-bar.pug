@@ -4,7 +4,7 @@
 
 nav
     .logo-container
-        a.logo(href='/explore')
+        a.logo(href='/new-explore')
             include ./circles-logo.svg
 
     .nav-hamburger(onclick='displayNavigation()')
@@ -14,13 +14,13 @@ nav
     .nav-items-container
         ul.nav-items
             li
-                a(href='/explore') Explore
+                a(href='/new-explore') Explore
             li
-                a(href='/more-circles') More Circles
+                a(href='/new-more-circles') More Circles
 
             if adminUser
                 li
-                    a(href='/manage-users') Manage Users
+                    a(href='/new-manage-users') Manage Users
 
     .profile-container
         .profile-information
@@ -30,15 +30,15 @@ nav
         .profile-dropdown 
             ul
                 li
-                    a(href='/profile') Profile
+                    a(href='/new-profile') Profile
 
                 if hasMagicLinks
                     li
-                        a(href='/your-magic-links') Your Magic Links
+                        a(href='/new-your-magic-links') Your Magic Links
 
                 if notGuest
                     li
-                        a(href='/uploaded-content') Uploaded Content
+                        a(href='/new-uploaded-content') Uploaded Content
 
                 li 
                     a.red(href='/logout') Log out

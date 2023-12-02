@@ -68,3 +68,33 @@ a {
     margin-left: 5px;
     margin-right: 3px;
 }
+
+// Success and Error Messages ----------------------------------------------------------------------------------------------------------------------------
+
+p.success-message {
+    @include start-flex;
+    color: $GREEN;
+    margin-top: $MEDIUM_MARGIN;
+    display: none;
+}
+
+p.success-message::before {
+    font: var(--fa-font-solid);
+    content: '\f058';
+    margin-right: $SMALL_MARGIN;
+    font-size: $MEDIUM_ICON;
+}
+
+p.error-message {
+    @include start-flex;
+    color: $RED;
+    margin-top: $MEDIUM_MARGIN;
+    display: none;
+}
+
+p.error-message::before {
+    font: var(--fa-font-solid);
+    content: '\f06a';
+    margin-right: $MEDIUM_MARGIN;
+    font-size: $MEDIUM_ICON;
+}

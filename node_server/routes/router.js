@@ -3,6 +3,7 @@
 const router     = require('express').Router();
 const path       = require('path');
 const controller = require('../controllers/controller');
+const newController = require('../controllers/newController');
 const User       = require('../models/user');
 const passport   = require('passport');
 const express    = require('express');
@@ -40,6 +41,16 @@ const notAuthenticated = (req, res, next) => {
 
   return next();
 };
+
+// NEW ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-explore', authenticated, newController.serveExplore);
+router.post('/update-session-display-name', authenticated, newController.updateSessionName);
+router.post('/new-create-magic-link', authenticated, newController.createMagicLink);
+
+// OLD ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web
 router.get('/', notAuthenticated, (req, res) => {
