@@ -24,6 +24,12 @@ const WorldSchema = new mongoose.Schema({
       required:   true,
       trim:       true
     },
+    hasProfileImage: {
+      type:       Boolean,
+      unique:     false,
+      required:   true,
+      trim:       true,
+    },
     group: {
       type:       mongoose.Schema.Types.ObjectId, 
       ref:        'worldGroups',
@@ -159,12 +165,26 @@ const addWorlds = async function()
             displayName = file;
           }
 
+          // Checking if world has profile image
+          var hasProfileImage;
+
+          try
+          {
+            fs.readFileSync(path + '/profile.jpg', 'utf8');
+            hasProfileImage = true;
+          }
+          catch(e)
+          {
+            hasProfileImage = false;
+          }
+
           if (world === null)
           {
             const worldData = {
               name: file,
               displayName: displayName,
               url: path,
+              hasProfileImage: hasProfileImage,
             };
 
             try 
@@ -182,6 +202,12 @@ const addWorlds = async function()
             if (world.displayName !== displayName)
             {
               world.displayName = displayName;
+              await world.save();
+            }
+
+            if (world.hasProfileImage !== hasProfileImage)
+            {
+              world.hasProfileImage = hasProfileImage;
               await world.save();
             }
           }

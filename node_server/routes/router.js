@@ -3,6 +3,7 @@
 const router     = require('express').Router();
 const path       = require('path');
 const controller = require('../controllers/controller');
+const newController = require('../controllers/newController');
 const User       = require('../models/user');
 const passport   = require('passport');
 const express    = require('express');
@@ -40,6 +41,16 @@ const notAuthenticated = (req, res, next) => {
 
   return next();
 };
+
+// NEW ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-explore', authenticated, newController.serveExplore);
+router.post('/update-session-display-name', authenticated, newController.updateSessionName);
+router.post('/new-create-magic-link', authenticated, newController.createMagicLink);
+
+// OLD ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web
 router.get('/', notAuthenticated, (req, res) => {
@@ -118,34 +129,6 @@ router.get('/logout', authenticated, (req, res, next) => {
     res.redirect('/'); // Redirect to home page
   });
 });
-
-// DELETE ----------------------------------------------------------------------------------------------------------------------------
-router.get('/newExplore', function(req, res, next) 
-{
-  var user = req.user;
-
-  const userInfo = {
-    username: user.username,
-    usertype: user.usertype,
-    email: user.email,
-    displayName: user.displayName,
-    headUrl: user.gltf_head_url,
-    hairUrl: user.gltf_hair_url,
-    bodyUrl: user.gltf_body_url,
-    headColor: user.color_head,
-    hairColor: user.color_hair,
-    bodyColor: user.color_body,
-    handLeftColor: user.color_hand_left,
-    handRightColor: user.color_hand_right,
-  }
-
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/newExplore'), {
-    title: 'Explore',
-    userInfo: userInfo,
-    sessionName: req.session.sessionName,
-  });
-});
-// DELETE ----------------------------------------------------------------------------------------------------------------------------
 
 router.post('/update-session-name', authenticated, controller.updateSessionName);
 router.post('/get-user-info', authenticated, controller.getUser);

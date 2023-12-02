@@ -926,9 +926,9 @@ const serveExplore = async (req, res, next) =>
 
   publicWorlds = organizeToGroups(publicWorlds, groups);
   userWorlds = organizeToGroups(userWorlds, groups);
-  var groupedWorlds = organizeToGroups(editableWorlds, groups);     // For managing groups
 
   // Getting groups with no worlds in them
+  var groupedWorlds = organizeToGroups(editableWorlds, groups);
   var groupsWithWorlds = [];
   
   for (const group of groupedWorlds.groups)
@@ -1574,7 +1574,7 @@ const createMagicLink = async (req, res, next) =>
           baseURL = req.get('host');
         }
 
-        const forwardingLink = baseURL + '/' + req.body.forwardingName
+        const forwardingLink = baseURL + '/' + req.body.forwardingName;
 
         // Saving magic link in database
         var linkInfo;
