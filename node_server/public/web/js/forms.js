@@ -18,7 +18,7 @@ function checkCheckboxWidth(formID)
     }
 
     // Setting every checkbox to the longest label + 50px
-    maxWidth += 50;
+    maxWidth += 40;
 
     for (const container of checkboxContainers)
     {

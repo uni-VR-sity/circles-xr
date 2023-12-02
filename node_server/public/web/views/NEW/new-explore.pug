@@ -50,9 +50,10 @@ block content
 
     // Circle section display ---------------------------------------------------------------
     mixin displayCircleSection(section, sectionType)
-
+        - var sectionJSON = JSON.stringify(section);
+        - var sectionJSON = sectionJSON.replaceAll(/'/gm, /\'/gm);
         script.
-            initializeCircleSection('!{JSON.stringify(section)}', '#{sectionType}');
+            initializeCircleSection('!{sectionJSON}', '#{sectionType}');
 
         // Circles with no groups
         if section.noGroup.length > 0
@@ -184,8 +185,11 @@ block content
             +displayCircleSection(publicWorlds, 'public')
             +displayCircleSection(userWorlds, 'your')
 
+            - var groupJSON = JSON.stringify(editableWorlds);
+            - var groupJSON = groupJSON.replaceAll(/'/gm, /\'/gm);
+
             script.
-                initializeCircleSection('!{JSON.stringify(editableWorlds)}', 'editable');
+                initializeCircleSection('!{groupJSON}', 'editable');
                 initializeAllCircleSection();
 
             // Displaying default section when page is loaded
@@ -235,65 +239,65 @@ block content
     if adminUser || managerUser
         section#magic-links-container
 
-        // Creating -------------------------------------------------------------------------
-        #create-link
-            .content-container
+            // Creating -------------------------------------------------------------------------
+            #create-link
+                .content-container
 
-                h2 Magic Links
+                    h2 Magic Links
 
-                p Select the expiry, forwarding group, and circle(s), then click on the blue 
-                    span.important-text [Create] 
-                    span button below to generate a magic link. Just copy and send the link to automatically give them access to the circle(s) as a guest user.
+                    p Select the expiry, forwarding group, and circle(s), then click on the blue 
+                        span.important-text [Create] 
+                        span button below to generate a magic link. Just copy and send the link to automatically give them access to the circle(s) as a guest user.
 
-                a(href='/magic-links') See Created Links
+                    a(href='/magic-links') See Created Links
 
-                form#magic-link-form(onsubmit='createMagicLink(event)' method='post')
-                    fieldset
+                    form#magic-link-form(onsubmit='createMagicLink(event)' method='post')
+                        fieldset
 
-                        .form-field
-                            label.required-form-label Expiration
+                            .form-field
+                                label.required-form-label Expiration
 
-                            select(id='linkExpiry' name='linkExpiry')
-                                option(value='7' selected) 7 days
+                                select(id='linkExpiry' name='linkExpiry')
+                                    option(value='7' selected) 7 days
 
-                                - for (var i = 30; i <= 90; i += 30)
-                                    option(value=i) !{i} days
+                                    - for (var i = 30; i <= 90; i += 30)
+                                        option(value=i) !{i} days
 
-                                option(value='custom') Custom...
-                                option(value='never') Never
+                                    option(value='custom') Custom...
+                                    option(value='never') Never
 
-                            .inline-field
-                                input(id='customLinkExpiry' type='date' name='customLinkExpiry')
+                                .inline-field
+                                    input(id='customLinkExpiry' type='date' name='customLinkExpiry')
+
+                                script.
+                                    customDateForm('linkExpiry', 'customLinkExpiry');
+
+                            .form-field
+                                label.required-form-label Link name
+                                input(type='text' name='forwardingName' placeholder='ClassVR' required)
+
+                            .form-field
+                                for group of editableWorlds.groups
+                                    for circle of group.noGroup
+                                        .horizontal-checkbox-container
+                                            - var boxID = circle.name + '-checkbox';
+                                            input(type='checkbox' id=boxID name='magicCircle' value=circle.name)
+                                            label(for=boxID)=circle.displayName
 
                             script.
-                                customDateForm('linkExpiry', 'customLinkExpiry');
+                                checkCheckboxWidth('magic-link-form');
 
-                        .form-field
-                            label.required-form-label Link name
-                            input(type='text' name='forwardingName' placeholder='ClassVR' required)
+                            //.form-field
+                                label.required-form-label Circles
+                                input(type='button' value='Select Circles')
+                                span.num-selected 0 selected
 
-                        .form-field
-                            for group of editableWorlds.groups
-                                for circle of group.noGroup
-                                    .horizontal-checkbox-container
-                                        - var boxID = circle.name + '-checkbox';
-                                        input(type='checkbox' id=boxID name='magicCircle' value=circle.name)
-                                        label(for=boxID)=circle.displayName
+                            .form-field.last-field
+                                input(type='submit' value='Create')
 
-                        script.
-                            checkCheckboxWidth('magic-link-form');
+                    p.success-message
 
-                        //.form-field
-                            label.required-form-label Circles
-                            input(type='button' value='Select Circles')
-                            span.num-selected 0 selected
+                    p.error-message
 
-                        .form-field.last-field
-                            input(type='submit' value='Create')
-
-                p.success-message
-
-                p.error-message
-
-                .copy-magic-link
-                    +copyLink('magic-link')
+                    .copy-magic-link
+                        +copyLink('magic-link')
