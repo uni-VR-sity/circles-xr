@@ -1,0 +1,165 @@
+block append scripts
+    script(src='/web/js/views/manage-groups.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var group;
+    - var subgroup;
+    - var circle;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // Group row ----------------------------------------------------------------------------
+    mixin groupRow(currentGroup)
+        .group-row(class=currentGroup.name.replaceAll(' ', '-') + ' hidden-row')
+            
+            .icon-container.collapse-icon
+                i(class='fa-solid fa-angle-right') 
+
+            p.group-name= currentGroup.name
+
+            p.greyed.subgroup-num= currentGroup.subgroups.length
+                span &nbsp
+                if currentGroup.subgroups.length === 1
+                    span subgroup
+                else 
+                    span subgroups
+
+            // Calculating number of circle in the group
+            - var numCircles = currentGroup.noGroup.length;
+
+            for subgroup of currentGroup.subgroups
+                - numCircles += subgroup.worlds.length;
+
+            p.greyed.circle-num= numCircles
+                span &nbsp
+                if numCircles === 1
+                    span circle
+                else 
+                    span circles
+
+            - var deleteFunction = 'deleteGroup(\'' + currentGroup.name + '\')';
+            - var note = 'Circles in group will NOT be deleted';
+            .icon-container.trash-icon
+                i(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp(event, "Group", "' + currentGroup.name + '", "' + deleteFunction + '", "' + note + '")') 
+
+        script.
+            groupRowClick('#{currentGroup.name}');
+
+    // Subgroup row -------------------------------------------------------------------------
+    mixin subgroupRow(currentGroup, currentSubgroup)
+        .row(class=currentGroup.name.replaceAll(' ', '-') + ' ' + currentSubgroup.name.replaceAll(' ', '-') + ' group-subgroup hidden-row')
+            .subgroup-row
+
+                .icon-container.collapse-icon
+                    i(class='fa-solid fa-angle-right') 
+                    
+                p.subgroup-name= currentSubgroup.name 
+
+                p.greyed.circle-num= currentSubgroup.worlds.length
+                    span &nbsp
+                    if currentSubgroup.worlds.length === 1
+                        span circle
+                    else 
+                        span circles
+
+                - var deleteFunction = 'deleteSubgroup(\'' + currentGroup.name + '\', \'' + currentSubgroup.name + '\')';
+                - var note = 'Circles in subgroup will NOT be deleted';
+                .icon-container.trash-icon
+                    i(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp(event, "Subgroup", "' + currentSubgroup.name + '", "' + deleteFunction + '", "' + note + '")') 
+
+            hr
+
+        script.
+            subgroupRowClick('#{currentGroup.name}', '#{currentSubgroup.name}');
+
+    // Add subgroup row ---------------------------------------------------------------------
+    mixin addSubgroupRow(currentGroup)
+        .row(class=currentGroup.name.replaceAll(' ', '-') + ' group-add-subgroup')
+            .add-subgroup-row
+
+                form(id=currentGroup.name.replaceAll(' ', '-') + '-create-subgroup' onsubmit='createSubgroup(event)' method='post')
+                
+                    .group-field
+                        input.hidden-field(type='text' name='group' value=currentGroup.name)
+
+                    .subgroup-field
+                        input(type='text' name='subgroup' placeholder='Subgroup name...' required)
+
+                        .icon-container.add-subgroup-icon
+                            label
+                                input(type='submit' style='display:none')
+                                i(class='fa-solid fa-square-plus')
+
+                    p.error-message
+
+    // Circle row ---------------------------------------------------------------------------
+    mixin circleRow(currentGroup, currentSubgroup, currentCircle)
+        - var rowClass = currentGroup.name.replaceAll(' ', '-');
+
+        if (currentSubgroup)
+            - rowClass += ' ' + currentSubgroup.name.replaceAll(' ', '-');
+            - rowClass += ' group-subgroup-circle';
+        else 
+            - rowClass += ' group-circle';
+
+        .row(class=rowClass)
+            .circle-row
+
+                - var manageURL = '/manage-circle/' + currentCircle.name;
+                a(href=manageURL).circle-name= currentCircle.displayName
+                    .icon-container
+                        i(class='fa-solid fa-arrow-up-right-from-square external-link-icon')
+
+            hr
+
+    // Manage groups overlay -----------------------------------------------------------------------------------------------------------------------
+    #manage-groups-overlay.overlay-container
+        .overlay 
+    
+            // Title ------------------------------------------------------------------------
+            #title-container
+                h2 Manage Groups
+
+                .icon-container
+                    i(class="fa-solid fa-xmark" onclick='closeOverlay("manage-groups-overlay")')
+
+                hr
+    
+            // Create new group -------------------------------------------------------------
+            #create-group 
+                form(id='create-group-form' onsubmit='createGroup(event)' method='post')
+                    
+                    #group-field-container
+                        input(type='text' name='group' placeholder='Group name...' required)
+
+                    #subgroup-field-container
+                        .subgroup-field
+                            input(type='text' name='subgroups' placeholder='Subgroup name...')
+
+                            .icon-container.add-subgroup-icon
+                                i(class='fa-solid fa-square-plus' onclick="addSubgroupInput(this)")
+                    
+                    #submit-field-container
+                        input(type='submit' value='Add Group')
+
+                p.error-message
+
+            // Group table ------------------------------------------------------------------
+            #groups-container
+                
+                for group of groupedWorlds.groups
+                    .group(class=group.name.replaceAll(' ', '-'))
+                        +groupRow(group)
+
+                        for circle of group.noGroup
+                            +circleRow(group, null, circle)
+
+                        for subgroup of group.subgroups
+                            +subgroupRow(group, subgroup)
+
+                            for circle of subgroup.worlds
+                                +circleRow(group, subgroup, circle)
+
+                        +addSubgroupRow(group)

@@ -171,8 +171,12 @@ block content
 
                     select#circles-subgroup-selector
 
-                .icon-container 
-                    i(class='fa-solid fa-gear')
+                if adminUser
+                
+                    include manage-groups.pug
+
+                    .icon-container.manage-groups-icon
+                        i#manage-groups-button(class='fa-solid fa-gear' onclick='openOverlay("manage-groups-overlay")')
 
                 script.
                     detectGroupSelect();

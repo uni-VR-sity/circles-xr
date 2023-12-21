@@ -50,6 +50,13 @@ router.get('/new-explore', authenticated, newController.serveExplore);
 router.post('/update-session-display-name', authenticated, newController.updateSessionName);
 router.post('/new-create-magic-link', authenticated, newController.createMagicLink);
 
+// Manage Groups Page Routes -----------------------------------------------------------------------------------------------------------------------------
+
+router.post('/new-create-group', authenticated, newController.createGroup);
+router.post('/new-create-subgroup', authenticated, newController.createSubgroup);
+router.post('/delete-group', authenticated, newController.deleteGroup);
+router.post('/delete-subgroup', authenticated, newController.deleteSubgroup);
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web

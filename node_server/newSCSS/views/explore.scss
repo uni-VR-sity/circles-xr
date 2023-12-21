@@ -307,7 +307,7 @@
                 margin-right: $LARGE_MARGIN;
             }
 
-            .icon-container {
+            .manage-groups-icon {
                 @include end-flex;
                 @include icon-button($MEDIUM_ICON);
                 margin-right: -1px;
