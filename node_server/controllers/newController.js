@@ -422,10 +422,12 @@ const updateSessionName = async (req, res, next) =>
     req.session.sessionName = req.body.sessionName;
 
     res.json('updated');
+    return;
   }
   else
   {
     res.json('invalid');
+    return;
   }
 }
 
@@ -448,6 +450,7 @@ const createMagicLink = async (req, res, next) =>
       console.log(e);
 
       res.json('error');
+      return;
     }
 
     if (!forwardingExists)
@@ -506,6 +509,7 @@ const createMagicLink = async (req, res, next) =>
             console.log(err);
 
             res.json('error');
+            return;
           }
         }
       }
@@ -523,6 +527,7 @@ const createMagicLink = async (req, res, next) =>
           console.log(err);
 
           res.json('error');
+          return;
         }
       }
 
@@ -575,6 +580,7 @@ const createMagicLink = async (req, res, next) =>
       catch(e)
       {
         res.json('error');
+        return;
       }
       
       var response = {
@@ -583,15 +589,244 @@ const createMagicLink = async (req, res, next) =>
       }
 
       res.json(response);
+      return;
     }
     else
     {
       res.json('forwarding name exists');
+      return;
     }
   }
   else
   {
     res.json('error');
+    return;
+  }
+}
+
+// Manage Groups Page ---------------------------------------------------------------------------------------------------------------------------------
+
+// Creating group on user request
+const createGroup = async (req, res, next) =>
+{
+  if (req.body.group) 
+  {
+    // Checking if the group already exists
+    // If it does, send an error message
+    // If it doesn't, create the group
+    if (await WorldGroups.findOne({name: req.body.group}))
+    {
+      res.json('group exists');
+      return;
+    }
+    else
+    {
+      var group = {
+        name: req.body.group,
+        subgroups: [],
+      }
+
+      // Validating subgroup value 
+      // Subgroup can't have a repeat value
+      function validateSubgroup(name, subgroupsAdded)
+      {
+        for (const subgroup of subgroupsAdded)
+        {
+          if (name === subgroup.name)
+          {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      // Adding subgroups
+      // req.body.subgroups will either be:
+      //    - ''                                    --> Nothing (won't trigger if statment)
+      //    - 'subgroup'                            --> Not array (only 1 subgroup and will add that)
+      //    - ['subgroup1', 'subgroup2', ...]       --> Array (will loop through and add each subgroup)
+      if (req.body.subgroups && req.body.subgroups.length > 0)
+      {
+        if (Array.isArray(req.body.subgroups))
+        {
+          for(const subgroup of req.body.subgroups)
+          {
+            if (subgroup.length > 0 && validateSubgroup(subgroup, group.subgroups))
+            {
+              group.subgroups.push({name: subgroup});
+            }
+          }
+        }
+        else
+        {
+          if (validateSubgroup(req.body.subgroups, group.subgroups))
+          {
+            group.subgroups.push({name: req.body.subgroups});
+          }
+        }
+      }
+
+      // Adding group to database
+      try
+      {
+        await WorldGroups.create(group);
+
+        res.json('success');
+        return;
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        res.json('error');
+        return;
+      }
+    }
+  }
+  else
+  {
+    res.json('error');
+    return;
+  }
+}
+
+// ------------------------------------------------------------
+
+// Creating subgroup on user request
+const createSubgroup = async (req, res, next) =>
+{
+  if (req.body.group && req.body.subgroup) 
+  {
+    // Getting group from database
+    var group;
+
+    try
+    {
+      group = await WorldGroups.findOne({name: req.body.group});
+    }
+    catch(e)
+    {
+      console.log(e)
+
+      res.json('error');
+      return;
+    }
+
+    if (group)
+    {
+      // Checking that a subgroup of that name doesn't already exist
+      for (const subgroup of group.subgroups)
+      {
+        if (subgroup.name === req.body.subgroup)
+        {
+          res.json('subgroup exists');
+          return;
+        }
+      }
+
+      // Adding subgroup to group
+      try
+      {
+        group.subgroups.push({name: req.body.subgroup})
+        await group.save();
+
+        res.json('success');
+        return;
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        res.json('error');
+        return;
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------------
+
+// Deleting group on user request
+const deleteGroup = async (req, res, next) =>
+{
+  // Getting group from database
+  var group = await WorldGroups.findOne({name: req.body.group});
+
+  if (group)
+  {
+    // Finding all worlds that are in the group
+    var worlds = await Worlds.find({group: group._id});
+
+    // Removing the worlds from the group
+    for (const world of worlds)
+    {
+      world.group = null;
+      world.subgroup = null;
+
+      await world.save();
+    }
+
+    // Deleting group
+    try
+    {
+      await WorldGroups.deleteOne({_id: group._id});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+}
+
+// ------------------------------------------------------------
+
+// Deleting group on user request
+const deleteSubgroup = async (req, res, next) =>
+{
+  // Getting group from database
+  var group = await WorldGroups.findOne({name: req.body.group});
+  
+  if (group)
+  {
+    // Finding subgroup and deleting it
+    var deletedSubgroup;
+
+    for (const subgroup of group.subgroups)
+    {
+      if (subgroup.name === req.body.subgroup)
+      {
+        deletedSubgroup = subgroup;
+
+        try
+        {
+          var index = group.subgroups.indexOf(subgroup);
+          group.subgroups.splice(index, 1);
+
+          await group.save();
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+
+        break;
+      }
+    }
+
+    // Finding all worlds that are in the group
+    var worlds = await Worlds.find({group: group._id});
+
+    // Removing the worlds from the subgroup
+    for (const world of worlds)
+    {
+      if (JSON.stringify(world.subgroup) === JSON.stringify(deletedSubgroup._id))
+      {
+        world.subgroup = null;
+      }
+
+      await world.save();
+    }
   }
 }
 
@@ -602,4 +837,9 @@ module.exports = {
   serveExplore,
   updateSessionName,
   createMagicLink,
+  // Manage Groups Page
+  createGroup,
+  createSubgroup,
+  deleteGroup,
+  deleteSubgroup,
 }

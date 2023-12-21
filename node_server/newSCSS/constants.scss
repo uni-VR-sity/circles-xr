@@ -5,9 +5,9 @@ $TABLET_BREAK: 950px;
 $MOBILE_BREAK: 650px;
 
 // Colours
-$BLACK: #ffffff00;
 $WHITE: #FFFFFF;
 $BLACK: #000000;
+$GREY_TEXT: #6B6B6B;
 $LIGHT_GREY: #ededed;
 $GREY: #D7D7D7;
 $HOVER_GREY: #c5c5c5;
@@ -19,6 +19,7 @@ $HOVER_BLUE: #0f5da7;
 $DARK_BLUE: #104C84;
 $CONTRAST_COLOR: #E85D75;
 $RED: #cb0000;
+$HOVER_RED: #cb0000;
 $GREEN: #008000;
 
 // Dimensions
@@ -45,6 +46,7 @@ $FORM_ACTIVE_BORDER: 2px solid $BLUE;
 $FORM_HEIGHT: 45px;
 
 // Icons
+$DEFAULT_X_LARGE_ICON: 35px;
 $DEFAULT_LARGE_ICON: 25px;
 $MOBILE_LARGE_ICON: 22.5px;
 $MEDIUM_ICON: 22px;
@@ -201,6 +203,41 @@ $SMALL_ICON: 14px;
 
         a:active {
             @include dark-button-hover;
+        }
+    }
+}
+
+// Red button
+@mixin red-button-regular($display: inline-block, $width: auto, $padding: 0 20px) {
+    @include primary-button-regular($display, $width, $padding);
+    background-color: $RED; 
+    color: $WHITE;
+}
+
+@mixin red-button-hover {
+    @include primary-button-hover;
+    background-color: $HOVER_RED;
+}
+
+@mixin red-button($display: inline-block, $width: auto, $padding: 0 20px) {
+
+    a {
+        @include red-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include red-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover {
+            @include red-button-regular($display, $width, $padding);
+        }
+
+        a:active {
+            @include red-button-hover;
         }
     }
 }

@@ -14,6 +14,7 @@ var currentSubgroup;
 
 // Session Name Form -------------------------------------------------------------------------------------------------------------------------------------
 
+// Updating session name through form
 function updateSessionName(event)
 {
     // Preventing page refresh
@@ -432,6 +433,24 @@ function setUpCircleGroup()
 // Displaying circles in specified section
 function displaySection(section)
 {
+    // Hiding or showing manage groups icon (editable section groups can't be edited)
+    function hideIcon(hide)
+    {
+        var icon = document.getElementById('manage-groups-button');
+
+        if (icon)
+        {
+            if (hide)
+            {
+                icon.style.display = 'none';
+            }
+            else
+            {
+                icon.style.display = 'block';
+            }
+        }
+    }
+
     // Getting circles in selected tab 
     switch(section)
     {
@@ -441,18 +460,22 @@ function displaySection(section)
 
         case 'all':
             currentSection = allCircles;
+            hideIcon(false);
             break;
 
         case 'public':
             currentSection = publicCircles;
+            hideIcon(false);
             break;
 
         case 'your':
             currentSection = yourCircles;
+            hideIcon(false);
             break;
 
         case 'editable':
             currentSection = editableCircles;
+            hideIcon(true);
             break;
     }
 
@@ -479,8 +502,9 @@ function circlesSearchBar()
     });
 }
 
-// Session Name Form -------------------------------------------------------------------------------------------------------------------------------------
+// Magic Links -------------------------------------------------------------------------------------------------------------------------------------------
 
+// Creating magic link through form
 function createMagicLink(event)
 {
     // Preventing page refresh
@@ -517,57 +541,67 @@ function createMagicLink(event)
         }
         else
         {
-            // Sending data to update session name
-            var request = new XMLHttpRequest();
-            request.open('POST', '/new-create-magic-link');
-            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-
-            request.onload = function() 
+            // Checking that link name does not contain spaces
+            if (formData.get('forwardingName').contains(' '))
             {
-                var response = JSON.parse(request.response);
+                errorMessage.style.display = 'flex';
+                errorMessage.innerHTML = 'Link name can not contain spaces (" ")';
+            }
+            else 
+            {
 
-                if (response === 'error')
-                {
-                    errorMessage.style.display = 'flex';
-                    errorMessage.innerHTML = 'Something went wrong, please try again';
-                }
-                else if (response === 'forwarding name exists')
-                {
-                    errorMessage.style.display = 'flex';
-                    errorMessage.innerHTML = '"' + formData.get('forwardingName') + '" link name is already being used, please enter a new name';
-                }
-                else
-                {
-                    successMessage.style.display = 'flex';
-                    successMessage.innerHTML = 'Magic link successfully made for the following circle(s): ';
+                // Sending data to update session name
+                var request = new XMLHttpRequest();
+                request.open('POST', '/new-create-magic-link');
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-                    for (const circle of response.worlds)
+
+                request.onload = function() 
+                {
+                    var response = JSON.parse(request.response);
+
+                    if (response === 'error')
                     {
-                        successMessage.innerHTML += circle + ', ';
+                        errorMessage.style.display = 'flex';
+                        errorMessage.innerHTML = 'Something went wrong, please try again';
                     }
+                    else if (response === 'forwarding name exists')
+                    {
+                        errorMessage.style.display = 'flex';
+                        errorMessage.innerHTML = '"' + formData.get('forwardingName') + '" link name is already being used, please enter a new name';
+                    }
+                    else
+                    {
+                        successMessage.style.display = 'flex';
+                        successMessage.innerHTML = 'Magic link successfully made for the following circle(s): ';
 
-                    successMessage.innerHTML = successMessage.innerHTML.slice(0, -2);
+                        for (const circle of response.worlds)
+                        {
+                            successMessage.innerHTML += circle + ', ';
+                        }
 
-                    copyForm.style.display = 'block';
-                    copyForm.querySelector('.copy-link-input').setAttribute('value', response.forwardingLink);
+                        successMessage.innerHTML = successMessage.innerHTML.slice(0, -2);
 
-                    // Clearing form
-                    var form = document.getElementById('magic-link-form');
-                    form.reset();
+                        copyForm.style.display = 'block';
+                        copyForm.querySelector('.copy-link-input').setAttribute('value', response.forwardingLink);
+
+                        // Clearing form
+                        var form = document.getElementById('magic-link-form');
+                        form.reset();
+                    }
                 }
+
+                var dataString = 'linkExpiry=' + formData.get('linkExpiry');
+                dataString += '&customLinkExpiry=' + formData.get('customLinkExpiry');
+                dataString += '&forwardingName=' + formData.get('forwardingName');
+
+                for (const circle of formData.getAll('magicCircle'))
+                {
+                    dataString += '&magicCircle=' + circle;
+                }
+
+                request.send(dataString);
             }
-
-            var dataString = 'linkExpiry=' + formData.get('linkExpiry');
-            dataString += '&customLinkExpiry=' + formData.get('customLinkExpiry');
-            dataString += '&forwardingName=' + formData.get('forwardingName');
-
-            for (const circle of formData.getAll('magicCircle'))
-            {
-                dataString += '&magicCircle=' + circle;
-            }
-
-            request.send(dataString);
         }
     }
 }
