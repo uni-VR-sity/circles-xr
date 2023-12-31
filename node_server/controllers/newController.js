@@ -830,7 +830,294 @@ const deleteSubgroup = async (req, res, next) =>
   }
 }
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
+// Manage Circle Page ---------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering manage circle page
+const serveManageCircle = async (req, res, next) =>
+{
+  // url: /manage-circle/circle_id
+  // split result array: {"", "manage-circle", "circle_id"}
+  const circleID = req.url.split('/')[2];
+  
+  // Getting world to send to manage-circle page
+  const world = await Worlds.findOne({name: circleID});
+
+  // Getting information of all existing groups
+  const allGroups = await WorldGroups.find({});
+
+  if (world)
+  {
+    var group = null;
+    var groupName = null;
+    var subgroupName = null;
+
+    if (world.group)
+    {
+      group = await WorldGroups.findById(world.group);
+
+      groupName = group.name;
+
+      if (group.subgroups)
+      {
+        for (const subgroup of group.subgroups)
+        {
+          if (JSON.stringify(subgroup._id) === JSON.stringify(world.subgroup))
+          {
+            subgroupName = subgroup.name;
+          }
+        }
+      }
+    }
+
+    // Getting all users from database
+    const users = await User.find({});
+
+    var userPermissions = [];
+
+    // For each user, checking user permissions for the world
+    for (const user of users)
+    {
+      // Checking if it is not the current user
+      if (JSON.stringify(user._id) !== JSON.stringify(req.user._id) && user.usertype !== CIRCLES.USER_TYPE.SUPERUSER)
+      {
+        var userPermission = {
+          username: user.username,
+          usertype: user.usertype,
+          viewing: false,
+          editing: false,
+        }
+  
+        if (world.viewingPermissions.includes(user._id))
+        {
+          userPermission.viewing = true;
+        }
+  
+        if (world.editingPermissions.includes(user._id))
+        {
+          userPermission.editing = true;
+        }
+  
+        userPermissions.push(userPermission);
+      }
+    }
+
+    const userInfo = getUserInfo(req);
+  
+    // Rendering the worldAccess page
+    res.render(path.resolve(__dirname + '/../public/web/views/NEW/manage-circle'), {
+      title: 'Manage ' + world.name,
+      userInfo: userInfo,
+      world: world,
+      worldGroup: groupName,
+      worldSubgroup: subgroupName,
+      userPermissions: userPermissions,
+      allGroups: allGroups,
+    });
+  }
+}
+
+// ------------------------------------------------------------
+
+// Updating circle to have public or private access on user request
+const updateAccessRestriction = async (req, res, next) => 
+{
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: req.body.circle});
+
+  if (world)
+  {
+    if (req.body.restriction === 'true')
+    {
+      try
+      {
+        // Changing world access restrictions to true
+        world.viewingRestrictions = true;
+        await world.save();
+      }
+      catch (e)
+      {
+        console.log(e);
+      }
+    }
+    else
+    {
+      try
+      {
+        // Changing world access restrictions to false
+        world.viewingRestrictions = false;
+        await world.save();
+      }
+      catch (e)
+      {
+        console.log(e);
+      }
+    }
+  }
+
+  res.json('success');
+}
+
+// ------------------------------------------------------------
+
+// Updating user viewing access for circle on user request
+const updateUserViewing = async (req, res, next) => 
+{
+  // Finding the user in database with that username
+  const user = await User.findOne({username: req.body.user});
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: req.body.circle});
+
+  if (user && world)
+  {
+    if (req.body.viewing === 'true')
+    {
+      try
+      {
+        // Adding the user from the list of permitted users
+        world.viewingPermissions.push(user);
+        await world.save();
+
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+    else
+    {
+      try
+      {
+        // Removing the user from the list of permitted users
+        world.viewingPermissions.pull(user);
+        await world.save();
+
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------------
+
+// Updating user editing access for circle on user request
+const updateUserEditing = async (req, res, next) => 
+{
+  // Finding the user in database with that username
+  const user = await User.findOne({username: req.body.user});
+
+  // Finding world in database with that name
+  const world = await Worlds.findOne({name: req.body.circle});
+
+  if (user && world)
+  {
+    if (req.body.editing === 'true')
+    {
+      try
+      {
+        // Adding the user from the list of permitted users
+        world.editingPermissions.push(user);
+        await world.save();
+
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+    else
+    {
+      try
+      {
+        // Removing the user from the list of permitted users
+        world.editingPermissions.pull(user);
+        await world.save();
+
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+  }
+}
+
+// Circle Group Page ----------------------------------------------------------------------------------------------------------------------------------
+
+// Updating circle group and subgroup on user request
+const updateCircleGroup = async (req, res, next) =>
+{
+  if (req.body.world && req.body.group && req.body.subgroup)
+  {
+    // Getting world from database
+    var world = null;
+
+    try
+    {
+      world = await Worlds.findOne({name: req.body.world});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (world)
+    {
+      // If 'No Group' was selected, removing world from any group
+      // Otherwise, adding world to selected group
+      if (req.body.group.replaceAll('-', ' ') === 'No Group')
+      {
+        world.group = null;
+        world.subgroup = null;
+      }
+      else
+      {
+        // Getting group from database
+        var group = null;
+
+        try
+        {
+          group = await WorldGroups.findOne({name: req.body.group.replaceAll('-', ' ')});
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+
+        if (group)
+        {
+          world.group = group._id;
+
+          // If 'No Subgroup' was selected, removing world from any subgroup
+          // Otherwise, adding world to selected subgroup
+          if (req.body.subgroup.replaceAll('-', ' ') === 'No Subgroup')
+          {
+            world.subgroup = null;
+          }
+          else
+          {
+            for (const subgroup of group.subgroups)
+            {
+              if (subgroup.name === req.body.subgroup.replaceAll('-', ' '))
+              {
+                world.subgroup = subgroup._id;
+              }
+            }
+          }
+        }
+      }
+
+      await world.save();
+    }
+  }
+
+  return res.redirect('/manage-circle/' + req.body.world);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
   // Explore Page
@@ -842,4 +1129,11 @@ module.exports = {
   createSubgroup,
   deleteGroup,
   deleteSubgroup,
+  // Manage Circle Page
+  serveManageCircle,
+  updateAccessRestriction,
+  updateUserViewing,
+  updateUserEditing,
+  // Circle Group Page
+  updateCircleGroup,
 }

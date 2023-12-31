@@ -1,0 +1,151 @@
+extends template.pug
+
+block append scripts
+    script(src='/web/js/views/manage-circle.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var user;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+    
+    // User row -----------------------------------------------------------------------------
+    mixin userRow(user, editable)
+        .row(id=user.username.replaceAll(' ', '-'))
+            p.username= user.username
+
+            p.user-type= user.usertype
+            
+            if editable
+                .viewing-access
+                    if user.viewing
+                        if user.editing
+                            .icon-container.permitted-icon.disabled
+                                i
+                        else 
+                            .icon-container.permitted-icon
+                                i(onclick='restrictViewing("' + user.username + '", "' + world.name + '")')
+                    else 
+                        if user.editing
+                            .icon-container.restricted-icon.disabled
+                                i
+                        else 
+                            .icon-container.restricted-icon
+                                i(onclick='permitViewing("' + user.username + '", "' + world.name + '")')
+
+                .editing-access
+                    if user.editing
+                        .icon-container.permitted-icon
+                            i(onclick='restrictEditing("' + user.username + '", "' + world.name + '")')
+                    else 
+                        .icon-container.restricted-icon
+                            i(onclick='permitEditing("' + user.username + '", "' + world.name + '")')
+            else
+                .viewing-access 
+                    if user.viewing
+                        .icon-container.permitted-icon
+                            i
+                    else 
+                        .icon-container.restricted-icon
+                            i
+
+                .editing-access
+                    if user.editing
+                        .icon-container.permitted-icon
+                            i
+                    else 
+                        .icon-container.restricted-icon
+                            i
+
+            hr
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+    // Title --------------------------------------------------------------------------------
+    section#circle-title-container
+        .content-container
+
+            - var profileURL = '/worlds/' + world.name + '/profile.jpg'
+            - var altText = world.displayName + "'s profile image";
+
+            if world.hasProfileImage
+                img(src=profileURL alt=altText)
+            else 
+                img(src='/web/views/includes/NEW/default-circle-profile.png' alt=altText)
+
+            h1= world.displayName
+
+            .circle-access-restriction
+                if world.viewingRestrictions
+                    h3#circle-restriction-text Private
+                    #circle-restriction-symbol.icon-container
+                        i.has-access-rectriction(onclick='makePublic("' + world.name + '")')
+                else 
+                    h3#circle-restriction-text Public
+                    #circle-restriction-symbol.icon-container
+                        i.no-access-rectriction(onclick='makePrivate("' + world.name + '")')
+
+            .circle-group 
+                .group-text
+                    if worldGroup != null
+
+                        p= worldGroup
+
+                        if worldSubgroup != null 
+                            p &nbsp&nbsp|&nbsp&nbsp !{worldSubgroup}
+
+                    else 
+                        p No Group
+
+                .icon-container 
+                    i(class='fa-solid fa-pencil' onclick='openOverlay("circle-group-overlay")')
+
+    include circle-group.pug
+
+    // User access --------------------------------------------------------------------------
+    section#user-access-container
+
+        if world.viewingRestrictions
+
+            // Header -----------------------------------------------------------------------
+            .header-row
+                .content-container
+
+                    .row 
+                        b.username User 
+
+                        b.user-type User Type 
+
+                        b.viewing-access Viewing Access 
+
+                        b.editing-access Editing Access
+
+            // User rows --------------------------------------------------------------------
+            .content-container
+
+                for user of userPermissions
+                    +userRow(user, true)
+
+        else
+            .content-container
+                i.warning * Make circle private to edit permissions
+
+            // Header -----------------------------------------------------------------------
+            .header-row
+                .content-container.greyed
+
+                    .row 
+                        b.username User 
+
+                        b.user-type User Type 
+
+                        b.viewing-access Viewing Access 
+
+                        b.editing-access Editing Access
+
+            // User rows --------------------------------------------------------------------
+            .content-container.greyed
+
+                for user of userPermissions
+                    +userRow(user, false)

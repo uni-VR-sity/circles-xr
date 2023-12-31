@@ -10,32 +10,6 @@
         display: flex;
         flex-direction: column;
 
-        // Title
-        #title-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-areas: "title close-button"
-                                 "divider divider";
-            margin-bottom: $LARGE_MARGIN;
-
-            h2 {
-                grid-area: title;
-            }
-
-            .icon-container {
-                @include end-flex;
-                @include icon-button($DEFAULT_LARGE_ICON, $WHITE, 8px 11px);
-                grid-area: close-button;
-                align-items: start; 
-                padding-right: $X_SMALL_MARGIN;
-            }
-
-            hr {
-                grid-area: divider;
-                width: 100%
-            }
-        }
-
         // Create new group
         #create-group {
             margin-bottom: $X_SMALL_MARGIN;

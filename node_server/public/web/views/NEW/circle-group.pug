@@ -1,0 +1,47 @@
+block append scripts
+    script(src='/web/js/views/circle-group.js')
+
+block content
+
+    // Circle group overlay ------------------------------------------------------------------------------------------------------------------------
+    #circle-group-overlay.overlay-container
+        .overlay
+
+            // Title ------------------------------------------------------------------------
+            #title-container
+                h2 Circle Group
+
+                .icon-container
+                    i(class="fa-solid fa-xmark" onclick='closeOverlay("circle-group-overlay")')
+
+                hr
+
+            // Group select -----------------------------------------------------------------
+            #group-select-container
+                form(action='/update-circle-group' method='post')
+                    
+                    input.hidden-field(type='text' name='world' value=world.name)
+
+                    .form-field
+                        label Group
+
+                        select(id='current-group' name='group')
+                            
+                            option(value='No-Group' id='no-group') No Group
+
+                            for group of allGroups
+                                - selected = (group.name === worldGroup);
+                                option(value!= group.name.replaceAll(' ', '-') selected!=selected)!= group.name
+                                - selected = false;
+
+                    .form-field
+                        label Subgroup
+                        select.field-select(id='current-subgroup' name='subgroup')
+
+                    script.
+                        displaySubgroups('!{JSON.stringify(allGroups)}', '#{worldGroup}', '#{worldSubgroup}');
+                        listenForGroupUpdate('!{JSON.stringify(allGroups)}', '#{worldGroup}');
+                        listenForSubgroupUpdate();
+
+                    .form-field.last-field
+                        input(type='submit' value='Update')

@@ -135,6 +135,11 @@ input[type=checkbox]:checked + label::before
 
 // SUBMIT -----------------------------------------------------
 
+.submit-field
+{
+    margin-left: 150px;
+}
+
 .form-field:has(> input[type=submit]:not(.inline-submit))
 {
     padding-top: $SMALL_MARGIN;

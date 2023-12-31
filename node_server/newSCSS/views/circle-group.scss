@@ -1,0 +1,40 @@
+// DEFAULT ----------------------------------------------------
+
+#circle-group-overlay {
+
+    .overlay {
+        box-sizing: border-box;
+        padding: $X_LARGE_MARGIN;
+        display: flex;
+        flex-direction: column;
+
+        // Group select
+        #group-select-container {
+
+            form {
+
+                .form-field {
+    
+                    select {
+    
+                        #no-group, #no-subgroup {
+                            color: $GREY;
+                        }
+                    }
+
+                    input[type=submit] {
+                        width: 100%;
+                    }
+
+                    .nothing-selected {
+                        color: $GREY;
+
+                        option {
+                            color: $BLACK;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
