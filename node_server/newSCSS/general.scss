@@ -11,13 +11,14 @@ hr {
 
 h1 {
     @include no-spacing;
+    margin-bottom: $SECTION_PADDING;
     font-weight: 700; 
     font-size: 35px;
  }
 
 h2 {
     @include no-spacing;
-    margin-bottom: 30px;
+    margin-bottom: $SECTION_PADDING;
     font-weight: 300; 
     font-size: 28px;
     text-transform: uppercase;
@@ -25,6 +26,7 @@ h2 {
 
 h3 {
     @include no-spacing;
+    margin-bottom: $SECTION_PADDING;
     font-weight: 500; 
     font-size: 20px;
 }

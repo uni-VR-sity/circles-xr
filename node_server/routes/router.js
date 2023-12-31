@@ -57,6 +57,17 @@ router.post('/new-create-subgroup', authenticated, newController.createSubgroup)
 router.post('/delete-group', authenticated, newController.deleteGroup);
 router.post('/delete-subgroup', authenticated, newController.deleteSubgroup);
 
+// Manage Circle Page Routes -----------------------------------------------------------------------------------------------------------------------------
+
+router.get('/manage-circle/:circle_id', authenticated, newController.serveManageCircle);
+router.post('/update-access-restriction', authenticated, newController.updateAccessRestriction);
+router.post('/update-user-viewing', authenticated, newController.updateUserViewing);
+router.post('/update-user-editing', authenticated, newController.updateUserEditing);
+
+// Circle Group Page Routes ------------------------------------------------------------------------------------------------------------------------------
+
+router.post('/update-circle-group', authenticated, newController.updateCircleGroup);
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web

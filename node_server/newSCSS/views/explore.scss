@@ -237,6 +237,10 @@
                 // (grid-template-areas set using js)
                 margin-left: $SECTION_PADDING;
 
+                h3 {
+                    @include no-spacing;
+                }
+
                 .selected-tab {
                     background-color: $DARK_GREY;
                     color: $WHITE;

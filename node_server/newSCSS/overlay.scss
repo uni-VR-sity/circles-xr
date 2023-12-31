@@ -18,6 +18,34 @@
         position: absolute; 
         box-shadow: 0px 0px 15px #0000003b; 
         border-radius: $BORDER_RADIUS;
+
+        // Title
+        #title-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-areas: "title close-button"
+                                 "divider divider";
+            margin-bottom: $LARGE_MARGIN;
+
+            h2 {
+                grid-area: title;
+                margin-bottom: $MEDIUM_MARGIN;
+            }
+
+            .icon-container {
+                @include end-flex;
+                @include icon-highlight($DEFAULT_LARGE_ICON, $RED);
+                grid-area: close-button;
+                align-items: start; 
+                padding-top: calc($X_SMALL_MARGIN / 2);
+                padding-right: $X_SMALL_MARGIN;
+            }
+
+            hr {
+                grid-area: divider;
+                width: 100%
+            }
+        }
     }
 }
 

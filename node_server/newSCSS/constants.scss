@@ -19,8 +19,10 @@ $HOVER_BLUE: #0f5da7;
 $DARK_BLUE: #104C84;
 $CONTRAST_COLOR: #E85D75;
 $RED: #cb0000;
-$HOVER_RED: #cb0000;
+$HOVER_RED: #ae0000;
+$DISABLED_RED: #e3b1b1;
 $GREEN: #008000;
+$DISABLED_GREEN: #99d599;
 
 // Dimensions
 $MAX_CONTENT_WIDTH: 1200px;
@@ -334,6 +336,55 @@ $SMALL_ICON: 14px;
 
         a:active {
             @include icon-button-hover;
+        }
+    }
+}
+
+// Icon button highlight
+@mixin icon-highlight-regular($font-size) {
+    color: $BLACK;
+    font-size: $font-size;
+}
+
+@mixin icon-highlight-hover($colour: $DARK_GREY) {
+    color: $colour;
+    cursor: pointer;
+}
+
+@mixin icon-highlight($font-size, $colour: $DARK_GREY) {
+    i {
+        @include icon-highlight-regular($font-size);
+    }
+
+    i:hover {
+        @include icon-highlight-hover($colour);
+    }
+
+    a {
+        @include icon-highlight-regular($font-size);
+    }
+
+    a:hover {
+        @include icon-highlight-hover($colour);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        i:hover {
+            @include icon-highlight-regular($font-size);
+        }
+
+        i:active {
+            @include icon-highlight-hover($colour);
+        }
+
+        a:hover {
+            @include icon-highlight-regular($font-size);
+        }
+
+        a:active {
+            @include icon-highlight-hover($colour);
         }
     }
 }

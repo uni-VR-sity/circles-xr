@@ -14,6 +14,27 @@ var currentSubgroup;
 
 // Session Name Form -------------------------------------------------------------------------------------------------------------------------------------
 
+// Checking that input doesn't contain ', ", or -
+function validInput(input)
+{
+    if (input.includes("'"))
+    {
+        return false;
+    }
+    else if (input.includes('"'))
+    {
+        return false;
+    }
+    else if (input.includes('-'))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// ------------------------------------------------------------
+
 // Updating session name through form
 function updateSessionName(event)
 {
@@ -30,28 +51,37 @@ function updateSessionName(event)
     // Getting form data
     var formData = new FormData(event.target);
 
-    // Sending data to update session name
-    var request = new XMLHttpRequest();
-    request.open('POST', '/update-session-display-name');
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    request.onload = function() 
+    // Checking that the session name don't contain ', ", or -
+    if (validInput(formData.get('sessionName')))
     {
-        var response = JSON.parse(request.response);
+        // Sending data to update session name
+        var request = new XMLHttpRequest();
+        request.open('POST', '/update-session-display-name');
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        if (response === 'updated')
+        request.onload = function() 
         {
-            successMessage.style.display = 'flex';
-            successMessage.innerHTML = 'Display name successfully changed for the session';
+            var response = JSON.parse(request.response);
+
+            if (response === 'updated')
+            {
+                successMessage.style.display = 'flex';
+                successMessage.innerHTML = 'Display name successfully changed for the session';
+            }
+            else
+            {
+                errorMessage.style.display = 'flex';
+                errorMessage.innerHTML = "Display name must contain text and can not start with a space (' ')";
+            }
         }
-        else
-        {
-            errorMessage.style.display = 'flex';
-            errorMessage.innerHTML = "Display name must contain text and can not start with a space (' ')";
-        }
+
+        request.send('sessionName='+ formData.get('sessionName'));
     }
-
-    request.send('sessionName='+ formData.get('sessionName'));
+    else
+    {
+        errorMessage.style.display = 'block';
+        errorMessage.innerHTML = 'Display name contains invalid characters (' + "'" + ', ", -)';
+    }
 }
 
 // Circle Tabs -------------------------------------------------------------------------------------------------------------------------------------------
