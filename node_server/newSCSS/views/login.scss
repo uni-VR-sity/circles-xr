@@ -1,0 +1,105 @@
+// DEFAULT ----------------------------------------------------
+
+#login {
+    display: flex;
+    background-image: url("/web/images/campfire.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: 50% 50%;
+    min-height: 100%;
+    margin: 0;
+
+    // Left side (photo)
+    #left {
+        display: block;
+        width: 50%;
+    }
+
+    // Right side (content)
+    #right {
+        flex-direction: column;
+        width: 50%;
+        padding: $LARGE_MARGIN;
+        box-sizing: border-box;
+        position: relative;
+        background-color: $LIGHT_GREY;
+
+        #logo {
+            max-width: 340px;
+            margin: 0 auto;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
+        #introduction, #login-form, #intro-video {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #introduction {
+            margin-bottom: $LARGE_MARGIN;
+        }
+
+        #login-form {
+            margin-bottom: $LARGE_MARGIN;
+
+            .error-message {
+                display: block;
+                padding-bottom: $X_SMALL_MARGIN;
+            }
+            
+            form {
+                width: fit-content;
+                margin: 0 auto;
+                margin-bottom: $LARGE_MARGIN;
+
+                .form-field {
+                    margin-bottom: $SMALL_MARGIN;
+                }
+            }
+
+            p {
+                text-align: center;
+            }
+
+            p:first-of-type {
+                margin-bottom: $SMALL_MARGIN;
+            }
+        }
+
+        #intro-video {
+            
+            #video-container {
+                position: relative; 
+                padding-bottom: 60%; 
+                height: 0; 
+                overflow: hidden; 
+                max-width: 100%;
+
+                iframe, object, embed {
+                    position: absolute; 
+                    top: 0; 
+                    left: 0; 
+                    width: 100%; 
+                    height: 100%;
+                }
+            }
+        }
+    }
+}
+
+// MOBILE -----------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK) 
+{
+    #login {
+
+        // Left side (photo)
+        #left {
+            display: none;
+        }
+
+        // Right side (content)
+        #right {
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,86 @@
+// DEFAULT ----------------------------------------------------
+
+#register {
+    display: flex;
+    background-image: url("/web/images/campfire.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: 50% 50%;
+    min-height: 100%;
+    margin: 0;
+
+    // Left side (photo)
+    #left {
+        display: block;
+        width: 50%;
+    }
+
+    // Right side (content)
+    #right {
+        flex-direction: column;
+        width: 50%;
+        padding: $LARGE_MARGIN;
+        box-sizing: border-box;
+        position: relative;
+        background-color: $LIGHT_GREY;
+
+        #logo {
+            max-width: 340px;
+            margin: 0 auto;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
+        #introduction, #register-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #register-form {
+            margin-bottom: $LARGE_MARGIN;
+
+            h2, p {
+                text-align: center;
+            }
+
+            h2 {
+                margin-top: $LARGE_MARGIN;
+            }
+
+            .error-message {
+                display: block;
+                padding-bottom: $X_SMALL_MARGIN;
+            }
+
+            form {
+                width: fit-content;
+                margin: $LARGE_MARGIN auto;
+                margin-bottom: $LARGE_MARGIN;
+
+                .form-field {
+                    margin-bottom: $SMALL_MARGIN;
+
+                    label {
+                        width: 170px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MOBILE -----------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK) 
+{
+    #register {
+
+        // Left side (photo)
+        #left {
+            display: none;
+        }
+
+        // Right side (content)
+        #right {
+            width: 100%;
+        }
+    }
+}

@@ -2,9 +2,9 @@
 
 // Force reload when back button is pressed (chrome does not keep data correctly when going so just always refresh the page)
 // https://stackoverflow.com/questions/8861181/clear-all-fields-in-a-form-upon-going-back-with-browser-back-button
-window.addEventListener("pageshow", function(event)
+window.addEventListener('pageshow', function(event)
 {
-    if (event.persisted|| performance.getEntriesByType("navigation")[0].type === 'back_forward') 
+    if (event.persisted|| performance.getEntriesByType('navigation')[0].type === 'back_forward') 
     {
         window.location.reload();
     }
