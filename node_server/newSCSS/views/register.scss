@@ -36,7 +36,6 @@
         }
 
         #register-form {
-            margin-bottom: $LARGE_MARGIN;
 
             h2, p {
                 text-align: center;
@@ -54,7 +53,6 @@
             form {
                 width: fit-content;
                 margin: $LARGE_MARGIN auto;
-                margin-bottom: $LARGE_MARGIN;
 
                 .form-field {
                     margin-bottom: $SMALL_MARGIN;
