@@ -44,6 +44,37 @@ const notAuthenticated = (req, res, next) => {
 
 // NEW ---------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Login Routes ------------------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/new', notAuthenticated, newController.serveLogin);
+
+router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
+  req.session.errorMessage = 'Username and/ or password incorrect';
+  return res.redirect('/');
+});
+
+router.get('/get-display-name', authenticated, function(req, res)
+{
+  req.session.sessionName = req.user.displayName;
+  return res.redirect('/explore');
+});
+
+router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
+  req.session.errorMessage = 'Guest log in failed, please try again';
+  return res.redirect('/');
+}); 
+
+// Register Routes ---------------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-register', notAuthenticated, newController.serveRegister);
+
+router.post('/new-register-user', newController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
+{
+  res.render(path.resolve(__dirname + '/../public/web/views/register'), {
+    message: "User registered successfully but login failed, please login again"
+  });
+});
+
 // Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------------
 
 router.get('/new-explore', authenticated, newController.serveExplore);

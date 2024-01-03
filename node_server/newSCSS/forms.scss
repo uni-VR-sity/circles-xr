@@ -135,9 +135,15 @@ input[type=checkbox]:checked + label::before
 
 // SUBMIT -----------------------------------------------------
 
-.submit-field
-{
+.submit-field {
     margin-left: 150px;
+}
+
+.full-width-submit {
+    
+    input[type=submit] {
+        width: 100%;
+    }
 }
 
 .form-field:has(> input[type=submit]:not(.inline-submit))

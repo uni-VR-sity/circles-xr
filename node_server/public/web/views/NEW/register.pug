@@ -1,0 +1,61 @@
+html
+    head
+
+        title Register for CIRCLES
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+        block stylesheets
+            link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+            link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
+
+        block scripts
+            script(src='/web/js/forms.js')
+            script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+    body 
+
+        main 
+
+            // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+            // Login --------------------------------------------------------------------------------
+            section#register
+
+                // Left side (photo) ----------------------------------------------------------------
+                #left 
+
+                // Right side (content) -------------------------------------------------------------
+                #right
+
+                    #logo 
+                        include includes/circles-logo.svg
+
+                    #register-form 
+                    
+                        h2 Register
+
+                        p Create an account to begin exploring! Or 
+                            a.link-icon(href="/guest-login") continue as guest
+
+                        if message
+                            p.error-message= message
+
+                        form(action='/new-register-user' method='post')
+
+                            .form-field
+                                label.required-form-label Username
+                                input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                            .form-field
+                                label.required-form-label Password 
+                                input(type='password' name='password' required)
+
+                            .form-field
+                                label.required-form-label Confirm password 
+                                input(type='password' name='passwordConf' required)
+
+                            .form-field.last-field.full-width-submit
+                                input(type='submit' value='Login')
+
+                        p
+                            a.link-icon(href='/') Return to home page

@@ -95,6 +95,128 @@ const createJWT_MagicLink = function(expiryTimeMin, worlds)
   return magicLink;
 }
 
+// Login Page -----------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering login page
+const serveLogin = async (req, res, next) => 
+{
+  let errorMessage = null;
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = '';
+  }
+
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/login.pug'), {
+    message: errorMessage
+  });
+}
+
+// Register Page --------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering the register user page with a specific message to the user about their registration (ex. error messages, success messages)
+const renderRegister = (res, renderMessage) =>
+{
+    res.render(path.resolve(__dirname + '/../public/web/views/NEW/register'), {
+      title: `Register for Circles`,
+      message: renderMessage
+    });
+}
+
+// ------------------------------------------------------------
+
+const serveRegister = async (req, res, next) => 
+{
+  var errorMessage = null;
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
+  renderRegister(res, errorMessage);
+}
+
+// ------------------------------------------------------------
+
+// Creates a new user and puts them in the user database
+const registerUser = (req, res, next) => 
+{
+  // Making sure all required fields are there (username, password, and password confirmation)
+  if (req.body.username && req.body.password && req.body.passwordConf) 
+  {
+    // Making sure passwords match
+    // If they don't, send an error message to the user
+    if (req.body.password !== req.body.passwordConf) 
+    {
+      console.log('ERROR: Passwords do not match');
+      renderRegister(res, 'Passwords do not match');
+    }
+    else
+    {
+      // Compiling all data for the new user
+      const userData = {
+        username: req.body.username,                                    // User entered username
+        usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
+        password: req.body.password,                                    // User entered password
+        displayName: req.body.username,                                 // By default, display name is the same as the username
+      };
+
+      var user = null;
+      var error = null;
+
+      // Creating new user in database
+      async function createNewUser(newUser) 
+      {
+        try {
+          user = await User.create(newUser);
+        } 
+        catch(err) 
+        {
+          error = err;
+        }
+      }
+      
+      createNewUser(userData).then(function() 
+      {
+        // Checking if there was an error while creating the user and if there was, sending the error to the console
+        // If user creation was successfull, outputting a success message to the user
+        if (error) 
+        {
+          console.log("createUser error on [" + userData.username + "]: " + error.message);
+
+          const errorMessage = error.message;
+
+          // Usernames must be unique
+          // If there was an error because the username already exists in the database, output an error message to the user
+          if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+          {
+            req.session.errorMessage = 'Username is unavailable';
+            return res.redirect('/register');
+          }
+          else
+          {
+            req.session.errorMessage = 'Something went wrong, please try again';
+            return res.redirect('/register');
+          }
+        } 
+        else 
+        {
+          console.log("Successfully added user: " + user.username);
+          return next();
+        }
+      });
+    }
+  } 
+  else 
+  {
+    req.session.errorMessage = 'Something went wrong, please try again';
+    return res.redirect('/register');
+  }
+}
+
 // Explore Page ---------------------------------------------------------------------------------------------------------------------------------------
 
 // Getting certain worlds from the world database
@@ -397,7 +519,7 @@ const serveExplore = async (req, res, next) =>
   }
 
   // Rendering page
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/new-explore'), 
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/explore'), 
   {
     title: 'Explore',
     userInfo: getUserInfo(req),
@@ -1120,6 +1242,11 @@ const updateCircleGroup = async (req, res, next) =>
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
+  // Login Page
+  serveLogin,
+  // Register Page
+  serveRegister,
+  registerUser,
   // Explore Page
   serveExplore,
   updateSessionName,
