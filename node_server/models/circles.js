@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const fs       = require('fs');
 
-const WorldSchema = new mongoose.Schema({
+const CircleSchema = new mongoose.Schema({
     name: {
       type:       String,
       unique:     true,
@@ -32,11 +32,11 @@ const WorldSchema = new mongoose.Schema({
     },
     group: {
       type:       mongoose.Schema.Types.ObjectId, 
-      ref:        'worldGroups',
+      ref:        'circleGroups',
     },
     subgroup: {
       type:       mongoose.Schema.Types.ObjectId, 
-      ref:        'worldGroups.subgroups',
+      ref:        'circleGroups.subgroups',
     },
     viewingRestrictions: {
       type:       Boolean,
@@ -91,10 +91,10 @@ const WorldSchema = new mongoose.Schema({
     }],
 });
 
-const Worlds = mongoose.model('worlds', WorldSchema);
+const Circles = mongoose.model('circles', CircleSchema);
 
-// Adding worlds from public/worlds to the database
-const addWorlds = async function()
+// Adding circles from public/worlds to the database
+const addCircles = async function()
 {
   // Getting all world folders under public/worlds
   var files = null;
@@ -129,15 +129,15 @@ const addWorlds = async function()
         }
 
         // If path is a directory,
-        // If the world is not already in the database, add it
+        // If the circle is not already in the database, add it
         // If it is, check that the settings are still the name (if something changed, update it)
         if (stat.isDirectory())
         {
-          var world = null;
+          var circle = null;
 
           try
           {
-            world = await Worlds.findOne({ name: file }).exec();
+            circle = await Circles.findOne({ name: file }).exec();
           }
           catch (e)
           {
@@ -178,9 +178,9 @@ const addWorlds = async function()
             hasProfileImage = false;
           }
 
-          if (world === null)
+          if (circle === null)
           {
-            const worldData = {
+            const circleData = {
               name: file,
               displayName: displayName,
               url: path,
@@ -189,7 +189,7 @@ const addWorlds = async function()
 
             try 
             {
-              await Worlds.create(worldData);
+              await Circles.create(circleData);
               console.log(file + ' added to database');
             } 
             catch(err) 
@@ -199,16 +199,16 @@ const addWorlds = async function()
           }
           else
           {
-            if (world.displayName !== displayName)
+            if (circle.displayName !== displayName)
             {
-              world.displayName = displayName;
-              await world.save();
+              circle.displayName = displayName;
+              await circle.save();
             }
 
-            if (world.hasProfileImage !== hasProfileImage)
+            if (circle.hasProfileImage !== hasProfileImage)
             {
-              world.hasProfileImage = hasProfileImage;
-              await world.save();
+              circle.hasProfileImage = hasProfileImage;
+              await circle.save();
             }
           }
         }
@@ -217,15 +217,15 @@ const addWorlds = async function()
   }
 }
 
-// Removing all worlds that are in the database but not in public/worlds
-const removeDeletedWorlds = async function()
+// Removing all circles that are in the database but not in public/worlds
+const removeDeletedCircles = async function()
 {
   // Getting all worlds in the database
   var databaseWorlds = [];
 
   try
   {
-    databaseWorlds = await Worlds.find({});
+    databaseWorlds = await Circles.find({});
   }
   catch (e)
   {
@@ -248,14 +248,14 @@ const removeDeletedWorlds = async function()
   // If a world in the database is not in public/worlds, delete it
   for (var i = 0; i < databaseWorlds.length; i++)
   {
-    var world = databaseWorlds[i];
+    var circle = databaseWorlds[i];
 
-    if (!serverWorlds.includes(world.name))
+    if (!serverWorlds.includes(circle.name))
     {
       try
       {
-        console.log('deleting ' + world.name);
-        await Worlds.deleteOne({name: world.name});
+        console.log('deleting ' + circle.name);
+        await Circles.deleteOne({name: circle.name});
       }
       catch (e) 
       {
@@ -269,11 +269,11 @@ const removeDeletedWorlds = async function()
 const checkWhiteboardFiles = async function()
 {
   // Getting all worlds in the database
-  var databaseWorlds = null;
+  var databaseCircles = null;
 
   try
   {
-    databaseWorlds = await Worlds.find({});
+    databaseCircles = await Circles.find({});
   }
   catch (e)
   {
@@ -294,15 +294,15 @@ const checkWhiteboardFiles = async function()
 
   // For each world, making sure their whiteboard files are in the folder
   // If not, delete their entry in the database
-  if (databaseWorlds)
+  if (databaseCircles)
   { 
     // Going through each world
-    for (const world of databaseWorlds)
+    for (const circle of databaseCircles)
     {
       var existingFiles = [];
       
       // Going through each whiteboard file
-      for (const file of world.whiteboardFiles)
+      for (const file of circle.whiteboardFiles)
       { 
         if (folderFiles.includes(file.name))
         {
@@ -314,8 +314,8 @@ const checkWhiteboardFiles = async function()
         }
       }
       
-      world.whiteboardFiles = existingFiles;
-      await world.save();
+      circle.whiteboardFiles = existingFiles;
+      await circle.save();
     }
   }
 }
@@ -323,11 +323,11 @@ const checkWhiteboardFiles = async function()
 // Calling functions one by one (errors occur if async functions run together)
 const execute = async function()
 {
-  await addWorlds();
-  await removeDeletedWorlds();
+  await addCircles();
+  await removeDeletedCircles();
   await checkWhiteboardFiles();
 }
 
 execute();
 
-module.exports = Worlds;
+module.exports = Circles;

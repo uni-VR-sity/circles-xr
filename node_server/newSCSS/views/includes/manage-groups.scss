@@ -1,4 +1,4 @@
-// DEFAULT ----------------------------------------------------
+// DEFAULT ----------------------------------------------------------------------------------
 
 #manage-groups-overlay
 {
@@ -224,6 +224,11 @@
                         color: $BLUE;
                     }
                 }
+            }
+
+            #no-groups-message {
+                margin-top: $X_SMALL_MARGIN;
+                justify-content: center;
             }
         }
     }

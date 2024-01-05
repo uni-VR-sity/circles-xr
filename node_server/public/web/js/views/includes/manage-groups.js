@@ -1,6 +1,6 @@
 'use strict';
 
-// Subgroup Inputs ---------------------------------------------------------------------------------------------------------------------------------------
+// Subgroup Inputs ---------------------------------------------------------------------------------------------------------------------------------
 
 // Adding another input into the group form
 function addSubgroupInput(element)
@@ -46,7 +46,7 @@ function addSubgroupInput(element)
     parentElement.appendChild(inputContainer);
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Removing input from the group form
 function removeSubgroupInput(element)
@@ -56,7 +56,7 @@ function removeSubgroupInput(element)
     input.remove();
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Removing extra subgroup inputs
 function removeExtraSubgroupInputs(form)
@@ -69,7 +69,7 @@ function removeExtraSubgroupInputs(form)
     }
 }
 
-// Creating ----------------------------------------------------------------------------------------------------------------------------------------------
+// Creating ----------------------------------------------------------------------------------------------------------------------------------------
 
 // Checking that input doesn't contain ', ", or -
 function validInput(input)
@@ -90,7 +90,7 @@ function validInput(input)
     return true;
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Updating number of subgroups in group row
 function updateSubgroupNum(row, increasing)
@@ -119,7 +119,7 @@ function updateSubgroupNum(row, increasing)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creating subgroup row
 function createSubgroupRow(group, subgroup)
@@ -192,7 +192,7 @@ function createSubgroupRow(group, subgroup)
     return row;
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creating group row and its subrows
 function createGroupRows(group, subgroups)
@@ -252,7 +252,7 @@ function createGroupRows(group, subgroups)
                 var deleteFunction = 'deleteGroup(\'' + group + '\')';
                 var note = 'Circles in group will NOT be deleted';
 
-                trashIcon.setAttribute('onclick', 'deleteConfirmationPopUp("Group", "' + group + '", "' + deleteFunction + '", "' + note + '")');
+                trashIcon.setAttribute('onclick', 'deleteConfirmationPopUp(event, "Group", "' + group + '", "' + deleteFunction + '", "' + note + '")');
 
             trashIconContainer.appendChild(trashIcon);
         
@@ -351,7 +351,7 @@ function createGroupRows(group, subgroups)
     groupContainer.appendChild(row);
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creating group through form
 function createGroup(event)
@@ -404,6 +404,8 @@ function createGroup(event)
                 }
                 else
                 {
+                    document.getElementById('no-groups-message').style.display = 'none';
+
                     createGroupRows(formData.get('group'), formData.getAll('subgroups'));
                 
                     event.target.reset();
@@ -434,7 +436,7 @@ function createGroup(event)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creating subgroup through form
 function createSubgroup(event)
@@ -488,7 +490,7 @@ function createSubgroup(event)
     }
 }
 
-// Deleting ----------------------------------------------------------------------------------------------------------------------------------------------
+// Deleting ----------------------------------------------------------------------------------------------------------------------------------------
 
 // Deleting group on user request
 function deleteGroup(group)
@@ -504,22 +506,21 @@ function deleteGroup(group)
         }
     }
 
+    // If that was the last group row, displaying no groups available message
+    if (document.getElementsByClassName('group').length === 0)
+    {
+        document.getElementById('no-groups-message').style.display = 'flex';
+    }
+
     // Sending data to delete group from database
     var request = new XMLHttpRequest();
     request.open('POST', '/delete-group');
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    request.onload = function()
-    {
-        location.reload();
-
-        // ******************************************
-    }
-
     request.send('group=' + group);
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Deleting subgroup on user request
 function deleteSubgroup(group, subgroup)
@@ -546,7 +547,7 @@ function deleteSubgroup(group, subgroup)
     request.send('group=' + group + '&subgroup=' + subgroup);
 }
 
-// Row Click ---------------------------------------------------------------------------------------------------------------------------------------------
+// Row Click ---------------------------------------------------------------------------------------------------------------------------------------
 
 // Collapsing or hiding group and subgroup subrows
 function collapseRows(row, subRowClass, isGroup, toDisplay)
@@ -622,7 +623,7 @@ function collapseRows(row, subRowClass, isGroup, toDisplay)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Colls/ hiding subrows when group row is clicked
 function groupRowClick(group)
@@ -644,7 +645,7 @@ function groupRowClick(group)
     });
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Expanding subrows when group row is clicked
 function subgroupRowClick(group, subgroup)

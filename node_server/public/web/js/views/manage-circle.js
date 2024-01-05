@@ -18,7 +18,7 @@ function makePublic(circle)
     request.send('circle='+ circle + '&restriction=false');
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Setting circle to be private
 function makePrivate(circle)
@@ -35,10 +35,6 @@ function makePrivate(circle)
 
     request.send('circle='+ circle + '&restriction=true');
 }
-
-// Group -------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 
 // User access -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -67,7 +63,7 @@ function permitViewing(user, circle)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Removing user viewing permission on circle
 function restrictViewing(user, circle)
@@ -94,7 +90,7 @@ function restrictViewing(user, circle)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Giving user editing permission on circle
 function permitEditing(user, circle)
@@ -125,7 +121,7 @@ function permitEditing(user, circle)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Removing user editing permission on circle
 function restrictEditing(user, circle)

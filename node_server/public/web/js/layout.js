@@ -10,7 +10,7 @@ window.addEventListener('pageshow', function(event)
     }
 });
 
-// Navigation Bar ----------------------------------------------------------------------------------------------------------------------------------------
+// Navigation Bar ----------------------------------------------------------------------------------------------------------------------------------
 
 // Listening for window resize to reset element style values to display properly
 var previousWindowWidth = window.innerWidth;

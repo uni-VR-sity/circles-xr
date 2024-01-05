@@ -1,6 +1,6 @@
 'use strict';
 
-// General -----------------------------------------------------------------------------------------------------------------------------------------------
+// General -----------------------------------------------------------------------------------------------------------------------------------------
 
 // Closing overlay
 function openOverlay(id)
@@ -10,7 +10,7 @@ function openOverlay(id)
     overlay.style.display = 'flex';
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Closing overlay
 function closeOverlay(id)
@@ -20,7 +20,13 @@ function closeOverlay(id)
     overlay.style.display = 'none';
 }
 
-// Delete Confirmation -----------------------------------------------------------------------------------------------------------------------------------
+// Closing overlay by reloading page
+function closeOverlayReload()
+{
+    location.reload();
+}
+
+// Delete Confirmation -----------------------------------------------------------------------------------------------------------------------------
 
 // Showing delete confirmation
 function deleteConfirmationPopUp(event, item, name, deleteFuntion, deleteNote = '')
@@ -105,10 +111,12 @@ function deleteConfirmationPopUp(event, item, name, deleteFuntion, deleteNote = 
 
     overlay.appendChild(popup);
 
+    overlay.style.display = 'flex';
+
     document.getElementsByTagName('body')[0].appendChild(overlay);
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Closing delete confirmation pop up
 function cancelPopupDelete(element)

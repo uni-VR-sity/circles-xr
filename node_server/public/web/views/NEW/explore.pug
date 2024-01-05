@@ -30,11 +30,11 @@ block content
             if circle.hasProfileImage
                 img(src=profileURL alt=altText)
             else 
-                img(src='/web/views/includes/NEW/default-circle-profile.png' alt=altText)
+                img(src='/web/views/NEW/includes/default-circle-profile.png' alt=altText)
 
             // Checking if circle is in editable words array (if user can edit it)
             // If it is, showing edit symbol
-            if (editableWorlds.groups[0].noGroup.find(x => x.name === circle.name) || editableWorlds.groups[1].noGroup.find(x => x.name === circle.name))
+            if (editableCircles.groups[0].noGroup.find(x => x.name === circle.name) || editableCircles.groups[1].noGroup.find(x => x.name === circle.name))
                 
                 .circle-info-with-settings
                     p
@@ -60,19 +60,19 @@ block content
             for circle of section.noGroup
                 +displayCircle(circle)
 
-        // Worlds with groups
+        // Circles with groups
         if section.groups.length > 0
             for group of section.groups
 
-                // Worlds with no subgroups
+                // Circles with no subgroups
                 if group.noGroup.length > 0
                     for circle of group.noGroup
                         +displayCircle(circle)
 
-                // Worlds with subgroups
+                // Circles with subgroups
                 if group.subgroups.length > 0
                     for subgroup of group.subgroups
-                        for circle of subgroup.worlds
+                        for circle of subgroup.circles
                             +displayCircle(circle)
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
@@ -81,6 +81,7 @@ block content
     section#session-information-container
         .content-container
 
+            // Session information description ----------------------------------------------
             #session-information-description
                 h2 Session Information
 
@@ -102,7 +103,7 @@ block content
 
                 p.error-message
 
-            // Display name button ----------------------------------------------------------
+            // Display name button (tablet and mobile) --------------------------------------
             #session-name-button
                 a Display Name
 
@@ -124,8 +125,8 @@ block content
                 // Tabs ---------------------------------------------------------------------
                 // Admin and manager users:     All Circles, Public Circles, Your Circles, Editable Circles
                 // Standard users:              All Circles, Public Circles, Your Circles
-                // Magic Guests:                Magic Circles, All Circles, Public Circles
-                // Guests:                      All Circles, Public Circles
+                // Magic Guests:                Magic Circles, Public Circles
+                // Guests:                      Public Circles
                 #circles-tabs
                 
                     if magicGuest
@@ -181,15 +182,17 @@ block content
                 script.
                     detectGroupSelect();
 
+        p#no-circles-message No circles available
+
         // All circles ----------------------------------------------------------------------
         #circles-display
 
             // Creating circle elements in all sections
-            +displayCircleSection(magicWorlds, 'magic')
-            +displayCircleSection(publicWorlds, 'public')
-            +displayCircleSection(userWorlds, 'your')
+            +displayCircleSection(magicCircles, 'magic')
+            +displayCircleSection(publicCircles, 'public')
+            +displayCircleSection(userCircles, 'your')
 
-            - var groupJSON = JSON.stringify(editableWorlds);
+            - var groupJSON = JSON.stringify(editableCircles);
             - var groupJSON = groupJSON.replaceAll(/'/gm, /\'/gm);
 
             script.
@@ -281,7 +284,7 @@ block content
                                 input(type='text' name='forwardingName' placeholder='ClassVR' required)
 
                             .form-field
-                                for group of editableWorlds.groups
+                                for group of editableCircles.groups
                                     for circle of group.noGroup
                                         .horizontal-checkbox-container
                                             - var boxID = circle.name + '-checkbox';

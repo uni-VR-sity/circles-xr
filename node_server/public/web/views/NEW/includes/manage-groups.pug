@@ -30,7 +30,7 @@ block content
             - var numCircles = currentGroup.noGroup.length;
 
             for subgroup of currentGroup.subgroups
-                - numCircles += subgroup.worlds.length;
+                - numCircles += subgroup.circles.length;
 
             p.greyed.circle-num= numCircles
                 span &nbsp
@@ -57,9 +57,9 @@ block content
                     
                 p.subgroup-name= currentSubgroup.name 
 
-                p.greyed.circle-num= currentSubgroup.worlds.length
+                p.greyed.circle-num= currentSubgroup.circles.length
                     span &nbsp
-                    if currentSubgroup.worlds.length === 1
+                    if currentSubgroup.circles.length === 1
                         span circle
                     else 
                         span circles
@@ -123,7 +123,7 @@ block content
                 h2 Manage Groups
 
                 .icon-container
-                    i(class="fa-solid fa-xmark" onclick='closeOverlay("manage-groups-overlay")')
+                    i(class="fa-solid fa-xmark" onclick='closeOverlayReload()')
 
                 hr
     
@@ -149,17 +149,23 @@ block content
             // Group table ------------------------------------------------------------------
             #groups-container
                 
-                for group of groupedWorlds.groups
-                    .group(class=group.name.replaceAll(' ', '-'))
-                        +groupRow(group)
+                if groupedCircles.groups.length > 0
+                    p#no-groups-message(style='display:none') No groups available
 
-                        for circle of group.noGroup
-                            +circleRow(group, null, circle)
+                    for group of groupedCircles.groups
+                        .group(class=group.name.replaceAll(' ', '-'))
+                            +groupRow(group)
 
-                        for subgroup of group.subgroups
-                            +subgroupRow(group, subgroup)
+                            for circle of group.noGroup
+                                +circleRow(group, null, circle)
 
-                            for circle of subgroup.worlds
-                                +circleRow(group, subgroup, circle)
+                            for subgroup of group.subgroups
+                                +subgroupRow(group, subgroup)
 
-                        +addSubgroupRow(group)
+                                for circle of subgroup.circles
+                                    +circleRow(group, subgroup, circle)
+
+                            +addSubgroupRow(group)
+
+                else 
+                    p#no-groups-message No groups available
