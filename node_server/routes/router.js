@@ -104,6 +104,17 @@ router.post('/update-circle-group', authenticated, newController.updateCircleGro
 router.get('/new-profile', authenticated, newController.serveProfile);
 router.post('/update-user-profile', authenticated, newController.updateUserProfile);
 
+// Manage Users Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-manage-users', authenticated, newController.serveManageUsers);
+router.post('/new-create-user', authenticated, newController.createUser);
+router.post('/new-bulk-create-users', authenticated, newController.bulkCreateUsers);
+router.post('/update-usertype', authenticated, newController.updateUsertype);
+
+router.get('/sample-upload-file', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
+})
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web
@@ -203,10 +214,6 @@ router.post('/update-whiteboard-file-position', authenticated, controller.update
 router.post('/create-user', authenticated, controller.createUser);
 router.post('/bulk-create-users', authenticated, controller.createUsersByFile);
 router.post('/change-usertype', authenticated, controller.updateUsertype);
-
-router.get('/sample-upload-file', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
-})
 
 router.get('/edit-access/:world_id', authenticated, controller.serveAccessEdit);
 router.get('/permit-viewing/:world_id/:user_id', authenticated, controller.permitWorldViewing);

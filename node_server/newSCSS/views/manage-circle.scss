@@ -108,12 +108,12 @@
 
             .username {
                 grid-area: username;
-                padding-left: 50px;
+                padding-left: $X_LARGE_MARGIN;
             }
 
             .user-type {
                 grid-area: user-type;
-                padding-left: 25px;
+                padding-left: $MEDIUM_MARGIN;
             }
 
             .viewing-access {

@@ -19,6 +19,10 @@ form, fieldset {
     display: none;
 }
 
+.indented-field {
+    margin-left: 150px;
+}
+
 // More space between fields for mobile
 // No inline fields on mobile
 @media only screen and (max-width: $MOBILE_BREAK) 
@@ -237,6 +241,24 @@ input[type=button]:hover {
     input[type=button]:active {
         @include secondary-button-hover;
     }
+}
+
+// FILE -------------------------------------------------------------------------------------
+
+input[type=file]
+{
+    border: none;
+    width: auto;
+}
+
+input::file-selector-button {
+    @include secondary-button-regular;
+    border: none;
+    margin-right: $X_SMALL_MARGIN;
+}
+
+input::file-selector-button:hover {
+    @include secondary-button-hover;
 }
 
 // Search Form -------------------------------------------------------------------------------------------------------------------------------------

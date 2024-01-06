@@ -1,0 +1,130 @@
+// Create Users ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#create-users-container {
+
+    .content-container {
+        
+        .success-message, .error-message {
+            display: block;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
+        form {
+            margin-top: $LARGE_MARGIN;
+        }
+
+        #create-bulk-users {
+
+            .form-field {
+
+                label {
+                    width: auto;
+                }
+            }
+
+            .instruction-container {
+                border: $GREEN 3px solid;
+                background-color: $LIGHT_GREEN;
+                width: 100%;
+                padding: $MEDIUM_MARGIN;
+                margin-bottom: $SMALL_MARGIN;
+
+                ul {
+                    margin-top: $LINE_HEIGHT;
+                    list-style-position: inside;
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
+// Manage Users ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#manage-users-container {
+
+    // Top bar
+    #manage-users-top-bar-container {
+
+        #manage-users-top-bar {
+
+            #manage-users-tabs {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    }
+
+    // Users
+    #users-container {
+
+        .content-container {
+
+            .manage-user-form {
+                display: none;
+                
+                .row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1.25fr;
+                    grid-template-areas: "username user-type update-type"
+                                        "divider divider divider";
+
+                    p, select {
+                        margin: $MEDIUM_MARGIN 0;
+                        align-self: center;
+                    }
+
+                    .username {
+                        grid-area: username;
+                        padding-left: $X_LARGE_MARGIN;
+                    }
+        
+                    .user-type {
+                        grid-area: user-type;
+                        padding-left: $MEDIUM_MARGIN;
+                    }
+
+                    select {
+                        grid-area: update-type;
+                        width: calc(100% - $X_LARGE_MARGIN);
+                    }
+
+                    hr {
+                        grid-area: divider;
+                    }
+                }
+            }
+
+            .form-field {
+                display: grid;
+                align-items: start;
+                grid-template-columns: 3fr 1fr;
+                grid-template-areas: "messages submit-button";
+
+                .messages {
+                    grid-area: messages;
+
+                    .error-message, .success-message {
+                        display: flex;
+                    }
+                }
+
+                input {
+                    grid-area: submit-button;
+                    justify-self: end;
+                    margin-top: $SMALL_MARGIN;
+                    margin-right: $X_LARGE_MARGIN;
+                    width: fit-content;
+                }
+            }
+            
+            .no-users-message {
+                text-align: center;
+                margin-top: $LARGE_MARGIN;
+            }
+        }
+    }
+}

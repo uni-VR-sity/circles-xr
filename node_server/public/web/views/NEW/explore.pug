@@ -119,33 +119,33 @@ block content
     section#circles-container
 
         // Top bar --------------------------------------------------------------------------
-        #circles-top-bar-container
-            #circles-top-bar
+        #circles-top-bar-container.top-bar-container
+            #circles-top-bar.top-bar
 
                 // Tabs ---------------------------------------------------------------------
                 // Admin and manager users:     All Circles, Public Circles, Your Circles, Editable Circles
                 // Standard users:              All Circles, Public Circles, Your Circles
                 // Magic Guests:                Magic Circles, Public Circles
                 // Guests:                      Public Circles
-                #circles-tabs
+                #circles-tabs.top-bar-tabs
                 
                     if magicGuest
-                        #magic-circles(onclick='displaySection("magic")')
+                        #magic-circles.tab(onclick='displaySection("magic")')
                             h3 Magic Circles 
 
                     if adminUser || managerUser || standardUser
-                        #all-circles(onclick='displaySection("all")')
+                        #all-circles.tab(onclick='displaySection("all")')
                             h3 All Circles
                         
-                    #public-circles(onclick='displaySection("public")')
+                    #public-circles.tab(onclick='displaySection("public")')
                         h3 Public Circles
 
                     if adminUser || managerUser || standardUser
-                        #your-circles(onclick='displaySection("your")')
+                        #your-circles.tab(onclick='displaySection("your")')
                             h3 Your Circles
 
                     if adminUser || managerUser
-                        #editable-circles(onclick='displaySection("editable")')
+                        #editable-circles.tab(onclick='displaySection("editable")')
                             h3 Editable Circles
 
                     #mobile-tabs-icon   

@@ -1369,6 +1369,415 @@ const updateUserProfile = async (req, res, next) =>
     return;
   }
 }
+// Manage Users Page -------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering manage users page
+const serveManageUsers = async (req, res, next) =>
+{
+  // Getting current user info
+  const userInfo = getUserInfo(req);
+
+  // Getting messages to output to user
+  var singleCreateError = null;           // Success message for user creation
+  var singleCreateSuccess = null;         // Error message for user creation
+  var bulkCreateError = [];               // Success message for user creation
+  var bulkCreateSuccess = [];             // Error message for user creation
+  var updateUsertypeError = [];           // Error message for usertype update
+  var updateUsertypeSuccess = [];         // Success message for usertype update
+
+  if (req.session.singleCreateError)
+  {
+    singleCreateError = req.session.singleCreateError;
+    req.session.singleCreateError = null;
+  }
+
+  if (req.session.singleCreateSuccess)
+  {
+    singleCreateSuccess = req.session.singleCreateSuccess;
+    req.session.singleCreateSuccess = null;
+  }
+
+  if (req.session.bulkCreateError && req.session.bulkCreateError.length > 0)
+  {
+    bulkCreateError = req.session.bulkCreateError;
+    req.session.bulkCreateError = null;
+  }
+
+  if (req.session.bulkCreateSuccess && req.session.bulkCreateSuccess.length > 0)
+  {
+    bulkCreateSuccess = req.session.bulkCreateSuccess;
+    req.session.bulkCreateSuccess = null;
+  }
+
+  if (req.session.updateUsertypeError && req.session.updateUsertypeError.length > 0)
+  {
+    updateUsertypeError = req.session.updateUsertypeError;
+    req.session.updateUsertypeError = null;
+  }
+
+  if (req.session.updateUsertypeSuccess && req.session.updateUsertypeSuccess.length > 0)
+  {
+    updateUsertypeSuccess = req.session.updateUsertypeSuccess;
+    req.session.updateUsertypeSuccess = null;
+  }
+
+  // 1. Ignoring the current user
+  // 2. Getting all admin users
+  var adminUsers = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.ADMIN,
+        },
+    },
+  ]);
+
+  // 1. Ignoring the current user
+  // 2. Getting all teacher users
+  var teacherUsers = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.TEACHER,
+        },
+    },
+  ]);
+
+  // 1. Ignoring the current user
+  // 2. Getting all researcher users
+  var researcherUsers = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.RESEARCHER,
+        },
+    },
+  ]);
+
+  // 1. Ignoring the current user
+  // 2. Getting all student users
+  var studentUsers = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.STUDENT,
+        },
+    },
+  ]);
+
+  // 1. Ignoring the current user
+  // 2. Getting all tester users
+  var testerUsers = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.TESTER,
+        },
+    },
+  ]);
+
+  // 1. Ignoring the current user
+  // 2. Getting all participant users
+  var participantUsers = await User.aggregate([
+    {
+      $match:
+        // 1
+        {
+          _id: { $nin: [req.user._id] },
+        },
+    },
+    {
+      $match:
+        // 2
+        {
+          usertype: CIRCLES.USER_TYPE.PARTICIPANT,
+        },
+    },
+  ]);
+
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/manage-users'), {
+    title: 'Manage Users',
+    singleCreateError: singleCreateError,
+    singleCreateSuccess: singleCreateSuccess,
+    bulkCreateError: bulkCreateError,
+    bulkCreateSuccess: bulkCreateSuccess,
+    updateUsertypeError: updateUsertypeError,
+    updateUsertypeSuccess: updateUsertypeSuccess,
+    userInfo: userInfo,
+    adminUsers,
+    teacherUsers,
+    researcherUsers,
+    studentUsers,
+    testerUsers,
+    participantUsers,
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating new user on user request
+const createUser = async (req, res, next) => 
+{
+  if (req.body.username && req.body.usertype)
+  {
+    // Compiling all data for the new user
+    const userData = {
+      username: req.body.username,                    // User entered username
+      usertype: req.body.usertype,                    // User entered usertype
+      password: env.DEFAULT_PASSWORD,                 // Default password
+      displayName: req.body.username,                 // By default, display name is the same as the username
+    };
+
+    // Creating new user in database
+    try 
+    {
+      await User.create(userData);
+
+      req.session.singleCreateSuccess = userData.username + ' created successfully';
+      return res.redirect('/new-manage-users');
+    } 
+    catch(error) 
+    {
+      // Usernames must be unique
+      // If there was an error because the username already exists in the database, output an error message to the user
+      if ((error.message.includes('dup key') === true) && (error.message.includes('username') === true))
+      {
+        req.session.singleCreateError = 'Username is unavailable';
+        return res.redirect('/new-manage-users');
+      }
+
+      req.session.singleCreateError = 'Something went wrong, please try again';
+      return res.redirect('/new-manage-users');
+    }
+  }
+  else
+  {
+    req.session.singleCreateError = 'Something went wrong, please try again';
+    return res.redirect('/new-manage-users');
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating new users through uploaded file
+const bulkCreateUsers = async (req, res, next) => 
+{
+  // Setting up user message as arrays to allow for multiple messages
+  req.session.bulkCreateSuccess = [];
+  req.session.bulkCreateError = [];
+
+  // Variable to count how many users were created
+  var numCreated = 0;
+
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      req.session.bulkCreateError.push('File could not be read, please try again');
+      return res.redirect('/new-manage-users');
+    }
+
+    const file = files.userFile;
+
+    // file: fileContentType/fileType
+    // split result array: {"fileContentType", "fileType"}
+    const fileType = file.mimetype.split('/')[1];
+
+    // Checking if file is of the correct type
+    // If it is, read the file
+    // If it isn't, output error message to user
+    if (fileType === 'csv')
+    {
+      fs.readFile(file.filepath, 'utf8', async function(err, data) 
+      {
+        if (err)
+        {
+          req.session.bulkCreateError.push('File could not be read, please try again');
+          return res.redirect('/new-manage-users');
+        }
+
+        // Splitting up the file enteries (each entry is on a seperate line)
+        const entries = data.split(/\r?\n/);
+
+        // Reading each entry (each entry being a user) and getting the username and usertype
+        // Entries are organized as username,usertype
+        for (const entry of entries)
+        {
+          const entryInfo = entry.split(',');
+
+          // Ensuring entry has the correct amount of data
+          // Otherwise outputting an error message for the entry
+          if (entryInfo.length === 2)
+          {
+            // Getting user info
+            const userInfo = {
+              username: entryInfo[0],                         // User entered username
+              usertype: entryInfo[1],                         // User entered usertype
+              password: env.DEFAULT_PASSWORD,                 // Default password
+              displayName: entryInfo[0],                      // By default, display name is the same as the username
+            }
+            
+            // Ensuring usertype is valid
+            var validUsertypes = [];
+
+            for (const key in CIRCLES.USER_TYPE)
+            {
+              if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.MAGIC_GUEST)
+              {
+                validUsertypes.push(CIRCLES.USER_TYPE[key]);
+              }
+            }
+
+            if (validUsertypes.includes(userInfo.usertype))
+            {
+              try 
+              {
+                var user = null;
+
+                user = await User.create(userInfo);
+
+                if (user)
+                {
+                  numCreated += 1;
+                }
+              } 
+              catch(err) 
+              {
+                const errorMessage = err.message;
+
+                // Usernames must be unique
+                // If there was an error because the username already exists in the database, output an error message to the user
+                if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+                {
+                  req.session.bulkCreateError.push('The following entry contains an unavailable username: ' + entry);
+                }
+                else
+                {
+                  req.session.bulkCreateError.push('An unexpected error occured when creating the following user: ' + entry);
+                }
+              }
+              
+            }
+            else
+            {
+              req.session.bulkCreateError.push('The following entry has an invalid usertype: ' + entry);
+            }
+          }
+          else
+          {
+            if (entryInfo.length === 1 && entryInfo[0].length === 0)
+            {
+              // Do nothing as it was just a blank entry
+            }
+            else
+            {
+              req.session.bulkCreateError.push('The following entry is invalid: ' + entry);
+            }
+          }
+        }
+
+        req.session.bulkCreateSuccess.push(numCreated + ' users were successfully created');
+        return res.redirect('/new-manage-users');
+      });
+    }
+    // This file type means no file was uploaded
+    else if (fileType === 'octet-stream')
+    {
+      req.session.bulkCreateError.push('No file uploaded' );
+      return res.redirect('/new-manage-users');
+    }
+    else
+    {
+      req.session.bulkCreateError.push('Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
+      return res.redirect('/new-manage-users');
+    }
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating new users through uploaded file
+const updateUsertype = async (req, res, next) => 
+{
+  // Setting up user message as arrays to allow for multiple messages
+  req.session.updateUsertypeError = [];
+  req.session.updateUsertypeSuccess = [];
+
+  for (const username in req.body)
+  {
+    // Getting user from database
+    const user = await User.findOne({username: username});
+    
+    // If the user was found in the database
+    // Checking if the usertype the user has entered is different then what it currently is
+    if (user)
+    {
+      // If it is, changing the user's usertype in the database
+      if (user.usertype !== req.body[username])
+      {
+        const updatedUser = await User.findOneAndUpdate({username: username}, {usertype: req.body[username]}, {new:true});
+
+        if (updatedUser)
+        {
+          const message = user.username + "'s usertype successfully updated to " + req.body[username];
+
+          req.session.updateUsertypeSuccess.push(message);
+        }
+        else
+        {
+          const message = user.username + "'s usertype failed to updated, please try again";
+
+          req.session.updateUsertypeError.push(message);
+        }
+      }
+    }
+  }
+
+  return res.redirect('/new-manage-users');
+}
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1397,4 +1806,9 @@ module.exports = {
   // Profile Page 
   serveProfile,
   updateUserProfile,
+  // Manage Users Page
+  serveManageUsers,
+  createUser,
+  bulkCreateUsers,
+  updateUsertype,
 }
