@@ -31,11 +31,11 @@ h3 {
     font-size: 20px;
 }
 
-p, i, a, label, input, select, option {
+p, i, a, label, input, select, option, li {
     @include no-spacing;
     font-weight: 400; 
     font-size: 16px;
-    line-height: 1.8;
+    line-height: $LINE_HEIGHT;
 }
 
 a {
@@ -105,4 +105,43 @@ p.error-message::before {
     content: '\f06a';
     margin-right: $MEDIUM_MARGIN;
     font-size: $MEDIUM_ICON;
+}
+
+// Top Bar -----------------------------------------------------------------------------------------------------------------------------------------
+
+.top-bar-container {
+    background-color: $GREY;
+    width: 100%;
+
+    .top-bar {
+        @include no-selection;
+        max-width: calc($MAX_CONTENT_WIDTH + ($SECTION_PADDING * 2));
+        margin: 0 auto;
+
+        .top-bar-tabs {
+            background-color: $GREY;
+            display: grid;
+            margin: 0 $SECTION_PADDING;
+
+            h3 {
+                @include no-spacing;
+            }
+
+            .selected-tab {
+                background-color: $DARK_GREY;
+                color: $WHITE;
+            }
+
+            .tab {
+                padding: $MEDIUM_MARGIN 0;
+                text-align: center;
+            }
+
+            .tab:not(.selected-tab):hover
+            {
+                background-color: $HOVER_GREY;
+                cursor: pointer;
+            }
+        }
+    }
 }

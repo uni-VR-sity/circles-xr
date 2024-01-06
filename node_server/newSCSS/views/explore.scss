@@ -217,45 +217,17 @@
 
     // Top bar
     #circles-top-bar-container {
-        background-color: $GREY;
-        width: 100%;
 
         #circles-top-bar {
-            @include no-selection;
-            max-width: calc($MAX_CONTENT_WIDTH + ($SECTION_PADDING * 2));
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 2fr 1fr;
             grid-template-areas: "circles-tabs circles-search";
             
             // Tabs
             #circles-tabs {
-                background-color: $GREY;
                 grid-area: circles-tabs;
-                display: grid;
                 grid-template-columns: repeat(4, 1fr);
                 // (grid-template-areas set using js)
-                margin-left: $SECTION_PADDING;
-
-                h3 {
-                    @include no-spacing;
-                }
-
-                .selected-tab {
-                    background-color: $DARK_GREY;
-                    color: $WHITE;
-                }
-
-                #magic-circles, #all-circles, #public-circles, #your-circles, #editable-circles {
-                    padding: $MEDIUM_MARGIN 0;
-                    text-align: center;
-                }
-
-                #magic-circles:not(.selected-tab):hover, #all-circles:not(.selected-tab):hover, #public-circles:not(.selected-tab):hover, #your-circles:not(.selected-tab):hover, #editable-circles:not(.selected-tab):hover
-                {
-                    background-color: $HOVER_GREY;
-                    cursor: pointer;
-                }
 
                 #magic-circles {
                     grid-area: magic-circles;

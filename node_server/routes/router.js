@@ -104,6 +104,17 @@ router.post('/update-circle-group', authenticated, newController.updateCircleGro
 router.get('/new-profile', authenticated, newController.serveProfile);
 router.post('/update-user-profile', authenticated, newController.updateUserProfile);
 
+// Manage Users Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-manage-users', authenticated, newController.serveManageUsers);
+router.post('/new-create-user', authenticated, newController.createUser);
+router.post('/new-bulk-create-users', authenticated, newController.bulkCreateUsers);
+router.post('/update-usertype', authenticated, newController.updateUsertype);
+
+router.get('/sample-upload-file', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
+})
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web
