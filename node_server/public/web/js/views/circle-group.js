@@ -72,9 +72,9 @@ function displaySubgroups(allGroups, currentGroup, currentSubgroup = null)
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
-// Detecting when the world group is updated
+// Detecting when the circle group is updated
 function listenForGroupUpdate(allGroups, currentGroup)
 {
   // Getting group form
@@ -106,9 +106,9 @@ function listenForGroupUpdate(allGroups, currentGroup)
   });
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
-// Detecting when the world subgroup is updated
+// Detecting when the circle subgroup is updated
 function listenForSubgroupUpdate()
 {
   // Getting group form

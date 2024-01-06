@@ -1,0 +1,54 @@
+// Variables -----------------------------------------------------------------------------------------------------------------------------------
+- var adminUser = userInfo.usertype === CIRCLES.USER_TYPE.SUPERUSER || userInfo.usertype === CIRCLES.USER_TYPE.ADMIN;
+- var hasMagicLinks = userInfo.usertype === CIRCLES.USER_TYPE.SUPERUSER || userInfo.usertype === CIRCLES.USER_TYPE.ADMIN || userInfo.usertype === CIRCLES.USER_TYPE.TEACHER || userInfo.usertype === CIRCLES.USER_TYPE.RESEARCHER;
+- var notGuest = userInfo.usertype !== CIRCLES.USER_TYPE.GUEST && userInfo.usertype !== CIRCLES.USER_TYPE.MAGIC_GUEST;
+
+// Navigation bar ------------------------------------------------------------------------------------------------------------------------------
+nav
+    // Logo ---------------------------------------------------------------------------------
+    .logo-container
+        a.logo(href='/new-explore')
+            include ./circles-logo.svg
+
+    // Hamburger icon (mobile) --------------------------------------------------------------
+    .nav-hamburger(onclick='displayNavigation()')
+        .icon-container
+            i(class='fa-solid fa-bars')
+
+    // Navigation buttons -------------------------------------------------------------------
+    .nav-items-container
+        ul.nav-items
+            li
+                a(href='/new-explore') Explore
+            li
+                a(href='/new-more-circles') More Circles
+
+            if adminUser
+                li
+                    a(href='/new-manage-users') Manage Users
+
+    // Profile ------------------------------------------------------------------------------
+    .profile-container
+
+        // Profile information --------------------------------------------------------------
+        .profile-information
+            .icon-container
+                i(class='fa-solid fa-user')
+            p.username= userInfo.username
+        
+        // Profile dropdown -----------------------------------------------------------------
+        .profile-dropdown 
+            ul
+                li
+                    a(href='/new-profile') Profile
+
+                if hasMagicLinks
+                    li
+                        a(href='/new-your-magic-links') Your Magic Links
+
+                if notGuest
+                    li
+                        a(href='/new-uploaded-content') Uploaded Content
+
+                li 
+                    a.red(href='/logout') Log out

@@ -15,12 +15,12 @@ const uniqueFilename = require('unique-filename');
 const User = require('../models/user');
 const Guest = require('../models/guest');
 const Model3D = require('../models/model3D');
-const WorldGroups = require('../models/worldGroups');
-const Worlds = require('../models/worlds');
+const CircleGroups = require('../models/circleGroups');
+const Circles = require('../models/circles');
 const Uploads = require('../models/uploads');
 const MagicLinks = require('../models/magicLinks');
 
-// General --------------------------------------------------------------------------------------------------------------------------------------------
+// General -----------------------------------------------------------------------------------------------------------------------------------------
 
 // Loading in config  
 var env = dotenv.config({});
@@ -32,7 +32,7 @@ if (env.error)
 
 env = dotenvParseVariables(env.parsed);
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Getting user information to send to pages
 const getUserInfo = function(req)
@@ -57,10 +57,10 @@ const getUserInfo = function(req)
   return userInfo;
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creating jwt for magic link
-const createJWT_MagicLink = function(expiryTimeMin, worlds)
+const createJWT_MagicLink = function(expiryTimeMin, circles)
 {
   const route = '/explore';
 
@@ -85,7 +85,7 @@ const createJWT_MagicLink = function(expiryTimeMin, worlds)
   }
 
   const payload = {
-    worlds: worlds,
+    worlds: circles,
   };
 
   const token = jwt.sign(payload, env.JWT_SECRET, jwtOptions);
@@ -95,7 +95,7 @@ const createJWT_MagicLink = function(expiryTimeMin, worlds)
   return magicLink;
 }
 
-// Login Page -----------------------------------------------------------------------------------------------------------------------------------------
+// Login Page --------------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering login page
 const serveLogin = async (req, res, next) => 
@@ -113,7 +113,7 @@ const serveLogin = async (req, res, next) =>
   });
 }
 
-// Register Page --------------------------------------------------------------------------------------------------------------------------------------
+// Register Page -----------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering the register user page with a specific message to the user about their registration (ex. error messages, success messages)
 const renderRegister = (res, renderMessage) =>
@@ -124,7 +124,7 @@ const renderRegister = (res, renderMessage) =>
     });
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 const serveRegister = async (req, res, next) => 
 {
@@ -139,7 +139,7 @@ const serveRegister = async (req, res, next) =>
   renderRegister(res, errorMessage);
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creates a new user and puts them in the user database
 const registerUser = (req, res, next) => 
@@ -217,49 +217,49 @@ const registerUser = (req, res, next) =>
   }
 }
 
-// Explore Page ---------------------------------------------------------------------------------------------------------------------------------------
+// Explore Page ------------------------------------------------------------------------------------------------------------------------------------
 
-// Getting certain worlds from the world database
+// Getting certain circles from the circle database
 // Permission Types:
-//    - public              Returns worlds that have no viewing restrictions
-//    - private             Returns worlds that have viewing restrictions
-//    - specialViewing      Returns worlds that the user has viewing access to
-//    - editing             Returns worlds that the user has editing access to
-//    - magic               Returns worlds that the user has viewing access to from a magic link
-const getWorlds = async function(user, permissionType)
+//    - public              Returns circles that have no viewing restrictions
+//    - private             Returns circles that have viewing restrictions
+//    - specialViewing      Returns circles that the user has viewing access to
+//    - editing             Returns circles that the user has editing access to
+//    - magic               Returns circles that the user has viewing access to from a magic link
+const getCircles = async function(user, permissionType)
 {
-  var worlds = []
+  var circles = []
 
   if (permissionType === "public")
   {
-    worlds = await Worlds.find({viewingRestrictions: false});
+    circles = await Circles.find({viewingRestrictions: false});
   }
   else if (permissionType === "private")
   {
-    worlds = await Worlds.find({viewingRestrictions: true});
+    circles = await Circles.find({viewingRestrictions: true});
   }
   else if (permissionType === "specialViewing")
   {
-    worlds = await Worlds.find({viewingRestrictions: true, viewingPermissions: { $in: [user] }});
+    circles = await Circles.find({viewingRestrictions: true, viewingPermissions: { $in: [user] }});
   }
   else if (permissionType === "editing")
   {
-    worlds = await Worlds.find({editingPermissions: { $in: [user] }});
+    circles = await Circles.find({editingPermissions: { $in: [user] }});
   }
   else if (permissionType === "magic")
   {
-    for (const world of user.magicLinkWorlds)
+    for (const circle of user.magicLinkWorlds)
     {
-      worlds.push(await Worlds.find(world));
+      circles.push(await Circles.find(circle));
     }
   }
 
-  return worlds;
+  return circles;
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
-// Organizing worlds into their groups and subgroups
+// Organizing circles into their groups and subgroups
 // Return object structure:
 //  {
 //    groups: [                             --> Array of group objects
@@ -268,57 +268,57 @@ const getWorlds = async function(user, permissionType)
 //        subgroups: [                      --> Array of subgroup objects in the group
 //          {
 //            name: SUBGROUP_NAME,          --> Subgroup name
-//            worlds: [                     --> Worlds in the subgroup
+//            circles: [                    --> Circles in the subgroup
 //              {
-//                name: WORLD_NAME,
+//                name: CIRCLE_NAME,
 //                displayName: DISPLAY_NAME,
 //              }
 //            ],
 //          }
 //        ],
-//        noGroup: [                        --> Worlds that are not in a subgroup
+//        noGroup: [                        --> Circles that are not in a subgroup
 //          {
-//            name: WORLD_NAME,
+//            name: CIRCLE_NAME,
 //            displayName: DISPLAY_NAME,
 //          }
 //        ],                   
 //      },
 //    ],
-//    noGroup: [                            --> Worlds that are not in a group
+//    noGroup: [                            --> Circles that are not in a group
 //      {
-//        name: WORLD_NAME,
+//        name: CIRCLE_NAME,
 //        displayName: DISPLAY_NAME,
 //      }
 //    ],
 //  }
-const organizeToGroups = function(worlds, databaseGroups)
+const organizeToGroups = function(circles, databaseGroups)
 {
-  var organizedWorlds = {
+  var organizedCircles = {
     groups: [],
     noGroup: [],
   };
 
-  // Going through each world
-  for (const world of worlds)
+  // Going through each circle
+  for (const circle of circles)
   {
-    // Checking if world is in a group
+    // Checking if circle is in a group
     // If it is, add it to group
     // If it is not, add it to no group array
-    if (world.group && databaseGroups.length > 0)
+    if (circle.group && databaseGroups.length > 0)
     {
       // Getting group from database
-      var databaseGroup = databaseGroups.find((group) => JSON.stringify(world.group) === JSON.stringify(group._id));
+      var databaseGroup = databaseGroups.find((group) => JSON.stringify(circle.group) === JSON.stringify(group._id));
 
       // Checking if group already exists in group object array
       // If it does, get it
       // If it doesn't, create the group object
-      var group = organizedWorlds.groups.find((group) => databaseGroup.name === group.name);
+      var group = organizedCircles.groups.find((group) => databaseGroup.name === group.name);
 
       var index;
 
       if (group)
       {
-        index = organizedWorlds.groups.indexOf(group);
+        index = organizedCircles.groups.indexOf(group);
       }
       else
       {
@@ -336,127 +336,127 @@ const organizeToGroups = function(worlds, databaseGroups)
           {
             var newSubgroup = {
               name: subgroup.name,
-              worlds: [],
+              circles: [],
             };
 
             newGroup.subgroups.push(newSubgroup);
           }
         }
 
-        organizedWorlds.groups.push(newGroup);
+        organizedCircles.groups.push(newGroup);
 
-        index = organizedWorlds.groups.indexOf(newGroup);
+        index = organizedCircles.groups.indexOf(newGroup);
       }
 
-      // Checking if world is in a subgroup
+      // Checking if circle is in a subgroup
       // If it is, add it to subgroup
       // If it is not, add it to no group array
-      if (world.subgroup)
+      if (circle.subgroup)
       {
-        var databaseSubgroup = databaseGroup.subgroups.find((subgroup) => JSON.stringify(world.subgroup) === JSON.stringify(subgroup._id));
+        var databaseSubgroup = databaseGroup.subgroups.find((subgroup) => JSON.stringify(circle.subgroup) === JSON.stringify(subgroup._id));
 
-        var subgroup = organizedWorlds.groups[index].subgroups.find((subgroup) => databaseSubgroup.name === subgroup.name);
+        var subgroup = organizedCircles.groups[index].subgroups.find((subgroup) => databaseSubgroup.name === subgroup.name);
 
-        var subIndex = organizedWorlds.groups[index].subgroups.indexOf(subgroup);
+        var subIndex = organizedCircles.groups[index].subgroups.indexOf(subgroup);
 
-        organizedWorlds.groups[index].subgroups[subIndex].worlds.push({name: world.name, displayName: world.displayName, hasProfileImage: world.hasProfileImage});
+        organizedCircles.groups[index].subgroups[subIndex].circles.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
       }
       else
       {
-        organizedWorlds.groups[index].noGroup.push({name: world.name, displayName: world.displayName, hasProfileImage: world.hasProfileImage});
+        organizedCircles.groups[index].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
       }
     }
     else
     {
-      organizedWorlds.noGroup.push({name: world.name, displayName: world.displayName, hasProfileImage: world.hasProfileImage});
+      organizedCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
     }
   }
 
-  return organizedWorlds;
+  return organizedCircles;
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Rendering explore page
 const serveExplore = async (req, res, next) => 
 {
-  // Getting all worlds the user has access to and putting their names into an array
-  // - All users are given access to worlds with no restrictions (public worlds)
-  // - If user is an admin user, viewing and editing access is given to all worlds
+  // Getting all circles the user has access to and putting their names into an array
+  // - All users are given access to circles with no restrictions (public circles)
+  // - If user is an admin user, viewing and editing access is given to all circles
   // - If user is a manager user:
-  //      - Viewing access is given to to specific worlds (ones that they have been given viewing access to)
-  //      - Editing access is given to specific worlds (ones that they have been given editing access to)
+  //      - Viewing access is given to to specific circles (ones that they have been given viewing access to)
+  //      - Editing access is given to specific circles (ones that they have been given editing access to)
   // - If user is a standard user:
-  //      - Viewing access is given to specific worlds (ones that they have been given viewing access to)
+  //      - Viewing access is given to specific circles (ones that they have been given viewing access to)
   //      - No editing access is given
   // - If user is a magic guest
-  //      - Viewing access is given to worlds in magicLinkWorlds array
+  //      - Viewing access is given to circles in magicLinkCircles array
   //      - No editing access is given
   // - If user is a guest
   //      - No editing access is given
 
   var user = req.user;
 
-  var magicWorlds = [];
-  var publicWorlds = [];
-  var userWorlds = [];
-  var editableWorlds = [];
+  var magicCircles = [];
+  var publicCircles = [];
+  var userCircles = [];
+  var editableCircles = [];
 
   // All users
-  publicWorlds.push(await getWorlds(user, 'public'));
+  publicCircles.push(await getCircles(user, 'public'));
 
   // Admin users
   if (CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(user.usertype))
   { 
-    userWorlds.push(await getWorlds(user, 'private'));
+    userCircles.push(await getCircles(user, 'private'));
 
-    editableWorlds.push(await getWorlds(user, 'public'));
-    editableWorlds.push(await getWorlds(user, 'private'));
+    editableCircles.push(await getCircles(user, 'public'));
+    editableCircles.push(await getCircles(user, 'private'));
   }
   // Manager users
   else if (CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype))
   {
-    userWorlds.push(await getWorlds(user, 'specialViewing'));
-    userWorlds.push(await getWorlds(user, 'editing'));
-    editableWorlds.push(await getWorlds(user, 'editing'));
+    userCircles.push(await getCircles(user, 'specialViewing'));
+    userCircles.push(await getCircles(user, 'editing'));
+    editableCircles.push(await getCircles(user, 'editing'));
   }
   // Standard users
   else if (CIRCLES.USER_CATEGORIES.STANDARD_USERS.includes(user.usertype))
   {
-    userWorlds.push(await getWorlds(user, 'specialViewing'));
+    userCircles.push(await getCircles(user, 'specialViewing'));
   }
   // Magic link guest
   else if (user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
   {
-    magicWorlds.push(await getWorlds(user, 'magic'));
+    magicCircles.push(await getCircles(user, 'magic'));
   }
 
   // Flattening the arrays
-  magicWorlds = magicWorlds.flat(2);
-  publicWorlds = publicWorlds.flat(2);
-  userWorlds = userWorlds.flat(2);
-  editableWorlds = editableWorlds.flat(2);
+  magicCircles = magicCircles.flat(2);
+  publicCircles = publicCircles.flat(2);
+  userCircles = userCircles.flat(2);
+  editableCircles = editableCircles.flat(2);
 
-  // Organizing worlds in each array into their groups and subgroups
-  var groups = await WorldGroups.find({});
+  // Organizing circles in each array into their groups and subgroups
+  var groups = await CircleGroups.find({});
 
-  publicWorlds = organizeToGroups(publicWorlds, groups);
-  userWorlds = organizeToGroups(userWorlds, groups);
+  publicCircles = organizeToGroups(publicCircles, groups);
+  userCircles = organizeToGroups(userCircles, groups);
 
-  // Getting groups with no worlds in them
-  var groupedWorlds = organizeToGroups(editableWorlds, groups);
-  var groupsWithWorlds = [];
+  // Getting groups with no circles in them
+  var groupedCircles = organizeToGroups(editableCircles, groups);
+  var groupsWithCircles = [];
   
-  for (const group of groupedWorlds.groups)
+  for (const group of groupedCircles.groups)
   {
-    groupsWithWorlds.push(group.name);
+    groupsWithCircles.push(group.name);
   }
 
   for (const group of groups)
   {
-    if (!groupsWithWorlds.includes(group.name))
+    if (!groupsWithCircles.includes(group.name))
     {
-      var noWorldGroup = {
+      var noCircleGroup = {
         name: group.name,
         subgroups: [],
         noGroup: [],
@@ -464,21 +464,21 @@ const serveExplore = async (req, res, next) =>
 
       for (const subgroup of group.subgroups)
       {
-        var noWorldSubgroup = {
+        var noCircleSubgroup = {
           name: subgroup.name,
-          worlds: [],
+          circles: [],
         };
 
-        noWorldGroup.subgroups.push(noWorldSubgroup);
+        noCircleGroup.subgroups.push(noCircleSubgroup);
       }
 
-      groupedWorlds.groups.push(noWorldGroup);
+      groupedCircles.groups.push(noCircleGroup);
     }
   }
 
-  // Organizing editable worlds into private and public groups
-  // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
-  var groupedEditableWorlds = {
+  // Organizing editable circles into private and public groups
+  // Keeping same object layout as publicCircles and userCircles to make it easier to display
+  var groupedEditableCircles = {
     groups: [
       {
         name: 'Private',
@@ -494,28 +494,28 @@ const serveExplore = async (req, res, next) =>
     noGroup: [],
   }
 
-  for (const world of editableWorlds)
+  for (const circle of editableCircles)
   {
-    if (world.viewingRestrictions)
+    if (circle.viewingRestrictions)
     {
-      groupedEditableWorlds.groups[0].noGroup.push({name: world.name, displayName: world.displayName, hasProfileImage: world.hasProfileImage});
+      groupedEditableCircles.groups[0].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
     }
     else
     {
-      groupedEditableWorlds.groups[1].noGroup.push({name: world.name, displayName: world.displayName, hasProfileImage: world.hasProfileImage});
+      groupedEditableCircles.groups[1].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
     }
   }
 
-  // Organizing editable worlds into private and public groups
-  // Keeping same object layout as publicWorlds and userWorlds to make it easier to display
-  var groupedMagicWorlds = {
+  // Organizing editable circles into private and public groups
+  // Keeping same object layout as publicCircles and userCircles to make it easier to display
+  var groupedMagicCircles = {
     groups: [],
     noGroup: [],
   }
 
-  for (const world of magicWorlds)
+  for (const circle of magicCircles)
   {
-    groupedMagicWorlds.noGroup.push({name: world.name, displayName: world.displayName, hasProfileImage: world.hasProfileImage});
+    groupedMagicCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
   }
 
   // Rendering page
@@ -524,15 +524,15 @@ const serveExplore = async (req, res, next) =>
     title: 'Explore',
     userInfo: getUserInfo(req),
     sessionName: req.session.sessionName,
-    magicWorlds: groupedMagicWorlds,
-    publicWorlds: publicWorlds,
-    userWorlds: userWorlds,
-    editableWorlds: groupedEditableWorlds,
-    groupedWorlds: groupedWorlds,
+    magicCircles: groupedMagicCircles,
+    publicCircles: publicCircles,
+    userCircles: userCircles,
+    editableCircles: groupedEditableCircles,
+    groupedCircles: groupedCircles,
   });
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Updating session name (XMLHttpRequest sent)
 const updateSessionName = async (req, res, next) => 
@@ -553,9 +553,9 @@ const updateSessionName = async (req, res, next) =>
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
-// Creating magic link to user requested worlds
+// Creating magic link to user requested circles
 const createMagicLink = async (req, res, next) =>
 {
   if (req.body.forwardingName && req.body.linkExpiry && req.body.magicCircle)
@@ -611,20 +611,20 @@ const createMagicLink = async (req, res, next) =>
         expiryTimeMin = Math.round((expiryTimeMin / 1000) / 60);
       }
       
-      // Getting worlds to create magic link to
-      const worlds = [];
-      const worldNames = [];
+      // Getting circles to create magic link to
+      const circles = [];
+      const circleNames = [];
 
       if (Array.isArray(req.body.magicCircle))
       {
-        for (const circle of req.body.magicCircle)
+        for (const magicCircle of req.body.magicCircle)
         {
           try 
           {
-            var world = await Worlds.findOne({name: circle});
+            var circle = await Circles.findOne({name: magicCircle});
 
-            worlds.push(world);
-            worldNames.push(world.displayName)
+            circles.push(circle);
+            circleNames.push(circle.displayName)
           }
           catch (err)
           {
@@ -639,10 +639,10 @@ const createMagicLink = async (req, res, next) =>
       {
         try 
         {
-          var world = await Worlds.findOne({name: req.body.magicCircle});
+          var circle = await Circles.findOne({name: req.body.magicCircle});
 
-          worlds.push(world);
-          worldNames.push(world.displayName)
+          circles.push(circle);
+          circleNames.push(circle.displayName)
         }
         catch (err)
         {
@@ -654,7 +654,7 @@ const createMagicLink = async (req, res, next) =>
       }
 
       // Creating magic link
-      const magicLink = createJWT_MagicLink(expiryTimeMin, worlds);
+      const magicLink = createJWT_MagicLink(expiryTimeMin, circles);
 
       var baseURL;
 
@@ -681,7 +681,7 @@ const createMagicLink = async (req, res, next) =>
           magicLink: magicLink,
           expires: true,
           expiryDate: expiryDate,
-          worlds: worldNames,
+          worlds: circleNames,
         }
       }
       else
@@ -691,7 +691,7 @@ const createMagicLink = async (req, res, next) =>
           forwardLink: req.body.forwardingName,
           magicLink: magicLink,
           expires: false,
-          worlds: worldNames,
+          worlds: circleNames,
         }
       }
 
@@ -707,7 +707,7 @@ const createMagicLink = async (req, res, next) =>
       
       var response = {
         forwardingLink: forwardingLink,
-        worlds: worldNames,
+        circles: circleNames,
       }
 
       res.json(response);
@@ -726,7 +726,7 @@ const createMagicLink = async (req, res, next) =>
   }
 }
 
-// Manage Groups Page ---------------------------------------------------------------------------------------------------------------------------------
+// Manage Groups Page ------------------------------------------------------------------------------------------------------------------------------
 
 // Creating group on user request
 const createGroup = async (req, res, next) =>
@@ -736,7 +736,7 @@ const createGroup = async (req, res, next) =>
     // Checking if the group already exists
     // If it does, send an error message
     // If it doesn't, create the group
-    if (await WorldGroups.findOne({name: req.body.group}))
+    if (await CircleGroups.findOne({name: req.body.group}))
     {
       res.json('group exists');
       return;
@@ -792,7 +792,7 @@ const createGroup = async (req, res, next) =>
       // Adding group to database
       try
       {
-        await WorldGroups.create(group);
+        await CircleGroups.create(group);
 
         res.json('success');
         return;
@@ -813,7 +813,7 @@ const createGroup = async (req, res, next) =>
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Creating subgroup on user request
 const createSubgroup = async (req, res, next) =>
@@ -825,7 +825,7 @@ const createSubgroup = async (req, res, next) =>
 
     try
     {
-      group = await WorldGroups.findOne({name: req.body.group});
+      group = await CircleGroups.findOne({name: req.body.group});
     }
     catch(e)
     {
@@ -867,32 +867,32 @@ const createSubgroup = async (req, res, next) =>
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Deleting group on user request
 const deleteGroup = async (req, res, next) =>
 {
   // Getting group from database
-  var group = await WorldGroups.findOne({name: req.body.group});
+  var group = await CircleGroups.findOne({name: req.body.group});
 
   if (group)
   {
-    // Finding all worlds that are in the group
-    var worlds = await Worlds.find({group: group._id});
+    // Finding all circles that are in the group
+    var circles = await Circles.find({group: group._id});
 
-    // Removing the worlds from the group
-    for (const world of worlds)
+    // Removing the circles from the group
+    for (const circle of circles)
     {
-      world.group = null;
-      world.subgroup = null;
+      circle.group = null;
+      circle.subgroup = null;
 
-      await world.save();
+      await circle.save();
     }
 
     // Deleting group
     try
     {
-      await WorldGroups.deleteOne({_id: group._id});
+      await CircleGroups.deleteOne({_id: group._id});
     }
     catch(e)
     {
@@ -901,13 +901,13 @@ const deleteGroup = async (req, res, next) =>
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Deleting group on user request
 const deleteSubgroup = async (req, res, next) =>
 {
   // Getting group from database
-  var group = await WorldGroups.findOne({name: req.body.group});
+  var group = await CircleGroups.findOne({name: req.body.group});
   
   if (group)
   {
@@ -936,23 +936,23 @@ const deleteSubgroup = async (req, res, next) =>
       }
     }
 
-    // Finding all worlds that are in the group
-    var worlds = await Worlds.find({group: group._id});
+    // Finding all circles that are in the group
+    var circles = await Circles.find({group: group._id});
 
-    // Removing the worlds from the subgroup
-    for (const world of worlds)
+    // Removing the circles from the subgroup
+    for (const circle of circles)
     {
-      if (JSON.stringify(world.subgroup) === JSON.stringify(deletedSubgroup._id))
+      if (JSON.stringify(circle.subgroup) === JSON.stringify(deletedSubgroup._id))
       {
-        world.subgroup = null;
+        circle.subgroup = null;
       }
 
-      await world.save();
+      await circle.save();
     }
   }
 }
 
-// Manage Circle Page ---------------------------------------------------------------------------------------------------------------------------------
+// Manage Circle Page ------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering manage circle page
 const serveManageCircle = async (req, res, next) =>
@@ -961,21 +961,21 @@ const serveManageCircle = async (req, res, next) =>
   // split result array: {"", "manage-circle", "circle_id"}
   const circleID = req.url.split('/')[2];
   
-  // Getting world to send to manage-circle page
-  const world = await Worlds.findOne({name: circleID});
+  // Getting circle to send to manage-circle page
+  const circle = await Circles.findOne({name: circleID});
 
   // Getting information of all existing groups
-  const allGroups = await WorldGroups.find({});
+  const allGroups = await CircleGroups.find({});
 
-  if (world)
+  if (circle)
   {
     var group = null;
     var groupName = null;
     var subgroupName = null;
 
-    if (world.group)
+    if (circle.group)
     {
-      group = await WorldGroups.findById(world.group);
+      group = await CircleGroups.findById(circle.group);
 
       groupName = group.name;
 
@@ -983,7 +983,7 @@ const serveManageCircle = async (req, res, next) =>
       {
         for (const subgroup of group.subgroups)
         {
-          if (JSON.stringify(subgroup._id) === JSON.stringify(world.subgroup))
+          if (JSON.stringify(subgroup._id) === JSON.stringify(circle.subgroup))
           {
             subgroupName = subgroup.name;
           }
@@ -996,7 +996,7 @@ const serveManageCircle = async (req, res, next) =>
 
     var userPermissions = [];
 
-    // For each user, checking user permissions for the world
+    // For each user, checking user permissions for the circle
     for (const user of users)
     {
       // Checking if it is not the current user
@@ -1009,12 +1009,12 @@ const serveManageCircle = async (req, res, next) =>
           editing: false,
         }
   
-        if (world.viewingPermissions.includes(user._id))
+        if (circle.viewingPermissions.includes(user._id))
         {
           userPermission.viewing = true;
         }
   
-        if (world.editingPermissions.includes(user._id))
+        if (circle.editingPermissions.includes(user._id))
         {
           userPermission.editing = true;
         }
@@ -1025,36 +1025,36 @@ const serveManageCircle = async (req, res, next) =>
 
     const userInfo = getUserInfo(req);
   
-    // Rendering the worldAccess page
+    // Rendering the manage circle page
     res.render(path.resolve(__dirname + '/../public/web/views/NEW/manage-circle'), {
-      title: 'Manage ' + world.name,
+      title: 'Manage ' + circle.name,
       userInfo: userInfo,
-      world: world,
-      worldGroup: groupName,
-      worldSubgroup: subgroupName,
+      circle: circle,
+      circleGroup: groupName,
+      circleSubgroup: subgroupName,
       userPermissions: userPermissions,
       allGroups: allGroups,
     });
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Updating circle to have public or private access on user request
 const updateAccessRestriction = async (req, res, next) => 
 {
-  // Finding world in database with that name
-  const world = await Worlds.findOne({name: req.body.circle});
+  // Finding circle in database with that name
+  const circle = await Circles.findOne({name: req.body.circle});
 
-  if (world)
+  if (circle)
   {
     if (req.body.restriction === 'true')
     {
       try
       {
-        // Changing world access restrictions to true
-        world.viewingRestrictions = true;
-        await world.save();
+        // Changing circle access restrictions to true
+        circle.viewingRestrictions = true;
+        await circle.save();
       }
       catch (e)
       {
@@ -1065,9 +1065,9 @@ const updateAccessRestriction = async (req, res, next) =>
     {
       try
       {
-        // Changing world access restrictions to false
-        world.viewingRestrictions = false;
-        await world.save();
+        // Changing circle access restrictions to false
+        circle.viewingRestrictions = false;
+        await circle.save();
       }
       catch (e)
       {
@@ -1079,7 +1079,7 @@ const updateAccessRestriction = async (req, res, next) =>
   res.json('success');
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Updating user viewing access for circle on user request
 const updateUserViewing = async (req, res, next) => 
@@ -1087,18 +1087,18 @@ const updateUserViewing = async (req, res, next) =>
   // Finding the user in database with that username
   const user = await User.findOne({username: req.body.user});
 
-  // Finding world in database with that name
-  const world = await Worlds.findOne({name: req.body.circle});
+  // Finding circle in database with that name
+  const circle = await Circles.findOne({name: req.body.circle});
 
-  if (user && world)
+  if (user && circle)
   {
     if (req.body.viewing === 'true')
     {
       try
       {
         // Adding the user from the list of permitted users
-        world.viewingPermissions.push(user);
-        await world.save();
+        circle.viewingPermissions.push(user);
+        await circle.save();
 
       }
       catch(e)
@@ -1111,8 +1111,8 @@ const updateUserViewing = async (req, res, next) =>
       try
       {
         // Removing the user from the list of permitted users
-        world.viewingPermissions.pull(user);
-        await world.save();
+        circle.viewingPermissions.pull(user);
+        await circle.save();
 
       }
       catch(e)
@@ -1123,7 +1123,7 @@ const updateUserViewing = async (req, res, next) =>
   }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Updating user editing access for circle on user request
 const updateUserEditing = async (req, res, next) => 
@@ -1131,18 +1131,18 @@ const updateUserEditing = async (req, res, next) =>
   // Finding the user in database with that username
   const user = await User.findOne({username: req.body.user});
 
-  // Finding world in database with that name
-  const world = await Worlds.findOne({name: req.body.circle});
+  // Finding circle in database with that name
+  const circle = await Circles.findOne({name: req.body.circle});
 
-  if (user && world)
+  if (user && circle)
   {
     if (req.body.editing === 'true')
     {
       try
       {
         // Adding the user from the list of permitted users
-        world.editingPermissions.push(user);
-        await world.save();
+        circle.editingPermissions.push(user);
+        await circle.save();
 
       }
       catch(e)
@@ -1155,8 +1155,8 @@ const updateUserEditing = async (req, res, next) =>
       try
       {
         // Removing the user from the list of permitted users
-        world.editingPermissions.pull(user);
-        await world.save();
+        circle.editingPermissions.pull(user);
+        await circle.save();
 
       }
       catch(e)
@@ -1167,33 +1167,33 @@ const updateUserEditing = async (req, res, next) =>
   }
 }
 
-// Circle Group Page ----------------------------------------------------------------------------------------------------------------------------------
+// Update Circle Group Page ------------------------------------------------------------------------------------------------------------------------
 
 // Updating circle group and subgroup on user request
 const updateCircleGroup = async (req, res, next) =>
 {
-  if (req.body.world && req.body.group && req.body.subgroup)
+  if (req.body.circle && req.body.group && req.body.subgroup)
   {
-    // Getting world from database
-    var world = null;
+    // Getting circle from database
+    var circle = null;
 
     try
     {
-      world = await Worlds.findOne({name: req.body.world});
+      circle = await Circles.findOne({name: req.body.circle});
     }
     catch(e)
     {
       console.log(e);
     }
 
-    if (world)
+    if (circle)
     {
-      // If 'No Group' was selected, removing world from any group
-      // Otherwise, adding world to selected group
+      // If 'No Group' was selected, removing circle from any group
+      // Otherwise, adding circle to selected group
       if (req.body.group.replaceAll('-', ' ') === 'No Group')
       {
-        world.group = null;
-        world.subgroup = null;
+        circle.group = null;
+        circle.subgroup = null;
       }
       else
       {
@@ -1202,7 +1202,7 @@ const updateCircleGroup = async (req, res, next) =>
 
         try
         {
-          group = await WorldGroups.findOne({name: req.body.group.replaceAll('-', ' ')});
+          group = await CircleGroups.findOne({name: req.body.group.replaceAll('-', ' ')});
         }
         catch(e)
         {
@@ -1211,13 +1211,13 @@ const updateCircleGroup = async (req, res, next) =>
 
         if (group)
         {
-          world.group = group._id;
+          circle.group = group._id;
 
-          // If 'No Subgroup' was selected, removing world from any subgroup
-          // Otherwise, adding world to selected subgroup
+          // If 'No Subgroup' was selected, removing circle from any subgroup
+          // Otherwise, adding circle to selected subgroup
           if (req.body.subgroup.replaceAll('-', ' ') === 'No Subgroup')
           {
-            world.subgroup = null;
+            circle.subgroup = null;
           }
           else
           {
@@ -1225,21 +1225,152 @@ const updateCircleGroup = async (req, res, next) =>
             {
               if (subgroup.name === req.body.subgroup.replaceAll('-', ' '))
               {
-                world.subgroup = subgroup._id;
+                circle.subgroup = subgroup._id;
               }
             }
           }
         }
       }
 
-      await world.save();
+      await circle.save();
     }
   }
 
-  return res.redirect('/manage-circle/' + req.body.world);
+  return res.redirect('/manage-circle/' + req.body.circle);
 }
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------
+// Profile Page ------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering profile page
+const serveProfile = async (req, res, next) =>
+{
+  var user = req.user;
+
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/profile'), {
+    title: 'Welcome ' + user.username,
+    userInfo: user,
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating user profile
+const updateUserProfile = async (req, res, next) => 
+{
+  var accountUpdated = false;
+  var user; 
+
+  // Getting user from database
+  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST)
+  {
+    user = await Guest.findOne({_id: req.user._id}).exec();
+  }
+  else
+  {
+    user = await User.findOne({_id: req.user._id}).exec();
+  }
+
+  if (user)
+  {
+    const userData = {};
+
+    // Checking if display name was updated
+    if (req.body.displayName !== user.displayName)
+    {
+      // Ensuring that there is text in the display name
+      // If not, assigning the display name to be the username
+      if (req.body.displayName.length > 0 && req.body.displayName[0] != ' ')
+      {
+        userData.displayName = req.body.displayName;
+      }
+      else
+      {
+        userData.displayName = user.username;
+      }
+
+      req.session.sessionName = userData.displayName;
+
+      accountUpdated = true;
+    }
+
+    // Checking if email was updated
+    if (req.body.email)
+    {
+      if (req.body.email !== user.email)
+      {
+        userData.email = req.body.email;
+        accountUpdated = true;
+      }
+    }
+
+    // Checking if the user wants to delete their email from their account
+    // If the checkbox was checked
+    if (req.body.deleteEmail)
+    {
+      userData.email = '';
+      accountUpdated = true;
+    }
+
+    // Checking if password was updated
+    if (req.body.passwordOld) 
+    {
+      // Checking if old password field matches the database
+      // If they do not, output an error message to the user
+      if (user.comparePasswords(req.body.passwordOld))
+      {
+        // Checking if the new password and the password confirmation field matches
+        // If they do, update the user password to the new password
+        // If they don't, output an error message
+        if ( req.body.passwordNew === req.body.passwordConf )
+        {
+          userData.password = req.body.passwordNew;
+          accountUpdated = true;
+        }
+        else
+        {
+          res.json('passwords do not match');
+        }
+      }
+      else
+      {
+        res.json('old password incorrect');
+      }
+    }
+
+    // Updating database
+    if (accountUpdated)
+    {
+      try 
+      {
+        if (user.usertype === CIRCLES.USER_TYPE.GUEST)
+        {
+          await Guest.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+        }
+        else
+        {
+          await User.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+        }
+
+        res.json('success');
+        return;
+      } 
+      catch(e) 
+      {
+        console.log(e);
+
+        res.json('error');
+        return;
+      }
+    }
+  }
+  else
+  {
+    res.json('error');
+    return;
+  }
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
   // Login Page
@@ -1261,6 +1392,9 @@ module.exports = {
   updateAccessRestriction,
   updateUserViewing,
   updateUserEditing,
-  // Circle Group Page
+  // Update Circle Group Page
   updateCircleGroup,
+  // Profile Page 
+  serveProfile,
+  updateUserProfile,
 }

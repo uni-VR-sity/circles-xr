@@ -1,6 +1,6 @@
 'use strict';
 
-// Global Variables --------------------------------------------------------------------------------------------------------------------------------------
+// Global Variables --------------------------------------------------------------------------------------------------------------------------------
 var magicCircles;
 var publicCircles;
 var yourCircles;
@@ -12,7 +12,7 @@ var currentCircles;
 var currentGroup;
 var currentSubgroup;
 
-// Session Name Form -------------------------------------------------------------------------------------------------------------------------------------
+// Session Name Form -------------------------------------------------------------------------------------------------------------------------------
 
 // Checking that input doesn't contain ', ", or -
 function validInput(input)
@@ -33,7 +33,7 @@ function validInput(input)
     return true;
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Updating session name through form
 function updateSessionName(event)
@@ -84,7 +84,7 @@ function updateSessionName(event)
     }
 }
 
-// Circle Tabs -------------------------------------------------------------------------------------------------------------------------------------------
+// Circle Tabs -------------------------------------------------------------------------------------------------------------------------------------
 
 // Fixing css depending on device and number of tabs visible
 function styleTabs(adminUser, managerUser, standardUser, magicGuest)
@@ -107,7 +107,7 @@ function styleTabs(adminUser, managerUser, standardUser, magicGuest)
     // Magic guest
     else if (magicGuest)
     {
-        tabsContainer.style.gridTemplateAreas = '"magic-circles all-circles public-circles"';
+        tabsContainer.style.gridTemplateAreas = '"magic-circles public-circles"';
     }
     // Guest
     else
@@ -143,7 +143,7 @@ function styleTabs(adminUser, managerUser, standardUser, magicGuest)
     */
 }
 
-// Displaying Circles ------------------------------------------------------------------------------------------------------------------------------------
+// Displaying Circles ------------------------------------------------------------------------------------------------------------------------------
 
 // Getting circles in each section
 function initializeCircleSection(circles, section)
@@ -168,7 +168,7 @@ function initializeCircleSection(circles, section)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Organizing cirles in the "all" section (combining public and your circles)
 function initializeAllCircleSection()
@@ -195,11 +195,11 @@ function initializeAllCircleSection()
                 // If it does, adding them
                 var toAddSubgroup = group.subgroups.find(x => x.name === existingSubgroup.name);
 
-                if (toAddSubgroup.worlds.length > 0)
+                if (toAddSubgroup.circles.length > 0)
                 {
-                    for (const world of toAddSubgroup.worlds)
+                    for (const circle of toAddSubgroup.circles)
                     {
-                        existingSubgroup.worlds.push(world);
+                        existingSubgroup.circles.push(circle);
                     }
                 }
             }
@@ -207,9 +207,9 @@ function initializeAllCircleSection()
             // If yourCircles has circles that are not in a subgroup, adding them
             if (group.noGroup.length > 0)
             {
-                for (const world of group.noGroup)
+                for (const circle of group.noGroup)
                 {
-                    allCircles.groups[groupIndex].noGroup.push(world);
+                    allCircles.groups[groupIndex].noGroup.push(circle);
                 }
             }
         }
@@ -222,14 +222,14 @@ function initializeAllCircleSection()
     // If yourCircles has circles that are not in a group, adding them
     if (yourCircles.noGroup.length > 0)
     {
-        for (const world of yourCircles.noGroup)
+        for (const circle of yourCircles.noGroup)
         {
-            allCircles.noGroup.push(world);
+            allCircles.noGroup.push(circle);
         }
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Getting current circles (in selected section, group, and subgroup)
 function getCurrentCircles()
@@ -260,7 +260,7 @@ function getCurrentCircles()
             // Circles with subgroup
             for (const subgroup of group.subgroups)
             {
-                getCircles(subgroup.worlds);
+                getCircles(subgroup.circles);
             }
         }
     }
@@ -279,7 +279,7 @@ function getCurrentCircles()
             // Circles with subgroup
             for (const subgroup of group.subgroups)
             {
-                getCircles(subgroup.worlds);
+                getCircles(subgroup.circles);
             }
         }
         else
@@ -287,16 +287,18 @@ function getCurrentCircles()
             // Getting current subgroup
             var subgroup = group.subgroups.find(x => x.name === currentSubgroup);
 
-            getCircles(subgroup.worlds);
+            getCircles(subgroup.circles);
         }
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Displaying current circles
 function displayCircles()
 {
+    var noCirclesMessage = document.getElementById('no-circles-message');
+
     // Hiding currently displayed circles
     var previouslyDisplayed = document.getElementsByClassName('displayed-circle');
 
@@ -306,15 +308,26 @@ function displayCircles()
         previouslyDisplayed[0].classList.remove('displayed-circle');
     }
 
-    // Displaying current circles
-    for (const circle of currentCircles)
+    // If there are circles to display, displaying current circles
+    // Otherwise displaying no circles message 
+    if (currentCircles.length > 0)
     {
-        document.getElementById(circle.name).classList.remove('hidden-circle');
-        document.getElementById(circle.name).classList.add('displayed-circle');
+        noCirclesMessage.style.display = 'none';
+
+        // Displaying current circles
+        for (const circle of currentCircles)
+        {
+            document.getElementById(circle.name).classList.remove('hidden-circle');
+            document.getElementById(circle.name).classList.add('displayed-circle');
+        }
+    }
+    else
+    {
+        noCirclesMessage.style.display = 'block';
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Displaying circles in selected group
 function displayCirclesInGroup(selectedGroup)
@@ -369,7 +382,7 @@ function displayCirclesInGroup(selectedGroup)
     displayCircles();
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Displaying circles in selected subgroup
 function displayCirclesInSubgroup(selectedSubgroup)
@@ -380,7 +393,7 @@ function displayCirclesInSubgroup(selectedSubgroup)
     displayCircles();
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Detecting what group and subgroup is selected to display appropriate circles
 function detectGroupSelect()
@@ -404,7 +417,7 @@ function detectGroupSelect()
     });
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Highlighting selected tab
 function highlightCirclesTab(tab)
@@ -421,7 +434,7 @@ function highlightCirclesTab(tab)
     document.getElementById(tab).classList.add('selected-tab');
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Setting up group selector for currentSection
 function setUpCircleGroup()
@@ -458,7 +471,7 @@ function setUpCircleGroup()
     subgroupSelector.style.display = 'none';
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Displaying circles in specified section
 function displaySection(section)
@@ -519,7 +532,7 @@ function displaySection(section)
     displayCirclesInGroup('All');
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Circles search bar functionality
 function circlesSearchBar()
@@ -532,7 +545,7 @@ function circlesSearchBar()
     });
 }
 
-// Magic Links -------------------------------------------------------------------------------------------------------------------------------------------
+// Magic Links -------------------------------------------------------------------------------------------------------------------------------------
 
 // Creating magic link through form
 function createMagicLink(event)
@@ -572,7 +585,7 @@ function createMagicLink(event)
         else
         {
             // Checking that link name does not contain spaces
-            if (formData.get('forwardingName').contains(' '))
+            if (formData.get('forwardingName').includes(' '))
             {
                 errorMessage.style.display = 'flex';
                 errorMessage.innerHTML = 'Link name can not contain spaces (" ")';
@@ -605,7 +618,7 @@ function createMagicLink(event)
                         successMessage.style.display = 'flex';
                         successMessage.innerHTML = 'Magic link successfully made for the following circle(s): ';
 
-                        for (const circle of response.worlds)
+                        for (const circle of response.circles)
                         {
                             successMessage.innerHTML += circle + ', ';
                         }
@@ -617,7 +630,6 @@ function createMagicLink(event)
 
                         // Clearing form
                         var form = document.getElementById('magic-link-form');
-                        form.reset();
                     }
                 }
 

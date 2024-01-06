@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const fs       = require('fs');
 
-const WorldGroupsSchema = new mongoose.Schema({
+const CircleGroupsSchema = new mongoose.Schema({
     name: {
       type:       String,
       unique:     true,
@@ -19,6 +19,6 @@ const WorldGroupsSchema = new mongoose.Schema({
     }]
 });
 
-const WorldGroups = mongoose.model('worldGroups', WorldGroupsSchema);
+const CircleGroups = mongoose.model('circleGroups', CircleGroupsSchema);
 
-module.exports = WorldGroups;
+module.exports = CircleGroups;

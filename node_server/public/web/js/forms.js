@@ -26,7 +26,7 @@ function checkCheckboxWidth(formID)
     }
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Activating custom date form
 function customDateForm (selectorID, customDateID)
@@ -54,7 +54,7 @@ function customDateForm (selectorID, customDateID)
     });
 }
 
-// ------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 // Copying text from input
 function copyText(inputId) 

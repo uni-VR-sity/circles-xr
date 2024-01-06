@@ -42,9 +42,9 @@ const notAuthenticated = (req, res, next) => {
   return next();
 };
 
-// NEW ---------------------------------------------------------------------------------------------------------------------------------------------------
+// NEW ---------------------------------------------------------------------------------------------------------------------------------------------
 
-// Login Routes ------------------------------------------------------------------------------------------------------------------------------------------
+// Login Routes ------------------------------------------------------------------------------------------------------------------------------------
 
 router.get('/new', notAuthenticated, newController.serveLogin);
 
@@ -64,7 +64,7 @@ router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/g
   return res.redirect('/');
 }); 
 
-// Register Routes ---------------------------------------------------------------------------------------------------------------------------------------
+// Register Routes ---------------------------------------------------------------------------------------------------------------------------------
 
 router.get('/new-register', notAuthenticated, newController.serveRegister);
 
@@ -75,31 +75,36 @@ router.post('/new-register-user', newController.registerUser, passport.authentic
   });
 });
 
-// Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------------
+// Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------
 
 router.get('/new-explore', authenticated, newController.serveExplore);
 router.post('/update-session-display-name', authenticated, newController.updateSessionName);
 router.post('/new-create-magic-link', authenticated, newController.createMagicLink);
 
-// Manage Groups Page Routes -----------------------------------------------------------------------------------------------------------------------------
+// Manage Groups Page Routes -----------------------------------------------------------------------------------------------------------------------
 
 router.post('/new-create-group', authenticated, newController.createGroup);
 router.post('/new-create-subgroup', authenticated, newController.createSubgroup);
 router.post('/delete-group', authenticated, newController.deleteGroup);
 router.post('/delete-subgroup', authenticated, newController.deleteSubgroup);
 
-// Manage Circle Page Routes -----------------------------------------------------------------------------------------------------------------------------
+// Manage Circle Page Routes -----------------------------------------------------------------------------------------------------------------------
 
 router.get('/manage-circle/:circle_id', authenticated, newController.serveManageCircle);
 router.post('/update-access-restriction', authenticated, newController.updateAccessRestriction);
 router.post('/update-user-viewing', authenticated, newController.updateUserViewing);
 router.post('/update-user-editing', authenticated, newController.updateUserEditing);
 
-// Circle Group Page Routes ------------------------------------------------------------------------------------------------------------------------------
+// Update Circle Group Page Routes -----------------------------------------------------------------------------------------------------------------
 
 router.post('/update-circle-group', authenticated, newController.updateCircleGroup);
 
-// OLD ---------------------------------------------------------------------------------------------------------------------------------------------------
+// Profile Page Routes -----------------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-profile', authenticated, newController.serveProfile);
+router.post('/update-user-profile', authenticated, newController.updateUserProfile);
+
+// OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web
 router.get('/', notAuthenticated, (req, res) => {

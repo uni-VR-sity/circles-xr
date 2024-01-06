@@ -3,7 +3,7 @@ block append scripts
 
 block content
 
-    // Circle group overlay ------------------------------------------------------------------------------------------------------------------------
+    // Update circle group overlay -----------------------------------------------------------------------------------------------------------------
     #circle-group-overlay.overlay-container
         .overlay
 
@@ -20,7 +20,7 @@ block content
             #group-select-container
                 form(action='/update-circle-group' method='post')
                     
-                    input.hidden-field(type='text' name='world' value=world.name)
+                    input.hidden-field(type='text' name='circle' value=circle.name)
 
                     .form-field
                         label Group
@@ -30,7 +30,7 @@ block content
                             option(value='No-Group' id='no-group') No Group
 
                             for group of allGroups
-                                - selected = (group.name === worldGroup);
+                                - selected = (group.name === circleGroup);
                                 option(value!= group.name.replaceAll(' ', '-') selected!=selected)!= group.name
                                 - selected = false;
 
@@ -39,8 +39,8 @@ block content
                         select.field-select(id='current-subgroup' name='subgroup')
 
                     script.
-                        displaySubgroups('!{JSON.stringify(allGroups)}', '#{worldGroup}', '#{worldSubgroup}');
-                        listenForGroupUpdate('!{JSON.stringify(allGroups)}', '#{worldGroup}');
+                        displaySubgroups('!{JSON.stringify(allGroups)}', '#{circleGroup}', '#{circleSubgroup}');
+                        listenForGroupUpdate('!{JSON.stringify(allGroups)}', '#{circleGroup}');
                         listenForSubgroupUpdate();
 
                     .form-field.last-field.full-width-submit

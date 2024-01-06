@@ -25,22 +25,22 @@ block content
                                 i
                         else 
                             .icon-container.permitted-icon
-                                i(onclick='restrictViewing("' + user.username + '", "' + world.name + '")')
+                                i(onclick='restrictViewing("' + user.username + '", "' + circle.name + '")')
                     else 
                         if user.editing
                             .icon-container.restricted-icon.disabled
                                 i
                         else 
                             .icon-container.restricted-icon
-                                i(onclick='permitViewing("' + user.username + '", "' + world.name + '")')
+                                i(onclick='permitViewing("' + user.username + '", "' + circle.name + '")')
 
                 .editing-access
                     if user.editing
                         .icon-container.permitted-icon
-                            i(onclick='restrictEditing("' + user.username + '", "' + world.name + '")')
+                            i(onclick='restrictEditing("' + user.username + '", "' + circle.name + '")')
                     else 
                         .icon-container.restricted-icon
-                            i(onclick='permitEditing("' + user.username + '", "' + world.name + '")')
+                            i(onclick='permitEditing("' + user.username + '", "' + circle.name + '")')
             else
                 .viewing-access 
                     if user.viewing
@@ -66,34 +66,34 @@ block content
     section#circle-title-container
         .content-container
 
-            - var profileURL = '/worlds/' + world.name + '/profile.jpg'
-            - var altText = world.displayName + "'s profile image";
+            - var profileURL = '/worlds/' + circle.name + '/profile.jpg'
+            - var altText = circle.displayName + "'s profile image";
 
-            if world.hasProfileImage
+            if circle.hasProfileImage
                 img(src=profileURL alt=altText)
             else 
-                img(src='/web/views/includes/NEW/default-circle-profile.png' alt=altText)
+                img(src='/web/views/NEW/includes/default-circle-profile.png' alt=altText)
 
-            h1= world.displayName
+            h1= circle.displayName
 
             .circle-access-restriction
-                if world.viewingRestrictions
+                if circle.viewingRestrictions
                     h3#circle-restriction-text Private
                     #circle-restriction-symbol.icon-container
-                        i.has-access-rectriction(onclick='makePublic("' + world.name + '")')
+                        i.has-access-rectriction(onclick='makePublic("' + circle.name + '")')
                 else 
                     h3#circle-restriction-text Public
                     #circle-restriction-symbol.icon-container
-                        i.no-access-rectriction(onclick='makePrivate("' + world.name + '")')
+                        i.no-access-rectriction(onclick='makePrivate("' + circle.name + '")')
 
             .circle-group 
                 .group-text
-                    if worldGroup != null
+                    if circleGroup != null
 
-                        p= worldGroup
+                        p= circleGroup
 
-                        if worldSubgroup != null 
-                            p &nbsp&nbsp|&nbsp&nbsp !{worldSubgroup}
+                        if circleSubgroup != null 
+                            p &nbsp&nbsp|&nbsp&nbsp !{circleSubgroup}
 
                     else 
                         p No Group
@@ -106,7 +106,7 @@ block content
     // User access --------------------------------------------------------------------------
     section#user-access-container
 
-        if world.viewingRestrictions
+        if circle.viewingRestrictions
 
             // Header -----------------------------------------------------------------------
             .header-row

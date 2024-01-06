@@ -1,0 +1,74 @@
+extends template.pug
+
+block append scripts
+    script(src='/web/js/views/profile.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+    // Title --------------------------------------------------------------------------------
+    section#profile-title-container
+        .content-container 
+
+            .icon-container 
+                i(class='fa-solid fa-user')
+
+            h1= userInfo.username 
+            h3= userInfo.usertype
+
+            hr
+
+    // Update profile -----------------------------------------------------------------------
+    section#update-profile-container
+        .content-container 
+
+            // Message ----------------------------------------------------------------------
+            p.error-message
+            p.success-message
+
+            // Update profile form ----------------------------------------------------------
+            form#update-profile-form(onsubmit='updateProfile(event)' method='post')
+
+                .form-field
+                    label Display name
+                    input(type='text' id='displayName' name='displayName' value=userInfo.displayName required)
+
+                .form-field
+                    label Email
+                        i &nbsp(Optional)
+                    input(type='email' id='email' name='email' placeholder='super@email.com' value=userInfo.email)
+
+                    .checkbox-container
+                        input(type='checkbox' id='deleteEmail' name='deleteEmail')
+                        label(for='deleteEmail') Remove email from account
+
+                hr
+
+                .form-field 
+                    label Old password
+                    input(type='password' name='passwordOld')
+
+                .form-field 
+                    label New password
+                    input(type='password' name='passwordNew')
+
+                .form-field.last-field
+                    label Confirm password
+                    input(type='password' name='passwordConf')
+
+            // Avatar form ------------------------------------------------------------------
+            .avatar-view 
+                i Avatar View (Coming Soon)
+
+            // Submit profile form ----------------------------------------------------------
+            .submit-profile-form 
+                input(type='submit' value='Update Profile' form='update-profile-form')
+
+            // Customize avatar button ------------------------------------------------------
+            .customize-avatar-button
+                a(href='/w/Wardrobe') Customize Avatar
