@@ -1,0 +1,116 @@
+extends template.pug
+
+block append scripts
+    script(src='/web/js/views/your-magic-links.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var circle;
+    - var link;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+    mixin magicLink(magicLink)
+        .magic-link(id=magicLink.forwardLink)
+            h3.link-name= magicLink.forwardLink 
+
+            - var visibleURL = baseURL + '/' + magicLink.forwardLink;
+            - var targetURL = '/' + magicLink.forwardLink;
+            a.link.link-icon(target='_blank' href=targetURL)= visibleURL
+
+            if magicLink.expires
+
+                // Calculating when link will expire
+                // https://www.geeksforgeeks.org/how-to-calculate-the-number-of-days-between-two-dates-in-javascript/
+                - var daysUntilExpired = magicLink.expiryDate - new Date();
+                - daysUntilExpired = Math.floor(daysUntilExpired / (1000 * 3600 * 24));
+
+                // If it expires in more then a week: Green text
+                // If it expires within the week: Red text
+                // If it never expires: Green text
+                if daysUntilExpired >= 8
+                    i.link-expiry Expires in #{daysUntilExpired} days
+
+                else if daysUntilExpired > 0 && daysUntilExpired < 8
+                    i.link-expiry.expires-soon Expires in #{daysUntilExpired} days
+
+                else if daysUntilExpired === 0
+                    i.link-expiry.expires-soon Expires today
+
+                else if daysUntilExpired < 0
+                    i.link-expiry.expires-soon Expired
+
+            else 
+                i.link-expiry Never expires
+
+            b.circles-title Circles: 
+
+            .link-circles 
+                for circle of magicLink.worlds
+                    p= circle
+
+            .link-buttons 
+                .renew-button
+                    a(onclick='renewLink("' + magicLink.forwardLink + '")') Renew 
+
+                .delete-button
+                    a(onclick='deleteLinkConfirmation("' + magicLink.forwardLink + '")') Delete
+
+            .renewal-container
+                form(id='renew-magic-link-' + magicLink.forwardLink action='/new-renew-magic-link' method='post')
+                    .hidden-field 
+                        input(type='text' name='magicLink' value=magicLink.forwardLink)
+
+                    .inline-field.select-expiry
+                        label Expiration
+
+                        select.no-border-field(id='link-expiry-' + magicLink.forwardLink name='linkExpiry')
+                            option(value='7' selected) 7 days
+
+                            - for (var i = 30; i <= 90; i += 30)
+                                option(value=i) !{i} days
+
+                            option(value='custom') Custom...
+                            option(value='never') Never
+
+                    .inline-field.custom-expiry
+                        input.no-border-field(id='custom-link-expiry-' + magicLink.forwardLink type='date' name='customLinkExpiry')
+
+                    script.
+                        customDateForm('link-expiry-!{magicLink.forwardLink}', 'custom-link-expiry-!{magicLink.forwardLink}');
+
+                .renewal-buttons  
+                    .renew-button
+                        input(type='submit' form='renew-magic-link-' + magicLink.forwardLink value='Renew')
+
+                    .cancel-button
+                        a(onclick='closeContainer("' + magicLink.forwardLink + '", ".renewal-container")') Cancel
+
+            .delete-confirmation-container
+
+                p.message Delete this magic link?
+
+                .renewal-buttons  
+                    .delete-button
+                        a(onclick='deleteLink("' + magicLink.forwardLink + '")') Delete
+
+                    .cancel-button
+                        a(onclick='closeContainer("' + magicLink.forwardLink + '", ".delete-confirmation-container")') Cancel
+
+            hr
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+    // Title --------------------------------------------------------------------------------
+    section#magic-links-title-container.title-container
+        .content-container
+            h1 Your Magic Links 
+            
+            hr
+
+    // Magic Links --------------------------------------------------------------------------
+    section#magic-links-container 
+        .content-container 
+
+            for link of magicLinks 
+                +magicLink(link)

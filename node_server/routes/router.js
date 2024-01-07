@@ -113,7 +113,13 @@ router.post('/update-usertype', authenticated, newController.updateUsertype);
 
 router.get('/sample-upload-file', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
-})
+});
+
+// Your Magic Links Page Routes -------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-your-magic-links', authenticated, newController.serveYourMagicLinks);
+router.post('/new-renew-magic-link', authenticated, newController.renewMagicLink);
+router.post('/new-delete-magic-link', authenticated, newController.deleteMagicLink);
 
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 

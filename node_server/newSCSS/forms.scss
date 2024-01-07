@@ -73,7 +73,11 @@ input:not([type=submit],[type=button],[type=checkbox]), select {
     background-color: $WHITE;
 }
 
-input:not([type=submit],[type=button],[type=checkbox]):active, input:not([type=submit],[type=button],[type=checkbox]):focus, select:active, select:focus { 
+.no-border-field, input.no-border-field{
+    border: none;
+}
+
+input:not([type=submit],[type=button],[type=checkbox]):active, input:not([type=submit],[type=button],[type=checkbox]):focus, select:active, select:focus, .no-border-field:active, .no-border-field:focus { 
     outline: none;
     border: $FORM_ACTIVE_BORDER;
 }

@@ -264,7 +264,7 @@ block content
                             .form-field
                                 label.required-form-label Expiration
 
-                                select(id='linkExpiry' name='linkExpiry')
+                                select(id='link-expiry' name='linkExpiry')
                                     option(value='7' selected) 7 days
 
                                     - for (var i = 30; i <= 90; i += 30)
@@ -274,10 +274,10 @@ block content
                                     option(value='never') Never
 
                                 .inline-field
-                                    input(id='customLinkExpiry' type='date' name='customLinkExpiry')
+                                    input(id='custom-link-expiry' type='date' name='customLinkExpiry')
 
                                 script.
-                                    customDateForm('linkExpiry', 'customLinkExpiry');
+                                    customDateForm('link-expiry', 'custom-link-expiry');
 
                             .form-field
                                 label.required-form-label Link name

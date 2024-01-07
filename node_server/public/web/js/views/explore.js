@@ -630,6 +630,7 @@ function createMagicLink(event)
 
                         // Clearing form
                         var form = document.getElementById('magic-link-form');
+                        form.reset();
                     }
                 }
 

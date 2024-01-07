@@ -1779,6 +1779,171 @@ const updateUsertype = async (req, res, next) =>
   return res.redirect('/new-manage-users');
 }
 
+// Your Magic Links Page ---------------------------------------------------------------------------------------------------------------------------
+
+// Rendering your magic links page
+const serveYourMagicLinks = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+
+  // Getting user's magic links
+  var magicLinks = [];
+
+  var currentUser = req.user;
+
+  magicLinks = await MagicLinks.find({creator: currentUser});
+
+  // Getting current domain
+  var baseURL;
+
+  if (env.DOMAIN)
+  {
+    baseURL = env.DOMAIN;
+  }
+  else
+  {
+    baseURL = req.get('host');
+  }
+
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/your-magic-links'), {
+    title: "Your Magic Links",
+    userInfo: userInfo,
+    magicLinks: magicLinks,
+    baseURL: baseURL,
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+const renewMagicLink = async (req, res, next) =>
+{
+  if (req.body.linkExpiry)
+  {
+    // Getting expiry time of magic link (if there is one)
+    var expiryTimeMin;
+    var expiryDate;
+
+    if (req.body.linkExpiry === 'never')
+    {
+      expiryTimeMin = null;
+    }
+    else if (req.body.linkExpiry === 'custom')
+    {
+      var date = req.body.customLinkExpiry.split('-');
+
+      var today = new Date();
+      expiryDate = new Date(parseInt(date[0]), parseInt(date[1]) - 1, parseInt(date[2]), 23, 59, 59, 59);
+
+      expiryTimeMin = expiryDate - today;
+      expiryTimeMin = Math.round((expiryTimeMin / 1000) / 60);
+    }
+    else
+    {
+      var today = new Date();
+
+      expiryDate = new Date();
+      var expiry = expiryDate.getDate() + parseInt(req.body.linkExpiry);
+      expiryDate.setDate(expiry);
+      expiryDate.setHours(23);
+      expiryDate.setMinutes(59);
+      expiryDate.setSeconds(59);
+      expiryDate.setMilliseconds(59);
+
+      expiryTimeMin = expiryDate - today;
+      expiryTimeMin = Math.round((expiryTimeMin / 1000) / 60);
+    }
+
+    var link = null;
+
+    // Getting link from database
+    try
+    {
+      link = await MagicLinks.findOne({forwardLink: req.body.magicLink}).exec();
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (link)
+    {
+      var circles = [];
+
+      // Getting circles for magic link
+      for (const circle of link.worlds)
+      {
+        try 
+        {
+          circles.push(await Circles.findOne({name: circle}));
+        }
+        catch (e)
+        {
+          console.log(e);
+
+          return res.redirect('/new-your-magic-links');
+        }
+      }
+
+      // Creating magic link
+      const magicLink = createJWT_MagicLink(expiryTimeMin, circles);
+
+      // Saving new magic link in database
+      link.magicLink = magicLink;
+
+      if (expiryTimeMin)
+      {
+        link.expires = true;
+        link.expiryDate = expiryDate;
+
+        link.markModified('expiryDate');
+      }
+      else
+      {
+        link.expires = false;
+      }
+
+      try
+      {
+        await link.save();
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+  }
+
+  return res.redirect('/new-your-magic-links');
+}
+
+// ------------------------------------------------------------------------------------------
+
+const deleteMagicLink = async (req, res, next) => 
+{
+  // Getting link from database
+  const link = await MagicLinks.findOne({forwardLink: req.body.magicLink}).exec();
+  const linkCreator = await User.findOne(link.creator).exec();
+
+  // Checking if the link belongs to the current user
+  const currentUser = await User.findById(req.user._id).exec();
+
+  // If it does, delete the link
+  if (JSON.stringify(linkCreator) == JSON.stringify(currentUser))
+  {
+    // Deleting from database
+    try
+    {
+      await MagicLinks.deleteOne({forwardLink: req.body.magicLink});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+  res.json('complete');
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -1811,4 +1976,8 @@ module.exports = {
   createUser,
   bulkCreateUsers,
   updateUsertype,
+  // Your Magic Links Page
+  serveYourMagicLinks,
+  renewMagicLink,
+  deleteMagicLink,
 }

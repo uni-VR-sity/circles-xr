@@ -45,10 +45,12 @@ function customDateForm (selectorID, customDateID)
         // Otherwise make sure it is hidden
         if (event.target.value === 'custom')
         {
+            console.log('custom');
             customDate.style.display = 'inline-block';
         }
         else
         {
+            console.log('no');
             customDate.style.display = 'none';
         }
     });
