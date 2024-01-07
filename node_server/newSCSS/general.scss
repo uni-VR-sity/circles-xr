@@ -38,6 +38,10 @@ p, i, a, label, input, select, option, li {
     line-height: $LINE_HEIGHT;
 }
 
+b {
+    line-height: $LINE_HEIGHT;
+}
+
 a {
    text-decoration: none;
    color: $BLUE;
