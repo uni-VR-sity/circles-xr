@@ -149,3 +149,46 @@ p.error-message::before {
         }
     }
 }
+
+// Instruction Container -----------------------------------------------------------------------------------------------------------------------------------------
+
+.instruction-container {
+    border: $GREEN 3px solid;
+    background-color: $LIGHT_GREEN;
+    width: 100%;
+    padding: $MEDIUM_MARGIN;
+    margin-bottom: $SMALL_MARGIN;
+    box-sizing: border-box;
+}
+
+// Lists ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ul {
+    margin-top: $LINE_HEIGHT;
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+// Tables --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+table {
+    border-collapse: collapse;
+    margin: $SMALL_MARGIN 0;
+
+    thead {
+        border-bottom: $BLACK solid 2px;
+        text-align: center;
+    }
+
+    tr {
+
+        td:not(:last-child) {
+            border-right: $BLACK solid 2px;
+        } 
+        
+        td {
+            vertical-align: top;
+            padding: $X_SMALL_MARGIN $MEDIUM_MARGIN;
+        }
+    }
+}

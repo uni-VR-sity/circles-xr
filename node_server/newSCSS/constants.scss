@@ -10,6 +10,7 @@ $MOBILE_BREAK: 650px;
 $WHITE: #FFFFFF;
 $BLACK: #000000;
 $GREY_TEXT: #6B6B6B;
+$TRANSPARENT_LIGHT_GREY: #edededf3;
 $LIGHT_GREY: #ededed;
 $GREY: #D7D7D7;
 $HOVER_GREY: #c5c5c5;
@@ -252,30 +253,26 @@ $SMALL_ICON: 14px;
     @include primary-button-regular($display, $width, $padding);
     background-color: transparent; 
     outline: 2px solid $DARK_GREY;
-    outline-offset: -1.5px;
+    outline-offset: -2px;
     color: $HOVER_DARK_GREY;
     font-weight: 500;
-    
 }
 
-@mixin outline-button-hover($icon: '\f061') {
-    font: var(--fa-font-solid);
-    content: $icon;
-    margin-left: 10px;
+@mixin outline-button-hover() {
+    outline: 2.5px solid $DARK_GREY;
+    outline-offset: -2.5px;
+    font-weight: 700;
 }
 
-@mixin outline-button($display: inline-block, $width: 100px, $padding: 0 35px, $icon: '\f061') {
+@mixin outline-button($display: inline-block, $width: 100px, $padding: 0 35px) {
 
     a {
         @include outline-button-regular($display, $width, $padding);
     }
 
     a:hover {
+        @include outline-button-hover();
         cursor: pointer;
-    }
-
-    a:hover::after {
-        @include outline-button-hover($icon);
     }
 
     // Tablet and mobile buttons have no hover state, only active
@@ -287,7 +284,46 @@ $SMALL_ICON: 14px;
         }
 
         a:active::after {
-            @include outline-button-hover($icon: '\f061');
+            @include outline-button-hover();
+        }
+    }
+}
+
+// Outline button (dark grey border, with icon on hover)
+@mixin outline-icon-button-regular($display: inline-block, $width: 100px, $padding: 0 35px) {
+    @include outline-button-regular($display, $width, $padding);
+}
+
+@mixin outline-icon-button-hover($icon: '\f061') {
+    font: var(--fa-font-solid);
+    content: $icon;
+    margin-left: 10px;
+}
+
+@mixin outline-icon-button($display: inline-block, $width: 100px, $padding: 0 35px, $icon: '\f061') {
+
+    a {
+        @include outline-icon-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        cursor: pointer;
+    }
+
+    a:hover::after {
+        @include outline-icon-button-hover($icon);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover::after {
+            content:'';
+            margin: 0;
+        }
+
+        a:active::after {
+            @include outline-icon-button-hover($icon: '\f061');
         }
     }
 }
@@ -346,8 +382,8 @@ $SMALL_ICON: 14px;
 }
 
 // Icon button highlight
-@mixin icon-highlight-regular($font-size) {
-    color: $BLACK;
+@mixin icon-highlight-regular($font-size, $colour) {
+    color: $colour;
     font-size: $font-size;
 }
 
@@ -356,40 +392,40 @@ $SMALL_ICON: 14px;
     cursor: pointer;
 }
 
-@mixin icon-highlight($font-size, $colour: $DARK_GREY) {
+@mixin icon-highlight($font-size, $colour: $BLACK, $hover-colour: $DARK_GREY) {
     i {
-        @include icon-highlight-regular($font-size);
+        @include icon-highlight-regular($font-size, $colour);
     }
 
     i:hover {
-        @include icon-highlight-hover($colour);
+        @include icon-highlight-hover($hover-colour);
     }
 
     a {
-        @include icon-highlight-regular($font-size);
+        @include icon-highlight-regular($font-size, $colour);
     }
 
     a:hover {
-        @include icon-highlight-hover($colour);
+        @include icon-highlight-hover($hover-colour);
     }
 
     // Tablet and mobile buttons have no hover state, only active
     @media only screen and (max-width: $TABLET_BREAK) 
     {
         i:hover {
-            @include icon-highlight-regular($font-size);
+            @include icon-highlight-regular($font-size, $colour);
         }
 
         i:active {
-            @include icon-highlight-hover($colour);
+            @include icon-highlight-hover($hover-colour);
         }
 
         a:hover {
-            @include icon-highlight-regular($font-size);
+            @include icon-highlight-regular($font-size, $colour);
         }
 
         a:active {
-            @include icon-highlight-hover($colour);
+            @include icon-highlight-hover($hover-colour);
         }
     }
 }

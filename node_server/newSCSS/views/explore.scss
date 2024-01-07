@@ -605,7 +605,7 @@
     #create-link {
 
         .content-container {
-            @include outline-button(inline-block, 175px);
+            @include outline-icon-button(inline-block, 175px);
 
             p {
                 margin-bottom: $MEDIUM_MARGIN;
