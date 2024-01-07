@@ -1815,6 +1815,7 @@ const serveYourMagicLinks = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
+// Renewing magic link
 const renewMagicLink = async (req, res, next) =>
 {
   if (req.body.linkExpiry)
@@ -1918,6 +1919,7 @@ const renewMagicLink = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
+// Deleting magic link
 const deleteMagicLink = async (req, res, next) => 
 {
   // Getting link from database
@@ -1939,6 +1941,303 @@ const deleteMagicLink = async (req, res, next) =>
     {
       console.log(e);
     }
+  }
+
+  res.json('complete');
+}
+
+// Uploaded Content Page ---------------------------------------------------------------------------------------------------------------------------
+
+// Rendering upload content page
+const serveUploadedContent = async (req, res, next) =>
+{
+  // Getting success and error messages
+  var successMessage = null;
+  var errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
+  // Getting valid file types
+  var validText = [];
+  var validImages = [];
+  var validVideos = [];
+  var valid3D = [];
+
+  for (const key in CIRCLES.VALID_TEXT_TYPES)
+  {
+    validText.push('.' + CIRCLES.VALID_TEXT_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_IMAGE_TYPES)
+  {
+    validImages.push('.' + CIRCLES.VALID_IMAGE_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_VIDEO_TYPES)
+  {
+    validVideos.push('.' + CIRCLES.VALID_VIDEO_TYPES[key]);
+  }
+
+  for (const key in CIRCLES.VALID_3D_TYPES)
+  {
+    valid3D.push('.' + CIRCLES.VALID_3D_TYPES[key]);
+  }
+
+  // Getting user content
+  var content = [];
+
+  var currentUser = req.user;
+
+  content = await Uploads.find({user: currentUser});
+
+  // Rendering the uploadedContent page
+  const userInfo = getUserInfo(req);
+
+  res.render(path.resolve(__dirname + '/../public/web/views/NEW/uploaded-content'), {
+    title: 'Uploaded Content',
+    userInfo: userInfo,
+    validText: validText,
+    validImages: validImages,
+    validVideos: validVideos,
+    valid3D: valid3D,
+    content: content,
+    successMessage: successMessage,
+    errorMessage: errorMessage,
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Storing content uploaded by user
+const uploadContent = async (req, res, next) =>
+{
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  // Setting file size restriction
+  form.options.maxFileSize = CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE * 1024 * 1024;
+
+  // Setting location to upload file to
+  form.uploadDir = path.join(__dirname, '/../uploads');
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      if (err.code === formidable.errors.biggerThanMaxFileSize)
+      {
+        req.session.errorMessage = 'File is too large, please ensure your file is under ' + CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE + 'MB';
+      }
+      else
+      {
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+      }
+
+      return res.redirect('/new-uploaded-content');
+    }
+
+    const file = files.contentFile;
+
+    // Getting valid file types
+    var validFiles = [];
+
+    for (const key in CIRCLES.VALID_TEXT_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_TEXT_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_IMAGE_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_IMAGE_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_VIDEO_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_VIDEO_TYPES[key]);
+    }
+
+    for (const key in CIRCLES.VALID_3D_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
+    }
+
+    // Checking that the file is of the correct type
+    // Otherwise, sending an error message
+
+    // file: fileContentType/fileType
+    // split result array: {"fileContentType", "fileType"}
+    const fileCategory = file.mimetype.split('/')[0];
+    const fileType = file.mimetype.split('/')[1];
+
+    if (validFiles.includes(fileType))
+    {
+      const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
+
+      // Renaming file to be valid
+      try
+      {
+        fs.renameSync(file.filepath, fileURL);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(file.filepath, {recursive: true});
+
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+        return res.redirect('/new-uploaded-content');
+      }
+
+      // Storing the file in the database
+      const fileInfo = {
+        user: await User.findById(req.user._id).exec(),
+        displayName: file.originalFilename,
+        name: file.newFilename + '.' + fileType,
+        url: fileURL,
+        type: fileType,
+        category: fileCategory,
+      }
+
+      try
+      {
+        await Uploads.create(fileInfo);
+        req.session.successMessage = file.originalFilename + ' uploaded successfully';
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(fileURL, {recursive: true});
+
+        req.session.errorMessage = 'File could not be uploaded, please try again';
+        return res.redirect('/new-uploaded-content');
+      }
+
+      return res.redirect('/new-uploaded-content');
+    }
+
+    // This file type means no file was uploaded
+    else if (fileType === 'octet-stream')
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'No file uploaded';
+      return res.redirect('/new-uploaded-content');
+    }
+    else
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      req.session.errorMessage = 'Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed';
+      return res.redirect('/new-uploaded-content');
+    }
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Sending user uploaded file
+const serveUploadedFile = async (req, res, next) => 
+{
+  // url: /uploads/file_name
+  // split result array: {"", "uploads", "file_name"}
+  const fileName = req.url.split('/')[2];
+
+  // Getting file info from database
+  var file = null;
+  var fileOwner = null;
+  try
+  {
+    file = await Uploads.findOne({name: fileName}).sort().exec();
+    fileOwner = await User.findOne(file.user);
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (file && fileOwner)
+  {
+    // Checking if the file belongs to the current user
+    const currentUser = await User.findById(req.user._id).sort().exec();
+
+    // If it does, send file
+    // If it doesn't, send file containing error message
+    if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+    {
+      res.sendFile(path.resolve(__dirname + '/../uploads/' + fileName));
+    }
+    else
+    {
+      res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
+    }
+  }
+  else
+  {
+    res.sendFile(path.resolve(__dirname + '/../public/web/views/error.txt'));
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Setting file dimensions in database
+const setFileDimensions = async (req, res, next) =>
+{
+  var file = null;
+
+  try
+  {
+    // Getting file from database
+    file = await Uploads.findOne({name: req.body.file});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  if (file)
+  {
+    // Updating file dimensions
+    file.height = req.body.height;
+    file.width = req.body.width;
+    await file.save();
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleteing user uploaded file
+const deleteContent = async (req, res, next) => 
+{
+  // Getting file info from database
+  const file = await Uploads.findOne({name: req.body.file}).sort().exec();
+  const fileOwner = await User.findOne(file.user);
+
+  // Checking if the file belongs to the current user
+  const currentUser = await User.findById(req.user._id).sort().exec();
+
+  // If it does, delete the file
+  if (JSON.stringify(fileOwner) == JSON.stringify(currentUser))
+  { 
+    // Deleting from database
+    await Uploads.deleteOne({name: req.body.file});
+
+    // Deleting from uploads folder
+    fs.rmSync(__dirname + '/../uploads/' + req.body.file, {recursive: true});
   }
 
   res.json('complete');
@@ -1980,4 +2279,10 @@ module.exports = {
   serveYourMagicLinks,
   renewMagicLink,
   deleteMagicLink,
+  // Uploaded Content Page
+  serveUploadedContent,
+  uploadContent,
+  serveUploadedFile,
+  setFileDimensions,
+  deleteContent,
 }

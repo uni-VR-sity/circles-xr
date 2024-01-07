@@ -34,7 +34,7 @@
 
             .icon-container {
                 @include end-flex;
-                @include icon-highlight($DEFAULT_LARGE_ICON, $RED);
+                @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $RED);
                 grid-area: close-button;
                 align-items: start; 
                 padding-top: calc($X_SMALL_MARGIN / 2);

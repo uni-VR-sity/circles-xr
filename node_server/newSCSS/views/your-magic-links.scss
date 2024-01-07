@@ -108,7 +108,7 @@
 
                     .cancel-button {
                         @include end-flex;
-                        @include outline-button(inline-block, 130px, 0, '\f00d');
+                        @include outline-button(inline-block, 130px, 0);
                         align-items: start;
                     }
                 }
@@ -123,7 +123,7 @@
                     margin-right: $MEDIUM_MARGIN;
                 }
 
-                .renewal-buttons {
+                .delete-buttons {
                     display: inline-block;
 
                     .delete-button, .cancel-button {
@@ -137,7 +137,7 @@
                     }
 
                     .cancel-button {
-                        @include outline-button(inline-block, 130px, 0, '\f00d');
+                        @include outline-button(inline-block, 130px, 0);
                         align-items: start;
                     }
                 }

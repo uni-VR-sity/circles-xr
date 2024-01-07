@@ -121,6 +121,14 @@ router.get('/new-your-magic-links', authenticated, newController.serveYourMagicL
 router.post('/new-renew-magic-link', authenticated, newController.renewMagicLink);
 router.post('/new-delete-magic-link', authenticated, newController.deleteMagicLink);
 
+// Uploaded Content Page Routes -------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-uploaded-content', authenticated, newController.serveUploadedContent);
+router.post('/new-upload-content', authenticated, newController.uploadContent);
+router.get('/new-uploads/:file_name', authenticated, newController.serveUploadedFile);
+router.post('/new-set-file-dimensions', authenticated, newController.setFileDimensions);
+router.post('/new-delete-uploaded-content', authenticated, newController.deleteContent);
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web

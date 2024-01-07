@@ -1,0 +1,228 @@
+extends template.pug
+
+block append scripts
+    script(src='/web/js/views/uploaded-content.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var file;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+    
+    // Image file display -------------------------------------------------------------------
+    mixin imageFile(image)
+        .file(id='file-' + image.name)
+            - var url = '/new-uploads/' + image.name;
+            
+            // If file does not have a height and width saved in the database, save it
+            if image.height && image.width
+                img(src=url) 
+            else 
+                img(id='image-' + image.name src=url onload='getDimensions("' + image.name + '", "image-' + image.name + '")')
+
+            .file-description 
+                .icon-container.file-icon
+                    i(class='fa-regular fa-image')
+
+                .file-name-container
+                    p.file-name= image.displayName
+
+                .icon-container.trash-icon 
+                    a(class='fa-regular fa-trash-can' onclick='confirmDeleteFile("file-' + image.name + '")')
+
+            .file-delete-confirmation
+                .icon-container.file-icon 
+                    i(class='fa-regular fa-trash-can')
+                
+                .delete-message
+                    p Delete this file?
+
+                .delete-buttons
+                    .cancel-button
+                        a(onclick='cancelDelete("file-' + image.name + '")') Cancel 
+
+                    .delete-button
+                        a(onclick='deleteFile("' + image.name + '", "file-' + image.name + '")') Delete
+
+    // Vide file display --------------------------------------------------------------------
+    mixin videoFile(video)
+        .file(id='file-' + video.name)
+            - var url = '/new-uploads/' + video.name;
+            
+            // If file does not have a height and width saved in the database, save it
+            if video.height && video.width
+                video(muted)
+                    source(src=url) 
+            else 
+                video(id='video-' + video.name muted onloadedmetadata='getDimensions("' + video.name + '", "video-' + video.name + '")')
+                    source(src=url)
+
+            .file-description 
+                .icon-container.file-icon
+                    i(class='fa-solid fa-video')
+
+                .file-name-container
+                    p.file-name= video.displayName
+
+                .icon-container.trash-icon 
+                    a(class='fa-regular fa-trash-can' onclick='confirmDeleteFile("file-' + video.name + '")')
+
+            .file-delete-confirmation
+                .icon-container.file-icon 
+                    i(class='fa-regular fa-trash-can')
+                
+                .delete-message
+                    p Delete this file?
+
+                .delete-buttons
+                    .cancel-button
+                        a(onclick='cancelDelete("file-' + video.name + '")') Cancel 
+
+                    .delete-button
+                        a(onclick='deleteFile("' + video.name + '", "file-' + video.name + '")') Delete
+
+    // Other file display -------------------------------------------------------------------
+    mixin otherFile(other)
+        .file.other-file(id='file-' + other.name)
+            .icon-container.file-icon
+                i(class='fa-regular fa-file')
+
+            .file-name-container
+                p.file-name= other.displayName
+
+            .file-description 
+                .icon-container.file-icon
+                    i(class='fa-regular fa-file')
+
+                .file-name-container
+                    p.file-name= other.displayName
+
+                .icon-container.trash-icon 
+                    a(class='fa-regular fa-trash-can' onclick='confirmDeleteFile("file-' + other.name + '")')
+
+            .file-delete-confirmation
+                .icon-container.file-icon 
+                    i(class='fa-regular fa-trash-can')
+                
+                .delete-message
+                    p Delete this file?
+
+                .delete-buttons
+                    .cancel-button
+                        a(onclick='cancelDelete("file-' + other.name + '")') Cancel 
+
+                    .delete-button
+                        a(onclick='deleteFile("' + other.name + '", "file-' + other.name + '")') Delete
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+    // Title --------------------------------------------------------------------------------
+    section#uploaded-content-title-container.title-container
+        .content-container
+            h1 Uploaded Content 
+            
+            hr
+
+    // New Content --------------------------------------------------------------------------
+    section#new-content-container
+        .content-container
+
+            p Content uploaded here can be displayed within worlds. 2D content can be put up on whiteboards and 3D content can be showed off on loading points.
+
+            form(action='/new-upload-content' method='post' enctype='multipart/form-data')
+
+                // Getting valid file types to restrict the file upload form
+                - var validFiles = '';
+
+                for fileType of validText
+                    - validFiles += (fileType + ',');
+
+                for fileType of validImages
+                    - validFiles += (fileType + ',');
+
+                for fileType of validVideos
+                    - validFiles += (fileType + ',');
+
+                for fileType of valid3D
+                    - validFiles += (fileType + ',');
+
+                .form-field
+                    label Upload new content: 
+                    input(type='file' name='contentFile' accept=validFiles)
+
+                .instruction-container 
+
+                    p The acceptable file forms for 2D content are:
+
+                    table 
+                        thead 
+                            tr 
+                                td Text
+                                td Images 
+                                td Videos
+                                td 3D Models
+                        tbody
+                            tr
+                                td
+                                    ul
+                                        for fileType of validText
+                                            li #{fileType}
+
+                                td 
+                                    ul
+                                        for fileType of validImages
+                                            li #{fileType}
+
+                                td  
+                                    ul
+                                        for fileType of validVideos
+                                            li #{fileType}
+                                
+                                td
+                                    ul
+                                        for fileType of valid3D
+                                            li #{fileType}
+
+                    i Maximum file size: #{CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE}MB
+
+                .form-field.last-field
+                    input(type='submit' value='Upload')
+
+            if errorMessage
+                p.error-message= errorMessage
+
+            if successMessage
+                p.success-message= successMessage
+
+            hr
+
+    // Uploaded Content ---------------------------------------------------------------------
+    section#uploaded-content-container
+        .content-container
+
+            if content.length > 0
+                p#no-content-message(style='display:none') You have no content uploaded
+
+                .file-container 
+
+                    // Displaying the content in the appropriate way depending on the file type
+                    // 1. Image files (with img tag)
+                    // 2. Video files (with video tag)
+                    // 3. Text files (just displaying name of file)
+                    for file of content
+
+                        if file.category === 'image'
+                            +imageFile(file)
+                        
+                        else if file.category === 'video'
+                            +videoFile(file)
+
+                        else 
+                            +otherFile(file)
+
+                    script
+                        include includes/shortenNames.js
+                    
+            else 
+                p#no-content-message You have no content uploaded
