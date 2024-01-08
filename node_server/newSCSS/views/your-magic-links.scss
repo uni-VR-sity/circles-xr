@@ -69,7 +69,7 @@
 
                 .renew-button {
                     @include start-flex;
-                    @include secondary-button(inline-block, 100%, 0);
+                    @include primary-button(inline-block, 100%, 0);
                     align-items: start;
                 }
 

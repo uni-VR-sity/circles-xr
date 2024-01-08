@@ -13,12 +13,12 @@
 
         .server {
             display: grid;
-            grid-template-columns: 3.5fr 6.5fr;
+            grid-template-columns: 1.25fr 1fr 1fr;
             grid-auto-rows: min-content;
-            grid-template-areas: "circles-name circles-name"
-                                   "description-title circles-title"
-                                   "description circles"
-                                   "divider divider";
+            grid-template-areas: "circles-name circles-name circles-name"
+                                   "description-title circles-title circles-title"
+                                   "description circles circles"
+                                   "divider divider divider";
             margin-bottom: $LARGE_MARGIN;
             
 
