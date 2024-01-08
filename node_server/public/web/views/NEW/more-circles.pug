@@ -8,29 +8,36 @@ block content
 
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
     mixin circlesServer(server)
-        .server 
+        
+        if server.active
             h3.circles-name #{server.ownerName}'s Circles 
 
-            b.description-title Description 
+        else 
+            h3.circles-name #{server.ownerName}'s Circles 
+                span 
+                    h3.inactive-text (INACTIVE)
 
-            .description 
-                if server.description
-                    p= server.description 
-                else 
-                    p No description avaliable
+        b.description-title Description 
 
+        .description 
+            if server.description
+                p= server.description 
+            else 
+                p No description avaliable
+
+            if server.active
                 .link-button 
                     a(href=server.link target='_blank') Check It Out 
 
-            b.circles-title Circles:
+        b.circles-title Circles:
 
-            .server-circles 
-                ul
-                    for circle of server.worlds
-                        div
-                            li= circle 
+        .server-circles 
+            ul
+                for circle of server.worlds
+                    div
+                        li= circle 
 
-            hr
+        hr
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
 
@@ -42,7 +49,12 @@ block content
             if circleServers.length > 0
                 
                 for server of circleServers
-                    +circlesServer(server)
+                    if server.active
+                        .server
+                            +circlesServer(server)
+                    else 
+                        .server.inactive-server
+                            +circlesServer(server)
 
             else
 

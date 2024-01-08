@@ -64,6 +64,16 @@
             }
         }
 
+        .inactive-server {
+            color: $GREY_TEXT;
+            
+            .inactive-text {
+                display: inline-block;
+                color: $RED;
+                margin-bottom: 0;
+            }
+        }
+
         .server-error-messages {
             text-align: center;
 
