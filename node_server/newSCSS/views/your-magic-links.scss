@@ -8,10 +8,10 @@
 
         .magic-link {
             display: grid;
-            grid-template-columns: 1.25fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             grid-template-areas: "link-name link-name link-name"
-                                 "link circles-title buttons"
-                                 "expiry circles buttons"
+                                 "info circles buttons"
+                                 "info circles buttons"
                                  "renewal renewal renewal"
                                  "delete delete delete"
                                  "divider divider divider";
@@ -22,28 +22,43 @@
                 margin-bottom: $MEDIUM_MARGIN;
             }
 
-            .link {
-                grid-area: link;
-                margin-bottom: $X_SMALL_MARGIN;
-            }
+            .link-info {
+                grid-area: info;
+                margin-bottom: $LARGE_MARGIN;
 
-            .link-expiry {
-                grid-area: expiry;
-                color: $GREEN;
-                margin-bottom: $MEDIUM_MARGIN;
-            }
+                a, i {
+                    display: block;
+                }
 
-            .expires-soon {
-                color: $RED;
-            }
+                .link-expiry {
+                    grid-area: expiry;
+                    color: $GREEN;
+                    margin-top: $X_SMALL_MARGIN;
+                    margin-bottom: $MEDIUM_MARGIN;
+                }
 
-            .circles-title {
-                grid-area: circles-title;
+                .expires-soon {
+                    color: $RED;
+                }
             }
 
             .link-circles {
                 grid-area: circles;
-                margin-bottom: $MEDIUM_MARGIN;
+                margin-bottom: $LARGE_MARGIN;
+
+                b {
+                    display: block;
+                    margin-bottom: $X_SMALL_MARGIN;
+                }
+
+                ul {
+                    margin-bottom: 0;
+                    
+                    li {
+                        line-height: $LINE_HEIGHT;
+                        margin: 0;
+                    }
+                }
             }
 
             .link-buttons {

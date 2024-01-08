@@ -2243,6 +2243,54 @@ const deleteContent = async (req, res, next) =>
   res.json('complete');
 }
 
+// More Circles Page -------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering more circles page
+const serveMoreCircles = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+
+  var request = new XMLHttpRequest();
+  request.open('GET', env.CENTRAL_SERVER + '/get-servers');
+
+  const renderError = function (message)
+  {
+    res.render(path.resolve(__dirname + '/../public/web/views/NEW/more-circles'), {
+      title: 'More Circles',
+      userInfo: userInfo,
+      circleServers: {},
+      serverErrorMessage: message,
+      secondaryMessage: 'Please try again. If error persists, contact the central Circles server',
+    });
+  }
+
+  request.onerror = function() 
+  {
+    renderError('An error occured while connecting to central server');
+  }
+
+  request.onload = function() 
+  {
+    var serverData = JSON.parse(request.response);
+    
+    // Checking that the server data was able the be collected, if not, outputting an error message
+    if (serverData === 'ERROR')
+    {
+      renderError('An error occured while getting data from central server');
+    }
+    else
+    {
+      res.render(path.resolve(__dirname + '/../public/web/views/NEW/more-circles'), {
+        title: "More Circles",
+        userInfo: userInfo,
+        circleServers: JSON.parse(request.response),
+      });
+    }
+  };
+
+  request.send();
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -2285,4 +2333,6 @@ module.exports = {
   serveUploadedFile,
   setFileDimensions,
   deleteContent,
+  // More Circles Page
+  serveMoreCircles,
 }

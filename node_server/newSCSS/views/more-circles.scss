@@ -1,0 +1,76 @@
+// More Circles ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#more-circles-container {
+
+    .content-container {
+
+        .intro-message {
+            @include center-flex;
+            margin-bottom: $NAVIGATION_MARGIN;
+        }
+
+        .server {
+            display: grid;
+            grid-template-columns: 3.5fr 6.5fr;
+            grid-auto-rows: min-content;
+            grid-template-areas: "circles-name circles-name"
+                                   "description-title circles-title"
+                                   "description circles"
+                                   "divider divider";
+            margin-bottom: $LARGE_MARGIN;
+            
+
+            .circles-name {
+                grid-area: circles-name;
+                margin-bottom: $MEDIUM_MARGIN;
+            }
+
+            .description-title {
+                grid-area: description-title;
+                margin-bottom: $X_SMALL_MARGIN;
+            }
+
+            .description {
+                grid-area: description;
+                margin-bottom: $LARGE_MARGIN;
+
+                .link-button {
+                    @include outline-icon-button(inline-block, 120px);
+                    margin-top: $MEDIUM_MARGIN;
+                }
+            }
+
+            .circles-title {
+                grid-area: circles-title;
+            }
+
+            .server-circles {
+                grid-area: circles;
+                margin-bottom: $LARGE_MARGIN;
+
+                ul {
+                    div {
+                        display: inline-block;
+                        min-width: 150px;
+                        margin-right: $SMALL_MARGIN;
+                    }
+                }
+            }
+
+            hr {
+                grid-area: divider;
+            }
+        }
+
+        .server-error-messages {
+            text-align: center;
+
+            .error-message {
+                @include center-flex;
+                display: flex;
+            }
+        }
+    }
+}

@@ -129,6 +129,10 @@ router.get('/new-uploads/:file_name', authenticated, newController.serveUploaded
 router.post('/new-set-file-dimensions', authenticated, newController.setFileDimensions);
 router.post('/new-delete-uploaded-content', authenticated, newController.deleteContent);
 
+// More Circles Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-more-circles', authenticated, newController.serveMoreCircles);
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web

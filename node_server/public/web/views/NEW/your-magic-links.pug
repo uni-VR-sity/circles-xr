@@ -13,41 +13,43 @@ block content
     mixin magicLink(magicLink)
         .magic-link(id=magicLink.forwardLink)
             h3.link-name= magicLink.forwardLink 
+            
+            .link-info
+                - var visibleURL = baseURL + '/' + magicLink.forwardLink;
+                - var targetURL = '/' + magicLink.forwardLink;
+                a.link-icon(target='_blank' href=targetURL)= visibleURL
 
-            - var visibleURL = baseURL + '/' + magicLink.forwardLink;
-            - var targetURL = '/' + magicLink.forwardLink;
-            a.link.link-icon(target='_blank' href=targetURL)= visibleURL
+                if magicLink.expires
 
-            if magicLink.expires
+                    // Calculating when link will expire
+                    // https://www.geeksforgeeks.org/how-to-calculate-the-number-of-days-between-two-dates-in-javascript/
+                    - var daysUntilExpired = magicLink.expiryDate - new Date();
+                    - daysUntilExpired = Math.floor(daysUntilExpired / (1000 * 3600 * 24));
 
-                // Calculating when link will expire
-                // https://www.geeksforgeeks.org/how-to-calculate-the-number-of-days-between-two-dates-in-javascript/
-                - var daysUntilExpired = magicLink.expiryDate - new Date();
-                - daysUntilExpired = Math.floor(daysUntilExpired / (1000 * 3600 * 24));
+                    // If it expires in more then a week: Green text
+                    // If it expires within the week: Red text
+                    // If it never expires: Green text
+                    if daysUntilExpired >= 8
+                        i.link-expiry Expires in #{daysUntilExpired} days
 
-                // If it expires in more then a week: Green text
-                // If it expires within the week: Red text
-                // If it never expires: Green text
-                if daysUntilExpired >= 8
-                    i.link-expiry Expires in #{daysUntilExpired} days
+                    else if daysUntilExpired > 0 && daysUntilExpired < 8
+                        i.link-expiry.expires-soon Expires in #{daysUntilExpired} days
 
-                else if daysUntilExpired > 0 && daysUntilExpired < 8
-                    i.link-expiry.expires-soon Expires in #{daysUntilExpired} days
+                    else if daysUntilExpired === 0
+                        i.link-expiry.expires-soon Expires today
 
-                else if daysUntilExpired === 0
-                    i.link-expiry.expires-soon Expires today
+                    else if daysUntilExpired < 0
+                        i.link-expiry.expires-soon Expired
 
-                else if daysUntilExpired < 0
-                    i.link-expiry.expires-soon Expired
-
-            else 
-                i.link-expiry Never expires
-
-            b.circles-title Circles: 
+                else 
+                    i.link-expiry Never expires 
 
             .link-circles 
-                for circle of magicLink.worlds
-                    p= circle
+                b.circles-title Circles:
+                
+                ul
+                    for circle of magicLink.worlds
+                        li= circle
 
             .link-buttons 
                 .renew-button
