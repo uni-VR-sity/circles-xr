@@ -13,7 +13,7 @@ block content
     // Image file display -------------------------------------------------------------------
     mixin imageFile(image)
         .file(id='file-' + image.name)
-            - var url = '/new-uploads/' + image.name;
+            - var url = '/uploads/' + image.name;
             
             // If file does not have a height and width saved in the database, save it
             if image.height && image.width
@@ -48,7 +48,7 @@ block content
     // Vide file display --------------------------------------------------------------------
     mixin videoFile(video)
         .file(id='file-' + video.name)
-            - var url = '/new-uploads/' + video.name;
+            - var url = '/uploads/' + video.name;
             
             // If file does not have a height and width saved in the database, save it
             if video.height && video.width
@@ -130,7 +130,7 @@ block content
 
             p Content uploaded here can be displayed within worlds. 2D content can be put up on whiteboards and 3D content can be showed off on loading points.
 
-            form(action='/new-upload-content' method='post' enctype='multipart/form-data')
+            form(action='/upload-content' method='post' enctype='multipart/form-data')
 
                 // Getting valid file types to restrict the file upload form
                 - var validFiles = '';

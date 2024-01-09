@@ -595,7 +595,7 @@ function createMagicLink(event)
 
                 // Sending data to update session name
                 var request = new XMLHttpRequest();
-                request.open('POST', '/new-create-magic-link');
+                request.open('POST', '/create-magic-link');
                 request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 

@@ -1,31 +1,32 @@
 // Shortens file names to display to user
 
-// Table section margins and padding sizes
-let sectionMargin = 24 * 3;
-let sectionPadding = 300;
+// Getting the width of file elements
+var sectionWidth = document.getElementsByClassName('file')[0].getBoundingClientRect().width;
 
-// Getting the width of the table sections
-let sectionWidth = (document.getElementsByClassName('uploads-table')[0].getBoundingClientRect().width - sectionMargin - sectionPadding) / 3;
+// Taking 60px off of the width for padding
+sectionWidth -= 60;
 
-// Going through each table section and checking if the length of the file name is greater then the width of the section
+// Going through each file element and checking if the length of the file name is greater then the width of the section
 // If it is, shorten it
-let tableSections = document.getElementsByClassName('file-container');
+var fileSections = document.getElementsByClassName('file');
 
-for (let section of tableSections)
+for (var section of fileSections)
 {
-    let firstNameElement = section.querySelector('.fileName');
-    let name = firstNameElement.innerHTML;
-    let nameLength = section.querySelector('.fileName').getBoundingClientRect().width;
+    var nameElement = section.querySelector('.file-name');
+    var fileName = nameElement.innerHTML;
+    var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
+
+    console.log(nameLength);
 
     if (nameLength > sectionWidth)
     {
         // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
         
         // Getting the file type
-        let splitName = name.split('.');
-        let type = splitName[splitName.length - 1];
+        var splitName = fileName.split('.');
+        var type = splitName[splitName.length - 1];
 
-        let condensedName = name;
+        var condensedName = fileName;
         
         // Taking a character off the file name until the length of the name is less then the section width
         while (nameLength > sectionWidth)
@@ -38,18 +39,18 @@ for (let section of tableSections)
             condensedName += '...' + type;
 
             // Checking the length of the name
-            firstNameElement.innerHTML = condensedName;
-            nameLength = firstNameElement.getBoundingClientRect().width;
+            nameElement.innerHTML = condensedName;
+            nameLength = nameElement.getBoundingClientRect().width;
         }
 
         // Changing all instances of the file name to the condensed version
-        let allFileNameElements = section.querySelectorAll('.fileName');
+        var allFileNameElements = section.querySelectorAll('.file-name');
 
-        for (let nameElement of allFileNameElements)
+        for (var nameElement of allFileNameElements)
         {
-            let currentName = nameElement.innerHTML;
+            var currentName = nameElement.innerHTML;
 
-            nameElement.innerHTML = currentName.replace(name, condensedName);
+            nameElement.innerHTML = currentName.replace(fileName, condensedName);
         }
     }
 }

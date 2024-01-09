@@ -1,52 +1,61 @@
 html
-  head
-    title Circles - #{title}
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    block stylesheets
-      link(rel="stylesheet" type="text/css" href="/web/css/OLD/vendor/pure-min.css")
-      link(rel="stylesheet" type="text/css" href="/web/css/OLD/app.css")
-      link(rel="stylesheet" type="text/css" href="/web/css/OLD/vendor/color-picker.css")
-    block scripts
-      script(src="https://kit.fontawesome.com/23ccd10015.js" crossorigin="anonymous")
-     
-  body
-    .homepage
-      .homepage__left
-      .homepage__right
-        .homepage__logo-wrapper.gutter-bottom
-          .homepage__logo
-            include includes/circles-logo.svg
-        
-        .homepage__register
-            p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. [Work-In-Progress].
-          
-            p(style='margin-top:10px') Create an account to begin exploring! Or 
-              a(href="/guest-login") continue as guest
+    head
 
-            h2(class="text--centered" style='margin:40px 0 20px 0') Register
+        title Register for CIRCLES
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
-            center
-              if message
-                div(style='margin-bottom:15px')
-                  i(class='fa-solid fa-triangle-exclamation error-icon')
-                  span.error-message=message
+        block stylesheets
+            link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+            link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
 
-            form(action="/register-user" method="post" class="pure-form pure-form-aligned")
-              fieldset
-                .pure-right-control-group
-                  label Username 
-                    span.required *
-                  input.field-long(right='text' name='username' placeholder='SuperFriend99' required)
-                .pure-right-control-group
-                  label Password 
-                    span.required *
-                  input.field-long(type='password' name='password' required)
-                .pure-right-control-group
-                  label Confirm password 
-                    span.required *
-                  input.field-long(type='password' name='passwordConf' required)
-                .pure-controls
-                  input(type='submit' value='Register' class="pure-button pure-input-1-2 pure-button-primary")
-            
-            p(class="text--centered" style='margin-top:30px')
-              a(href="/") Return to home page
+        block scripts
+            script(src='/web/js/forms.js')
+            script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+    body 
+
+        main 
+
+            // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+            // Login --------------------------------------------------------------------------------
+            section#register
+
+                // Left side (photo) ----------------------------------------------------------------
+                #left 
+
+                // Right side (content) -------------------------------------------------------------
+                #right
+
+                    #logo 
+                        include includes/circles-logo.svg
+
+                    #register-form 
+                    
+                        h2 Register
+
+                        p Create an account to begin exploring! Or 
+                            a.link-icon(href="/guest-login") continue as guest
+
+                        if message
+                            p.error-message= message
+
+                        form(action='/register-user' method='post')
+
+                            .form-field
+                                label.required-form-label Username
+                                input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                            .form-field
+                                label.required-form-label Password 
+                                input(type='password' name='password' required)
+
+                            .form-field
+                                label.required-form-label Confirm password 
+                                input(type='password' name='passwordConf' required)
+
+                            .form-field.last-field.full-width-submit
+                                input(type='submit' value='Login')
+
+                        p
+                            a.link-icon(href='/') Return to home page

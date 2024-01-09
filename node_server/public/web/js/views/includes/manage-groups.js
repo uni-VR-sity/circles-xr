@@ -385,7 +385,7 @@ function createGroup(event)
         {
             // Sending data to update session name
             var request = new XMLHttpRequest();
-            request.open('POST', '/new-create-group');
+            request.open('POST', '/create-group');
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             request.onload = function()
@@ -456,7 +456,7 @@ function createSubgroup(event)
     {
         // Sending data to update session name
         var request = new XMLHttpRequest();
-        request.open('POST', '/new-create-subgroup');
+        request.open('POST', '/create-subgroup');
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         request.onload = function()

@@ -79,7 +79,7 @@ block content
             i A default password of "password" will be assigned (this can be changed by the user later)
 
             // Create single user------------------------------------------------------------
-            form#create-single-user(action='/new-create-user' method='post')
+            form#create-single-user(action='/create-user' method='post')
                 
                 if singleCreateError
                     p.error-message= singleCreateError
@@ -99,7 +99,7 @@ block content
                     input(type='submit' value='Create User')
 
             // Create bulk users ------------------------------------------------------------
-            form#create-bulk-users(action='/new-bulk-create-users' method='post' enctype='multipart/form-data')
+            form#create-bulk-users(action='/bulk-create-users' method='post' enctype='multipart/form-data')
 
                 .form-field
                     label or bulk create users by uploading a CSV file: 

@@ -22,7 +22,7 @@ function getDimensions(filename, file)
     }
 
     var request = new XMLHttpRequest();
-    request.open('POST', '/new-set-file-dimensions');
+    request.open('POST', '/set-file-dimensions');
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.send('file='+ filename + '&height=' + height + '&width=' + width);
 }
@@ -52,7 +52,7 @@ function deleteFile(filename, file)
 {
     // Sending data to delete magic link
     var request = new XMLHttpRequest();
-    request.open('POST', '/new-delete-uploaded-content');
+    request.open('POST', '/delete-uploaded-content');
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     request.onload = function() 

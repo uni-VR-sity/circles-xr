@@ -90,7 +90,7 @@ const createJWT_MagicLink = function(expiryTimeMin, circles)
 
   const token = jwt.sign(payload, env.JWT_SECRET, jwtOptions);
 
-  const magicLink = '/magic-login?token=' + token + '&route=' + route;;
+  const magicLink = '/magic-login?token=' + token + '&route=' + route;
 
   return magicLink;
 }
@@ -108,9 +108,55 @@ const serveLogin = async (req, res, next) =>
     req.session.errorMessage = '';
   }
 
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/login.pug'), {
+  res.render(path.resolve(__dirname + '/../public/web/views/login'), {
     message: errorMessage
   });
+}
+
+// ------------------------------------------------------------------------------------------
+
+const invalidAddress = function(req, res, next)
+{
+  res.render(path.resolve(__dirname + '/../public/web/views/login'), {
+    message: 'Invalid address entered'
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// If a magic link forward address was entered, direct to the magic link
+// Otherwise, direct them to error page
+const forwardMagicLink = async (req, res, next) => 
+{
+  // url: /forwarding_name
+  // split result array: {"", "forwarding_name"}
+  const forwardName = req.url.split('/')[1];
+
+  // Checking if the forwarding link is in the database
+  // If it is, redirect the user
+  // If it isn't direct them to an error page
+
+  var magicLink;
+
+  try
+  {
+    magicLink = await MagicLinks.findOne({forwardLink: forwardName}).exec();
+  }
+  catch(e)
+  {
+    console.log(e);
+
+    invalidAddress(req, res, next);
+  }
+
+  if (magicLink)
+  {
+    return res.redirect(magicLink.magicLink);
+  }
+  else
+  {
+    invalidAddress(req, res, next);
+  }
 }
 
 // Register Page -----------------------------------------------------------------------------------------------------------------------------------
@@ -118,7 +164,7 @@ const serveLogin = async (req, res, next) =>
 // Rendering the register user page with a specific message to the user about their registration (ex. error messages, success messages)
 const renderRegister = (res, renderMessage) =>
 {
-    res.render(path.resolve(__dirname + '/../public/web/views/NEW/register'), {
+    res.render(path.resolve(__dirname + '/../public/web/views/register'), {
       title: `Register for Circles`,
       message: renderMessage
     });
@@ -519,7 +565,7 @@ const serveExplore = async (req, res, next) =>
   }
 
   // Rendering page
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/explore'), 
+  res.render(path.resolve(__dirname + '/../public/web/views/explore'), 
   {
     title: 'Explore',
     userInfo: getUserInfo(req),
@@ -1026,7 +1072,7 @@ const serveManageCircle = async (req, res, next) =>
     const userInfo = getUserInfo(req);
   
     // Rendering the manage circle page
-    res.render(path.resolve(__dirname + '/../public/web/views/NEW/manage-circle'), {
+    res.render(path.resolve(__dirname + '/../public/web/views/manage-circle'), {
       title: 'Manage ' + circle.name,
       userInfo: userInfo,
       circle: circle,
@@ -1246,7 +1292,7 @@ const serveProfile = async (req, res, next) =>
 {
   var user = req.user;
 
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/profile'), {
+  res.render(path.resolve(__dirname + '/../public/web/views/profile'), {
     title: 'Welcome ' + user.username,
     userInfo: user,
   });
@@ -1369,6 +1415,7 @@ const updateUserProfile = async (req, res, next) =>
     return;
   }
 }
+
 // Manage Users Page -------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering manage users page
@@ -1535,7 +1582,7 @@ const serveManageUsers = async (req, res, next) =>
     },
   ]);
 
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/manage-users'), {
+  res.render(path.resolve(__dirname + '/../public/web/views/manage-users'), {
     title: 'Manage Users',
     singleCreateError: singleCreateError,
     singleCreateSuccess: singleCreateSuccess,
@@ -1574,7 +1621,7 @@ const createUser = async (req, res, next) =>
       await User.create(userData);
 
       req.session.singleCreateSuccess = userData.username + ' created successfully';
-      return res.redirect('/new-manage-users');
+      return res.redirect('/manage-users');
     } 
     catch(error) 
     {
@@ -1583,17 +1630,17 @@ const createUser = async (req, res, next) =>
       if ((error.message.includes('dup key') === true) && (error.message.includes('username') === true))
       {
         req.session.singleCreateError = 'Username is unavailable';
-        return res.redirect('/new-manage-users');
+        return res.redirect('/manage-users');
       }
 
       req.session.singleCreateError = 'Something went wrong, please try again';
-      return res.redirect('/new-manage-users');
+      return res.redirect('/manage-users');
     }
   }
   else
   {
     req.session.singleCreateError = 'Something went wrong, please try again';
-    return res.redirect('/new-manage-users');
+    return res.redirect('/manage-users');
   }
 }
 
@@ -1617,7 +1664,7 @@ const bulkCreateUsers = async (req, res, next) =>
     if (err)
     {
       req.session.bulkCreateError.push('File could not be read, please try again');
-      return res.redirect('/new-manage-users');
+      return res.redirect('/manage-users');
     }
 
     const file = files.userFile;
@@ -1636,7 +1683,7 @@ const bulkCreateUsers = async (req, res, next) =>
         if (err)
         {
           req.session.bulkCreateError.push('File could not be read, please try again');
-          return res.redirect('/new-manage-users');
+          return res.redirect('/manage-users');
         }
 
         // Splitting up the file enteries (each entry is on a seperate line)
@@ -1720,19 +1767,19 @@ const bulkCreateUsers = async (req, res, next) =>
         }
 
         req.session.bulkCreateSuccess.push(numCreated + ' users were successfully created');
-        return res.redirect('/new-manage-users');
+        return res.redirect('/manage-users');
       });
     }
     // This file type means no file was uploaded
     else if (fileType === 'octet-stream')
     {
       req.session.bulkCreateError.push('No file uploaded' );
-      return res.redirect('/new-manage-users');
+      return res.redirect('/manage-users');
     }
     else
     {
       req.session.bulkCreateError.push('Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed' );
-      return res.redirect('/new-manage-users');
+      return res.redirect('/manage-users');
     }
   });
 }
@@ -1776,7 +1823,7 @@ const updateUsertype = async (req, res, next) =>
     }
   }
 
-  return res.redirect('/new-manage-users');
+  return res.redirect('/manage-users');
 }
 
 // Your Magic Links Page ---------------------------------------------------------------------------------------------------------------------------
@@ -1805,7 +1852,7 @@ const serveYourMagicLinks = async (req, res, next) =>
     baseURL = req.get('host');
   }
 
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/your-magic-links'), {
+  res.render(path.resolve(__dirname + '/../public/web/views/your-magic-links'), {
     title: "Your Magic Links",
     userInfo: userInfo,
     magicLinks: magicLinks,
@@ -1881,7 +1928,7 @@ const renewMagicLink = async (req, res, next) =>
         {
           console.log(e);
 
-          return res.redirect('/new-your-magic-links');
+          return res.redirect('/your-magic-links');
         }
       }
 
@@ -1914,7 +1961,7 @@ const renewMagicLink = async (req, res, next) =>
     }
   }
 
-  return res.redirect('/new-your-magic-links');
+  return res.redirect('/your-magic-links');
 }
 
 // ------------------------------------------------------------------------------------------
@@ -2003,7 +2050,7 @@ const serveUploadedContent = async (req, res, next) =>
   // Rendering the uploadedContent page
   const userInfo = getUserInfo(req);
 
-  res.render(path.resolve(__dirname + '/../public/web/views/NEW/uploaded-content'), {
+  res.render(path.resolve(__dirname + '/../public/web/views/uploaded-content'), {
     title: 'Uploaded Content',
     userInfo: userInfo,
     validText: validText,
@@ -2043,7 +2090,7 @@ const uploadContent = async (req, res, next) =>
         req.session.errorMessage = 'File could not be uploaded, please try again';
       }
 
-      return res.redirect('/new-uploaded-content');
+      return res.redirect('/uploaded-content');
     }
 
     const file = files.contentFile;
@@ -2096,7 +2143,7 @@ const uploadContent = async (req, res, next) =>
         fs.rmSync(file.filepath, {recursive: true});
 
         req.session.errorMessage = 'File could not be uploaded, please try again';
-        return res.redirect('/new-uploaded-content');
+        return res.redirect('/uploaded-content');
       }
 
       // Storing the file in the database
@@ -2122,10 +2169,10 @@ const uploadContent = async (req, res, next) =>
         fs.rmSync(fileURL, {recursive: true});
 
         req.session.errorMessage = 'File could not be uploaded, please try again';
-        return res.redirect('/new-uploaded-content');
+        return res.redirect('/uploaded-content');
       }
 
-      return res.redirect('/new-uploaded-content');
+      return res.redirect('/uploaded-content');
     }
 
     // This file type means no file was uploaded
@@ -2135,7 +2182,7 @@ const uploadContent = async (req, res, next) =>
       fs.rmSync(file.filepath, {recursive: true});
 
       req.session.errorMessage = 'No file uploaded';
-      return res.redirect('/new-uploaded-content');
+      return res.redirect('/uploaded-content');
     }
     else
     {
@@ -2143,7 +2190,7 @@ const uploadContent = async (req, res, next) =>
       fs.rmSync(file.filepath, {recursive: true});
 
       req.session.errorMessage = 'Incorrect file type uploaded: ' + fileType.toUpperCase() + ' files are not allowed';
-      return res.redirect('/new-uploaded-content');
+      return res.redirect('/uploaded-content');
     }
   });
 }
@@ -2255,7 +2302,7 @@ const serveMoreCircles = async (req, res, next) =>
 
   const renderError = function (message)
   {
-    res.render(path.resolve(__dirname + '/../public/web/views/NEW/more-circles'), {
+    res.render(path.resolve(__dirname + '/../public/web/views/more-circles'), {
       title: 'More Circles',
       userInfo: userInfo,
       circleServers: {},
@@ -2280,7 +2327,7 @@ const serveMoreCircles = async (req, res, next) =>
     }
     else
     {
-      res.render(path.resolve(__dirname + '/../public/web/views/NEW/more-circles'), {
+      res.render(path.resolve(__dirname + '/../public/web/views/more-circles'), {
         title: "More Circles",
         userInfo: userInfo,
         circleServers: JSON.parse(request.response),
@@ -2296,6 +2343,7 @@ const serveMoreCircles = async (req, res, next) =>
 module.exports = {
   // Login Page
   serveLogin,
+  forwardMagicLink,
   // Register Page
   serveRegister,
   registerUser,

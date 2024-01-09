@@ -59,7 +59,7 @@ block content
                     a(onclick='deleteLinkConfirmation("' + magicLink.forwardLink + '")') Delete
 
             .renewal-container
-                form(id='renew-magic-link-' + magicLink.forwardLink action='/new-renew-magic-link' method='post')
+                form(id='renew-magic-link-' + magicLink.forwardLink action='/renew-magic-link' method='post')
                     .hidden-field 
                         input(type='text' name='magicLink' value=magicLink.forwardLink)
 
