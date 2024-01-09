@@ -2,22 +2,19 @@
 
 const router     = require('express').Router();
 const path       = require('path');
-const controller = require('../controllers/controller');
-const newController = require('../controllers/newController');
+const viewController = require('../controllers/viewController');
+const circleController = require('../controllers/circleController');
+const centralServerController = require('../controllers/centralServerController');
 const User       = require('../models/user');
 const passport   = require('passport');
 const express    = require('express');
 const session    = require('express-session');
 const app      = express();
 
-/**
- * Authenticated
- *
- * Using the `isAuthenticated()` check provided by PassportJS on the request
- * body, provide a middleware check for routes to ensrue they're authenticated
- * before proceeding.
- *
- */
+// General Routes ----------------------------------------------------------------------------------------------------------------------------------
+
+// Authenticated
+// Using the `isAuthenticated()` check provided by PassportJS on the request body, provide a middleware check for routes to ensrue they're authenticated before proceeding
 const authenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
@@ -27,13 +24,9 @@ const authenticated = (req, res, next) => {
   return res.redirect('/');
 };
 
-/**
- * Not Authenticated
- *
- * A check method to ensure that a route is only accessible when *not*
- * authenticated. For example, a user should only be able to get to the login
- * route if they're not already authenticated.
- */
+// Not Authenticated
+// A check method to ensure that a route is only accessible when *not* authenticated
+// For example, a user should only be able to get to the login route if they're not already authenticated
 const notAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return res.redirect('/explore');
@@ -42,11 +35,9 @@ const notAuthenticated = (req, res, next) => {
   return next();
 };
 
-// NEW ---------------------------------------------------------------------------------------------------------------------------------------------
-
 // Login Routes ------------------------------------------------------------------------------------------------------------------------------------
 
-router.get('/new', notAuthenticated, newController.serveLogin);
+router.get('/', notAuthenticated, viewController.serveLogin);
 
 router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
   req.session.errorMessage = 'Username and/ or password incorrect';
@@ -63,121 +54,6 @@ router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/g
   req.session.errorMessage = 'Guest log in failed, please try again';
   return res.redirect('/');
 }); 
-
-// Register Routes ---------------------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-register', notAuthenticated, newController.serveRegister);
-
-router.post('/new-register-user', newController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
-{
-  res.render(path.resolve(__dirname + '/../public/web/views/register'), {
-    message: "User registered successfully but login failed, please login again"
-  });
-});
-
-// Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-explore', authenticated, newController.serveExplore);
-router.post('/update-session-display-name', authenticated, newController.updateSessionName);
-router.post('/new-create-magic-link', authenticated, newController.createMagicLink);
-
-// Manage Groups Page Routes -----------------------------------------------------------------------------------------------------------------------
-
-router.post('/new-create-group', authenticated, newController.createGroup);
-router.post('/new-create-subgroup', authenticated, newController.createSubgroup);
-router.post('/delete-group', authenticated, newController.deleteGroup);
-router.post('/delete-subgroup', authenticated, newController.deleteSubgroup);
-
-// Manage Circle Page Routes -----------------------------------------------------------------------------------------------------------------------
-
-router.get('/manage-circle/:circle_id', authenticated, newController.serveManageCircle);
-router.post('/update-access-restriction', authenticated, newController.updateAccessRestriction);
-router.post('/update-user-viewing', authenticated, newController.updateUserViewing);
-router.post('/update-user-editing', authenticated, newController.updateUserEditing);
-
-// Update Circle Group Page Routes -----------------------------------------------------------------------------------------------------------------
-
-router.post('/update-circle-group', authenticated, newController.updateCircleGroup);
-
-// Profile Page Routes -----------------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-profile', authenticated, newController.serveProfile);
-router.post('/update-user-profile', authenticated, newController.updateUserProfile);
-
-// Manage Users Page Routes -----------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-manage-users', authenticated, newController.serveManageUsers);
-router.post('/new-create-user', authenticated, newController.createUser);
-router.post('/new-bulk-create-users', authenticated, newController.bulkCreateUsers);
-router.post('/update-usertype', authenticated, newController.updateUsertype);
-
-router.get('/sample-upload-file', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
-});
-
-// Your Magic Links Page Routes -------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-your-magic-links', authenticated, newController.serveYourMagicLinks);
-router.post('/new-renew-magic-link', authenticated, newController.renewMagicLink);
-router.post('/new-delete-magic-link', authenticated, newController.deleteMagicLink);
-
-// Uploaded Content Page Routes -------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-uploaded-content', authenticated, newController.serveUploadedContent);
-router.post('/new-upload-content', authenticated, newController.uploadContent);
-router.get('/new-uploads/:file_name', authenticated, newController.serveUploadedFile);
-router.post('/new-set-file-dimensions', authenticated, newController.setFileDimensions);
-router.post('/new-delete-uploaded-content', authenticated, newController.deleteContent);
-
-// More Circles Page Routes -----------------------------------------------------------------------------------------------------------------------
-
-router.get('/new-more-circles', authenticated, newController.serveMoreCircles);
-
-// CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
-
-// More Circles Page Routes -----------------------------------------------------------------
-
-router.post('/new-add-server', authenticated, newController.addCirclesServer);
-router.post('/new-deactivate-circles-server', authenticated, newController.deactivateCirclesServer);
-router.post('/new-activate-circles-server', authenticated, newController.activateCirclesServer);
-router.post('/new-delete-circles-server', authenticated, newController.deleteCirclesServer);
-
-// OLD ---------------------------------------------------------------------------------------------------------------------------------------------
-
-//general web
-router.get('/', notAuthenticated, (req, res) => {
-
-  let errorMessage = null;
-
-  if (req.session.errorMessage)
-  {
-    errorMessage = req.session.errorMessage;
-    req.session.errorMessage = '';
-  }
-
-  res.render(path.resolve(__dirname + '/../public/web/views/index'), {
-    title: 'Welcome to CIRCLES',
-    message: errorMessage
-  });
-});
-
-router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
-  req.session.errorMessage = 'Username and/ or password incorrect';
-  return res.redirect('/');
-});
-
-router.get('/get-display-name', authenticated, function(req, res)
-{
-  req.session.sessionName = req.user.displayName;
-  return res.redirect('/explore');
-});
-
-router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
-  req.session.errorMessage = 'Guest log in failed, please try again';
-  return res.redirect('/');
-});
-
-router.post('/create-magic-link', authenticated, controller.createMagicLink);
 
 router.get('/magic-login', function(req, res, next) {
   passport.authenticate('jwt', function(err, user, info) 
@@ -213,7 +89,6 @@ router.get('/magic-login', function(req, res, next) {
   })(req, res, next);
 });
 
-// Ensure a user is authenticated before hitting logout
 router.get('/logout', authenticated, (req, res, next) => {
   // Logout of Passport
   req.logout(function(err) {
@@ -222,95 +97,105 @@ router.get('/logout', authenticated, (req, res, next) => {
   });
 });
 
-router.post('/update-session-name', authenticated, controller.updateSessionName);
-router.post('/get-user-info', authenticated, controller.getUser);
+// Register Routes ---------------------------------------------------------------------------------------------------------------------------------
 
-router.get('/register', controller.serveRegister);
-router.get('/profile', authenticated, controller.serveProfile);
-router.get('/explore', authenticated, controller.serveExplore);
+router.get('/register', notAuthenticated, viewController.serveRegister);
 
-router.get('/delete-group/:group_name', authenticated, controller.deleteGroup);
-router.post('/create-group', authenticated, controller.createGroup);
-router.get('/delete-subgroup/:group_name/:subgroup_name', authenticated, controller.deleteSubgroup);
-router.post('/create-subgroup', authenticated, controller.createSubgroup);
-router.post('/update-world-group', authenticated, controller.updateWorldGroup);
-
-router.get('/manage-users', authenticated, controller.serveUserManager);
-router.get('/more-circles', authenticated, controller.serveMoreCircles);
-
-router.post('/add-server', authenticated, controller.addServer);
-router.get('/get-servers', controller.getServersList); // This is requested from outside servers and can not have authenticated access only
-
-router.get('/inactivate-server/:server_id', authenticated, controller.inactivateServer);
-router.get('/activate-server/:server_id', authenticated, controller.activateServer);
-router.get('/delete-server/:server_id', authenticated, controller.deleteServer);
-
-router.get('/uploaded-content', authenticated, controller.serveUploadedContent);
-router.get('/uploads/:file_name', authenticated, controller.serveUploadedFile);
-router.get('/whiteboard-file/:file_name', authenticated, controller.serveWhiteboardFile);
-router.get('/delete-uploaded-content/:file_name', authenticated, controller.deleteUploadedFile);
-router.get('/get-user-uploaded-content', authenticated, controller.getUserFiles);
-
-router.get('/your-magic-links', authenticated, controller.serveMagicLinks);
-router.get('/delete-magic-link/:magic_link', authenticated, controller.deleteMagicLink);
-router.post('/renew-magic-link/:magic_link', authenticated, controller.renewMagicLink);
-
-router.post('/upload-content', authenticated, controller.newContent);
-router.post('/insert-whiteboard-file', authenticated, controller.insertWhiteboardFile);
-router.post('/remove-whiteboard-file', authenticated, controller.removeWhiteboardFile);
-router.post('/get-whiteboard-files', authenticated, controller.getWhiteboardFiles);
-router.post('/set-file-dimensions', authenticated, controller.setFileDimensions);
-router.post('/update-whiteboard-file-position', authenticated, controller.updateFilePosition);
-
-router.post('/create-user', authenticated, controller.createUser);
-router.post('/bulk-create-users', authenticated, controller.createUsersByFile);
-router.post('/change-usertype', authenticated, controller.updateUsertype);
-
-router.get('/sample-upload-file', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
-})
-
-router.get('/edit-access/:world_id', authenticated, controller.serveAccessEdit);
-router.get('/permit-viewing/:world_id/:user_id', authenticated, controller.permitWorldViewing);
-router.get('/remove-viewing/:world_id/:user_id', authenticated, controller.removeWorldViewing);
-router.get('/permit-editing/:world_id/:user_id', authenticated, controller.permitWorldEditing);
-router.get('/remove-editing/:world_id/:user_id', authenticated, controller.removeWorldEditing);
-router.get('/remove-restrictions/:world_id', authenticated, controller.removeWorldRestrictions);
-router.get('/put-restrictions/:world_id', authenticated, controller.putWorldRestrictions);
-
-//REST API (need to secure one day ... )
-//inspired by https://www.codementor.io/olatundegaruba/nodejs-restful-apis-in-10-minutes-q0sgsfhbd
-// router.route('/users/:username')
-//   .get(controller.getUser)
-//   .put(controller.updateUser)
-//   .delete(controller.deleteUser);
-
-// router.route('/users')
-//   .get(controller.getAllUsers);
-
-router.post('/register-user', controller.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
+router.post('/register-user', viewController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/register'), {
-    title: `Register for Circles`,
     message: "User registered successfully but login failed, please login again"
   });
 });
-    
-router.post('/update-user', authenticated, controller.updateUserInfo);
 
-/**
- * Room Exploration
- *
- * This route will look for and load worlds by folder name and use the shared
- * room name of "explore". This will be a public room.
- */
-router.get('/w/:world_id', authenticated, controller.serveWorld);
+// Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------
+
+router.get('/explore', authenticated, viewController.serveExplore);
+router.post('/update-session-display-name', authenticated, viewController.updateSessionName);
+router.post('/create-magic-link', authenticated, viewController.createMagicLink);
+
+// Manage Groups Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.post('/create-group', authenticated, viewController.createGroup);
+router.post('/create-subgroup', authenticated, viewController.createSubgroup);
+router.post('/delete-group', authenticated, viewController.deleteGroup);
+router.post('/delete-subgroup', authenticated, viewController.deleteSubgroup);
+
+// Manage Circle Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.get('/manage-circle/:circle_id', authenticated, viewController.serveManageCircle);
+router.post('/update-access-restriction', authenticated, viewController.updateAccessRestriction);
+router.post('/update-user-viewing', authenticated, viewController.updateUserViewing);
+router.post('/update-user-editing', authenticated, viewController.updateUserEditing);
+
+// Update Circle Group Page Routes -----------------------------------------------------------------------------------------------------------------
+
+router.post('/update-circle-group', authenticated, viewController.updateCircleGroup);
+
+// Profile Page Routes -----------------------------------------------------------------------------------------------------------------------------
+
+router.get('/profile', authenticated, viewController.serveProfile);
+router.post('/update-user-profile', authenticated, viewController.updateUserProfile);
+
+// Manage Users Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.get('/manage-users', authenticated, viewController.serveManageUsers);
+router.post('/create-user', authenticated, viewController.createUser);
+router.post('/bulk-create-users', authenticated, viewController.bulkCreateUsers);
+router.post('/update-usertype', authenticated, viewController.updateUsertype);
+
+router.get('/sample-upload-file', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
+});
+
+// Your Magic Links Page Routes -------------------------------------------------------------------------------------------------------------------
+
+router.get('/your-magic-links', authenticated, viewController.serveYourMagicLinks);
+router.post('/renew-magic-link', authenticated, viewController.renewMagicLink);
+router.post('/delete-magic-link', authenticated, viewController.deleteMagicLink);
+
+// Uploaded Content Page Routes -------------------------------------------------------------------------------------------------------------------
+
+router.get('/uploaded-content', authenticated, viewController.serveUploadedContent);
+router.post('/upload-content', authenticated, viewController.uploadContent);
+router.get('/uploads/:file_name', authenticated, viewController.serveUploadedFile);
+router.post('/set-file-dimensions', authenticated, viewController.setFileDimensions);
+router.post('/delete-uploaded-content', authenticated, viewController.deleteContent);
+
+// Accessing Circles Routes -----------------------------------------------------------------------------------------------------------------------
+
+// Room Exploration
+// This route will look for and load worlds by folder name and use the shared room name of "explore". This will be a public room.
+router.get('/w/:world_id', authenticated, circleController.serveWorld);
 
 // Serving relative links properly (this also means we can't use index.html) ...
-router.get('/w/:world_id/*', authenticated, controller.serveRelativeWorldContent);
+router.get('/w/:world_id/*', authenticated, circleController.serveRelativeWorldContent);
+
+// Whiteboard Routes ------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/whiteboard-file/:file_name', authenticated, circleController.serveWhiteboardFile);
+router.get('/get-user-uploaded-content', authenticated, circleController.getUserFiles);
+router.post('/insert-whiteboard-file', authenticated, circleController.insertWhiteboardFile);
+router.post('/remove-whiteboard-file', authenticated, circleController.removeWhiteboardFile);
+router.post('/get-whiteboard-files', authenticated, circleController.getWhiteboardFiles);
+router.post('/update-whiteboard-file-position', authenticated, circleController.updateFilePosition);
+
+// CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
+
+// More Circles Page Routes -----------------------------------------------------------------
+
+router.get('/more-circles', authenticated, centralServerController.serveMoreCircles);
+router.post('/add-server', authenticated, centralServerController.addCirclesServer);
+router.post('/deactivate-circles-server', authenticated, centralServerController.deactivateCirclesServer);
+router.post('/activate-circles-server', authenticated, centralServerController.activateCirclesServer);
+router.post('/delete-circles-server', authenticated, centralServerController.deleteCirclesServer);
+
+router.get('/get-servers', centralServerController.getServersList); // This is requested from outside servers and can not have authenticated access only
+
+// Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 
 // For forwarding magic links
 // (Has to be last or routes below it will not work)
-router.get('/:forwarding_name', controller.forwardMagicLink);
+router.get('/:forwarding_name', viewController.forwardMagicLink);
 
 module.exports = router;

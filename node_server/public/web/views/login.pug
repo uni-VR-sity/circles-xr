@@ -1,7 +1,7 @@
 html
     head
 
-        title Register for CIRCLES
+        title Welcome to CIRCLES
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
         block stylesheets
@@ -19,7 +19,7 @@ html
             // Webpage -------------------------------------------------------------------------------------------------------------------------------------
 
             // Login --------------------------------------------------------------------------------
-            section#register
+            section#login
 
                 // Left side (photo) ----------------------------------------------------------------
                 #left 
@@ -30,17 +30,15 @@ html
                     #logo 
                         include includes/circles-logo.svg
 
-                    #register-form 
-                    
-                        h2 Register
+                    #introduction 
+                        p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. [Work-In-Progress].
 
-                        p Create an account to begin exploring! Or 
-                            a.link-icon(href="/guest-login") continue as guest
+                    #login-form 
 
                         if message
                             p.error-message= message
 
-                        form(action='/new-register-user' method='post')
+                        form(action='/login' method='post')
 
                             .form-field
                                 label.required-form-label Username
@@ -50,12 +48,15 @@ html
                                 label.required-form-label Password 
                                 input(type='password' name='password' required)
 
-                            .form-field
-                                label.required-form-label Confirm password 
-                                input(type='password' name='passwordConf' required)
-
                             .form-field.last-field.full-width-submit
                                 input(type='submit' value='Login')
 
-                        p
-                            a.link-icon(href='/') Return to home page
+                        p Don't have an account? 
+                            a.link-icon(href='/register') Register here
+
+                        p Or 
+                            a.link-icon(href='/guest-login') continue as guest
+
+                    #intro-video
+                        #video-container
+                            iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)

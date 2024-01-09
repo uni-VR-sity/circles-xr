@@ -7,7 +7,7 @@
 nav
     // Logo ---------------------------------------------------------------------------------
     .logo-container
-        a.logo(href='/new-explore')
+        a.logo(href='/explore')
             include ./circles-logo.svg
 
     // Hamburger icon (mobile) --------------------------------------------------------------
@@ -19,13 +19,13 @@ nav
     .nav-items-container
         ul.nav-items
             li
-                a(href='/new-explore') Explore
+                a(href='/explore') Explore
             li
-                a(href='/new-more-circles') More Circles
+                a(href='/more-circles') More Circles
 
             if adminUser
                 li
-                    a(href='/new-manage-users') Manage Users
+                    a(href='/manage-users') Manage Users
 
     // Profile ------------------------------------------------------------------------------
     .profile-container
@@ -40,15 +40,15 @@ nav
         .profile-dropdown 
             ul
                 li
-                    a(href='/new-profile') Profile
+                    a(href='/profile') Profile
 
                 if hasMagicLinks
                     li
-                        a(href='/new-your-magic-links') Your Magic Links
+                        a(href='/your-magic-links') Your Magic Links
 
                 if notGuest
                     li
-                        a(href='/new-uploaded-content') Uploaded Content
+                        a(href='/uploaded-content') Uploaded Content
 
                 li 
                     a.red(href='/logout') Log out

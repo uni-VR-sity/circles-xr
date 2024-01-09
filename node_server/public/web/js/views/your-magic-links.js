@@ -35,7 +35,7 @@ function deleteLink(magicLink)
 {
     // Sending data to delete magic link
     var request = new XMLHttpRequest();
-    request.open('POST', '/new-delete-magic-link');
+    request.open('POST', '/delete-magic-link');
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     request.onload = function() 

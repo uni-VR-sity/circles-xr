@@ -1,7 +1,7 @@
 extends template.pug
 
 block append scripts
-    script(src='/web/js/views/more-circles.js')
+    script(src='/web/js/views/CENTRAL_SERVER/more-circles.js')
 
 block content
 
@@ -78,7 +78,7 @@ block content
                 if successMessage 
                     p.success-message= successMessage
 
-                form#add-server-form(action='/new-add-server' method='post')
+                form#add-server-form(action='/add-server' method='post')
                     
                     .server-info
                         .form-field 

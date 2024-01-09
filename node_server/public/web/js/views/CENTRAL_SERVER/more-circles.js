@@ -106,7 +106,7 @@ function deactivateServer(serverElement, serverID)
 {
   // Sending data to deactivate server
   var request = new XMLHttpRequest();
-  request.open('POST', '/new-deactivate-circles-server');
+  request.open('POST', '/deactivate-circles-server');
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   request.onload = function() 
@@ -124,7 +124,7 @@ function activateServer(serverElement, serverID)
 {
   // Sending data to activate server
   var request = new XMLHttpRequest();
-  request.open('POST', '/new-activate-circles-server');
+  request.open('POST', '/activate-circles-server');
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   request.onload = function() 
@@ -158,7 +158,7 @@ function deleteServer(serverID)
 {
   // Sending data to delete server
   var request = new XMLHttpRequest();
-  request.open('POST', '/new-delete-circles-server');
+  request.open('POST', '/delete-circles-server');
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   request.onload = function() 

@@ -83,15 +83,7 @@ app.use(bodyParser.json());                                 //set body parser mi
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(sassMiddleware({
-  src: __dirname + '/scss',
-  dest: __dirname + '/public/web/css/OLD',
-  debug: true,
-  outputStyle: 'compressed',
-  prefix: '/web/css/OLD',
-}));
-
-app.use(sassMiddleware({
-  src: __dirname + '/newSCSS/root.scss',
+  src: __dirname + '/scss/root.scss',
   dest: __dirname + '/public/web/css/styles.css',
   debug: true,
   outputStyle: 'compressed',
