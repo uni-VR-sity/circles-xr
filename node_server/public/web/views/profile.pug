@@ -5,6 +5,9 @@ block append scripts
 
 block content
 
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var guest = userInfo.usertype === CIRCLES.USER_TYPE.GUEST || userInfo.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST;
+
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
 
     // Title --------------------------------------------------------------------------------
@@ -28,34 +31,36 @@ block content
             p.success-message
 
             // Update profile form ----------------------------------------------------------
-            form#update-profile-form(onsubmit='updateProfile(event)' method='post')
+            form#update-profile-form(onsubmit='updateProfile(event, ' + guest + ')' method='post')
 
                 .form-field
                     label Display name
                     input(type='text' id='displayName' name='displayName' value=userInfo.displayName required)
 
-                .form-field
-                    label Email
-                        i &nbsp(Optional)
-                    input(type='email' id='email' name='email' placeholder='super@email.com' value=userInfo.email)
+                if !guest
 
-                    .checkbox-container
-                        input(type='checkbox' id='deleteEmail' name='deleteEmail')
-                        label(for='deleteEmail') Remove email from account
+                    .form-field
+                        label Email
+                            i &nbsp(Optional)
+                        input(type='email' id='email' name='email' placeholder='super@email.com' value=userInfo.email)
 
-                hr
+                        .checkbox-container
+                            input(type='checkbox' id='deleteEmail' name='deleteEmail')
+                            label(for='deleteEmail') Remove email from account
 
-                .form-field 
-                    label Old password
-                    input(type='password' name='passwordOld')
+                    hr
 
-                .form-field 
-                    label New password
-                    input(type='password' name='passwordNew')
+                    .form-field 
+                        label Old password
+                        input(type='password' name='passwordOld')
 
-                .form-field.last-field
-                    label Confirm password
-                    input(type='password' name='passwordConf')
+                    .form-field 
+                        label New password
+                        input(type='password' name='passwordNew')
+
+                    .form-field.last-field
+                        label Confirm password
+                        input(type='password' name='passwordConf')
 
             // Avatar form ------------------------------------------------------------------
             .avatar-view 

@@ -11,29 +11,41 @@ block content
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
     
     // User row -----------------------------------------------------------------------------
-    mixin userRow(user, editable)
+    mixin userRow(user, viewingEditable, editEditable)
         .row(id=user.username.replaceAll(' ', '-'))
             p.username= user.username
 
             p.user-type= user.usertype
+
+            - var canEdit = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(user.usertype) || CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype);
             
-            if editable
+            if viewingEditable 
                 .viewing-access
                     if user.viewing
-                        if user.editing
+                        if user.editing && canEdit
                             .icon-container.permitted-icon.disabled
                                 i
                         else 
                             .icon-container.permitted-icon
                                 i(onclick='restrictViewing("' + user.username + '", "' + circle.name + '")')
                     else 
-                        if user.editing
+                        if user.editing && canEdit
                             .icon-container.restricted-icon.disabled
                                 i
                         else 
                             .icon-container.restricted-icon
                                 i(onclick='permitViewing("' + user.username + '", "' + circle.name + '")')
 
+            else 
+                .viewing-access 
+                    if user.viewing
+                        .icon-container.permitted-icon.disabled
+                            i
+                    else 
+                        .icon-container.restricted-icon.disabled
+                            i
+
+            if editEditable
                 .editing-access
                     if user.editing
                         .icon-container.permitted-icon
@@ -41,21 +53,14 @@ block content
                     else 
                         .icon-container.restricted-icon
                             i(onclick='permitEditing("' + user.username + '", "' + circle.name + '")')
-            else
-                .viewing-access 
-                    if user.viewing
-                        .icon-container.permitted-icon
-                            i
-                    else 
-                        .icon-container.restricted-icon
-                            i
 
+            else 
                 .editing-access
                     if user.editing
-                        .icon-container.permitted-icon
+                        .icon-container.permitted-icon.disabled
                             i
                     else 
-                        .icon-container.restricted-icon
+                        .icon-container.restricted-icon.disabled
                             i
 
             hr
@@ -125,15 +130,20 @@ block content
             .content-container
 
                 for user of userPermissions
-                    +userRow(user, true)
+                    
+                    if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
+                        +userRow(user, true, true)
+
+                    else 
+                        +userRow(user, true, false)
 
         else
             .content-container
-                i.warning * Make circle private to edit permissions
+                i.warning * Make circle private to edit viewing permissions
 
             // Header -----------------------------------------------------------------------
             .header-row
-                .content-container.greyed
+                .content-container
 
                     .row 
                         b.username User 
@@ -145,7 +155,12 @@ block content
                         b.editing-access Editing Access
 
             // User rows --------------------------------------------------------------------
-            .content-container.greyed
+            .content-container
 
                 for user of userPermissions
-                    +userRow(user, false)
+
+                    if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
+                        +userRow(user, false, true)
+
+                    else 
+                        +userRow(user, false, false)

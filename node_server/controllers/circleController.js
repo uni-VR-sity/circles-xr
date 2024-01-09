@@ -20,6 +20,18 @@ const Circles = require('../models/circles');
 const Uploads = require('../models/uploads');
 const MagicLinks = require('../models/magicLinks');
 
+// General -----------------------------------------------------------------------------------------------------------------------------------------
+
+// Loading in config  
+var env = dotenv.config({});
+
+if (env.error) 
+{
+  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
+}
+
+env = dotenvParseVariables(env.parsed);
+
 // Rendering Circles -------------------------------------------------------------------------------------------------------------------------------
 
 const serveWorld = (req, res, next) => {

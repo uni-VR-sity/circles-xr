@@ -69,7 +69,7 @@
 
                 .renew-button {
                     @include start-flex;
-                    @include primary-button(inline-block, 100%, 0);
+                    @include secondary-button(inline-block, 100%, 0);
                     align-items: start;
                 }
 
@@ -161,6 +161,10 @@
             hr {
                 grid-area: divider;
             }
+        }
+
+        .no-links-message {
+            text-align: center;
         }
     }
 }
