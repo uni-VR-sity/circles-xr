@@ -114,5 +114,10 @@ block content
     section#magic-links-container 
         .content-container 
 
-            for link of magicLinks 
-                +magicLink(link)
+            if magicLinks.length > 0
+
+                for link of magicLinks 
+                    +magicLink(link)
+            
+            else 
+                p.no-links-message You have no magic links

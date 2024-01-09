@@ -61,7 +61,7 @@
                 text-align: center;
             }
 
-            p:first-of-type {
+            .register-message, .error-message {
                 margin-bottom: $SMALL_MARGIN;
             }
         }

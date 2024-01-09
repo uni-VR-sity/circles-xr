@@ -1,7 +1,7 @@
 'use strict';
 
 // Updating profile through form
-function updateProfile(event)
+function updateProfile(event, guestUser)
 {
     // Preventing page refresh
     event.preventDefault(); 
@@ -52,35 +52,41 @@ function updateProfile(event)
             // If values have changed, updating form
             document.getElementById('displayName').value = formData.get('displayName');
 
-            if (formData.get('email').length > 0)
+            if (!guestUser)
             {
-                document.getElementById('email').value = formData.get('email');
-            }
+                if (formData.get('email').length > 0)
+                {
+                    document.getElementById('email').value = formData.get('email');
+                }
 
-            if (formData.get('deleteEmail'))
-            {
-                document.getElementById('email').value = '';
+                if (formData.get('deleteEmail'))
+                {
+                    document.getElementById('email').value = '';
+                }
             }
         }
     }
 
     var dataString = 'displayName=' + formData.get('displayName');
 
-    if (formData.get('email').length > 0)
+    if (!guestUser)
     {
-        dataString += '&email=' + formData.get('email');
-    }
+        if (formData.get('email').length > 0)
+        {
+            dataString += '&email=' + formData.get('email');
+        }
 
-    if (formData.get('deleteEmail'))
-    {
-        dataString += '&deleteEmail=' + formData.get('deleteEmail');
-    }
+        if (formData.get('deleteEmail'))
+        {
+            dataString += '&deleteEmail=' + formData.get('deleteEmail');
+        }
 
-    if (formData.get('passwordOld').length > 0)
-    {
-        dataString += '&passwordOld=' + formData.get('passwordOld');
-        dataString += '&passwordNew=' + formData.get('passwordNew');
-        dataString += '&passwordConf=' + formData.get('passwordConf');
+        if (formData.get('passwordOld').length > 0)
+        {
+            dataString += '&passwordOld=' + formData.get('passwordOld');
+            dataString += '&passwordNew=' + formData.get('passwordNew');
+            dataString += '&passwordConf=' + formData.get('passwordConf');
+        }
     }
 
     request.send(dataString);

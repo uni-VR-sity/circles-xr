@@ -182,41 +182,4 @@
             }
         }
     }
-
-    .greyed {
-        color: $GREY_TEXT;
-
-        .row {
-
-            hr {
-                border-top-color: $GREY_TEXT;
-            }
-
-            .icon-container {
-
-                i:hover {
-                    cursor: not-allowed;
-                }
-            }
-
-            .permitted-icon {
-
-                i {
-                    color: $DISABLED_GREEN;
-                }
-            }
-
-            .restricted-icon {
-
-                i {
-                   transform: rotate(180deg);
-                   color: $DISABLED_RED;
-               }
-           }
-        }
-    }
-
-    .greyed:hover {
-        cursor: not-allowed;
-    }
 }

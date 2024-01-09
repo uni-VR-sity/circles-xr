@@ -1046,7 +1046,7 @@ const serveManageCircle = async (req, res, next) =>
     for (const user of users)
     {
       // Checking if it is not the current user
-      if (JSON.stringify(user._id) !== JSON.stringify(req.user._id) && user.usertype !== CIRCLES.USER_TYPE.SUPERUSER)
+      if (JSON.stringify(user._id) !== JSON.stringify(req.user._id) && !CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(user.usertype))
       {
         var userPermission = {
           username: user.username,
@@ -1307,7 +1307,7 @@ const updateUserProfile = async (req, res, next) =>
   var user; 
 
   // Getting user from database
-  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST)
+  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE.MAGIC_GUEST)
   {
     user = await Guest.findOne({_id: req.user._id}).exec();
   }
@@ -1388,7 +1388,7 @@ const updateUserProfile = async (req, res, next) =>
     {
       try 
       {
-        if (user.usertype === CIRCLES.USER_TYPE.GUEST)
+        if (user.usertype === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE.MAGIC_GUEST)
         {
           await Guest.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
         }
@@ -1411,6 +1411,7 @@ const updateUserProfile = async (req, res, next) =>
   }
   else
   {
+    console.log('Could not find user (' + req.user._id + ') to update profile');
     res.json('error');
     return;
   }
