@@ -1,7 +1,6 @@
 // DEFAULT ----------------------------------------------------------------------------------
 
-#manage-groups-overlay
-{
+#manage-groups-overlay {
     .overlay {
         width: 80%; 
         height: 90%; 
@@ -56,7 +55,7 @@
             margin-bottom: $SMALL_MARGIN;
 
             .add-subgroup-icon {
-                margin-left: calc($SMALL_MARGIN + 4.5px);
+                margin-left: $SMALL_MARGIN;
 
                 i {
                     font-size: $MEDIUM_ICON;
@@ -70,12 +69,8 @@
             }
 
             .remove-subgroup-icon {
-                @include icon-button($MEDIUM_ICON, $WHITE, 9px 10px);
-                margin-left: $X_SMALL_MARGIN;
-
-                i {
-                    color: $RED;
-                }
+                @include icon-highlight($MEDIUM_ICON, $BLACK, $RED);
+                margin-left: $SMALL_MARGIN;
             }
         }
 

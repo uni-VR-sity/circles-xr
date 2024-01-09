@@ -129,6 +129,19 @@ router.get('/new-uploads/:file_name', authenticated, newController.serveUploaded
 router.post('/new-set-file-dimensions', authenticated, newController.setFileDimensions);
 router.post('/new-delete-uploaded-content', authenticated, newController.deleteContent);
 
+// More Circles Page Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.get('/new-more-circles', authenticated, newController.serveMoreCircles);
+
+// CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
+
+// More Circles Page Routes -----------------------------------------------------------------
+
+router.post('/new-add-server', authenticated, newController.addCirclesServer);
+router.post('/new-deactivate-circles-server', authenticated, newController.deactivateCirclesServer);
+router.post('/new-activate-circles-server', authenticated, newController.activateCirclesServer);
+router.post('/new-delete-circles-server', authenticated, newController.deleteCirclesServer);
+
 // OLD ---------------------------------------------------------------------------------------------------------------------------------------------
 
 //general web

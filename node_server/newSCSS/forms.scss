@@ -47,6 +47,13 @@ label {
     vertical-align: middle;
 }
 
+.textarea-field {
+
+    label {
+        vertical-align: top;
+    }
+}
+
 .required-form-label::after {
     content: ' *';
     color: $RED;
@@ -63,7 +70,7 @@ label {
 
 // INPUTS -----------------------------------------------------------------------------------
 
-input:not([type=submit],[type=button],[type=checkbox]), select {
+input:not([type=submit],[type=button],[type=checkbox]), select, textarea {
     padding: 0 15px;
     height: $FORM_HEIGHT;
     width: 200px;
@@ -84,6 +91,12 @@ input:not([type=submit],[type=button],[type=checkbox]):active, input:not([type=s
 
 input:disabled:active, input:disabled:focus {
     border: $FORM_BORDER;
+}
+
+textarea {
+    resize: vertical;
+    height: 150px;
+    padding: 5px 15px;
 }
 
 // Longer fields on mobile

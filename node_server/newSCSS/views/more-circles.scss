@@ -1,0 +1,233 @@
+// Add New Servers ---------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#add-new-server-container {
+    margin-bottom: $LARGE_MARGIN;
+
+    .content-container {
+
+        h2 {
+            margin-bottom: $LARGE_MARGIN;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            grid-template-areas: "info circles";
+
+            input:not([type=submit]), textarea {
+                width: 300px;
+            }
+
+            .circles-field-container {
+
+                .circles-field {
+                    @include start-flex;
+                    margin-top: $X_SMALL_MARGIN;
+
+                    .add-circle-icon {
+                        margin-left: $SMALL_MARGIN;
+    
+                        i {
+                            font-size: $MEDIUM_ICON;
+                            color: $BLUE;
+                        }
+        
+                        i:hover {
+                            cursor: pointer;
+                            color: $HOVER_BLUE;
+                        }
+                    }
+
+                    .remove-circle-icon {
+                        @include icon-highlight($MEDIUM_ICON, $BLACK, $RED);
+                        margin-left: $SMALL_MARGIN;
+                    }
+                }
+            }
+        }
+
+        .error-message, .success-message {
+            display: flex;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
+        hr {
+            margin-top: $LARGE_MARGIN;
+        }
+    }
+}
+
+// More Circles ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#more-circles-container {
+
+    .content-container {
+
+        .intro-message {
+            @include center-flex;
+            margin-bottom: $NAVIGATION_MARGIN;
+        }
+
+        .server {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr 1fr;
+            grid-auto-rows: min-content;
+            grid-template-areas: "circles-name circles-name circles-name"
+                                   "description-title circles-title buttons"
+                                   "description circles buttons"
+                                   "delete delete delete"
+                                   "divider divider divider";
+            margin-bottom: $LARGE_MARGIN;
+            
+
+            .circles-name {
+                grid-area: circles-name;
+                margin-bottom: $MEDIUM_MARGIN;
+
+                .inactive-text {
+                    display: none;
+                }
+            }
+
+            .description-title {
+                grid-area: description-title;
+                margin-bottom: $X_SMALL_MARGIN;
+            }
+
+            .description {
+                grid-area: description;
+                margin-bottom: $LARGE_MARGIN;
+
+                .link-button {
+                    @include outline-icon-button(inline-block, 120px);
+                    margin-top: $MEDIUM_MARGIN;
+                }
+            }
+
+            .circles-title {
+                grid-area: circles-title;
+            }
+
+            .server-circles {
+                grid-area: circles;
+                margin-bottom: $LARGE_MARGIN;
+
+                ul {
+                    div {
+                        display: inline-block;
+                        min-width: 150px;
+                        margin-right: $SMALL_MARGIN;
+                    }
+                }
+            }
+
+            .server-buttons {
+                grid-area: buttons;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                column-gap: $SMALL_MARGIN;
+
+                .deactivate-button {
+                    @include start-flex;
+                    @include secondary-button(inline-block, 100%, 0);
+                    align-items: start;
+                }
+
+                .activate-button {
+                    @include start-flex;
+                    @include primary-button(inline-block, 100%, 0);
+                    align-items: start;
+                    display: none;
+                }
+
+                .delete-button {
+                    @include end-flex;
+                    @include red-button(inline-block, 100%, 0);
+                    align-items: start;
+                }
+            }
+
+            .delete-confirmation-container {
+                grid-area: delete;
+                background-color: $LIGHT_GREY;
+                border-radius: $BORDER_RADIUS;
+                padding: $SMALL_MARGIN $MEDIUM_MARGIN;
+                margin-bottom: $SMALL_MARGIN;
+                display: none;
+
+                .message {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: $MEDIUM_MARGIN;
+                    color: $BLACK;
+                }
+
+                .delete-buttons {
+                    display: inline-block;
+
+                    .delete-button, .cancel-button {
+                        display: inline-block;
+                    }
+
+                    .delete-button {
+                        @include red-button(inline-block, 130px, 0);
+                        align-items: start;
+                        margin-right: $SMALL_MARGIN;
+                    }
+
+                    .cancel-button {
+                        @include outline-button(inline-block, 130px, 0);
+                        align-items: start;
+                    }
+                }
+            }
+
+            hr {
+                grid-area: divider;
+            }
+        }
+
+        .inactive-server {
+            color: $GREY_TEXT;
+            
+            .circles-name {
+                .inactive-text {
+                    display: inline-block;
+                    color: $RED;
+                    margin-bottom: 0;
+                }
+            }
+
+            .description {
+
+                .link-button {
+                    display: none;
+                }
+            }
+
+            .server-buttons {
+
+                .deactivate-button {
+                    display: none;
+                }
+
+                .activate-button {
+                    display: flex;
+                }
+            }
+        }
+
+        .server-error-messages {
+            text-align: center;
+
+            .error-message {
+                @include center-flex;
+                display: flex;
+            }
+        }
+    }
+}
