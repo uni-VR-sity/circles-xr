@@ -267,10 +267,13 @@ function createGroupRows(group, subgroups)
     // Adding subgroup rows
     for (const subgroup of subgroups)
     {
-        var row = createSubgroupRow(group, subgroup);
-        row.style.display = 'none';
+        if (subgroup.length > 0)
+        {
+            var row = createSubgroupRow(group, subgroup);
+            row.style.display = 'none';
 
-        groupContainer.appendChild(row);
+            groupContainer.appendChild(row);
+        }
     }
 
     // Creating add subgroup row
@@ -418,7 +421,10 @@ function createGroup(event)
 
             for (const subgroup of formData.getAll('subgroups'))
             {
-                dataString += '&subgroups=' + subgroup;
+                if (subgroup.length > 0)
+                {
+                    dataString += '&subgroups=' + subgroup;
+                }
             }
 
             request.send(dataString);
