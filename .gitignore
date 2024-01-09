@@ -25,10 +25,10 @@ node_server/uploads
 node_server/whiteboardFiles
 
 =======
-# ignore vscode
+# Ignore vscode
 .vscode
 
-#Ignore compiles SASS
+# Ignore compiles SASS
 node_server/public/web/css/styles.css
 
 *.DS_Store
