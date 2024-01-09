@@ -1307,7 +1307,7 @@ const updateUserProfile = async (req, res, next) =>
   var user; 
 
   // Getting user from database
-  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE.MAGIC_GUEST)
+  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || req.user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
   {
     user = await Guest.findOne({_id: req.user._id}).exec();
   }
@@ -1388,7 +1388,7 @@ const updateUserProfile = async (req, res, next) =>
     {
       try 
       {
-        if (user.usertype === CIRCLES.USER_TYPE.GUEST || CIRCLES.USER_TYPE.MAGIC_GUEST)
+        if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || req.user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
         {
           await Guest.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
         }
