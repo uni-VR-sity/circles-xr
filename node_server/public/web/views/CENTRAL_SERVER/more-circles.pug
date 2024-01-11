@@ -56,7 +56,7 @@ block content
 
             .delete-buttons  
                 .delete-button
-                    a(onclick='deleteServer("server-' + server._id + '")') Delete
+                    a(onclick='deleteServer("' + server._id + '")') Delete
 
                 .cancel-button
                     a(onclick='closeDeleteConfirmation("server-' + server._id + '")') Cancel
