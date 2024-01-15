@@ -206,7 +206,7 @@ const insertWhiteboardFile = async (req, res, next) =>
     insertedFile = await Uploads.findOne({name: req.body.file}).exec();
 
     // Getting world from database
-    world = await Worlds.findOne({name: req.body.world});
+    world = await Circles.findOne({name: req.body.world});
   }
   catch(e)
   {
@@ -301,7 +301,7 @@ const removeWhiteboardFile = async (req, res, next) =>
   try
   {
     // Getting world from database
-    world = await Worlds.findOne({name: req.body.world});
+    world = await Circles.findOne({name: req.body.world});
   }
   catch(e)
   {
@@ -350,7 +350,7 @@ const getWhiteboardFiles = async (req, res, next) =>
   try
   {
     // Getting world from database
-    world = await Worlds.findOne({name: req.body.world});
+    world = await Circles.findOne({name: req.body.world});
   }
   catch(e)
   {
@@ -388,7 +388,7 @@ const updateFilePosition = async (req, res, next) =>
     try
     {
       // Getting world from database
-      world = await Worlds.findOne({name: req.body.world});
+      world = await Circles.findOne({name: req.body.world});
     }
     catch(e)
     {
