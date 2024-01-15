@@ -57,7 +57,7 @@ const generatePopUp_Computer_Mobile = function()
     container.setAttribute('class', 'overlay');
 
         // Title
-        var title = document.createElement('h1');
+        var title = document.createElement('h2');
 
         title.innerHTML = 'Insert File';
 
@@ -193,7 +193,7 @@ const insertFileElement = function(event)
         
         button.setAttribute('material', {
             shader: 'flat',
-            color: '#0078e7',
+            color: '#0f68bb',
         });
     
         button.setAttribute('position', {
@@ -320,11 +320,11 @@ const generatePopUp_Headset = function()
         title.setAttribute('text', {
             align: 'center',
             color: '#000000',
-            value: 'Insert File',
+            value: 'INSERT FILE',
         });
 
         title.setAttribute('position', {
-            x: -1,
+            x: -0.95,
             y: 0.75, 
             z: 0.001,
         });
@@ -720,26 +720,32 @@ const addButton = function(CONTEXT_AF)
     // Getting pop up container
     var container = document.getElementById('upload-content-container');
 
-    var button = document.createElement('a');
+    var buttonContainer = document.createElement('div');
+    
+    buttonContainer.classList.add('button-container');
 
-    button.setAttribute('id', 'insert-button');
-    button.setAttribute('class', 'button-inactive');
-    button.innerHTML = 'Insert';
+        var button = document.createElement('a');
 
-    // When button is clicked, if it is active, add selected file to whiteboard
-    button.addEventListener('click', function() 
-    {
-        if (button.classList.contains('button-active'))
+        button.setAttribute('id', 'insert-button');
+        button.setAttribute('class', 'button-inactive');
+        button.innerHTML = 'Insert';
+
+        // When button is clicked, if it is active, add selected file to whiteboard
+        button.addEventListener('click', function() 
         {
-            // Closing pop up
-            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
+            if (button.classList.contains('button-active'))
+            {
+                // Closing pop up
+                document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
 
-            // Inserting file
-            insertFile(CONTEXT_AF);
-        }
-    });
+                // Inserting file
+                insertFile(CONTEXT_AF);
+            }
+        });
 
-    container.appendChild(button);
+    buttonContainer.appendChild(button);
+
+    container.appendChild(buttonContainer);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -790,117 +796,96 @@ const displayContent = function(content)
     var container = document.getElementById('upload-content-container');
 
         // Creating table container
-        var tableContainer = document.createElement('div');
+        var fileContainer = document.createElement('div');
         
-        tableContainer.setAttribute('id', 'table-overflow-container');
+        fileContainer.setAttribute('id', 'file-container');
 
-            // Creating table to display content
-            var table = document.createElement('table');
-
-            table.setAttribute('id', 'uploads-table')
-
-            // Content is displayed in rows of 5
-            var numRows = Math.ceil(content.length / 5);
-
-            for (var i = 0; i < numRows; i++)
+            for (const file of content)
             {
-                var row = document.createElement('tr');
+                var fileElementContainer = document.createElement('div');
 
-                    for (var j = 0; j < 5; j++)
-                    {
-                        var fileNum = (5 * i) + j;
+                fileElementContainer.setAttribute('class', 'file');
+                fileElementContainer.setAttribute('id', file.name);
 
-                        // Ensuring that there is still content to display
-                        if (fileNum < content.length)
-                        {
-                            var data = document.createElement('td');
+                // Displaying the content in the appropriate way depending on the file type
+                // Image files (with img tag)
+                if (file.category === 'image')
+                {
+                    var image = document.createElement('img');
 
-                            data.setAttribute('class', 'file-table-section');
+                    image.setAttribute('src', '/uploads/' + file.name);
 
-                                var fileContainer = document.createElement('div');
+                    fileElementContainer.appendChild(image);
+                }
+                // Video files (with video tag)
+                else if (file.category === 'video')
+                {
+                    var video = document.createElement('video');
 
-                                fileContainer.setAttribute('class', 'file-container');
-                                fileContainer.setAttribute('id', content[fileNum].name);
+                    video.muted = true;
+                    video.setAttribute('preload', 'auto');
+                    video.setAttribute('playsinline', '');
+                    video.setAttribute('webkit-playsinline', '');
 
-                                    // Displaying the content in the appropriate way depending on the file type
-                                    // Image files (with img tag)
-                                    if (content[fileNum].category === 'image')
-                                    {
-                                        var image = document.createElement('img');
+                        var source = document.createElement('source');
 
-                                        image.setAttribute('src', '/uploads/' + content[fileNum].name);
+                        source.setAttribute('src', '/uploads/' + file.name);
 
-                                        fileContainer.appendChild(image);
-                                    }
-                                    // Video files (with video tag)
-                                    else if (content[fileNum].category === 'video')
-                                    {
-                                        var video = document.createElement('video');
+                        video.appendChild(source);
 
-                                        video.muted = true;
-                                        video.setAttribute('preload', 'auto');
-                                        video.setAttribute('playsinline', '');
-                                        video.setAttribute('webkit-playsinline', '');
+                    fileElementContainer.appendChild(video);
 
-                                            var source = document.createElement('source');
+                    // Adding overlay to video to display symbol
+                    var overlay = document.createElement('div');
 
-                                            source.setAttribute('src', '/uploads/' + content[fileNum].name);
+                    overlay.setAttribute('class', 'video-symbol-overlay');
 
-                                            video.appendChild(source);
+                        // Icon
+                        var icon = document.createElement('i');
 
-                                        fileContainer.appendChild(video);
+                        icon.setAttribute('class', 'fa-solid fa-video');
 
-                                        // Adding overlay to video to display symbol
-                                        var overlay = document.createElement('div');
+                        overlay.appendChild(icon);
 
-                                        overlay.setAttribute('class', 'video-symbol-overlay');
+                    fileElementContainer.appendChild(overlay);
+                }
+                // Text files (just displaying name of file)
+                else
+                {
+                    fileElementContainer.classList.add('other-file');
 
-                                            // Icon
-                                            var icon = document.createElement('i');
+                    // Icon
+                    var iconContainer = document.createElement('div');
 
-                                            icon.setAttribute('class', 'fa-solid fa-video');
+                    iconContainer.classList.add('icon-container');
 
-                                            overlay.appendChild(icon);
+                        var icon = document.createElement('i');
 
-                                        fileContainer.appendChild(overlay);
-                                    }
-                                    // Text files (just displaying name of file)
-                                    else
-                                    {
-                                        data.setAttribute('class', 'other-file-type file-table-section');
+                        icon.setAttribute('class', 'fa-regular fa-file file-icon');
 
-                                        // Icon
-                                        var icon = document.createElement('i');
+                    iconContainer.appendChild(icon);
 
-                                        icon.setAttribute('class', 'fa-regular fa-file file-icon');
+                    fileElementContainer.appendChild(iconContainer);
 
-                                        fileContainer.appendChild(icon);
+                    // File name
+                    var fileNameContainer = document.createElement('div');
 
-                                        // Space
-                                        var space = document.createElement('br');
-                                        fileContainer.appendChild(space);
+                    fileNameContainer.classList.add('file-name-container');
 
-                                        // File name
-                                        var name = document.createElement('p');
+                        var name = document.createElement('p');
 
-                                        name.setAttribute('class', 'fileName');
-                                        name.innerHTML = content[fileNum].displayName;
+                        name.setAttribute('class', 'file-name');
+                        name.innerHTML = file.displayName;
 
-                                        fileContainer.appendChild(name);
-                                    }
+                    fileNameContainer.appendChild(name);
 
-                                data.appendChild(fileContainer);
+                    fileElementContainer.appendChild(fileNameContainer);
+                }
 
-                            row.appendChild(data);
-                        }
-                    }
-                    
-                table.appendChild(row);
+                fileContainer.appendChild(fileElementContainer);
             }
-
-        tableContainer.appendChild(table);
     
-    container.appendChild(tableContainer);
+    container.appendChild(fileContainer);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -908,46 +893,56 @@ const displayContent = function(content)
 // Shortening file names to fit the width of the table data
 const shortenNames = function()
 {
-    // Table section margins and padding sizes
-    let sectionMargin = 40 * 5;
-    let sectionPadding = 300;
+    // Getting the width of file elements
+    var sectionWidth = document.getElementsByClassName('other-file')[0].getBoundingClientRect().width;
 
-    // Getting the width of the table sections
-    let sectionWidth = (document.getElementById('uploads-table').getBoundingClientRect().width - sectionMargin - sectionPadding) / 5;
+    // Taking 30px off of the width for padding
+    sectionWidth -= 30;
 
-    // Going through each table section and checking if the length of the file name is greater then the width of the section
+    // Going through each file element and checking if the length of the file name is greater then the width of the section
     // If it is, shorten it
-    let nameElements = document.getElementsByClassName('fileName');
+    var fileSections = document.getElementsByClassName('other-file');
 
-    for (let element of nameElements)
+    for (var section of fileSections)
     {
-        let name = element.innerHTML;
-        let nameLength = element.getBoundingClientRect().width;
+        var nameElement = section.querySelector('.file-name');
+        var fileName = nameElement.innerHTML;
+        var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
+    }
 
-        if (nameLength > sectionWidth)
+    if (nameLength > sectionWidth)
+    {
+        // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
+        
+        // Getting the file type
+        var splitName = fileName.split('.');
+        var type = splitName[splitName.length - 1];
+
+        var condensedName = fileName;
+        
+        // Taking a character off the file name until the length of the name is less then the section width
+        while (nameLength > sectionWidth)
         {
-            // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
-            
-            // Getting the file type
-            let splitName = name.split('.');
-            let type = splitName[splitName.length - 1];
+            // Getting the file name without the type
+            condensedName = condensedName.replace('...' + type, '');
 
-            let condensedName = name;
-            
-            // Taking a character off the file name until the length of the name is less then the section width
-            while (nameLength > sectionWidth)
-            {
-                // Getting the file name without the type
-                condensedName = condensedName.replace('...' + type, '');
+            // Removing the last character of the name
+            condensedName = condensedName.substring(0, condensedName.length - 1);
+            condensedName += '...' + type;
 
-                // Removing the last character of the name
-                condensedName = condensedName.substring(0, condensedName.length - 1);
-                condensedName += '...' + type;
+            // Checking the length of the name
+            nameElement.innerHTML = condensedName;
+            nameLength = nameElement.getBoundingClientRect().width;
+        }
 
-                // Checking the length of the name
-                element.innerHTML = condensedName;
-                nameLength = element.getBoundingClientRect().width;
-            }
+        // Changing all instances of the file name to the condensed version
+        var allFileNameElements = section.querySelectorAll('.file-name');
+
+        for (var nameElement of allFileNameElements)
+        {
+            var currentName = nameElement.innerHTML;
+
+            nameElement.innerHTML = currentName.replace(fileName, condensedName);
         }
     }
 }
@@ -1210,35 +1205,6 @@ const displayPage = function(pages, pageNum)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Adjusting table width (for computer and mobile)
-// (For when there is only 1, 2, 3, or 4 files uploaded, to still be displayed with the correct proportions)
-const adjustWidth = function()
-{
-    // Getting the table
-    var table = document.getElementById('uploads-table');
-
-    // Getting the width of the table sections
-    var width = (table.getBoundingClientRect().width) / 5;
-
-    // Changing the table to have a max width of 100% 
-    table.style.width = 'auto';
-    table.style.maxWidth = '100%';
-
-    // Getting all table sections
-    var sections = table.querySelectorAll('.file-table-section');
-
-    // Adjusting width of all table sections to be a fifth of the width of the table
-    for (var section of sections)
-    {
-        section.style.width = width;
-        
-        // "Padding" between the file container and table section (the only way sections would stay of even width with padding)
-        section.querySelector('.file-container').style.width = width - 40;
-    }
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------
-
 // Component
 AFRAME.registerComponent('circles-upload-whiteboard-ui', 
 {
@@ -1363,13 +1329,10 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
                     displayContent(content);
 
                     // Showing pop up as program can not get dimensions when elements are hidden
-                    document.getElementById('upload-content-container').style.display = 'block';
+                    document.getElementById('upload-content-container').style.display = 'flex';
 
                         // Making sure file names fit the width of the table data
                         shortenNames();
-
-                        // Adjusting table width
-                        adjustWidth();
 
                     // Hiding pop up again
                     document.getElementById('upload-content-container').style.display = 'none';
@@ -1380,14 +1343,14 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
                     // Listening for when files are clicked to activate them to insert onto whiteboard
 
                     // Getting all file containers
-                    var containers = document.getElementsByClassName('file-container');
+                    var files = document.getElementsByClassName('file');
 
                     // Adding event listeners to file containers
-                    for (const container of containers)
+                    for (const file of files)
                     {
-                        container.addEventListener('click', function()
+                        file.addEventListener('click', function()
                         {
-                            contentPress(container);
+                            contentPress(file);
                         });
                     }
                 }
@@ -1455,6 +1418,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
 
                 // Getting information about where the user is to display pop up (for its position)
                 var user = document.querySelector('[camera]');
+
                 var position = new THREE.Vector3();
                 user.querySelector('.UI-position').object3D.getWorldPosition(position);
 
@@ -1510,7 +1474,7 @@ AFRAME.registerComponent('circles-upload-whiteboard-ui',
         {
             if (CONTEXT_AF.data.active === true)
             {
-                document.getElementById('upload-content-container').style.display = 'block';
+                document.getElementById('upload-content-container').style.display = 'flex';
             }
             else
             {

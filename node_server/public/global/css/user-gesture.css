@@ -1,3 +1,7 @@
+html {
+    font-family: "Roboto",sans-serif;
+}
+
 /* Enter World UI ****************************************************************************************************************************************/
 
 div.grid2col {
@@ -11,7 +15,9 @@ div.grid2col {
     position: relative;
     margin: 8px 0;
     line-height: 41px;
-    font-size: 20px; color:#000; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    font-size: 20px; color:#000; 
+    /*font-family: Trebuchet, Arial, sans-serif;*/
+    font-weight: bold;
     width: 164px;
     height:45px;
     text-align: right;
@@ -21,7 +27,9 @@ div.grid2col {
     position: relative;
     margin: 8px 0px 8px 0px;
     line-height: 41px;
-    font-size: 28px; color:#2196F3; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    font-size: 28px; color:#2196F3; 
+    /*font-family: Trebuchet, Arial, sans-serif;*/
+    font-weight: bold;
     text-align:center;
 }
 
@@ -86,7 +94,9 @@ div.grid2col {
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
     display: block; float: left; width: 50%; height: 41px; padding: 0; line-height: 41px;
-    font-size: 25px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    font-size: 25px; color: white; 
+    /*font-family: Trebuchet, Arial, sans-serif;*/
+    font-weight: bold;
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
@@ -164,8 +174,7 @@ div.grid2col {
     background-color: rgb(123, 196, 255);
 }
 
-#loading-animation-enter 
-{
+#loading-animation-enter {
     display:block;
     width:50px;
     height:50px;
@@ -173,178 +182,239 @@ div.grid2col {
     margin-right: auto;
 }
 
+/* Home Button *******************************************************************************************************************************************/
+
+#home-ui-container {
+    z-index: 100;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 2% 0 0 2%;
+}
+
+#home-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 65px;
+    background-color: #ffffff8a;
+    border-radius: 100px;
+}
+
+#home-container i {
+    user-select: none;
+    color: #000000;
+    font-size: 24px;
+}
+
+#home-container:hover {
+    cursor: pointer;
+}
+
+#home-container:hover i {
+    font-size: 26px;
+}
+
 /* Whiteboard Insert File UI (circles-upload-ui) *********************************************************************************************************/
 
-#upload-content-container
-{
+#upload-content-container {
     display: none;
     z-index: 99;
-    height: 75%;
-    width: 75%;
-    padding: 50px 80px;
-    font-family: Trebuchet, Arial, sans-serif;
+    width: 80%;
+    height: 90%;
+    box-sizing: border-box;
+    padding: 30px 50px;
+    flex-direction: column;
 }
 
-#upload-content-container hr
-{
-    margin-bottom: 0;
-}
-
-#upload-content-container h1
-{
+#upload-content-container h2 {
+    font-weight: 300;
+    font-size: 28px;
+    text-transform: uppercase;
     display: inline-block;
 }
 
-.close-upload
-{
+#upload-content-container hr {
+    border-top: 1px solid #000;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.close-upload {
     position: absolute;
     display: inline-block;
-    top:92px;
-    right:100px;
-    color:#757575;
-}
-
-.close-upload:hover
-{
+    top: 70px;
+    right: 65px;
     color:black;
 }
 
-#table-overflow-container
-{
-    height:70%;
-    overflow-y:auto;
-    width:100%;
+.close-upload:hover {
+    color:red;
+    cursor: pointer;
 }
 
-#uploads-table
-{
-    width:100%;
-    border-spacing:0 36px;
+#file-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 35px;
+    row-gap: 35px;
+    margin-top: 35px;
+    overflow-y: auto;
 }
 
-.file-table-section img, .file-table-section video
-{
-    width:100%;
-    height:100%;
-    object-fit: cover;
-}
-
-.file-container
-{
-    height: 175px;
-    text-align: center;
-    box-sizing: border-box;
-    margin: auto;
+.file {
     position: relative;
 }
 
-.file-container:hover
-{
+.file:hover {
+    border: 3px solid #5aafff;
+    box-shadow: 0 0 15px #0078e7;
+    cursor: pointer;
+}
+
+.file-selected {
     border:3px solid #5aafff;
     box-shadow: 0 0 15px #0078e7;
 }
 
-.file-selected
-{
-    border:3px solid #5aafff;
-    box-shadow: 0 0 15px #0078e7;
-}
-
-.other-file-type .file-container
-{
-    background-color:#e7e7e7;
-    background-clip: content-box;
-}
-
-.video-symbol-overlay
-{
-    height: 100%;
+#file-container .file img, #file-container .file video {
     width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.video-symbol-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
     position: absolute;
-    top: 0;
+    width: 100%;
+    height: 100%;
     bottom: 0;
-    right: 0;
     left: 0;
+    right: 0;
     background-color: #ffffffb6;
 }
 
-#uploads-table .video-symbol-overlay i
-{
-    font-size:300%;
-    margin-bottom:15px;
-    margin-top:35%;
+.video-symbol-overlay i {
+    font-size: 35px;
 }
 
-#uploads-table td.other-file-type i
-{
-    font-size:250%;
-    margin-bottom:15px;
-    margin-top:23%;
+.other-file {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    background-color: #ededed;
 }
 
-.fileName
-{
-    padding:0;
-    display:inline-block;
+.other-file .icon-container {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
-.error-message
-{
-    text-align:center;
-    line-height: 25px;
-    margin-top:40px;
+.other-file .icon-container i {
+    font-size: 35px;
 }
 
-#insert-button
-{
-    position: absolute;
+.other-file .file-name-container {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
+
+.other-file .file-name-container p {
     display: inline-block;
-    right:112px;
-    margin-top:30px;
-    padding:.6em 1.5em;
-    font-size:17px;
-    color:#fff;
+    font-size: 14px;
 }
 
-.button-active
-{
-    background-color:#0078e7;
+.error-message {
+    text-align: center;
+    line-height: 25px;
+    margin-top: 60px;
 }
 
-.button-active:hover
-{
+.error-message a {
+    text-decoration: none;
+    color: #0f68bb;
+    cursor: pointer;
+}
+
+.error-message a::after {
+    font: var(--fa-font-solid);
+    content: '\f105';
+    font-size: 12px;
+    margin-left: 2px;
+    margin-right: 3px;
+}
+
+.error-message a:hover::after {
+    content: '\f061';
+    font-size: 12px;
+    margin-left: 5px;
+    margin-right: 3px
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+#insert-button {
+    display: inline-block;
+    width: auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 17px;
+    border: none;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 0 30px;
+    line-height: 45px;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.button-active {
+    background-color: #0f68bb;
+}
+
+.button-active:hover {
     background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
     cursor:pointer
 }
 
-.button-inactive
-{
+.button-inactive {
     background-color:#b8b8b8;
+}
+
+.button-inactive:hover {
+    cursor: not-allowed;
 }
 
 /* Arrow UI (circles-drag-object) ************************************************************************************************************************/
 
-#arrow-ui-container
-{
+#arrow-ui-container {
     z-index: 99;
     position: absolute;
-    width: 290px;
+    width: 250px;
     right: 0;
     bottom: 0;
     padding: 0 3% 3% 0;
 }
 
-#arrow-container
-{
+#arrow-container {
     display: inline-block;
-    width: 230px;
-    background-color: #ffffff58;
+    width: 190px;
+    background-color: #ffffff8a;
     border-radius: 50px;
     padding: 30px;
 }
 
-.vertical-arrow
-{
+.vertical-arrow {
     text-align: center;
 }
 
@@ -353,28 +423,25 @@ div.grid2col {
     content: "";
     clear: both;
     display: table;
-  }
+}
 
-.horizontal-left-arrow
-{
+.horizontal-left-arrow {
     float: left;
 }
 
-.horizontal-right-arrow
-{
+.horizontal-right-arrow {
     float: right;
 }
 
-.vertical-arrow i, .horizontal-left-arrow i, .horizontal-right-arrow i
-{
-    font-size: 75px;
+.vertical-arrow i, .horizontal-left-arrow i, .horizontal-right-arrow i {
+    font-size: 60px;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    color:#00000080;
+    color:#000000bd;
 }
 
-.vertical-arrow i:hover, .horizontal-left-arrow i:hover, .horizontal-right-arrow i:hover
-{
-    color:#000000b1;
+.vertical-arrow i:hover, .horizontal-left-arrow i:hover, .horizontal-right-arrow i:hover {
+    color:#000000;
+    cursor: pointer;
 }

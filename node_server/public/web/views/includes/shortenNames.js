@@ -16,8 +16,6 @@ for (var section of fileSections)
     var fileName = nameElement.innerHTML;
     var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
 
-    console.log(nameLength);
-
     if (nameLength > sectionWidth)
     {
         // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)

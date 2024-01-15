@@ -18,6 +18,7 @@ env = dotenvParseVariables(env.parsed);
 
 //read in parts content to insert
 let circles_header           =  fs.readFileSync('./src/webpack.worlds.parts/circles_header.part.html', 'utf8');
+let circles_basic_ui         =  fs.readFileSync('./src/webpack.worlds.parts/circles_basic_ui.part.html', 'utf8');
 let circles_enter_ui         =  fs.readFileSync('./src/webpack.worlds.parts/circles_enter_ui.part.html', 'utf8');
 let circles_scene_properties =  fs.readFileSync('./src/webpack.worlds.parts/circles_scene_properties.part.html', 'utf8');
 let circles_assets           =  fs.readFileSync('./src/webpack.worlds.parts/circles_assets.part.html', 'utf8');
@@ -62,6 +63,7 @@ module.exports = {
               //insert new parts
               content = content.toString();
               content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
+              content = content.replace(/<circles-basic-ui(\s+)?\/>/i, circles_basic_ui);
               content = content.replace(/<circles-start-ui(\s+)?\/>/i, circles_enter_ui);
               content = content.replace(/circles_scene_properties/i, circles_scene_properties);
               content = content.replace(/<circles-assets(\s+)?\/>/i, circles_assets);
