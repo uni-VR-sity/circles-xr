@@ -7,16 +7,20 @@ AFRAME.registerComponent('circles-costume', {
         model:          {type: 'asset',     default: ''},
         label_text:     {type: 'string',    default: ''},
         label_visible:  {type: 'boolean',   default: true},
-        persist:        {type: 'boolean',   default: false}  //this will only work for models that are part of the Circles' constants i.e. entering an index instead of URL for asset 
     },
     init: function() {
         const CONTEXT_AF = this;
         const data = CONTEXT_AF.data;
 
+        const avatar = document.querySelector('#' + CIRCLES.CONSTANTS.PRIMARY_USER_ID);
+
+        data.color = avatar.getAttribute('circles-' + data.body_type + '-color');
+
         //create costume object component for portal
         CONTEXT_AF.costumeElem = document.createElement('a-entity');
         CONTEXT_AF.costumeElem.classList.add('costume');
         CONTEXT_AF.costumeElem.setAttribute('circles-interactive-object', {type:'scale', neutral_scale:1.1, hover_scale:1.15, click_scale:1.15});
+        CONTEXT_AF.costumeElem.setAttribute("circles-color", {color:data.color});
         CONTEXT_AF.el.appendChild(CONTEXT_AF.costumeElem);
 
         //create text component for title
@@ -28,11 +32,6 @@ AFRAME.registerComponent('circles-costume', {
         CONTEXT_AF.costumeElem.addEventListener('click', (e) => {
           CONTEXT_AF.applyChanges(); 
         });
-
-        //set params we will edit and pass later in the portal component
-        if (!window.newURLSearchParams) {
-          window.newURLSearchParams = new URLSearchParams((window.location.search) ? window.location.search : '');
-        }
     },
     update: function(oldData)  {
       const CONTEXT_AF  = this;
@@ -48,10 +47,6 @@ AFRAME.registerComponent('circles-costume', {
 
       if ( (oldData.color !== data.color) && (data.color !== '') ) {
         CONTEXT_AF.costumeElem.setAttribute("circles-color", {color:data.color});
-
-        if (data.persist) {
-          window.newURLSearchParams.set(data.body_type + '_col', data.color);
-        }
       }
 
       if ( (oldData.model !== data.model) && (data.model !== '') ) {
@@ -70,11 +65,6 @@ AFRAME.registerComponent('circles-costume', {
 
           if (modelEnum[modelIndex]) {
             CONTEXT_AF.costumeElem.setAttribute("gltf-model", modelEnum[modelIndex]);
-
-            //can only persist if a built-in model i.e. set using index
-            if (data.persist) {
-              window.newURLSearchParams.set(data.body_type, data.model);
-            }
           }
           else {
             CONTEXT_AF.costumeElem.setAttribute("gltf-model", ((typeof data.model === 'string' || data.model instanceof String) ? data.model : data.model.getAttribute('src') ));
@@ -116,17 +106,12 @@ AFRAME.registerComponent('circles-costume', {
         if (modelEnum[modelIndex]) {
           avatarNode.setAttribute("gltf-model", modelEnum[modelIndex]);
 
-          //only works with built in models for now
-          //will check for window.newURLSearchParams in circles-portal.js
-          if (data.persist) {
-            //need to set url search params somehow ....
-            if (window.newURLSearchParams.has(data.body_type)) {
-              window.newURLSearchParams.set(data.body_type, data.model);
-            }
-            else {
-              window.newURLSearchParams.append(data.body_type, data.model);
-            }
-          }
+          // Sending data to update user model in database
+          var request = new XMLHttpRequest();
+          request.open('POST', '/update-user-model');
+          request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+          request.send('type=' + data.body_type + '&model='+ modelEnum[modelIndex]);
         }
         else {
           const modelPath = ((typeof data.model === 'string' || data.model instanceof String) ? data.model : data.model.getAttribute('src') );
@@ -137,15 +122,12 @@ AFRAME.registerComponent('circles-costume', {
       if (data.color !== '') {
         avatarNode.setAttribute("circles-color", {color:data.color});
 
-        if (data.persist) {
-          //need to set url search params somehow ....
-          if (window.newURLSearchParams.has(data.body_type + '_col')) {
-            window.newURLSearchParams.set(data.body_type + '_col', data.color);
-          }
-          else {
-            window.newURLSearchParams.append(data.body_type + '_col', data.color);
-          }
-        }
+        // Sending data to update user colour in database
+        var request = new XMLHttpRequest();
+        request.open('POST', '/update-user-colour');
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        request.send('type=' + data.body_type + '&colour='+ data.color);
       }
     },
 });
