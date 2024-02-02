@@ -183,6 +183,11 @@ router.post('/remove-whiteboard-file', authenticated, circleController.removeWhi
 router.post('/get-whiteboard-files', authenticated, circleController.getWhiteboardFiles);
 router.post('/update-whiteboard-file-position', authenticated, circleController.updateFilePosition);
 
+// Wardrobe Routes ------------------------------------------------------------------------------------------------------------------------------
+
+router.post('/update-user-model', authenticated, circleController.updateUserModel);
+router.post('/update-user-colour', authenticated, circleController.updateUserColour);
+
 // Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 
 // For forwarding magic links

@@ -11,7 +11,7 @@ AFRAME.registerComponent('circles-interactive-object', {
     click_scale:        {type:'number',     default:1.10},
     click_sound:        {type:'audio',      default:''},
     sound_volume:       {type:'number',     default:0.5},               
-    enabled:            {type:'boolean',    default:true},
+    enabled:            {type:'boolean',    default:true}
   },
   init: function() {
     const CONTEXT_AF = this;
@@ -230,8 +230,6 @@ AFRAME.registerComponent('circles-interactive-object', {
                 rc.components.raycaster.refreshObjects();
             }
         }); 
-
-        this.initHighlight();
     }
     else {
         CONTEXT_AF.removeEventListeners();
@@ -242,8 +240,6 @@ AFRAME.registerComponent('circles-interactive-object', {
         raycasters.forEach(rc => {
             rc.components.raycaster.refreshObjects();
         }); 
-
-        this.resetHighlight();
     }
   },
   remove : function () {

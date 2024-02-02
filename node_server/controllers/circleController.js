@@ -154,17 +154,17 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
         res.end(result); //not sure exactly why res.send doesn't work here ...
       }
     });
-};
+}
 
 // ------------------------------------------------------------------------------------------
 
 const serveRelativeWorldContent = (req, res, next) => {
-    //making it easier for devs as absolute paths are a pain to type in ...
-    const worldID = req.params.world_id;
-    const relURL = req.params[0];
-    const newURL = '/worlds/' + worldID + '/' + relURL;
-    return res.redirect(newURL);
-  };
+  //making it easier for devs as absolute paths are a pain to type in ...
+  const worldID = req.params.world_id;
+  const relURL = req.params[0];
+  const newURL = '/worlds/' + worldID + '/' + relURL;
+  return res.redirect(newURL);
+}
 
 // Whiteboard --------------------------------------------------------------------------------------------------------------------------------------
 
@@ -380,7 +380,6 @@ const getWhiteboardFiles = async (req, res, next) =>
 // Updating file position in its world database entry
 const updateFilePosition = async (req, res, next) =>
 {
-
   if (req.body.world && req.body.file && req.body.newX && req.body.newY)
   {
     var world = null;
@@ -422,6 +421,132 @@ const updateFilePosition = async (req, res, next) =>
   }
 }
 
+// Wardrobe ----------------------------------------------------------------------------------------------------------------------------------------
+
+const updateUserModel = async (req, res, next) => 
+{
+  var user; 
+
+  // Getting user from database
+  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || req.user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
+  {
+    user = await Guest.findOne({_id: req.user._id}).exec();
+  }
+  else
+  {
+    user = await User.findOne({_id: req.user._id}).exec();
+  }
+
+  if (user)
+  {
+    const userData = {};
+
+    if (req.body.type === 'head')
+    {
+      userData.gltf_head_url = req.body.model;
+    }
+    else if (req.body.type === 'hair')
+    {
+      userData.gltf_hair_url = req.body.model;
+    }
+    else if (req.body.type === 'body')
+    {
+      userData.gltf_body_url = req.body.model;
+    }
+
+    try 
+    {
+      if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || req.user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
+      {
+        await Guest.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+      }
+      else
+      {
+        await User.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+      }
+
+      res.json('success');
+      return;
+    } 
+    catch(e) 
+    {
+      console.log(e);
+
+      res.json('error');
+      return;
+    }
+  }
+  else
+  {
+    console.log('Could not find user (' + req.user._id + ') to update profile');
+    res.json('error');
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+const updateUserColour = async (req, res, next) => 
+{
+  var user; 
+
+  // Getting user from database
+  if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || req.user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
+  {
+    user = await Guest.findOne({_id: req.user._id}).exec();
+  }
+  else
+  {
+    user = await User.findOne({_id: req.user._id}).exec();
+  }
+
+  if (user)
+  {
+    const userData = {};
+
+    if (req.body.type === 'head')
+    {
+      userData.color_head = req.body.colour;
+    }
+    else if (req.body.type === 'hair')
+    {
+      userData.color_hair = req.body.colour;
+    }
+    else if (req.body.type === 'body')
+    {
+      userData.color_body = req.body.colour;
+    }
+
+    try 
+    {
+      if (req.user.usertype === CIRCLES.USER_TYPE.GUEST || req.user.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST)
+      {
+        await Guest.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+      }
+      else
+      {
+        await User.findOneAndUpdate({_id:req.user._id}, userData, {new:true});
+      }
+
+      res.json('success');
+      return;
+    } 
+    catch(e) 
+    {
+      console.log(e);
+
+      res.json('error');
+      return;
+    }
+  }
+  else
+  {
+    console.log('Could not find user (' + req.user._id + ') to update profile');
+    res.json('error');
+    return;
+  }
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -435,4 +560,7 @@ module.exports = {
   removeWhiteboardFile,
   getWhiteboardFiles,
   updateFilePosition,
+  // Wardrobe
+  updateUserModel,
+  updateUserColour,
 }
