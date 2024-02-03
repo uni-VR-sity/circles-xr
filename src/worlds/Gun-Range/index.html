@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+      <title>Assignment 2 - Shooting Range</title>
+
+      <meta name="description" content="Assignment 2 - Shooting Range">
+
+      <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+      <script src="/worlds/Gun-Range/js/start_experience.js"></script>
+      <script src="/worlds/Gun-Range/js/star_generator.js"></script>
+      <script src="/worlds/Gun-Range/js/highlight_gun.js"></script>
+      <script src="/worlds/Gun-Range/js/pickup_gun.js"></script>
+      <script src="/worlds/Gun-Range/js/shoot_gun.js"></script>
+      <script src="/worlds/Gun-Range/js/move_bullet.js"></script>
+      <script src="/worlds/Gun-Range/js/bullet_collider.js"></script>
+      <script src="/worlds/Gun-Range/js/target_generator.js"></script>
+      <script src="/worlds/Gun-Range/js/target_collider.js"></script>
+      <script src="/worlds/Gun-Range/js/button_generator.js"></script>
+      <script src="/worlds/Gun-Range/js/move_targets.js"></script>
+      <script src="/worlds/Gun-Range/js/delete_targets.js"></script>
+      <script src="/worlds/Gun-Range/js/reset_targets.js"></script>
+      <script src="/worlds/Gun-Range/js/put_down_gun.js"></script>
+      <script src="/worlds/Gun-Range/js/gun_generator.js"></script>
+
+      <link rel="stylesheet" href="/worlds/Gun-Range/css/start_screen.css">
+
+    </head>
+
+    <body>
+
+      <!-- Starting Screen -->
+      <div id="startScreen">
+        <div id="center">
+            <button id="startButton" onclick="startExperience()">Start</button>
+        </div>
+      </div>
+
+      <!-- A-Frame Scene -->
+      <a-scene id="scene">
+
+        <!-- ambientNoise.mp3 from Pixabay by SamuelFrancisJohnson and was then edited by me: https://pixabay.com/sound-effects/spacesound-7547/ -->
+        <!-- gunShot.mp3 from Pixabay by Navadaux and was then edited by me: https://pixabay.com/sound-effects/laser-gun-72558/ -->
+        <!-- button.mp3 from Pixabay by Universfield and was then edited by me: https://pixabay.com/sound-effects/interface-124464/ -->
+        <a-assets timeout="3000">
+          <audio id="ambientNoise" src="/worlds/Gun-Range/assets/ambientNoise.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="gunShot" src="/worlds/Gun-Range/assets/gunShot.mp3" preload="auto" crossorigin="anonymous"></audio>
+          <audio id="button" src="/worlds/Gun-Range/assets/button.mp3" preload="auto" crossorigin="anonymous"></audio>
+        </a-assets>
+
+        <!-- Camera -->
+        <a-entity rotation="0 90 0" position="8.5 1.6 0">
+            <a-entity id="user" camera look-controls fov="90">
+                <!-- Cursor -->
+                <a-entity cursor="rayOrigin:mouse;" 
+                          raycaster="far:20; interval:30; objects:.interactive;">
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- Sound -->
+        <a-entity id="ambientEntity" sound="src:#ambientNoise; autoplay:false; loop:true; positional:false"></a-entity>
+        <a-entity id="gunShotEntity" sound="src:#gunShot; positional:false"></a-entity>
+        <a-entity id="buttonSoundEntity" sound="src:#button; positional:false"></a-entity>
+
+        <!-- Bullet Container -->
+        <a-entity id="bullets"></a-entity>
+
+        <!-- Target Container -->
+        <a-entity id="targets">
+          <a-entity id="frontRow"></a-entity>
+          <a-entity id="middleRow"></a-entity>
+          <a-entity id="backRow"></a-entity>
+        </a-entity>
+
+        <!-- Button Container -->
+        <a-entity id="buttons"></a-entity>
+        
+        <!-- Lights -->
+        <a-entity light="type:point; castShadow:true; shadowBias:-0.0005; angle:0; penumbra:0.3; intensity:0.2;"
+                  position="8.5 5 0">
+        </a-entity>
+        <a-entity light="type:point; castShadow:true; shadowBias:-0.0005; angle:0; penumbra:0.3; intensity:0.2;"
+                  position="-2 5 0">
+        </a-entity>
+
+        <!-- Room -->
+        <a-entity id="room">
+            <!-- Floor -->
+            <a-entity id="floor"
+                      geometry="primitive:plane; width:24; height:14;"
+                      material="color:#12173B; roughness:0.7;"
+                      position="0 0.01 0"
+                      rotation="-90 0 0"
+                      shadow="cast:true; receive:true">
+            </a-entity>
+            <!-- Ceiling -->
+            <a-entity id="ceiling"
+                      geometry="primitive:plane; width:24; height:14;"
+                      material="color:#12173B; roughness:0.7;"
+                      position="0 10 0"
+                      rotation="90 0 0"
+                      shadow="cast:true; receive:true">
+            </a-entity> 
+            <!-- Star Container -->
+            <a-entity id="stars" star_generator></a-entity> 
+            <!-- Walls -->
+            <a-entity id="walls">
+                <a-entity class="zWall"
+                      geometry="primitive:plane; width:24; height:10;"
+                      material="color:#12173B; roughness:0.7;"
+                      position="0 5 -7"
+                      rotation="0 0 0"
+                      shadow="cast:true; receive:true">
+                </a-entity>
+                <a-entity class="zWall"
+                          geometry="primitive:plane; width:24; height:10;"
+                          material="color:#12173B; roughness:0.7;"
+                          position="0 5 7"
+                          rotation="0 180 0"
+                          shadow="cast:true; receive:true">
+                </a-entity>
+                <a-entity class="xWall"
+                          geometry="primitive:plane; width:14; height:10;"
+                          material="color:#12173B; roughness:0.7;"
+                          position="-12 5 0"
+                          rotation="0 90 0"
+                          shadow="cast:true; receive:true">
+                </a-entity>
+                <a-entity class="xWall"
+                          geometry="primitive:plane; width:14; height:10;"
+                          material="color:#12173B; roughness:0.7;"
+                          position="12 5 0"
+                          rotation="0 -90 0"
+                          shadow="cast:true; receive:true">
+                </a-entity>
+            </a-entity>
+        </a-entity>
+        
+        <!-- Environment -->
+        <a-entity id="table"
+                  material="color:black; roughness:0.5;"
+                  geometry="primitive:box; height:0.8; width:2; depth:14;"
+                  position="5.7 0.4 0"
+                  rotation="0 0 0"
+                  shadow="cast:true; recieve:true">
+        </a-entity>
+      </a-scene>
+    </body>
+
+</html>

@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- REQUIRED --------------------------------------------------------------------------------------------------------------->
+    <!-- webrtc shim from https://webrtc.github.io/adapter/adapter-latest.js -->
+    <circles-start-scripts/>
+
+    <!-- OUR COMPONENTS --------------------------------------------------------------------------------------------------------->
+
+    </head>
+    <body>
+
+    <!-- REQUIRED --------------------------------------------------------------------------------------------------------------->
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- REQUIRED -->
+    <a-scene circles_scene_properties>
+
+      <a-assets>
+        <!-- OUR ASSETS --------------------------------------------------------------------------------------------------------->
+        
+        <img id="sky" src="/worlds/STS-Lobby/assets/textures/black stars.jpg">
+
+        <img id='spaceshipImg' src='/worlds/STS-Lobby/assets/textures/spaceshipWorld.png' crossorigin="anonymous">
+        <img id='missionControlImg' src='/worlds/STS-Lobby/assets/textures/missionControlWorld.png' crossorigin="anonymous">
+
+        <!-- REQUIRED ----------------------------------------------------------------------------------------------------------->
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- WORLD GENERATION STARTS HERE ----------------------------------------------------------------------------------------->
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+       <!-- ambient music/sound -->
+       <a-entity circles-sound="type:music; src:/worlds/STS-Lobby/assets/sounds/K. Leimer - Very Tired.mp3; autoplay:true; loop:true;"></a-entity>
+
+      <!-- Ground -->
+      <a-entity geometry="primitive:plane; width:20; height:20" 
+                material="color:#000000; shader:flat" 
+                position="0 0 0" 
+                rotation="-90 0 0">
+      </a-entity>
+
+      <a-entity id="navmesh" gltf-model="/worlds/STS-Lobby/assets/models/navmesh.glb" nav-mesh visible="false"></a-entity>
+
+      <!-- Portal to spaceship -->
+      <a-entity id="spaceshipPortal"
+                position="4 1.5 -5" 
+                rotation="0 -90 0" 
+                scale="1 1 1"
+                circles-portal="img_src:#spaceshipImg; title_text:Spaceship; link_url:/w/STS_Spaceship">
+      </a-entity>
+
+      <!-- Portal to mission control -->
+      <a-entity id="spaceshipPortal"
+                position="-4 1.5 -5"
+                rotation="0 -90 0" 
+                scale="1 1 1"
+                circles-portal="img_src:#missionControlImg; title_text:Mission Control; link_url:/w/STS_MissionControl">
+      </a-entity>
+
+      <!-- Portal to Info -->
+      <a-entity id="infoPortal"
+                position="0.685 1.500 5"
+                rotation="0 90 0" 
+                scale="1 1 1"
+                circles-portal="img_src: /worlds/STS-Lobby/assets/domeImg.png; title_text:Discovery Dome; link_url:/w/STS-InfoRoom">
+      </a-entity>
+
+      <!-- Sky and lights -->
+      <a-sky  id="#skydome" src="#sky"></a-sky>
+
+      <a-entity position="0 2.484 -7.489" scale="11.288 5.000 5.000 "geometry="primitive: plane" material="src: /worlds/STS-Lobby/assets/STS Odyssey.jpg; roughness: 1" id="logo"></a-entity>
+      <a-entity position="-6.87496 2.484 -0.051" rotation="0 90 0" scale="4.06191 5.1077 5.1077" geometry="primitive: plane" material="src: /worlds/STS-Lobby/assets/howto.png; roughness: 1" id="howto"></a-entity>
+      <a-entity id="light" light="color: #ffffff; intensity: 8.3; type: point" position="-3.17768 2.67782 0.53658" rotation=""></a-entity>
+    
+      <a-entity class="checkpoint interactive" position="-4.076 0 0" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline" circles-checkpoint=""><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+      <a-entity class="checkpoint interactive" position="0 0 0" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline" circles-checkpoint=""><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+
+    </a-scene>
+    <!-- WORLD GENERATION END HERE -------------------------------------------------------------------------------------------->
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+/* Style for experience start screen */
+
+#startScreen
+{
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #070917ac;
+    z-index: 999999;
+}
+
+#center
+{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#startButton
+{
+    display: block;
+    width: 200px;
+    height: 75px;
+    background-color: #ffffff00;
+    color: #f7f4af;
+    font-size: 20px;
+    font-family:'Courier New', Courier, monospace;
+    letter-spacing: 1.5px;
+    padding: 14px 20px;
+    margin: 0px 10px 8px 10px;
+    border: 3px solid #f7f4af;
+    border-radius: 20px;
+    cursor: pointer;
+}
