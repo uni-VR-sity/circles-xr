@@ -3,7 +3,8 @@
 AFRAME.registerComponent('circles-manager', {
   schema: {
     world: {type:'string', default:''},    //use __WORLDNAME__ unless you want to control synching in some other fashion
-    user: {type:'string', default:''}     //use __VISIBLENAME__ unless you want to control synching in some other fashion
+    user: {type:'string', default:''},     //use __VISIBLENAME__ unless you want to control synching in some other fashion
+    avatar: {type:'boolean', default:true}
   },
   multiple: false, //do not allow multiple instances of this component on this entity
   init: function()
@@ -25,11 +26,18 @@ AFRAME.registerComponent('circles-manager', {
     }
 
     CONTEXT_AF.addEventListeners();
-    CONTEXT_AF.addArtefactNarrationController();
 
-    //attach networkedcomponent (to create avatar) to player rig
-    console.log('circles-manager: attaching networked component to avatar');
-    CIRCLES.getAvatarRigElement().setAttribute('networked', {template:'#' + CIRCLES.NETWORKED_TEMPLATES.AVATAR, attachTemplateToLocal:true});
+    if (CONTEXT_AF.data.avatar)
+    {
+      CONTEXT_AF.addArtefactNarrationController();
+    }
+
+    if (CONTEXT_AF.data.avatar)
+    {
+      //attach networkedcomponent (to create avatar) to player rig
+      console.log('circles-manager: attaching networked component to avatar');
+      CIRCLES.getAvatarRigElement().setAttribute('networked', {template:'#' + CIRCLES.NETWORKED_TEMPLATES.AVATAR, attachTemplateToLocal:true});
+    }
 
     scene.addEventListener(CIRCLES.EVENTS.CAMERA_ATTACHED, (e) => {
         CONTEXT_AF.playerHolder = CIRCLES.getAvatarHolderElementBody();  //this is our player holder
