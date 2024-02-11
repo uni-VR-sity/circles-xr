@@ -1,0 +1,123 @@
+// Title -------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#museum-title-container {
+    margin-bottom: $NAVIGATION_MARGIN;
+
+    .content-container {
+        text-align: center;
+    }
+}
+
+// Games -------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#museum-games {
+
+    .content-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+
+        .game{
+            padding: $SMALL_MARGIN $SMALL_MARGIN;
+            margin: 0 calc($SECTION_PADDING - $SMALL_MARGIN);
+            text-align: center;
+            position: relative;
+
+            img {
+                aspect-ratio: 1 / 1;
+                margin: 2.5% 0;
+                width: 95%;
+                object-fit: cover;
+                border-radius: $BORDER_RADIUS;
+            }
+
+            b {
+                display: inline-block;
+                margin-top: $SMALL_MARGIN;
+                margin-bottom: calc($X_SMALL_MARGIN / 2);
+            }
+        }
+
+        .game:hover {
+            cursor: pointer;
+
+            img {
+                margin: 0;
+                width: 100%;
+            }
+        }
+
+        .game-description-overlay {
+
+            .overlay {
+                width: 80%; 
+                height: 60%; 
+                box-sizing: border-box;
+                padding: $X_LARGE_MARGIN;
+                overflow-y: auto;
+
+                .game-title-container {
+                    display: grid;
+                    grid-template-columns: 1fr 4.75fr;
+                    grid-template-areas: "image name close-button"
+                                         "image credits close-button"
+                                         "image link close-button";
+
+                    img {
+                        grid-area: image;
+                        aspect-ratio: 1 / 1;
+                        width: 100%;
+                        object-fit: cover;
+                        border-radius: $BORDER_RADIUS;
+                    }
+
+                    h3 {
+                        @include no-spacing;
+                        @include start-flex;
+                        grid-area: name;
+                        align-items: end;
+                        margin-left: $LARGE_MARGIN;
+                        margin-top: $X_SMALL_MARGIN;
+                        margin-bottom: $X_SMALL_MARGIN;
+                    }
+
+                    p {
+                        grid-area: credits;
+                        @include start-flex;
+                        @include no-spacing;
+                        align-items: start;
+                        margin-left: $LARGE_MARGIN;
+                    }
+
+                    .game-link {
+                        @include no-spacing;
+                        grid-area: link;
+                        margin-left: $LARGE_MARGIN;
+                        margin-bottom: $X_SMALL_MARGIN;
+                    }
+
+                    .icon-container {
+                        @include end-flex;
+                        @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $RED);
+                        grid-area: close-button;
+                        align-items: start; 
+                        padding-top: calc($X_SMALL_MARGIN / 2);
+                        padding-right: $X_SMALL_MARGIN;
+                    }
+                }
+
+                .game-description {
+                    margin-top: $MEDIUM_MARGIN;
+
+                    b {
+                        display: inline-block;
+                        margin-top: $MEDIUM_MARGIN;
+                    }
+                }
+            }
+        }
+    }
+}

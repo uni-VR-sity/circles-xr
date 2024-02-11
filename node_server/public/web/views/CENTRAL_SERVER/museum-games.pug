@@ -1,0 +1,59 @@
+extends ../template.pug
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var game;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // Game display -------------------------------------------------------------------------
+    mixin displayGame(game)
+        - var gameId = game.name.replaceAll(' ', '-');
+        - var imageSrc = '/web/views/CENTRAL_SERVER/museum-game-images/' + game.image;
+
+        .game(onclick='openOverlay("' + gameId + '")')
+            img(src=imageSrc alt=altText)
+
+            b= game.name
+
+            p By #{game.credit}
+
+        .game-description-overlay.overlay-container(id=gameId)
+            .overlay 
+
+                .game-title-container
+                    img(src=imageSrc alt=altText)
+
+                    h3= game.name 
+                    p By #{game.credit}
+
+                    .game-link
+                        a.link-icon=game.link
+
+                    .icon-container
+                        i(class="fa-solid fa-xmark" onclick='closeOverlay("' + gameId + '")')
+
+                .game-description 
+                    p= game.description
+
+                    b Playing Instructions: 
+                    p= game.instructions
+
+                    b Contact the Developers: 
+                    p= game.contact
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+    // Title --------------------------------------------------------------------------------
+    section#museum-title-container 
+        .content-container 
+
+            h1 Museum Games
+        
+    // Games --------------------------------------------------------------------------------
+    section#museum-games 
+        .content-container 
+
+            for game of games
+                +displayGame(game)

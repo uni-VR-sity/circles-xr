@@ -197,6 +197,10 @@ router.post('/delete-circles-server', authenticated, centralServerController.del
 
 router.get('/get-servers', centralServerController.getServersList); // This is requested from outside servers and can not have authenticated access only
 
+// Museum Games Page Routes -----------------------------------------------------------------
+
+router.get('/museum-games', centralServerController.serveMuseumGames);
+
 // Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 
 // For forwarding magic links
