@@ -23,7 +23,7 @@ nav {
         @include start-flex;
         justify-self: start;
         grid-area: nav-logo;
-        padding: 0 $SECTION_PADDING;
+        padding: 15px $SECTION_PADDING;
 
         a {
             width: 125px;
@@ -143,11 +143,6 @@ nav {
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "nav-logo nav-profile"
                              "nav-items nav-items";
-
-        // Logo
-        .logo-container {
-            padding: 15px $SECTION_PADDING;
-        }
 
         // Navigation items
         .nav-items-container {
