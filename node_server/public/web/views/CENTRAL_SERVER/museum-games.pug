@@ -4,6 +4,7 @@ block content
 
     // Variables -----------------------------------------------------------------------------------------------------------------------------------
     - var game;
+    - var paragraph;
 
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +18,7 @@ block content
 
             b= game.name
 
-            p By #{game.credit}
+            p= game.credit
 
         .game-description-overlay.overlay-container(id=gameId)
             .overlay 
@@ -26,7 +27,7 @@ block content
                     img(src=imageSrc alt=altText)
 
                     h3= game.name 
-                    p By #{game.credit}
+                    p= game.credit
 
                     .game-link
                         a.link-icon=game.link
@@ -35,13 +36,16 @@ block content
                         i(class="fa-solid fa-xmark" onclick='closeOverlay("' + gameId + '")')
 
                 .game-description 
-                    p= game.description
+                    each paragraph in game.description.split('\n') 
+                        p= paragraph
 
                     b Playing Instructions: 
-                    p= game.instructions
+                    each paragraph in game.instructions.split('\n') 
+                        p= paragraph
 
                     b Contact the Developers: 
-                    p= game.contact
+                    each paragraph in game.instructions.split('\n')
+                        p= paragraph
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
 
