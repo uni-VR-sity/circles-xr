@@ -4,7 +4,9 @@ block content
 
     // Variables -----------------------------------------------------------------------------------------------------------------------------------
     - var game;
+    - var line;
     - var paragraph;
+    - var moreInformation
 
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
 
@@ -30,22 +32,59 @@ block content
                     p= game.credit
 
                     .game-link
-                        a.link-icon=game.link
+                        a(href=game.link).link-icon=game.link
 
                     .icon-container
                         i(class="fa-solid fa-xmark" onclick='closeOverlay("' + gameId + '")')
 
                 .game-description 
-                    each paragraph in game.description.split('\n') 
-                        p= paragraph
+                    for paragraph of game.description.split('\n\n')
+                        ul.paragraph 
+                            for line of paragraph.split('\n')
+                                if line.includes('<subtitle>')
+                                    i= line.split('<subtitle>')[1]
+                                else if line.includes('<list>')
+                                    li= line.split('<list>')[1]
+                                else 
+                                    p= line
 
                     b Playing Instructions: 
-                    each paragraph in game.instructions.split('\n') 
-                        p= paragraph
+                    for paragraph of game.instructions.split('\n\n')
+                        ul.paragraph 
+                            for line of paragraph.split('\n')
+                                if line.includes('<subtitle>')
+                                    i= line.split('<subtitle>')[1]
+                                else if line.includes('<list>')
+                                    li= line.split('<list>')[1]
+                                else 
+                                    p= line
 
-                    b Contact the Developers: 
-                    each paragraph in game.instructions.split('\n')
-                        p= paragraph
+                    if game.contact
+                        b Contact the Developer(s): 
+                        for paragraph of game.contact.split('\n\n')
+                            ul.paragraph 
+                                for line of paragraph.split('\n')
+                                    if line.includes('<subtitle>')
+                                        i= line.split('<subtitle>')[1]
+                                    else if line.includes('<list>')
+                                        li= line.split('<list>')[1]
+                                    else 
+                                        p= line
+
+                    if game.other 
+                        for moreInformation of game.other 
+                            b= moreInformation.title 
+
+                            for paragraph of moreInformation.description.split('\n\n')
+                                ul.paragraph 
+                                    for line of paragraph.split('\n')
+                                        if line.includes('<subtitle>')
+                                            i= line.split('<subtitle>')[1]
+                                        else if line.includes('<list>')
+                                            li= line.split('<list>')[1]
+                                        else 
+                                            p= line
+
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
 

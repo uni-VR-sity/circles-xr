@@ -128,7 +128,15 @@
 
                     b {
                         display: inline-block;
-                        margin-top: $MEDIUM_MARGIN;
+                    }
+
+                    .paragraph {
+                        margin-bottom: $MEDIUM_MARGIN;
+                        list-style-position: outside;
+
+                        li {
+                            margin-left: 17px;
+                        }
                     }
                 }
             }

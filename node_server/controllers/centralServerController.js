@@ -285,29 +285,36 @@ const serveMuseumGames = async (req, res, next) =>
 
   games[1] = {
     name: "Ambivalence",
-    credit: "Elis Joynes",
-    description: "------",
-    instructions: "------",
+    credit: "Elis Joynes, Dandan Tao, Kylie Duck, Emily Chen",
+    description: "Ambivalence is a puzzle platformer that plays on there being two halves of one whole puzzle that you switch between in order to get to the end.  ***Flashing Lights***",
+    instructions: "All you need to play is your keyboard and mouse. We also suggest that you have your volume on as there are sound effects.",
     link: "https://elisvoid.itch.io/ambivalence",
-    image: "default-circle-profile.png",
-    contact: '-----',
+    image: "AmbivalenceCover.png",
+    other: [{
+      title: "Attributions",
+      description: "<list>Birds Sound Effect: https://freesound.org/people/hargissssound/sounds/345851/\n<list>Light Switch Sound Effect: https://freesound.org/people/FillSoko/sounds/257958/\n<list>Background music: https://soundimage.org/looping-music/",
+    }],
   }
 
   games[2] = {
     name: "Avian RumbLOL",
-    credit: "------",
-    description: "------",
-    instructions: "------",
-    link: "------",
-    image: "default-circle-profile.png",
-    contact: "------",
+    credit: "Patrick Boyer",
+    description: "In Avian RumbLOL, you're a bird trying to find letters to spell out \"LOL\", \"LMAO\", and \"ROFL\" before anyone else does. Be the first to get all the letters in the right order, and you win!",
+    instructions: "<subtitle>Controls:\n<list>For the Chicken: Use the \"WASD\" keys to move around.\n<list>For the Pigeon: Use the arrow keys (← ↑ → ↓) to fly in different directions.\n<list>Got a Gamepad? You can use it to control the chicken if it's connected.\n<list>Oops, Need a Do-Over? Press \"P\" to start the game again.\n<list>All Done Playing? Press \"Esc\" to quit the game.\n\n<subtitle>Rules:\n<list>Wrap-Around Magic: Your bird can magically pop from one side of the screen to the other!\n<list>Letter Hunt: Grab letters as they pop up. But watch out! Grabbing a letter makes a grumpy duck come after you.\n<list>Duck Trouble: If a grumpy duck catches you, you'll lose your letters and have to start over.\n<list>Invincible Bird: After a duck bumps into you, you'll be invincible for a short time. You'll know because your bird will look really sad but don't worry, it can't be hurt during this time.\n<list>Speedy Feathers: Every time you complete a word sequence, you get a little faster. Zoom zoom!\n<list>Bumping Birds: The chicken and pigeon can bump into each other. It's all part of the fun!",
+    link: "https://pboyer2.itch.io/avian-rumblol",
+    image: "AvianRumbLOLCover.png",
+    contact: "boyer.patrick@gmail.com",
+    other: [{
+      title: "Responsible AI Use Disclosure:",
+      description: "The description and playing instructions for Avian RumbLOL were crafted with the assistance of an Artificial Intelligence (AI) tool. This AI, developed by OpenAI, provided guidance on language simplification and creativity to ensure the content is engaging and understandable for a target audience of K-6 students. I am committed to using AI responsibly and transparently, enhancing my creative processes while maintaining the integrity and safety of the content. I reviewed the synthetic wording and adjusted where needed to produce the final version of the content. For any questions or concerns about the use of AI, please feel free to reach out to me.",
+    }],
   }
 
   games[3] = {
     name: "Deck of Laughs",
     credit: "Tyson Moyes, Michael Dillabough, Jason Hein, David Dunkelman, Mathieu O'Brien",
     description: "Tactical Card Comedy! Use your spell cards to cast jokes onto the crowd of gremlins to make them laugh. Beware, the hexler will cast his own spells and end the laughter.\nBug note: In the end screen, if your mouse disappears after clicking, hit TAB on the keyboard, your mouse should reappear.",
-    instructions: "Extract the files from the zip. In-game, click on the card you wish to read & select. Click on the location in the crowd to cast the spell. Right click to cancel the spell and to deselect the card. When you are done your turn, click the 'end turn' button.",
+    instructions: "Extract the files from the zip. In-game, click on the card you wish to read & select. Click on the location in the crowd to cast the spell. Right click to cancel the spell and to deselect the card. When you are done your turn, click the \"end turn\" button.",
     link: "https://skypyre.itch.io/deck-of-laughs",
     image: "DeckOfLaughsCover.png",
     contact: "general@skypyre.com",
@@ -317,59 +324,55 @@ const serveMuseumGames = async (req, res, next) =>
     name: "Just a Jester Jesting",
     credit: "------",
     description: "Can you perform enough tricks to survive the king's wrath?\nA 2D and 3D fusion game where you only need a mouse to play. Help the jester be funny for the court\nSurvive as long as you can while keeping all your lives (hearts), the fast paced mini games in the bottom half of the screen will test your skill. Inspired by Nintendo DS games likes Wario Ware and Rhythm Heaven. Keep up!",
-    instructions: "Mouse: Use the left click to interact with elements on the bottom half of the screen\nClick fast, drag, and time your clicks to stay alive.",
+    instructions: "Mouse: Use the left click to interact with elements on the bottom half of the screen. Click fast, drag, and time your clicks to stay alive.",
     link: "https://dcole.itch.io/just-a-jester-jesting",
-    image: "default-circle-profile.png",
-    contact: "------",
+    image: "JustAJesterJestingCover.png",
   }
 
   games[5] = {
     name: "Sea Barks",
     credit: "Anastacia Gorbenko, Msgana Ocabazgi, Sam Lamoureux, Zoe Prevost",
     description: "In this underwater adventure, you play the role of Neptune, an eager puppy looking to please his owner at his new underwater farm SeaBarks. Neptune is responsible for putting away the sea creatures, and protecting them from hungry sharks. Get the sea creatures in to correct pens and you will be rewarded with treats.",
-    instructions: "Use your keyboard arrows to move around, and the space bar to bark!\nGuide sea creatures into their pens, and the catch? Neptune holds himself to good boy standards and wants to guide a minimum number of sea creatures to safety (shown on each pen). Neptune's hard work does not go unnoticed, he receives a treat before embarking on his next duty.\nBarking can be used on the sea creatures and the shark to yield different results. For the sea creatures, barking has different effects on each creature (find out more on hints screen) and barking at the shark scares them away when they are attacking.\nThe shark will think about its meal choice for a few seconds before they attack, be prepared to defend that creature! If the shark eats too many and you can no longer meet the farm’s minimum requirements, it's level over. Don’t worry, Neptune's owner always gives him another shot!",
+    instructions: "<list>Use your keyboard arrows to move around, and the space bar to bark!\n<list>Guide sea creatures into their pens, and the catch? Neptune holds himself to good boy standards and wants to guide a minimum number of sea creatures to safety (shown on each pen). Neptune's hard work does not go unnoticed, he receives a treat before embarking on his next duty.\n<list>Barking can be used on the sea creatures and the shark to yield different results. For the sea creatures, barking has different effects on each creature (find out more on hints screen) and barking at the shark scares them away when they are attacking.\n<list>The shark will think about its meal choice for a few seconds before they attack, be prepared to defend that creature! If the shark eats too many and you can no longer meet the farm’s minimum requirements, it's level over. Don’t worry, Neptune's owner always gives him another shot!",
     link: "https://stacy-g.itch.io/sea-barks",
     image: "SeaBarksCover.png",
-    contact: "------",
   }
 
   games[6] = {
-    name: "Shooting range (VR)",
+    name: "Shooting Range (VR)",
     credit: "Anastacia Gorbenko",
     description: "------",
     instructions: "------",
     link: "------",
     image: "ShootingRangeCover.png",
-    contact: "------",
+    contact: "anastaciagorbenko@yahoo.ca",
   }
 
   games[7] = {
     name: "Super Laugh Bros",
-    credit: "------",
+    credit: "Forest Kristoffer Ziven Anderson, Matt Penny, Matt Diener",
     description: "You're jesters tasked with pleasing the Lord of the land... with laughter! Please his requests for humor, but stay out of his way if he runs at you, or you'll be pushed out of the arena.",
-    instructions: "Controller controls:\nMove: left stick\nJump: Xbox A / Sony cross / Nintendo B\nAttack: Xbox X / Sony square / Nintendo Y\n\nKeyboard controls:\nMove: WASD / IJKL\nJump: E / U\nAttack: Q / O",
+    instructions: "<subtitle>Controller Controls:\n<list>Move: Left stick\n<list>Jump: Xbox A / Sony cross / Nintendo B\n<list>Attack: Xbox X / Sony square / Nintendo Y\n\n<subtitle>Keyboard Controls:\n<list>Move: WASD / IJKL\n<list>Jump: E / U\n<list>Attack: Q / O",
     link: "https://globalgamejam.org/games/2024/super-laugh-bros-6",
-    image: "default-circle-profile.png",
-    contact: "------",
+    image: "SuperLaughBrosCover.png",
   }
 
   games[8] = {
     name: "Wattson's Way Home",
-    credit: "------",
-    description: "------",
-    instructions: "------",
+    credit: "Alex Di Nobile, Cole McMullin, Emma Souannhaphanh, Cohen Ly",
+    description: "Wattson’s Way Home is a 2D platformer game about helping a little spark find his way home. One day during a thunderstorm, Wattson fell out of a lightning bolt and was sent crashing into an unsuspecting house. Lost in a strange place filled with dust bunnies and leaky pipes, Wattson only knows that he needs to make it back home. Help find Wattson’s Way Home!",
+    instructions: "Use arrow keys to move, Space to jump, E/Enter to interact",
     link: "https://alexdinobile.itch.io/wattsons-way-home",
-    image: "default-circle-profile.png",
-    contact: "------",
+    image: "WattsonsWayHomeCover.png",
   }
 
   games[9] = {
     name: "Wend",
-    credit: "Chrita B",
-    description: "Wend is a single player, top-down perspective game about exploration where you, the player, will navigate a complex labyrinth, lighting your way with a single torch as you collect relics and wander towards the center. The catch, however, is that the brightness and size of your torch light is dependent on your state of motion",
-    instructions: "Controller:\nUse the left stick to move around the labyrinth\nUse the right stick to move the camera (only enabled when you're standing still!)\nPress 'A' to pick up and drop gems, and to collect relics\nPress Start to pause\n\nKeyboard Controls:\nWASD to move\nArrow keys to move camera\nB key for picking up/dropping objects and any other action button prompts\nTAB to pause (arrow keys to navigate menus while paused)",
+    credit: "Christa Buttera, Matt Donoghue, Quinn Hentschel, Heather Hennessey",
+    description: "Wend is a single player, top-down perspective game about exploration where you, the player, will navigate a complex labyrinth, lighting your way with a single torch as you collect relics and wander towards the center. The catch, however, is that the brightness and size of your torch light is dependent on your state of motion: the torch burns low and small while you run through the labyrinth, and burns bright and large while you stand still. Luminescent gems can be found throughout the labyrinth and allow you to mark your way as you proceed along the dark and mysterious paths. Uncover the mysteries of these unexplored depths as you wend your way through the labyrinth, and recover ancient relics to discover the secrets that lie at its center.",
+    instructions: "You, the player, have the ability to control your torch light through the game's movement mechanics: while moving, only a small radius around your avatar is illuminated. While stationary, however, your torch is raised automatically to expand this radius to the neighbouring pathways to view a greater portion of the labyrinth. While playing, you can discover and collect emissive gems hidden throughout the labyrinth to help you find your way. These gems illuminate a small area around themselves, and, as such, can be placed anywhere in the labyrinth to create strategic paths to specific areas or landmarks that you deem significant.\n\n<subtitle>Controller Controls:\nUse the left stick to move around the labyrinth\nUse the right stick to move the camera (only enabled when you're standing still!)\nPress 'A' to pick up and drop gems, and to collect relics\nPress Start to pause\n\n<subtitle>Keyboard Controls:\nWASD to move\nArrow keys to move camera\nB key for picking up/dropping objects and any other action button prompts\nTAB to pause (arrow keys to navigate menus while paused)",
     link: "https://christabuttera.itch.io/wend",
-    image: "default-circle-profile.png",
+    image: "WendCover.png",
     contact: "------",
   }
 
