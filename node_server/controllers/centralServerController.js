@@ -330,6 +330,15 @@ const serveMuseumGames = async (req, res, next) =>
   }
 
   games[5] = {
+    name: "Rooting for Carrots",
+    credit: "Avery Babineau",
+    description: "Rooting for carrots is a rpg-based farming simulator created for the 2022 Global Game Jam. The game jam theme was roots.",
+    instructions: "Use the arrow keys to move. Find the garden. In the garden, left click to plant, watch the carrots grow and right click to harvest the carrots.",
+    link: "https://avocadoscancode.itch.io/rooting-for-carrots",
+    image: "RootingForCarrotsCover.png",
+  }
+
+  games[6] = {
     name: "Sea Barks",
     credit: "Anastacia Gorbenko, Msgana Ocabazgi, Sam Lamoureux, Zoe Prevost",
     description: "In this underwater adventure, you play the role of Neptune, an eager puppy looking to please his owner at his new underwater farm SeaBarks. Neptune is responsible for putting away the sea creatures, and protecting them from hungry sharks. Get the sea creatures in to correct pens and you will be rewarded with treats.",
@@ -338,7 +347,7 @@ const serveMuseumGames = async (req, res, next) =>
     image: "SeaBarksCover.png",
   }
 
-  games[6] = {
+  games[7] = {
     name: "Shooting Range (VR)",
     credit: "Anastacia Gorbenko",
     description: "------",
@@ -348,7 +357,7 @@ const serveMuseumGames = async (req, res, next) =>
     contact: "anastaciagorbenko@yahoo.ca",
   }
 
-  games[7] = {
+  games[8] = {
     name: "Super Laugh Bros",
     credit: "Forest Kristoffer Ziven Anderson, Matt Penny, Matt Diener",
     description: "You're jesters tasked with pleasing the Lord of the land... with laughter! Please his requests for humor, but stay out of his way if he runs at you, or you'll be pushed out of the arena.",
@@ -357,7 +366,7 @@ const serveMuseumGames = async (req, res, next) =>
     image: "SuperLaughBrosCover.png",
   }
 
-  games[8] = {
+  games[9] = {
     name: "Wattson's Way Home",
     credit: "Alex Di Nobile, Cole McMullin, Emma Souannhaphanh, Cohen Ly",
     description: "Wattson’s Way Home is a 2D platformer game about helping a little spark find his way home. One day during a thunderstorm, Wattson fell out of a lightning bolt and was sent crashing into an unsuspecting house. Lost in a strange place filled with dust bunnies and leaky pipes, Wattson only knows that he needs to make it back home. Help find Wattson’s Way Home!",
@@ -366,7 +375,7 @@ const serveMuseumGames = async (req, res, next) =>
     image: "WattsonsWayHomeCover.png",
   }
 
-  games[9] = {
+  games[10] = {
     name: "Wend",
     credit: "Christa Buttera, Matt Donoghue, Quinn Hentschel, Heather Hennessey",
     description: "Wend is a single player, top-down perspective game about exploration where you, the player, will navigate a complex labyrinth, lighting your way with a single torch as you collect relics and wander towards the center. The catch, however, is that the brightness and size of your torch light is dependent on your state of motion: the torch burns low and small while you run through the labyrinth, and burns bright and large while you stand still. Luminescent gems can be found throughout the labyrinth and allow you to mark your way as you proceed along the dark and mysterious paths. Uncover the mysteries of these unexplored depths as you wend your way through the labyrinth, and recover ancient relics to discover the secrets that lie at its center.",
