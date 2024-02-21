@@ -9,6 +9,7 @@
     <!-- Game scripts -->
     <script src="/worlds/Asteroid-Field/scripts/game-manager.js"></script>
     <script src="/worlds/Asteroid-Field/scripts/player.js"></script>
+    <script src="/worlds/Asteroid-Field/scripts/player-wasd.js"></script>
     <script src="/worlds/Asteroid-Field/scripts/asteroid.js"></script>
     <script src="/worlds/Asteroid-Field/scripts/asteroid-spawner.js"></script>
 
@@ -39,10 +40,11 @@
 
       <!-- Player -->
       <a-entity id="player"
-                player>
+                position="0 0 0"
+                player="maxCoordinates:10 10 0; minCoordinates:-10 0 0;">
 
         <a-entity camera
-                  look-controls>
+                  look-controls="mouseEnabled:false;">
         </a-entity>
 
       </a-entity>
