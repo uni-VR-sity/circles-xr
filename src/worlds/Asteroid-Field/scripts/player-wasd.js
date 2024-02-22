@@ -9,17 +9,15 @@ AFRAME.registerComponent('player-wasd',
 {
     schema: 
     {
-        acceleration: {type: 'number', default: 1.5},
-        active: {type: 'boolean', default: true},
+        acceleration: {type: 'number', default: 1},
         maxCoordinates: {type: 'vec3'},
         minCoordinates: {type: 'vec3'},
     },
 
     init: function()
     {
-        const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
+        const element = this.el;
+        const schema = this.data;
 
         this.keyDown = this.keyDown.bind(this);
         this.keyUp = this.keyUp.bind(this);
@@ -29,13 +27,16 @@ AFRAME.registerComponent('player-wasd',
         this.velocity = new THREE.Vector3();
         this.xAxis = 0;
         this.yAxis = 0;
+
+        // Setting up event listeners for WASD and arrow keys
+        window.addEventListener('keydown', this.keyDown);
+        window.addEventListener('keyup', this.keyUp);
     },
 
     tick: function(time, deltaTime)
     {
-        const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
+        const element = this.el;
+        const schema = this.data;
 
         deltaTime /= 1000;
 
@@ -72,8 +73,6 @@ AFRAME.registerComponent('player-wasd',
             z: oldPos.z += this.velocity.z,
         };
 
-        console.log(schema.maxCoordinates.x);
-
         // Checking that player is within bounds
         if (newPos.x > schema.maxCoordinates.x)
         {
@@ -98,38 +97,6 @@ AFRAME.registerComponent('player-wasd',
             y: newPos.y,
             z: newPos.z,
         });
-    },
-
-    update: function(oldData)
-    {
-        const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
-        
-        // If set to active, add player movement event listeners
-        // Otherwise remove event listeners
-        if (schema.active)
-        {
-            this.setUpEventListeners();
-        }
-        else
-        {
-            this.removeEventListeners();
-        }
-    },
-
-    // Setting up event listeners for WASD and arrow keys
-    setUpEventListeners: function()
-    {
-        window.addEventListener('keydown', this.keyDown);
-        window.addEventListener('keyup', this.keyUp);
-    },
-
-    // Removing event listeners for WASD and arrow keys
-    removeEventListeners: function()
-    {
-        window.removeEventListener('keydown', this.keyDown);
-        window.removeEventListener('keyup', this.keyUp);
     },
 
     // Checking what key is pressed

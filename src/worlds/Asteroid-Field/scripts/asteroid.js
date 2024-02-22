@@ -135,9 +135,8 @@ AFRAME.registerComponent('asteroid',
 
     init: function()
     {
-        const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
+        const element = this.el;
+        const schema = this.data;
 
         // Keeping track if asteroid hits player
         var playerHit = false;

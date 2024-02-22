@@ -8,43 +8,78 @@ AFRAME.registerComponent('player',
 {
     schema: 
     {
-        canMove: {type: 'boolean', default: true},
-        maxCoordinates: {type: 'vec3'},
-        minCoordinates: {type: 'vec3'},
+
     },
 
     init: function()
     {
-        const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
-    },
+        const element = this.el;
+        const schema = this.data;
 
-    update: function()
-    {
-        const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
+        this.playerHeight = 10;
 
-        // If playing on desktop,
-        // If player can move, set movement component to be active
-        // Otherwise deactivate it
+        // If player on desktop, setting up WASD and arrow keys for movement
+        // Otherwise, waiting for user to enter vr and getting their height from the camera
         if (AFRAME.utils.device.checkHeadsetConnected() === false)
         {
-            if (schema.canMove)
-            {
-                element.setAttribute('player-wasd', {
-                    active: true,
-                    maxCoordinates: schema.maxCoordinates,
-                    minCoordinates: schema.minCoordinates,
-                });
-            }
-            else
-            {
-                element.setAttribute('player-wasd', {
-                    active: false,
-                });
-            }
+            element.setAttribute('player-wasd', {
+                active: true,
+
+                maxCoordinates: {
+                    x: this.playerHeight * 2, 
+                    y: this.playerHeight * 2.5, 
+                    z: 0
+                },
+
+                minCoordinates: {
+                    x: -this.playerHeight * 2, 
+                    y: this.playerHeight / 2, 
+                    z: 0
+                },
+            });
+
+            document.getElementById('spawner').setAttribute('geometry', {
+                height: this.playerHeight * 2.5,
+                width: this.playerHeight * 4,
+            });
+
+            document.getElementById('spawner').setAttribute('position', {
+                x: 0,
+                y: ((this.playerHeight * 2.5) / 2) + (this.playerHeight / 2),
+                z: -28,
+            });
         }
+        else
+        {
+            document.querySelector('a-scene').addEventListener('enter-vr', function () 
+            {
+                setTimeout(function() 
+                {
+                    this.playerHeight = element.querySelector('[camera]').getAttribute('position').y;
+
+                    document.getElementById('debugger').setAttribute('text', {
+                        value: this.playerHeight,
+                    });
+
+                    document.getElementById('spawner').setAttribute('geometry', {
+                        height: this.playerHeight * 2.5,
+                        width: this.playerHeight * 4,
+                    });
+
+                    document.getElementById('spawner').setAttribute('position', {
+                        x: 0,
+                        y: ((this.playerHeight * 2.5) / 2) + (this.playerHeight / 2),
+                        z: -28,
+                    });
+
+                }, 500);
+             });
+        }
+    },
+
+    // Returning player height
+    getPlayerHeight: function()
+    {
+        return this.playerHeight;
     },
 });

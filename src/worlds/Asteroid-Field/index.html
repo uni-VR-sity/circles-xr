@@ -13,6 +13,9 @@
     <script src="/worlds/Asteroid-Field/scripts/asteroid.js"></script>
     <script src="/worlds/Asteroid-Field/scripts/asteroid-spawner.js"></script>
 
+    <!-- Physics script -->
+    <script src="/global/js/libs/aframe-physics-system.min.js"></script>
+
   </head>
   <body>
 
@@ -23,7 +26,7 @@
     <circles-NA-start-ui/>
 
     <!-- a-scene with 'circles-properties' component (no networking) [REQUIRED] -->
-    <a-scene circles_NN_scene_properties>
+    <a-scene circles_NN_scene_properties physics="debug:true;">
       <a-assets>
 
       </a-assets>
@@ -33,6 +36,19 @@
 
       <!---------------------------------------------------------------------------------------------------------------------->
 
+      <!-- Debugger -->
+      <a-entity position="10 3 -12"
+                rotation="0 -40 0"
+                geometry="primitive:plane; height:5; width:5;"
+                material="color:blue">
+
+        <a-entity id="debugger"
+                  text="align:center; width:5; wrapCount:25"
+                  position="0 0 0.01">
+        </a-entity>
+              
+      </a-entity>
+
       <!-- Game manager -->
       <a-entity id="game-manager"
                 game-manager>
@@ -41,13 +57,15 @@
       <!-- Player -->
       <a-entity id="player"
                 position="0 0 0"
-                player="maxCoordinates:10 10 0; minCoordinates:-10 0 0;">
-
+                player>
+      
         <a-entity camera
-                  look-controls="mouseEnabled:false;">
+                  look-controls="mouseEnabled:false;"
+                  static-body="shape:sphere; sphereRadius:0.2">
         </a-entity>
 
       </a-entity>
+      
 
       <!-- Start screen -->
       <a-entity id="start-screen">
@@ -60,15 +78,14 @@
       <!-- Asteroid spawner -->
       <a-entity id="spawner"
                 asteroid-spawner
-                geometry="primitive:plane; height:10; width:10;"
-                position="0 5 -28"
+                geometry="primitive:plane;"
                 visible="true">
       </a-entity>
 
       <!-- Asteroid container -->
       <a-entity id="asteroid-container">
 
-        <a-entity asteroid="startPos:0 5 -28; endPos:0 5 2; startRotation:10 25 70 ; rotationAxes:1 0 0 ; speed: 0.01">
+        <a-entity asteroid="startPos:0 10 -28; endPos:0 10 2; startRotation:10 25 70 ; rotationAxes:1 0 0 ; speed: 0.01">
         </a-entity>
 
       </a-entity>
@@ -85,7 +102,7 @@
       <a-entity geometry="primitive:plane; height:10; width:30;"
                 position="0 0 -13"
                 rotation="-90 90 0"
-                material="color:black;">
+                material="color:blue;">
       </a-entity>
 
 
