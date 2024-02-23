@@ -29,6 +29,17 @@ function setUpAsteroid(asteroid, schema)
         y: schema.startRotation.y,
         z: schema.startRotation.z,
     });
+
+    // Physics
+    asteroid.setAttribute('static-body', {
+        shape: 'cube',
+    });
+
+    asteroid.setAttribute('physics-collider', {});
+
+    asteroid.setAttribute('collision-filter', {
+        collidesWith: 'player',
+    });
 }
 
 // ------------------------------------------------------------------------------------------
@@ -90,16 +101,6 @@ function moveAsteroid(asteroid, schema)
 
 // ------------------------------------------------------------------------------------------
 
-// Checking if asteroid collided with player
-// If it has, decrease player lives and return true
-// Otherwise, return false
-function checkCollision()
-{
-    return false;
-}
-
-// ------------------------------------------------------------------------------------------
-
 // Checking if asteroid is at the end point
 // If it is, delete asteroid and, if the asteroid has not hit the player, increase player score
 function checkPosition(position, asteroid, schema, playerHit)
@@ -141,8 +142,19 @@ AFRAME.registerComponent('asteroid',
         // Keeping track if asteroid hits player
         var playerHit = false;
 
-        // Setting up enitity with model, position, scale, and rotation
+        // Setting up enitity with model, position, scale, rotation, and physics
         setUpAsteroid(element, schema);
+
+        // Listening for collision with player 
+        // If there is a collision, decreasing player lives
+        element.addEventListener('collisions', function(event)
+        {
+            if (event.detail.els.length > 0)
+            {
+                console.log('player hit');
+                playerHit = true;
+            }
+        });
 
         setTimeout(function()
         {
@@ -152,14 +164,11 @@ AFRAME.registerComponent('asteroid',
                 // Moving asteroid
                 var asteroidPos = moveAsteroid(element, schema);
 
-                // Checking if asteroid collided with player
-                playerHit = checkCollision();
-
                 // Checking if asteroid is at the end point
                 checkPosition(asteroidPos, element, schema, playerHit);
 
             }, 1);
 
-        }, 5000)
+        }, 0)
     },
 });

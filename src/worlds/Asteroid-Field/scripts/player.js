@@ -23,15 +23,13 @@ AFRAME.registerComponent('player',
         if (AFRAME.utils.device.checkHeadsetConnected() === false)
         {
             element.setAttribute('player-wasd', {
-                active: true,
-
-                maxCoordinates: {
+                maxCoordinate: {
                     x: this.playerHeight * 2, 
                     y: this.playerHeight * 2.5, 
                     z: 0
                 },
 
-                minCoordinates: {
+                minCoordinate: {
                     x: -this.playerHeight * 2, 
                     y: this.playerHeight / 2, 
                     z: 0

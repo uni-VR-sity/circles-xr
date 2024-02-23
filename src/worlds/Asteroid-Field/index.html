@@ -13,8 +13,9 @@
     <script src="/worlds/Asteroid-Field/scripts/asteroid.js"></script>
     <script src="/worlds/Asteroid-Field/scripts/asteroid-spawner.js"></script>
 
-    <!-- Physics script -->
+    <!-- Physics scripts -->
     <script src="/global/js/libs/aframe-physics-system.min.js"></script>
+    <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
 
   </head>
   <body>
@@ -56,12 +57,13 @@
 
       <!-- Player -->
       <a-entity id="player"
-                position="0 0 0"
+                position="0 10 0"
                 player>
       
         <a-entity camera
                   look-controls="mouseEnabled:false;"
-                  static-body="shape:sphere; sphereRadius:0.2">
+                  static-body="shape:sphere; sphereRadius:0.2"
+                  collision-filter="group:player">
         </a-entity>
 
       </a-entity>
@@ -85,7 +87,7 @@
       <!-- Asteroid container -->
       <a-entity id="asteroid-container">
 
-        <a-entity asteroid="startPos:0 10 -28; endPos:0 10 2; startRotation:10 25 70 ; rotationAxes:1 0 0 ; speed: 0.01">
+        <a-entity asteroid="startPos:0 10 -28; endPos:0 10 2; startRotation:10 25 70; rotationAxes:1 0 0; speed: 0.01">
         </a-entity>
 
       </a-entity>

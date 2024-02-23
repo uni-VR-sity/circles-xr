@@ -9,9 +9,9 @@ AFRAME.registerComponent('player-wasd',
 {
     schema: 
     {
-        acceleration: {type: 'number', default: 1},
-        maxCoordinates: {type: 'vec3'},
-        minCoordinates: {type: 'vec3'},
+        acceleration: {type: 'number', default: 1.5},
+        maxCoordinate: {type: 'vec3'},
+        minCoordinate: {type: 'vec3'},
     },
 
     init: function()
@@ -74,22 +74,22 @@ AFRAME.registerComponent('player-wasd',
         };
 
         // Checking that player is within bounds
-        if (newPos.x > schema.maxCoordinates.x)
+        if (newPos.x > schema.maxCoordinate.x)
         {
-            newPos.x = schema.maxCoordinates.x;
+            newPos.x = schema.maxCoordinate.x;
         }
-        else if (newPos.x < schema.minCoordinates.x)
+        else if (newPos.x < schema.minCoordinate.x)
         {
-            newPos.x = schema.minCoordinates.x;
+            newPos.x = schema.minCoordinate.x;
         }
 
-        if (newPos.y > schema.maxCoordinates.y)
+        if (newPos.y > schema.maxCoordinate.y)
         {
-            newPos.y = schema.maxCoordinates.y;
+            newPos.y = schema.maxCoordinate.y;
         }
-        else if (newPos.y < schema.minCoordinates.y)
+        else if (newPos.y < schema.minCoordinate.y)
         {
-            newPos.y = schema.minCoordinates.y;
+            newPos.y = schema.minCoordinate.y;
         }
 
         element.setAttribute('position', {
