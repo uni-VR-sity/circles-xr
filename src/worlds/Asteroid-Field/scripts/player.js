@@ -6,9 +6,9 @@
 
 AFRAME.registerComponent('player', 
 {
-    schema: 
+    scheme: 
     {
-
+        canMove: {type: 'boolean', default: false},
     },
 
     init: function()
@@ -18,66 +18,140 @@ AFRAME.registerComponent('player',
 
         this.playerHeight = 10;
 
-        // If player on desktop, setting up WASD and arrow keys for movement
-        // Otherwise, waiting for user to enter vr and getting their height from the camera
-        if (AFRAME.utils.device.checkHeadsetConnected() === false)
+        // If player on desktop, setting player position, movement (WASD and arrow keys), and cursor interaction
+        // Otherwise, setting up controller interaction and waiting for user to enter vr to get their height from the camera
+        if (!AFRAME.utils.device.checkHeadsetConnected())
         {
-            element.setAttribute('player-wasd', {
-                maxCoordinate: {
-                    x: this.playerHeight * 2, 
-                    y: this.playerHeight * 2.5, 
-                    z: 0
-                },
-
-                minCoordinate: {
-                    x: -this.playerHeight * 2, 
-                    y: this.playerHeight / 2, 
-                    z: 0
-                },
-            });
-
-            document.getElementById('spawner').setAttribute('geometry', {
-                height: this.playerHeight * 2.5,
-                width: this.playerHeight * 4,
-            });
-
-            document.getElementById('spawner').setAttribute('position', {
+            // Position
+            element.setAttribute('position', {
                 x: 0,
-                y: ((this.playerHeight * 2.5) / 2) + (this.playerHeight / 2),
-                z: -28,
+                y: this.playerHeight,
+                z: 0,
             });
+
+            // Movement
+            var minBounds = {
+                x: -this.playerHeight * 2, 
+                y: this.playerHeight / 2, 
+                z: 0
+            }
+
+            var maxBounds = {
+                x: this.playerHeight * 2, 
+                y: this.playerHeight * 2.5, 
+                z: 0
+            };
+
+            element.setAttribute('player-wasd', {
+                active: false,
+                minBounds: minBounds,
+                maxBounds: maxBounds,
+            });
+
+            // Cursor interaction
+            var cursor = document.createElement('a-entity');
+            
+            cursor.setAttribute('cursor', {
+                rayOrigin: 'mouse',
+            });
+
+            cursor.setAttribute('raycaster', {
+                objects: '.interactive', 
+                far: 20,
+                interval: 30, 
+                useWorldCoordinates: true,
+            });
+
+            element.querySelector('[camera]').appendChild(cursor);
+
+            // Emitting event that player is ready
+            element.emit('player-ready', {playerHeight: this.playerHeight}, false);
         }
         else
         {
-            document.querySelector('a-scene').addEventListener('enter-vr', function () 
+            // Left Controller interaction
+            var leftController = document.createElement('a-entity');
+            leftController.setAttribute('id', 'left-controller');
+                    
+            leftController.setAttribute('laser-controls',{
+                hand: 'left', 
+                model: false,
+            });
+
+            leftController.setAttribute('hand-controls', {
+                hand: 'left', 
+                handModelStyle: 'lowPoly',
+            });
+
+            leftController.setAttribute('raycaster', {
+                objects: '.interactive', 
+                far: 20,
+                interval: 30, 
+                showLine: true, 
+                useWorldCoordinates: true,
+            });
+            
+            element.appendChild(leftController);
+
+            // Right Controller interaction
+            var rightController = document.createElement('a-entity');
+            rightController.setAttribute('id', 'right-controller');
+
+            rightController.setAttribute('laser-controls', { 
+                hand: 'right', 
+                model: false});
+
+            rightController.setAttribute('hand-controls', {
+                hand: 'right', 
+                handModelStyle: 'lowPoly'});
+
+            rightController.setAttribute('raycaster', {
+                objects: '.interactive', 
+                far: 20,
+                interval: 30, 
+                showLine: true, 
+                useWorldCoordinates: true
+            });
+
+            element.appendChild(rightController);
+
+            // Player height
+            document.querySelector('a-scene').addEventListener('enter-vr', function() 
             {
                 setTimeout(function() 
                 {
                     this.playerHeight = element.querySelector('[camera]').getAttribute('position').y;
-
-                    document.getElementById('debugger').setAttribute('text', {
-                        value: this.playerHeight,
-                    });
-
-                    document.getElementById('spawner').setAttribute('geometry', {
-                        height: this.playerHeight * 2.5,
-                        width: this.playerHeight * 4,
-                    });
-
-                    document.getElementById('spawner').setAttribute('position', {
-                        x: 0,
-                        y: ((this.playerHeight * 2.5) / 2) + (this.playerHeight / 2),
-                        z: -28,
-                    });
+                    
+                    // Emitting event that player is ready
+                    element.emit('player-ready', {playerHeight: this.playerHeight}, false);
 
                 }, 500);
-             });
+            });
         }
     },
 
-    // Returning player height
-    getPlayerHeight: function()
+    update: function(oldData)
     {
-        return this.playerHeight;
+        const element = this.el;
+        const schema = this.data;
+        
+        // If player on desktop,
+        //      If player can move, activating player-wasd component
+        //      Otherwise, disabling it
+        if (AFRAME.utils.device.checkHeadsetConnected() === false)
+        {
+            if (schema.canMove && !oldData.canMove)
+            {
+                element.setAttribute('player-wasd', {
+                    active: true,
+                });
+            }
+            else if (!schema.canMove && oldData.canMove)
+            {
+                element.setAttribute('player-wasd', {
+                    active: false,
+                });
+            }
+        }
     },
 });

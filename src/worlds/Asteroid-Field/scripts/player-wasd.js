@@ -9,9 +9,10 @@ AFRAME.registerComponent('player-wasd',
 {
     schema: 
     {
+        active: {type: 'boolean', default: true},
         acceleration: {type: 'number', default: 1.5},
-        maxCoordinate: {type: 'vec3'},
-        minCoordinate: {type: 'vec3'},
+        minBounds: {type: 'vec3'},
+        maxBounds: {type: 'vec3'},
     },
 
     init: function()
@@ -28,9 +29,28 @@ AFRAME.registerComponent('player-wasd',
         this.xAxis = 0;
         this.yAxis = 0;
 
-        // Setting up event listeners for WASD and arrow keys
-        window.addEventListener('keydown', this.keyDown);
-        window.addEventListener('keyup', this.keyUp);
+        // Setting up movement keys if component is active
+        if (schema.active)
+        {
+            this.setUpMovementKeys();
+        }
+    },
+
+    update: function (oldData)
+    {
+        const element = this.el;
+        const schema = this.data;
+
+        // If component has become active, listen for movement key input
+        // Otherwise, disable movement key input
+        if (schema.active && !oldData.active)
+        {
+            this.setUpMovementKeys();
+        }
+        else if (!schema.active && oldData.active)
+        {
+            this.disableMovementKeys();
+        }
     },
 
     tick: function(time, deltaTime)
@@ -74,22 +94,22 @@ AFRAME.registerComponent('player-wasd',
         };
 
         // Checking that player is within bounds
-        if (newPos.x > schema.maxCoordinate.x)
+        if (newPos.x > schema.maxBounds.x)
         {
-            newPos.x = schema.maxCoordinate.x;
+            newPos.x = schema.maxBounds.x;
         }
-        else if (newPos.x < schema.minCoordinate.x)
+        else if (newPos.x < schema.minBounds.x)
         {
-            newPos.x = schema.minCoordinate.x;
+            newPos.x = schema.minBounds.x;
         }
 
-        if (newPos.y > schema.maxCoordinate.y)
+        if (newPos.y > schema.maxBounds.y)
         {
-            newPos.y = schema.maxCoordinate.y;
+            newPos.y = schema.maxBounds.y;
         }
-        else if (newPos.y < schema.minCoordinate.y)
+        else if (newPos.y < schema.minBounds.y)
         {
-            newPos.y = schema.minCoordinate.y;
+            newPos.y = schema.minBounds.y;
         }
 
         element.setAttribute('position', {
@@ -97,6 +117,20 @@ AFRAME.registerComponent('player-wasd',
             y: newPos.y,
             z: newPos.z,
         });
+    },
+
+    // Setting up event listeners for WASD and arrow keys
+    setUpMovementKeys: function()
+    {
+        window.addEventListener('keydown', this.keyDown);
+        window.addEventListener('keyup', this.keyUp);
+    },
+
+    // Removing event listeners for WASD and arrow keys
+    disableMovementKeys: function()
+    {
+        window.removeEventListener('keydown', this.keyDown);
+        window.removeEventListener('keyup', this.keyUp);
     },
 
     // Checking what key is pressed
