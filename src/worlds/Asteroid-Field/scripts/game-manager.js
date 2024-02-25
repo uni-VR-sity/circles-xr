@@ -44,14 +44,14 @@ AFRAME.registerComponent('game-manager',
         var playerHeight = event.detail.playerHeight;
         
         // Calculating asteroid spawner min and max bounds
-        spawnerMinBounds = {
+        this.spawnerMinBounds = {
             x: -playerHeight * 2,
             y: playerHeight / 2,
             z: -28,
         };
 
-        spawnerMaxBounds = {
-            x: -playerHeight * 2,
+        this.spawnerMaxBounds = {
+            x: playerHeight * 2,
             y: playerHeight * 3,
             z: -28,
         };
@@ -113,17 +113,23 @@ AFRAME.registerComponent('game-manager',
 
         this.score = 0;
         this.lives = 3;
+
+        // Attaching asteroid spawner
+        document.getElementById('spawner').setAttribute('asteroid-spawner', {
+            minBounds: this.spawnerMinBounds,
+            maxBounds: this.spawnerMaxBounds,
+        });
     },
 
     // Decreasing player lives by 1
     hit: function()
     {
-
+        this.lives -= 0
     },
 
     // Increasing player score by 1
     increaseScore: function()
     {
-        console.log('increase score');
+        points++;
     },
 });

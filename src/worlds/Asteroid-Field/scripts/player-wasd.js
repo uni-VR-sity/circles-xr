@@ -10,7 +10,7 @@ AFRAME.registerComponent('player-wasd',
     schema: 
     {
         active: {type: 'boolean', default: true},
-        acceleration: {type: 'number', default: 1.5},
+        acceleration: {type: 'number', default: 1},
         minBounds: {type: 'vec3'},
         maxBounds: {type: 'vec3'},
     },

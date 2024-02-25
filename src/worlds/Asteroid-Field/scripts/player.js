@@ -16,6 +16,8 @@ AFRAME.registerComponent('player',
         const element = this.el;
         const schema = this.data;
 
+        this.getPlayerHeight = this.getPlayerHeight.bind(this);
+
         this.playerHeight = 10;
 
         // If player on desktop, setting player position, movement (WASD and arrow keys), and cursor interaction
@@ -116,17 +118,7 @@ AFRAME.registerComponent('player',
             element.appendChild(rightController);
 
             // Player height
-            document.querySelector('a-scene').addEventListener('enter-vr', function() 
-            {
-                setTimeout(function() 
-                {
-                    this.playerHeight = element.querySelector('[camera]').getAttribute('position').y;
-                    
-                    // Emitting event that player is ready
-                    element.emit('player-ready', {playerHeight: this.playerHeight}, false);
-
-                }, 500);
-            });
+            document.querySelector('a-scene').addEventListener('enter-vr', this.getPlayerHeight);
         }
     },
 
@@ -153,5 +145,20 @@ AFRAME.registerComponent('player',
                 });
             }
         }
+    },
+
+    // Getting player height in headset
+    getPlayerHeight: function(event)
+    {
+        document.querySelector('a-scene').removeEventListener('enter-vr', this.getPlayerHeight);
+
+        setTimeout(function() 
+        {
+            this.playerHeight = element.querySelector('[camera]').getAttribute('position').y;
+            
+            // Emitting event that player is ready
+            element.emit('player-ready', {playerHeight: this.playerHeight}, false);
+
+        }, 500);
     },
 });

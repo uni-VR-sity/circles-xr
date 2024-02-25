@@ -63,7 +63,6 @@ function moveAsteroid(asteroid, schema)
         y: newPos.y,
         z: newPos.z,
     });
-    
 
     // Getting asteroid's current rotation
     var currentRotation = asteroid.getAttribute('rotation');
