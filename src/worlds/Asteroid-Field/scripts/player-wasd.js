@@ -10,7 +10,7 @@ AFRAME.registerComponent('player-wasd',
     schema: 
     {
         active: {type: 'boolean', default: true},
-        acceleration: {type: 'number', default: 1},
+        acceleration: {type: 'number', default: 0.2},
         minBounds: {type: 'vec3'},
         maxBounds: {type: 'vec3'},
     },
@@ -20,19 +20,29 @@ AFRAME.registerComponent('player-wasd',
         const element = this.el;
         const schema = this.data;
 
+        this.DELTA_TIME = 0.01;
+
+        this.move = this.move.bind(this);
         this.keyDown = this.keyDown.bind(this);
         this.keyUp = this.keyUp.bind(this);
+
+        this.moveInterval;
 
         this.easing = 1.1;
 
         this.velocity = new THREE.Vector3();
-        this.xAxis = 0;
-        this.yAxis = 0;
+        
+        this.keyPressed = {
+            left: false,
+            right: false,
+            up: false,
+            down: false,
+        }
 
         // Setting up movement keys if component is active
         if (schema.active)
         {
-            this.setUpMovementKeys();
+            this.setUpMovement();
         }
     },
 
@@ -45,113 +55,134 @@ AFRAME.registerComponent('player-wasd',
         // Otherwise, disable movement key input
         if (schema.active && !oldData.active)
         {
-            this.setUpMovementKeys();
+            this.setUpMovement();
         }
         else if (!schema.active && oldData.active)
         {
-            this.disableMovementKeys();
+            this.disableMovement();
+
+            this.keyPressed.right = false;
+            this.keyPressed.left = false;
+            this.keyPressed.up = false;
+            this.keyPressed.down = false;
         }
     },
 
-    tick: function(time, deltaTime)
+    move: function()
     {
         const element = this.el;
         const schema = this.data;
 
-        deltaTime /= 1000;
-
-        // Decelerating player movement
-        var deceleration = Math.pow(1 / this.easing, deltaTime * 60);
-        this.velocity.x = this.velocity.x * deceleration;
-        this.velocity.y = this.velocity.y * deceleration;
-
-        // Adding acceleration to velocity if a key is pressed
-        if (this.xAxis > 0)
+        if (schema.active)
         {
-            this.velocity.x += schema.acceleration * deltaTime;
-        }
-        else if (this.xAxis < 0)
-        {
-            this.velocity.x -= schema.acceleration * deltaTime;
-        }
+            // Decelerating player movement
+            var deceleration = Math.pow(1 / this.easing, this.DELTA_TIME * 40);
 
-        if (this.yAxis > 0)
-        {
-            this.velocity.y += schema.acceleration * deltaTime;
-        }
-        else if (this.yAxis < 0)
-        {
-            this.velocity.y -= schema.acceleration * deltaTime;
-        }
+            this.velocity.x = this.velocity.x * deceleration;
+            this.velocity.y = this.velocity.y * deceleration;
 
-        // Updating player position
-        var oldPos = element.getAttribute('position');
+            // Adding acceleration to velocity if a key is pressed
+            if (this.keyPressed.right)
+            {
+                this.velocity.x += schema.acceleration * this.DELTA_TIME;
+            }
+            
+            if (this.keyPressed.left)
+            {
+                this.velocity.x -= schema.acceleration * this.DELTA_TIME;
+            }
 
-        var newPos = {
-            x: oldPos.x += this.velocity.x,
-            y: oldPos.y += this.velocity.y,
-            z: oldPos.z += this.velocity.z,
-        };
+            if (this.keyPressed.up)
+            {
+                this.velocity.y += schema.acceleration * this.DELTA_TIME;
+            }
+            
+            if (this.keyPressed.down)
+            {
+                this.velocity.y -= schema.acceleration * this.DELTA_TIME;
+            }
 
-        // Checking that player is within bounds
-        if (newPos.x > schema.maxBounds.x)
-        {
-            newPos.x = schema.maxBounds.x;
-        }
-        else if (newPos.x < schema.minBounds.x)
-        {
-            newPos.x = schema.minBounds.x;
-        }
+            // Updating player position
+            var oldPos = element.getAttribute('position');
 
-        if (newPos.y > schema.maxBounds.y)
-        {
-            newPos.y = schema.maxBounds.y;
-        }
-        else if (newPos.y < schema.minBounds.y)
-        {
-            newPos.y = schema.minBounds.y;
-        }
+            var newPos = {
+                x: oldPos.x += this.velocity.x,
+                y: oldPos.y += this.velocity.y,
+                z: oldPos.z += this.velocity.z,
+            };
 
-        element.setAttribute('position', {
-            x: newPos.x,
-            y: newPos.y,
-            z: newPos.z,
-        });
+            // Checking that player is within bounds
+            if (newPos.x > schema.maxBounds.x)
+            {
+                newPos.x = schema.maxBounds.x;
+            }
+            else if (newPos.x < schema.minBounds.x)
+            {
+                newPos.x = schema.minBounds.x;
+            }
+
+            if (newPos.y > schema.maxBounds.y)
+            {
+                newPos.y = schema.maxBounds.y;
+            }
+            else if (newPos.y < schema.minBounds.y)
+            {
+                newPos.y = schema.minBounds.y;
+            }
+
+            element.setAttribute('position', {
+                x: newPos.x,
+                y: newPos.y,
+                z: newPos.z,
+            });
+        }
     },
 
     // Setting up event listeners for WASD and arrow keys
-    setUpMovementKeys: function()
+    // Setting up movement loop
+    setUpMovement: function()
     {
         window.addEventListener('keydown', this.keyDown);
         window.addEventListener('keyup', this.keyUp);
+
+        this.moveInterval = setInterval(this.move, this.DELTA_TIME * 1000);
     },
 
     // Removing event listeners for WASD and arrow keys
-    disableMovementKeys: function()
+    // Clearing movement loop
+    disableMovement: function()
     {
         window.removeEventListener('keydown', this.keyDown);
         window.removeEventListener('keyup', this.keyUp);
+
+        clearInterval(this.moveInterval);
     },
 
     // Checking what key is pressed
     // If it is a WASD or arrow key, marking the corresponding axis and direction of movement
     keyDown: function(event)
     {
-        if (event.code === 'KeyW' || event.code === 'ArrowUp')
+        const element = this.el;
+        const schema = this.data;
+
+        if (schema.active)
         {
-            this.yAxis = 1;
-        }
-        else if (event.code === 'KeyA' || event.code === 'ArrowLeft')
-        {
-            this.xAxis = -1;
-        }
-        else if (event.code === 'KeyS' || event.code === 'ArrowDown')
-        {
-            this.yAxis = -1;
-        }
-        else if (event.code === 'KeyD' || event.code === 'ArrowRight')
-        {
-            this.xAxis = 1;
+            if (event.code === 'KeyW' || event.code === 'ArrowUp')
+            {
+                this.keyPressed.up = true;
+            }
+            else if (event.code === 'KeyA' || event.code === 'ArrowLeft')
+            {
+                this.keyPressed.left = true;
+            }
+            else if (event.code === 'KeyS' || event.code === 'ArrowDown')
+            {
+                this.keyPressed.down = true;
+            }
+            else if (event.code === 'KeyD' || event.code === 'ArrowRight')
+            {
+                this.keyPressed.right = true;
+            }
         }
     },
 
@@ -159,21 +190,27 @@ AFRAME.registerComponent('player-wasd',
     // If it is a WASD or arrow key, marking the corresponding axis and direction of movement
     keyUp: function(event)
     {
-        if (event.code === 'KeyW' || event.code === 'ArrowUp')
+        const element = this.el;
+        const schema = this.data;
+
+        if (schema.active)
         {
-            this.yAxis = 0;
-        }
-        else if (event.code === 'KeyA' || event.code === 'ArrowLeft')
-        {
-            this.xAxis = 0;
-        }
-        else if (event.code === 'KeyS' || event.code === 'ArrowDown')
-        {
-            this.yAxis = 0;
-        }
-        else if (event.code === 'KeyD' || event.code === 'ArrowRight')
-        {
-            this.xAxis = 0;
+            if (event.code === 'KeyW' || event.code === 'ArrowUp')
+            {
+                this.keyPressed.up = false;
+            }
+            else if (event.code === 'KeyA' || event.code === 'ArrowLeft')
+            {
+                this.keyPressed.left = false;
+            }
+            else if (event.code === 'KeyS' || event.code === 'ArrowDown')
+            {
+                this.keyPressed.down = false;
+            }
+            else if (event.code === 'KeyD' || event.code === 'ArrowRight')
+            {
+                this.keyPressed.right = false;
+            }
         }
     },
 });

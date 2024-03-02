@@ -27,7 +27,7 @@
     <circles-NA-start-ui/>
 
     <!-- a-scene with 'circles-properties' component (no networking) [REQUIRED] -->
-    <a-scene circles_NN_scene_properties physics="debug:false;">
+    <a-scene circles_NN_scene_properties background="color: black" physics="debug:false;">
       <a-assets>
 
       </a-assets>
@@ -61,49 +61,53 @@
       
         <a-entity camera
                   look-controls="mouseEnabled:false;"
-                  static-body="shape:sphere; sphereRadius:0.2"
+                  static-body="shape:sphere"
                   collision-filter="group:player">
         </a-entity>
 
-         <!-- Score container -->
-        <a-entity id="score-container"
-                  position="-6 0 -4.5"
-                  rotation="0 20 0">
+        <!-- Game stats container -->
+        <a-entity id="game-stats-container"
+                  visible="false">
 
-          <a-entity position="0 0 0"
-                    geometry="primitive:plane; height:0.05; width:2"
-                    material="color:black">
+          <!-- Score container -->
+          <a-entity id="score-container"
+                    position="0 -0.25 0">
+
+            <a-entity position="0 0 0"
+                      geometry="primitive:plane; height:0.05; width:2"
+                      material="color:white; shader:flat;">
+            </a-entity>
+
+            <a-entity id="score"
+                      position="0 -0.35 0"
+                      text="value:0; align:center; width:2; wrapCount:15; color:white; shader:flat;">
+            </a-entity>
+
           </a-entity>
 
-          <a-entity id="score"
-                    position="0 -0.35 0"
-                    text="value:score; align:center; width:2; wrapCount:15; color:black">
-          </a-entity>
+          <!-- Lives container -->
+          <a-entity id="lives-container"
+                    position="0 0.25 0"
+                    scale="0.5 0.5 0.5">
 
-        </a-entity>
+            <a-entity id="live-1"
+                      position="-1.5 0 0"
+                      geometry="primitive:plane"
+                      material="color:red; shader:flat;">
+            </a-entity>
 
-        <!-- Lives container -->
-        <a-entity id="lives-container"
-                  position="-6 0.5 -4.5"
-                  rotation="0 20 0"
-                  scale="0.5 0.5 0.5">
+            <a-entity id="live-2"
+                      position="0 0 0"
+                      geometry="primitive:plane"
+                      material="color:red; shader:flat;">
+            </a-entity>
 
-          <a-entity id="live-1"
-                    position="-1.5 0 0"
-                    geometry="primitive:plane"
-                    material="color:green">
-          </a-entity>
+            <a-entity id="live-3"
+                      position="1.5 0 0"
+                      geometry="primitive:plane"
+                      material="color:red; shader:flat;">
+            </a-entity>
 
-          <a-entity id="live-2"
-                    position="0 0 0"
-                    geometry="primitive:plane"
-                    material="color:green">
-          </a-entity>
-
-          <a-entity id="live-3"
-                    position="1.5 0 0"
-                    geometry="primitive:plane"
-                    material="color:green">
           </a-entity>
 
         </a-entity>
@@ -123,7 +127,6 @@
           </a-entity>
 
           <a-entity id="play-button"
-                    class="interactive"
                     position="0 -1.5 0.1"
                     geometry="primitive:plane; height:1.2; width: 4"
                     material="color:white; shader:flat">
@@ -139,7 +142,34 @@
       </a-entity>
 
       <!-- Restart screen -->
-      <a-entity id="restart-screen">
+      <a-entity id="restart-screen"
+                visible="false">
+
+        <a-entity geometry="primitive:plane; height:8; width:15"
+                  material="color:#000338; shader:flat">
+
+          <a-entity position="0 1.5 0.1"
+                    text="value:Asteroid Field; align:center; width:15; wrapCount:25">
+          </a-entity>
+
+          <a-entity id="final-score"
+                    position="0 0 0.1"
+                    text="value:; color:white; align:center; width:4; wrapCount:15">
+          </a-entity>
+
+          <a-entity id="restart-button"
+                    position="0 -1.5 0.1"
+                    geometry="primitive:plane; height:1.2; width: 4"
+                    material="color:white; shader:flat">
+
+            <a-entity position="0 0 0.1"
+                      text="value:Restart; color:#000338; align:center; width:4; wrapCount:15">
+            </a-entity>
+
+          </a-entity>
+
+        </a-entity>
+
       </a-entity>
 
       <!-- Asteroid spawner -->
@@ -148,12 +178,6 @@
 
       <!-- Asteroid container -->
       <a-entity id="asteroid-container">
-
-        <!--
-        <a-entity asteroid="startPos:0 10 -28; endPos:0 10 2; startRotation:10 25 70; rotationAxes:1 0 0; speed: 0.01">
-        </a-entity>
-        -->
-
       </a-entity>
 
     </a-scene>

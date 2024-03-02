@@ -10,6 +10,13 @@ function randomNum(min, max)
     return Math.random() * (max - min) + min;
 }
 
+function weightedRandomNum(min, max)
+{
+    weightedMin = randomNum(min, max / 3);
+
+    return randomNum(weightedMin, max);
+}
+
 // Component ---------------------------------------------------------------------------------------------------------------------------------------
 
 AFRAME.registerComponent('asteroid-spawner', 
@@ -19,13 +26,14 @@ AFRAME.registerComponent('asteroid-spawner',
         minBounds: {type: 'vec3'},
         maxBounds: {type: 'vec3'},
         despawnLocation: {type: 'vec3', default: {x: 0, y: 0, z: 2}},
-        minScale: {type: 'number', default: 1},
-        maxScale: {type: 'number', default: 5},
-        minSpeed: {type: 'number', default: 0.01},
-        maxSpeed: {type: 'number', default: 0.08},
-        minSpawnRate: {type: 'int', default: 250},
-        maxSpawnRate: {type: 'int', default: 3000},
-        rateIncreaseInterval: {type: 'int', default: 3},
+        minScale: {type: 'number'},
+        maxScale: {type: 'number'},
+        minSpeed: {type: 'number'},
+        maxSpeed: {type: 'number'},
+        minSpawnRate: {type: 'int'},
+        maxSpawnRate: {type: 'int'},
+        rateDecrease: {type: 'int'},
+        rateIncreaseInterval: {type: 'int'},
     },
 
     init: function()
@@ -34,17 +42,63 @@ AFRAME.registerComponent('asteroid-spawner',
         const schema = this.data;
 
         this.spawnerLoop = this.spawnerLoop.bind(this);
+        this.increaseSpawnRate = this.increaseSpawnRate.bind(this);
 
-        this.numSpawned = 0;
-        this.nextIntervalIncrease = schema.rateIncreaseInterval;
+        this.increaseRate = schema.rateIncreaseInterval;
         this.spawnRate = schema.maxSpawnRate;
 
         // Spawning the first asteroid
         this.spawnAsteroid();
-        this.numSpawned++;
 
         // Setting up the spawn loop
         this.spawningInterval = setInterval(this.spawnerLoop, this.spawnRate);
+
+        // Setting up spawn rate increase loop
+        this.increaseRateInterval = setInterval(this.increaseSpawnRate, this.increaseRate);
+    },
+
+    // Clearing interval and deleting all remaining asteroids when component is removed
+    remove: function()
+    {
+        clearInterval(this.spawningInterval);
+        clearInterval(this.increaseRateInterval);
+
+        var asteroidContainer = document.getElementById('asteroid-container');
+
+        while (asteroidContainer.lastChild)
+        {
+            asteroidContainer.removeChild(asteroidContainer.lastChild);
+        }
+    },
+
+    // Increasing spawning rate
+    increaseSpawnRate: function()
+    {
+        const element = this.el;
+        const schema = this.data;
+
+        // If the spawn rate isn't at the minimum
+        // If it is, clearing the interval
+        if (this.spawnRate > schema.minSpawnRate)
+        {
+            // Decreasing spawn rate
+            this.spawnRate -= schema.rateDecrease;
+
+            // Increasing increase rate
+            this.increaseRate += (schema.rateDecrease * 5);
+
+            // Clearing current loops
+            clearInterval(this.spawningInterval);
+            clearInterval(this.increaseRateInterval);
+
+            // Setting up new spawning loop with new rate, and new spawn rate increase loop
+            this.spawningInterval = setInterval(this.spawnerLoop, this.spawnRate);
+            this.increaseRateInterval = setInterval(this.increaseSpawnRate, this.increaseRate);
+        }
+        else
+        {
+            clearInterval(this.increaseRateInterval);
+        }
     },
 
     // Asteroid spawning loop
@@ -56,23 +110,6 @@ AFRAME.registerComponent('asteroid-spawner',
         // Spawning asteroid
         this.spawnAsteroid();
         this.numSpawned++;
-
-        // If the number of asteroids spawned is at the next interval increase
-        if (this.numSpawned == this.nextIntervalIncrease)
-        {
-            // If the spawn rate isn't at the minimum
-            // Decrease the spawn rate, set the next interval increase, clear the current spawn interval, and set a new one at the new spawn rate
-            if (this.spawnRate != schema.minSpawnRate)
-            {
-                this.spawnRate -= 250;
-
-                this.nextIntervalIncrease += schema.rateIncreaseInterval;
-
-                clearInterval(this.spawningInterval);
-
-                this.spawningInterval = setInterval(this.spawnerLoop, this.spawnRate);
-            }
-        }
     },
 
     // Spawning an asteroid
@@ -89,11 +126,7 @@ AFRAME.registerComponent('asteroid-spawner',
         }
 
         // Generating random scale between min and max bounds
-        var scale = {
-            x: randomNum(schema.minScale.x, schema.maxScale.x),
-            y: randomNum(schema.minScale.y, schema.maxScale.y),
-            z: randomNum(schema.minScale.z, schema.maxScale.z),
-        }
+        var scale = randomNum(schema.minScale, schema.maxScale);
 
         // Generating random start rotation
         var startRotation = {
@@ -104,13 +137,13 @@ AFRAME.registerComponent('asteroid-spawner',
 
         // Generation random axes of rotation
         var rotationAxes = {
-            x: randomNum(0, 1),
+            x: 1,
             y: randomNum(0, 1),
             z: randomNum(0, 1),
         }
 
         // Generationg a random speed
-        var speed = randomNum(schema.minSpeed, schema.maxSpeed);
+        var speed = weightedRandomNum(schema.minSpeed, schema.maxSpeed);
 
         // Creating new asteroid
         var asteroid = document.createElement('a-entity');

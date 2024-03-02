@@ -22,6 +22,11 @@ function setUpAsteroid(asteroid, schema)
     });
 
     // Scale
+    asteroid.setAttribute('scale', {
+        x: schema.scale,
+        y: schema.scale,
+        z: schema.scale,
+    });
 
     // Rotation
     asteroid.setAttribute('rotation', {
@@ -127,7 +132,7 @@ AFRAME.registerComponent('asteroid',
         startPos: {type: 'vec3'},
         endPos: {type: 'vec3'},
         model: {},
-        scale: {type: 'vec3'},
+        scale: {type: 'number'},
         startRotation: {type: 'vec3'},
         rotationAxes: {type: 'vec3'},
         speed: {type: 'number'},
@@ -138,8 +143,10 @@ AFRAME.registerComponent('asteroid',
         const element = this.el;
         const schema = this.data;
 
+        this.move = this.move.bind(this);
+
         // Keeping track if asteroid hits player
-        var playerHit = false;
+        this.playerHit = false;
 
         // Setting up enitity with model, position, scale, rotation, and physics
         setUpAsteroid(element, schema);
@@ -150,24 +157,30 @@ AFRAME.registerComponent('asteroid',
         {
             if (event.detail.els.length > 0)
             {
-                console.log('player hit');
-                playerHit = true;
+                document.querySelector('#game-manager').components['game-manager'].hit();
+
+                this.playerHit = true;
             }
         });
 
-        setTimeout(function()
-        {
-            // Moving asteroid every millisecond
-            setInterval(function()
-            {
-                // Moving asteroid
-                var asteroidPos = moveAsteroid(element, schema);
+        // Moving asteroid every 10 millisecond
+        this.movingInterval = setInterval(this.move, 10);
+    },
 
-                // Checking if asteroid is at the end point
-                checkPosition(asteroidPos, element, schema, playerHit);
+    remove: function()
+    {
+        clearInterval(this.movingInterval);
+    },
 
-            }, 1);
+    move: function()
+    {
+        const element = this.el;
+        const schema = this.data;
 
-        }, 0)
+        // Moving asteroid
+        var asteroidPos = moveAsteroid(element, schema);
+
+        // Checking if asteroid is at the end point
+        checkPosition(asteroidPos, element, schema, this.playerHit);
     },
 });
