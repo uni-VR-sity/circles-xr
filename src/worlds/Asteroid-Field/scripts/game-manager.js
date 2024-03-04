@@ -273,6 +273,9 @@ AFRAME.registerComponent('game-manager',
     // Decreasing player lives by 1
     hit: function()
     {
+        // Vibrating controllers
+        document.getElementById('player').components['player'].vibrateControllers();
+
         // Updating lives container
         document.querySelector('#live-' + this.lives).setAttribute('material', {
             color: 'grey',

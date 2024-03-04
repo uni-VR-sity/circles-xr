@@ -84,18 +84,22 @@ function setUpController(element, side, showLine)
 
     controller.setAttribute('laser-controls', { 
         hand: side, 
-        model: false});
+        model: false,
+    });
 
-        controller.setAttribute('hand-controls', {
+    controller.setAttribute('hand-controls', {
         hand: side, 
-        handModelStyle: 'lowPoly'});
+        handModelStyle: 'lowPoly',
+    });
 
-        controller.setAttribute('raycaster', {
+    controller.setAttribute('haptics', {});
+
+    controller.setAttribute('raycaster', {
         objects: '.interactive', 
         far: 100,
         interval: 30, 
         showLine: showLine, 
-        useWorldCoordinates: true
+        useWorldCoordinates: true,
     });
 
     element.appendChild(controller);
@@ -231,6 +235,19 @@ AFRAME.registerComponent('player',
         else
         {
             return element.getAttribute('position');
+        }
+    },
+
+    // Vibrating player controllers (if player on headset)
+    vibrateControllers: function()
+    {
+        const element = this.el;
+        const schema = this.data;
+
+        if (AFRAME.utils.device.checkHeadsetConnected())
+        {
+            element.querySelector('#left-controller').components['haptics'].pulse(1.0, 350);
+            element.querySelector('#right-controller').components['haptics'].pulse(1.0, 350);
         }
     },
 });
