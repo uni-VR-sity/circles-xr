@@ -52,7 +52,7 @@ AFRAME.registerComponent('game-manager',
             },
         }
 
-        this.score;
+        //this.score;
         this.lives;
         this.playerHeight;
         this.spawnerMinBounds;
@@ -158,9 +158,9 @@ AFRAME.registerComponent('game-manager',
         });
 
         // Resetting score container
-        document.getElementById('score').setAttribute('text', {
-            value: '0',
-        });
+        //document.getElementById('score').setAttribute('text', {
+            //value: '0',
+        //});
 
         // Resetting lives container
         var livesContainer = document.getElementById('lives-container');
@@ -182,7 +182,7 @@ AFRAME.registerComponent('game-manager',
 
         // Resetting game variables
         this.score = 0;
-        this.lives = 3;
+        //this.lives = 3;
 
         // Attaching asteroid spawner
         document.getElementById('spawner').setAttribute('asteroid-spawner', {
@@ -238,9 +238,9 @@ AFRAME.registerComponent('game-manager',
         // Restarting game
         document.getElementById('restart-screen').setAttribute('visible', true);
         
-        document.getElementById('final-score').setAttribute('text', {
-            value: 'Score: ' + this.score,
-        });
+        //document.getElementById('final-score').setAttribute('text', {
+            //value: 'Score: ' + this.score,
+        //});
 
         var button = document.getElementById('restart-button');
 

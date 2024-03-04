@@ -113,13 +113,6 @@ function checkPosition(position, asteroid, schema, playerHit)
     {
         // Deleting asteroid
         asteroid.parentNode.removeChild(asteroid);
-
-        // Checking if asteroid hit player
-        if (!playerHit)
-        {
-            // Getting game manager and increasing player score
-            document.querySelector('#game-manager').components['game-manager'].increaseScore();
-        }
     }
 }
 
@@ -145,9 +138,6 @@ AFRAME.registerComponent('asteroid',
 
         this.move = this.move.bind(this);
 
-        // Keeping track if asteroid hits player
-        this.playerHit = false;
-
         // Setting up enitity with model, position, scale, rotation, and physics
         setUpAsteroid(element, schema);
 
@@ -158,8 +148,6 @@ AFRAME.registerComponent('asteroid',
             if (event.detail.els.length > 0)
             {
                 document.querySelector('#game-manager').components['game-manager'].hit();
-
-                this.playerHit = true;
             }
         });
 
@@ -181,6 +169,6 @@ AFRAME.registerComponent('asteroid',
         var asteroidPos = moveAsteroid(element, schema);
 
         // Checking if asteroid is at the end point
-        checkPosition(asteroidPos, element, schema, this.playerHit);
+        checkPosition(asteroidPos, element, schema);
     },
 });
