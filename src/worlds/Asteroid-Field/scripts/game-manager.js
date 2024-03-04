@@ -20,11 +20,12 @@ AFRAME.registerComponent('game-manager',
 
             ASTEROID_SPAWNER: {
                 Z_POS: -40,
+                SPAWN_RANGE: 2,
                 MIN_SCALE: 0.25,
-                MAX_SCALE: 2.0,
+                MAX_SCALE: 1.0,
                 MIN_SPEED: 0.04,
                 MAX_SPEED: 0.13,
-                MIN_SPAWN_RATE: 100,
+                MIN_SPAWN_RATE: 500,
                 MAX_SPAWN_RATE: 1500,
                 RATE_DECREASE: 100,
                 RATE_INCREASE_INTERVAL: 2000,
@@ -41,11 +42,12 @@ AFRAME.registerComponent('game-manager',
 
             ASTEROID_SPAWNER: {
                 Z_POS: -40,
+                SPAWN_RANGE: 1,
                 MIN_SCALE: 0.1,
-                MAX_SCALE: 0.8,
+                MAX_SCALE: 0.7,
                 MIN_SPEED: 0.04,
                 MAX_SPEED: 0.13,
-                MIN_SPAWN_RATE: 500,
+                MIN_SPAWN_RATE: 700,
                 MAX_SPAWN_RATE: 2000,
                 RATE_DECREASE: 100,
                 RATE_INCREASE_INTERVAL: 3000,
@@ -55,8 +57,8 @@ AFRAME.registerComponent('game-manager',
         //this.score;
         this.lives;
         this.playerHeight;
-        this.spawnerMinBounds;
-        this.spawnerMaxBounds;
+        //this.spawnerMinBounds;
+        //this.spawnerMaxBounds;
 
         this.setUpGame = this.setUpGame.bind(this);
         this.playButton = this.playButton.bind(this);
@@ -84,6 +86,7 @@ AFRAME.registerComponent('game-manager',
         this.playerHeight = event.detail.playerHeight;
         
         // Calculating asteroid spawner min and max bounds
+        /*
         this.spawnerMinBounds = {
             x: -this.playerHeight * 2,
             y: this.playerHeight / 2,
@@ -93,8 +96,9 @@ AFRAME.registerComponent('game-manager',
         this.spawnerMaxBounds = {
             x: this.playerHeight * 2,
             y: this.playerHeight * 3,
-            z: -28,
+            z: this.GAME_CONSTANTS.ASTEROID_SPAWNER.Z_POS,
         };
+        */
 
         // Position start and restart screen to match player height
         var screenPos = {
@@ -181,13 +185,16 @@ AFRAME.registerComponent('game-manager',
         document.getElementById('game-stats-container').setAttribute('visible', true);
 
         // Resetting game variables
-        this.score = 0;
-        //this.lives = 3;
+        //this.score = 0;
+        this.lives = 3;
 
         // Attaching asteroid spawner
         document.getElementById('spawner').setAttribute('asteroid-spawner', {
-            minBounds: this.spawnerMinBounds,
-            maxBounds: this.spawnerMaxBounds,
+            //minBounds: this.spawnerMinBounds,
+            //maxBounds: this.spawnerMaxBounds,
+
+            spawnLocation: {x: 0, y: 0, z: this.GAME_CONSTANTS.ASTEROID_SPAWNER.Z_POS},
+            spawnRange: this.GAME_CONSTANTS.ASTEROID_SPAWNER.SPAWN_RANGE,
 
             minScale: this.GAME_CONSTANTS.ASTEROID_SPAWNER.MIN_SCALE,
             maxScale: this.GAME_CONSTANTS.ASTEROID_SPAWNER.MAX_SCALE,

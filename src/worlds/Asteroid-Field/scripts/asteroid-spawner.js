@@ -10,11 +10,93 @@ function randomNum(min, max)
     return Math.random() * (max - min) + min;
 }
 
-function weightedRandomNum(min, max)
+// ------------------------------------------------------------------------------------------
+
+// Generating a random number that is more likely to be higher
+function weightedHighRandomNum(min, max)
 {
     weightedMin = randomNum(min, max / 3);
 
     return randomNum(weightedMin, max);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Generating a random number that is more likely to be in the middle
+function weightedMidRandomNum(min, max)
+{
+    weightedMin = randomNum(min, max / 2);
+    weightedMax = randomNum(min / 2, max);
+
+    return randomNum(weightedMin, weightedMax);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Calculating spawning bounds depending on where the player is
+function getSpawningBounds(distanceFromPlayer, z)
+{
+    // Getting players current position
+    var playerPos = document.getElementById('player').components['player'].getPlayerPosition();
+
+    var spawningBounds = {
+
+        min: {
+            x: playerPos.x - distanceFromPlayer,
+            y: playerPos.y - distanceFromPlayer,
+            z: z,
+        },
+
+        max: {
+            x: playerPos.x + distanceFromPlayer,
+            y: playerPos.y + distanceFromPlayer,
+            z: z,
+        },
+    }
+
+    return spawningBounds;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Generating a random starting position and making sure it is not similar to the past 3 spawns
+function generateStartPos(spawningBounds, pastSpawns)
+{
+    var startPos = null;
+
+    while (!startPos)
+    {
+        var pos = {
+            x: weightedMidRandomNum(spawningBounds.min.x, spawningBounds.max.x),
+            y: weightedMidRandomNum(spawningBounds.min.y, spawningBounds.max.y),
+            z: weightedMidRandomNum(spawningBounds.min.z, spawningBounds.max.z),
+        }
+
+        var valid = {
+            x: false,
+            y: false,
+        }
+
+        for (var i = 0; i < pastSpawns.length; i++)
+        {
+            if (pos.x < (pastSpawns[i].x - 0.5) || pos.x > (pastSpawns[i].x + 0.5))
+            {
+                valid.x = true;
+            }
+
+            if (pos.y < (pastSpawns[i].y - 0.5) || pos.y > (pastSpawns[i].y + 0.5))
+            {
+                valid.y = true;
+            }
+        }
+
+        if (valid.x && valid.y)
+        {
+            startPos = pos;
+        }
+    }
+
+    return startPos;
 }
 
 // Component ---------------------------------------------------------------------------------------------------------------------------------------
@@ -23,8 +105,10 @@ AFRAME.registerComponent('asteroid-spawner',
 {
     schema:
     {
-        minBounds: {type: 'vec3'},
-        maxBounds: {type: 'vec3'},
+        //minBounds: {type: 'vec3'},
+        //maxBounds: {type: 'vec3'},
+        spawnLocation: {type: 'vec3'},
+        spawnRange: {type: 'number'},
         despawnLocation: {type: 'vec3', default: {x: 0, y: 0, z: 2}},
         minScale: {type: 'number'},
         maxScale: {type: 'number'},
@@ -43,6 +127,8 @@ AFRAME.registerComponent('asteroid-spawner',
 
         this.spawnerLoop = this.spawnerLoop.bind(this);
         this.increaseSpawnRate = this.increaseSpawnRate.bind(this);
+
+        this.pastSpawns = [{x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}];
 
         this.increaseRate = schema.rateIncreaseInterval;
         this.spawnRate = schema.maxSpawnRate;
@@ -118,12 +204,13 @@ AFRAME.registerComponent('asteroid-spawner',
         const element = this.el;
         const schema = this.data;
 
-        // Generating random position between min and max bounds
-        var startPos = {
-            x: randomNum(schema.minBounds.x, schema.maxBounds.x),
-            y: randomNum(schema.minBounds.y, schema.maxBounds.y),
-            z: randomNum(schema.minBounds.z, schema.maxBounds.z),
-        }
+        // Generating random position in range of the player
+        var spawningBounds = getSpawningBounds(schema.spawnRange, schema.spawnLocation.z);
+        var startPos = generateStartPos(spawningBounds, this.pastSpawns);
+
+        // Saving start position
+        this.pastSpawns.shift();
+        this.pastSpawns.push(startPos);
 
         // Generating random scale between min and max bounds
         var scale = randomNum(schema.minScale, schema.maxScale);
@@ -143,7 +230,7 @@ AFRAME.registerComponent('asteroid-spawner',
         }
 
         // Generationg a random speed
-        var speed = weightedRandomNum(schema.minSpeed, schema.maxSpeed);
+        var speed = weightedHighRandomNum(schema.minSpeed, schema.maxSpeed);
 
         // Creating new asteroid
         var asteroid = document.createElement('a-entity');

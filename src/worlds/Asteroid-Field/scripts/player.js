@@ -17,14 +17,14 @@ function setUpDesktopPlayer(schema, element, playerHeight, colliderRadius)
 
     // Movement
     var minBounds = {
-        x: -playerHeight * 2, 
-        y: playerHeight / 2, 
+        x: -playerHeight * 0.5, 
+        y: playerHeight / 1.5, 
         z: 0
     }
 
     var maxBounds = {
-        x: playerHeight * 2, 
-        y: playerHeight * 2.5, 
+        x: playerHeight * 0.5, 
+        y: playerHeight * 1.5, 
         z: 0
     };
 
@@ -125,7 +125,7 @@ AFRAME.registerComponent('player',
     {
         this.DESKTOP_CONSTANTS = {
             PLAYER_HEIGHT: 10,
-            COLLIDER_RADIUS: 0.4,
+            COLLIDER_RADIUS: 0.5,
         }
 
         this.HEADSET_CONSTANTS = {
@@ -214,5 +214,23 @@ AFRAME.registerComponent('player',
         }, 500);
 
         document.querySelector('a-scene').removeEventListener('enter-vr', getPlayerHeight);
+    },
+
+    // Returning player postion
+    getPlayerPosition: function()
+    {
+        const element = this.el;
+        const schema = this.data;
+
+        // If on headset, returning camera position
+        // If on desktop, returning this elements position
+        if (AFRAME.utils.device.checkHeadsetConnected())
+        {
+            return element.querySelector('[camera]').getAttribute('position');
+        }
+        else
+        {
+            return element.getAttribute('position');
+        }
     },
 });
