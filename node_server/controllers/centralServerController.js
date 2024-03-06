@@ -275,12 +275,16 @@ const serveMuseumGames = async (req, res, next) =>
 
   games[0] = {
     name: "Asteroid Field (VR)",
-    credit: "------",
-    description: "------",
-    instructions: "------",
+    credit: "CirclesXR",
+    description: "Avoid the asteroids as you navigate through the Asteroid Field!",
+    instructions: "<subtitle>VR Headset:\nEnter \"VR Mode\" to begin the game. Avoid the asteroids by jumping. Crouching, and moving side to side.\n\n<subtitle>Desktop:\nUse the WASD or arrow keys to move around through space.",
     link: "------",
     image: "default-circle-profile.png",
-    contact: "------",
+    contact: "Ali Arya\narya@carleton.ca\n\nAnastacia Gorbenko\nanastaciagorbenko@yahoo.ca",
+    other: [{
+      title: "Attributions",
+      description: "TODO for assets",
+    }],
   }
 
   games[1] = {
