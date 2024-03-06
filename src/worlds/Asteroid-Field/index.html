@@ -30,7 +30,12 @@
     <circles-NA-start-ui/>
 
     <!-- a-scene with 'circles-properties' component (no networking) [REQUIRED] -->
-    <a-scene circles_NN_scene_properties background="color: black" physics="debug:false;">
+    <a-scene circles_NN_scene_properties 
+             background="color: black" 
+             animation__hit001="property: background.color; type: color; from: #000000; to: #380001; dur: 500; startEvents: hitAnimation;"
+             animation__hit002="property: background.color; type: color; from: #380001; to: #000000; dur: 500; delay: 500; startEvents: hitAnimation;"
+             physics="debug:false;">
+
       <a-assets>
 
         <!-- Hearts -->

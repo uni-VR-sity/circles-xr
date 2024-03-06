@@ -273,8 +273,14 @@ AFRAME.registerComponent('game-manager',
     // Decreasing player lives by 1
     hit: function()
     {
+        const element = this.el;
+        const schema = this.data;
+
         // Vibrating controllers
         document.getElementById('player').components['player'].vibrateControllers();
+
+        // Playing background animation
+        element.sceneEl.emit('hitAnimation', null, false);
 
         // Updating lives container
         document.querySelector('#live-' + this.lives).setAttribute('material', {
