@@ -31,16 +31,28 @@
 
     <!-- a-scene with 'circles-properties' component (no networking) [REQUIRED] -->
     <a-scene circles_NN_scene_properties 
-             background="color: black" 
-             animation__hit001="property: background.color; type: color; from: #000000; to: #380001; dur: 500; startEvents: hitAnimation;"
-             animation__hit002="property: background.color; type: color; from: #380001; to: #000000; dur: 500; delay: 500; startEvents: hitAnimation;"
-             physics="debug:false;">
+             background="color: #000000" 
+             animation__hit1="property: background.color; type: color; from: #000000; to: #000000; dur: 500; startEvents: hitAnimation;"
+             animation__hit2="property: background.color; type: color; from: #000000; to: #000000; dur: 500; delay: 500; startEvents: hitAnimation;"
+             physics="debug: false;">
 
       <a-assets>
 
         <!-- Hearts -->
-        <a-asset-item id="red-heart-gltf"    src="/worlds/Asteroid-Field/assets/models/redHeart.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="grey-heart-gltf"  src="/worlds/Asteroid-Field/assets/models/greyHeart.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="red-heart-gltf" src="/worlds/Asteroid-Field/assets/models/redHeart.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="grey-heart-gltf" src="/worlds/Asteroid-Field/assets/models/greyHeart.glb" response-type="arraybuffer"></a-asset-item>
+
+        <!-- Asteroids -->
+        <a-asset-item id="asteroid-1-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid1.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-2-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid2.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-3-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid3.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-4-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid4.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-5-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid5.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-6-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid6.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-7-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid7.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-8-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid8.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-9-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid9.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="asteroid-10-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid10.glb" response-type="arraybuffer"></a-asset-item>
 
       </a-assets>
 
@@ -49,20 +61,10 @@
 
       <!---------------------------------------------------------------------------------------------------------------------->
 
-      <!-- Debugger -->
-      <!--
-      <a-entity position="10 3 -12"
-                rotation="0 -40 0"
-                geometry="primitive:plane; height:5; width:5;"
-                material="color:blue">
-
-        <a-entity id="debugger"
-                  text="align:center; width:5; wrapCount:25"
-                  position="0 0 0.01">
-        </a-entity>
-              
+      <!-- Light -->
+      <a-entity position="0 1 2"
+                light="type: directional; castShadow: true; intensity: 0.5">
       </a-entity>
-      -->
 
       <!-- Game manager -->
       <a-entity id="game-manager"
@@ -106,22 +108,40 @@
                     position="0 0.25 0"
                     scale="0.5 0.5 0.5">
 
-            <a-entity id="live-1"
+            <!-- 1 -->
+            <a-entity id="active-life-1"
                       position="-1.5 0 0"
-                      geometry="primitive:plane"
-                      material="color:red; shader:flat;">
+                      gltf-model="#red-heart-gltf">
             </a-entity>
 
-            <a-entity id="live-2"
+            <a-entity id="disabled-life-1"
+                      position="-1.5 0 0"
+                      gltf-model="#grey-heart-gltf"
+                      visible="false">
+            </a-entity>
+
+            <!-- 2 -->
+            <a-entity id="active-life-2"
                       position="0 0 0"
-                      geometry="primitive:plane"
-                      material="color:red; shader:flat;">
+                      gltf-model="#red-heart-gltf">
             </a-entity>
 
-            <a-entity id="live-3"
+            <a-entity id="disabled-life-2"
+                      position="0 0 0"
+                      gltf-model="#grey-heart-gltf"
+                      visible="false">
+            </a-entity>
+
+            <!-- 3 -->
+            <a-entity id="active-life-3"
                       position="1.5 0 0"
-                      geometry="primitive:plane"
-                      material="color:red; shader:flat;">
+                      gltf-model="#red-heart-gltf">
+            </a-entity>
+
+            <a-entity id="disabled-life-3"
+                      position="1.5 0 0"
+                      gltf-model="#grey-heart-gltf"
+                      visible="false">
             </a-entity>
 
           </a-entity>

@@ -222,14 +222,17 @@ AFRAME.registerComponent('asteroid-spawner',
             z: randomNum(0, 360),
         }
 
-        // Generation random axes of rotation
+        // Generating a random model number
+        var model = randomNum(1, 10);
+
+        // Generating random axes of rotation
         var rotationAxes = {
             x: 1,
             y: randomNum(0, 1),
             z: randomNum(0, 1),
         }
 
-        // Generationg a random speed
+        // Generating a random speed
         var speed = weightedHighRandomNum(schema.minSpeed, schema.maxSpeed);
 
         // Creating new asteroid
@@ -238,6 +241,7 @@ AFRAME.registerComponent('asteroid-spawner',
         asteroid.setAttribute('asteroid', {
             startPos: startPos,
             endPos: schema.despawnLocation,
+            model: model,
             scale: scale,
             startRotation: startRotation,
             rotationAxes: rotationAxes,

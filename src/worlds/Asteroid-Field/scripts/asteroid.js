@@ -8,11 +8,7 @@
 function setUpAsteroid(asteroid, schema)
 {
     // Model
-    asteroid.setAttribute('geometry', {
-        primitive: 'box',
-        height: 1,
-        width: 1,
-    });
+    asteroid.setAttribute('gltf-model', '#asteroid-' + schema.model + '-gltf');
 
     // Position
     asteroid.setAttribute('position', {
@@ -37,7 +33,8 @@ function setUpAsteroid(asteroid, schema)
 
     // Physics
     asteroid.setAttribute('static-body', {
-        shape: 'cube',
+        shape: 'sphere',
+        sphereRadius: schema.scale / 2.5,
     });
 
     asteroid.setAttribute('physics-collider', {});
@@ -124,7 +121,7 @@ AFRAME.registerComponent('asteroid',
     {
         startPos: {type: 'vec3'},
         endPos: {type: 'vec3'},
-        model: {},
+        model: {type: 'int'},
         scale: {type: 'number'},
         startRotation: {type: 'vec3'},
         rotationAxes: {type: 'vec3'},

@@ -12,6 +12,7 @@ AFRAME.registerComponent('game-manager',
     {
         this.DESKTOP_CONSTANTS = {
             SCREEN_Z_POS: -6,
+            BACKGROUND_RED: '#260001',
 
             STATS_CONTAINER: {
                 POSITION: {x: -6, y: 0, z: -4.5},
@@ -34,6 +35,7 @@ AFRAME.registerComponent('game-manager',
 
         this.HEADSET_CONSTANTS = {
             SCREEN_Z_POS: -20,
+            BACKGROUND_RED: '#210001',
 
             STATS_CONTAINER: {
                 POSITION: {x: -5, y: 0, z: -15},
@@ -54,6 +56,9 @@ AFRAME.registerComponent('game-manager',
             },
         }
 
+        const element = this.el;
+        const schema = this.data;
+
         //this.score;
         this.lives;
         this.playerHeight;
@@ -63,6 +68,7 @@ AFRAME.registerComponent('game-manager',
         this.setUpGame = this.setUpGame.bind(this);
         this.playButton = this.playButton.bind(this);
         this.restartButton = this.restartButton.bind(this);
+        this.hitDelay = this.hitDelay.bind(this);
 
         this.GAME_CONSTANTS;
 
@@ -74,6 +80,10 @@ AFRAME.registerComponent('game-manager',
         {
             this.GAME_CONSTANTS = this.DESKTOP_CONSTANTS;
         }
+
+        // Setting up what colour red hit animation will be 
+        element.sceneEl.setAttribute('animation__hit1', {to: this.GAME_CONSTANTS.BACKGROUND_RED});
+        element.sceneEl.setAttribute('animation__hit2', {from: this.GAME_CONSTANTS.BACKGROUND_RED});
 
         // Setting up event listeners for player to be ready to set up the game
         document.getElementById('player').addEventListener('player-ready', this.setUpGame);
@@ -169,17 +179,14 @@ AFRAME.registerComponent('game-manager',
         // Resetting lives container
         var livesContainer = document.getElementById('lives-container');
 
-        livesContainer.querySelector('#live-1').setAttribute('material', {
-            color: 'red',
-        });
+        livesContainer.querySelector('#active-life-1').setAttribute('visible', true);
+        livesContainer.querySelector('#disabled-life-1').setAttribute('visible', false);
 
-        livesContainer.querySelector('#live-2').setAttribute('material', {
-            color: 'red',
-        });
+        livesContainer.querySelector('#active-life-2').setAttribute('visible', true);
+        livesContainer.querySelector('#disabled-life-2').setAttribute('visible', false);
 
-        livesContainer.querySelector('#live-3').setAttribute('material', {
-            color: 'red',
-        });
+        livesContainer.querySelector('#active-life-3').setAttribute('visible', true);
+        livesContainer.querySelector('#disabled-life-3').setAttribute('visible', false);
 
         // Showing game stats container
         document.getElementById('game-stats-container').setAttribute('visible', true);
@@ -270,7 +277,7 @@ AFRAME.registerComponent('game-manager',
         this.playGame();
     },
 
-    // Decreasing player lives by 1
+    // Playing hit feedback
     hit: function()
     {
         const element = this.el;
@@ -282,10 +289,16 @@ AFRAME.registerComponent('game-manager',
         // Playing background animation
         element.sceneEl.emit('hitAnimation', null, false);
 
+        // Waiting for animation to start playing to decrease lives information
+        setTimeout(this.hitDelay, 150);
+    },
+
+    // Decreasing player lives by 1
+    hitDelay: function()
+    {
         // Updating lives container
-        document.querySelector('#live-' + this.lives).setAttribute('material', {
-            color: 'grey',
-        });
+        document.querySelector('#active-life-' + this.lives).setAttribute('visible', false);
+        document.querySelector('#disabled-life-' + this.lives).setAttribute('visible', true);
 
         this.lives -= 1;
 
