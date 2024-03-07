@@ -278,12 +278,12 @@ const serveMuseumGames = async (req, res, next) =>
     credit: "CirclesXR",
     description: "Avoid the asteroids as you navigate through the Asteroid Field!",
     instructions: "<subtitle>VR Headset:\nEnter \"VR Mode\" to begin the game. Avoid the asteroids by jumping. Crouching, and moving side to side.\n\n<subtitle>Desktop:\nUse the WASD or arrow keys to move around through space.",
-    link: "------",
-    image: "default-circle-profile.png",
+    link: "https://uni-vr-sity.ca/Asteroid-Field",
+    image: "AsteroidFieldCover.png",
     contact: "Ali Arya\narya@carleton.ca\n\nAnastacia Gorbenko\nanastaciagorbenko@yahoo.ca",
     other: [{
       title: "Attributions",
-      description: "TODO for assets",
+      description: "\"Heart\" (https://skfb.ly/6WPTn) by freshlybaked is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n\n\"Asteroids Pack (metallic version)\" (https://skfb.ly/o6LtG) by SebastianSosnowski is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n\n\"Bold Style Font Pack 5\" (https://skfb.ly/oGGSO) by Okapiguy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
     }],
   }
 
@@ -356,7 +356,7 @@ const serveMuseumGames = async (req, res, next) =>
     credit: "Anastacia Gorbenko",
     description: "------",
     instructions: "------",
-    link: "------",
+    link: "https://uni-vr-sity.ca/Shooting-Range",
     image: "ShootingRangeCover.png",
     contact: "anastaciagorbenko@yahoo.ca",
   }
