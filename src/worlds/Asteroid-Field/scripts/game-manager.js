@@ -15,8 +15,8 @@ AFRAME.registerComponent('game-manager',
             BACKGROUND_RED: '#260001',
 
             STATS_CONTAINER: {
-                POSITION: {x: -6, y: 0, z: -4.5},
-                ROTATION: {x: 0, y: 20, z: 0},
+                POSITION: {x: -5.5, y: 0, z: -5},
+                ROTATION: {x: 0, y: 40, z: 0},
             },
 
             ASTEROID_SPAWNER: {
@@ -34,7 +34,7 @@ AFRAME.registerComponent('game-manager',
         }
 
         this.HEADSET_CONSTANTS = {
-            SCREEN_Z_POS: -20,
+            SCREEN_Z_POS: -15,
             BACKGROUND_RED: '#210001',
 
             STATS_CONTAINER: {
@@ -59,6 +59,8 @@ AFRAME.registerComponent('game-manager',
         const element = this.el;
         const schema = this.data;
 
+        this.currentButton;
+
         //this.score;
         this.lives;
         this.playerHeight;
@@ -66,6 +68,8 @@ AFRAME.registerComponent('game-manager',
         //this.spawnerMaxBounds;
 
         this.setUpGame = this.setUpGame.bind(this);
+        this.buttonEnter = this.buttonEnter.bind(this);
+        this.buttonLeave = this.buttonLeave.bind(this);
         this.playButton = this.playButton.bind(this);
         this.restartButton = this.restartButton.bind(this);
         this.hitDelay = this.hitDelay.bind(this);
@@ -139,9 +143,27 @@ AFRAME.registerComponent('game-manager',
         document.getElementById('start-screen').setAttribute('visible', 'true');
 
         var button = document.getElementById('play-button');
+        this.currentButton = 'play';
 
         button.classList.add('interactive');
+
+        button.addEventListener('mouseenter', this.buttonEnter)
+        button.addEventListener('mouseleave', this.buttonLeave)
         button.addEventListener('click', this.playButton);
+    },
+
+    // Listening for button hover
+    buttonEnter: function()
+    {
+        document.getElementById(this.currentButton + '-default').setAttribute('visible', false);
+        document.getElementById(this.currentButton + '-hover').setAttribute('visible', true);
+    },
+
+    // Listening for button leave
+    buttonLeave: function()
+    {
+        document.getElementById(this.currentButton + '-default').setAttribute('visible', true);
+        document.getElementById(this.currentButton + '-hover').setAttribute('visible', false);
     },
 
     // Listening for play button press
@@ -150,11 +172,14 @@ AFRAME.registerComponent('game-manager',
         // Hiding start screen
         document.getElementById('start-screen').setAttribute('visible', false);
 
-        // Removing event listener from button
+        // Removing event listeners from button
         var button = document.getElementById('play-button');
 
         button.classList.remove('interactive');
+
         button.removeEventListener('click', this.playButton);
+        button.removeEventListener('mouseenter', this.buttonEnter)
+        button.removeEventListener('mouseleave', this.buttonLeave)
     
         // Starting game
         this.playGame();
@@ -257,11 +282,16 @@ AFRAME.registerComponent('game-manager',
         //});
 
         var button = document.getElementById('restart-button');
+        this.currentButton = 'restart';
 
         button.classList.add('interactive');
+
         button.addEventListener('click', this.restartButton);
+        button.addEventListener('mouseenter', this.buttonEnter)
+        button.addEventListener('mouseleave', this.buttonLeave)
     },
 
+    // Listening for restart button press
     restartButton: function(event)
     {
         // Hiding start screen
@@ -271,7 +301,10 @@ AFRAME.registerComponent('game-manager',
         var button = document.getElementById('restart-button');
 
         button.classList.remove('interactive');
-        document.getElementById('restart-button').removeEventListener('click', this.restartButton);
+
+        button.removeEventListener('click', this.restartButton);
+        button.removeEventListener('mouseenter', this.buttonEnter)
+        button.removeEventListener('mouseleave', this.buttonLeave);
     
         // Starting game
         this.playGame();
@@ -290,7 +323,7 @@ AFRAME.registerComponent('game-manager',
         element.sceneEl.emit('hitAnimation', null, false);
 
         // Waiting for animation to start playing to decrease lives information
-        setTimeout(this.hitDelay, 150);
+        setTimeout(this.hitDelay, 250);
     },
 
     // Decreasing player lives by 1
