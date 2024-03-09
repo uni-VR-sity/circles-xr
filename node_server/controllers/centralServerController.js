@@ -280,9 +280,9 @@ const serveMuseumGames = async (req, res, next) =>
     instructions: "<subtitle>VR Headset:\nEnter \"VR Mode\" to begin the game. Avoid the asteroids by jumping. Crouching, and moving side to side.\n\n<subtitle>Desktop:\nUse the WASD or arrow keys to move around through space.",
     link: "https://uni-vr-sity.ca/Asteroid-Field",
     image: "AsteroidFieldCover.png",
-    contact: "Ali Arya\narya@carleton.ca\n\nAnastacia Gorbenko\nanastaciagorbenko@yahoo.ca",
+    contact: "Anastacia Gorbenko\nanastaciagorbenko@yahoo.ca\n\nAli Arya\narya@carleton.ca\n\n",
     other: [{
-      title: "Attributions",
+      title: "Attributions:",
       description: "<list>\"Heart\" (https://skfb.ly/6WPTn) by freshlybaked is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n<list>\"Asteroids Pack (metallic version)\" (https://skfb.ly/o6LtG) by SebastianSosnowski is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n<list>\"Bold Style Font Pack 5\" (https://skfb.ly/oGGSO) by Okapiguy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
     }],
   }
@@ -295,7 +295,7 @@ const serveMuseumGames = async (req, res, next) =>
     link: "https://elisvoid.itch.io/ambivalence",
     image: "AmbivalenceCover.png",
     other: [{
-      title: "Attributions",
+      title: "Attributions:",
       description: "<list>Birds Sound Effect: https://freesound.org/people/hargissssound/sounds/345851/\n<list>Light Switch Sound Effect: https://freesound.org/people/FillSoko/sounds/257958/\n<list>Background music: https://soundimage.org/looping-music/",
     }],
   }
@@ -336,11 +336,17 @@ const serveMuseumGames = async (req, res, next) =>
 
   games[5] = {
     name: "Just a Jester Jesting",
-    credit: "------",
+    credit: "Adel Manji, Danielle Cole, Everett O’man, Marcos Angelos Santos, Nicolas Teriault",
     description: "Can you perform enough tricks to survive the king's wrath?\nA 2D and 3D fusion game where you only need a mouse to play. Help the jester be funny for the court\nSurvive as long as you can while keeping all your lives (hearts), the fast paced mini games in the bottom half of the screen will test your skill. Inspired by Nintendo DS games likes Wario Ware and Rhythm Heaven. Keep up!",
     instructions: "Mouse: Use the left click to interact with elements on the bottom half of the screen. Click fast, drag, and time your clicks to stay alive.",
     link: "https://dcole.itch.io/just-a-jester-jesting",
     image: "JustAJesterJestingCover.png",
+    contact: "Danielle Cole at coles-danielle@shaw.ca",
+    other: [{
+      title: "Credits:",
+      description: "<subtitle>Audio and Sound:\nAdel Manji\n\n<subtitle>Programming and Game Design:\nMarcos Angelos Santos\nNicolas Teriault\n\n<subtitle>Art and Assets:\nDanielle Cole\nEverett O’man",
+    }],
+
   }
 
   games[6] = {
