@@ -276,7 +276,7 @@ const serveMuseumGames = async (req, res, next) =>
   games[0] = {
     name: "Asteroid Field (VR)",
     credit: "CirclesXR",
-    description: "Avoid the asteroids as you navigate through the Asteroid Field!",
+    description: "This is a mini-game demo for the Circles XR framework. Avoid the asteroids as you navigate through the Asteroid Field!",
     instructions: "<subtitle>VR Headset:\nEnter \"VR Mode\" to begin the game. Avoid the asteroids by jumping. Crouching, and moving side to side.\n\n<subtitle>Desktop:\nUse the WASD or arrow keys to move around through space.",
     link: "https://uni-vr-sity.ca/Asteroid-Field",
     image: "AsteroidFieldCover.png",
@@ -325,6 +325,16 @@ const serveMuseumGames = async (req, res, next) =>
   }
 
   games[4] = {
+    name: "ICE - Make me laugh for Mental Health",
+    credit: "Avery Babineau",
+    description: "This game was designed at the 2024 Global Game Jam. The theme for the game jam was \"Make Me Laugh\". This game is to promote and remind people how laughter can be used to improve mental health and make you feel better. The goal of this game is to make the monster (aka ICE) laugh and improve his mental health by collecting \"Jokens\" throughout the city of New York. Be careful, because at the beginning the monster is angry will not like when you get too close to him.",
+    instructions: "You play the game by using the WASD keys to move in different directions, and the mouse to look around. Space bar is to jump, SHIFT key is to sprint. Remember to collect the coins (a.k.a. Jokens)",
+    link: "https://avocadoscancode.itch.io/ice-make-me-laugh",
+    image: "ICECover.png",
+    contact: "av.babineau@gmail.com",
+  }
+
+  games[5] = {
     name: "Just a Jester Jesting",
     credit: "------",
     description: "Can you perform enough tricks to survive the king's wrath?\nA 2D and 3D fusion game where you only need a mouse to play. Help the jester be funny for the court\nSurvive as long as you can while keeping all your lives (hearts), the fast paced mini games in the bottom half of the screen will test your skill. Inspired by Nintendo DS games likes Wario Ware and Rhythm Heaven. Keep up!",
@@ -333,7 +343,7 @@ const serveMuseumGames = async (req, res, next) =>
     image: "JustAJesterJestingCover.png",
   }
 
-  games[5] = {
+  games[6] = {
     name: "Rooting for Carrots",
     credit: "Avery Babineau",
     description: "Rooting for carrots is a rpg-based farming simulator created for the 2022 Global Game Jam. The game jam theme was roots.",
@@ -342,7 +352,7 @@ const serveMuseumGames = async (req, res, next) =>
     image: "RootingForCarrotsCover.png",
   }
 
-  games[6] = {
+  games[7] = {
     name: "Sea Barks",
     credit: "Anastacia Gorbenko, Msgana Ocabazgi, Sam Lamoureux, Zoe Prevost",
     description: "In this underwater adventure, you play the role of Neptune, an eager puppy looking to please his owner at his new underwater farm SeaBarks. Neptune is responsible for putting away the sea creatures, and protecting them from hungry sharks. Get the sea creatures in to correct pens and you will be rewarded with treats.",
@@ -351,17 +361,17 @@ const serveMuseumGames = async (req, res, next) =>
     image: "SeaBarksCover.png",
   }
 
-  games[7] = {
-    name: "Shooting Range (VR)",
+  games[8] = {
+    name: "Shooting Range",
     credit: "Anastacia Gorbenko",
-    description: "------",
-    instructions: "------",
+    description: "Practice your aim in this space-themed shooting range!",
+    instructions: "This game can be played on desktop or mobile. When you enter, choose your colour and begin.\n\n<subtitle>Desktop:\nLook around using your mouse and shoot by pressing spacebar.\n\n<subtitle>Mobile:\nLook around by moving your device and shoot by clicking the gun.",
     link: "https://uni-vr-sity.ca/Shooting-Range",
     image: "ShootingRangeCover.png",
     contact: "anastaciagorbenko@yahoo.ca",
   }
 
-  games[8] = {
+  games[9] = {
     name: "Super Laugh Bros",
     credit: "Forest Kristoffer Ziven Anderson, Matt Penny, Matt Diener",
     description: "You're jesters tasked with pleasing the Lord of the land... with laughter! Please his requests for humor, but stay out of his way if he runs at you, or you'll be pushed out of the arena.",
@@ -370,7 +380,7 @@ const serveMuseumGames = async (req, res, next) =>
     image: "SuperLaughBrosCover.png",
   }
 
-  games[9] = {
+  games[10] = {
     name: "Wattson's Way Home",
     credit: "Alex Di Nobile, Cole McMullin, Emma Souannhaphanh, Cohen Ly",
     description: "Wattson’s Way Home is a 2D platformer game about helping a little spark find his way home. One day during a thunderstorm, Wattson fell out of a lightning bolt and was sent crashing into an unsuspecting house. Lost in a strange place filled with dust bunnies and leaky pipes, Wattson only knows that he needs to make it back home. Help find Wattson’s Way Home!",
@@ -379,14 +389,13 @@ const serveMuseumGames = async (req, res, next) =>
     image: "WattsonsWayHomeCover.png",
   }
 
-  games[10] = {
+  games[11] = {
     name: "Wend",
     credit: "Christa Buttera, Matt Donoghue, Quinn Hentschel, Heather Hennessey",
     description: "Wend is a single player, top-down perspective game about exploration where you, the player, will navigate a complex labyrinth, lighting your way with a single torch as you collect relics and wander towards the center. The catch, however, is that the brightness and size of your torch light is dependent on your state of motion: the torch burns low and small while you run through the labyrinth, and burns bright and large while you stand still. Luminescent gems can be found throughout the labyrinth and allow you to mark your way as you proceed along the dark and mysterious paths. Uncover the mysteries of these unexplored depths as you wend your way through the labyrinth, and recover ancient relics to discover the secrets that lie at its center.",
     instructions: "You, the player, have the ability to control your torch light through the game's movement mechanics: while moving, only a small radius around your avatar is illuminated. While stationary, however, your torch is raised automatically to expand this radius to the neighbouring pathways to view a greater portion of the labyrinth. While playing, you can discover and collect emissive gems hidden throughout the labyrinth to help you find your way. These gems illuminate a small area around themselves, and, as such, can be placed anywhere in the labyrinth to create strategic paths to specific areas or landmarks that you deem significant.\n\n<subtitle>Controller Controls:\nUse the left stick to move around the labyrinth\nUse the right stick to move the camera (only enabled when you're standing still!)\nPress 'A' to pick up and drop gems, and to collect relics\nPress Start to pause\n\n<subtitle>Keyboard Controls:\nWASD to move\nArrow keys to move camera\nB key for picking up/dropping objects and any other action button prompts\nTAB to pause (arrow keys to navigate menus while paused)",
     link: "https://christabuttera.itch.io/wend",
     image: "WendCover.png",
-    contact: "------",
   }
 
   res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/museum-games'), {
