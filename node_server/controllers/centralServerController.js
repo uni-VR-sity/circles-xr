@@ -283,7 +283,7 @@ const serveMuseumGames = async (req, res, next) =>
     contact: "Ali Arya\narya@carleton.ca\n\nAnastacia Gorbenko\nanastaciagorbenko@yahoo.ca",
     other: [{
       title: "Attributions",
-      description: "\"Heart\" (https://skfb.ly/6WPTn) by freshlybaked is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n\n\"Asteroids Pack (metallic version)\" (https://skfb.ly/o6LtG) by SebastianSosnowski is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n\n\"Bold Style Font Pack 5\" (https://skfb.ly/oGGSO) by Okapiguy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
+      description: "<list>\"Heart\" (https://skfb.ly/6WPTn) by freshlybaked is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n<list>\"Asteroids Pack (metallic version)\" (https://skfb.ly/o6LtG) by SebastianSosnowski is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n<list>\"Bold Style Font Pack 5\" (https://skfb.ly/oGGSO) by Okapiguy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
     }],
   }
 
@@ -328,7 +328,7 @@ const serveMuseumGames = async (req, res, next) =>
     name: "ICE - Make me laugh for Mental Health",
     credit: "Avery Babineau",
     description: "This game was designed at the 2024 Global Game Jam. The theme for the game jam was \"Make Me Laugh\". This game is to promote and remind people how laughter can be used to improve mental health and make you feel better. The goal of this game is to make the monster (aka ICE) laugh and improve his mental health by collecting \"Jokens\" throughout the city of New York. Be careful, because at the beginning the monster is angry will not like when you get too close to him.",
-    instructions: "You play the game by using the WASD keys to move in different directions, and the mouse to look around. Space bar is to jump, SHIFT key is to sprint. Remember to collect the coins (a.k.a. Jokens)",
+    instructions: "You play the game by using the WASD keys to move in different directions, and the mouse to look around. Space bar is to jump, SHIFT key is to sprint. Remember to collect the coins (a.k.a. Jokens).",
     link: "https://avocadoscancode.itch.io/ice-make-me-laugh",
     image: "ICECover.png",
     contact: "av.babineau@gmail.com",
