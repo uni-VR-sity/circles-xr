@@ -365,7 +365,7 @@ const serveMuseumGames = async (req, res, next) =>
     name: "Shooting Range",
     credit: "Anastacia Gorbenko",
     description: "Practice your aim in this space-themed shooting range!",
-    instructions: "This game can be played on desktop or mobile. When you enter, choose your colour and begin.\n\n<subtitle>Desktop:\nLook around using your mouse and shoot by pressing spacebar.\n\n<subtitle>Mobile:\nLook around by moving your device and shoot by clicking the gun.",
+    instructions: "When you enter, choose your colour and begin. Look around using your mouse and shoot by pressing spacebar.",
     link: "https://uni-vr-sity.ca/Shooting-Range",
     image: "ShootingRangeCover.png",
     contact: "anastaciagorbenko@yahoo.ca",
