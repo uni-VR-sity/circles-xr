@@ -18,7 +18,9 @@ block content
         .game(onclick='openOverlay("' + gameId + '")')
             img(src=imageSrc alt=altText)
 
-            b= game.name
+            b.title= game.name
+
+            i.platform= game.platform
 
             p= game.credit
 

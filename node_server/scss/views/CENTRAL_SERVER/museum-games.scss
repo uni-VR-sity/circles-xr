@@ -34,9 +34,13 @@
                 border-radius: $BORDER_RADIUS;
             }
 
-            b {
-                display: inline-block;
+            b.title {
+                display: block;
                 margin-top: $SMALL_MARGIN;
+            }
+
+            i.platform {
+                display: block;
                 margin-bottom: calc($X_SMALL_MARGIN / 2);
             }
 
