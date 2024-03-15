@@ -59,7 +59,7 @@ function setUpDesktopPlayer(schema, element, playerHeight, colliderRadius)
 // ------------------------------------------------------------------------------------------
 
 // Setting up player functionality on desktop
-// (Controller interaction, collider)
+// (Controller interaction)
 function setUpHeadsetPlayer(schema, element, colliderRadius)
 {
     // Left Controller interaction
@@ -67,11 +67,6 @@ function setUpHeadsetPlayer(schema, element, colliderRadius)
 
     // Right Controller interaction
     setUpController(element, 'right', schema.hasControllers);
-
-    // Player collider
-    element.querySelector('[camera]').setAttribute('static-body', {
-        sphereRadius: colliderRadius,
-    });
 }
 
 // ------------------------------------------------------------------------------------------
@@ -133,7 +128,7 @@ AFRAME.registerComponent('player',
         }
 
         this.HEADSET_CONSTANTS = {
-            COLLIDER_RADIUS: 0.2,
+            COLLIDER_RADIUS: 0.3,
         }
 
         const element = this.el;
@@ -202,7 +197,7 @@ AFRAME.registerComponent('player',
         }
     },
 
-    // Getting player height in headset
+    // Getting player height in headset and setting up colliders
     getPlayerHeight: function(event)
     {
         const element = this.el;
@@ -211,6 +206,44 @@ AFRAME.registerComponent('player',
         setTimeout(function() 
         {
             var playerHeight = element.querySelector('[camera]').getAttribute('position').y;
+
+            // Player collider
+
+            // Head
+            element.querySelector('[camera]').setAttribute('static-body', {
+                sphereRadius: this.DESKTOP_CONSTANTS.COLLIDER_RADIUS,
+            });
+
+            // Body
+            var playerBody = document.createElement('a-entity');
+
+            playerBody.setAttribute('geometry', {
+                primitive: 'box',
+            });
+
+            playerBody.setAttribute('position', {
+                x: 0,
+                y: -playerHeight / 2, 
+                z: 0,
+            });
+
+            playerBody.setAttribute('scale', {
+                x: this.DESKTOP_CONSTANTS.COLLIDER_RADIUS * 2,
+                y: playerHeight, 
+                z: this.DESKTOP_CONSTANTS.COLLIDER_RADIUS * 2,
+            });
+
+            playerBody.setAttribute('static-body', {
+                shape: 'box',
+            });
+
+            playerBody.setAttribute('collision-filter', {
+                group: 'player',
+            });
+
+            playerBody.setAttribute('visible', false);
+
+            element.querySelector('[camera]').appendChild(playerBody);
             
             // Emitting event that player is ready
             element.emit('player-ready', {playerHeight: playerHeight}, false);
