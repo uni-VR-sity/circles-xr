@@ -142,7 +142,7 @@ AFRAME.registerComponent('player',
             setUpHeadsetPlayer(schema, element, this.HEADSET_CONSTANTS.COLLIDER_RADIUS);
 
             element.querySelector('[camera]').setAttribute('static-body', {
-                sphereRadius: HEADSET_CONSTANTS.COLLIDER_RADIUS,
+                sphereRadius: this.HEADSET_CONSTANTS.COLLIDER_RADIUS,
             });
 
             // Waiting for user to enter vr to get their height
