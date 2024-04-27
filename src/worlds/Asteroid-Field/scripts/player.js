@@ -59,7 +59,7 @@ function setUpDesktopPlayer(schema, element, playerHeight, colliderRadius)
 // ------------------------------------------------------------------------------------------
 
 // Setting up player functionality on desktop
-// (Controller interaction)
+// (Controller interaction and head collider)
 function setUpHeadsetPlayer(schema, element, colliderRadius)
 {
     // Left Controller interaction
@@ -67,6 +67,11 @@ function setUpHeadsetPlayer(schema, element, colliderRadius)
 
     // Right Controller interaction
     setUpController(element, 'right', schema.hasControllers);
+
+    // Head Collider
+    element.querySelector('[camera]').setAttribute('static-body', {
+        sphereRadius: colliderRadius,
+    });
 }
 
 // ------------------------------------------------------------------------------------------
@@ -141,10 +146,6 @@ AFRAME.registerComponent('player',
         {
             setUpHeadsetPlayer(schema, element, this.HEADSET_CONSTANTS.COLLIDER_RADIUS);
 
-            element.querySelector('[camera]').setAttribute('static-body', {
-                sphereRadius: this.HEADSET_CONSTANTS.COLLIDER_RADIUS,
-            });
-
             // Waiting for user to enter vr to get their height
             document.querySelector('a-scene').addEventListener('enter-vr', this.getPlayerHeight);
         }
@@ -199,7 +200,7 @@ AFRAME.registerComponent('player',
         }
     },
 
-    // Getting player height in headset and setting up colliders
+    // Getting player height in headset and setting up body colliders
     getPlayerHeight: function(event)
     {
         const element = this.el;
@@ -211,13 +212,9 @@ AFRAME.registerComponent('player',
         {
             var playerHeight = element.querySelector('[camera]').getAttribute('position').y;
 
-            // Player collider
+            // Body collider
 
-            // Head
-
-
-            // Body
-            /*var playerBody = document.createElement('a-entity');
+            var playerBody = document.createElement('a-entity');
 
             playerBody.setAttribute('geometry', {
                 primitive: 'box',
@@ -246,7 +243,6 @@ AFRAME.registerComponent('player',
             playerBody.setAttribute('visible', false);
 
             element.querySelector('[camera]').appendChild(playerBody);
-            */
 
             // Emitting event that player is ready
             element.emit('player-ready', {playerHeight: playerHeight}, false);
