@@ -208,7 +208,9 @@ AFRAME.registerComponent('player',
             var playerHeight = element.querySelector('[camera]').getAttribute('position').y;
 
             // Player collider
-
+            document.getElementById('debugger').setAttribute('text', {
+                value: HEADSET_CONSTANTS.COLLIDER_RADIUS,
+            })
             // Head
             element.querySelector('[camera]').setAttribute('static-body', {
                 sphereRadius: HEADSET_CONSTANTS.COLLIDER_RADIUS,
@@ -243,7 +245,8 @@ AFRAME.registerComponent('player',
 
             playerBody.setAttribute('visible', false);
 
-            element.querySelector('[camera]').appendChild(playerBody);*/
+            element.querySelector('[camera]').appendChild(playerBody);
+            */
 
             // Emitting event that player is ready
             element.emit('player-ready', {playerHeight: playerHeight}, false);
