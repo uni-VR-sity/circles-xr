@@ -215,7 +215,7 @@ AFRAME.registerComponent('player',
             });
 
             // Body
-            var playerBody = document.createElement('a-entity');
+            /*var playerBody = document.createElement('a-entity');
 
             playerBody.setAttribute('geometry', {
                 primitive: 'box',
@@ -243,7 +243,7 @@ AFRAME.registerComponent('player',
 
             playerBody.setAttribute('visible', false);
 
-            element.querySelector('[camera]').appendChild(playerBody);
+            element.querySelector('[camera]').appendChild(playerBody);*/
 
             // Emitting event that player is ready
             element.emit('player-ready', {playerHeight: playerHeight}, false);
