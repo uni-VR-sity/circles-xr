@@ -134,8 +134,6 @@ AFRAME.registerComponent('player',
         const element = this.el;
         const schema = this.data;
 
-        this.test = 1;
-
         this.getPlayerHeight = this.getPlayerHeight.bind(this);
 
         // Setting up player depending on what device they are on
@@ -203,6 +201,8 @@ AFRAME.registerComponent('player',
         const element = this.el;
         const schema = this.data;
 
+        HEADSET_CONSTANTS = this.HEADSET_CONSTANTS;
+
         setTimeout(function() 
         {
             var playerHeight = element.querySelector('[camera]').getAttribute('position').y;
@@ -211,7 +211,7 @@ AFRAME.registerComponent('player',
 
             // Head
             element.querySelector('[camera]').setAttribute('static-body', {
-                sphereRadius: this.DESKTOP_CONSTANTS.COLLIDER_RADIUS,
+                sphereRadius: HEADSET_CONSTANTS.COLLIDER_RADIUS,
             });
 
             // Body
@@ -228,10 +228,10 @@ AFRAME.registerComponent('player',
             });
 
             playerBody.setAttribute('scale', {
-                x: this.DESKTOP_CONSTANTS.COLLIDER_RADIUS * 2,
+                x: HEADSET_CONSTANTS.COLLIDER_RADIUS * 2,
                 y: playerHeight, 
-                z: this.DESKTOP_CONSTANTS.COLLIDER_RADIUS * 2,
-            });
+                z: HEADSET_CONSTANTS.COLLIDER_RADIUS * 2,
+            }); 
 
             playerBody.setAttribute('static-body', {
                 shape: 'box',
@@ -244,7 +244,7 @@ AFRAME.registerComponent('player',
             playerBody.setAttribute('visible', false);
 
             element.querySelector('[camera]').appendChild(playerBody);
-            
+
             // Emitting event that player is ready
             element.emit('player-ready', {playerHeight: playerHeight}, false);
 
