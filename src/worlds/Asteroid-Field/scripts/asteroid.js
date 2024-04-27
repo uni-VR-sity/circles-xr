@@ -133,20 +133,16 @@ AFRAME.registerComponent('asteroid',
         const element = this.el;
         const schema = this.data;
 
+        this.playerHit = false;
+
         this.move = this.move.bind(this);
+        this.collision = this.collision.bind(this);
 
         // Setting up enitity with model, position, scale, rotation, and physics
         setUpAsteroid(element, schema);
 
         // Listening for collision with player 
-        // If there is a collision, decreasing player lives
-        element.addEventListener('collisions', function(event)
-        {
-            if (event.detail.els.length > 0)
-            {
-                document.querySelector('#game-manager').components['game-manager'].hit();
-            }
-        });
+        element.addEventListener('collisions', this.collision);
 
         // Moving asteroid every 10 millisecond
         this.movingInterval = setInterval(this.move, 10);
@@ -167,5 +163,24 @@ AFRAME.registerComponent('asteroid',
 
         // Checking if asteroid is at the end point
         checkPosition(asteroidPos, element, schema);
+    },
+
+    collision: function(event)
+    {
+        const element = this.el;
+        const schema = this.data;
+
+        // Avoiding one asteroid triggering multiple colliders on a player by checking is asteroid already hit the player
+        // If it has not, decreasing player lives
+        if (!this.playerHit)
+        {
+            if (event.detail.els.length > 0)
+            {
+                document.querySelector('#game-manager').components['game-manager'].hit();
+                
+                this.playerHit = true;
+            }
+        }
+
     },
 });
