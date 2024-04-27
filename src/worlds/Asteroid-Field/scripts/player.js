@@ -141,6 +141,10 @@ AFRAME.registerComponent('player',
         {
             setUpHeadsetPlayer(schema, element, this.HEADSET_CONSTANTS.COLLIDER_RADIUS);
 
+            element.querySelector('[camera]').setAttribute('static-body', {
+                sphereRadius: HEADSET_CONSTANTS.COLLIDER_RADIUS,
+            });
+
             // Waiting for user to enter vr to get their height
             document.querySelector('a-scene').addEventListener('enter-vr', this.getPlayerHeight);
         }
@@ -208,13 +212,9 @@ AFRAME.registerComponent('player',
             var playerHeight = element.querySelector('[camera]').getAttribute('position').y;
 
             // Player collider
-            document.getElementById('debugger').setAttribute('text', {
-                value: HEADSET_CONSTANTS.COLLIDER_RADIUS,
-            })
+
             // Head
-            element.querySelector('[camera]').setAttribute('static-body', {
-                sphereRadius: HEADSET_CONSTANTS.COLLIDER_RADIUS,
-            });
+
 
             // Body
             /*var playerBody = document.createElement('a-entity');
