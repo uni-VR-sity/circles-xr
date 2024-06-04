@@ -149,6 +149,7 @@
                 grid-template-rows: 1fr 0.6fr 0.7fr;
                 background-color: $LIGHT_GREY;
                 overflow: hidden;
+                aspect-ratio: 1 / 1;
 
                 .file-name-container {
                     margin-top: $MEDIUM_MARGIN;
