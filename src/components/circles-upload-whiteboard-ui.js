@@ -297,8 +297,8 @@ const generatePopUp_Headset = function()
     container.setAttribute('circles-lookat', {
         targetElement: document.querySelector('[camera]'),
         constrainYAxis: true,
-        contraintedX: -10,
-        contraintedZ: 0,
+        constraintedX: -10,
+        constraintedZ: 0,
         smoothingAlpha: 0.01,
     });
 

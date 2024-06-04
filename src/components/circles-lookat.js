@@ -5,8 +5,8 @@ AFRAME.registerComponent('circles-lookat', {
     targetElement:  {type:'selector', default:null},
     enabled:        {type:'boolean',  default:true},
     constrainYAxis: {type:'boolean',  default:true},
-      contraintedX:   {type:'number',   default:0},
-      contraintedZ:   {type:'number',   default:0},
+    constraintedX:   {type:'number',   default:0},
+    constraintedZ:   {type:'number',   default:0},
     updateRate:     {type:'number',   default:200},   //in ms
     smoothingOn:    {type:'boolean',  default:true},
     smoothingAlpha: {type:'float',    default:0.05},
@@ -53,9 +53,9 @@ AFRAME.registerComponent('circles-lookat', {
 
       if (this.data.constrainYAxis === true) {
         this.el.setAttribute('rotation', {
-          x: this.data.contraintedX,
+          x: this.data.constraintedX,
           y: this.el.getAttribute('rotation').y,
-          z: this.data.contraintedZ,
+          z: this.data.constraintedZ,
         });
       }
     }
