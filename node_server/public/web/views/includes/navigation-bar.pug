@@ -57,3 +57,36 @@ nav
 
                     li 
                         a.red(href='/logout') Log out
+
+    else 
+        // Hamburger icon (mobile) --------------------------------------------------------------
+        .nav-hamburger(onclick='displayNavigation()')
+            .icon-container
+                i(class='fa-solid fa-bars')
+                
+        // Navigation buttons -------------------------------------------------------------------
+        .nav-items-container
+            ul.nav-items
+                li
+                    a(href='/more-circles') More Circles
+
+        // Profile ------------------------------------------------------------------------------
+        .profile-container
+
+            // Profile information --------------------------------------------------------------
+            .profile-information
+                .icon-container
+                    i(class='fa-solid fa-user')
+                p.username Account
+            
+            // Profile dropdown -----------------------------------------------------------------
+            .profile-dropdown 
+                ul
+                    li
+                        a(href='/profile') Log In
+
+                    li
+                        a(href='/your-magic-links') Register
+
+                    li
+                        a(href='/uploaded-content') Continue as Guest

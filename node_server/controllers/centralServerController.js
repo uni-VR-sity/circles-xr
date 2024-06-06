@@ -38,27 +38,47 @@ env = dotenvParseVariables(env.parsed);
 // Getting user information to send to pages
 const getUserInfo = function(req)
 {
-  var user = req.user;
+  if (req.user)
+  {
+    var user = req.user;
 
-  const userInfo = {
-    username: user.username,
-    usertype: user.usertype,
-    email: user.email,
-    displayName: user.displayName,
-    headUrl: user.gltf_head_url,
-    hairUrl: user.gltf_hair_url,
-    bodyUrl: user.gltf_body_url,
-    headColor: user.color_head,
-    hairColor: user.color_hair,
-    bodyColor: user.color_body,
-    handLeftColor: user.color_hand_left,
-    handRightColor: user.color_hand_right,
+    const userInfo = {
+      username: user.username,
+      usertype: user.usertype,
+      email: user.email,
+      displayName: user.displayName,
+      headUrl: user.gltf_head_url,
+      hairUrl: user.gltf_hair_url,
+      bodyUrl: user.gltf_body_url,
+      headColor: user.color_head,
+      hairColor: user.color_hair,
+      bodyColor: user.color_body,
+      handLeftColor: user.color_hand_left,
+      handRightColor: user.color_hand_right,
+    }
+
+    return userInfo;
   }
-
-  return userInfo;
+  else
+  {
+    return null;
+  }
 }
 
-// More Circles Page Routes ------------------------------------------------------------------------------------------------------------------------
+// Homepage ----------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering homepage page
+const serveHomepage = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+
+  res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/homepage'), {
+    title: "uni-VR-sity",
+    userInfo: userInfo,
+  });
+}
+
+// More Circles Page ------------------------------------------------------------------------------------------------------------------------------
 
 // Rendering more circles page
 const serveMoreCircles = async (req, res, next) =>
@@ -267,7 +287,7 @@ const getServersList = async (req, res, next) =>
   }
 }
 
-// Museum Games Page Routes ------------------------------------------------------------------------------------------------------------------------
+// Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
 
 const serveMuseumGames = async (req, res, next) =>
 {
@@ -425,6 +445,8 @@ const serveMuseumGames = async (req, res, next) =>
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
+    // Homepage
+    serveHomepage,
     // More Circles Page
     serveMoreCircles,
     addCirclesServer,

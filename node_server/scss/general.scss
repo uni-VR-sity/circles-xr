@@ -130,6 +130,15 @@ p.error-message::before {
 
             h3 {
                 @include no-spacing;
+                padding: $MEDIUM_MARGIN 0;
+            }
+
+            a {
+                @include no-spacing;
+                display: block;
+                font-size: 20px;
+                line-height: 1;
+                padding: $MEDIUM_MARGIN 0;
             }
 
             .selected-tab {
@@ -138,7 +147,6 @@ p.error-message::before {
             }
 
             .tab {
-                padding: $MEDIUM_MARGIN 0;
                 text-align: center;
             }
 

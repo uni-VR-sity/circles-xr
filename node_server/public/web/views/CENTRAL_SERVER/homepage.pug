@@ -1,0 +1,66 @@
+extends ../template.pug
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+
+    // Banner -------------------------------------------------------------------------------
+    section#homepage-banner-container
+        #homepage-title
+            .content-container 
+
+                // Title ------------------------------------------------------------------------
+                h1 uni-VR-sity
+
+                // Description ------------------------------------------------------------------
+                #description
+                    p WebXR learning framework and research project that explores multi-learner and multi-platform
+                    p (Desktop, Mobile, and HMD) learning affordances
+
+        // Page Navigation --------------------------------------------------------------
+        #homepage-navigation-container.top-bar-container
+            .top-bar
+                
+                .top-bar-tabs
+                    .tab 
+                        a(href='#about-container') About 
+
+                    .tab 
+                        a(href='#featured-circles-container') Showroom 
+
+                    .tab 
+                        a(href='#development-container') Development 
+
+                    .tab 
+                        a(href='#news-container') News 
+
+                    .tab 
+                        a(href='#project-team-container') Project Team
+
+    // About --------------------------------------------------------------------------------
+    section#about-container 
+        .content-container 
+
+    // Featured Circles ---------------------------------------------------------------------
+    section#featured-circles-container 
+        .content-container 
+
+    // Development --------------------------------------------------------------------------
+    section#development-container 
+        .content-container
+
+    // News ---------------------------------------------------------------------------------
+    section#news-container 
+        .content-container 
+
+    // Project Team -------------------------------------------------------------------------
+    section#project-team-container 
+        .content-container 
+    
+    include ../includes/footer.pug

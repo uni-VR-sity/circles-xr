@@ -187,6 +187,10 @@ router.post('/update-user-colour', authenticated, circleController.updateUserCol
 
 // CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
 
+// Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/homepage', centralServerController.serveHomepage);
+
 // More Circles Page Routes -----------------------------------------------------------------
 
 router.get('/more-circles', authenticated, centralServerController.serveMoreCircles);

@@ -1,0 +1,117 @@
+// Banner ------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#homepage-banner-container {
+    height: 600px;
+    margin-top: calc(-1 * $NAVIGATION_MARGIN);
+    background-image: url("/web/images/campfire.jpg");
+    background-size: cover;
+    background-position: 50% 100%;
+    display: grid;
+    grid-template-rows: 7fr 1fr;
+    color: $WHITE;
+
+    #homepage-title {
+
+        .content-container {
+            width: $MAX_CONTENT_WIDTH;
+            margin-top: $LARGE_MARGIN * 2;
+            
+            h1 {
+                align-self: end;
+                font-size: 110px;
+                font-weight: 400;
+                margin-bottom: $LARGE_MARGIN;
+            }
+    
+            p {
+                font-size: 22px;
+            }
+        }
+    }
+
+    #homepage-navigation-container {
+        background-color: rgba(0, 0, 0, 0.50);
+        align-self: end;
+
+        .top-bar-tabs {
+            grid-template-columns: repeat(5, 1fr);
+            background-color: transparent;
+
+            a {
+                color: $WHITE;
+            }
+
+            .tab:not(.selected-tab):hover
+            {
+                background-color: $BLACK;
+            }
+        }
+    }
+}
+
+// About -------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#about-container {
+    background-color: rgb(255, 231, 186);
+    height: 600px;
+
+    .content-container {
+
+    }
+}
+
+// Featured Circles --------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#featured-circles-container {
+    background-color: rgb(255, 255, 190);
+    height: 400px;
+
+    .content-container {
+
+    }
+}
+
+// Development -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#development-container {
+    background-color: rgb(195, 255, 195);
+    height: 600px;
+
+    .content-container {
+
+    }
+}
+
+// News --------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#news-container {
+    background-color: rgb(193, 193, 255);
+    height: 800px;
+
+    .content-container {
+
+    }
+}
+
+// Project Team ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#project-team-container {
+    background-color: rgb(255, 192, 255);
+    height: 400px;
+
+    .content-container {
+
+    }
+}

@@ -11,7 +11,7 @@ body {
 nav {
     @include no-spacing;
     margin: 0 auto;
-    margin-bottom: $NAVIGATION_MARGIN + 1px;
+    margin-bottom: $NAVIGATION_MARGIN;
     background-color: $WHITE;
     width: 100%;
     display: grid;
@@ -22,8 +22,10 @@ nav {
     .logo-container {
         @include start-flex;
         justify-self: start;
+        align-self: center;
         grid-area: nav-logo;
-        padding: 15px $SECTION_PADDING;
+        height: $DEFAULT_NAV_HEIGHT;
+        padding: 0 $SECTION_PADDING;
 
         a {
             width: 125px;
@@ -44,10 +46,12 @@ nav {
         .nav-items {
             @include no-spacing;
             list-style: none;
+            height: 100%;
         
             li {
                 display: inline-block;
                 background-color: $WHITE;
+                height: 100%;
         
                 a {
                     display: inline-block;
@@ -69,7 +73,7 @@ nav {
         grid-area: nav-profile;
         justify-self: end;
         position: relative;
-        min-width: 198px;
+        min-width: 200px;
 
         // Information
         .profile-information {
@@ -171,7 +175,7 @@ nav {
 
         // Profile
         .profile-container {
-            min-width: 192px;
+            min-width: 200px;
 
             // Information
             .profile-information {
