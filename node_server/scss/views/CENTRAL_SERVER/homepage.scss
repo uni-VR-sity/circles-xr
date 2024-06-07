@@ -61,19 +61,19 @@
 
         h1 {
             text-align: center;
-            margin-bottom: $LARGE_MARGIN;
+            margin-bottom: $X_LARGE_MARGIN;
         }
 
         #about-description {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-gap: $X_SMALL_MARGIN;
+            grid-gap: $X_LARGE_MARGIN + 10px;
             align-items: center;
             margin-bottom: $X_LARGE_MARGIN;
 
             #video-container {
                 position: relative; 
-                padding-bottom: 45%; 
+                padding-bottom: 55%; 
                 height: 0; 
                 overflow: hidden; 
                 max-width: 100%;
@@ -114,11 +114,23 @@
 // DEFAULT ----------------------------------------------------------------------------------
 
 #featured-circles-container {
-    background-color: rgb(255, 255, 190);
-    height: 400px;
+    background-color: $LIGHT_GREY;
+    padding: $X_LARGE_MARGIN 0;
 
     .content-container {
 
+        h1 {
+            text-align: center;
+        }
+
+        #circles-scroll-container {
+            display: grid;
+            grid-template-columns: 1fr repeat(3, 2.5fr) 1fr;
+
+            p {
+                border: 1px solid black;
+            }
+        }
     }
 }
 
