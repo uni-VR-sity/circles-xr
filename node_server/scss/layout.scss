@@ -28,7 +28,10 @@ nav {
         padding: 0 $SECTION_PADDING;
 
         a {
-            width: 125px;
+
+            img {
+                height: 60%;
+            }
         }
     }
 
