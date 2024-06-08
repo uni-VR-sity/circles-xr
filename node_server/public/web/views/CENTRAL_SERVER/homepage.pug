@@ -72,25 +72,25 @@ block content
 
             h1 Featured Circles
 
-            #circles-scroll-container 
+            #circles-scroll-container.scroll-gallery-container
 
                 #left-arrow.arrow
                     .icon-container 
                         i(class='fa-solid fa-chevron-left')
 
-                .featured-circle
+                .featured-circle.scroll-gallery-item
                     img(src='/web/images/default-circle-profile.png' alt=altText)
                     p Circle 1
                 
-                .featured-circle
+                .featured-circle.scroll-gallery-item
                     img(src='/web/images/default-circle-profile.png' alt=altText)
                     p Circle 2
 
-                .featured-circle
+                .featured-circle.scroll-gallery-item
                     img(src='/web/images/default-circle-profile.png' alt=altText)
                     p Circle 3
 
-                .featured-circle
+                .featured-circle.scroll-gallery-item
                     img(src='/web/images/default-circle-profile.png' alt=altText)
                     p Circle 4
 
@@ -98,7 +98,7 @@ block content
                     .icon-container 
                         i(class='fa-solid fa-chevron-right')
 
-            #page-indicator-container
+            .gallery-page-indicator-container
 
                 #page1.page-indicator 
                     .icon-container
@@ -174,7 +174,7 @@ block content
 
                     #article-description
 
-                        h2 TITLE
+                        h2 Title
 
                         h3 Month Day, 2024
 
@@ -188,7 +188,7 @@ block content
 
                     #article-description
 
-                        h2 TITLE
+                        h2 Title
 
                         h3 Month Day, 2024
 
@@ -202,7 +202,7 @@ block content
 
                     #article-description
 
-                        h2 TITLE
+                        h2 Title
 
                         h3 Month Day, 2024
 
@@ -213,5 +213,58 @@ block content
     // Project Team -------------------------------------------------------------------------
     section#project-team-container 
         .content-container 
+
+            hr.section-divider
+
+            h1 Project Team
+
+            #team-scroll-container.scroll-gallery-container
+
+                #left-arrow.arrow
+                    .icon-container 
+                        i(class='fa-solid fa-chevron-left')
+
+                .team-member.scroll-gallery-item
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+                    h2 Name
+                    p Title
+                
+                .team-member.scroll-gallery-item
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+                    h2 Name
+                    p Title
+
+                .team-member.scroll-gallery-item
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+                    h2 Name
+                    p Title
+
+                .team-member.scroll-gallery-item
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+                    h2 Name
+                    p Title
+
+                #right-arrow.arrow
+                    .icon-container 
+                        i(class='fa-solid fa-chevron-right')
+
+            .gallery-page-indicator-container
+
+                #page1.page-indicator 
+                    .icon-container
+                        i(class='fa-solid fa-circle')
+
+                #page2.page-indicator 
+                    .icon-container
+                        i(class='fa-regular fa-circle')
+
+                #page3.page-indicator 
+                    .icon-container
+                        i(class='fa-regular fa-circle')
+
+                #page4.page-indicator 
+                    .icon-container
+                        i(class='fa-regular fa-circle')
+
     
     include ../includes/footer.pug

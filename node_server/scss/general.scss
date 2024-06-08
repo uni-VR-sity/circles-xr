@@ -54,15 +54,6 @@ a {
     color: $BLUE;
 }
 
-.section-divider {
-    width: 300px;
-    margin: 0 auto;
-    margin-bottom: $XX_LARGE_MARGIN;
-    height: 2px;
-    border: none;
-    background: black;
-}
-
 // Icons -------------------------------------------------------------------------------------------------------------------------------------------
 
 .icon-container {
@@ -231,6 +222,56 @@ table {
         td {
             vertical-align: top;
             padding: $X_SMALL_MARGIN $MEDIUM_MARGIN;
+        }
+    }
+}
+
+// Scroll Gallery ------------------------------------------------------------------------------------------------------------------------------------------------
+
+.scroll-gallery-container {
+    display: grid;
+    grid-template-columns: 1fr repeat(4, 3fr) 1fr;
+    margin-bottom: $X_LARGE_MARGIN;
+
+    .arrow {
+        align-content: center;
+
+        .icon-container {
+            @include icon-highlight ($DEFAULT_X_LARGE_ICON, $BLACK);
+        }
+    }
+
+    #left-arrow {
+        justify-self: left;
+    }
+
+    #right-arrow {
+        justify-self: right;
+    }
+
+    .scroll-gallery-item {
+        display: grid;
+        justify-items: center;
+
+        img {
+            width: 65%;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+    }
+}
+
+.gallery-page-indicator-container {
+    @include center-flex;
+                
+    .page-indicator {
+        display: inline-block;
+        margin: 0 $XX_SMALL_MARGIN;
+
+        .icon-container {
+                
+            i {
+                font-size: $SMALL_ICON;
+            }
         }
     }
 }

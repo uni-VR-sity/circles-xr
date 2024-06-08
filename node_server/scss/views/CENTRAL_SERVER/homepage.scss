@@ -125,54 +125,15 @@
         }
 
         #circles-scroll-container {
-            display: grid;
-            grid-template-columns: 1fr repeat(4, 3fr) 1fr;
-            margin-bottom: $X_LARGE_MARGIN;
-
-            .arrow {
-                align-content: center;
-
-                .icon-container {
-                    @include icon-highlight ($DEFAULT_X_LARGE_ICON, $BLACK);
-                }
-            }
-
-            #left-arrow {
-                justify-self: left;
-            }
-
-            #right-arrow {
-                justify-self: right;
-            }
-
+            
             .featured-circle {
-                display: grid;
-                justify-items: center;
-
+                
                 img {
-                    width: 65%;
                     border-radius: 50%;
-                    margin-bottom: $MEDIUM_MARGIN;
                 }
-
+        
                 p {
                     font-size: 20px;
-                }
-            }
-        }
-
-        #page-indicator-container {
-            @include center-flex;
-                
-            .page-indicator {
-                display: inline-block;
-                margin: 0 $XX_SMALL_MARGIN;
-
-                .icon-container {
-                     
-                    i {
-                        font-size: $SMALL_ICON;
-                    }
                 }
             }
         }
@@ -295,10 +256,19 @@
 // DEFAULT ----------------------------------------------------------------------------------
 
 #project-team-container {
-    background-color: rgb(255, 192, 255);
-    height: 400px;
 
     .content-container {
 
+        h1 {
+            text-align: center;
+            margin-bottom: $X_LARGE_MARGIN;
+        }
+
+        .team-member {
+
+            h2 {
+                margin: 0;
+            }
+        }
     }
 }
