@@ -67,6 +67,7 @@ a {
     -webkit-font-smoothing: antialiased;
  }
 
+// Used when word/ sentence is a link
 .link-icon::after {
     font: var(--fa-font-solid);
     content: '\f105';
@@ -80,6 +81,29 @@ a {
     font-size: 12px;
     margin-left: 5px;
     margin-right: 3px;
+}
+
+// Used when section is a link
+.link-icon-section {
+    
+    p::after {
+        font: var(--fa-font-solid);
+        content: '\f105';
+        font-size: 12px;
+        margin-left: 2px;
+        margin-right: 3px;
+    }
+}
+
+.link-icon-section:hover {
+    cursor: pointer;
+
+    p::after {
+        content: '\f061';
+        font-size: 12px;
+        margin-left: 5px;
+        margin-right: 3px;
+    }
 }
 
 // Success and Error Messages ----------------------------------------------------------------------------------------------------------------------
