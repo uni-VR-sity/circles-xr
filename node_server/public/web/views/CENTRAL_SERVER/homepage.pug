@@ -9,262 +9,262 @@ block content
 
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Banner -------------------------------------------------------------------------------
-    section#homepage-banner-container
-        #homepage-title
+        // Banner ---------------------------------------------------------------------------
+        section#homepage-banner-container
+            #homepage-title
+                .content-container 
+
+                    // Title ------------------------------------------------------------------------
+                    h1 uni-VR-sity
+
+                    // Description ------------------------------------------------------------------
+                    #intro-description
+                        p WebXR learning framework and research project that explores multi-learner and multi-platform
+                        p (Desktop, Mobile, and HMD) learning affordances
+
+            // Page Navigation --------------------------------------------------------------
+            #homepage-navigation-container.top-bar-container
+                .top-bar
+                    
+                    .top-bar-tabs
+                        .tab 
+                            a(href='#about-container') About 
+
+                        .tab 
+                            a(href='#featured-circles-container') Showroom 
+
+                        .tab 
+                            a(href='#development-container') Development 
+
+                        .tab 
+                            a(href='#news-container') News 
+
+                        .tab 
+                            a(href='#project-team-container') Project Team
+
+        // About ----------------------------------------------------------------------------
+        section#about-container 
+            .content-container 
+                
+                h1 Educational VR Framework
+
+                #about-description
+
+                    p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy.
+
+                    #video-container
+                        iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
+
+                #logos-container 
+                    a(href="https://img.csit.carleton.ca/#projects/0/UNI-VR-SITY" target='_blank')
+                        img#iMG-logo(src='/web/images/logos/iMG-logo.png' alt="iMG Logo")
+
+                    a(href="https://circlesxr.com/" target='_blank')
+                        img#circles-logo(src='/web/images/logos/circles-logo.svg' alt="CirclesXR Logo")
+
+                    a(href="https://carleton.ca/" target='_blank')
+                        img#carletonU-logo(src='/web/images/logos/carletonU-logo.png' alt="Carleton University Logo")
+
+        // Featured Circles -----------------------------------------------------------------
+        section#featured-circles-container 
             .content-container 
 
-                // Title ------------------------------------------------------------------------
-                h1 uni-VR-sity
+                h1 Featured Circles
 
-                // Description ------------------------------------------------------------------
-                #intro-description
-                    p WebXR learning framework and research project that explores multi-learner and multi-platform
-                    p (Desktop, Mobile, and HMD) learning affordances
+                #circles-scroll-container.scroll-gallery-container
 
-        // Page Navigation --------------------------------------------------------------
-        #homepage-navigation-container.top-bar-container
-            .top-bar
-                
-                .top-bar-tabs
-                    .tab 
-                        a(href='#about-container') About 
+                    #left-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-left')
 
-                    .tab 
-                        a(href='#featured-circles-container') Showroom 
-
-                    .tab 
-                        a(href='#development-container') Development 
-
-                    .tab 
-                        a(href='#news-container') News 
-
-                    .tab 
-                        a(href='#project-team-container') Project Team
-
-    // About --------------------------------------------------------------------------------
-    section#about-container 
-        .content-container 
-            
-            h1 Educational VR Framework
-
-            #about-description
-
-                p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy.
-
-                #video-container
-                    iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
-
-            #logos-container 
-                a(href="https://img.csit.carleton.ca/#projects/0/UNI-VR-SITY" target='_blank')
-                    img#iMG-logo(src='/web/images/logos/iMG-logo.png' alt="iMG Logo")
-
-                a(href="https://circlesxr.com/" target='_blank')
-                    img#circles-logo(src='/web/images/logos/circles-logo.svg' alt="CirclesXR Logo")
-
-                a(href="https://carleton.ca/" target='_blank')
-                    img#carletonU-logo(src='/web/images/logos/carletonU-logo.png' alt="Carleton University Logo")
-
-    // Featured Circles ---------------------------------------------------------------------
-    section#featured-circles-container 
-        .content-container 
-
-            h1 Featured Circles
-
-            #circles-scroll-container.scroll-gallery-container
-
-                #left-arrow.arrow
-                    .icon-container 
-                        i(class='fa-solid fa-chevron-left')
-
-                .featured-circle.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    p Circle 1
-                
-                .featured-circle.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    p Circle 2
-
-                .featured-circle.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    p Circle 3
-
-                .featured-circle.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    p Circle 4
-
-                #right-arrow.arrow
-                    .icon-container 
-                        i(class='fa-solid fa-chevron-right')
-
-            .gallery-page-indicator-container
-
-                #page1.page-indicator 
-                    .icon-container
-                        i(class='fa-solid fa-circle')
-
-                #page2.page-indicator 
-                    .icon-container
-                        i(class='fa-regular fa-circle')
-
-                #page3.page-indicator 
-                    .icon-container
-                        i(class='fa-regular fa-circle')
-
-                #page4.page-indicator 
-                    .icon-container
-                        i(class='fa-regular fa-circle')
-
-    // Development --------------------------------------------------------------------------
-    section#development-container 
-        .content-container
-
-            #development-description-container 
-
-                #development-description 
+                    .featured-circle.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        p Circle 1
                     
-                    h1 Development 
+                    .featured-circle.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        p Circle 2
 
-                    p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    .featured-circle.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        p Circle 3
 
-                #video-container
-                    iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
+                    .featured-circle.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        p Circle 4
 
-            #development-links
+                    #right-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-right')
 
-                a(href='' target='_blank')#documentation-link.link-icon-section
+                .gallery-page-indicator-container
+
+                    #page1.page-indicator 
+                        .icon-container
+                            i(class='fa-solid fa-circle')
+
+                    #page2.page-indicator 
+                        .icon-container
+                            i(class='fa-regular fa-circle')
+
+                    #page3.page-indicator 
+                        .icon-container
+                            i(class='fa-regular fa-circle')
+
+                    #page4.page-indicator 
+                        .icon-container
+                            i(class='fa-regular fa-circle')
+
+        // Development ----------------------------------------------------------------------
+        section#development-container 
+            .content-container
+
+                #development-description-container 
+
+                    #development-description 
+                        
+                        h1 Development 
+
+                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+
+                    #video-container
+                        iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
+
+                #development-links
+
+                    a(href='' target='_blank')#documentation-link.link-icon-section
+                        
+                        .icon-container 
+                            i(class='fa-regular fa-file')
+                        
+                        p Documentation 
+
+                    a(href='' target='_blank')#github-link.link-icon-section
+
+                        .icon-container 
+                            i(class='fa-brands fa-github')
+                        
+                        p GitHub
+
+        // News -----------------------------------------------------------------------------
+        section#news-container 
+            .content-container
+
+                hr.section-divider
+
+                h1 News 
+
+                #news-years-container 
+
+                    .news-year.selected-year
+                        a(onclick='') 2024
+
+                    .news-year 
+                        a(onclick='') 2023
+
+                    .news-year
+                        a(onclick='') 2022
+                        
+                #news-articles-container 
                     
-                    .icon-container 
-                        i(class='fa-regular fa-file')
+                    #news-article 
+
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                        #article-description
+
+                            h2 Title
+
+                            h3 Month Day, 2024
+
+                            p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.
+
+                            a.link-icon(href='' target='_blank') Read more
+
+                    #news-article 
+
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                        #article-description
+
+                            h2 Title
+
+                            h3 Month Day, 2024
+
+                            p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure.
+
+                            a.link-icon(href='' target='_blank') Read more
+
+                    #news-article 
+
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                        #article-description
+
+                            h2 Title
+
+                            h3 Month Day, 2024
+
+                            p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.
+
+                            a.link-icon(href='' target='_blank') Read more
+
+        // Project Team ---------------------------------------------------------------------
+        section#project-team-container 
+            .content-container 
+
+                hr.section-divider
+
+                h1 Project Team
+
+                #team-scroll-container.scroll-gallery-container
+
+                    #left-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-left')
+
+                    .team-member.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        h2 Name
+                        p Title
                     
-                    p Documentation 
+                    .team-member.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        h2 Name
+                        p Title
 
-                a(href='' target='_blank')#github-link.link-icon-section
+                    .team-member.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        h2 Name
+                        p Title
 
-                    .icon-container 
-                        i(class='fa-brands fa-github')
-                    
-                    p GitHub
+                    .team-member.scroll-gallery-item
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+                        h2 Name
+                        p Title
 
-    // News ---------------------------------------------------------------------------------
-    section#news-container 
-        .content-container
+                    #right-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-right')
 
-            hr.section-divider
+                .gallery-page-indicator-container
 
-            h1 News 
+                    #page1.page-indicator 
+                        .icon-container
+                            i(class='fa-solid fa-circle')
 
-            #news-years-container 
+                    #page2.page-indicator 
+                        .icon-container
+                            i(class='fa-regular fa-circle')
 
-                .news-year.selected-year
-                    a(onclick='') 2024
+                    #page3.page-indicator 
+                        .icon-container
+                            i(class='fa-regular fa-circle')
 
-                .news-year 
-                    a(onclick='') 2023
+                    #page4.page-indicator 
+                        .icon-container
+                            i(class='fa-regular fa-circle')
 
-                .news-year
-                    a(onclick='') 2022
-                    
-            #news-articles-container 
-                
-                #news-article 
-
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-
-                    #article-description
-
-                        h2 Title
-
-                        h3 Month Day, 2024
-
-                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.
-
-                        a.link-icon(href='' target='_blank') Read more
-
-                #news-article 
-
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-
-                    #article-description
-
-                        h2 Title
-
-                        h3 Month Day, 2024
-
-                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure.
-
-                        a.link-icon(href='' target='_blank') Read more
-
-                #news-article 
-
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-
-                    #article-description
-
-                        h2 Title
-
-                        h3 Month Day, 2024
-
-                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.
-
-                        a.link-icon(href='' target='_blank') Read more
-
-    // Project Team -------------------------------------------------------------------------
-    section#project-team-container 
-        .content-container 
-
-            hr.section-divider
-
-            h1 Project Team
-
-            #team-scroll-container.scroll-gallery-container
-
-                #left-arrow.arrow
-                    .icon-container 
-                        i(class='fa-solid fa-chevron-left')
-
-                .team-member.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    h2 Name
-                    p Title
-                
-                .team-member.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    h2 Name
-                    p Title
-
-                .team-member.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    h2 Name
-                    p Title
-
-                .team-member.scroll-gallery-item
-                    img(src='/web/images/default-circle-profile.png' alt=altText)
-                    h2 Name
-                    p Title
-
-                #right-arrow.arrow
-                    .icon-container 
-                        i(class='fa-solid fa-chevron-right')
-
-            .gallery-page-indicator-container
-
-                #page1.page-indicator 
-                    .icon-container
-                        i(class='fa-solid fa-circle')
-
-                #page2.page-indicator 
-                    .icon-container
-                        i(class='fa-regular fa-circle')
-
-                #page3.page-indicator 
-                    .icon-container
-                        i(class='fa-regular fa-circle')
-
-                #page4.page-indicator 
-                    .icon-container
-                        i(class='fa-regular fa-circle')
-
-    
     include ../includes/footer.pug

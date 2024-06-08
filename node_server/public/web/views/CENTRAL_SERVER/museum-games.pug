@@ -88,18 +88,19 @@ block content
                                             p= line
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Title --------------------------------------------------------------------------------
-    section#museum-title-container 
-        .content-container 
+        // Title ----------------------------------------------------------------------------
+        section#museum-title-container 
+            .content-container 
 
-            h1 Museum Games
+                h1 Museum Games
 
-            a(href='https://ingeniumcanada.org/scitech/events/march-break-at-the-museum').link-icon Check out the event
-        
-    // Games --------------------------------------------------------------------------------
-    section#museum-games 
-        .content-container 
+                a(href='https://ingeniumcanada.org/scitech/events/march-break-at-the-museum').link-icon Check out the event
+            
+        // Games ----------------------------------------------------------------------------
+        section#museum-games 
+            .content-container 
 
-            for game of games
-                +displayGame(game)
+                for game of games
+                    +displayGame(game)

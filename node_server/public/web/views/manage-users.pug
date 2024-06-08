@@ -63,114 +63,115 @@ block content
             p.manage-user-form.no-users-message(id=formId) No #{usertype} users
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Title --------------------------------------------------------------------------------
-    section#manage-users-title-container.title-container
-        .content-container
-            h1 Manage Users 
-            
-            hr
-
-    // Create Users -------------------------------------------------------------------------
-    section#create-users-container 
-        .content-container
-
-            h2 Create Users 
-            i A default password of "password" will be assigned (this can be changed by the user later)
-
-            // Create single user------------------------------------------------------------
-            form#create-single-user(action='/create-user' method='post')
+        // Title ----------------------------------------------------------------------------
+        section#manage-users-title-container.title-container
+            .content-container
+                h1 Manage Users 
                 
-                if singleCreateError
-                    p.error-message= singleCreateError
+                hr
 
-                if singleCreateSuccess
-                    p.success-message= singleCreateSuccess
-
-                .form-field
-                    label.required-form-label Username 
-                    input(type='text' name='username' placeholder='SuperFriend99' required)
-
-                .form-field
-                    label.required-form-label Usertype 
-                    +userTypeSelect('usertype', true, false, false, false, false, false)
-
-                .form-field.last-field.indented-field
-                    input(type='submit' value='Create User')
-
-            // Create bulk users ------------------------------------------------------------
-            form#create-bulk-users(action='/bulk-create-users' method='post' enctype='multipart/form-data')
-
-                .form-field
-                    label or bulk create users by uploading a CSV file: 
-                    input(type='file' name='userFile' accept='.csv' required)
-
-                .instruction-container
-
-                    p Please follow the following format for records: 
-                        span
-                            i username,usertype
-
-                    p The acceptable usertypes are:
-
-                    ul
-                        li Admin
-                        li Teacher
-                        li Researcher
-                        li Student
-                        li Participant
-                        li Tester
-
-                    p See example file 
-                        a.link-icon(href='/sample-upload-file' target='_blank') here
-
-                .form-field.last-field
-                    input(type='submit' value='Create Users')
-
-            for message of bulkCreateError
-                p.error-message= message
-
-            for message of bulkCreateSuccess
-                p.success-message= message
-
-    // Manage Users -------------------------------------------------------------------------
-    section#manage-users-container
-
-        // Top bar --------------------------------------------------------------------------
-        #manage-users-top-bar-container.top-bar-container
-            #manage-users-top-bar.top-bar
-
-                // Tabs ---------------------------------------------------------------------
-                #manage-users-tabs.top-bar-tabs
-                        
-                    #admin-users-tab.tab.selected-tab(onclick='displayUsers("admin")')
-                        h3 Admins
-
-                    #teacher-users-tab.tab(onclick='displayUsers("teacher")')
-                        h3 Teachers
-
-                    #researcher-users-tab.tab(onclick='displayUsers("researcher")')
-                        h3 Researchers
-
-                    #student-users-tab.tab(onclick='displayUsers("student")')
-                        h3 Students
-
-                    #tester-users-tab.tab(onclick='displayUsers("tester")')
-                        h3 Testers
-
-                    #participant-users-tab.tab(onclick='displayUsers("participant")')
-                        h3 Participants
-
-        // Users ----------------------------------------------------------------------------
-        #users-container    
+        // Create Users ---------------------------------------------------------------------
+        section#create-users-container 
             .content-container
 
-                +manageUserForm(adminUsers, 'admin')
-                +manageUserForm(teacherUsers, 'teacher')
-                +manageUserForm(researcherUsers, 'researcher')
-                +manageUserForm(studentUsers, 'student')
-                +manageUserForm(testerUsers, 'tester')
-                +manageUserForm(participantUsers, 'participant')
+                h2 Create Users 
+                i A default password of "password" will be assigned (this can be changed by the user later)
 
-                script.
-                    displayUsers("admin");
+                // Create single user------------------------------------------------------------
+                form#create-single-user(action='/create-user' method='post')
+                    
+                    if singleCreateError
+                        p.error-message= singleCreateError
+
+                    if singleCreateSuccess
+                        p.success-message= singleCreateSuccess
+
+                    .form-field
+                        label.required-form-label Username 
+                        input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                    .form-field
+                        label.required-form-label Usertype 
+                        +userTypeSelect('usertype', true, false, false, false, false, false)
+
+                    .form-field.last-field.indented-field
+                        input(type='submit' value='Create User')
+
+                // Create bulk users ------------------------------------------------------------
+                form#create-bulk-users(action='/bulk-create-users' method='post' enctype='multipart/form-data')
+
+                    .form-field
+                        label or bulk create users by uploading a CSV file: 
+                        input(type='file' name='userFile' accept='.csv' required)
+
+                    .instruction-container
+
+                        p Please follow the following format for records: 
+                            span
+                                i username,usertype
+
+                        p The acceptable usertypes are:
+
+                        ul
+                            li Admin
+                            li Teacher
+                            li Researcher
+                            li Student
+                            li Participant
+                            li Tester
+
+                        p See example file 
+                            a.link-icon(href='/sample-upload-file' target='_blank') here
+
+                    .form-field.last-field
+                        input(type='submit' value='Create Users')
+
+                for message of bulkCreateError
+                    p.error-message= message
+
+                for message of bulkCreateSuccess
+                    p.success-message= message
+
+        // Manage Users ---------------------------------------------------------------------
+        section#manage-users-container
+
+            // Top bar ----------------------------------------------------------------------
+            #manage-users-top-bar-container.top-bar-container
+                #manage-users-top-bar.top-bar
+
+                    // Tabs -----------------------------------------------------------------
+                    #manage-users-tabs.top-bar-tabs
+                            
+                        #admin-users-tab.tab.selected-tab(onclick='displayUsers("admin")')
+                            h3 Admins
+
+                        #teacher-users-tab.tab(onclick='displayUsers("teacher")')
+                            h3 Teachers
+
+                        #researcher-users-tab.tab(onclick='displayUsers("researcher")')
+                            h3 Researchers
+
+                        #student-users-tab.tab(onclick='displayUsers("student")')
+                            h3 Students
+
+                        #tester-users-tab.tab(onclick='displayUsers("tester")')
+                            h3 Testers
+
+                        #participant-users-tab.tab(onclick='displayUsers("participant")')
+                            h3 Participants
+
+            // Users ------------------------------------------------------------------------
+            #users-container    
+                .content-container
+
+                    +manageUserForm(adminUsers, 'admin')
+                    +manageUserForm(teacherUsers, 'teacher')
+                    +manageUserForm(researcherUsers, 'researcher')
+                    +manageUserForm(studentUsers, 'student')
+                    +manageUserForm(testerUsers, 'tester')
+                    +manageUserForm(participantUsers, 'participant')
+
+                    script.
+                        displayUsers("admin");

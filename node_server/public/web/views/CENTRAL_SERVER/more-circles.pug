@@ -64,72 +64,73 @@ block content
         hr
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Add New Servers ----------------------------------------------------------------------
-    if adminUser
-        section#add-new-server-container 
+        // Add New Servers ------------------------------------------------------------------
+        if adminUser
+            section#add-new-server-container 
+                .content-container 
+
+                    h2 Add New Server
+
+                    if errorMessage 
+                        p.error-message= errorMessage
+
+                    if successMessage 
+                        p.success-message= successMessage
+
+                    form#add-server-form(action='/add-server' method='post')
+                        
+                        .server-info
+                            .form-field 
+                                label.required-form-label Owner's name 
+                                input(type='text' name='ownerName' placeholder='John Doe' required)
+
+                            .form-field.textarea-field
+                                label.required-form-label Description 
+                                textarea(name='description' placeholder='This server features ...' required)
+
+                            .form-field 
+                                label.required-form-label Link to Server
+                                input(type='url' name='link' pattern="https?://+.+\\.+.+" placeholder='https://circles.com' required)
+                        
+                            .form-field.last-field.indented-field
+                                input(type='submit' value='Add Server')
+
+                        .circles-field-container
+                            label.required-form-label Circles
+
+                            .circles-field
+                                input(type='text' name='circles' placeholder='Classroom' required)
+
+                                .icon-container.add-circle-icon
+                                    i(class='fa-solid fa-square-plus' onclick="addCircleInput(this)")
+                            
+                    hr
+
+        // More Circles ---------------------------------------------------------------------
+        section#more-circles-container 
             .content-container 
 
-                h2 Add New Server
+                b.intro-message Take a look at the other Circles out there and what they have been working on!
 
-                if errorMessage 
-                    p.error-message= errorMessage
-
-                if successMessage 
-                    p.success-message= successMessage
-
-                form#add-server-form(action='/add-server' method='post')
+                if circleServers.length > 0
                     
-                    .server-info
-                        .form-field 
-                            label.required-form-label Owner's name 
-                            input(type='text' name='ownerName' placeholder='John Doe' required)
+                    for circleServer of circleServers
+                        if circleServer.active
+                            .server(id='server-' + circleServer._id)
+                                +circlesServer(circleServer)
+                        else 
+                            .server.inactive-server(id='server-' + circleServer._id)
+                                +circlesServer(circleServer)
 
-                        .form-field.textarea-field
-                            label.required-form-label Description 
-                            textarea(name='description' placeholder='This server features ...' required)
+                else
 
-                        .form-field 
-                            label.required-form-label Link to Server
-                            input(type='url' name='link' pattern="https?://+.+\\.+.+" placeholder='https://circles.com' required)
+                    .server-error-messages
                     
-                        .form-field.last-field.indented-field
-                            input(type='submit' value='Add Server')
+                        if serverErrorMessage 
+                            p.error-message=serverErrorMessage
+                            p.error-message=secondaryMessage
 
-                    .circles-field-container
-                        label.required-form-label Circles
-
-                        .circles-field
-                            input(type='text' name='circles' placeholder='Classroom' required)
-
-                            .icon-container.add-circle-icon
-                                i(class='fa-solid fa-square-plus' onclick="addCircleInput(this)")
-                        
-                hr
-
-    // More Circles -------------------------------------------------------------------------
-    section#more-circles-container 
-        .content-container 
-
-            b.intro-message Take a look at the other Circles out there and what they have been working on!
-
-            if circleServers.length > 0
-                
-                for circleServer of circleServers
-                    if circleServer.active
-                        .server(id='server-' + circleServer._id)
-                            +circlesServer(circleServer)
-                    else 
-                        .server.inactive-server(id='server-' + circleServer._id)
-                            +circlesServer(circleServer)
-
-            else
-
-                .server-error-messages
-                
-                    if serverErrorMessage 
-                        p.error-message=serverErrorMessage
-                        p.error-message=secondaryMessage
-
-                    else 
-                        p Oops, no other Circles servers are available right now...
+                        else 
+                            p Oops, no other Circles servers are available right now...

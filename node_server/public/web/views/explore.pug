@@ -76,177 +76,178 @@ block content
                             +displayCircle(circle)
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Session information ------------------------------------------------------------------
-    section#session-information-container
-        .content-container
+        // Session information --------------------------------------------------------------
+        section#session-information-container
+            .content-container
 
-            // Session information description ----------------------------------------------
-            #session-information-description
-                h2 Session Information
+                // Session information description ------------------------------------------
+                #session-information-description
+                    h2 Session Information
 
-                p Set how your avatar is displayed for this session. Change it permanently on your
-                    span 
-                        a.link-icon(href='/profile') profile page
+                    p Set how your avatar is displayed for this session. Change it permanently on your
+                        span 
+                            a.link-icon(href='/profile') profile page
 
-            // Display name form ------------------------------------------------------------
-            #session-name-form
-                form(onsubmit='updateSessionName(event)' method="post")
-                    fieldset
+                // Display name form --------------------------------------------------------
+                #session-name-form
+                    form(onsubmit='updateSessionName(event)' method="post")
+                        fieldset
 
-                        .form-field.last-field
-                            label(style='white-space:nowrap') Display Name
-                            input(type='text' name='sessionName' value=sessionName required)
-                            input.inline-submit(type='submit' value='Set Name')
+                            .form-field.last-field
+                                label(style='white-space:nowrap') Display Name
+                                input(type='text' name='sessionName' value=sessionName required)
+                                input.inline-submit(type='submit' value='Set Name')
 
-                p.success-message
+                    p.success-message
 
-                p.error-message
+                    p.error-message
 
-            // Display name button (tablet and mobile) --------------------------------------
-            #session-name-button
-                a Display Name
+                // Display name button (tablet and mobile) ----------------------------------
+                #session-name-button
+                    a Display Name
 
-            // Avatar button ----------------------------------------------------------------
-            //#session-wardrobe-button
-                a(href='/w/Wardrobe')
-                    .icon-container
-                        i
-
-                    p Wardrobe
-
-    // Circles ------------------------------------------------------------------------------
-    section#circles-container
-
-        // Top bar --------------------------------------------------------------------------
-        #circles-top-bar-container.top-bar-container
-            #circles-top-bar.top-bar
-
-                // Tabs ---------------------------------------------------------------------
-                // Admin and manager users:     All Circles, Public Circles, Your Circles, Editable Circles
-                // Standard users:              All Circles, Public Circles, Your Circles
-                // Magic Guests:                Magic Circles, Public Circles
-                // Guests:                      Public Circles
-                #circles-tabs.top-bar-tabs
-                
-                    if magicGuest
-                        #magic-circles.tab(onclick='displaySection("magic")')
-                            h3 Magic Circles 
-
-                    if adminUser || managerUser || standardUser
-                        #all-circles.tab(onclick='displaySection("all")')
-                            h3 All Circles
-                        
-                    #public-circles.tab(onclick='displaySection("public")')
-                        h3 Public Circles
-
-                    if adminUser || managerUser || standardUser
-                        #your-circles.tab(onclick='displaySection("your")')
-                            h3 Your Circles
-
-                    if adminUser || managerUser
-                        #editable-circles.tab(onclick='displaySection("editable")')
-                            h3 Editable Circles
-
-                    #mobile-tabs-icon   
+                // Avatar button ------------------------------------------------------------
+                //#session-wardrobe-button
+                    a(href='/w/Wardrobe')
                         .icon-container
-                            i(class='fa-solid fa-chevron-down')
+                            i
 
-                    // Fixing css on tabs depending on how many are shown
+                        p Wardrobe
+
+        // Circles --------------------------------------------------------------------------
+        section#circles-container
+
+            // Top bar ----------------------------------------------------------------------
+            #circles-top-bar-container.top-bar-container
+                #circles-top-bar.top-bar
+
+                    // Tabs -----------------------------------------------------------------
+                    // Admin and manager users:     All Circles, Public Circles, Your Circles, Editable Circles
+                    // Standard users:              All Circles, Public Circles, Your Circles
+                    // Magic Guests:                Magic Circles, Public Circles
+                    // Guests:                      Public Circles
+                    #circles-tabs.top-bar-tabs
+                    
+                        if magicGuest
+                            #magic-circles.tab(onclick='displaySection("magic")')
+                                h3 Magic Circles 
+
+                        if adminUser || managerUser || standardUser
+                            #all-circles.tab(onclick='displaySection("all")')
+                                h3 All Circles
+                            
+                        #public-circles.tab(onclick='displaySection("public")')
+                            h3 Public Circles
+
+                        if adminUser || managerUser || standardUser
+                            #your-circles.tab(onclick='displaySection("your")')
+                                h3 Your Circles
+
+                        if adminUser || managerUser
+                            #editable-circles.tab(onclick='displaySection("editable")')
+                                h3 Editable Circles
+
+                        #mobile-tabs-icon   
+                            .icon-container
+                                i(class='fa-solid fa-chevron-down')
+
+                        // Fixing css on tabs depending on how many are shown
+                        script.
+                            styleTabs(#{adminUser}, #{managerUser}, #{standardUser}, #{magicGuest});
+
+                    // Search bar -----------------------------------------------------------
+                    #circles-search-bar
+                        //+searchBar()
+
+                        //script.
+                            circlesSearchBar();
+
+            // Group selection --------------------------------------------------------------
+            #circles-groups
+                .content-container
+
+                    .circles-selectors
+                        select#circles-group-selector
+
+                        select#circles-subgroup-selector
+
+                    if adminUser
+                    
+                        include includes/manage-groups.pug
+
+                        .icon-container.manage-groups-icon
+                            i#manage-groups-button(class='fa-solid fa-gear' onclick='openOverlay("manage-groups-overlay")')
+
                     script.
-                        styleTabs(#{adminUser}, #{managerUser}, #{standardUser}, #{magicGuest});
+                        detectGroupSelect();
 
-                // Search bar ---------------------------------------------------------------
-                #circles-search-bar
-                    //+searchBar()
+            p#no-circles-message No circles available
 
-                    //script.
-                        circlesSearchBar();
+            // All circles ------------------------------------------------------------------
+            #circles-display
 
-        // Group selection ------------------------------------------------------------------
-        #circles-groups
-            .content-container
+                // Creating circle elements in all sections
+                +displayCircleSection(magicCircles, 'magic')
+                +displayCircleSection(publicCircles, 'public')
+                +displayCircleSection(userCircles, 'your')
 
-                .circles-selectors
-                    select#circles-group-selector
-
-                    select#circles-subgroup-selector
-
-                if adminUser
-                
-                    include includes/manage-groups.pug
-
-                    .icon-container.manage-groups-icon
-                        i#manage-groups-button(class='fa-solid fa-gear' onclick='openOverlay("manage-groups-overlay")')
+                - var groupJSON = JSON.stringify(editableCircles);
+                - var groupJSON = groupJSON.replaceAll(/'/gm, /\'/gm);
 
                 script.
-                    detectGroupSelect();
+                    initializeCircleSection('!{groupJSON}', 'editable');
+                    initializeAllCircleSection();
 
-        p#no-circles-message No circles available
+                // Displaying default section when page is loaded
+                if magicGuest
+                    script.
+                        displaySection('magic');
+                else if guest 
+                    script.
+                        displaySection('public');
+                else 
+                    script.
+                        displaySection('all');
 
-        // All circles ----------------------------------------------------------------------
-        #circles-display
+            // Page selector ----------------------------------------------------------------
+            //#circles-page-selector
+                .content-container
 
-            // Creating circle elements in all sections
-            +displayCircleSection(magicCircles, 'magic')
-            +displayCircleSection(publicCircles, 'public')
-            +displayCircleSection(userCircles, 'your')
+                    .icon-container 
+                        i(class='fa-solid fa-chevron-left')
 
-            - var groupJSON = JSON.stringify(editableCircles);
-            - var groupJSON = groupJSON.replaceAll(/'/gm, /\'/gm);
+                    .page-number-container 
 
-            script.
-                initializeCircleSection('!{groupJSON}', 'editable');
-                initializeAllCircleSection();
+                        .page-number.current-page
+                            p 1
 
-            // Displaying default section when page is loaded
-            if magicGuest
-                script.
-                    displaySection('magic');
-            else if guest 
-                script.
-                    displaySection('public');
-            else 
-                script.
-                    displaySection('all');
+                        .page-number
+                            p 2
 
-        // Page selector --------------------------------------------------------------------
-        //#circles-page-selector
-            .content-container
+                        .page-number
+                            p 3
 
-                .icon-container 
-                    i(class='fa-solid fa-chevron-left')
+                        .page-number-seperator
+                            p . . .
 
-                .page-number-container 
+                        .page-number
+                            p 5
 
-                    .page-number.current-page
-                        p 1
+                    .icon-container
+                        i(class='fa-solid fa-chevron-right')
 
-                    .page-number
-                        p 2
+            // View more circles ------------------------------------------------------------
+            #circles-view-more
+                .content-container
+                    a View More
 
-                    .page-number
-                        p 3
-
-                    .page-number-seperator
-                        p . . .
-
-                    .page-number
-                        p 5
-
-                .icon-container
-                    i(class='fa-solid fa-chevron-right')
-
-        // View more circles ----------------------------------------------------------------
-        #circles-view-more
-            .content-container
-                a View More
-
-    // Magic links --------------------------------------------------------------------------
-    if adminUser || managerUser
+        // Magic links ----------------------------------------------------------------------
+        if adminUser || managerUser
         section#magic-links-container
 
-            // Creating -------------------------------------------------------------------------
+            // Creating ---------------------------------------------------------------------
             #create-link
                 .content-container
 

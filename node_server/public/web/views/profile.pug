@@ -9,67 +9,68 @@ block content
     - var guest = userInfo.usertype === CIRCLES.USER_TYPE.GUEST || userInfo.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST;
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Title --------------------------------------------------------------------------------
-    section#profile-title-container
-        .content-container 
+        // Title ----------------------------------------------------------------------------
+        section#profile-title-container
+            .content-container 
 
-            .icon-container 
-                i(class='fa-solid fa-user')
+                .icon-container 
+                    i(class='fa-solid fa-user')
 
-            h1= userInfo.username 
-            h3= userInfo.usertype
+                h1= userInfo.username 
+                h3= userInfo.usertype
 
-            hr
+                hr
 
-    // Update profile -----------------------------------------------------------------------
-    section#update-profile-container
-        .content-container 
+        // Update profile -------------------------------------------------------------------
+        section#update-profile-container
+            .content-container 
 
-            // Message ----------------------------------------------------------------------
-            p.error-message
-            p.success-message
+                // Message ------------------------------------------------------------------
+                p.error-message
+                p.success-message
 
-            // Update profile form ----------------------------------------------------------
-            form#update-profile-form(onsubmit='updateProfile(event, ' + guest + ')' method='post')
-
-                .form-field
-                    label Display name
-                    input(type='text' id='displayName' name='displayName' value=userInfo.displayName required)
-
-                if !guest
+                // Update profile form ------------------------------------------------------
+                form#update-profile-form(onsubmit='updateProfile(event, ' + guest + ')' method='post')
 
                     .form-field
-                        label Email
-                            i &nbsp(Optional)
-                        input(type='email' id='email' name='email' placeholder='super@email.com' value=userInfo.email)
+                        label Display name
+                        input(type='text' id='displayName' name='displayName' value=userInfo.displayName required)
 
-                        .checkbox-container
-                            input(type='checkbox' id='deleteEmail' name='deleteEmail')
-                            label(for='deleteEmail') Remove email from account
+                    if !guest
 
-                    hr
+                        .form-field
+                            label Email
+                                i &nbsp(Optional)
+                            input(type='email' id='email' name='email' placeholder='super@email.com' value=userInfo.email)
 
-                    .form-field 
-                        label Old password
-                        input(type='password' name='passwordOld')
+                            .checkbox-container
+                                input(type='checkbox' id='deleteEmail' name='deleteEmail')
+                                label(for='deleteEmail') Remove email from account
 
-                    .form-field 
-                        label New password
-                        input(type='password' name='passwordNew')
+                        hr
 
-                    .form-field.last-field
-                        label Confirm password
-                        input(type='password' name='passwordConf')
+                        .form-field 
+                            label Old password
+                            input(type='password' name='passwordOld')
 
-            // Avatar form ------------------------------------------------------------------
-            .avatar-view 
-                i Avatar View (Coming Soon)
+                        .form-field 
+                            label New password
+                            input(type='password' name='passwordNew')
 
-            // Submit profile form ----------------------------------------------------------
-            .submit-profile-form 
-                input(type='submit' value='Update Profile' form='update-profile-form')
+                        .form-field.last-field
+                            label Confirm password
+                            input(type='password' name='passwordConf')
 
-            // Customize avatar button ------------------------------------------------------
-            .customize-avatar-button
-                a(href='/w/Wardrobe') Customize Avatar
+                // Avatar form --------------------------------------------------------------
+                .avatar-view 
+                    i Avatar View (Coming Soon)
+
+                // Submit profile form ------------------------------------------------------
+                .submit-profile-form 
+                    input(type='submit' value='Update Profile' form='update-profile-form')
+
+                // Customize avatar button --------------------------------------------------
+                .customize-avatar-button
+                    a(href='/w/Wardrobe') Customize Avatar

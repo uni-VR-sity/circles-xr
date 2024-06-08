@@ -66,101 +66,102 @@ block content
             hr
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Title --------------------------------------------------------------------------------
-    section#circle-title-container
-        .content-container
+        // Title ----------------------------------------------------------------------------
+        section#circle-title-container
+            .content-container
 
-            - var profileURL = '/worlds/' + circle.name + '/profile.jpg'
-            - var altText = circle.displayName + "'s profile image";
+                - var profileURL = '/worlds/' + circle.name + '/profile.jpg'
+                - var altText = circle.displayName + "'s profile image";
 
-            if circle.hasProfileImage
-                img(src=profileURL alt=altText)
-            else 
-                img(src='/web/views/includes/default-circle-profile.png' alt=altText)
-
-            h1= circle.displayName
-
-            .circle-access-restriction
-                if circle.viewingRestrictions
-                    h3#circle-restriction-text Private
-                    #circle-restriction-symbol.icon-container
-                        i.has-access-rectriction(onclick='makePublic("' + circle.name + '")')
+                if circle.hasProfileImage
+                    img(src=profileURL alt=altText)
                 else 
-                    h3#circle-restriction-text Public
-                    #circle-restriction-symbol.icon-container
-                        i.no-access-rectriction(onclick='makePrivate("' + circle.name + '")')
+                    img(src='/web/views/includes/default-circle-profile.png' alt=altText)
 
-            .circle-group 
-                .group-text
-                    if circleGroup != null
+                h1= circle.displayName
 
-                        p= circleGroup
-
-                        if circleSubgroup != null 
-                            p &nbsp&nbsp|&nbsp&nbsp !{circleSubgroup}
-
+                .circle-access-restriction
+                    if circle.viewingRestrictions
+                        h3#circle-restriction-text Private
+                        #circle-restriction-symbol.icon-container
+                            i.has-access-rectriction(onclick='makePublic("' + circle.name + '")')
                     else 
-                        p No Group
+                        h3#circle-restriction-text Public
+                        #circle-restriction-symbol.icon-container
+                            i.no-access-rectriction(onclick='makePrivate("' + circle.name + '")')
 
-                .icon-container 
-                    i(class='fa-solid fa-pencil' onclick='openOverlay("circle-group-overlay")')
+                .circle-group 
+                    .group-text
+                        if circleGroup != null
 
-    include includes/update-circle-group.pug
+                            p= circleGroup
 
-    // User access --------------------------------------------------------------------------
-    section#user-access-container
+                            if circleSubgroup != null 
+                                p &nbsp&nbsp|&nbsp&nbsp !{circleSubgroup}
 
-        if circle.viewingRestrictions
+                        else 
+                            p No Group
 
-            // Header -----------------------------------------------------------------------
-            .header-row
+                    .icon-container 
+                        i(class='fa-solid fa-pencil' onclick='openOverlay("circle-group-overlay")')
+
+        include includes/update-circle-group.pug
+
+        // User access ----------------------------------------------------------------------
+        section#user-access-container
+
+            if circle.viewingRestrictions
+
+                // Header -------------------------------------------------------------------
+                .header-row
+                    .content-container
+
+                        .row 
+                            b.username User 
+
+                            b.user-type User Type 
+
+                            b.viewing-access Viewing Access 
+
+                            b.editing-access Editing Access
+
+                // User rows ----------------------------------------------------------------
                 .content-container
 
-                    .row 
-                        b.username User 
+                    for user of userPermissions
+                        
+                        if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
+                            +userRow(user, true, true)
 
-                        b.user-type User Type 
+                        else 
+                            +userRow(user, true, false)
 
-                        b.viewing-access Viewing Access 
+            else
+                .content-container
+                    i.warning * Make circle private to edit viewing permissions
 
-                        b.editing-access Editing Access
+                // Header -------------------------------------------------------------------
+                .header-row
+                    .content-container
 
-            // User rows --------------------------------------------------------------------
-            .content-container
+                        .row 
+                            b.username User 
 
-                for user of userPermissions
-                    
-                    if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
-                        +userRow(user, true, true)
+                            b.user-type User Type 
 
-                    else 
-                        +userRow(user, true, false)
+                            b.viewing-access Viewing Access 
 
-        else
-            .content-container
-                i.warning * Make circle private to edit viewing permissions
+                            b.editing-access Editing Access
 
-            // Header -----------------------------------------------------------------------
-            .header-row
+                // User rows ----------------------------------------------------------------
                 .content-container
 
-                    .row 
-                        b.username User 
+                    for user of userPermissions
 
-                        b.user-type User Type 
+                        if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
+                            +userRow(user, false, true)
 
-                        b.viewing-access Viewing Access 
-
-                        b.editing-access Editing Access
-
-            // User rows --------------------------------------------------------------------
-            .content-container
-
-                for user of userPermissions
-
-                    if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
-                        +userRow(user, false, true)
-
-                    else 
-                        +userRow(user, false, false)
+                        else 
+                            +userRow(user, false, false)
