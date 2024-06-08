@@ -615,12 +615,12 @@
                 margin-bottom: $X_LARGE_MARGIN;
             }
 
-            form {
-                margin-bottom: 35px;
-            }
-
             .num-selected {
                 margin-left: $SMALL_MARGIN;
+            }
+
+            .success-message, .error-message {
+                margin-top: $LARGE_MARGIN;
             }
 
             .copy-magic-link {
