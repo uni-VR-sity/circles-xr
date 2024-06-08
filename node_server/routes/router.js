@@ -189,7 +189,7 @@ router.post('/update-user-colour', authenticated, circleController.updateUserCol
 
 // Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
 
-//router.get('/homepage', centralServerController.serveHomepage);
+router.get('/homepage', centralServerController.serveHomepage);
 
 // More Circles Page Routes -----------------------------------------------------------------
 
