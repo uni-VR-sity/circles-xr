@@ -67,7 +67,7 @@
         #about-description {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-gap: $X_LARGE_MARGIN + 10px;
+            grid-gap: $XX_LARGE_MARGIN;
             align-items: center;
             margin-bottom: $X_LARGE_MARGIN;
 
@@ -127,15 +127,13 @@
         #circles-scroll-container {
             display: grid;
             grid-template-columns: 1fr repeat(4, 3fr) 1fr;
+            margin-bottom: $X_LARGE_MARGIN;
 
             .arrow {
                 align-content: center;
 
                 .icon-container {
-
-                    i {
-                        font-size: $DEFAULT_X_LARGE_ICON;
-                    }
+                    @include icon-highlight ($DEFAULT_X_LARGE_ICON, $BLACK);
                 }
             }
 
@@ -159,6 +157,22 @@
 
                 p {
                     font-size: 20px;
+                }
+            }
+        }
+
+        #page-indicator-container {
+            @include center-flex;
+                
+            .page-indicator {
+                display: inline-block;
+                margin: 0 $XX_SMALL_MARGIN;
+
+                .icon-container {
+                     
+                    i {
+                        font-size: $SMALL_ICON;
+                    }
                 }
             }
         }
@@ -225,11 +239,54 @@
 // DEFAULT ----------------------------------------------------------------------------------
 
 #news-container {
-    background-color: rgb(193, 193, 255);
-    height: 800px;
 
     .content-container {
 
+        #news-years-container {
+            margin-bottom: $MEDIUM_MARGIN;
+
+            .news-year {
+                @include secondary-button;
+                display: inline-block;
+                margin-right: $MEDIUM_MARGIN;
+            }
+
+            .selected-year {
+                @include primary-button;
+            }
+        }
+
+        #news-articles-container {
+            
+            #news-article {
+                display: grid;
+                grid-template-columns: 1fr 5fr;
+                grid-gap: $LARGE_MARGIN;
+                background-color: $LIGHT_GREY;
+                padding: $LARGE_MARGIN;
+                margin-bottom: $MEDIUM_MARGIN;
+
+                img {
+                    width: 100%;
+                }
+
+                #article-description {
+                    align-self: center;
+                    
+                    h2 {
+                        margin-bottom: $X_SMALL_MARGIN;
+                    }
+
+                    h3 {
+                        margin-bottom: $SMALL_MARGIN;
+                    }
+
+                    p {
+                        margin-bottom: $X_SMALL_MARGIN;
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -54,6 +54,15 @@ a {
     color: $BLUE;
 }
 
+.section-divider {
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: $XX_LARGE_MARGIN;
+    height: 2px;
+    border: none;
+    background: black;
+}
+
 // Icons -------------------------------------------------------------------------------------------------------------------------------------------
 
 .icon-container {

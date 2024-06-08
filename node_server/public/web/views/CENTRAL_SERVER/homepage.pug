@@ -98,6 +98,24 @@ block content
                     .icon-container 
                         i(class='fa-solid fa-chevron-right')
 
+            #page-indicator-container
+
+                #page1.page-indicator 
+                    .icon-container
+                        i(class='fa-solid fa-circle')
+
+                #page2.page-indicator 
+                    .icon-container
+                        i(class='fa-regular fa-circle')
+
+                #page3.page-indicator 
+                    .icon-container
+                        i(class='fa-regular fa-circle')
+
+                #page4.page-indicator 
+                    .icon-container
+                        i(class='fa-regular fa-circle')
+
     // Development --------------------------------------------------------------------------
     section#development-container 
         .content-container
@@ -131,7 +149,66 @@ block content
 
     // News ---------------------------------------------------------------------------------
     section#news-container 
-        .content-container 
+        .content-container
+
+            hr.section-divider
+
+            h1 News 
+
+            #news-years-container 
+
+                .news-year.selected-year
+                    a(onclick='') 2024
+
+                .news-year 
+                    a(onclick='') 2023
+
+                .news-year
+                    a(onclick='') 2022
+                    
+            #news-articles-container 
+                
+                #news-article 
+
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                    #article-description
+
+                        h2 TITLE
+
+                        h3 Month Day, 2024
+
+                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.
+
+                        a.link-icon(href='' target='_blank') Read more
+
+                #news-article 
+
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                    #article-description
+
+                        h2 TITLE
+
+                        h3 Month Day, 2024
+
+                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure.
+
+                        a.link-icon(href='' target='_blank') Read more
+
+                #news-article 
+
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                    #article-description
+
+                        h2 TITLE
+
+                        h3 Month Day, 2024
+
+                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.
+
+                        a.link-icon(href='' target='_blank') Read more
 
     // Project Team -------------------------------------------------------------------------
     section#project-team-container 
