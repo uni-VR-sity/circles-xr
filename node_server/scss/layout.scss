@@ -313,6 +313,7 @@ nav {
 // DEFAULT ----------------------------------------------------------------------------------
 
 footer {
+    margin-top: $SECTION_MARGIN;
     background-color: $DARK_GREY;
     padding: $X_SMALL_MARGIN 0;
 
@@ -327,8 +328,12 @@ footer {
 // Page Sections -----------------------------------------------------------------------------------------------------------------------------------
 section {
     @include no-spacing;
-    margin-bottom: $SECTION_MARGIN;
+    padding-top: $SECTION_MARGIN;
     width: 100%;
+}
+
+section:first-of-type, .title-container + section{
+    padding-top: 0;
 }
 
 .content-container {
@@ -344,7 +349,8 @@ section {
 .section-divider {
     width: 300px;
     margin: 0 auto;
-    margin-bottom: $XXX_LARGE_MARGIN;
+    margin-top: $SECTION_MARGIN;
+    margin-bottom: -10px;
     height: 1.5px;
     border: none;
     background: black;
