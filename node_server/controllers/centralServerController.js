@@ -111,7 +111,72 @@ const serveHomepage = async (req, res, next) =>
   }
 
   // News
+  var newsYears = [2024, 2023, 2022];
+
   var news = [];
+
+  news[0] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 0',
+    monthDay: 'June 1',
+    year: '2024',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
+
+  news[1] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 1',
+    monthDay: 'May 1',
+    year: '2024',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
+
+  news[2] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 2',
+    monthDay: 'April 1',
+    year: '2024',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
+
+  news[3] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 3',
+    monthDay: 'March 1',
+    year: '2023',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
+
+  news[4] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 4',
+    monthDay: 'Febuary 1',
+    year: '2023',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
+
+  news[5] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 5',
+    monthDay: 'January 1',
+    year: '2022',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
+
+  news[6] = {
+    photo: '/web/images/default-circle-profile.png',
+    title: 'Title 6',
+    monthDay: 'May 1',
+    year: '2022',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
+    link: '',
+  }
 
   // Project Team
   var projectTeam = [];
@@ -198,6 +263,7 @@ const serveHomepage = async (req, res, next) =>
     title: 'uni-VR-sity',
     userInfo: userInfo,
     featuredCircles: featuredCircles,
+    newsYears: newsYears,
     news: news,
     projectTeam: projectTeam,
   });

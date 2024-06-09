@@ -214,15 +214,14 @@
                 margin-right: $MEDIUM_MARGIN;
             }
 
-            .selected-year {
+            .selected-news-year {
                 @include primary-button;
             }
         }
 
         #news-articles-container {
             
-            #news-article {
-                display: grid;
+            .news-article {
                 grid-template-columns: 1fr 5fr;
                 grid-gap: $LARGE_MARGIN;
                 background-color: $LIGHT_GREY;
@@ -233,7 +232,7 @@
                     width: 100%;
                 }
 
-                #article-description {
+                .article-description {
                     align-self: center;
                     
                     h2 {
@@ -248,6 +247,14 @@
                         margin-bottom: $X_SMALL_MARGIN;
                     }
                 }
+            }
+
+            .hidden-article {
+                display: none;
+            }
+
+            .visible-article {
+                display: grid;
             }
         }
     }

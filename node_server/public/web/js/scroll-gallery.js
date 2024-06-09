@@ -120,6 +120,7 @@ function showCurrentScrollGalleryPage(galleryContainerID)
             galleryItems[i].style.visibility = 'visible';
 
             galleryItems[i].querySelector('.gallery-item-image').src = currentPageContents[i].photo;
+            galleryItems[i].querySelector('.gallery-item-image').alt = 'Image of ' + currentPageContents[i].name;
             galleryItems[i].querySelector('.gallery-item-name').innerHTML = currentPageContents[i].name;
 
             if (currentPageContents[i].secondaryInfo && galleryItems[i].querySelector('.gallery-item-secondary-info'))

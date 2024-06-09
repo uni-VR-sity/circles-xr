@@ -1,12 +1,34 @@
 extends ../template.pug
 
+block append scripts
+    script(src='/web/js/views/CENTRAL_SERVER/homepage.js')
+
 block content
 
     // Variables -----------------------------------------------------------------------------------------------------------------------------------
-    
+    - var year;
+    - var article;
 
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+    mixin displayNewsArticle(article)
+        - var articleClass = 'news-year-' + article.year;
+        - var altText = article.title + "'s image";
+        
+        .news-article(class=articleClass).hidden-article
 
+            img(src=article.photo alt=altText)
+
+            .article-description
+
+                h2= article.title
+
+                h3= article.monthDay
+                    span , 
+                    span= article.year
+
+                p= article.description
+
+                a.link-icon(href=article.link target='_blank') Read more
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
     main 
@@ -146,58 +168,19 @@ block content
 
                 #news-years-container 
 
-                    .news-year.selected-year
-                        a(onclick='') 2024
+                    for year of newsYears
+                        - var buttonClass = year + '-news-button';
 
-                    .news-year 
-                        a(onclick='') 2023
-
-                    .news-year
-                        a(onclick='') 2022
+                        .news-year(class=buttonClass)
+                            a(onclick='displayNewsYear(' + year + ')')= year
                         
                 #news-articles-container 
                     
-                    #news-article 
+                    for article of news
+                        +displayNewsArticle(article)
 
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-
-                        #article-description
-
-                            h2 Title
-
-                            h3 Month Day, 2024
-
-                            p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.
-
-                            a.link-icon(href='' target='_blank') Read more
-
-                    #news-article 
-
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-
-                        #article-description
-
-                            h2 Title
-
-                            h3 Month Day, 2024
-
-                            p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure.
-
-                            a.link-icon(href='' target='_blank') Read more
-
-                    #news-article 
-
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-
-                        #article-description
-
-                            h2 Title
-
-                            h3 Month Day, 2024
-
-                            p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.
-
-                            a.link-icon(href='' target='_blank') Read more
+                script.
+                    displayNewsYear('!{newsYears[0]}');
 
         hr.section-divider
 
