@@ -72,9 +72,134 @@ const serveHomepage = async (req, res, next) =>
 {
   const userInfo = getUserInfo(req);
 
+  // Featured circles
+  var featuredCircles = [];
+
+  featuredCircles[0] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 0',
+  }
+
+  featuredCircles[1] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 1',
+  }
+
+  featuredCircles[2] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 2',
+  }
+
+  featuredCircles[3] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 3',
+  }
+
+  featuredCircles[4] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 4',
+  }
+
+  featuredCircles[5] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 5',
+  }
+
+  featuredCircles[6] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Circle 6',
+  }
+
+  // News
+  var news = [];
+
+  // Project Team
+  var projectTeam = [];
+
+  projectTeam[0] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 0',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[1] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 1',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[2] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 2',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[3] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 3',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[4] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 4',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[5] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 5',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[6] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 6',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[7] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 7',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[8] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 8',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[9] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 9',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[10] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 10',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[11] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 11',
+    secondaryInfo: 'Title',
+  }
+
+  projectTeam[12] = {
+    photo: '/web/images/default-circle-profile.png',
+    name: 'Name 12',
+    secondaryInfo: 'Title',
+  }
+
   res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/homepage'), {
-    title: "uni-VR-sity",
+    title: 'uni-VR-sity',
     userInfo: userInfo,
+    featuredCircles: featuredCircles,
+    news: news,
+    projectTeam: projectTeam,
   });
 }
 

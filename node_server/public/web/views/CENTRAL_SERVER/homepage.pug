@@ -67,7 +67,7 @@ block content
                     a(href="https://carleton.ca/" target='_blank')
                         img#carletonU-logo(src='/web/images/logos/carletonU-logo.png' alt="Carleton University Logo")
 
-        // Featured Circles -----------------------------------------------------------------
+        // Showroom -------------------------------------------------------------------------
         section#Showroom 
             .content-container 
 
@@ -77,45 +77,33 @@ block content
 
                     #left-arrow.arrow
                         .icon-container 
-                            i(class='fa-solid fa-chevron-left')
+                            i(class='fa-solid fa-chevron-left' onclick='changeScrollGalleryPage("circles-scroll-container", -1)')
 
                     .featured-circle.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        p Circle 1
+                        img.gallery-item-image
+                        p.gallery-item-name
                     
                     .featured-circle.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        p Circle 2
+                        img.gallery-item-image
+                        p.gallery-item-name
 
                     .featured-circle.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        p Circle 3
+                        img.gallery-item-image
+                        p.gallery-item-name
 
-                    .featured-circle.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        p Circle 4
+                    .featured-circle.scroll-gallery-item 
+                        img.gallery-item-image
+                        p.gallery-item-name
 
                     #right-arrow.arrow
                         .icon-container 
-                            i(class='fa-solid fa-chevron-right')
+                            i(class='fa-solid fa-chevron-right' onclick='changeScrollGalleryPage("circles-scroll-container", 1)')
 
-                .gallery-page-indicator-container
+                - var featuredCirclesJSON = JSON.stringify(featuredCircles);
+                - var featuredCirclesJSON = featuredCirclesJSON.replaceAll(/'/gm, /\'/gm);
 
-                    #page1.page-indicator 
-                        .icon-container
-                            i(class='fa-solid fa-circle')
-
-                    #page2.page-indicator 
-                        .icon-container
-                            i(class='fa-regular fa-circle')
-
-                    #page3.page-indicator 
-                        .icon-container
-                            i(class='fa-regular fa-circle')
-
-                    #page4.page-indicator 
-                        .icon-container
-                            i(class='fa-regular fa-circle')
+                script.
+                    setUpScrollGallery('!{featuredCirclesJSON}', 4, 'circles-scroll-container');
 
         // Development ----------------------------------------------------------------------
         section#Development 
@@ -223,48 +211,36 @@ block content
 
                     #left-arrow.arrow
                         .icon-container 
-                            i(class='fa-solid fa-chevron-left')
+                            i(class='fa-solid fa-chevron-left' onclick='changeScrollGalleryPage("team-scroll-container", -1)')
 
                     .team-member.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        h2 Name
-                        p Title
+                        img.gallery-item-image
+                        h2.gallery-item-name
+                        p.gallery-item-secondary-info
                     
                     .team-member.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        h2 Name
-                        p Title
+                        img.gallery-item-image
+                        h2.gallery-item-name
+                        p.gallery-item-secondary-info
 
                     .team-member.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        h2 Name
-                        p Title
+                        img.gallery-item-image
+                        h2.gallery-item-name
+                        p.gallery-item-secondary-info
 
                     .team-member.scroll-gallery-item
-                        img(src='/web/images/default-circle-profile.png' alt=altText)
-                        h2 Name
-                        p Title
+                        img.gallery-item-image
+                        h2.gallery-item-name
+                        p.gallery-item-secondary-info
 
                     #right-arrow.arrow
                         .icon-container 
-                            i(class='fa-solid fa-chevron-right')
+                            i(class='fa-solid fa-chevron-right' onclick='changeScrollGalleryPage("team-scroll-container", 1)')
 
-                .gallery-page-indicator-container
+                - var projectTeamJSON = JSON.stringify(projectTeam);
+                - var projectTeamJSON = projectTeamJSON.replaceAll(/'/gm, /\'/gm);
 
-                    #page1.page-indicator 
-                        .icon-container
-                            i(class='fa-solid fa-circle')
-
-                    #page2.page-indicator 
-                        .icon-container
-                            i(class='fa-regular fa-circle')
-
-                    #page3.page-indicator 
-                        .icon-container
-                            i(class='fa-regular fa-circle')
-
-                    #page4.page-indicator 
-                        .icon-container
-                            i(class='fa-regular fa-circle')
+                script.
+                    setUpScrollGallery('!{projectTeamJSON}', 4, 'team-scroll-container');
 
     include ../includes/footer.pug
