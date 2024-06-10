@@ -12,7 +12,7 @@ html
             script(src='/web/js/forms.js')
             script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
 
-    body 
+    body.no-navigations
 
         // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main 
@@ -27,7 +27,8 @@ html
                 #right
 
                     #logo 
-                        include includes/circles-logo.svg
+                        a.logo(href='/')
+                            img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
 
                     #introduction 
                         p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. [Work-In-Progress].
@@ -37,7 +38,7 @@ html
                         if message
                             p.error-message= message
 
-                        form(action='/login' method='post')
+                        form(action='/login-user' method='post')
 
                             .form-field
                                 label.required-form-label Username
@@ -55,7 +56,3 @@ html
 
                         p.guest-message Or 
                             a.link-icon(href='/guest-login') continue as guest
-
-                    #intro-video
-                        #video-container
-                            iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)

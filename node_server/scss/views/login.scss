@@ -27,7 +27,17 @@
         #logo {
             max-width: 340px;
             margin: 0 auto;
-            margin-bottom: $MEDIUM_MARGIN;
+            margin-bottom: $LARGE_MARGIN;
+            
+            a {
+                display: block;
+                width: 25%;
+                margin: auto;
+
+                img {
+                    width: 100%;
+                }
+            }
         }
 
         #introduction, #login-form, #intro-video {
@@ -63,25 +73,6 @@
 
             .register-message, .error-message {
                 margin-bottom: $SMALL_MARGIN;
-            }
-        }
-
-        #intro-video {
-            
-            #video-container {
-                position: relative; 
-                padding-bottom: 60%; 
-                height: 0; 
-                overflow: hidden; 
-                max-width: 100%;
-
-                iframe, object, embed {
-                    position: absolute; 
-                    top: 0; 
-                    left: 0; 
-                    width: 100%; 
-                    height: 100%;
-                }
             }
         }
     }

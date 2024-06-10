@@ -12,7 +12,7 @@ html
             script(src='/web/js/forms.js')
             script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
 
-    body 
+    body.no-navigations
 
         // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main 
@@ -27,11 +27,13 @@ html
                 #right
 
                     #logo 
-                        include includes/circles-logo.svg
+                        a.logo(href='/')
+                            img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
+
+                    #introduction 
+                        p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. [Work-In-Progress].
 
                     #register-form 
-                    
-                        h2 Register
 
                         p Create an account to begin exploring! Or 
                             a.link-icon(href="/guest-login") continue as guest
@@ -54,7 +56,7 @@ html
                                 input(type='password' name='passwordConf' required)
 
                             .form-field.last-field.full-width-submit
-                                input(type='submit' value='Login')
+                                input(type='submit' value='Register')
 
-                        p
-                            a.link-icon(href='/') Return to home page
+                        p.login-message Have an account? 
+                            a.link-icon(href='/login') Log in here

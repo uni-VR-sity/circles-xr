@@ -27,7 +27,17 @@
         #logo {
             max-width: 340px;
             margin: 0 auto;
-            margin-bottom: $MEDIUM_MARGIN;
+            margin-bottom: $LARGE_MARGIN;
+            
+            a {
+                display: block;
+                width: 25%;
+                margin: auto;
+
+                img {
+                    width: 100%;
+                }
+            }
         }
 
         #introduction, #register-form {
@@ -35,15 +45,11 @@
             margin: 0 auto;
         }
 
+        #introduction {
+            margin-bottom: $SMALL_MARGIN;
+        }
+
         #register-form {
-
-            h2, p {
-                text-align: center;
-            }
-
-            h2 {
-                margin-top: $LARGE_MARGIN;
-            }
 
             .error-message {
                 display: block;
@@ -61,6 +67,10 @@
                         width: 170px;
                     }
                 }
+            }
+
+            .login-message {
+                text-align: center;
             }
         }
     }
