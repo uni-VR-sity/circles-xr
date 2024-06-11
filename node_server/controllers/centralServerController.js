@@ -480,6 +480,7 @@ const getServersList = async (req, res, next) =>
 
 // Prototyping Page --------------------------------------------------------------------------------------------------------------------------------
 
+// Rendering prototyping page
 const servePrototyping = async (req, res, next) =>
 {
   const userInfo = getUserInfo(req);
@@ -488,6 +489,64 @@ const servePrototyping = async (req, res, next) =>
     title: 'prototyping',
     userInfo: userInfo,
   });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating new prototype from template
+const createNewPrototype = async (req, res, next) =>
+{
+  console.log('creating prototype...');
+
+  const templateFilePath = __dirname + '/../public/prototypes/template.html';
+  const destinationFilePath = __dirname + '/../public/prototypes/created';
+
+  // Creating unique file name
+  var filename = uniqueFilename(destinationFilePath).split('\\').pop();
+
+  // Creating prototype folder
+  const prototypeFolderPath = destinationFilePath + '/' + filename;
+
+  try
+  {
+    fs.mkdirSync(prototypeFolderPath); 
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  // Copying template file for new prototype
+  try
+  {
+    fs.copyFileSync(templateFilePath, prototypeFolderPath + '/' + filename + '.html', fs.constants.COPYFILE_EXCL);
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  // Creating prototype json file
+  var prototypeJSON = {
+    "title" : filename,
+    "sceneObjects" : [],
+  }
+
+  try 
+  {
+    fs.writeFileSync(prototypeFolderPath + '/' + filename + '.json', JSON.stringify(prototypeJSON));
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  var response = {
+    status: "success",
+    prototypeName: filename,
+  }
+
+  res.json(response);
 }
 
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
@@ -659,6 +718,7 @@ module.exports = {
     getServersList,
     // Prototyping
     servePrototyping,
+    createNewPrototype,
     // Museum Games Page
     serveMuseumGames,
   }

@@ -204,6 +204,7 @@ router.get('/get-servers', centralServerController.getServersList); // This is r
 // Prototyping Routes -----------------------------------------------------------------------
 
 router.get('/prototyping', centralServerController.servePrototyping);
+router.post('/create-new-prototype', centralServerController.createNewPrototype);
 
 // Museum Games Page Routes -----------------------------------------------------------------
 
