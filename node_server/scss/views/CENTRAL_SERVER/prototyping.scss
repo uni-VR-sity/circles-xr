@@ -1,0 +1,119 @@
+#prototyping-body {
+
+    footer {
+        margin-top: $XX_LARGE_MARGIN;
+    }
+}
+
+#prototyping-main {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
+}
+
+// Navigation --------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#prototyping-navigation-container {
+    @include no-spacing;
+    margin: 0 auto;
+    margin-bottom: $LARGE_MARGIN;
+    background-color: $WHITE;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas: "nav-logo nav-title nav-items nav-return-home";
+
+    // Logo
+    .logo-container {
+        @include start-flex;
+        justify-self: start;
+        align-self: center;
+        grid-area: nav-logo;
+        height: $DEFAULT_NAV_HEIGHT;
+        padding: 0 $SECTION_PADDING;
+
+        a {
+
+            img {
+                height: 60%;
+            }
+        }
+    }
+
+    // Title
+    .prototyping-title-container {
+        grid-area: nav-title; 
+        @include start-flex;
+
+        h3 {
+            @include no-spacing;
+        }
+    }
+
+    // Navigation Buttons
+    .prototyping-nav-buttons-container {
+        @include center-flex;
+
+        .prototype-button {
+            @include center-flex;
+            background-color: $WHITE;
+            height: 100%;
+
+            p {
+                display: inline-block;
+                color: $BLACK;
+                padding: 0 50px;
+            }
+        }
+
+        .prototype-button:hover {
+            background-color: $LIGHT_GREY;
+            cursor: pointer;
+        }
+    }
+
+    // Return to Home 
+    .exit-prototyping-container {
+        @include start-flex;
+        min-width: 90px;
+    }
+}
+
+// Prototyping -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#prototyping-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: $LARGE_MARGIN;
+    height: 100%;
+    max-width: 95%;
+    margin: 0 auto;
+
+    #prototype-input-container {
+
+        #prototyping-form {
+            height: 100%;
+
+            fieldset {
+                display: grid;
+                grid-template-rows: 1fr auto;
+                height: 100%;
+            
+                textarea {
+                    resize: none;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+    #result-container {
+
+    }
+}
+

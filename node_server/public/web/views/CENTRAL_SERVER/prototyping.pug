@@ -1,0 +1,61 @@
+html
+    head
+
+        title Register for CIRCLES
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+        block stylesheets
+            link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+            link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
+
+        block scripts
+            script(src='/web/js/forms.js')
+            script(src='/web/js/views/CENTRAL_SERVER/prototyping.js')
+            script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+    body#prototyping-body
+
+        nav#prototyping-navigation-container
+
+            // Logo -------------------------------------------------------------------------
+            .logo-container
+                a.logo(href='/')
+                    img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
+
+            // Title Container --------------------------------------------------------------
+            .prototyping-title-container 
+                h3 Prototyping
+
+            // Navigation Buttons -----------------------------------------------------------
+            .prototyping-nav-buttons-container
+                
+                .prototype-button(onclick='newPrototype()')
+                    p New Prototype
+
+            // Exit Prototyping -------------------------------------------------------------
+            .exit-prototyping-container 
+                a.link-icon(href='/') Exit
+
+        // Variables -------------------------------------------------------------------------------------------------------------------------------
+
+        // Webpage ---------------------------------------------------------------------------------------------------------------------------------
+        main#prototyping-main
+
+            // Prototyping ------------------------------------------------------------------
+            section#prototyping-container 
+
+                #prototype-input-container 
+                    
+                    form#prototyping-form(onsubmit='updatePrototype()' method='post')
+                        fieldset
+                            
+                            .form-field
+                                textarea(name='prototyping' placeholder='prototyping...' required)
+
+                            .form-field.last-field
+                                input(type='submit' value='Update')
+
+                #result-container
+                    p result
+
+        include ../includes/footer.pug

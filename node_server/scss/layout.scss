@@ -324,13 +324,23 @@ nav {
 footer {
     margin-top: $SECTION_MARGIN;
     background-color: $DARK_GREY;
-    padding: $X_SMALL_MARGIN 0;
+    padding: $SMALL_MARGIN $SECTION_PADDING;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
     p {
-        text-align: center;
         color: $WHITE;
         font-size: 13px;
         line-height: 1.5;
+    }
+
+    .footer-email {
+        @include start-flex;
+    }
+
+    .footer-copyright {
+        @include end-flex;
     }
 }
 

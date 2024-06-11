@@ -478,6 +478,18 @@ const getServersList = async (req, res, next) =>
   }
 }
 
+// Prototyping Page --------------------------------------------------------------------------------------------------------------------------------
+
+const servePrototyping = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+  
+  res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/prototyping'), {
+    title: 'prototyping',
+    userInfo: userInfo,
+  });
+}
+
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
 
 const serveMuseumGames = async (req, res, next) =>
@@ -645,7 +657,8 @@ module.exports = {
     activateCirclesServer,
     deleteCirclesServer,
     getServersList,
+    // Prototyping
+    servePrototyping,
     // Museum Games Page
     serveMuseumGames,
-
   }
