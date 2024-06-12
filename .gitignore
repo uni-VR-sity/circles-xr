@@ -15,6 +15,9 @@
 # Ignore main environment file
 .env
 
+# Ignore created prototypes
+node_server/public/prototypes/created
+
 # Ignore compiled worlds
 node_server/public/worlds
 

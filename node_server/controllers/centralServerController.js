@@ -496,8 +496,6 @@ const servePrototyping = async (req, res, next) =>
 // Creating new prototype from template
 const createNewPrototype = async (req, res, next) =>
 {
-  console.log('creating prototype...');
-
   const templateFilePath = __dirname + '/../public/prototypes/template.html';
   const destinationFilePath = __dirname + '/../public/prototypes/created';
 
@@ -542,11 +540,112 @@ const createNewPrototype = async (req, res, next) =>
   }
 
   var response = {
-    status: "success",
+    status: 'success',
     prototypeName: filename,
   }
 
   res.json(response);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype JSON file
+// Returns updated JSON object
+const updatePrototypeJSON = function(filePath, edits)
+{
+  // Reading file
+  var prototypeJSON;
+
+  try
+  {
+    prototypeJSON = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing file to update
+  var prototypeObject = JSON.parse(prototypeJSON);
+  prototypeObject.sceneObjects = JSON.parse(edits);
+
+  // Saving file updates
+  try 
+  {
+    fs.writeFileSync(filePath, JSON.stringify(prototypeObject));
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  return prototypeObject;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype HTML file
+const updatePrototypeHTML = function(filePath, prototypeObject)
+{
+  
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype files
+const updatePrototype = async (req, res, next) =>
+{
+  if (req.body.prototypeName && req.body.prototypeEdits) 
+  {
+    const prototypePath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
+    const JSONPath = prototypePath + '/' + req.body.prototypeName + '.json';
+    const HTMLPath = prototypePath + '/' + req.body.prototypeName + '.html';
+
+    // Checking that prototype files exists
+    if (fs.existsSync(JSONPath) && fs.existsSync(HTMLPath))
+    {
+      // Updating prototype JSON file
+      var updatedJSON = updatePrototypeJSON(JSONPath, req.body.prototypeEdits);
+
+      if (updatedJSON)
+      {
+        // Updating HTML file
+        updatePrototypeHTML(HTMLPath, updatedJSON);
+      }
+      else
+      {
+        var response = {
+          status: 'error',
+          error: 'Something went wrong, please try again',
+        }
+    
+        res.json(response);
+        return;
+      }
+    }
+    else
+    {
+      var response = {
+        status: 'error',
+        error: 'Prototype can not be found',
+      }
+
+      res.json(response);
+      return;
+    }
+  }
+  else
+  {
+    var response = {
+      status: 'error',
+      error: 'Something went wrong, please try again',
+    }
+
+    res.json(response);
+    return;
+  }
 }
 
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
@@ -719,6 +818,7 @@ module.exports = {
     // Prototyping
     servePrototyping,
     createNewPrototype,
+    updatePrototype,
     // Museum Games Page
     serveMuseumGames,
   }

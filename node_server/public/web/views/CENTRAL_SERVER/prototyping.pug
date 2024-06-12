@@ -44,18 +44,22 @@ html
             // Prototyping ------------------------------------------------------------------
             section#prototyping-container 
 
-                #prototype-input-container 
+                #prototype-input-container  
                     
-                    form#prototyping-form(onsubmit='updatePrototype()' method='post')
+                    form#prototyping-form(onsubmit='updatePrototype(event)' method='post')
                         fieldset
+
+                            h3 Title: 
+                                span#prototype-title 
                             
                             .form-field
-                                textarea(name='prototyping' placeholder='prototyping...' required)
+                                textarea#prototyping-input(name='prototyping' required)
 
                             .form-field.last-field
                                 input(type='submit' value='Update')
+                                p#prototype-input-success.success-message 
+                                p#prototype-input-error.error-message
 
                 #result-container
-                    p result
 
         include ../includes/footer.pug

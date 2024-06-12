@@ -132,7 +132,7 @@ p.error-message {
 p.error-message::before {
     font: var(--fa-font-solid);
     content: '\f06a';
-    margin-right: $MEDIUM_MARGIN;
+    margin-right: $SMALL_MARGIN;
     font-size: $MEDIUM_ICON;
 }
 
