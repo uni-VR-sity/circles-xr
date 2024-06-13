@@ -497,7 +497,7 @@ const servePrototyping = async (req, res, next) =>
 const createNewPrototype = async (req, res, next) =>
 {
   const destinationFilePath = __dirname + '/../public/prototypes/created';
-  const startingString = '{\n\t"shape" : "box",\n\t"colour" : "grey",\n\t"position" : ["0", "0", "-5"],\n\t"rotation" : ["0", "45", "0"]\n}';
+  const startingString = '{\n    "shape" : "box",\n    "colour" : "grey",\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
 
   // Creating unique file name
   var filename = uniqueFilename(destinationFilePath).split('\\').pop();
