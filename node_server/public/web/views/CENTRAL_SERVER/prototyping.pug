@@ -10,7 +10,10 @@ html
 
         block scripts
             script(src='/global/js/libs/aframe-master.min.js')
+            script(src='/web/js/layout.js')
             script(src='/web/js/forms.js')
+            script(src='/web/js/overlay.js')
+            script(src='/web/js/scroll-gallery.js')
             script(src='/web/js/views/CENTRAL_SERVER/prototyping.js')
             script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
 
@@ -37,14 +40,14 @@ html
 
             // Current Prototype Title Container --------------------------------------------
             #current-prototype-title-container.hide-until-ready
-                h3#prototype-title title
+                h3#prototype-title Name
 
             // Prototype Buttons Container --------------------------------------------------
             #prototyping-buttons-container.hide-until-ready
                 input(type='submit' form='prototyping-form' value='Update')
                 
                 .prototype-button
-                    a() Export JSON
+                    a() Export
 
                 .prototype-button
                     a() New Prototype
@@ -69,7 +72,7 @@ html
 
                 #result-container
                     #prototype-scene 
-                    
+
                     p#prototype-input-error.error-message
 
         include ../includes/footer.pug
