@@ -9,57 +9,67 @@ html
             link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
 
         block scripts
+            script(src='/global/js/libs/aframe-master.min.js')
             script(src='/web/js/forms.js')
             script(src='/web/js/views/CENTRAL_SERVER/prototyping.js')
             script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
 
     body#prototyping-body
 
+        // Variables -------------------------------------------------------------------------------------------------------------------------------
+
+        // Navigation ------------------------------------------------------------------------------------------------------------------------------
         nav#prototyping-navigation-container
 
             // Logo -------------------------------------------------------------------------
-            .logo-container
+            #logo-container
                 a.logo(href='/')
                     img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
 
             // Title Container --------------------------------------------------------------
-            .prototyping-title-container 
+            #prototyping-title-container
                 h3 Prototyping
 
-            // Navigation Buttons -----------------------------------------------------------
-            .prototyping-nav-buttons-container
-                
-                .prototype-button(onclick='newPrototype()')
-                    p New Prototype
-
             // Exit Prototyping -------------------------------------------------------------
-            .exit-prototyping-container 
-                a.link-icon(href='/') Exit
+            #exit-prototyping-container 
+                .icon-container
+                    a(class='fa-solid fa-arrow-right-from-bracket' href='/')
 
-        // Variables -------------------------------------------------------------------------------------------------------------------------------
+            // Current Prototype Title Container --------------------------------------------
+            #current-prototype-title-container.hide-until-ready
+                h3#prototype-title title
+
+            // Prototype Buttons Container --------------------------------------------------
+            #prototyping-buttons-container.hide-until-ready
+                input(type='submit' form='prototyping-form' value='Update')
+                
+                .prototype-button
+                    a() Export JSON
+
+                .prototype-button
+                    a() New Prototype
 
         // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main#prototyping-main
 
+            // Inital Buttons ---------------------------------------------------------------
+            section#initial-buttons-container 
+                a(onclick='newPrototype()') Create New Prototype
+
             // Prototyping ------------------------------------------------------------------
-            section#prototyping-container 
+            section#prototyping-container.hide-until-ready
 
                 #prototype-input-container  
                     
                     form#prototyping-form(onsubmit='updatePrototype(event)' method='post')
                         fieldset
-
-                            h3 Title: 
-                                span#prototype-title 
                             
                             .form-field
                                 textarea#prototyping-input(name='prototyping' required)
 
-                            .form-field.last-field
-                                input(type='submit' value='Update')
-                                p#prototype-input-success.success-message 
-                                p#prototype-input-error.error-message
-
                 #result-container
+                    #prototype-scene 
+                    
+                    p#prototype-input-error.error-message
 
         include ../includes/footer.pug

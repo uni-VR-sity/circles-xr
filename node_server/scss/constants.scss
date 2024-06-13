@@ -30,7 +30,7 @@ $LIGHT_GREEN: #e3f1e3;
 
 // Dimensions
 $MAX_CONTENT_WIDTH: 1200px;
-$DEFAULT_NAV_HEIGHT: 65px;
+$DEFAULT_NAV_HEIGHT:70px;
 $TABLET_NAV_HEIGHT: 55px;
 $MOBILE_NAV_HEIGHT: 58px;
 
@@ -431,6 +431,63 @@ $SMALL_ICON: 14px;
 
         a:active {
             @include icon-highlight-hover($hover-colour);
+        }
+    }
+}
+
+// Icon button grow
+@mixin icon-grow-regular($font-size, $colour) {
+    color: $colour;
+    font-size: $font-size;
+}
+
+@mixin icon-grow-hover($font-size, $grow-by, $right-grow) {
+    font-size: $font-size + $grow-by;
+
+    @if $right-grow {
+        margin-right: -2.5px;
+    }
+    @else {
+        margin-left: -2.5px;
+    }
+
+    cursor: pointer;
+}
+
+@mixin icon-grow($font-size, $right-grow: true, $grow-by: 5px, $colour: $BLACK) {
+    i {
+        @include icon-grow-regular($font-size, $colour);
+    }
+
+    i:hover {
+        @include icon-grow-hover($font-size, $grow-by, $right-grow);
+    }
+
+    a {
+        @include icon-grow-regular($font-size, $colour);
+    }
+
+    a:hover {
+        @include icon-grow-hover($font-size, $grow-by, $right-grow);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        i:hover {
+            @include icon-grow-regular($font-size, $colour);
+        }
+
+        i:active {
+            @include icon-grow-hover($font-size, $grow-by, $right-grow);
+        }
+
+        a:hover {
+            @include icon-grow-regular($font-size, $colour);
+        }
+
+        a:active {
+            @include icon-grow-hover($font-size, $grow-by, $right-grow);
         }
     }
 }

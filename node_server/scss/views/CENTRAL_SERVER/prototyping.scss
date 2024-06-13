@@ -1,7 +1,7 @@
 #prototyping-body {
 
     footer {
-        margin-top: $XX_LARGE_MARGIN;
+        margin-top: $LARGE_MARGIN;
     }
 }
 
@@ -9,6 +9,10 @@
     height: 100%;
     display: grid;
     grid-template-rows: 1fr;
+}
+
+.hide-until-ready {
+    visibility: hidden;
 }
 
 // Navigation --------------------------------------------------------------------------------------------------------------------------------------
@@ -22,11 +26,12 @@
     background-color: $WHITE;
     width: 100%;
     display: grid;
-    grid-template-columns: auto auto 1fr auto;
-    grid-template-areas: "nav-logo nav-title nav-items nav-return-home";
+    grid-template-columns: auto 1fr 1fr;
+    grid-template-areas: "nav-logo nav-title nav-return-home"
+                         "current-prototype current-prototype prototype-buttons";
 
     // Logo
-    .logo-container {
+    #logo-container {
         @include start-flex;
         justify-self: start;
         align-self: center;
@@ -37,13 +42,13 @@
         a {
 
             img {
-                height: 60%;
+                height: 55%;
             }
         }
     }
 
     // Title
-    .prototyping-title-container {
+    #prototyping-title-container {
         grid-area: nav-title; 
         @include start-flex;
 
@@ -52,33 +57,54 @@
         }
     }
 
-    // Navigation Buttons
-    .prototyping-nav-buttons-container {
-        @include center-flex;
+    // Return to Home 
+    #exit-prototyping-container {
+        @include end-flex;
+        grid-area: nav-return-home;
+        
+        .icon-container {
+            @include icon-grow($DEFAULT_LARGE_ICON);
+            padding-right: $SECTION_PADDING + 5px;
 
-        .prototype-button {
-            @include center-flex;
-            background-color: $WHITE;
-            height: 100%;
-
-            p {
-                display: inline-block;
-                color: $BLACK;
-                padding: 0 50px;
+            a {
+                @include center-flex;
             }
         }
+    }
 
-        .prototype-button:hover {
-            background-color: $LIGHT_GREY;
-            cursor: pointer;
+    // Current Prototype Buttons
+    #current-prototype-title-container {
+        grid-area: current-prototype;
+        background-color: $LIGHT_GREY;
+        padding: $MEDIUM_MARGIN $SECTION_PADDING;
+
+        #prototype-title {
+            @include no-spacing;
+            font-weight: 400;
         }
     }
 
-    // Return to Home 
-    .exit-prototyping-container {
-        @include start-flex;
-        min-width: 90px;
+    // Prototype Buttons
+    #prototyping-buttons-container {
+        @include end-flex;
+        grid-area: prototype-buttons;
+        background-color: $LIGHT_GREY;
+        padding: 0 $SECTION_PADDING;
+
+        .prototype-button {
+            @include secondary-button;
+            margin-left: $SMALL_MARGIN;
+        }
     }
+}
+
+// Initial Buttons ---------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#initial-buttons-container {
+    @include outline-button(block, auto, $XX_SMALL_MARGIN $MEDIUM_MARGIN);
+    @include center-flex;
 }
 
 // Prototyping -------------------------------------------------------------------------------------------------------------------------------------
@@ -86,13 +112,12 @@
 // DEFAULT ----------------------------------------------------------------------------------
 
 #prototyping-container {
-    visibility: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: $LARGE_MARGIN;
     height: 100%;
-    max-width: 95%;
-    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 0 $SECTION_PADDING;
 
     #prototype-input-container {
 
@@ -100,42 +125,26 @@
             height: 100%;
 
             fieldset {
-                display: grid;
-                grid-template-rows: auto 1fr auto;
-                height: 100%;
-
-                h3 {
-                    margin-bottom: $MEDIUM_MARGIN;
-
-                    #prototype-title {
-                        font-weight: 400;
-                    }
-                }
             
                 #prototyping-input {
                     resize: none;
                     width: 100%;
                     height: 100%;
                 }
-
-                .last-field {
-                    @include start-flex;
-
-                    input[type=submit] {
-                        display: inline-block;
-                    }
-    
-                    #prototype-input-success, #prototype-input-error {
-                        margin-top: 0;
-                        margin-left: $MEDIUM_MARGIN;
-                    }
-                }
             }
         }
     }
 
     #result-container {
-        border: 1px solid $BLACK;
+        position: relative;
+
+        #prototype-input-error {
+            position: absolute; 
+            left: 0px; 
+            top: 0px; 
+            z-index: +1;
+            margin: $SMALL_MARGIN+5px $MEDIUM_MARGIN;
+        }
     }
 }
 

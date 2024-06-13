@@ -497,6 +497,7 @@ const servePrototyping = async (req, res, next) =>
 const createNewPrototype = async (req, res, next) =>
 {
   const destinationFilePath = __dirname + '/../public/prototypes/created';
+  const startingString = '{\n\t"shape" : "box",\n\t"colour" : "grey",\n\t"position" : ["0", "0", "-5"],\n\t"rotation" : ["0", "45", "0"]\n}';
 
   // Creating unique file name
   var filename = uniqueFilename(destinationFilePath).split('\\').pop();
@@ -516,7 +517,7 @@ const createNewPrototype = async (req, res, next) =>
   // Creating prototype JSON file
   var prototypeJSON = {
     title : filename,
-    sceneObjects : [],
+    sceneObjects : [JSON.parse(startingString)],
   }
 
   try 
@@ -529,11 +530,13 @@ const createNewPrototype = async (req, res, next) =>
   }
 
   // Creating prototype HTML file
-  updatePrototypeHTML(prototypeFolderPath + '/' + filename + '.html', prototypeJSON);
+  var sceneObjectsHTML = updatePrototypeHTML(prototypeFolderPath + '/' + filename + '.html', prototypeJSON);
 
   var response = {
     status: 'success',
     prototypeName: filename,
+    startingString: startingString,
+    sceneObjects: sceneObjectsHTML,
   }
 
   res.json(response);
@@ -586,17 +589,17 @@ const parsePrototype = function(prototypeObject)
   // Creating an a-entity element for each scene object
   for (const object of prototypeObject.sceneObjects)
   {
-    var element = '<a-entity ';
+    var element = '<a-entity';
 
     // Adding id if object has one specified
     if (object.id)
     {
-      element += 'id="' + object.id + '" ';
+      element += ' id="' + object.id + '"';
     }
 
     // If object has a shape specified, adding it
     // Otherwise adding default cube shape
-    element += 'geometry="';
+    element += ' geometry="';
 
     if (object.shape)
     {
@@ -631,30 +634,30 @@ const parsePrototype = function(prototypeObject)
       element += 'primitive:cube;';
     }
 
-    element += '" ';
+    element += '"';
 
     // Adding colour if object has on specified
     if (object.colour)
     {
-      element += 'material="color:' + object.colour + ';" ';
+      element += ' material="color:' + object.colour + ';"';
     }
 
     // Adding position if object has one specified
     if (object.position)
     {
-      element += 'position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';" '
+      element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"'
     }
 
     // Adding rotation if object has one specified
     if (object.rotation)
     {
-      element += 'rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';" '
+      element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"'
     }
 
     // Adding scale if object has one specified
     if (object.scale)
     {
-      element += 'scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';" '
+      element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"'
     }
 
     element += '></a-entity>';
@@ -670,7 +673,7 @@ const parsePrototype = function(prototypeObject)
 // ------------------------------------------------------------------------------------------
 
 // Updating prototype HTML file
-// Returns if update was successfull
+// Returns HTML scene object
 const updatePrototypeHTML = function(filePath, prototypeObject)
 {
   // Getting scene objects from prototype
@@ -690,7 +693,7 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   catch(e)
   {
     console.log(e);
-    return false;
+    return null;
   }
 
   // Replacing __PROTOTYPE_TITLE__ with prototype title
@@ -708,7 +711,7 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   catch(e)
   {
     console.log(e);
-    return false;
+    return null;
   }
 
   // Saving file updates
@@ -719,10 +722,10 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   catch(e)
   {
     console.log(e);
-    return false;
+    return null;
   }
 
-  return true;
+  return sceneObjects;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -745,12 +748,13 @@ const updatePrototype = async (req, res, next) =>
       if (updatedJSON)
       {
         // Updating HTML file
-        var success = updatePrototypeHTML(HTMLPath, updatedJSON);
+        var sceneObjects = updatePrototypeHTML(HTMLPath, updatedJSON);
 
-        if (success)
+        if (sceneObjects)
         {
           var response = {
             status: 'success',
+            sceneObjects: sceneObjects,
           }
       
           res.json(response);

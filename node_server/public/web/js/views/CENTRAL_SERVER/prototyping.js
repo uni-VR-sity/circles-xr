@@ -1,21 +1,27 @@
 'use strict';
 
-// Constant Variables ------------------------------------------------------------------------------------------------------------------------------
-const STARTING_STRING = '{\n\t"shape" : "box",\n\t"position" : ["0", "0", "0"]\n}'
-
 // Global Variables --------------------------------------------------------------------------------------------------------------------------------
 var prototypeName;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
-// Hiding success and error messages
+// Hiding error messages
 function hideMessages()
 {
-    document.getElementById('prototype-input-success').style.display = 'none';
     document.getElementById('prototype-input-error').style.display = 'none';
 }
 
 // Prototyping -------------------------------------------------------------------------------------------------------------------------------------
+
+// Displays prototype scene
+function displayPrototypeScene(sceneObjects)
+{
+    var scene = '<a-scene embedded background="color:#ededed">' + sceneObjects + '</a-scene>';
+    
+    document.getElementById('prototype-scene').innerHTML = scene;
+}
+
+// ------------------------------------------------------------------------------------------
 
 // Creates new prototype
 function newPrototype()
@@ -39,13 +45,23 @@ function newPrototype()
             document.getElementById('prototype-title').innerHTML = response.prototypeName;
 
             // Inserting starting string into textarea
-            document.getElementById('prototyping-input').innerHTML = STARTING_STRING;
+            document.getElementById('prototyping-input').innerHTML = response.startingString;
 
             // Hiding success and error messages
             hideMessages();
 
             // Displaying prototype editor
-            document.getElementById('prototyping-container').style.visibility = 'visible';
+            var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
+
+            while (prototypeEditorElements.length > 0)
+            {
+                prototypeEditorElements[0].classList.remove('hide-until-ready');
+            }
+
+            document.getElementById('initial-buttons-container').style.display = 'none';
+
+            // Displaying prototype scene
+            displayPrototypeScene(response.sceneObjects);
         }
     }
 
@@ -93,13 +109,13 @@ function updatePrototype(event)
 
             if (response.status == 'success')
             {
-                document.getElementById('prototype-input-success').innerHTML = 'Prototype updated';
-                document.getElementById('prototype-input-success').style.display = 'inline-flex';
+                // Updating prototype scene
+                displayPrototypeScene(response.sceneObjects);
             }
             else
             {
                 document.getElementById('prototype-input-error').innerHTML = response.error;
-                document.getElementById('prototype-input-error').style.display = 'inline-flex';
+                document.getElementById('prototype-input-error').style.display = 'flex';
             }
         }
 
@@ -108,6 +124,6 @@ function updatePrototype(event)
     catch (e) 
     {
         document.getElementById('prototype-input-error').innerHTML = 'Error in JSON syntax';
-        document.getElementById('prototype-input-error').style.display = 'inline-flex';
+        document.getElementById('prototype-input-error').style.display = 'flex';
     }
 }
