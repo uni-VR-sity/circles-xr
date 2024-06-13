@@ -496,7 +496,6 @@ const servePrototyping = async (req, res, next) =>
 // Creating new prototype from template
 const createNewPrototype = async (req, res, next) =>
 {
-  const templateFilePath = __dirname + '/../public/prototypes/template.html';
   const destinationFilePath = __dirname + '/../public/prototypes/created';
 
   // Creating unique file name
@@ -514,20 +513,10 @@ const createNewPrototype = async (req, res, next) =>
     console.log(e);
   }
 
-  // Copying template file for new prototype
-  try
-  {
-    fs.copyFileSync(templateFilePath, prototypeFolderPath + '/' + filename + '.html', fs.constants.COPYFILE_EXCL);
-  }
-  catch(e)
-  {
-    console.log(e);
-  }
-
-  // Creating prototype json file
+  // Creating prototype JSON file
   var prototypeJSON = {
-    "title" : filename,
-    "sceneObjects" : [],
+    title : filename,
+    sceneObjects : [],
   }
 
   try 
@@ -538,6 +527,9 @@ const createNewPrototype = async (req, res, next) =>
   {
     console.log(e);
   }
+
+  // Creating prototype HTML file
+  updatePrototypeHTML(prototypeFolderPath + '/' + filename + '.html', prototypeJSON);
 
   var response = {
     status: 'success',
@@ -586,10 +578,151 @@ const updatePrototypeJSON = function(filePath, edits)
 
 // ------------------------------------------------------------------------------------------
 
+// Returning scene objects from prototype object
+const parsePrototype = function(prototypeObject)
+{
+  var sceneObjects = '';
+
+  // Creating an a-entity element for each scene object
+  for (const object of prototypeObject.sceneObjects)
+  {
+    var element = '<a-entity ';
+
+    // Adding id if object has one specified
+    if (object.id)
+    {
+      element += 'id="' + object.id + '" ';
+    }
+
+    // If object has a shape specified, adding it
+    // Otherwise adding default cube shape
+    element += 'geometry="';
+
+    if (object.shape)
+    {
+      element += 'primitive:' + object.shape + ';';
+
+      // Adding height if object has one specified
+      if (object.height)
+      {
+        element += ' height:' + object.height + ';';
+      }
+
+      // Adding width if object has one specified
+      if (object.width)
+      {
+        element += ' width:' + object.width + ';';
+      }
+
+      // Adding depth if object has one specified
+      if (object.depth)
+      {
+        element += ' depth:' + object.depth + ';';
+      }
+
+      // Adding radius if object has one specified
+      if (object.radius)
+      {
+        element += ' radius:' + object.radius + ';';
+      }
+    }
+    else
+    {
+      element += 'primitive:cube;';
+    }
+
+    element += '" ';
+
+    // Adding colour if object has on specified
+    if (object.colour)
+    {
+      element += 'material="color:' + object.colour + ';" ';
+    }
+
+    // Adding position if object has one specified
+    if (object.position)
+    {
+      element += 'position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';" '
+    }
+
+    // Adding rotation if object has one specified
+    if (object.rotation)
+    {
+      element += 'rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';" '
+    }
+
+    // Adding scale if object has one specified
+    if (object.scale)
+    {
+      element += 'scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';" '
+    }
+
+    element += '></a-entity>';
+
+    // Adding element to scene objects
+    sceneObjects += element;
+  }
+
+
+  return sceneObjects;
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Updating prototype HTML file
+// Returns if update was successfull
 const updatePrototypeHTML = function(filePath, prototypeObject)
 {
-  
+  // Getting scene objects from prototype
+  var sceneObjects = parsePrototype(prototypeObject);
+
+  // Creating updated HTML file with new scene objects
+  const templateTopFilePath = __dirname + '/../public/prototypes/template-top.html';
+  const templateBottomFilePath = __dirname + '/../public/prototypes/template-bottom.html';
+
+  var updatedHTML;
+
+  // Getting template top
+  try
+  {
+    updatedHTML = fs.readFileSync(templateTopFilePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return false;
+  }
+
+  // Replacing __PROTOTYPE_TITLE__ with prototype title
+  updatedHTML = updatedHTML.replace(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
+
+  // Inserting scene objects
+  updatedHTML += sceneObjects;
+  updatedHTML += '\n';
+
+  // Inserting template bottom
+  try
+  {
+    updatedHTML += fs.readFileSync(templateBottomFilePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return false;
+  }
+
+  // Saving file updates
+  try 
+  {
+    fs.writeFileSync(filePath, updatedHTML);
+  }
+  catch(e)
+  {
+    console.log(e);
+    return false;
+  }
+
+  return true;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -612,7 +745,28 @@ const updatePrototype = async (req, res, next) =>
       if (updatedJSON)
       {
         // Updating HTML file
-        updatePrototypeHTML(HTMLPath, updatedJSON);
+        var success = updatePrototypeHTML(HTMLPath, updatedJSON);
+
+        if (success)
+        {
+          var response = {
+            status: 'success',
+          }
+      
+          res.json(response);
+          return;
+        }
+        else
+        {
+          var response = {
+            status: 'error',
+            error: 'Something went wrong, please try again',
+          }
+      
+          res.json(response);
+          return;
+        }
+        
       }
       else
       {
@@ -646,6 +800,20 @@ const updatePrototype = async (req, res, next) =>
     res.json(response);
     return;
   }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Temporary, renders prototype circle
+const servePrototypeCircle = async (req, res, next) =>
+{
+  // url: /manage-circle/circle_id
+  // split result array: {"", "prototype", "prototype_name"}
+  const prototypeName = req.url.split('/')[2];
+
+  const filePath = __dirname + '/../public/prototypes/created/' + prototypeName;
+
+  res.sendFile(prototypeName + '.html', {root:filePath});
 }
 
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
@@ -819,6 +987,7 @@ module.exports = {
     servePrototyping,
     createNewPrototype,
     updatePrototype,
+    servePrototypeCircle,
     // Museum Games Page
     serveMuseumGames,
   }

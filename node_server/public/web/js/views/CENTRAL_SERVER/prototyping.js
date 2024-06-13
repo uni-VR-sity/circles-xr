@@ -93,7 +93,8 @@ function updatePrototype(event)
 
             if (response.status == 'success')
             {
-
+                document.getElementById('prototype-input-success').innerHTML = 'Prototype updated';
+                document.getElementById('prototype-input-success').style.display = 'inline-flex';
             }
             else
             {
