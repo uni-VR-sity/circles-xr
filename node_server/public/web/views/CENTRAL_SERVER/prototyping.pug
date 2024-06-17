@@ -39,25 +39,21 @@ html
                     a(class='fa-solid fa-arrow-right-from-bracket' href='/')
 
             // Current Prototype Title Container --------------------------------------------
-            #current-prototype-title-container.hide-until-ready
-                h3#prototype-title Name
+            #current-prototype-title-container
+                h3#prototype-title.hide-until-ready Name
 
             // Prototype Buttons Container --------------------------------------------------
-            #prototyping-buttons-container.hide-until-ready
-                input(type='submit' form='prototyping-form' value='Update')
+            #prototyping-buttons-container
+                input(type='submit' form='prototyping-form' value='Update').hide-until-ready
                 
-                .prototype-button
+                .prototype-button.hide-until-ready
                     a() Export
 
                 .prototype-button
-                    a() New Prototype
+                    a(onclick='openOverlay("create-prototype-overlay")') New Prototype
 
         // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main#prototyping-main
-
-            // Inital Buttons ---------------------------------------------------------------
-            section#initial-buttons-container 
-                a(onclick='newPrototype()') Create New Prototype
 
             include includes/create-prototype.pug
 

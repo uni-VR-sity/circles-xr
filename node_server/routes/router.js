@@ -203,9 +203,9 @@ router.get('/get-servers', centralServerController.getServersList); // This is r
 
 // Prototyping Routes -----------------------------------------------------------------------
 
-router.get('/prototyping', centralServerController.servePrototyping);
-router.post('/create-new-prototype', centralServerController.createNewPrototype);
-router.post('/update-prototype', centralServerController.updatePrototype);
+router.get('/prototyping', authenticated, centralServerController.servePrototyping);
+router.post('/create-new-prototype', authenticated, centralServerController.createNewPrototype);
+router.post('/update-prototype', authenticated, centralServerController.updatePrototype);
 
 router.get('/prototype/:prototype_name', centralServerController.servePrototypeCircle);
 

@@ -497,50 +497,111 @@ const servePrototyping = async (req, res, next) =>
 // Creating new prototype from template
 const createNewPrototype = async (req, res, next) =>
 {
-  const destinationFilePath = __dirname + '/../public/prototypes/created';
-  const startingString = '{\n    "shape" : "box",\n    "colour" : "grey",\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
-
-  // Creating unique file name
-  var filename = uniqueFilename(destinationFilePath).split('\\').pop();
-
-  // Creating prototype folder
-  const prototypeFolderPath = destinationFilePath + '/' + filename;
-
-  try
+  if (req.body.prototypeName) 
   {
-    fs.mkdirSync(prototypeFolderPath); 
+    const destinationFilePath = __dirname + '/../public/prototypes/created';
+    const startingString = '{\n    "shape" : "box",\n    "colour" : "grey",\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
+
+    // Making sure prototype name is unique, sending error message if it already exists
+    if (await Prototypes.findOne({name: req.body.prototypeName}))
+    {
+      var response = {
+        status: 'error',
+        error: 'Prototype name is unavailable',
+      }
+  
+      res.json(response);
+      return;
+    }
+
+    // Creating prototype folder
+    const prototypeFolderPath = destinationFilePath + '/' + req.body.prototypeName;
+
+    try
+    {
+      fs.mkdirSync(prototypeFolderPath); 
+    }
+    catch(e)
+    {
+      var response = {
+        status: 'error',
+        error: 'Something went wrong, please try again',
+      }
+  
+      res.json(response);
+      return;
+    }
+
+    // Creating prototype JSON file
+    var prototypeJSON = {
+      title : req.body.prototypeName,
+      sceneObjects : [JSON.parse(startingString)],
+    }
+
+    try 
+    {
+      fs.writeFileSync(prototypeFolderPath + '/' + req.body.prototypeName + '.json', JSON.stringify(prototypeJSON));
+    }
+    catch(e)
+    {
+      var response = {
+        status: 'error',
+        error: 'Something went wrong, please try again',
+      }
+  
+      res.json(response);
+      return;
+    }
+
+    // Creating prototype HTML file
+    var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + req.body.prototypeName + '.html', prototypeJSON);
+
+    // Storing prototype in the database
+    var prototypeInfo = {
+      user: await User.findById(req.user._id).exec(),
+      name: req.body.prototypeName,
+      url: prototypeFolderPath,
+    }
+
+    try
+    {
+      await Prototypes.create(prototypeInfo);
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      // Deleting prototype folder
+      fs.rmSync(prototypeFolderPath, {recursive: true});
+
+      var response = {
+        status: 'error',
+        error: 'Something went wrong, please try again',
+      }
+  
+      res.json(response);
+      return;
+    }
+
+    var response = {
+      status: 'success',
+      prototypeName: req.body.prototypeName,
+      startingString: startingString,
+      sceneElements: sceneElements,
+    }
+
+    res.json(response);
   }
-  catch(e)
+  else
   {
-    console.log(e);
-  }
+    var response = {
+      status: 'error',
+      error: 'Something went wrong, please try again',
+    }
 
-  // Creating prototype JSON file
-  var prototypeJSON = {
-    title : filename,
-    sceneObjects : [JSON.parse(startingString)],
+    res.json(response);
+    return;
   }
-
-  try 
-  {
-    fs.writeFileSync(prototypeFolderPath + '/' + filename + '.json', JSON.stringify(prototypeJSON));
-  }
-  catch(e)
-  {
-    console.log(e);
-  }
-
-  // Creating prototype HTML file
-  var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + filename + '.html', prototypeJSON);
-
-  var response = {
-    status: 'success',
-    prototypeName: filename,
-    startingString: startingString,
-    sceneElements: sceneElements,
-  }
-
-  res.json(response);
 }
 
 // ------------------------------------------------------------------------------------------

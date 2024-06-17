@@ -22,11 +22,11 @@ block content
             // Create Prototype -------------------------------------------------------------
             #create-prototype-container
 
-                form(onsubmit='updateSessionName(event)' method="post")
+                form(onsubmit='createPrototype(event)' method="post")
                     fieldset 
 
                         .form-field.last-field
                             input(type='text' name='prototypeName' placeholder='Name...' required)
                             input.inline-submit(type='submit' value='Create') 
 
-                p.error-message error
+                p#prototype-creation-error.error-message

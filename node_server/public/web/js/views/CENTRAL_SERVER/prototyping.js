@@ -1,14 +1,19 @@
 'use strict';
 
 // Global Variables --------------------------------------------------------------------------------------------------------------------------------
-var prototypeName;
+var currentPrototype;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
 // Hiding error messages
 function hideMessages()
 {
-    document.getElementById('prototype-input-error').style.display = 'none';
+    var errors = document.getElementsByClassName('error-message');
+
+    for (const error of errors)
+    {
+        error.style.display = 'none';
+    }
 }
 
 // Prototyping -------------------------------------------------------------------------------------------------------------------------------------
@@ -24,8 +29,17 @@ function displayPrototypeScene(sceneObjects)
 // ------------------------------------------------------------------------------------------
 
 // Creates new prototype
-function newPrototype()
+function createPrototype(event)
 {
+    // Preventing page refresh
+    event.preventDefault(); 
+
+    // Getting form data
+    var formData = new FormData(event.target);
+
+    // Getting prototype name
+    var prototypeName = formData.get('prototypeName');
+
     // Send request to create new prototype
     var request = new XMLHttpRequest();
     request.open('POST', '/create-new-prototype');
@@ -38,8 +52,11 @@ function newPrototype()
         // If new prototype made successfully
         if (response.status == 'success')
         {
+            // Closing create prototype overlay
+            closeOverlay("create-prototype-overlay");
+
             // Saving prototype name
-            prototypeName = response.prototypeName;
+            currentPrototype = response.prototypeName;
 
             // Updating title
             document.getElementById('prototype-title').innerHTML = response.prototypeName;
@@ -63,9 +80,14 @@ function newPrototype()
             // Displaying prototype scene
             displayPrototypeScene(response.sceneElements);
         }
+        else 
+        {
+            document.getElementById('prototype-creation-error').innerHTML = response.error;
+            document.getElementById('prototype-creation-error').style.display = 'flex';
+        }
     }
 
-    request.send();
+    request.send('prototypeName=' + prototypeName);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -119,7 +141,7 @@ function updatePrototype(event)
             }
         }
 
-        request.send('prototypeName=' + prototypeName + '&prototypeEdits=' + prototypeJSON);
+        request.send('prototypeName=' + currentPrototype + '&prototypeEdits=' + prototypeJSON);
     } 
     catch (e) 
     {
