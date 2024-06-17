@@ -75,8 +75,6 @@ function createPrototype(event)
                 prototypeEditorElements[0].classList.remove('hide-until-ready');
             }
 
-            document.getElementById('initial-buttons-container').style.display = 'none';
-
             // Displaying prototype scene
             displayPrototypeScene(response.sceneElements);
         }
