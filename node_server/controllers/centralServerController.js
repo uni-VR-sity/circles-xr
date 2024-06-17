@@ -497,6 +497,11 @@ const servePrototyping = async (req, res, next) =>
 // Creating new prototype from template
 const createNewPrototype = async (req, res, next) =>
 {
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
   if (req.body.prototypeName) 
   {
     const destinationFilePath = __dirname + '/../public/prototypes/created';
@@ -505,12 +510,9 @@ const createNewPrototype = async (req, res, next) =>
     // Making sure prototype name is unique, sending error message if it already exists
     if (await Prototypes.findOne({name: req.body.prototypeName}))
     {
-      var response = {
-        status: 'error',
-        error: 'Prototype name is unavailable',
-      }
+      errorResponse.error = 'Prototype name is unavailable';
   
-      res.json(response);
+      res.json(errorResponse);
       return;
     }
 
@@ -523,12 +525,7 @@ const createNewPrototype = async (req, res, next) =>
     }
     catch(e)
     {
-      var response = {
-        status: 'error',
-        error: 'Something went wrong, please try again',
-      }
-  
-      res.json(response);
+      res.json(errorResponse);
       return;
     }
 
@@ -544,12 +541,7 @@ const createNewPrototype = async (req, res, next) =>
     }
     catch(e)
     {
-      var response = {
-        status: 'error',
-        error: 'Something went wrong, please try again',
-      }
-  
-      res.json(response);
+      res.json(errorResponse);
       return;
     }
 
@@ -572,34 +564,31 @@ const createNewPrototype = async (req, res, next) =>
       console.log(e);
 
       // Deleting prototype folder
-      fs.rmSync(prototypeFolderPath, {recursive: true});
-
-      var response = {
-        status: 'error',
-        error: 'Something went wrong, please try again',
+      try
+      {
+        fs.rmSync(prototypeFolderPath, {recursive: true});
       }
-  
-      res.json(response);
+      catch(e)
+      {
+        console.log(e);
+      }
+
+      res.json(errorResponse);
       return;
     }
 
-    var response = {
+    var successResponse = {
       status: 'success',
       prototypeName: req.body.prototypeName,
       startingString: startingString,
       sceneElements: sceneElements,
     }
 
-    res.json(response);
+    res.json(successResponse);
   }
   else
   {
-    var response = {
-      status: 'error',
-      error: 'Something went wrong, please try again',
-    }
-
-    res.json(response);
+    res.json(errorResponse);
     return;
   }
 }
@@ -822,6 +811,11 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
 // Updating prototype files
 const updatePrototype = async (req, res, next) =>
 {
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
   if (req.body.prototypeName && req.body.prototypeEdits) 
   {
     const prototypePath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
@@ -841,56 +835,36 @@ const updatePrototype = async (req, res, next) =>
 
         if (sceneElements)
         {
-          var response = {
+          var successResponse = {
             status: 'success',
             sceneElements: sceneElements,
           }
       
-          res.json(response);
+          res.json(successResponse);
           return;
         }
         else
         {
-          var response = {
-            status: 'error',
-            error: 'Something went wrong, please try again',
-          }
-      
-          res.json(response);
+          res.json(errorResponse);
           return;
         }
         
       }
       else
       {
-        var response = {
-          status: 'error',
-          error: 'Something went wrong, please try again',
-        }
-    
-        res.json(response);
+        res.json(errorResponse);
         return;
       }
     }
     else
     {
-      var response = {
-        status: 'error',
-        error: 'Prototype can not be found',
-      }
-
-      res.json(response);
+      res.json(errorResponse);
       return;
     }
   }
   else
   {
-    var response = {
-      status: 'error',
-      error: 'Something went wrong, please try again',
-    }
-
-    res.json(response);
+    res.json(errorResponse);
     return;
   }
 }
@@ -911,6 +885,11 @@ const getPrototypes = async (req, res, next) =>
 // Deleting specified prototype
 const deletePrototype = async (req, res, next) =>
 {
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
   if (req.body.prototypeName) 
   {
     const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
@@ -923,6 +902,9 @@ const deletePrototype = async (req, res, next) =>
     catch(e)
     {
       console.log(e);
+
+      res.json(errorResponse);
+      return;
     }
 
     // Deleting prototype from database
@@ -933,10 +915,103 @@ const deletePrototype = async (req, res, next) =>
     catch(e)
     {
       console.log(e);
+  
+      res.json(errorResponse);
+      return;
     }
+
+    var response = {
+      status: 'success',
+    }
+
+    res.json(response);
+    return;
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning information about specified prototype
+const getPrototypeInfo = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
   }
 
-  res.json('complete');
+  if (req.body.prototypeName) 
+  {
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
+    const JSONPath = prototypeFolderPath + '/' + req.body.prototypeName + '.json';
+    const HTMLPath = prototypeFolderPath + '/' + req.body.prototypeName + '.html';
+
+    // Getting prototype from database
+    var prototype = null;
+    var prototypeOwner = null;
+
+    try
+    {
+      prototype = await Prototypes.findOne({name: req.body.prototypeName}).sort().exec();
+      prototypeOwner = await User.findOne(prototype.user);
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (prototype && prototypeOwner)
+    {
+      // Checking if the prototype belongs to the current user
+      const currentUser = await User.findById(req.user._id).sort().exec();
+
+      // If it does, send prototype information
+      if (JSON.stringify(prototypeOwner) == JSON.stringify(currentUser))
+      {
+        // Reading JSON file
+        var prototypeJSON;
+
+        try
+        {
+          prototypeJSON = fs.readFileSync(JSONPath , { encoding: 'utf8', flag: 'r' });
+        }
+        catch(e)
+        {
+          console.log(e);
+      
+          res.json(errorResponse);
+          return;
+        }
+
+        var prototypeObject = JSON.parse(prototypeJSON);
+
+        var prototypeInfo = {
+          status: 'success',
+          editorInput: JSON.stringify(prototypeObject.sceneObjects).slice(1, -1),
+          sceneElements: parsePrototype(prototypeObject),
+        };
+
+        res.json(prototypeInfo);
+        return;
+      }
+      else
+      {
+        errorResponse.error = 'Unauthorized access';
+    
+        res.json(errorResponse);
+        return;
+      }
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
 }
 
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
@@ -1112,6 +1187,7 @@ module.exports = {
     updatePrototype,
     getPrototypes,
     deletePrototype,
+    getPrototypeInfo,
     // Museum Games Page
     serveMuseumGames,
   }

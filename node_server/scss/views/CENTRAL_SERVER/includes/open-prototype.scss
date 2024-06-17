@@ -10,6 +10,11 @@
         display: flex;
         flex-direction: column;
 
+        #prototype-open-error {
+            margin-top: 0;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
         #existing-prototypes-container {
             overflow-y: auto;
             height: 100%;

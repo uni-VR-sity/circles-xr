@@ -28,6 +28,32 @@ function displayPrototypeScene(sceneObjects)
 
 // ------------------------------------------------------------------------------------------
 
+// Displaying prototype editor
+function displayPrototypeEditor(editorInput, sceneElements)
+{
+    // Updating title
+    document.getElementById('prototype-title').innerHTML = currentPrototype;
+
+    // Inserting starting string into textarea
+    document.getElementById('prototyping-input').value = editorInput;
+
+    // Hiding success and error messages
+    hideMessages();
+
+    // Displaying prototype editor
+    var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
+
+    for (const element of prototypeEditorElements)
+    {
+        element.style.visibility = 'visible';
+    }
+
+    // Displaying prototype scene
+    displayPrototypeScene(sceneElements);
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Creates new prototype
 function createPrototype(event)
 {
@@ -61,25 +87,8 @@ function createPrototype(event)
             // Saving prototype name
             currentPrototype = response.prototypeName;
 
-            // Updating title
-            document.getElementById('prototype-title').innerHTML = response.prototypeName;
-
-            // Inserting starting string into textarea
-            document.getElementById('prototyping-input').innerHTML = response.startingString;
-
-            // Hiding success and error messages
-            hideMessages();
-
             // Displaying prototype editor
-            var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
-
-            for (const element of prototypeEditorElements)
-            {
-                element.style.visibility = 'visible';
-            }
-
-            // Displaying prototype scene
-            displayPrototypeScene(response.sceneElements);
+            displayPrototypeEditor(response.startingString, response.sceneElements);
         }
         else 
         {
@@ -109,7 +118,7 @@ function updatePrototype(event)
     var prototypeInput = formData.get('prototyping');
 
     // Adding array brackets to input
-    var prototypeInput = '[' + prototypeInput + ']';
+    prototypeInput = '[' + prototypeInput + ']';
 
     // Converting input to JSON and ensuring it is valid
     // If it is valid,
@@ -165,21 +174,23 @@ function getExistingPrototypes()
     {
         var response = JSON.parse(request.response);
 
+        // Deleting current prototype elements
+        var oldElements = document.getElementsByClassName('prototype');
+
+        while (oldElements[0])
+        {
+            oldElements[0].parentNode.removeChild(oldElements[0]);
+        }
+
         // If the user does not have any prototypes, displaying message
         // Otherwise displaying prototypes
-        if (response.length === 0)
+        if (response.length == 0)
         {
             document.getElementById('no-prototypes-message').style.display = 'flex';
         }
         else
         {
-            // Deleting current prototype elements
-            var oldElements = document.getElementsByClassName('prototype');
-
-            while (oldElements[0])
-            {
-                oldElements[0].parentNode.removeChild(oldElements[0]);
-            }
+            document.getElementById('no-prototypes-message').style.display = 'none';
 
             // Displaying prototypes
             var prototypeContainer = document.getElementById('existing-prototypes-container');
@@ -220,6 +231,9 @@ function getExistingPrototypes()
             }
         }
 
+        // Hiding success and error messages
+        hideMessages();
+
         // Displaying overlay
         openOverlay('open-prototype-overlay');
     }
@@ -232,7 +246,34 @@ function getExistingPrototypes()
 // Opening selected prototype
 function openPrototype(prototype)
 {
-    console.log('Opening: ' + prototype);
+    // Send request to get selected prototype information
+    var request = new XMLHttpRequest();
+    request.open('POST', '/get-prototype-info');
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    request.onload = function() 
+    {
+        var response = JSON.parse(request.response);
+
+        if (response.status == 'success')
+        {
+            // Saving prototype name
+            currentPrototype = prototype;
+
+            // Displaying prototype editor
+            displayPrototypeEditor(response.editorInput, response.sceneElements);
+
+            // Closing create prototype overlay
+            closeOverlay("open-prototype-overlay");
+        }
+        else
+        {
+            document.getElementById('prototype-open-error').innerHTML = response.error;
+            document.getElementById('prototype-open-error').style.display = 'flex';
+        }
+    }
+
+    request.send('prototypeName=' + prototype);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -247,19 +288,29 @@ function deletePrototype(prototype)
 
     request.onload = function() 
     {
-        // If deleted prototype was current prototype, hiding prototype editor
-        if (prototype === currentPrototype)
+        var response = JSON.parse(request.response);
+
+        if (response.status == 'success')
         {
-            var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
-
-            for (const element of prototypeEditorElements)
+            // If deleted prototype was current prototype, hiding prototype editor
+            if (prototype === currentPrototype)
             {
-                element.style.visibility = 'hidden';
-            }
-        }
+                var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
 
-        // Displaying overlay again to update
-        getExistingPrototypes();
+                for (const element of prototypeEditorElements)
+                {
+                    element.style.visibility = 'hidden';
+                }
+            }
+
+            // Displaying overlay again to update
+            getExistingPrototypes();
+        }
+        else
+        {
+            document.getElementById('prototype-open-error').innerHTML = response.error;
+            document.getElementById('prototype-open-error').style.display = 'flex';
+        }
     }
 
     request.send('prototypeName=' + prototype);

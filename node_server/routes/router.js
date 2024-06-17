@@ -208,6 +208,7 @@ router.post('/create-new-prototype', authenticated, centralServerController.crea
 router.post('/update-prototype', authenticated, centralServerController.updatePrototype);
 router.post('/get-prototypes', authenticated, centralServerController.getPrototypes);
 router.post('/delete-prototype', authenticated, centralServerController.deletePrototype);
+router.post('/get-prototype-info', authenticated, centralServerController.getPrototypeInfo);
 
 // Museum Games Page Routes -----------------------------------------------------------------
 
