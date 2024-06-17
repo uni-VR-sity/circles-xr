@@ -20,6 +20,7 @@ const Circles = require('../models/circles');
 const Uploads = require('../models/uploads');
 const MagicLinks = require('../models/magicLinks');
 const Servers = require('../models/servers');
+const Prototypes = require('../models/prototypes');
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
