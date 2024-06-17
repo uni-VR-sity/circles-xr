@@ -1,0 +1,27 @@
+// DEFAULT ----------------------------------------------------------------------------------
+
+#create-prototype-overlay {
+    display: flex;
+    
+    .overlay {
+        width: 50%; 
+        height: auto; 
+        box-sizing: border-box;
+        padding: $X_LARGE_MARGIN;
+
+        form {
+
+            fieldset {
+
+                .form-field {
+                    display: grid;
+                    grid-template-columns: 1fr auto;
+
+                    input[type=text] {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

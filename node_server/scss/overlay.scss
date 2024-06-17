@@ -23,9 +23,8 @@
         #title-container {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            grid-template-areas: "title close-button"
-                                 "divider divider";
-            margin-bottom: $LARGE_MARGIN;
+            grid-template-areas: "title close-button";
+            margin-bottom: $SMALL_MARGIN;
 
             h2 {
                 grid-area: title;
@@ -39,11 +38,6 @@
                 align-items: start; 
                 padding-top: calc($X_SMALL_MARGIN / 2);
                 padding-right: $X_SMALL_MARGIN;
-            }
-
-            hr {
-                grid-area: divider;
-                width: 100%
             }
         }
     }

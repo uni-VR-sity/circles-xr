@@ -530,13 +530,13 @@ const createNewPrototype = async (req, res, next) =>
   }
 
   // Creating prototype HTML file
-  var sceneObjectsHTML = updatePrototypeHTML(prototypeFolderPath + '/' + filename + '.html', prototypeJSON);
+  var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + filename + '.html', prototypeJSON);
 
   var response = {
     status: 'success',
     prototypeName: filename,
     startingString: startingString,
-    sceneObjects: sceneObjectsHTML,
+    sceneElements: sceneElements,
   }
 
   res.json(response);
@@ -581,93 +581,120 @@ const updatePrototypeJSON = function(filePath, edits)
 
 // ------------------------------------------------------------------------------------------
 
-// Returning scene objects from prototype object
-const parsePrototype = function(prototypeObject)
+// Creating prototype scene element
+const createPrototypeElement = function(object)
 {
-  var sceneObjects = '';
+  var element = '<a-entity';
 
-  // Creating an a-entity element for each scene object
-  for (const object of prototypeObject.sceneObjects)
+  // Adding id if object has one specified
+  if (object.id)
   {
-    var element = '<a-entity';
+    element += ' id="' + object.id + '"';
+  }
 
-    // Adding id if object has one specified
-    if (object.id)
+  // If object has a shape specified, adding it
+  // Otherwise adding default cube shape
+  element += ' geometry="';
+
+  if (object.shape)
+  {
+    element += 'primitive:' + object.shape + ';';
+
+    // Adding height if object has one specified
+    if (object.height)
     {
-      element += ' id="' + object.id + '"';
+      element += ' height:' + object.height + ';';
     }
 
-    // If object has a shape specified, adding it
-    // Otherwise adding default cube shape
-    element += ' geometry="';
-
-    if (object.shape)
+    // Adding width if object has one specified
+    if (object.width)
     {
-      element += 'primitive:' + object.shape + ';';
+      element += ' width:' + object.width + ';';
+    }
 
-      // Adding height if object has one specified
-      if (object.height)
-      {
-        element += ' height:' + object.height + ';';
-      }
+    // Adding depth if object has one specified
+    if (object.depth)
+    {
+      element += ' depth:' + object.depth + ';';
+    }
 
-      // Adding width if object has one specified
-      if (object.width)
-      {
-        element += ' width:' + object.width + ';';
-      }
+    // Adding radius if object has one specified
+    if (object.radius)
+    {
+      element += ' radius:' + object.radius + ';';
+    }
+  }
+  else
+  {
+    element += 'primitive:cube;';
+  }
 
-      // Adding depth if object has one specified
-      if (object.depth)
-      {
-        element += ' depth:' + object.depth + ';';
-      }
+  element += '"';
 
-      // Adding radius if object has one specified
-      if (object.radius)
+  // Adding colour if object has on specified
+  if (object.colour)
+  {
+    element += ' material="color:' + object.colour + ';"';
+  }
+
+  // Adding position if object has one specified
+  if (object.position)
+  {
+    element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"'
+  }
+
+  // Adding rotation if object has one specified
+  if (object.rotation)
+  {
+    element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"'
+  }
+
+  // Adding scale if object has one specified
+  if (object.scale)
+  {
+    element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"'
+  }
+
+  element += '>';
+
+  // Adding children if object has some specified
+  if (object.children)
+  {
+    if (Array.isArray(object.children))
+    {
+      for (const childObject of object.children)
       {
-        element += ' radius:' + object.radius + ';';
+        var childElement = createPrototypeElement(childObject);
+        element += childElement;
       }
     }
     else
     {
-      element += 'primitive:cube;';
+      var childElement = createPrototypeElement(childObject);
+      element += childElement;
     }
-
-    element += '"';
-
-    // Adding colour if object has on specified
-    if (object.colour)
-    {
-      element += ' material="color:' + object.colour + ';"';
-    }
-
-    // Adding position if object has one specified
-    if (object.position)
-    {
-      element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"'
-    }
-
-    // Adding rotation if object has one specified
-    if (object.rotation)
-    {
-      element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"'
-    }
-
-    // Adding scale if object has one specified
-    if (object.scale)
-    {
-      element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"'
-    }
-
-    element += '></a-entity>';
-
-    // Adding element to scene objects
-    sceneObjects += element;
   }
 
+  element += '</a-entity>';
 
-  return sceneObjects;
+  return element;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning scene elements from prototype object
+const parsePrototype = function(prototypeObject)
+{
+  var sceneElements = '';
+
+  // Creating an a-entity element for each scene element
+  for (const object of prototypeObject.sceneObjects)
+  {
+    var element = createPrototypeElement(object);    
+    sceneElements += element;
+  }
+
+  return sceneElements;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -676,8 +703,8 @@ const parsePrototype = function(prototypeObject)
 // Returns HTML scene object
 const updatePrototypeHTML = function(filePath, prototypeObject)
 {
-  // Getting scene objects from prototype
-  var sceneObjects = parsePrototype(prototypeObject);
+  // Getting scene elements from prototype
+  var sceneElements = parsePrototype(prototypeObject);
 
   // Creating updated HTML file with new scene objects
   const templateTopFilePath = __dirname + '/../public/prototypes/template-top.html';
@@ -700,7 +727,7 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   updatedHTML = updatedHTML.replace(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
 
   // Inserting scene objects
-  updatedHTML += sceneObjects;
+  updatedHTML += sceneElements;
   updatedHTML += '\n';
 
   // Inserting template bottom
@@ -725,7 +752,7 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
     return null;
   }
 
-  return sceneObjects;
+  return sceneElements;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -748,13 +775,13 @@ const updatePrototype = async (req, res, next) =>
       if (updatedJSON)
       {
         // Updating HTML file
-        var sceneObjects = updatePrototypeHTML(HTMLPath, updatedJSON);
+        var sceneElements = updatePrototypeHTML(HTMLPath, updatedJSON);
 
-        if (sceneObjects)
+        if (sceneElements)
         {
           var response = {
             status: 'success',
-            sceneObjects: sceneObjects,
+            sceneElements: sceneElements,
           }
       
           res.json(response);

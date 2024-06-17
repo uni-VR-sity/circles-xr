@@ -1,0 +1,32 @@
+block append scripts
+    script(src='/web/js/views/CENTRAL_SERVER/prototyping.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // Manage groups overlay -----------------------------------------------------------------------------------------------------------------------
+    #create-prototype-overlay.overlay-container
+        .overlay 
+    
+            // Title ------------------------------------------------------------------------
+            #title-container
+                h2 Create Prototype
+
+                .icon-container
+                    i(class="fa-solid fa-xmark" onclick='closeOverlay("create-prototype-overlay")')
+
+            // Create Prototype -------------------------------------------------------------
+            #create-prototype-container
+
+                form(onsubmit='updateSessionName(event)' method="post")
+                    fieldset 
+
+                        .form-field.last-field
+                            input(type='text' name='prototypeName' placeholder='Name...' required)
+                            input.inline-submit(type='submit' value='Create') 
+
+                p.error-message error

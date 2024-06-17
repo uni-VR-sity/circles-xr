@@ -61,7 +61,7 @@ function newPrototype()
             document.getElementById('initial-buttons-container').style.display = 'none';
 
             // Displaying prototype scene
-            displayPrototypeScene(response.sceneObjects);
+            displayPrototypeScene(response.sceneElements);
         }
     }
 
@@ -110,7 +110,7 @@ function updatePrototype(event)
             if (response.status == 'success')
             {
                 // Updating prototype scene
-                displayPrototypeScene(response.sceneObjects);
+                displayPrototypeScene(response.sceneElements);
             }
             else
             {
