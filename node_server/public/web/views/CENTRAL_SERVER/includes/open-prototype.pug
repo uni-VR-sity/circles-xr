@@ -1,0 +1,22 @@
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // Open prototype overlay ----------------------------------------------------------------------------------------------------------------------
+    #open-prototype-overlay.overlay-container
+        .overlay 
+    
+            // Title ------------------------------------------------------------------------
+            #title-container
+                h2 Open Prototype
+
+                .icon-container
+                    i(class="fa-solid fa-xmark" onclick='closeOverlay("open-prototype-overlay")')
+
+            // Prototypes -------------------------------------------------------------------
+            #existing-prototypes-container
+
+                p#no-prototypes-message You have no prototypes

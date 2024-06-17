@@ -1,14 +1,6 @@
-block append scripts
-    script(src='/web/js/views/CENTRAL_SERVER/prototyping.js')
-
 block content
 
-    // Variables -----------------------------------------------------------------------------------------------------------------------------------
-
-
-    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
-
-    // Manage groups overlay -----------------------------------------------------------------------------------------------------------------------
+    // Create prototype overlay --------------------------------------------------------------------------------------------------------------------
     #create-prototype-overlay.overlay-container
         .overlay 
     
@@ -22,7 +14,7 @@ block content
             // Create Prototype -------------------------------------------------------------
             #create-prototype-container
 
-                form(onsubmit='createPrototype(event)' method="post")
+                form#create-prototype-form(onsubmit='createPrototype(event)' method='post')
                     fieldset 
 
                         .form-field.last-field

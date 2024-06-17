@@ -50,12 +50,16 @@ html
                     a() Export
 
                 .prototype-button
+                    a(onclick='getExistingPrototypes()') Open
+
+                .prototype-button
                     a(onclick='openOverlay("create-prototype-overlay")') New Prototype
 
         // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main#prototyping-main
 
             include includes/create-prototype.pug
+            include includes/open-prototype.pug
 
             // Prototyping ------------------------------------------------------------------
             section#prototyping-container.hide-until-ready

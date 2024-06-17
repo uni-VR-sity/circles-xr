@@ -47,7 +47,7 @@
 
 .overlay-delete-confirmation {
     width: 25%; 
-    height: 65%; 
+    height: auto; 
     box-sizing: border-box;
     padding: $X_LARGE_MARGIN;
     display: flex;
@@ -82,19 +82,21 @@
     .button-container {
         display: grid;
         grid-template-columns: 1fr 1fr; 
+        grid-gap: $SMALL_MARGIN;
         align-items: end;
         height: 100%;
+        margin-top: $LARGE_MARGIN;
 
         div {
             @include center-flex;
         }
 
         .cancel-button {
-            @include secondary-button(inline-block, auto, 0 30px);
+            @include secondary-button(inline-block, 100%, 0 30px);
         }
     
         .delete-button {
-            @include red-button(inline-block, auto, 0 30px);
+            @include red-button(inline-block, 100%, 0 30px);
         }
     }
 }

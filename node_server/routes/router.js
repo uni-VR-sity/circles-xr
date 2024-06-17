@@ -206,8 +206,8 @@ router.get('/get-servers', centralServerController.getServersList); // This is r
 router.get('/prototyping', authenticated, centralServerController.servePrototyping);
 router.post('/create-new-prototype', authenticated, centralServerController.createNewPrototype);
 router.post('/update-prototype', authenticated, centralServerController.updatePrototype);
-
-router.get('/prototype/:prototype_name', centralServerController.servePrototypeCircle);
+router.post('/get-prototypes', authenticated, centralServerController.getPrototypes);
+router.post('/delete-prototype', authenticated, centralServerController.deletePrototype);
 
 // Museum Games Page Routes -----------------------------------------------------------------
 

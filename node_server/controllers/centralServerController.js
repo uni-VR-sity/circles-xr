@@ -897,16 +897,46 @@ const updatePrototype = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
-// Temporary, renders prototype circle
-const servePrototypeCircle = async (req, res, next) =>
+// Returning current user's existing prototypes
+const getPrototypes = async (req, res, next) =>
 {
-  // url: /manage-circle/circle_id
-  // split result array: {"", "prototype", "prototype_name"}
-  const prototypeName = req.url.split('/')[2];
+  var prototypes = [];
+  prototypes = await Prototypes.find({user: req.user}, 'name');
 
-  const filePath = __dirname + '/../public/prototypes/created/' + prototypeName;
+  res.json(prototypes);
+}
 
-  res.sendFile(prototypeName + '.html', {root:filePath});
+// ------------------------------------------------------------------------------------------
+
+// Deleting specified prototype
+const deletePrototype = async (req, res, next) =>
+{
+  if (req.body.prototypeName) 
+  {
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
+
+    // Deleting prototype folder
+    try
+    {
+      fs.rmSync(prototypeFolderPath, {recursive: true});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    // Deleting prototype from database
+    try
+    {
+      await Prototypes.deleteOne({name: req.body.prototypeName});
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+  res.json('complete');
 }
 
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
@@ -1080,7 +1110,8 @@ module.exports = {
     servePrototyping,
     createNewPrototype,
     updatePrototype,
-    servePrototypeCircle,
+    getPrototypes,
+    deletePrototype,
     // Museum Games Page
     serveMuseumGames,
   }
