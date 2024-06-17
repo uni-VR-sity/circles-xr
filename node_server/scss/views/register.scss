@@ -51,14 +51,14 @@
 
         #register-form {
 
-            .error-message {
-                display: block;
-                padding-bottom: $X_SMALL_MARGIN;
-            }
-
             form {
                 width: fit-content;
                 margin: $LARGE_MARGIN auto;
+
+                .error-message {
+                    @include center-flex;
+                    padding-bottom: $MEDIUM_MARGIN;
+                }
 
                 .form-field {
                     margin-bottom: $SMALL_MARGIN;

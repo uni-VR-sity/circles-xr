@@ -35,10 +35,10 @@ html
 
                     #login-form 
 
-                        if message
-                            p.error-message= message
-
                         form(action='/login-user' method='post')
+
+                            if message
+                                p.error-message= message
 
                             .form-field
                                 label.required-form-label Username

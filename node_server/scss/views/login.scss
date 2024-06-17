@@ -51,16 +51,16 @@
 
         #login-form {
             margin-bottom: $LARGE_MARGIN;
-
-            .error-message {
-                display: block;
-                padding-bottom: $X_SMALL_MARGIN;
-            }
             
             form {
                 width: fit-content;
                 margin: 0 auto;
                 margin-bottom: $LARGE_MARGIN;
+
+                .error-message {
+                    @include center-flex;
+                    padding-bottom: $MEDIUM_MARGIN;
+                }
 
                 .form-field {
                     margin-bottom: $SMALL_MARGIN;
@@ -71,7 +71,7 @@
                 text-align: center;
             }
 
-            .register-message, .error-message {
+            .register-message {
                 margin-bottom: $SMALL_MARGIN;
             }
         }

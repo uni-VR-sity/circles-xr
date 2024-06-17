@@ -38,10 +38,10 @@ html
                         p Create an account to begin exploring! Or 
                             a.link-icon(href="/guest-login") continue as guest
 
-                        if message
-                            p.error-message= message
-
                         form(action='/register-user' method='post')
+
+                            if message
+                                p.error-message= message
 
                             .form-field
                                 label.required-form-label Username

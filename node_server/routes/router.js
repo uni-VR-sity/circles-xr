@@ -45,7 +45,7 @@ router.get('/login', notAuthenticated, viewController.serveLogin);
 
 router.post('/login-user', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
   req.session.errorMessage = 'Username and/ or password incorrect';
-  return res.redirect('/');
+  return res.redirect('/login');
 });
 
 router.get('/get-display-name', authenticated, function(req, res)
