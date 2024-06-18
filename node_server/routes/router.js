@@ -35,15 +35,11 @@ const notAuthenticated = (req, res, next) => {
   return next();
 };
 
-// Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
-
-router.get('/', centralServerController.serveHomepage);
-
 // Login Routes ------------------------------------------------------------------------------------------------------------------------------------
 
-router.get('/login', notAuthenticated, viewController.serveLogin);
+router.get('/', notAuthenticated, viewController.serveLogin);
 
-router.post('/login-user', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
+router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
   req.session.errorMessage = 'Username and/ or password incorrect';
   return res.redirect('/login');
 });
@@ -51,12 +47,12 @@ router.post('/login-user', passport.authenticate('local', { successRedirect: '/g
 router.get('/get-display-name', authenticated, function(req, res)
 {
   req.session.sessionName = req.user.displayName;
-  return res.redirect('/');
+  return res.redirect('/explore');
 });
 
 router.get('/guest-login', passport.authenticate('dummy', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
   req.session.errorMessage = 'Guest log in failed, please try again';
-  return res.redirect('/login');
+  return res.redirect('/');
 }); 
 
 router.get('/magic-login', function(req, res, next) {
@@ -78,7 +74,7 @@ router.get('/magic-login', function(req, res, next) {
         req.session.errorMessage = 'This magic link is invalid';
       }
 
-      return res.redirect('/login'); 
+      return res.redirect('/'); 
     }
 
     req.logIn(user, function(err) 
@@ -105,7 +101,7 @@ router.get('/logout', authenticated, (req, res, next) => {
 
 router.get('/register', notAuthenticated, viewController.serveRegister);
 
-router.post('/register-user', viewController.registerUser, passport.authenticate('local', { successRedirect: '/', failWithError: true}), function(err, req, res, next)
+router.post('/register-user', viewController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/register'), {
     message: "User registered successfully but login failed, please login again"
@@ -191,9 +187,13 @@ router.post('/update-user-colour', authenticated, circleController.updateUserCol
 
 // CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
 
+// Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/homepage', centralServerController.serveHomepage);
+
 // More Circles Page Routes -----------------------------------------------------------------
 
-router.get('/more-circles', centralServerController.serveMoreCircles);
+router.get('/more-circles', authenticated, centralServerController.serveMoreCircles);
 router.post('/add-server', authenticated, centralServerController.addCirclesServer);
 router.post('/deactivate-circles-server', authenticated, centralServerController.deactivateCirclesServer);
 router.post('/activate-circles-server', authenticated, centralServerController.activateCirclesServer);
