@@ -66,7 +66,7 @@
     h3 {
         color: $RED;
         text-align: center;
-        margin-bottom: $LARGE_MARGIN;
+        margin-bottom: $SMALL_MARGIN;
     }
 
     p {
@@ -97,6 +97,62 @@
     
         .delete-button {
             @include red-button(inline-block, 100%, 0 30px);
+        }
+    }
+}
+
+// Warning -----------------------------------------------------------------------------------------------------------------------------------------
+
+.overlay-warning {
+    width: auto; 
+    height: auto; 
+    box-sizing: border-box;
+    padding: $X_LARGE_MARGIN;
+    display: flex;
+    flex-direction: column;
+
+    .icon-container {
+        @include center-flex;
+        margin-bottom: $MEDIUM_MARGIN;
+
+        i {
+            color: $YELLOW;
+            font-size: $DEFAULT_X_LARGE_ICON;
+        }
+    }
+
+    h3 {
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    p {
+        margin-top: $SMALL_MARGIN;
+        text-align: center;
+        line-height: 30px;
+    }
+
+    .button-container {
+        display: flex;
+        grid-gap: $SMALL_MARGIN;
+        align-items: end;
+        height: 100%;
+        margin-top: $LARGE_MARGIN;
+
+        div {
+            @include center-flex;
+        }
+
+        .cancel-button {
+            @include secondary-button(inline-block, auto, 0 25px);
+        }
+    
+        .option-button:nth-of-type(1) {
+            @include primary-button(inline-block, auto, 0 25px);
+        }
+
+        .option-button:nth-of-type(2) {
+            @include secondary-button(inline-block, auto, 0 25px);
         }
     }
 }

@@ -81,19 +81,6 @@ function deleteConfirmationPopUp(event, item, name, deleteFuntion, deleteNote = 
             var buttonContainer = document.createElement('div');
             buttonContainer.classList.add('button-container');
 
-                // Cancel button
-                var cancelButtonContainer = document.createElement('div');
-                cancelButtonContainer.classList.add('cancel-button');
-
-                    var cancelButton = document.createElement('a');
-
-                    cancelButton.innerHTML = 'Cancel';
-                    cancelButton.setAttribute('onclick', 'cancelPopupDelete(this)');
-
-                cancelButtonContainer.appendChild(cancelButton);
-
-            buttonContainer.appendChild(cancelButtonContainer);
-
                 // Delete button
                 var deleteButtonContainer = document.createElement('div');
                 deleteButtonContainer.classList.add('delete-button');
@@ -106,6 +93,19 @@ function deleteConfirmationPopUp(event, item, name, deleteFuntion, deleteNote = 
                 deleteButtonContainer.appendChild(deleteButton);
 
             buttonContainer.appendChild(deleteButtonContainer);
+
+                // Cancel button
+                var cancelButtonContainer = document.createElement('div');
+                cancelButtonContainer.classList.add('cancel-button');
+
+                    var cancelButton = document.createElement('a');
+
+                    cancelButton.innerHTML = 'Cancel';
+                    cancelButton.setAttribute('onclick', 'cancelPopupDelete(this)');
+
+                cancelButtonContainer.appendChild(cancelButton);
+
+            buttonContainer.appendChild(cancelButtonContainer);
 
         popup.appendChild(buttonContainer);
 
@@ -122,4 +122,96 @@ function deleteConfirmationPopUp(event, item, name, deleteFuntion, deleteNote = 
 function cancelPopupDelete(element)
 {
   element.parentElement.parentElement.parentElement.parentElement.remove();
+}
+
+// Warning -----------------------------------------------------------------------------------------------------------------------------------------
+
+// Showing warning
+function warningPopUp(event, warning, options, details = null)
+{
+    // Preventing parent from being clicked
+    event.stopPropagation();
+
+    // Overlay
+    var overlay = document.createElement('div');
+    overlay.classList.add('overlay-container');
+
+        // Pop up
+        var popup = document.createElement('div');
+        popup.classList.add('overlay-warning', 'overlay');
+
+            // Icon container
+            var iconContainer = document.createElement('div');
+            iconContainer.classList.add('icon-container');
+
+                // Icon
+                var icon = document.createElement('i');
+                icon.classList.add('fa-solid', 'fa-circle-exclamation');
+
+            iconContainer.appendChild(icon);
+
+        popup.appendChild(iconContainer);
+
+            // Title
+            var title = document.createElement('h3');
+            title.innerHTML = warning;
+
+        popup.appendChild(title);
+
+            // Description (if there is one)
+            if (details)
+            {
+                var description = document.createElement('p');
+                description.innerHTML = details;
+
+                popup.appendChild(description);
+            }
+
+            // Button Container
+            var buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+            
+            var gridColumnsFormating = '';
+
+            // Option buttons
+            for (var i = 0; i < options.buttons.length; i++)
+            {
+                gridColumnsFormating += 'auto ';
+
+                var optionButtonContainer = document.createElement('div');
+                optionButtonContainer.classList.add('option-button');
+
+                    var optionButton = document.createElement('a');
+                    
+                    optionButton.innerHTML = options.buttons[i];
+                    optionButton.setAttribute('onclick', 'cancelPopupDelete(this); ' + options.functions[i]);
+
+                    optionButtonContainer.appendChild(optionButton);
+
+                buttonContainer.appendChild(optionButtonContainer);
+            }
+
+                // Cancel button
+                gridColumnsFormating += 'auto';
+
+                var cancelButtonContainer = document.createElement('div');
+                cancelButtonContainer.classList.add('cancel-button');
+
+                    var cancelButton = document.createElement('a');
+
+                    cancelButton.innerHTML = 'Cancel';
+                    cancelButton.setAttribute('onclick', 'cancelPopupDelete(this)');
+
+                cancelButtonContainer.appendChild(cancelButton);
+                buttonContainer.style.gridTemplateColumns = gridColumnsFormating;
+
+            buttonContainer.appendChild(cancelButtonContainer);
+
+        popup.appendChild(buttonContainer);
+
+    overlay.appendChild(popup);
+
+    overlay.style.display = 'flex';
+
+    document.getElementsByTagName('body')[0].appendChild(overlay);
 }
