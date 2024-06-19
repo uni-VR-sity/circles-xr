@@ -210,6 +210,8 @@ router.post('/get-prototypes', authenticated, centralServerController.getPrototy
 router.post('/delete-prototype', authenticated, centralServerController.deletePrototype);
 router.post('/get-prototype-info', authenticated, centralServerController.getPrototypeInfo);
 
+router.get('/prototype/:prototype_name', centralServerController.servePrototypeCircle);
+
 // Museum Games Page Routes -----------------------------------------------------------------
 
 router.get('/museum-games', centralServerController.serveMuseumGames);

@@ -21,7 +21,17 @@ function hideMessages()
 // Displays prototype scene
 function displayPrototypeScene(sceneObjects)
 {
-    var scene = '<a-scene embedded background="color:#ededed">' + sceneObjects + '</a-scene>';
+    var scene = '<a-scene embedded background="color:#ededed">';
+
+        scene += '<a-entity position="0 1.6 0" camera look-controls wasd-controls>';
+            scene += '<a-entity cursor="rayOrigin:mouse" raycaster="objects:.interactive; far:100; interval:30; useWorldCoordinates:true"></a-entity>';
+        scene += '</a-entity>';
+
+        scene += '<a-entity id="circles-manager" circles-manager="avatar:false"></a-entity>';
+
+        scene += sceneObjects;
+    
+    scene += '</a-scene>';
     
     document.getElementById('prototype-scene').innerHTML = scene;
 }

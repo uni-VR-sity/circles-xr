@@ -682,7 +682,7 @@ const createPrototypeElement = function(object)
 
   element += '"';
 
-  // Adding colour if object has on specified
+  // Adding colour if object has one specified
   if (object.colour)
   {
     element += ' material="color:' + object.colour + ';"';
@@ -691,22 +691,66 @@ const createPrototypeElement = function(object)
   // Adding position if object has one specified
   if (object.position)
   {
-    element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"'
+    element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"';
   }
 
   // Adding rotation if object has one specified
   if (object.rotation)
   {
-    element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"'
+    element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"';
   }
 
   // Adding scale if object has one specified
   if (object.scale)
   {
-    element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"'
+    element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"';
   }
 
   element += '>';
+
+  // Adding description if object has one specified
+  if (object.description)
+  {
+    element += '<a-entity circles-description="lookAtCamera:false; constrainYAxis:true; updateRate:200; smoothingOn:true; smoothingAlpha:0.05;';
+
+    // Adding front title if object has one specified
+    if (object.description.frontTitle)
+    {
+      element += ' title_text_front:' + object.description.frontTitle + ';';
+    }
+
+    // Adding front description if object has one specified
+    if (object.description.frontDescription)
+    {
+      element += ' description_text_front:' + object.description.frontDescription + ';';
+    }
+
+    // Adding back title if object has one specified
+    if (object.description.backTitle)
+    {
+      element += ' title_text_back:' + object.description.backTitle + ';';
+    }
+
+    // Adding back description if object has one specified
+    if (object.description.backDescription)
+    {
+      element += ' description_text_back:' + object.description.backDescription + ';';
+    }
+
+    // Adding offset if object has one specified
+    if (object.description.offset)
+    {
+      element += ' offset:' + object.description.offset[0] + ' ' + object.description.offset[1] + ' ' + object.description.offset[2] + ';';
+    }
+
+    // Adding arrow position if object has one specified
+    if (object.description.arrowPosition)
+    {
+      element += ' arrow_position:' + object.description.arrowPosition + ';';
+    }
+
+    element += '" circles-lookat="targetElement:[camera]"></a-entity>';
+  }
 
   // Adding children if object has some specified
   if (object.children)
@@ -754,42 +798,66 @@ const parsePrototype = function(prototypeObject)
 // Returns HTML scene object
 const updatePrototypeHTML = function(filePath, prototypeObject)
 {
-  // Getting scene elements from prototype
-  var sceneElements = parsePrototype(prototypeObject);
+  // Getting scene elements (starting elements and from prototype)
+  var sceneElements = '';
 
-  // Creating updated HTML file with new scene objects
-  const templateTopFilePath = __dirname + '/../public/prototypes/template-top.html';
-  const templateBottomFilePath = __dirname + '/../public/prototypes/template-bottom.html';
-
-  var updatedHTML;
-
-  // Getting template top
   try
   {
-    updatedHTML = fs.readFileSync(templateTopFilePath, { encoding: 'utf8', flag: 'r' });
+    sceneElements += fs.readFileSync(__dirname + '/../public/prototypes/template-scene-elements.html', { encoding: 'utf8', flag: 'r' });
   }
   catch(e)
   {
     console.log(e);
     return null;
+  }
+
+  sceneElements += parsePrototype(prototypeObject);
+
+  // Creating updated HTML file with new scene elements
+  const templateBeforeFilePaths = [
+    __dirname + '/../public/prototypes/template-header.html',
+    __dirname + '/../public/prototypes/template-body.html',
+  ];
+
+  const templateAfterFilePaths = [
+    __dirname + '/../public/prototypes/template-end.html',
+  ];
+
+  var updatedHTML = '';
+
+  // Inserting before templates
+  for (const template of templateBeforeFilePaths)
+  {
+    try
+    {
+      updatedHTML += fs.readFileSync(template, { encoding: 'utf8', flag: 'r' });
+    }
+    catch(e)
+    {
+      console.log(e);
+      return null;
+    }
   }
 
   // Replacing __PROTOTYPE_TITLE__ with prototype title
   updatedHTML = updatedHTML.replace(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
 
-  // Inserting scene objects
+  // Inserting scene elements
   updatedHTML += sceneElements;
   updatedHTML += '\n';
 
-  // Inserting template bottom
-  try
+  // Inserting after templates
+  for (const template of templateAfterFilePaths)
   {
-    updatedHTML += fs.readFileSync(templateBottomFilePath, { encoding: 'utf8', flag: 'r' });
-  }
-  catch(e)
-  {
-    console.log(e);
-    return null;
+    try
+    {
+      updatedHTML += fs.readFileSync(template, { encoding: 'utf8', flag: 'r' });
+    }
+    catch(e)
+    {
+      console.log(e);
+      return null;
+    }
   }
 
   // Saving file updates
@@ -1014,6 +1082,20 @@ const getPrototypeInfo = async (req, res, next) =>
   }
 }
 
+// ------------------------------------------------------------------------------------------
+
+// Temporary, renders prototype circle
+const servePrototypeCircle = async (req, res, next) =>
+{
+  // url: /manage-circle/circle_id
+  // split result array: {"", "prototype", "prototype_name"}
+  const prototypeName = req.url.split('/')[2];
+
+  const filePath = __dirname + '/../public/prototypes/created/' + prototypeName;
+
+  res.sendFile(prototypeName + '.html', {root:filePath});
+}
+
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
 
 const serveMuseumGames = async (req, res, next) =>
@@ -1188,6 +1270,7 @@ module.exports = {
     getPrototypes,
     deletePrototype,
     getPrototypeInfo,
+    servePrototypeCircle,
     // Museum Games Page
     serveMuseumGames,
   }
