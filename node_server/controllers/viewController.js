@@ -1923,7 +1923,7 @@ const renewMagicLink = async (req, res, next) =>
       {
         try 
         {
-          circles.push(await Circles.findOne({name: circle}));
+          circles.push(await Circles.findOne({displayName: circle}));
         }
         catch (e)
         {
@@ -1932,6 +1932,8 @@ const renewMagicLink = async (req, res, next) =>
           return res.redirect('/your-magic-links');
         }
       }
+
+      console.log(circles);
 
       // Creating magic link
       const magicLink = createJWT_MagicLink(expiryTimeMin, circles);
