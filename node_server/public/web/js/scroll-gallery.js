@@ -127,6 +127,43 @@ function showCurrentScrollGalleryPage(galleryContainerID)
             {
                 galleryItems[i].querySelector('.gallery-item-secondary-info').innerHTML = currentPageContents[i].secondaryInfo;
             }
+
+            if (currentPageContents[i].description && galleryItems[i].querySelector('.gallery-item-description'))
+            {
+                galleryItems[i].querySelector('.gallery-item-description').innerHTML = currentPageContents[i].description;
+            }
+
+            if (currentPageContents[i].link && galleryItems[i].querySelector('.gallery-item-link'))
+            {
+                galleryItems[i].querySelector('.gallery-item-link').href = currentPageContents[i].link;
+            }
+
+            if (currentPageContents[i].iconLinks && galleryItems[i].querySelector('.gallery-item-icon-links'))
+            {
+                var icons = galleryItems[i].querySelector('.gallery-item-icon-links').querySelectorAll('.icon-container');
+
+                for (var j = 0; j < icons.length; j++)
+                {
+                    if (currentPageContents[i].iconLinks[j])
+                    {
+                        icons[j].style.display = 'inline-block';
+                        icons[j].querySelector('a').href = currentPageContents[i].iconLinks[j]
+                    }
+                    else
+                    {
+                        icons[j].style.display = 'none';
+                    }
+                }
+            }
+            else if (galleryItems[i].querySelector('.gallery-item-icon-links'))
+            {
+                var icons = galleryItems[i].querySelector('.gallery-item-icon-links').querySelectorAll('.icon-container');
+
+                for (var j = 0; j < icons.length; j++)
+                {
+                    icons[j].style.display = 'none';
+                }
+            }
         }
         else
         {

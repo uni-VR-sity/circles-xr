@@ -77,186 +77,85 @@ const serveHomepage = async (req, res, next) =>
   var featuredCircles = [];
 
   featuredCircles[0] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 0',
+    photo: '/worlds/COG-Memory-Palace/profile.jpg',
+    name: 'BrainVR',
+    description: 'BrainVR Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    link: 'https://uni-vr-sity.ca/Memory-Palace',
   }
 
   featuredCircles[1] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 1',
+    photo: '/worlds/Gathering-Place/profile.jpg',
+    name: 'Gathering Place',
+    description: 'Gathering Place Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    link: 'https://uni-vr-sity.ca/Gathering-Place',
   }
 
   featuredCircles[2] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 2',
+    photo: '/worlds/CU-Campus/profile.jpg',
+    name: 'CU Campus',
+    description: 'CU Campus Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    link: 'https://uni-vr-sity.ca/CU-Campus',
   }
 
   featuredCircles[3] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 3',
-  }
-
-  featuredCircles[4] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 4',
-  }
-
-  featuredCircles[5] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 5',
-  }
-
-  featuredCircles[6] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Circle 6',
+    photo: '/worlds/Asteroid-Field/profile.jpg',
+    name: 'Asteroid Field',
+    description: 'Asteroid Field Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    link: 'https://uni-vr-sity.ca/Asteroid-Field',
   }
 
   // News
-  var newsYears = [2024, 2023, 2022];
+  var newsYears = [2024];
 
   var news = [];
 
   news[0] = {
     photo: '/web/images/default-circle-profile.png',
-    title: 'Title 0',
-    monthDay: 'June 1',
+    title: 'InspirED 2024 Symposium',
+    monthDay: 'April 24',
     year: '2024',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
-  }
-
-  news[1] = {
-    photo: '/web/images/default-circle-profile.png',
-    title: 'Title 1',
-    monthDay: 'May 1',
-    year: '2024',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
-  }
-
-  news[2] = {
-    photo: '/web/images/default-circle-profile.png',
-    title: 'Title 2',
-    monthDay: 'April 1',
-    year: '2024',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
-  }
-
-  news[3] = {
-    photo: '/web/images/default-circle-profile.png',
-    title: 'Title 3',
-    monthDay: 'March 1',
-    year: '2023',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
-  }
-
-  news[4] = {
-    photo: '/web/images/default-circle-profile.png',
-    title: 'Title 4',
-    monthDay: 'Febuary 1',
-    year: '2023',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
-  }
-
-  news[5] = {
-    photo: '/web/images/default-circle-profile.png',
-    title: 'Title 5',
-    monthDay: 'January 1',
-    year: '2022',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
-  }
-
-  news[6] = {
-    photo: '/web/images/default-circle-profile.png',
-    title: 'Title 6',
-    monthDay: 'May 1',
-    year: '2022',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.',
-    link: '',
+    description: 'Based on the projects in uni-VR-sity, Dr. Ali Arya discussed his experience and insights on teaching with Virtual/ Augmented/ Extended Reality during the InspirED 2024 Symposium <a href="https://www.csit.carleton.ca/~arya/prez/Teaching_with_XR-INSPIRED_2024.pptx">PPTX</a>, <a href="https://www.csit.carleton.ca/~arya/prez/Teaching_with_XR-INSPIRED_2024.pdf">PDF</a>',
   }
 
   // Project Team
   var projectTeam = [];
 
   projectTeam[0] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 0',
-    secondaryInfo: 'Title',
+    photo: '/web/images/people/AliArya.jpg',
+    name: 'Ali Arya',
+    secondaryInfo: 'Associate Professor (Info Tech)',
+    iconLinks: ['https://www.csit.carleton.ca/~arya/', 'linkedIn'],
   }
 
   projectTeam[1] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 1',
-    secondaryInfo: 'Title',
+    photo: '/web/images/people/AnthonyScavarelli.jpg',
+    name: 'Anthony Scavarelli',
+    secondaryInfo: 'PhD DM, MASc HCI',
+    iconLinks: ['http://portfolio.anthony-scavarelli.com/', 'linkedIn'],
   }
 
   projectTeam[2] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 2',
-    secondaryInfo: 'Title',
+    photo: '/web/images/people/JimDavies.jpg',
+    name: 'Jim Davies',
+    secondaryInfo: 'Professor (Cog Sci), Research Collaborator',
+    iconLinks: ['http://www.jimdavies.org'],
   }
 
   projectTeam[3] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 3',
-    secondaryInfo: 'Title',
+    photo: '/web/images/people/DanHawes.png',
+    name: 'Dan Hawes',
+    secondaryInfo: 'PHD DM',
   }
 
   projectTeam[4] = {
     photo: '/web/images/default-circle-profile.png',
-    name: 'Name 4',
+    name: 'Danielle Cole',
     secondaryInfo: 'Title',
   }
 
   projectTeam[5] = {
     photo: '/web/images/default-circle-profile.png',
-    name: 'Name 5',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[6] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 6',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[7] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 7',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[8] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 8',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[9] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 9',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[10] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 10',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[11] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 11',
-    secondaryInfo: 'Title',
-  }
-
-  projectTeam[12] = {
-    photo: '/web/images/default-circle-profile.png',
-    name: 'Name 12',
+    name: 'Anastacia Gorbenko',
     secondaryInfo: 'Title',
   }
 

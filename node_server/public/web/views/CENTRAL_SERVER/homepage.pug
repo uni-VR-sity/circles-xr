@@ -8,8 +8,11 @@ block content
     // Variables -----------------------------------------------------------------------------------------------------------------------------------
     - var year;
     - var article;
+    - var line;
 
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // News article display - ---------------------------------------------------------------
     mixin displayNewsArticle(article)
         - var articleClass = 'news-year-' + article.year;
         - var altText = article.title + "'s image";
@@ -26,9 +29,16 @@ block content
                     span , 
                     span= article.year
 
-                p= article.description
+                p
+                    for line of article.description.split('<a href=')
+                        if line.includes('</a>')
+                            a.link-underline(href=line.split('"')[1] target='_blank')= line.split('>')[1].split('<')[0]
+                            span= line.split('</a>')[1]
+                        else 
+                            span= line
 
-                a.link-icon(href=article.link target='_blank') Read more
+                if article.link
+                    a.link-icon(href=article.link target='_blank') Read more
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
     main 
@@ -39,12 +49,12 @@ block content
                 .content-container 
 
                     // Title ------------------------------------------------------------------------
-                    h1 uni-VR-sity
+                    img(src='/web/images/logos/uni-VR-sity-banner.png' alt='uni-VR-sity')
 
                     // Description ------------------------------------------------------------------
                     #intro-description
-                        p WebXR learning framework and research project that explores multi-learner and multi-platform
-                        p (Desktop, Mobile, and HMD) learning affordances
+                        p A set of research and educational projects aimed at exploring inclusive, effective, and
+                        p transformative uses of VR in education, based on a web-based VR framework
 
             // Page Navigation --------------------------------------------------------------
             #homepage-navigation-container.top-bar-container
@@ -74,7 +84,13 @@ block content
 
                 #about-description
 
-                    p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy.
+                    p Uni-VR-sity is a collection of educational research and development projects at Carleton University’s 
+                        a.link-underline(href='https://img.csit.carleton.ca/' target='_blank') Interactive Media Group (iMG)
+                        span  and partner organizations/ institutions. The uni-VR-sity group of projects is rooted in our design and development of a multi-platform multi-user web-based VR framework for education called 
+                        a.link-underline(href='https://circlesxr.com/' target='_blank') Circles
+                        span . The uni-VR-sity projects range from VR-based educational modules for specific courses or cultural topics to investigation and demonstration of various technical features in VR systems. While most of these projects are done with the Circles framework, we continuously explore other tools and options, and are open to collaborations beyond our existing projects. For more information, or to connect to our projects or propose new ones, contact 
+                        a.link-underline(href='#Project-Team' target='_blank') our people
+                        span  or email us at info@uni-vr-sity.ca.
 
                     #video-container
                         iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
@@ -95,7 +111,7 @@ block content
 
                 h1 Featured Circles
 
-                #circles-scroll-container.scroll-gallery-container
+                #circles-scroll-container.descriptive-scroll-gallery-container
 
                     #left-arrow.arrow
                         .icon-container 
@@ -103,19 +119,12 @@ block content
 
                     .featured-circle.scroll-gallery-item
                         img.gallery-item-image
-                        p.gallery-item-name
-                    
-                    .featured-circle.scroll-gallery-item
-                        img.gallery-item-image
-                        p.gallery-item-name
 
-                    .featured-circle.scroll-gallery-item
-                        img.gallery-item-image
-                        p.gallery-item-name
+                        .description-container
+                            h2.gallery-item-name
+                            p.gallery-item-description
 
-                    .featured-circle.scroll-gallery-item 
-                        img.gallery-item-image
-                        p.gallery-item-name
+                            a.link-icon.gallery-item-link(href='' target='_blank') Visit Circle
 
                     #right-arrow.arrow
                         .icon-container 
@@ -125,7 +134,7 @@ block content
                 - var featuredCirclesJSON = featuredCirclesJSON.replaceAll(/'/gm, /\'/gm);
 
                 script.
-                    setUpScrollGallery('!{featuredCirclesJSON}', 4, 'circles-scroll-container');
+                    setUpScrollGallery('!{featuredCirclesJSON}', 1, 'circles-scroll-container');
 
         // Development ----------------------------------------------------------------------
         section#Development 
@@ -137,12 +146,16 @@ block content
                         
                         h1 Development 
 
-                        p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                        p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. Circles is open-source and Circles worlds can be hosted by setting up new server or uploading to existing servers, such as uni-vr-sity.ca and circlesxr.com. We are working on various development tools to help new users build their own “circles”. For more information, visit 
+                            a.link-underline(href='https://circlesxr.com/' target='_blank') Circles website
+                            span  or 
+                            a.link-underline(href='https://github.com/PlumCantaloupe/circlesxr' target='_blank') GitHub home
+                            span .
 
                     #video-container
                         iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
 
-                #development-links
+                //#development-links
 
                     a(href='' target='_blank')#documentation-link.link-icon-section
                         
@@ -198,23 +211,56 @@ block content
 
                     .team-member.scroll-gallery-item
                         img.gallery-item-image
-                        h2.gallery-item-name
+                        h3.gallery-item-name
                         p.gallery-item-secondary-info
+                        
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin')
+
                     
                     .team-member.scroll-gallery-item
                         img.gallery-item-image
-                        h2.gallery-item-name
+                        h3.gallery-item-name
                         p.gallery-item-secondary-info
+
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin')
 
                     .team-member.scroll-gallery-item
                         img.gallery-item-image
-                        h2.gallery-item-name
+                        h3.gallery-item-name
                         p.gallery-item-secondary-info
+
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin')
 
                     .team-member.scroll-gallery-item
                         img.gallery-item-image
-                        h2.gallery-item-name
+                        h3.gallery-item-name
                         p.gallery-item-secondary-info
+
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin')
 
                     #right-arrow.arrow
                         .icon-container 

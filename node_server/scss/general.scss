@@ -54,6 +54,10 @@ a {
     color: $BLUE;
 }
 
+.link-underline:hover {
+    text-decoration: underline;
+}
+
 // Icons -------------------------------------------------------------------------------------------------------------------------------------------
 
 .icon-container {
@@ -230,8 +234,7 @@ table {
 
 .scroll-gallery-container {
     display: grid;
-    grid-template-columns: 1fr repeat(4, 3fr) 1fr;
-    margin-bottom: $X_LARGE_MARGIN;
+    grid-gap: $SECTION_MARGIN;
 
     .arrow {
         align-content: center;
@@ -252,10 +255,76 @@ table {
     .scroll-gallery-item {
         display: grid;
         justify-items: center;
+        text-align: center;
 
         img {
-            width: 65%;
-            margin-bottom: $MEDIUM_MARGIN;
+            width: 100%;
+            margin-bottom: $LARGE_MARGIN;
+            border-radius: $BORDER_RADIUS;
+        }
+
+        h2,  h3 {
+            margin-bottom: $SMALL_MARGIN;
+        }
+
+        a {
+            margin-top: $SMALL_MARGIN;
+        }
+
+        .gallery-item-icon-links {
+            display: flex;
+            grid-gap: $MEDIUM_MARGIN;
+            margin-top: $X_SMALL_MARGIN;
+
+            .icon-container {
+                @include icon-highlight($MEDIUM_ICON, $BLACK);
+            }
+        }
+    }
+}
+
+.descriptive-scroll-gallery-container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-gap: $SECTION_MARGIN;
+
+    .arrow {
+        align-content: center;
+
+        .icon-container {
+            @include icon-highlight ($DEFAULT_X_LARGE_ICON, $BLACK);
+        }
+    }
+
+    #left-arrow {
+        justify-self: left;
+    }
+
+    #right-arrow {
+        justify-self: right;
+    }
+
+    .scroll-gallery-item {
+        display: grid;
+        grid-template-columns: 0.25fr 1fr;
+        grid-gap: $LARGE_MARGIN;
+
+        img {
+            width: 100%;
+            border-radius: $BORDER_RADIUS;
+        }
+
+        .description-container
+        {
+            align-self: center;
+            
+            h2 {
+                margin-bottom: $SMALL_MARGIN;
+            }
+
+            p {
+                margin-bottom: $SMALL_MARGIN;
+            }
         }
     }
 }
@@ -266,6 +335,7 @@ table {
     .page-indicator {
         display: inline-block;
         margin: 0 $XX_SMALL_MARGIN;
+        margin-top: $LARGE_MARGIN;
 
         .icon-container {
                 
