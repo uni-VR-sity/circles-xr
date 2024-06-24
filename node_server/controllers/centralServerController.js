@@ -110,7 +110,7 @@ const serveHomepage = async (req, res, next) =>
   var news = [];
 
   news[0] = {
-    photo: '/web/images/default-circle-profile.png',
+    photo: '/web/images/news/InspirED2024Symposium.jpg',
     title: 'InspirED 2024 Symposium',
     monthDay: 'April 24',
     year: '2024',
@@ -123,17 +123,18 @@ const serveHomepage = async (req, res, next) =>
   projectTeam[0] = {
     photo: '/web/images/people/AliArya.jpg',
     name: 'Ali Arya',
-    secondaryInfo: 'Associate Professor (Info Tech)',
+    secondaryInfo: 'Associate Professor (Info Tech), Carleton University',
     iconLinks: ['https://www.csit.carleton.ca/~arya/', 'https://www.linkedin.com/in/aliarya/'],
   }
 
   projectTeam[1] = {
     photo: '/web/images/people/AnthonyScavarelli.jpg',
     name: 'Anthony Scavarelli',
-    secondaryInfo: 'PhD DM, MASc HCI',
+    secondaryInfo: 'Professor (Multimedia), Algonquin College',
     iconLinks: ['http://portfolio.anthony-scavarelli.com/', 'https://www.linkedin.com/in/anthonyscavarelli/'],
   }
 
+  /*
   projectTeam[2] = {
     photo: '/web/images/people/JimDavies.jpg',
     name: 'Jim Davies',
@@ -146,17 +147,19 @@ const serveHomepage = async (req, res, next) =>
     name: 'Dan Hawes',
     secondaryInfo: 'PHD DM',
   }
+  */
 
-  projectTeam[4] = {
-    photo: '/web/images/default-circle-profile.png',
+  projectTeam[2] = {
+    photo: '/web/images/people/DanielleCole.png',
     name: 'Danielle Cole',
     secondaryInfo: 'Title',
+    iconLinks: ['https://coledani.myportfolio.com/', 'https://www.linkedin.com/in/cole-dani/'],
   }
 
-  projectTeam[5] = {
-    photo: '/web/images/default-circle-profile.png',
+  projectTeam[3] = {
+    photo: '/web/images/people/AnastaciaGorbenko.jpg',
     name: 'Anastacia Gorbenko',
-    secondaryInfo: 'Title',
+    secondaryInfo: 'Developer',
     iconLinks: [null, 'https://www.linkedin.com/in/anastaciagorbenko/'],
   }
 

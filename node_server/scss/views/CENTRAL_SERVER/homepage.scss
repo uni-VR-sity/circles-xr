@@ -229,7 +229,7 @@
                         margin-bottom: $SMALL_MARGIN;
                     }
 
-                    p {
+                    p:not(:last-child) {
                         margin-bottom: $X_SMALL_MARGIN;
                     }
                 }
