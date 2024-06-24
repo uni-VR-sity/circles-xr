@@ -11,6 +11,10 @@ body.no-navigations {
     @include no-spacing;
     min-height: 100vh;
     display: block;
+
+    main {
+        height: 100%;
+    }
 }
 
 // Navigation Bar ----------------------------------------------------------------------------------------------------------------------------------
@@ -37,9 +41,10 @@ nav {
         padding: 0 $SECTION_PADDING;
 
         a {
+            height: 55%;
 
             img {
-                height: 55%;
+                height: 100%;
             }
         }
     }
