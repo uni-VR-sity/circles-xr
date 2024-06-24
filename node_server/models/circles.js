@@ -18,12 +18,30 @@ const CircleSchema = new mongoose.Schema({
       required:   true,
       trim:       true
     },
+    credit: {
+      type:       String,
+      unique:     false,
+      required:   false,
+      trim:       true,
+    },
+    description: {
+      type:       String,
+      unique:     false,
+      required:   false,
+      trim:       true,
+    },
     url: {
       type:       String,
       unique:     false,
       required:   true,
       trim:       true
     },
+    contact: [{
+      type:       String,
+      unique:     false,
+      required:   false,
+      trim:       true,
+    }],
     hasProfileImage: {
       type:       Boolean,
       unique:     false,
@@ -130,7 +148,7 @@ const addCircles = async function()
 
         // If path is a directory,
         // If the circle is not already in the database, add it
-        // If it is, check that the settings are still the name (if something changed, update it)
+        // If it is, check that the settings are still the same (if something changed, update it)
         if (stat.isDirectory())
         {
           var circle = null;
