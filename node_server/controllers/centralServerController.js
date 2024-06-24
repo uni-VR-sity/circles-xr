@@ -124,14 +124,14 @@ const serveHomepage = async (req, res, next) =>
     photo: '/web/images/people/AliArya.jpg',
     name: 'Ali Arya',
     secondaryInfo: 'Associate Professor (Info Tech)',
-    iconLinks: ['https://www.csit.carleton.ca/~arya/', 'linkedIn'],
+    iconLinks: ['https://www.csit.carleton.ca/~arya/', 'https://www.linkedin.com/in/aliarya/'],
   }
 
   projectTeam[1] = {
     photo: '/web/images/people/AnthonyScavarelli.jpg',
     name: 'Anthony Scavarelli',
     secondaryInfo: 'PhD DM, MASc HCI',
-    iconLinks: ['http://portfolio.anthony-scavarelli.com/', 'linkedIn'],
+    iconLinks: ['http://portfolio.anthony-scavarelli.com/', 'https://www.linkedin.com/in/anthonyscavarelli/'],
   }
 
   projectTeam[2] = {
@@ -157,6 +157,7 @@ const serveHomepage = async (req, res, next) =>
     photo: '/web/images/default-circle-profile.png',
     name: 'Anastacia Gorbenko',
     secondaryInfo: 'Title',
+    iconLinks: [null, 'https://www.linkedin.com/in/anastaciagorbenko/'],
   }
 
   res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/homepage'), {
