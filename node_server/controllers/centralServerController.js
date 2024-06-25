@@ -152,7 +152,7 @@ const serveHomepage = async (req, res, next) =>
   projectTeam[2] = {
     photo: '/web/images/people/DanielleCole.png',
     name: 'Danielle Cole',
-    secondaryInfo: 'Title',
+    secondaryInfo: 'Research Assistant',
     iconLinks: ['https://coledani.myportfolio.com/', 'https://www.linkedin.com/in/cole-dani/'],
   }
 
