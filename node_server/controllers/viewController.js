@@ -405,16 +405,16 @@ const organizeToGroups = function(circles, databaseGroups)
 
         var subIndex = organizedCircles.groups[index].subgroups.indexOf(subgroup);
 
-        organizedCircles.groups[index].subgroups[subIndex].circles.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+        organizedCircles.groups[index].subgroups[subIndex].circles.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
       }
       else
       {
-        organizedCircles.groups[index].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+        organizedCircles.groups[index].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
       }
     }
     else
     {
-      organizedCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+      organizedCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
     }
   }
 
@@ -544,11 +544,11 @@ const serveExplore = async (req, res, next) =>
   {
     if (circle.viewingRestrictions)
     {
-      groupedEditableCircles.groups[0].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+      groupedEditableCircles.groups[0].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
     }
     else
     {
-      groupedEditableCircles.groups[1].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+      groupedEditableCircles.groups[1].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
     }
   }
 
@@ -561,7 +561,7 @@ const serveExplore = async (req, res, next) =>
 
   for (const circle of magicCircles)
   {
-    groupedMagicCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+    groupedMagicCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
   }
 
   // Rendering page

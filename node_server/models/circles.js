@@ -30,6 +30,20 @@ const CircleSchema = new mongoose.Schema({
       required:   false,
       trim:       true,
     },
+    extraInfo: [{
+      title: {
+        type:       String,
+        unique:     false,
+        required:   false,
+        trim:       true,
+      },
+      description: {
+        type:       String,
+        unique:     false,
+        required:   false,
+        trim:       true
+      },
+    }],
     url: {
       type:       String,
       unique:     false,
@@ -163,11 +177,12 @@ const addCircles = async function()
           }
 
           // Getting settings folder
+          var settings;
           var displayName;
 
           try
           {
-            var settings = JSON.parse(fs.readFileSync(path + '/settings.JSON', 'utf8'));
+            settings = JSON.parse(fs.readFileSync(path + '/settings.JSON', 'utf8'));
             
             if (settings.world.name)
             {
@@ -205,6 +220,26 @@ const addCircles = async function()
               hasProfileImage: hasProfileImage,
             };
 
+            if (settings.world.credit)
+            {
+              circleData.credit = settings.world.credit;
+            }
+
+            if (settings.world.description)
+            {
+              circleData.description = settings.world.description;
+            }
+
+            if (settings.world.extraInfo)
+            {
+              circleData.extraInfo = settings.world.extraInfo;
+            }
+
+            if (settings.world.contact)
+            {
+              circleData.contact = settings.world.contact;
+            }
+
             try 
             {
               await Circles.create(circleData);
@@ -226,6 +261,30 @@ const addCircles = async function()
             if (circle.hasProfileImage !== hasProfileImage)
             {
               circle.hasProfileImage = hasProfileImage;
+              await circle.save();
+            }
+
+            if (settings.world.credit && circle.credit !== settings.world.credit)
+            {
+              circle.credit = settings.world.credit;
+              await circle.save();
+            }
+
+            if (settings.world.description && circle.description !== settings.world.description)
+            {
+              circle.description = settings.world.description;
+              await circle.save();
+            }
+
+            if (settings.world.extraInfo && circle.extraInfo !== settings.world.extraInfo)
+            {
+              circle.extraInfo = settings.world.extraInfo;
+              await circle.save();
+            }
+
+            if (settings.world.contact && circle.contact !== settings.world.contact)
+            {
+              circle.contact = settings.world.contact;
               await circle.save();
             }
           }

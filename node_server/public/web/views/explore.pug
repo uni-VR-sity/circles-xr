@@ -15,12 +15,17 @@ block content
     - var group;
     - var subgroup;
     - var circle;
+    - var section;
+    - var line;
+    - var paragraph;
+    - var developer;
 
     // Mixins --------------------------------------------------------------------------------------------------------------------------------------
 
     // Circle display -----------------------------------------------------------------------
     // Stacking links/ cards tutorial: https://inclusive-components.design/cards/
     mixin displayCircle(circle)
+        - var overlayID = circle.name + '-overlay';
         - var circleURL = '/w/' + circle.name;
         - var profileURL = '/worlds/' + circle.name + '/profile.jpg'
         - var altText = circle.displayName + "'s profile image";
@@ -38,7 +43,7 @@ block content
                 
                 .circle-info-with-settings
                     p
-                        a(href=circleURL)= circle.displayName
+                        a(onclick='openOverlay("' + overlayID + '")')= circle.displayName
                     
                     .icon-container
                         a(class='fa-solid fa-gear' href=manageURL)
@@ -46,12 +51,62 @@ block content
             else 
                 .circle-info-no-settings
                     p
-                        a(href=circleURL)= circle.displayName
+                        a(onclick='openOverlay("' + overlayID + '")')= circle.displayName
+
+        .circle-description-overlay.overlay-container(id=overlayID)
+            .overlay 
+
+                .circle-title-container
+                    if circle.hasProfileImage
+                        img(src=profileURL alt=altText)
+                    else 
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                    .circle-title
+                        h3= circle.displayName 
+
+                        if circle.credit
+                            p= circle.credit
+
+                        .circle-link
+                            a(href=circleURL).link-icon Visit Circle
+
+                    .icon-container
+                        i(class="fa-solid fa-xmark" onclick='closeOverlay("' + overlayID + '")')
+
+                .circle-description 
+                    
+                    if circle.description
+                        .description-section
+                            p= circle.description.replaceAll("<'>", '"')
+
+                    if circle.extraInfo.length > 0
+                        for section of circle.extraInfo
+                            .description-section
+                                b= section.title.replaceAll("<'>", '"')
+                                    span :
+                                    
+                                for paragraph of section.description.split('<new-line><new-line>')
+                                    ul.paragraph 
+                                        for line of paragraph.split('<new-line>')
+                                            if line.includes('<subtitle>')
+                                                i= line.split('<subtitle>')[1].replaceAll("<'>", '"')
+                                            else if line.includes('<list>')
+                                                li= line.split('<list>')[1].replaceAll("<'>", '"')
+                                            else 
+                                                p= line.replaceAll("<'>", '"')
+
+                    if circle.contact.length > 0
+                        .description-section
+                            b Contact the Developer(s): 
+                                for developer of circle.contact 
+                                    p= developer
 
     // Circle section display ---------------------------------------------------------------
     mixin displayCircleSection(section, sectionType)
         - var sectionJSON = JSON.stringify(section);
         - var sectionJSON = sectionJSON.replaceAll(/'/gm, /\'/gm);
+
         script.
             initializeCircleSection('!{sectionJSON}', '#{sectionType}');
 
@@ -195,6 +250,7 @@ block content
 
                 - var groupJSON = JSON.stringify(editableCircles);
                 - var groupJSON = groupJSON.replaceAll(/'/gm, /\'/gm);
+                - var groupJSON = groupJSON.replaceAll(/<">/gm, /\"/gm)
 
                 script.
                     initializeCircleSection('!{groupJSON}', 'editable');

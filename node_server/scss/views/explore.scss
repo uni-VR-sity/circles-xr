@@ -374,6 +374,82 @@
                 width: 100%;
             }
         }
+
+        .circle-description-overlay {
+
+            .overlay {
+                width: 60%; 
+                height: 80%; 
+                box-sizing: border-box;
+                padding: $X_LARGE_MARGIN;
+                overflow-y: auto;
+
+                .circle-title-container {
+                    display: grid;
+                    grid-template-columns: 1fr 4.75fr;
+                    grid-template-areas: "image title close-button"
+                                         "image title close-button"
+                                         "image title close-button";
+
+                    img {
+                        grid-area: image;
+                        aspect-ratio: 1 / 1;
+                        width: 100%;
+                        object-fit: cover;
+                        border-radius: $BORDER_RADIUS;
+                    }
+
+                    .circle-title {
+                        grid-area: title;
+                        align-self: center;
+                        margin-left: $LARGE_MARGIN;
+
+                        h3 {
+                            @include no-spacing;
+                            margin-bottom: $X_SMALL_MARGIN;
+                        }
+    
+                        p {
+                            @include no-spacing;
+                            margin-bottom: $X_SMALL_MARGIN;
+                        }
+    
+                        .circle-link {
+                            @include no-spacing;
+                        }
+                    }
+
+                    .icon-container {
+                        @include end-flex;
+                        @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $RED);
+                        grid-area: close-button;
+                        align-items: start; 
+                    }
+                }
+
+                .circle-description {
+                    margin-top: $MEDIUM_MARGIN;
+
+                    b {
+                        display: inline-block;
+                    }
+
+                    .description-section {
+                        margin-bottom: $MEDIUM_MARGIN;
+                        list-style-position: outside;
+
+                        ul {
+                            @include no-spacing;
+                            margin-bottom: $X_SMALL_MARGIN;
+
+                            li {
+                                margin-left: 17px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     #no-circles-message {

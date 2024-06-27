@@ -1,5 +1,17 @@
 {
     "world": {
-        "name": "Asteroid Field"
+        "name": "Asteroid Field",
+        "credit": "CirclesXR",
+        "description": "This is a mini-game demo for the Circles XR framework. Avoid the asteroids as you navigate through the Asteroid Field!",
+        "extraInfo": [
+            {
+                "title": "Playing Instructions",
+                "description": "<subtitle>VR Headset:<new-line>Enter <'>VR Mode<'> to begin the game. Avoid the asteroids by jumping, crouching, and moving side to side.<new-line><new-line><subtitle>Desktop:<new-line>Use the WASD or arrow keys to move around through space."
+            }
+        ],
+        "contact": [
+            "Anastacia Gorbenko: anastaciagorbenko@yahoo.ca",
+            "Ali Arya: arya@carleton.ca"
+        ]
     }
 }
