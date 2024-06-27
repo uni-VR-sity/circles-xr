@@ -35,13 +35,17 @@ const notAuthenticated = (req, res, next) => {
   return next();
 };
 
+// Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/', centralServerController.serveHomepage);
+
 // Login Routes ------------------------------------------------------------------------------------------------------------------------------------
 
-router.get('/', notAuthenticated, viewController.serveLogin);
+router.get('/login', notAuthenticated, viewController.serveLogin);
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
+router.post('/login-user', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
   req.session.errorMessage = 'Username and/ or password incorrect';
-  return res.redirect('/');
+  return res.redirect('/login');
 });
 
 router.get('/get-display-name', authenticated, function(req, res)
@@ -187,13 +191,9 @@ router.post('/update-user-colour', authenticated, circleController.updateUserCol
 
 // CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
 
-// Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
-
-router.get('/homepage', centralServerController.serveHomepage);
-
 // More Circles Page Routes -----------------------------------------------------------------
 
-router.get('/more-circles', authenticated, centralServerController.serveMoreCircles);
+router.get('/more-circles', centralServerController.serveMoreCircles);
 router.post('/add-server', authenticated, centralServerController.addCirclesServer);
 router.post('/deactivate-circles-server', authenticated, centralServerController.deactivateCirclesServer);
 router.post('/activate-circles-server', authenticated, centralServerController.activateCirclesServer);

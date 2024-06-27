@@ -6,7 +6,8 @@ block append scripts
 block content
 
     // Variables -----------------------------------------------------------------------------------------------------------------------------------
-    - var adminUser = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(userInfo.usertype);
+    if userInfo
+        - var adminUser = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(userInfo.usertype);
 
     - var circleServer;
     - var circle;
