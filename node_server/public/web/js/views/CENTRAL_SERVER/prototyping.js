@@ -39,7 +39,7 @@ function displayPrototypeEditor(editorInput, sceneElements)
     document.getElementById('prototype-title').innerHTML = currentPrototype;
 
     // Inserting starting string into textarea
-    document.getElementById('prototyping-input').value = editorInput;
+    document.getElementById('prototyping-input').value = JSON.stringify(JSON.parse(editorInput), null, 4);
 
     // Hiding success and error messages
     hideMessages();

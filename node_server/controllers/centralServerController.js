@@ -540,126 +540,80 @@ const createPrototypeElement = function(object)
 {
   var element = '<a-entity';
 
-  // Adding id if object has one specified
-  if (object.id)
+  // Reading component file
+  var componentsJSON;
+
+  try
   {
-    element += ' id="' + object.id + '"';
+    componentsJSON = fs.readFileSync(__dirname + '/../public/prototypes/components.JSON', { encoding: 'utf8', flag: 'r' });
   }
-  // Adding geometry if object has one specified
-  if (object.geometry)
+  catch(e)
   {
-    element += ' geometry="';
-
-    // Adding primitive if object has one specified
-    if (object.geometry.primitive)
-    {
-      element += 'primitive:' + object.geometry.primitive + ';';
-    }
-
-    // Adding height if object has one specified
-    if (object.geometry.height)
-    {
-      element += ' height:' + object.geometry.height + ';';
-    }
-
-    // Adding width if object has one specified
-    if (object.geometry.width)
-    {
-      element += ' width:' + object.geometry.width + ';';
-    }
-
-    // Adding depth if object has one specified
-    if (object.geometry.depth)
-    {
-      element += ' depth:' + object.geometry.depth + ';';
-    }
-
-    // Adding radius if object has one specified
-    if (object.geometry.radius)
-    {
-      element += ' radius:' + object.geometry.radius + ';';
-    }
-
-    element += '"';
+    console.log(e);
+    return null;
   }
 
-  // Adding material if object has one specified
-  if (object.material)
-  {
-    element += ' material="';
+  // Parsing file to update
+  var components = JSON.parse(componentsJSON);
 
-    // Adding colour if object has one specified
-    if (object.material.color)
+  // -----------------------------
+
+  // Function to create string to add component value to element depending on its type
+  function addValue(component, valueObject)
+  {
+    var resultString = '';
+
+    // If value is a string
+    if (component.value === "string")
     {
-      element += ' color:' + object.material.color + ';';
+      resultString += valueObject[component.name];
+    }
+    // If value is an array
+    else if (component.value === "array")
+    {
+      for (var i = 0; i < component.size; i++)
+      {
+        resultString += valueObject[component.name][i];
+
+        // If array position is not the last, adding space
+        if (i + 1 != component.size)
+        {
+          resultString += ' ';
+        }
+      }
+    }
+    // If value is an object
+    else if (component.value === "object")
+    {
+      // Looping through component attributes
+      for (const attribute of component.attributes)
+      {
+        // Checking if object has current component's attribute
+        // If it does, adding it
+        if (valueObject[component.name].hasOwnProperty(attribute.name))
+        {
+          resultString += ' ' + attribute.name + ':' + addValue(attribute, valueObject[component.name]) + ';';
+        }
+      }
     }
 
-    element += '"';
+    return resultString;
   }
 
-  // Adding position if object has one specified
-  if (object.position)
-  {
-    element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"';
-  }
+  // -----------------------------
 
-  // Adding rotation if object has one specified
-  if (object.rotation)
+  // Looping through all possible components
+  for (const component of components)
   {
-    element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"';
-  }
-
-  // Adding scale if object has one specified
-  if (object.scale)
-  {
-    element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"';
+    // Checking if object has current component
+    // If it does, adding it to element
+    if (object.hasOwnProperty(component.name))
+    {
+      element += ' ' + component.name + '="' + addValue(component, object) + '"';
+    }
   }
 
   element += '>';
-
-  // Adding description if object has one specified
-  if (object.description)
-  {
-    element += '<a-entity circles-description="lookAtCamera:false; constrainYAxis:true; updateRate:200; smoothingOn:true; smoothingAlpha:0.05;';
-
-    // Adding front title if object has one specified
-    if (object.description.frontTitle)
-    {
-      element += ' title_text_front:' + object.description.frontTitle + ';';
-    }
-
-    // Adding front description if object has one specified
-    if (object.description.frontDescription)
-    {
-      element += ' description_text_front:' + object.description.frontDescription + ';';
-    }
-
-    // Adding back title if object has one specified
-    if (object.description.backTitle)
-    {
-      element += ' title_text_back:' + object.description.backTitle + ';';
-    }
-
-    // Adding back description if object has one specified
-    if (object.description.backDescription)
-    {
-      element += ' description_text_back:' + object.description.backDescription + ';';
-    }
-
-    // Adding offset if object has one specified
-    if (object.description.offset)
-    {
-      element += ' offset:' + object.description.offset[0] + ' ' + object.description.offset[1] + ' ' + object.description.offset[2] + ';';
-    }
-
-    // Adding arrow position if object has one specified
-    if (object.description.arrowPosition)
-    {
-      element += ' arrow_position:' + object.description.arrowPosition + ';';
-    }
-
-    element += '" circles-lookat="targetElement:[camera]"></a-entity>';
-  }
 
   // Adding children if object has some specified
   if (object.children)
@@ -1092,7 +1046,7 @@ const servePrototypeCircle = async (req, res, next) =>
   {
     if (error) 
     {
-      return res.redirect('/profile');
+      return res.redirect('/explore');
     }
     else 
     {
