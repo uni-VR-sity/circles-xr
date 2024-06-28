@@ -545,50 +545,56 @@ const createPrototypeElement = function(object)
   {
     element += ' id="' + object.id + '"';
   }
-
-  // If object has a shape specified, adding it
-  // Otherwise adding default cube shape
-  element += ' geometry="';
-
-  if (object.shape)
+  // Adding geometry if object has one specified
+  if (object.geometry)
   {
-    element += 'primitive:' + object.shape + ';';
+    element += ' geometry="';
+
+    // Adding primitive if object has one specified
+    if (object.geometry.primitive)
+    {
+      element += 'primitive:' + object.geometry.primitive + ';';
+    }
 
     // Adding height if object has one specified
-    if (object.height)
+    if (object.geometry.height)
     {
-      element += ' height:' + object.height + ';';
+      element += ' height:' + object.geometry.height + ';';
     }
 
     // Adding width if object has one specified
-    if (object.width)
+    if (object.geometry.width)
     {
-      element += ' width:' + object.width + ';';
+      element += ' width:' + object.geometry.width + ';';
     }
 
     // Adding depth if object has one specified
-    if (object.depth)
+    if (object.geometry.depth)
     {
-      element += ' depth:' + object.depth + ';';
+      element += ' depth:' + object.geometry.depth + ';';
     }
 
     // Adding radius if object has one specified
-    if (object.radius)
+    if (object.geometry.radius)
     {
-      element += ' radius:' + object.radius + ';';
+      element += ' radius:' + object.geometry.radius + ';';
     }
-  }
-  else
-  {
-    element += 'primitive:cube;';
+
+    element += '"';
   }
 
-  element += '"';
-
-  // Adding colour if object has one specified
-  if (object.colour)
+  // Adding material if object has one specified
+  if (object.material)
   {
-    element += ' material="color:' + object.colour + ';"';
+    element += ' material="';
+
+    // Adding colour if object has one specified
+    if (object.material.color)
+    {
+      element += ' color:' + object.material.color + ';';
+    }
+
+    element += '"';
   }
 
   // Adding position if object has one specified
