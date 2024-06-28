@@ -21,13 +21,7 @@ function hideMessages()
 // Displays prototype scene
 function displayPrototypeScene(sceneObjects)
 {
-    var scene = '<a-scene embedded background="color:#ededed">';
-
-        scene += '<a-entity position="0 1.6 0" camera look-controls wasd-controls>';
-            scene += '<a-entity cursor="rayOrigin:mouse" raycaster="objects:.interactive; far:100; interval:30; useWorldCoordinates:true"></a-entity>';
-        scene += '</a-entity>';
-
-        scene += '<a-entity id="circles-manager" circles-manager="avatar:false"></a-entity>';
+    var scene = '<a-scene embedded background="color:#ededed"renderer="antialias:true;colorManagement: true;sortObjects: false;foveationLevel: 3;highRefreshRate: true;physicallyCorrectLights: true;logarithmicDepthBuffer: false;precision: high;"networked-scene="room:explore;connectOnLoad:true;onConnect:onConnect;audio:false;debug:false;adapter: socketio;serverURL: /"shadow="autoUpdate:false; type:basic;"vr-mode-ui="enabled:true;"loading-screen="enabled:false;"device-orientation-permission-ui="enabled:true;"circles-platform-scene-shadows>';
 
         scene += sceneObjects;
     
@@ -305,6 +299,8 @@ function deletePrototype(prototype)
             // If deleted prototype was current prototype, hiding prototype editor
             if (prototype === currentPrototype)
             {
+                document.getElementById('prototyping-input').value = '';
+
                 var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
 
                 for (const element of prototypeEditorElements)

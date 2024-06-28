@@ -408,7 +408,7 @@ const createNewPrototype = async (req, res, next) =>
   if (req.body.prototypeName) 
   {
     const destinationFilePath = __dirname + '/../public/prototypes/created';
-    const startingString = '{\n    "shape" : "box",\n    "colour" : "grey",\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
+    const startingString = '{\n    "geometry" : \n    {\n        "primitive" : "box"\n    },\n    "material" : \n    {\n        "color" : "grey"\n    },\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
 
     // Making sure prototype name is unique, sending error message if it already exists
     if (await Prototypes.findOne({name: req.body.prototypeName}))
@@ -484,7 +484,7 @@ const createNewPrototype = async (req, res, next) =>
       status: 'success',
       prototypeName: req.body.prototypeName,
       startingString: startingString,
-      sceneElements: sceneElements,
+      sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
     }
 
     res.json(successResponse);
@@ -814,7 +814,7 @@ const updatePrototype = async (req, res, next) =>
         {
           var successResponse = {
             status: 'success',
-            sceneElements: sceneElements,
+            sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
           }
       
           res.json(successResponse);
@@ -925,7 +925,6 @@ const getPrototypeInfo = async (req, res, next) =>
   {
     const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
     const JSONPath = prototypeFolderPath + '/' + req.body.prototypeName + '.json';
-    const HTMLPath = prototypeFolderPath + '/' + req.body.prototypeName + '.html';
 
     // Getting prototype from database
     var prototype = null;
@@ -966,10 +965,25 @@ const getPrototypeInfo = async (req, res, next) =>
 
         var prototypeObject = JSON.parse(prototypeJSON);
 
+        // Getting scene elements (starting elements and from prototype)
+        var sceneElements = '';
+
+        try
+        {
+          sceneElements += fs.readFileSync(__dirname + '/../public/prototypes/template-scene-elements.html', { encoding: 'utf8', flag: 'r' });
+        }
+        catch(e)
+        {
+          console.log(e);
+          return null;
+        }
+
+        sceneElements += parsePrototype(prototypeObject);
+
         var prototypeInfo = {
           status: 'success',
           editorInput: JSON.stringify(prototypeObject.sceneObjects).slice(1, -1),
-          sceneElements: parsePrototype(prototypeObject),
+          sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
         };
 
         res.json(prototypeInfo);
@@ -993,16 +1007,105 @@ const getPrototypeInfo = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
+// Adding user information to prototype HTML
+const addPrototypeUserInfo = function(req, prototypeName, prototypeHTML)
+{
+  var specialStatus = '';
+      
+  const u_name = req.session.sessionName;
+  const u_height = CIRCLES.CONSTANTS.DEFAULT_USER_HEIGHT;
+
+  var head_type = req.user.gltf_hair_url;
+  var hair_type = req.user.gltf_hair_url;
+  var body_type = req.user.gltf_body_url;
+
+  const head_col = req.user.color_head;
+  const hair_col = req.user.color_hair;
+  const body_col = req.user.color_body;
+  
+  if (req.user.usertype === CIRCLES.USER_TYPE.TEACHER) 
+  {
+    specialStatus = ' (T)';
+  }
+  else if (req.user.usertype === CIRCLES.USER_TYPE.RESEARCHER) 
+  {
+    specialStatus = ' (R)';
+  }
+
+  prototypeHTML = prototypeHTML.replace(/__WORLDNAME__/g, prototypeName);
+  prototypeHTML = prototypeHTML.replace(/__USERTYPE__/g, req.user.usertype);
+  prototypeHTML = prototypeHTML.replace(/__USERNAME__/g, req.user.username);
+  prototypeHTML = prototypeHTML.replace(/__VISIBLENAME__/g, u_name + specialStatus);
+  prototypeHTML = prototypeHTML.replace(/__FACE_MAP__/g, CIRCLES.CONSTANTS.DEFAULT_FACE_HAPPY_MAP);
+
+  prototypeHTML = prototypeHTML.replace(/__USER_HEIGHT__/g, u_height);
+  prototypeHTML = prototypeHTML.replace(/__MODEL_HEAD__/g, head_type);
+  prototypeHTML = prototypeHTML.replace(/__MODEL_HAIR__/g, hair_type);
+  prototypeHTML = prototypeHTML.replace(/__MODEL_BODY__/g, body_type);
+  prototypeHTML = prototypeHTML.replace(/__COLOR_HEAD__/g, head_col);
+  prototypeHTML = prototypeHTML.replace(/__COLOR_HAIR__/g, hair_col);
+  prototypeHTML = prototypeHTML.replace(/__COLOR_BODY__/g, body_col);
+
+  return prototypeHTML;
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Temporary, renders prototype circle
 const servePrototypeCircle = async (req, res, next) =>
 {
-  // url: /manage-circle/circle_id
-  // split result array: {"", "prototype", "prototype_name"}
-  const prototypeName = req.url.split('/')[2];
+  // Need to make sure we have the trailing slash to signify a folder so that relative links works correctly
+  // https://stackoverflow.com/questions/30373218/handling-relative-urls-in-a-node-js-http-server 
+  const splitURL = req.url.split('?');
+  const baseURL = (splitURL.length > 0)?splitURL[0]:'';
+  const urlParamsStr = (splitURL.length > 1)?splitURL[1]:'';
 
-  const filePath = __dirname + '/../public/prototypes/created/' + prototypeName;
+  if (splitURL.length > 0) 
+  {
+      if (baseURL.charAt(baseURL.length - 1) !== '/') 
+      {
+        const fixedURL = baseURL + "/"  + ((urlParamsStr === '')?'':'?' + urlParamsStr);
+        res.writeHead(302, { "Location": fixedURL });
+        res.end();
+        return;
+      }
+  }
 
-  res.sendFile(prototypeName + '.html', {root:filePath});
+  // Make sure there are the correct url seatch params available
+  const urlObj = new URL(req.protocol + '://' + req.get('host') + req.originalUrl);
+  const searchParamsObj = urlObj.searchParams;
+
+  // If no group indicated then assume the group 'explore'
+  if (!searchParamsObj.has('group')) 
+  {
+    const fixedURL = baseURL + "?" + 'group=explore' + ((urlParamsStr === '')?'':'&' + urlParamsStr);
+    res.writeHead(302, { "Location": fixedURL });
+    res.end();
+    return;
+  }
+
+  const prototypeName = req.params.prototype_name;
+  const pathStr = path.resolve(__dirname + '/../public/prototypes/created/' + prototypeName + '/' + prototypeName + '.html');
+
+  // Ensure the world file exists
+  fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => 
+  {
+    if (error) 
+    {
+      return res.redirect('/profile');
+    }
+    else 
+    {
+      var prototypeHTML = addPrototypeUserInfo(req, prototypeName, data);
+
+      // Replace room ID with generic explore name too keep the HTML output
+      // clean
+      prototypeHTML = prototypeHTML.replace(/__ROOM_NAME__/g, searchParamsObj.get('group'));
+
+      res.set('Content-Type', 'text/html');
+      res.end(prototypeHTML); //not sure exactly why res.send doesn't work here ...
+    }
+  });
 }
 
 // Museum Games Page -------------------------------------------------------------------------------------------------------------------------------

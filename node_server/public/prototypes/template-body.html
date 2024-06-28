@@ -1,5 +1,67 @@
     <body>
 
-        <!-- A-Frame Scene -->
-        <a-scene id="scene">
+        <!-- 2D UI elements overylayed on the 3D scene for user options -->
+        <!-- Home button to go back to explore page -->
+        <div id="home-ui-container">
+            <div id="home-container">
+
+                <i class="fa-solid fa-house" onclick="window.location.href='/explore';"></i>
+                
+            </div>
+        </div>
+
+        <!-- This is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+        <!-- html to get appropriate user interactions to trigger permission and user choices. Turning off for now until we figure out permissions with link traversal -->
+        <div id="user-gesture-overlay" >
+            <div id="Permissions" class="overlay">
+                <img class="logo" src="/global/assets/textures/logos/circles_logo.svg" alt="Circles logo" />
+                
+                <div class="suboverlay">
+                <p class="title">Permissions</p>
+                    
+                <div id="user-microphone-wrapper" class="grid2col">
+                    <span class="label">Microphone</span>
+                    <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch_mic" class="onoffswitch-checkbox" id="switch_mic" autocomplete="off">
+                    <label class="onoffswitch-label" for="switch_mic">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                    </div>
+                </div>
+
+                <input id="user-gesture-enter" class="user-gesture-button" type="submit" value="Enter Circles">
+                <input id="wardrobe-enter" class="user-gesture-button"  type="submit" value="Customize Avatar">
+                <!-- loading gif from: https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1 -->
+                <img id="loading-animation-enter" src="/global/images/loading.gif">
+                </div>
+            </div>
+        </div>
+
+        <div id="ui_wrapper">
+            <input id="button_microphone" type="submit" value="">
+        </div>
+
+        <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+        <a-scene renderer="antialias: true;
+                           colorManagement: true;
+                           sortObjects: false;
+                           foveationLevel: 3;
+                           highRefreshRate: true;
+                           physicallyCorrectLights: true;
+                           logarithmicDepthBuffer: false;
+                           precision: high;"
+                 networked-scene="room: __ROOM_NAME__;
+                                  connectOnLoad: true;
+                                  onConnect: onConnect;
+                                  audio: false;
+                                  debug: false;
+                                  adapter: socketio;
+                                  serverURL: /"
+                 shadow="autoUpdate:false; type:basic;"
+                 vr-mode-ui="enabled:true;"
+                 loading-screen="enabled:false;"
+                 device-orientation-permission-ui="enabled:true;"
+                 circles-enter-ui
+                 circles-platform-scene-shadows>
 
