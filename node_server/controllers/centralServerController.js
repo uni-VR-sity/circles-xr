@@ -408,7 +408,13 @@ const createNewPrototype = async (req, res, next) =>
   if (req.body.prototypeName) 
   {
     const destinationFilePath = __dirname + '/../public/prototypes/created';
-    const startingString = '{\n    "geometry" : \n    {\n        "primitive" : "box"\n    },\n    "material" : \n    {\n        "color" : "grey"\n    },\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
+    
+    const startingObject = {
+      geometry: { primitive: 'box' },
+      material: { color: 'grey' },
+      position: [0, 0, -5],
+      rotation: [0, 45, 0],
+    }
 
     // Making sure prototype name is unique, sending error message if it already exists
     if (await Prototypes.findOne({name: req.body.prototypeName}))
@@ -420,7 +426,7 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype folder
-    const prototypeFolderPath = destinationFilePath + '/' + req.body.prototypeName;
+    const prototypeFolderPath = destinationFilePath + '/' + req.body.prototypeName.replace(' ', '-');
 
     try
     {
@@ -435,12 +441,12 @@ const createNewPrototype = async (req, res, next) =>
     // Creating prototype JSON file
     var prototypeJSON = {
       title : req.body.prototypeName,
-      sceneObjects : [JSON.parse(startingString)],
+      sceneObjects : [startingObject],
     }
 
     try 
     {
-      fs.writeFileSync(prototypeFolderPath + '/' + req.body.prototypeName + '.json', JSON.stringify(prototypeJSON));
+      fs.writeFileSync(prototypeFolderPath + '/' + req.body.prototypeName.replace(' ', '-') + '.json', JSON.stringify(prototypeJSON));
     }
     catch(e)
     {
@@ -449,7 +455,7 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype HTML file
-    var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + req.body.prototypeName + '.html', prototypeJSON);
+    var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + req.body.prototypeName.replace(' ', '-') + '.html', prototypeJSON);
 
     // Storing prototype in the database
     var prototypeInfo = {
@@ -483,7 +489,7 @@ const createNewPrototype = async (req, res, next) =>
     var successResponse = {
       status: 'success',
       prototypeName: req.body.prototypeName,
-      startingString: startingString,
+      startingString: JSON.stringify(startingObject),
       sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
     }
 
@@ -749,9 +755,9 @@ const updatePrototype = async (req, res, next) =>
 
   if (req.body.prototypeName && req.body.prototypeEdits) 
   {
-    const prototypePath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
-    const JSONPath = prototypePath + '/' + req.body.prototypeName + '.json';
-    const HTMLPath = prototypePath + '/' + req.body.prototypeName + '.html';
+    const prototypePath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName.replace(' ', '-');
+    const JSONPath = prototypePath + '/' + req.body.prototypeName.replace(' ', '-') + '.json';
+    const HTMLPath = prototypePath + '/' + req.body.prototypeName.replace(' ', '-') + '.html';
 
     // Checking that prototype files exists
     if (fs.existsSync(JSONPath) && fs.existsSync(HTMLPath))
@@ -823,7 +829,7 @@ const deletePrototype = async (req, res, next) =>
 
   if (req.body.prototypeName) 
   {
-    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName.replace(' ', '-');
 
     // Deleting prototype folder
     try
@@ -877,8 +883,8 @@ const getPrototypeInfo = async (req, res, next) =>
 
   if (req.body.prototypeName) 
   {
-    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName;
-    const JSONPath = prototypeFolderPath + '/' + req.body.prototypeName + '.json';
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName.replace(' ', '-');
+    const JSONPath = prototypeFolderPath + '/' + req.body.prototypeName.replace(' ', '-') + '.json';
 
     // Getting prototype from database
     var prototype = null;
