@@ -410,12 +410,12 @@ const createNewPrototype = async (req, res, next) =>
     const destinationFilePath = __dirname + '/../public/prototypes/created';
     const fileName = req.body.prototypeName.replaceAll(' ', '-');
 
-    const startingObject = {
+    const startingObject = [{
       geometry: { primitive: 'box' },
       material: { color: 'grey' },
       position: [0, 0, -5],
       rotation: [0, 45, 0],
-    }
+    }];
 
     // Making sure prototype name is unique, sending error message if it already exists
     if (await Prototypes.findOne({name: req.body.prototypeName}))
@@ -442,7 +442,7 @@ const createNewPrototype = async (req, res, next) =>
     // Creating prototype JSON file
     var prototypeJSON = {
       title : req.body.prototypeName,
-      sceneObjects : [startingObject],
+      sceneObjects : startingObject,
     }
 
     try 
@@ -947,7 +947,7 @@ const getPrototypeInfo = async (req, res, next) =>
 
         var prototypeInfo = {
           status: 'success',
-          editorInput: JSON.stringify(prototypeObject.sceneObjects).slice(1, -1),
+          editorInput: JSON.stringify(prototypeObject.sceneObjects),
           sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
         };
 

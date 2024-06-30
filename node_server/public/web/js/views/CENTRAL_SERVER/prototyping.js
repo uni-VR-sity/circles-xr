@@ -121,9 +121,6 @@ function updatePrototype(event)
     // Getting prototype input
     var prototypeInput = formData.get('prototyping');
 
-    // Adding array brackets to input
-    prototypeInput = '[' + prototypeInput + ']';
-
     // Converting input to JSON and ensuring it is valid
     // If it is valid,
     // If it is invalid, displaying error message

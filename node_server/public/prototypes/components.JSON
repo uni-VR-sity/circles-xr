@@ -223,5 +223,44 @@
                 "value" : "string"
             }
         ]
+    },
+    {
+        "name" : "circles-interactive-object",
+        "value" : "object",
+        "attributes" : 
+        [
+            {
+                "name" : "type",
+                "value" : "string"
+            },
+            {
+                "name" : "highlight_color",
+                "value" : "string"
+            },
+            {
+                "name" : "neutral_scale",
+                "value" : "string"
+            },
+            {
+                "name" : "hover_scale",
+                "value" : "string"
+            },
+            {
+                "name" : "click_scale",
+                "value" : "string"
+            },
+            {
+                "name" : "click_sound",
+                "value" : "string"
+            },
+            {
+                "name" : "sound_volume",
+                "value" : "string"
+            },
+            {
+                "name" : "enabled",
+                "value" : "string"
+            }
+        ]
     }
 ]
