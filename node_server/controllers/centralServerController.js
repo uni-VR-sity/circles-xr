@@ -980,7 +980,7 @@ const addPrototypeUserInfo = function(req, prototypeName, prototypeHTML)
   const u_name = req.session.sessionName;
   const u_height = CIRCLES.CONSTANTS.DEFAULT_USER_HEIGHT;
 
-  var head_type = req.user.gltf_hair_url;
+  var head_type = req.user.gltf_head_url;
   var hair_type = req.user.gltf_hair_url;
   var body_type = req.user.gltf_body_url;
 
