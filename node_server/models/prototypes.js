@@ -66,12 +66,12 @@ const checkPrototypes = async function()
     // Going through each prototype
     for (const prototype of databasePrototypes)
     {
-      if (!folderPrototypes.includes(prototype.fileName))
+      if (!folderPrototypes.includes(prototype.name))
       {
         try
         {
-          console.log('deleting ' + prototype.fileName);
-          await Prototypes.deleteOne({name: prototype.fileName});
+          console.log('deleting ' + prototype.name);
+          await Prototypes.deleteOne({name: prototype.name});
         }
         catch (e) 
         {
