@@ -174,5 +174,54 @@
                 "value" : "string"
             }
         ]
+    },
+    {
+        "name" : "circles-pickup-object",
+        "value" : "object",
+        "attributes" : 
+        [
+            {
+                "name" : "pickupPosition",
+                "value" : "array",
+                "size" : "3"
+            },
+            {
+                "name" : "pickupRotation",
+                "value" : "array",
+                "size" : "3"
+            },
+            {
+                "name" : "pickupScale",
+                "value" : "array",
+                "size" : "3"
+            },
+            {
+                "name" : "dropPosition",
+                "value" : "array",
+                "size" : "3"
+            },
+            {
+                "name" : "dropRotation",
+                "value" : "array",
+                "size" : "3"
+            },
+            {
+                "name" : "dropScale",
+                "value" : "array",
+                "size" : "3"
+            },
+            {
+                "name" : "animate",
+                "value" : "string"
+            },
+            {
+                "name" : "animateDurationMS",
+                "value" : "string"
+            },
+            {
+                "name" : "enabled",
+                "value" : "string"
+            }
+        ]
     }
 ]
