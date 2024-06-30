@@ -16,6 +16,12 @@ const PrototypeSchema = new mongoose.Schema({
         required:   true,
         trim:       true
       },
+    fileName: {
+        type:       String,
+        unique:     true,
+        required:   true,
+        trim:       true
+      },
     url: {
         type:       String,
         unique:     true,
@@ -60,12 +66,12 @@ const checkPrototypes = async function()
     // Going through each prototype
     for (const prototype of databasePrototypes)
     {
-      if (!folderPrototypes.includes(prototype.name))
+      if (!folderPrototypes.includes(prototype.fileName))
       {
         try
         {
-          console.log('deleting ' + prototype.name);
-          await Prototypes.deleteOne({name: prototype.name});
+          console.log('deleting ' + prototype.fileName);
+          await Prototypes.deleteOne({name: prototype.fileName});
         }
         catch (e) 
         {

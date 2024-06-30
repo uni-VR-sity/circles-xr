@@ -408,7 +408,8 @@ const createNewPrototype = async (req, res, next) =>
   if (req.body.prototypeName) 
   {
     const destinationFilePath = __dirname + '/../public/prototypes/created';
-    
+    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+
     const startingObject = {
       geometry: { primitive: 'box' },
       material: { color: 'grey' },
@@ -426,7 +427,7 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype folder
-    const prototypeFolderPath = destinationFilePath + '/' + req.body.prototypeName.replace(' ', '-');
+    const prototypeFolderPath = destinationFilePath + '/' + fileName;
 
     try
     {
@@ -446,7 +447,7 @@ const createNewPrototype = async (req, res, next) =>
 
     try 
     {
-      fs.writeFileSync(prototypeFolderPath + '/' + req.body.prototypeName.replace(' ', '-') + '.json', JSON.stringify(prototypeJSON));
+      fs.writeFileSync(prototypeFolderPath + '/' + fileName + '.json', JSON.stringify(prototypeJSON));
     }
     catch(e)
     {
@@ -455,12 +456,13 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype HTML file
-    var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + req.body.prototypeName.replace(' ', '-') + '.html', prototypeJSON);
+    var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON);
 
     // Storing prototype in the database
     var prototypeInfo = {
       user: await User.findById(req.user._id).exec(),
       name: req.body.prototypeName,
+      fileName: fileName,
       url: prototypeFolderPath,
     }
 
@@ -709,7 +711,7 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   }
 
   // Replacing __PROTOTYPE_TITLE__ with prototype title
-  updatedHTML = updatedHTML.replace(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
+  updatedHTML = updatedHTML.replaceAll(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
 
   // Inserting scene elements
   updatedHTML += sceneElements;
@@ -755,9 +757,10 @@ const updatePrototype = async (req, res, next) =>
 
   if (req.body.prototypeName && req.body.prototypeEdits) 
   {
-    const prototypePath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName.replace(' ', '-');
-    const JSONPath = prototypePath + '/' + req.body.prototypeName.replace(' ', '-') + '.json';
-    const HTMLPath = prototypePath + '/' + req.body.prototypeName.replace(' ', '-') + '.html';
+    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const prototypePath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypePath + '/' + fileName + '.json';
+    const HTMLPath = prototypePath + '/' + fileName + '.html';
 
     // Checking that prototype files exists
     if (fs.existsSync(JSONPath) && fs.existsSync(HTMLPath))
@@ -829,7 +832,8 @@ const deletePrototype = async (req, res, next) =>
 
   if (req.body.prototypeName) 
   {
-    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName.replace(' ', '-');
+    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
 
     // Deleting prototype folder
     try
@@ -883,8 +887,9 @@ const getPrototypeInfo = async (req, res, next) =>
 
   if (req.body.prototypeName) 
   {
-    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + req.body.prototypeName.replace(' ', '-');
-    const JSONPath = prototypeFolderPath + '/' + req.body.prototypeName.replace(' ', '-') + '.json';
+    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypeFolderPath + '/' + fileName + '.json';
 
     // Getting prototype from database
     var prototype = null;
@@ -992,19 +997,19 @@ const addPrototypeUserInfo = function(req, prototypeName, prototypeHTML)
     specialStatus = ' (R)';
   }
 
-  prototypeHTML = prototypeHTML.replace(/__WORLDNAME__/g, prototypeName);
-  prototypeHTML = prototypeHTML.replace(/__USERTYPE__/g, req.user.usertype);
-  prototypeHTML = prototypeHTML.replace(/__USERNAME__/g, req.user.username);
-  prototypeHTML = prototypeHTML.replace(/__VISIBLENAME__/g, u_name + specialStatus);
-  prototypeHTML = prototypeHTML.replace(/__FACE_MAP__/g, CIRCLES.CONSTANTS.DEFAULT_FACE_HAPPY_MAP);
+  prototypeHTML = prototypeHTML.replaceAll(/__WORLDNAME__/g, prototypeName);
+  prototypeHTML = prototypeHTML.replaceAll(/__USERTYPE__/g, req.user.usertype);
+  prototypeHTML = prototypeHTML.replaceAll(/__USERNAME__/g, req.user.username);
+  prototypeHTML = prototypeHTML.replaceAll(/__VISIBLENAME__/g, u_name + specialStatus);
+  prototypeHTML = prototypeHTML.replaceAll(/__FACE_MAP__/g, CIRCLES.CONSTANTS.DEFAULT_FACE_HAPPY_MAP);
 
-  prototypeHTML = prototypeHTML.replace(/__USER_HEIGHT__/g, u_height);
-  prototypeHTML = prototypeHTML.replace(/__MODEL_HEAD__/g, head_type);
-  prototypeHTML = prototypeHTML.replace(/__MODEL_HAIR__/g, hair_type);
-  prototypeHTML = prototypeHTML.replace(/__MODEL_BODY__/g, body_type);
-  prototypeHTML = prototypeHTML.replace(/__COLOR_HEAD__/g, head_col);
-  prototypeHTML = prototypeHTML.replace(/__COLOR_HAIR__/g, hair_col);
-  prototypeHTML = prototypeHTML.replace(/__COLOR_BODY__/g, body_col);
+  prototypeHTML = prototypeHTML.replaceAll(/__USER_HEIGHT__/g, u_height);
+  prototypeHTML = prototypeHTML.replaceAll(/__MODEL_HEAD__/g, head_type);
+  prototypeHTML = prototypeHTML.replaceAll(/__MODEL_HAIR__/g, hair_type);
+  prototypeHTML = prototypeHTML.replaceAll(/__MODEL_BODY__/g, body_type);
+  prototypeHTML = prototypeHTML.replaceAll(/__COLOR_HEAD__/g, head_col);
+  prototypeHTML = prototypeHTML.replaceAll(/__COLOR_HAIR__/g, hair_col);
+  prototypeHTML = prototypeHTML.replaceAll(/__COLOR_BODY__/g, body_col);
 
   return prototypeHTML;
 }
@@ -1060,7 +1065,7 @@ const servePrototypeCircle = async (req, res, next) =>
 
       // Replace room ID with generic explore name too keep the HTML output
       // clean
-      prototypeHTML = prototypeHTML.replace(/__ROOM_NAME__/g, searchParamsObj.get('group'));
+      prototypeHTML = prototypeHTML.replaceAll(/__ROOM_NAME__/g, searchParamsObj.get('group'));
 
       res.set('Content-Type', 'text/html');
       res.end(prototypeHTML); //not sure exactly why res.send doesn't work here ...
