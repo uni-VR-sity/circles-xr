@@ -5,9 +5,9 @@
 #homepage-banner-container {
     height: 600px;
     margin-top: calc(-1 * $NAVIGATION_MARGIN);
-    background-image: url("/web/images/campfire.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("/web/images/CU-campus.png");
     background-size: cover;
-    background-position: 50% 100%;
+    background-position: 50% 20%;
     display: grid;
     grid-template-rows: 7fr 1fr;
     color: $WHITE;
