@@ -20,6 +20,9 @@
             "primitive" : {
                 "value" : "string"
             },
+            "skipCache" : {
+                "value" : "string"
+            },
             "height" : {
                 "value" : "string"
             },
@@ -29,8 +32,83 @@
             "depth" : {
                 "value" : "string"
             },
+            "segmentsHeight" : {
+                "value" : "string"
+            },
+            "segmentsWidth" : {
+                "value" : "string"
+            },
+            "segmentsDepth" : {
+                "value" : "string"
+            },
             "radius" : {
                 "value" : "string"
+            },
+            "segments" : {
+                "value" : "string"
+            },
+            "thetaStart" : {
+                "value" : "string"
+            },
+            "thetaLength" : {
+                "value" : "string"
+            },
+            "openEnded" : {
+                "value" : "string"
+            },
+            "radiusBottom" : {
+                "value" : "string"
+            },
+            "radiusTop" : {
+                "value" : "string"
+            },
+            "segmentsRadial" : {
+                "value" : "string"
+            },
+            "radiusInner" : {
+                "value" : "string"
+            },
+            "radiusOuter" : {
+                "value" : "string"
+            },
+            "segmentsTheta" : {
+                "value" : "string"
+            },
+            "segmentsPhi" : {
+                "value" : "string"
+            },
+            "phiStart" : {
+                "value" : "string"
+            },
+            "phiLength" : {
+                "value" : "string"
+            },
+            "radiusTubular" : {
+                "value" : "string"
+            },
+            "segmentsTubular" : {
+                "value" : "string"
+            },
+            "arc" : {
+                "value" : "string"
+            },
+            "p" : {
+                "value" : "string"
+            },
+            "q" : {
+                "value" : "string"
+            },
+            "vertexA" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "vertexB" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "vertexC" : {
+                "value" : "array",
+                "size" : "3"
             }
         }
     },
