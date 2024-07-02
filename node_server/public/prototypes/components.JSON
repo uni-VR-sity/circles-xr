@@ -326,6 +326,9 @@
             }
         }
     },
+    "gltf-model" : {
+        "value" : "string"
+    },
     "circles-artefact" : {
         "value" : "object",
         "attributes" : {

@@ -544,25 +544,10 @@ const updatePrototypeJSON = function(filePath, edits)
 // ------------------------------------------------------------------------------------------
 
 // Creating prototype scene element
-const createPrototypeElement = function(object)
+const createPrototypeElement = function(object, allComponents)
 {
   var element = '<a-entity';
-
-  // Reading component file
-  var componentsJSON;
-
-  try
-  {
-    componentsJSON = fs.readFileSync(__dirname + '/../public/prototypes/components.JSON', { encoding: 'utf8', flag: 'r' });
-  }
-  catch(e)
-  {
-    console.log(e);
-    return null;
-  }
-
-  // Parsing file to update
-  var allComponents = JSON.parse(componentsJSON);
+  var models = [];
 
   // -----------------------------
 
@@ -629,6 +614,12 @@ const createPrototypeElement = function(object)
         element += ' ' + component + '="' + addValue(component, allComponents[component], object) + '"';
       }
     }
+
+    // If component is a GLTF model, adding model to model array
+    if (component === 'gltf-model')
+    {
+      models.push(object[component].split('#')[1]);
+    }
   }
 
   element += '>';
@@ -640,15 +631,22 @@ const createPrototypeElement = function(object)
     {
       for (const childObject of object.children)
       {
-        var childElement = createPrototypeElement(childObject);
-        element += childElement;
+        var childElementInfo = createPrototypeElement(childObject, allComponents);
+
+        element += childElementInfo.elementHTML;
+        models = models.concat(childElementInfo.models);
       }
     }
   }
 
   element += '</a-entity>';
 
-  return element;
+  var elementInfo = {
+    elementHTML: element, 
+    models: models,
+  }
+  
+  return elementInfo;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -657,13 +655,95 @@ const createPrototypeElement = function(object)
 const parsePrototype = function(prototypeObject)
 {
   var sceneElements = '';
+  var sceneModels = [];
+
+  // Reading component file
+  var componentsJSON;
+
+  try
+  {
+    componentsJSON = fs.readFileSync(__dirname + '/../public/prototypes/components.JSON', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing file to update
+  var allComponents = JSON.parse(componentsJSON);
 
   // Creating an a-entity element for each scene element
   for (const object of prototypeObject.sceneObjects)
   {
-    var element = createPrototypeElement(object);    
-    sceneElements += element;
+    var elementInfo = createPrototypeElement(object, allComponents);
+
+    sceneElements += elementInfo.elementHTML;
+    sceneModels = sceneModels.concat(elementInfo.models);
   }
+
+  // Removing duplicate models
+  sceneModels = [...new Set(sceneModels)];
+
+  var sceneInfo = {
+    sceneElements: sceneElements,
+    sceneModels: sceneModels,
+  }
+
+  return sceneInfo;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Putting scene elements together from template and prototype
+const gatherSceneElements = function(prototypeObject)
+{
+  // Getting assets from template
+  var templateAssets;
+
+  try
+  {
+    templateAssets = fs.readFileSync(__dirname + '/../public/prototypes/template-scene-assets.html', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Getting elements from template
+  var templateElements;
+
+  try
+  {
+    templateElements = fs.readFileSync(__dirname + '/../public/prototypes/template-scene-elements.html', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing prototype object for prototype elements
+  var prototypeSceneInfo = parsePrototype(prototypeObject);
+
+  if (!prototypeSceneInfo)
+  {
+    return null;
+  }
+
+  // Putting assets and elements together
+  var sceneElements = '';
+
+  sceneElements += templateAssets;
+
+  for (var model of prototypeSceneInfo.sceneModels)
+  {
+    sceneElements += '<a-asset-item id="' + model + '" src="/model-library/' + model + '/scene.gltf" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>\n';
+  }
+
+  sceneElements += templateElements;
+  sceneElements += prototypeSceneInfo.sceneElements;
 
   return sceneElements;
 }
@@ -674,20 +754,13 @@ const parsePrototype = function(prototypeObject)
 // Returns HTML scene object
 const updatePrototypeHTML = function(filePath, prototypeObject)
 {
-  // Getting scene elements (starting elements and from prototype)
-  var sceneElements = '';
+  // Getting scene elements
+  var sceneElements = gatherSceneElements(prototypeObject);
 
-  try
+  if (!sceneElements)
   {
-    sceneElements += fs.readFileSync(__dirname + '/../public/prototypes/template-scene-elements.html', { encoding: 'utf8', flag: 'r' });
-  }
-  catch(e)
-  {
-    console.log(e);
     return null;
   }
-
-  sceneElements += parsePrototype(prototypeObject);
 
   // Creating updated HTML file with new scene elements
   const templateBeforeFilePaths = [
@@ -936,19 +1009,13 @@ const getPrototypeInfo = async (req, res, next) =>
         var prototypeObject = JSON.parse(prototypeJSON);
 
         // Getting scene elements (starting elements and from prototype)
-        var sceneElements = '';
+        var sceneElements = gatherSceneElements(prototypeObject);
 
-        try
+        if (!sceneElements)
         {
-          sceneElements += fs.readFileSync(__dirname + '/../public/prototypes/template-scene-elements.html', { encoding: 'utf8', flag: 'r' });
+          res.json(errorResponse);
+          return;
         }
-        catch(e)
-        {
-          console.log(e);
-          return null;
-        }
-
-        sceneElements += parsePrototype(prototypeObject);
 
         var prototypeInfo = {
           status: 'success',
