@@ -115,7 +115,157 @@
     "material" : {
         "value" : "object",
         "attributes" : {
+            "alphaTest" : {
+                "value" : "string"
+            },
+            "depthTest" : {
+                "value" : "string"
+            },
+            "flatShading" : {
+                "value" : "string"
+            },
+            "npot" : {
+                "value" : "string"
+            },
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "opacity" : {
+                "value" : "string"
+            },
+            "repeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "shader" : {
+                "value" : "string"
+            },
+            "side" : {
+                "value" : "string"
+            },
+            "transparent" : {
+                "value" : "string"
+            },
+            "vertexColorsEnabled" : {
+                "value" : "string"
+            },
+            "visible" : {
+                "value" : "string"
+            },
+            "blending" : {
+                "value" : "string"
+            },
+            "dithering" : {
+                "value" : "string"
+            },
+            "anisotropy" : {
+                "value" : "string"
+            },
+            "ambientOcclusionMap" : {
+                "value" : "string"
+            },
+            "ambientOcclusionMapIntensity" : {
+                "value" : "string"
+            },
+            "ambientOcclusionTextureRepeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "ambientOcclusionTextureOffset" : {
+                "value" : "array",
+                "size" : "2"
+            },
             "color" : {
+                "value" : "string"
+            },
+            "displacementMap" : {
+                "value" : "string"
+            },
+            "displacementScale" : {
+                "value" : "string"
+            },
+            "displacementBias" : {
+                "value" : "string"
+            },
+            "displacementTextureRepeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "displacementTextureOffset" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "emissive" : {
+                "value" : "string"
+            },
+            "emissiveIntensity" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "envMap" : {
+                "value" : "string"
+            },
+            "fog" : {
+                "value" : "string"
+            },
+            "metalness" : {
+                "value" : "string"
+            },
+            "normalMap" : {
+                "value" : "string"
+            },
+            "normalScale" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "normalTextureRepeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "normalTextureOffset" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "roughness" : {
+                "value" : "string"
+            },
+            "sphericalEnvMap" : {
+                "value" : "string"
+            },
+            "width" : {
+                "value" : "string"
+            },
+            "wireframe" : {
+                "value" : "string"
+            },
+            "wireframeLinewidth" : {
+                "value" : "string"
+            },
+            "src" : {
+                "value" : "string"
+            },
+            "specular" : {
+                "value" : "string"
+            },
+            "shininess" : {
+                "value" : "string"
+            },
+            "combine" : {
+                "value" : "string"
+            },
+            "reflectivity" : {
+                "value" : "string"
+            },
+            "refract" : {
+                "value" : "string"
+            },
+            "refractionRatio" : {
+                "value" : "string"
+            },
+            "toneMapped" : {
                 "value" : "string"
             }
         }
