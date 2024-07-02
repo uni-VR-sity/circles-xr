@@ -57,6 +57,81 @@
         ]
     },
     {
+        "name" : "animation",
+        "value" : "object",
+        "attributes" : 
+        [
+            {
+                "name" : "property",
+                "value" : "string"
+            },
+            {
+                "name" : "isRawProperty",
+                "value" : "string"
+            },
+            {
+                "name" : "from",
+                "value" : "string"
+            },
+            {
+                "name" : "to",
+                "value" : "string"
+            },
+            {
+                "name" : "type",
+                "value" : "string"
+            },
+            {
+                "name" : "delay",
+                "value" : "string"
+            },
+            {
+                "name" : "dir",
+                "value" : "string"
+            },
+            {
+                "name" : "dur",
+                "value" : "string"
+            },
+            {
+                "name" : "easing",
+                "value" : "string"
+            },
+            {
+                "name" : "elasticity",
+                "value" : "string"
+            },
+            {
+                "name" : "loop",
+                "value" : "string"
+            },
+            {
+                "name" : "round",
+                "value" : "string"
+            },
+            {
+                "name" : "startEvents",
+                "value" : "string"
+            },
+            {
+                "name" : "pauseEvents",
+                "value" : "string"
+            },
+            {
+                "name" : "resumeEvents",
+                "value" : "string"
+            },
+            {
+                "name" : "autoplay",
+                "value" : "string"
+            },
+            {
+                "name" : "enabled",
+                "value" : "string"
+            }
+        ]
+    },
+    {
         "name" : "circles-artefact",
         "value" : "object",
         "attributes" : 
