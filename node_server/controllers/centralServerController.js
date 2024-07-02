@@ -602,19 +602,6 @@ const createPrototypeElement = function(object)
           resultString += ' ' + attribute + ':' + addValue(attribute, componentValues.attributes[attribute], objectValues[componentName]) + ';';
         }
       }
-
-      /*
-      // Looping through component attributes
-      for (const attribute of componentValues.attributes)
-      {
-        // Checking if object has current component's attribute
-        // If it does, adding it
-        if (objectValues[componentName].hasOwnProperty(attribute.name))
-        {
-          resultString += ' ' + attribute.name + ':' + addValue(attribute.name, attribute, objectValues[componentName]) + ';';
-        }
-      }
-        */
     }
 
     return resultString;
@@ -643,26 +630,6 @@ const createPrototypeElement = function(object)
       }
     }
   }
-  /*
-  // Looping through all possible components
-  for (const component of components)
-  {
-    // Checking if object has current component
-    // If it does, adding it to element
-    if (object.hasOwnProperty(component.name))
-    {
-      // Checking if component has custom tag name (ex. animation__rotation, animation__position)
-      if (object[component.name].tagName)
-      {
-        element += ' ' + object[component.name].tagName + '="' + addValue(component, object) + '"';
-      }
-      else
-      {
-        element += ' ' + component.name + '="' + addValue(component, object) + '"';
-      }
-    }
-  }
-  */
 
   element += '>';
 
@@ -676,11 +643,6 @@ const createPrototypeElement = function(object)
         var childElement = createPrototypeElement(childObject);
         element += childElement;
       }
-    }
-    else
-    {
-      var childElement = createPrototypeElement(childObject);
-      element += childElement;
     }
   }
 
