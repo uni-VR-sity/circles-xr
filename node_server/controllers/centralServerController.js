@@ -562,47 +562,59 @@ const createPrototypeElement = function(object)
   }
 
   // Parsing file to update
-  var components = JSON.parse(componentsJSON);
+  var allComponents = JSON.parse(componentsJSON);
 
   // -----------------------------
 
   // Function to create string to add component value to element depending on its type
-  function addValue(component, valueObject)
+  function addValue(componentName, componentValues, objectValues)
   {
     var resultString = '';
 
     // If value is a string
-    if (component.value === "string")
+    if (componentValues.value === "string")
     {
-      resultString += valueObject[component.name];
+      resultString += objectValues[componentName];
     }
     // If value is an array
-    else if (component.value === "array")
+    else if (componentValues.value === "array")
     {
-      for (var i = 0; i < component.size; i++)
+      for (var i = 0; i < componentValues.size; i++)
       {
-        resultString += valueObject[component.name][i];
+        resultString += objectValues[componentName][i];
 
         // If array position is not the last, adding space
-        if (i + 1 != component.size)
+        if (i + 1 != componentValues.size)
         {
           resultString += ' ';
         }
       }
     }
     // If value is an object
-    else if (component.value === "object")
+    else if (componentValues.value === "object")
     {
+      // Looping through all attributes in object component
+      for (var attribute in objectValues[componentName])
+      {
+        // Checking if attribute exists
+        if (componentValues.attributes.hasOwnProperty(attribute))
+        {
+          resultString += ' ' + attribute + ':' + addValue(attribute, componentValues.attributes[attribute], objectValues[componentName]) + ';';
+        }
+      }
+
+      /*
       // Looping through component attributes
-      for (const attribute of component.attributes)
+      for (const attribute of componentValues.attributes)
       {
         // Checking if object has current component's attribute
         // If it does, adding it
-        if (valueObject[component.name].hasOwnProperty(attribute.name))
+        if (objectValues[componentName].hasOwnProperty(attribute.name))
         {
-          resultString += ' ' + attribute.name + ':' + addValue(attribute, valueObject[component.name]) + ';';
+          resultString += ' ' + attribute.name + ':' + addValue(attribute.name, attribute, objectValues[componentName]) + ';';
         }
       }
+        */
     }
 
     return resultString;
@@ -610,6 +622,28 @@ const createPrototypeElement = function(object)
 
   // -----------------------------
 
+  // Looping through all components in object
+  for (var component in object)
+  {
+    // Checking if component contains __ (for custom tag names (ex. animation__rotation, animation__position))
+    if (component.includes('__'))
+    {
+      // Checking if component before __ exists
+      if (allComponents.hasOwnProperty(component.split('__')[0]))
+      {
+        element += ' ' + component + '="' + addValue(component, allComponents[component.split('__')[0]], object) + '"';
+      }
+    }
+    else
+    {
+      // Checking if component exists
+      if (allComponents.hasOwnProperty(component))
+      {
+        element += ' ' + component + '="' + addValue(component, allComponents[component], object) + '"';
+      }
+    }
+  }
+  /*
   // Looping through all possible components
   for (const component of components)
   {
@@ -617,9 +651,18 @@ const createPrototypeElement = function(object)
     // If it does, adding it to element
     if (object.hasOwnProperty(component.name))
     {
-      element += ' ' + component.name + '="' + addValue(component, object) + '"';
+      // Checking if component has custom tag name (ex. animation__rotation, animation__position)
+      if (object[component.name].tagName)
+      {
+        element += ' ' + object[component.name].tagName + '="' + addValue(component, object) + '"';
+      }
+      else
+      {
+        element += ' ' + component.name + '="' + addValue(component, object) + '"';
+      }
     }
   }
+  */
 
   element += '>';
 

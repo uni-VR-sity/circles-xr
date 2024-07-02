@@ -1,341 +1,259 @@
-[
-    {
-        "name" : "id",
+{
+    "id" : {
         "value" : "string"
     },
-    {
-        "name" : "position",
+    "position" : {
         "value" : "array",
         "size" : "3"
     },
-    {
-        "name" : "rotation",
+    "rotation" : {
         "value" : "array",
         "size" : "3"
     },
-    {
-        "name" : "scale",
+    "scale" : {
         "value" : "array",
         "size" : "3"
     },
-    {
-        "name" : "geometry",
+    "geometry" : {
         "value" : "object",
-        "attributes" : 
-        [
-            {
-                "name" : "primitive",
+        "attributes" : {
+            "primitive" : {
                 "value" : "string"
             },
-            {
-                "name" : "height",
+            "height" : {
                 "value" : "string"
             },
-            {
-                "name" : "width",
+            "width" : {
                 "value" : "string"
             },
-            {
-                "name" : "depth",
+            "depth" : {
                 "value" : "string"
             },
-            {
-                "name" : "radius",
+            "radius" : {
                 "value" : "string"
             }
-        ]
+        }
     },
-    {
-        "name" : "material",
+    "material" : {
         "value" : "object",
-        "attributes" : 
-        [
-            {
-                "name" : "color",
+        "attributes" : {
+            "color" : {
                 "value" : "string"
             }
-        ]
+        }
     },
-    {
-        "name" : "animation",
+    "animation" : {
         "value" : "object",
-        "attributes" : 
-        [
-            {
-                "name" : "property",
+        "attributes" : {
+            "property" : {
                 "value" : "string"
             },
-            {
-                "name" : "isRawProperty",
+            "isRawProperty" : {
                 "value" : "string"
             },
-            {
-                "name" : "from",
+            "from" : {
                 "value" : "string"
             },
-            {
-                "name" : "to",
+            "to" : {
                 "value" : "string"
             },
-            {
-                "name" : "type",
+            "type" : {
                 "value" : "string"
             },
-            {
-                "name" : "delay",
+            "delay" : {
                 "value" : "string"
             },
-            {
-                "name" : "dir",
+            "dir" : {
                 "value" : "string"
             },
-            {
-                "name" : "dur",
+            "dur" : {
                 "value" : "string"
             },
-            {
-                "name" : "easing",
+            "easing" : {
                 "value" : "string"
             },
-            {
-                "name" : "elasticity",
+            "elasticity" : {
                 "value" : "string"
             },
-            {
-                "name" : "loop",
+            "loop" : {
                 "value" : "string"
             },
-            {
-                "name" : "round",
+            "round" : {
                 "value" : "string"
             },
-            {
-                "name" : "startEvents",
+            "startEvents" : {
                 "value" : "string"
             },
-            {
-                "name" : "pauseEvents",
+            "pauseEvents" : {
                 "value" : "string"
             },
-            {
-                "name" : "resumeEvents",
+            "resumeEvents" : {
                 "value" : "string"
             },
-            {
-                "name" : "autoplay",
+            "autoplay" : {
                 "value" : "string"
             },
-            {
-                "name" : "enabled",
+            "enabled" : {
                 "value" : "string"
             }
-        ]
+        }
     },
-    {
-        "name" : "circles-artefact",
+    "circles-artefact" : {
         "value" : "object",
-        "attributes" : 
-        [
-            {
-                "name" : "title",
+        "attributes" : {
+            "title" : {
                 "value" : "string"
             },
-            {
-                "name" : "description",
+            "description" : {
                 "value" : "string"
             },
-            {
-                "name" : "title_back",
+            "title_back" : {
                 "value" : "string"
             },
-            {
-                "name" : "description_back",
+            "description_back" : {
                 "value" : "string"
             },
-            {
-                "name" : "description_on",
+            "description_on" : {
                 "value" : "string"
             },
-            {
-                "name" : "description_offset",
+            "description_offset" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "desc_arrow_position",
+            "desc_arrow_position" : {
                 "value" : "string"
             },
-            {
-                "name" : "audio",
+            "audio" : {
                 "value" : "string"
             },
-            {
-                "name" : "volume",
+            "volume" : {
                 "value" : "string"
             },
-            {
-                "name" : "inspectPosition",
+            "inspectPosition" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "inspectScale",
+            "inspectScale" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "inspectRotation",
+            "inspectRotation" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "origPosition",
+            "origPosition" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "origRotation",
+            "origRotation" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "origScale",
+            "origScale" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "textRotationY",
+            "textRotationY" : {
                 "value" : "string"
             },
-            {
-                "name" : "descriptionLookAt",
+            "descriptionLookAt" : {
                 "value" : "string"
             },
-            {
-                "name" : "labelLookAt",
+            "labelLookAt" : {
                 "value" : "string"
             },
-            {
-                "name" : "constrainYAxis",
+            "constrainYAxis" : {
                 "value" : "string"
             },
-            {
-                "name" : "updateRate",
+            "updateRate" : {
                 "value" : "string"
             },
-            {
-                "name" : "smoothingOn",
+            "smoothingOn" : {
                 "value" : "string"
             },
-            {
-                "name" : "smoothingAlpha",
+            "smoothingAlpha" : {
                 "value" : "string"
             },
-            {
-                "name" : "label_text",
+            "label_text" : {
                 "value" : "string"
             },
-            {
-                "name" : "label_on",
+            "label_on" : {
                 "value" : "string"
             },
-            {
-                "name" : "label_offset",
+            "label_offset" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "label_arrow_position",
+            "label_arrow_position" : {
                 "value" : "string"
             }
-        ]
+        }
     },
-    {
-        "name" : "circles-pickup-object",
+    "circles-pickup-object" : {
         "value" : "object",
-        "attributes" : 
-        [
-            {
-                "name" : "pickupPosition",
+        "attributes" : {
+            "pickupPosition" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "pickupRotation",
+            "pickupRotation" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "pickupScale",
+            "pickupScale" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "dropPosition",
+            "dropPosition" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "dropRotation",
+            "dropRotation" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "dropScale",
+            "dropScale" : {
                 "value" : "array",
                 "size" : "3"
             },
-            {
-                "name" : "animate",
+            "animate" : {
                 "value" : "string"
             },
-            {
-                "name" : "animateDurationMS",
+            "animateDurationMS" : {
                 "value" : "string"
             },
-            {
-                "name" : "enabled",
+            "enabled" : {
                 "value" : "string"
             }
-        ]
+        }
     },
-    {
-        "name" : "circles-interactive-object",
+    "circles-interactive-object" : {
         "value" : "object",
-        "attributes" : 
-        [
-            {
-                "name" : "type",
+        "attributes" : {
+            "type" : {
                 "value" : "string"
             },
-            {
-                "name" : "highlight_color",
+            "highlight_color" : {
                 "value" : "string"
             },
-            {
-                "name" : "neutral_scale",
+            "neutral_scale" : {
                 "value" : "string"
             },
-            {
-                "name" : "hover_scale",
+            "hover_scale" : {
                 "value" : "string"
             },
-            {
-                "name" : "click_scale",
+            "click_scale" : {
                 "value" : "string"
             },
-            {
-                "name" : "click_sound",
+            "click_sound" : {
                 "value" : "string"
             },
-            {
-                "name" : "sound_volume",
+            "sound_volume" : {
                 "value" : "string"
             },
-            {
-                "name" : "enabled",
+            "enabled" : {
                 "value" : "string"
             }
-        ]
+        }
     }
-]
+}
