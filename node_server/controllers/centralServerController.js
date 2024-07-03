@@ -543,56 +543,54 @@ const updatePrototypeJSON = function(filePath, edits)
 
 // ------------------------------------------------------------------------------------------
 
+// Creating string to add component to element depending on its values
+const addComponentValue = function(componentName, componentInfo, prototypeObject)
+{
+  var component = '';
+
+  // If value is a string
+  if (componentInfo.value === "string")
+  {
+    component += prototypeObject[componentName];
+  }
+  // If value is an array
+  else if (componentInfo.value === "array")
+  {
+    for (var i = 0; i < componentInfo.size; i++)
+    {
+      component += prototypeObject[componentName][i];
+
+      // If array position is not the last, adding space
+      if (i + 1 != componentInfo.size)
+      {
+        component += ' ';
+      }
+    }
+  }
+  // If value is an object
+  else if (componentInfo.value === "object")
+  {
+    // Looping through all attributes in prototype object's component
+    for (var attribute in prototypeObject[componentName])
+    {
+      // Checking if attribute exists
+      if (componentInfo.attributes.hasOwnProperty(attribute))
+      {
+        component += ' ' + attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
+      }
+    }
+  }
+
+  return component;
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Creating prototype scene element
 const createPrototypeElement = function(object, allComponents)
 {
   var element = '<a-entity';
   var models = [];
-
-  // -----------------------------
-
-  // Function to create string to add component value to element depending on its type
-  function addValue(componentName, componentValues, objectValues)
-  {
-    var resultString = '';
-
-    // If value is a string
-    if (componentValues.value === "string")
-    {
-      resultString += objectValues[componentName];
-    }
-    // If value is an array
-    else if (componentValues.value === "array")
-    {
-      for (var i = 0; i < componentValues.size; i++)
-      {
-        resultString += objectValues[componentName][i];
-
-        // If array position is not the last, adding space
-        if (i + 1 != componentValues.size)
-        {
-          resultString += ' ';
-        }
-      }
-    }
-    // If value is an object
-    else if (componentValues.value === "object")
-    {
-      // Looping through all attributes in object component
-      for (var attribute in objectValues[componentName])
-      {
-        // Checking if attribute exists
-        if (componentValues.attributes.hasOwnProperty(attribute))
-        {
-          resultString += ' ' + attribute + ':' + addValue(attribute, componentValues.attributes[attribute], objectValues[componentName]) + ';';
-        }
-      }
-    }
-
-    return resultString;
-  }
-
-  // -----------------------------
 
   // Looping through all components in object
   for (var component in object)
@@ -603,7 +601,7 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component before __ exists
       if (allComponents.hasOwnProperty(component.split('__')[0]))
       {
-        element += ' ' + component + '="' + addValue(component, allComponents[component.split('__')[0]], object) + '"';
+        element += ' ' + component + '="' + addComponentValue(component, allComponents[component.split('__')[0]], object) + '"';
       }
     }
     else
@@ -611,7 +609,7 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component exists
       if (allComponents.hasOwnProperty(component))
       {
-        element += ' ' + component + '="' + addValue(component, allComponents[component], object) + '"';
+        element += ' ' + component + '="' + addComponentValue(component, allComponents[component], object) + '"';
       }
     }
 
@@ -724,7 +722,7 @@ const gatherSceneElements = function(prototypeObject)
     return null;
   }
 
-  // Parsing prototype object for prototype elements
+  // Parsing prototype object for prototype elements and used scene models
   var prototypeSceneInfo = parsePrototype(prototypeObject);
 
   if (!prototypeSceneInfo)
