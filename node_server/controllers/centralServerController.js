@@ -913,38 +913,74 @@ const deletePrototype = async (req, res, next) =>
     const fileName = req.body.prototypeName.replaceAll(' ', '-');
     const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
 
-    // Deleting prototype folder
+    // Getting prototype from database
+    var prototype = null;
+    var prototypeOwner = null;
+
     try
     {
-      fs.rmSync(prototypeFolderPath, {recursive: true});
+      prototype = await Prototypes.findOne({name: req.body.prototypeName}).sort().exec();
+      prototypeOwner = await User.findOne(prototype.user);
     }
     catch(e)
     {
       console.log(e);
+    }
 
+    if (prototype && prototypeOwner)
+    {
+      // Checking if the prototype belongs to the current user
+      const currentUser = await User.findById(req.user._id).sort().exec();
+
+      // If it does, deleting prototype
+      if (JSON.stringify(prototypeOwner) == JSON.stringify(currentUser))
+      {
+        // Deleting prototype folder
+        try
+        {
+          fs.rmSync(prototypeFolderPath, {recursive: true});
+        }
+        catch(e)
+        {
+          console.log(e);
+
+          res.json(errorResponse);
+          return;
+        }
+
+        // Deleting prototype from database
+        try
+        {
+          await Prototypes.deleteOne({name: req.body.prototypeName});
+        }
+        catch(e)
+        {
+          console.log(e);
+      
+          res.json(errorResponse);
+          return;
+        }
+
+        var response = {
+          status: 'success',
+        }
+
+        res.json(response);
+        return;
+      }
+      else
+      {
+        errorResponse.error = 'Unauthorized access';
+    
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
       res.json(errorResponse);
       return;
     }
-
-    // Deleting prototype from database
-    try
-    {
-      await Prototypes.deleteOne({name: req.body.prototypeName});
-    }
-    catch(e)
-    {
-      console.log(e);
-  
-      res.json(errorResponse);
-      return;
-    }
-
-    var response = {
-      status: 'success',
-    }
-
-    res.json(response);
-    return;
   }
   else
   {
@@ -1033,6 +1069,11 @@ const getPrototypeInfo = async (req, res, next) =>
         res.json(errorResponse);
         return;
       }
+    }
+    else
+    {
+      res.json(errorResponse);
+      return;
     }
   }
   else
