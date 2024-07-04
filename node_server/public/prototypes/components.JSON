@@ -486,5 +486,17 @@
                 "value" : "string"
             }
         }
+    },
+    "circles-checkpoint" : {
+        "value" : "object",
+        "attributes" : {
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "useDefaultModel" : {
+                "value" : "string"
+            }
+        }
     }
 }
