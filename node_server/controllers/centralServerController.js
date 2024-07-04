@@ -547,6 +547,7 @@ const updatePrototypeJSON = function(filePath, edits)
 const addComponentValue = function(componentName, componentInfo, prototypeObject)
 {
   var component = '';
+  var assets = [];
 
   // If value is a string
   if (componentInfo.value === "string")
@@ -576,12 +577,26 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
       // Checking if attribute exists
       if (componentInfo.attributes.hasOwnProperty(attribute))
       {
-        component += ' ' + attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
+        var componentValue = addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]);
+
+        component += ' ' + attribute + ':' + componentValue.componentHTML + ';';
+        assets = assets.concat(componentValue.assets);
+      }
+
+      // If attribute is a src, adding asset to asset array
+      if (attribute === 'src')
+      {
+        assets.push(prototypeObject[componentName][attribute].split('#')[1]);
       }
     }
   }
 
-  return component;
+  var componentInfo = {
+    componentHTML: component, 
+    assets: assets,
+  }
+
+  return componentInfo;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -591,6 +606,7 @@ const createPrototypeElement = function(object, allComponents)
 {
   var element = '<a-entity';
   var models = [];
+  var assets = [];
 
   // Looping through all components in object
   for (var component in object)
@@ -601,7 +617,10 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component before __ exists
       if (allComponents.hasOwnProperty(component.split('__')[0]))
       {
-        element += ' ' + component + '="' + addComponentValue(component, allComponents[component.split('__')[0]], object) + '"';
+        var componentValue = addComponentValue(component, allComponents[component.split('__')[0]], object);
+
+        element += ' ' + component + '="' + componentValue.componentHTML + '"';
+        assets = assets.concat(componentValue.assets);
       }
     }
     else
@@ -609,7 +628,10 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component exists
       if (allComponents.hasOwnProperty(component))
       {
-        element += ' ' + component + '="' + addComponentValue(component, allComponents[component], object) + '"';
+        var componentValue = addComponentValue(component, allComponents[component], object);
+
+        element += ' ' + component + '="' + componentValue.componentHTML + '"';
+        assets = assets.concat(componentValue.assets);
       }
     }
 
@@ -620,7 +642,7 @@ const createPrototypeElement = function(object, allComponents)
     }
   }
 
-  element += '>';
+  element += '>\n';
 
   // Adding children if object has some specified
   if (object.children)
@@ -633,15 +655,17 @@ const createPrototypeElement = function(object, allComponents)
 
         element += childElementInfo.elementHTML;
         models = models.concat(childElementInfo.models);
+        assets = assets.concat(childElementInfo.assets);
       }
     }
   }
 
-  element += '</a-entity>';
+  element += '</a-entity>\n';
 
   var elementInfo = {
     elementHTML: element, 
     models: models,
+    assets: assets,
   }
   
   return elementInfo;
@@ -654,6 +678,7 @@ const parsePrototype = function(prototypeObject)
 {
   var sceneElements = '';
   var sceneModels = [];
+  var sceneAssets = [];
 
   // Reading component file
   var componentsJSON;
@@ -678,14 +703,21 @@ const parsePrototype = function(prototypeObject)
 
     sceneElements += elementInfo.elementHTML;
     sceneModels = sceneModels.concat(elementInfo.models);
+    sceneAssets = sceneAssets.concat(elementInfo.assets);
   }
 
   // Removing duplicate models
   sceneModels = [...new Set(sceneModels)];
 
+  // Removing duplicate assets
+  sceneAssets = [...new Set(sceneAssets)];
+
+  console.log(sceneAssets);
+
   var sceneInfo = {
     sceneElements: sceneElements,
     sceneModels: sceneModels,
+    sceneAssets: sceneAssets
   }
 
   return sceneInfo;
@@ -738,6 +770,11 @@ const gatherSceneElements = function(prototypeObject)
   for (var model of prototypeSceneInfo.sceneModels)
   {
     sceneElements += '<a-asset-item id="' + model + '" src="/asset-library/' + model + '/scene.gltf" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>\n';
+  }
+
+  for (var asset of prototypeSceneInfo.sceneAssets)
+  {
+    sceneElements += '<img id="' + asset + '" src="/asset-library/' + asset + '.jpg" crossorigin="anonymous"></img>\n';
   }
 
   sceneElements += templateElements;
