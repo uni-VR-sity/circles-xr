@@ -420,6 +420,48 @@
             }
         }
     },
+    "circles-description" : {
+        "value" : "object",
+        "attributes" : {
+            "title_text_front" : {
+                "value" : "string"
+            },
+            "title_text_back" : {
+                "value" : "string"
+            },
+            "description_text_front" : {
+                "value" : "string"
+            },
+            "description_text_back" : {
+                "value" : "string"
+            },
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "arrow_position" : {
+                "value" : "string"
+            },
+            "arrow_visible" : {
+                "value" : "string"
+            },
+            "lookAtCamera" : {
+                "value" : "string"
+            },
+            "constrainYAxis" : {
+                "value" : "string"
+            },
+            "updateRate" : {
+                "value" : "string"
+            },
+            "smoothingOn" : {
+                "value" : "string"
+            },
+            "smoothingAlpha" : {
+                "value" : "string"
+            }
+        }
+    },
     "circles-pickup-object" : {
         "value" : "object",
         "attributes" : {
