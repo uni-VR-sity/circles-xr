@@ -737,7 +737,7 @@ const gatherSceneElements = function(prototypeObject)
 
   for (var model of prototypeSceneInfo.sceneModels)
   {
-    sceneElements += '<a-asset-item id="' + model + '" src="/model-library/' + model + '/scene.gltf" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>\n';
+    sceneElements += '<a-asset-item id="' + model + '" src="/asset-library/' + model + '/scene.gltf" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>\n';
   }
 
   sceneElements += templateElements;
