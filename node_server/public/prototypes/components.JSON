@@ -567,5 +567,13 @@
                 "value" : "string"
             }
         }
+    },
+    "circles-sendpoint" : {
+        "value" : "object",
+        "attributes" : {
+            "target" : {
+                "value" : "string"
+            }
+        }
     }
 }
