@@ -544,5 +544,28 @@
     "circles-spawnpoint" : {
         "value" : "object",
         "attributes" : {}
+    },
+    "circles-button" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "button_color" : {
+                "value" : "string"
+            },
+            "button_color_hover" : {
+                "value" : "string"
+            },
+            "pedastal_color" : {
+                "value" : "string"
+            },
+            "diameter" : {
+                "value" : "string"
+            },
+            "pedastal_visible" : {
+                "value" : "string"
+            }
+        }
     }
 }
