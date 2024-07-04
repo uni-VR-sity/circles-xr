@@ -540,5 +540,9 @@
                 "value" : "string"
             }
         }
+    },
+    "circles-spawnpoint" : {
+        "value" : "object",
+        "attributes" : {}
     }
 }
