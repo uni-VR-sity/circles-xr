@@ -271,14 +271,88 @@
         }
     },
     "light" : {
-        "type" : {
-            "value" : "string"
-        },
-        "color" : {
-            "value" : "string"
-        },
-        "intensity" : {
-            "value" : "string"
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "color" : {
+                "value" : "string"
+            },
+            "groundColor" : {
+                "value" : "string"
+            },
+            "intensity" : {
+                "value" : "string"
+            },
+            "decay" : {
+                "value" : "string"
+            },
+            "distance" : {
+                "value" : "string"
+            },
+            "angle" : {
+                "value" : "string"
+            },
+            "penumbra" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
+            },
+            "envMap" : {
+                "value" : "string"
+            },
+            "castShadow" : {
+                "value" : "string"
+            },
+            "shadowBias" : {
+                "value" : "string"
+            },
+            "shadowCameraAutomatic" : {
+                "value" : "string"
+            },
+            "shadowCameraBottom" : {
+                "value" : "string"
+            },
+            "shadowCameraFar" : {
+                "value" : "string"
+            },
+            "shadowCameraFov" : {
+                "value" : "string"
+            },
+            "shadowCameraLeft" : {
+                "value" : "string"
+            },
+            "shadowCameraNear" : {
+                "value" : "string"
+            },
+            "shadowCameraRight" : {
+                "value" : "string"
+            },
+            "shadowCameraTop" : {
+                "value" : "string"
+            },
+            "shadowCameraVisible" : {
+                "value" : "string"
+            },
+            "shadowMapHeight" : {
+                "value" : "string"
+            },
+            "shadowMapWidth" : {
+                "value" : "string"
+            }
+        }
+    },
+    "shadows" : {
+        "value" : "object",
+        "attributes" : {
+            "cast" : {
+                "value" : "string"
+            },
+            "receive" : {
+                "value" : "string"
+            }
         }
     },
     "animation" : {
@@ -583,6 +657,17 @@
         "value" : "object",
         "attributes" : {
             "target" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-sphere-env-map" : {
+        "value" : "object",
+        "attributes" : {
+            "src" : {
+                "value" : "string"
+            },
+            "format" : {
                 "value" : "string"
             }
         }
