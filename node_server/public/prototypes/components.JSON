@@ -270,6 +270,17 @@
             }
         }
     },
+    "light" : {
+        "type" : {
+            "value" : "string"
+        },
+        "color" : {
+            "value" : "string"
+        },
+        "intensity" : {
+            "value" : "string"
+        }
+    },
     "animation" : {
         "value" : "object",
         "attributes" : {
