@@ -1,5 +1,6 @@
 {
     "world": {
-        "name": "CU Campus"
+        "name": "CU Campus",
+        "description": "Carleton University (CU) Campus is a simplified version of a campus simulation used in English as a Second Language course for international students to allow them to explore the campus and interact with others and AI agents prior to attending the university."
     }
 }
