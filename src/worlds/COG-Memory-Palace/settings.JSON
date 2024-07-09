@@ -1,5 +1,6 @@
 {
     "world": {
-        "name": "CogSci: Memory Palace"
+        "name": "CogSci: Memory Palace",
+        "description": "BrainVR is an immersive interactive educational module created in collaboration with <a href='https://carleton.ca/cognitivescience/people/davies-jim/'>Dr. Jim Davies</a> for a course on Cognitive Science. It uses a pneumonic approach to help students learn about the names and functions of brain parts."
     }
 }
