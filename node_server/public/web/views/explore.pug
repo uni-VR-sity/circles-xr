@@ -17,6 +17,7 @@ block content
     - var circle;
     - var section;
     - var line;
+    - var splitLine;
     - var paragraph;
     - var developer;
 
@@ -78,7 +79,12 @@ block content
                     
                     if circle.description
                         .description-section
-                            p= circle.description.replaceAll("<'>", '"')
+                            for line of circle.description.split('<a href=')
+                                if line.includes('</a>')
+                                    a.link-underline(href=line.split("'")[1] target='_blank')= line.split('>')[1].split('<')[0]
+                                    span= line.split('</a>')[1]
+                                else 
+                                    span= line
 
                     if circle.extraInfo.length > 0
                         for section of circle.extraInfo
@@ -89,12 +95,16 @@ block content
                                 for paragraph of section.description.split('<new-line><new-line>')
                                     ul.paragraph 
                                         for line of paragraph.split('<new-line>')
-                                            if line.includes('<subtitle>')
-                                                i= line.split('<subtitle>')[1].replaceAll("<'>", '"')
-                                            else if line.includes('<list>')
-                                                li= line.split('<list>')[1].replaceAll("<'>", '"')
-                                            else 
-                                                p= line.replaceAll("<'>", '"')
+                                            for splitLine of line.split('<a href=')
+                                                if splitLine.includes('<subtitle>')
+                                                    i= splitLine.split('<subtitle>')[1].replaceAll("<'>", '"')
+                                                else if splitLine.includes('<list>')
+                                                    li= splitLine.split('<list>')[1].replaceAll("<'>", '"')
+                                                else if splitLine.includes('</a>')
+                                                    a.link-underline(href=splitLine.split('"')[1] target='_blank')= splitLine.split('>')[1].split('<')[0]
+                                                    span= splitLine.split('</a>')[1]
+                                                else 
+                                                    p= splitLine.replaceAll("<'>", '"')
 
                     if circle.contact.length > 0
                         .description-section
