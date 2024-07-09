@@ -130,7 +130,8 @@ function showCurrentScrollGalleryPage(galleryContainerID)
 
             if (currentPageContents[i].description && galleryItems[i].querySelector('.gallery-item-description'))
             {
-                galleryItems[i].querySelector('.gallery-item-description').innerHTML = currentPageContents[i].description;
+                console.log(currentPageContents[i].description);
+                galleryItems[i].querySelector('.gallery-item-description').innerHTML = currentPageContents[i].description.replaceAll("/'/gm", "'");
             }
 
             if (currentPageContents[i].link && galleryItems[i].querySelector('.gallery-item-link'))

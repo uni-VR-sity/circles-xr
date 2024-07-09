@@ -74,37 +74,39 @@ const serveHomepage = async (req, res, next) =>
   const userInfo = getUserInfo(req);
 
   // Featured circles
+  // Descriptions can have links: <a href='...'>...</a>
   var featuredCircles = [];
 
   featuredCircles[0] = {
     photo: '/worlds/COG-Memory-Palace/profile.jpg',
     name: 'BrainVR',
-    description: 'BrainVR Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    description: "BrainVR is an immersive interactive educational module created in collaboration with <a href='https://carleton.ca/cognitivescience/people/davies-jim/' target='_blank'>Dr. Jim Davies</a> for a course on Cognitive Science. It uses a pneumonic approach to help students learn about the names and functions of brain parts.",
     link: 'https://uni-vr-sity.ca/Memory-Palace',
   }
 
   featuredCircles[1] = {
     photo: '/worlds/Gathering-Place/profile.jpg',
     name: 'Gathering Place',
-    description: 'Gathering Place Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    description: "Indigenous Gathering Place is an ongoing project in collaboration with Indigenous Culture and Media Innovations (<a href='https://icmi.ca/' target='_blank'>ICMI</a>) to develop a place for Indigenous communities and their allies to meet, exhibit art and culture artefact, and educate.",
     link: 'https://uni-vr-sity.ca/Gathering-Place',
   }
 
   featuredCircles[2] = {
     photo: '/worlds/CU-Campus/profile.jpg',
     name: 'CU Campus',
-    description: 'CU Campus Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    description: "Carleton University (CU) Campus is a simplified version of a campus simulation used in English as a Second Language course for international students to allow them to explore the campus and interact with others and AI agents prior to attending the university.",
     link: 'https://uni-vr-sity.ca/CU-Campus',
   }
 
   featuredCircles[3] = {
     photo: '/worlds/Asteroid-Field/profile.jpg',
     name: 'Asteroid Field',
-    description: 'Asteroid Field Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    description: "Asteroid Field is a simple yet engaging VR game that demonstrates the abilities of the Circles framework in creating immersive, active video games.",
     link: 'https://uni-vr-sity.ca/Asteroid-Field',
   }
 
   // News
+  // Descriptions can have links: <a href='...'>...</a>
   var newsYears = [2024];
 
   var news = [];
@@ -1225,6 +1227,10 @@ const servePrototypeCircle = async (req, res, next) =>
 
 const serveMuseumGames = async (req, res, next) =>
 {
+  // New line: \n
+  // Quotation marks: \"
+  // Subtitle: <subtitle>...\n
+  // List item: <list>...\n
   var games = [];
 
   games[0] = {
