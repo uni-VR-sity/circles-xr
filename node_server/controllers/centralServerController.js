@@ -80,14 +80,14 @@ const serveHomepage = async (req, res, next) =>
   featuredCircles[0] = {
     photo: '/worlds/COG-Memory-Palace/profile.jpg',
     name: 'BrainVR',
-    description: "BrainVR is an immersive interactive educational module created in collaboration with <a href='https://carleton.ca/cognitivescience/people/davies-jim/' target='_blank'>Dr. Jim Davies</a> for a course on Cognitive Science. It uses a pneumonic approach to help students learn about the names and functions of brain parts.",
+    description: "BrainVR is an immersive interactive educational module created in collaboration with <a class='link-underline' href='https://carleton.ca/cognitivescience/people/davies-jim/' target='_blank'>Dr. Jim Davies</a> for a course on Cognitive Science. It uses a pneumonic approach to help students learn about the names and functions of brain parts.",
     link: 'https://uni-vr-sity.ca/Memory-Palace',
   }
 
   featuredCircles[1] = {
     photo: '/worlds/Gathering-Place/profile.jpg',
     name: 'Gathering Place',
-    description: "Indigenous Gathering Place is an ongoing project in collaboration with Indigenous Culture and Media Innovations (<a href='https://icmi.ca/' target='_blank'>ICMI</a>) to develop a place for Indigenous communities and their allies to meet, exhibit art and culture artefact, and educate.",
+    description: "Indigenous Gathering Place is an ongoing project in collaboration with Indigenous Culture and Media Innovations (<a class='link-underline' href='https://icmi.ca/' target='_blank'>ICMI</a>) to develop a place for Indigenous communities and their allies to meet, exhibit art and culture artefact, and educate.",
     link: 'https://uni-vr-sity.ca/Gathering-Place',
   }
 
