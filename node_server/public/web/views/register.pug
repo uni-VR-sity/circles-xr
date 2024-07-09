@@ -1,10 +1,11 @@
 html
     head
 
-        title Register for CIRCLES
+        title Register for uni-VR-sity
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
         block stylesheets
+            link(rel='icon' href='/web/images/logos/uni-VR-sity-logo-with-background.png' type='image/x-icon')
             link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
             link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
 
@@ -31,12 +32,10 @@ html
                             img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
 
                     #introduction 
-                        p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. [Work-In-Progress].
-
-                    #register-form 
-
                         p Create an account to begin exploring! Or 
                             a.link-icon(href="/guest-login") continue as guest
+
+                    #register-form 
 
                         form(action='/register-user' method='post')
 
