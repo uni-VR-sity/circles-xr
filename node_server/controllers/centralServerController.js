@@ -583,6 +583,15 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
     }
   }
 
+  // If component is a glft-model or src and does not contain a url (ex. does not contain "http://"), add asset library path
+  if (componentName === 'gltf-model' || componentName === 'src')
+  {
+    if (!component.includes('http://'))
+    {
+      component = component.slice(0, 4) + 'asset-library/' + component.slice(4);
+    }
+  }
+
   return component;
 }
 
