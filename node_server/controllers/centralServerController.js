@@ -549,7 +549,6 @@ const updatePrototypeJSON = function(filePath, edits)
 const addComponentValue = function(componentName, componentInfo, prototypeObject)
 {
   var component = '';
-  var assets = [];
 
   // If value is a string
   if (componentInfo.value === "string")
@@ -579,26 +578,12 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
       // Checking if attribute exists
       if (componentInfo.attributes.hasOwnProperty(attribute))
       {
-        var componentValue = addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]);
-
-        component += ' ' + attribute + ':' + componentValue.componentHTML + ';';
-        assets = assets.concat(componentValue.assets);
-      }
-
-      // If attribute is a src, adding asset to asset array
-      if (attribute === 'src')
-      {
-        assets.push(prototypeObject[componentName][attribute].split('#')[1]);
+        component += ' ' + attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
       }
     }
   }
 
-  var componentInfo = {
-    componentHTML: component, 
-    assets: assets,
-  }
-
-  return componentInfo;
+  return component;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -607,8 +592,6 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
 const createPrototypeElement = function(object, allComponents)
 {
   var element = '<a-entity';
-  var models = [];
-  var assets = [];
 
   // Looping through all components in object
   for (var component in object)
@@ -619,10 +602,7 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component before __ exists
       if (allComponents.hasOwnProperty(component.split('__')[0]))
       {
-        var componentValue = addComponentValue(component, allComponents[component.split('__')[0]], object);
-
-        element += ' ' + component + '="' + componentValue.componentHTML + '"';
-        assets = assets.concat(componentValue.assets);
+        element += ' ' + component + '="' + addComponentValue(component, allComponents[component.split('__')[0]], object) + '"';
       }
     }
     else
@@ -630,17 +610,8 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component exists
       if (allComponents.hasOwnProperty(component))
       {
-        var componentValue = addComponentValue(component, allComponents[component], object);
-
-        element += ' ' + component + '="' + componentValue.componentHTML + '"';
-        assets = assets.concat(componentValue.assets);
+        element += ' ' + component + '="' + addComponentValue(component, allComponents[component], object) + '"';
       }
-    }
-
-    // If component is a GLTF model, adding model to model array
-    if (component === 'gltf-model')
-    {
-      models.push(object[component].split('#')[1]);
     }
   }
 
@@ -653,24 +624,14 @@ const createPrototypeElement = function(object, allComponents)
     {
       for (const childObject of object.children)
       {
-        var childElementInfo = createPrototypeElement(childObject, allComponents);
-
-        element += childElementInfo.elementHTML;
-        models = models.concat(childElementInfo.models);
-        assets = assets.concat(childElementInfo.assets);
+        element += createPrototypeElement(childObject, allComponents);
       }
     }
   }
 
   element += '</a-entity>\n';
-
-  var elementInfo = {
-    elementHTML: element, 
-    models: models,
-    assets: assets,
-  }
   
-  return elementInfo;
+  return element;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -679,8 +640,6 @@ const createPrototypeElement = function(object, allComponents)
 const parsePrototype = function(prototypeObject)
 {
   var sceneElements = '';
-  var sceneModels = [];
-  var sceneAssets = [];
 
   // Reading component file
   var componentsJSON;
@@ -701,28 +660,10 @@ const parsePrototype = function(prototypeObject)
   // Creating an a-entity element for each scene element
   for (const object of prototypeObject.sceneObjects)
   {
-    var elementInfo = createPrototypeElement(object, allComponents);
-
-    sceneElements += elementInfo.elementHTML;
-    sceneModels = sceneModels.concat(elementInfo.models);
-    sceneAssets = sceneAssets.concat(elementInfo.assets);
+    sceneElements += createPrototypeElement(object, allComponents);
   }
 
-  // Removing duplicate models
-  sceneModels = [...new Set(sceneModels)];
-
-  // Removing duplicate assets
-  sceneAssets = [...new Set(sceneAssets)];
-
-  console.log(sceneAssets);
-
-  var sceneInfo = {
-    sceneElements: sceneElements,
-    sceneModels: sceneModels,
-    sceneAssets: sceneAssets
-  }
-
-  return sceneInfo;
+  return sceneElements;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -757,9 +698,9 @@ const gatherSceneElements = function(prototypeObject)
   }
 
   // Parsing prototype object for prototype elements and used scene models
-  var prototypeSceneInfo = parsePrototype(prototypeObject);
+  var prototypeSceneElements = parsePrototype(prototypeObject);
 
-  if (!prototypeSceneInfo)
+  if (!prototypeSceneElements)
   {
     return null;
   }
@@ -768,19 +709,8 @@ const gatherSceneElements = function(prototypeObject)
   var sceneElements = '';
 
   sceneElements += templateAssets;
-
-  for (var model of prototypeSceneInfo.sceneModels)
-  {
-    sceneElements += '<a-asset-item id="' + model + '" src="/asset-library/' + model + '/scene.gltf" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>\n';
-  }
-
-  for (var asset of prototypeSceneInfo.sceneAssets)
-  {
-    sceneElements += '<img id="' + asset + '" src="/asset-library/' + asset + '.jpg" crossorigin="anonymous"></img>\n';
-  }
-
   sceneElements += templateElements;
-  sceneElements += prototypeSceneInfo.sceneElements;
+  sceneElements += prototypeSceneElements;
 
   return sceneElements;
 }
