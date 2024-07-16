@@ -412,12 +412,17 @@ const createNewPrototype = async (req, res, next) =>
     const destinationFilePath = __dirname + '/../public/prototypes/created';
     const fileName = req.body.prototypeName.replaceAll(' ', '-');
 
-    const startingObject = [{
-      geometry: { primitive: 'box' },
-      material: { color: 'grey' },
-      position: [0, 0, -5],
-      rotation: [0, 45, 0],
-    }];
+    const startingScene = {
+      sceneAttributes : {
+        background: { color : '#ededed' },
+      },
+      sceneObjects : [{
+        geometry: { primitive: 'box' },
+        material: { color: 'grey' },
+        position: [0, 0, -5],
+        rotation: [0, 45, 0],
+      }],
+    };
 
     // Making sure prototype name is unique, sending error message if it already exists
     if (await Prototypes.findOne({name: req.body.prototypeName}))
@@ -444,7 +449,8 @@ const createNewPrototype = async (req, res, next) =>
     // Creating prototype JSON file
     var prototypeJSON = {
       title : req.body.prototypeName,
-      sceneObjects : startingObject,
+      sceneAttributes : startingScene.sceneAttributes,
+      sceneObjects : startingScene.sceneObjects,
     }
 
     try 
@@ -493,7 +499,7 @@ const createNewPrototype = async (req, res, next) =>
     var successResponse = {
       status: 'success',
       prototypeName: req.body.prototypeName,
-      startingString: JSON.stringify(startingObject),
+      startingString: JSON.stringify(startingScene),
       sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
     }
 
@@ -524,10 +530,13 @@ const updatePrototypeJSON = function(filePath, edits)
     console.log(e);
     return null;
   }
-
+  
   // Parsing file to update
   var prototypeObject = JSON.parse(prototypeJSON);
-  prototypeObject.sceneObjects = JSON.parse(edits);
+  var parsedEdits = JSON.parse(edits);
+
+  prototypeObject.sceneAttributes = parsedEdits.sceneAttributes;
+  prototypeObject.sceneObjects = parsedEdits.sceneObjects;
 
   // Saving file updates
   try 
@@ -707,9 +716,14 @@ const gatherSceneElements = function(prototypeObject)
   }
 
   // Parsing prototype object for prototype elements and used scene models
-  var prototypeSceneElements = parsePrototype(prototypeObject);
+  var prototypeSceneElements = '';
+  
+  if (prototypeObject.sceneObjects)
+  {
+    prototypeSceneElements = parsePrototype(prototypeObject);
+  }
 
-  if (!prototypeSceneElements)
+  if (prototypeSceneElements == null)
   {
     return null;
   }
@@ -1029,9 +1043,29 @@ const getPrototypeInfo = async (req, res, next) =>
           return;
         }
 
+        // Putting together editor input string
+        var editorInput = '{';
+
+        if (prototypeObject.sceneAttributes)
+        {
+          editorInput += '"sceneAttributes":' + JSON.stringify(prototypeObject.sceneAttributes);
+
+          if (prototypeObject.sceneObjects)
+          {
+            editorInput += ',';
+          }
+        }
+
+        if (prototypeObject.sceneObjects)
+        {
+          editorInput += '"sceneObjects":' + JSON.stringify(prototypeObject.sceneObjects);
+        }
+
+        editorInput += '}';
+
         var prototypeInfo = {
           status: 'success',
-          editorInput: JSON.stringify(prototypeObject.sceneObjects),
+          editorInput: editorInput,
           sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
         };
 

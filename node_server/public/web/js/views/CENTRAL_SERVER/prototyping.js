@@ -21,7 +21,7 @@ function hideMessages()
 // Displays prototype scene
 function displayPrototypeScene(sceneObjects)
 {
-    var scene = '<a-scene embedded background="color:#ededed" renderer="antialias:true;colorManagement:true;sortObjects:false;foveationLevel:3;highRefreshRate:true;physicallyCorrectLights:true;logarithmicDepthBuffer:false;precision:high;" shadow="autoUpdate:false;type:basic;" vr-mode-ui="enabled:true;" loading-screen="enabled:false;" device-orientation-permission-ui="enabled:true;" circles-platform-scene-shadows>';
+    var scene = '<a-scene embedded renderer="antialias:true;colorManagement:true;sortObjects:false;foveationLevel:3;highRefreshRate:true;physicallyCorrectLights:true;logarithmicDepthBuffer:false;precision:high;" shadow="autoUpdate:false;type:basic;" vr-mode-ui="enabled:true;" loading-screen="enabled:false;" device-orientation-permission-ui="enabled:true;" circles-platform-scene-shadows>';
 
         scene += sceneObjects;
     
