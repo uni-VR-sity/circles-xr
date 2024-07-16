@@ -8,6 +8,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     dropPosition:       { type: "vec3", default:{x:100001.0, y:0.0, z:0.0} },   //where do we want this to end up after it is released
     dropRotation:       { type: "vec3", default:{x:100001.0, y:0.0, z:0.0} },   //where do we want this to orient as after it is released
     dropScale:          { type: "vec3", default:{x:100001.0, y:0.0, z:0.0} },   //what scale after it is released
+    physicsObject:      { type: "boolean", default:false },
     animate:            { type: "boolean", default:true },                     //whether we animate
     animateDurationMS:  { type: "number", default:400 },                        //how long animation is
     enabled:            { type: "boolean", default:true },                      //whethere this works
@@ -20,6 +21,8 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     CONTEXT_AF.playerHolder   = null;
     CONTEXT_AF.origParent     = null;
+
+    CONTEXT_AF.physicsAttributes = null;
 
     if (CONTEXT_AF.el.hasAttribute('circles-interactive-object') === false) {
       CONTEXT_AF.el.setAttribute('circles-interactive-object', {});
@@ -83,6 +86,12 @@ AFRAME.registerComponent('circles-pickup-object', {
     const CONTEXT_AF    = (passedContext) ? passedContext : this;
     const data          = CONTEXT_AF.data;
     const SAME_DIFF     = 0.001;
+
+    if (data.physicsObject)
+    {
+      CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
+      CONTEXT_AF.el.removeAttribute('dynamic-body');
+    }
 
     CONTEXT_AF.playerHolder.object3D.attach(CONTEXT_AF.el.object3D);
 
@@ -152,6 +161,11 @@ AFRAME.registerComponent('circles-pickup-object', {
       else {
         CONTEXT_AF.el.object3D.scale.set(data.dropScale.x, data.dropScale.y, data.dropScale.z);
       }
+    }
+
+    if (data.physicsObject)
+    {
+      CONTEXT_AF.el.setAttribute('dynamic-body', CONTEXT_AF.physicsAttributes);
     }
 
     CONTEXT_AF.pickedUp = false;
