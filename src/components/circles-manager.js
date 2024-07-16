@@ -60,6 +60,7 @@ AFRAME.registerComponent('circles-manager', {
           CONTEXT_AF.artefactRotIndexTarget = ((++CONTEXT_AF.artefactRotIndexTarget) > CONTEXT_AF.artefactRotSteps.length - 1) ? 0 : CONTEXT_AF.artefactRotIndexTarget;
           const targetRot = CONTEXT_AF.artefactRotSteps[CONTEXT_AF.artefactRotIndexTarget];
 
+          CONTEXT_AF.playerHolder.removeAttribute('animation__rotate');
           CONTEXT_AF.playerHolder.setAttribute('animation__rotate', {property:'rotation.y', dur:400, to:targetRot, easing:'easeInOutBack'});
         });
 
