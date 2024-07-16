@@ -37,16 +37,43 @@ AFRAME.registerComponent('circles-pickup-object', {
       };
       CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.READY, readyFunc);
     }
+
+    if (data.animate == true)
+    {
+      CONTEXT_AF.setPickUpAnimations();
+      CONTEXT_AF.setDropAnimations();
+    }
+
     CONTEXT_AF.el.addEventListener('click', CONTEXT_AF.clickFunc);
   },
   update: function(oldData) {
     const CONTEXT_AF = this;
     const data = this.data;
+    const SAME_DIFF = 0.001;
 
     if (Object.keys(data).length === 0) { return; } // No need to update. as nothing here yet
 
     if ( (oldData.enabled !== data.enabled) && (data.enabled !== '') ) {
       CONTEXT_AF.el.setAttribute('circles-interactive-object', {enabled:data.enabled});
+    }
+
+    if (data.animate == true && oldData.animate)
+    {
+      if (oldData.animate == false)
+      {
+        CONTEXT_AF.setPickUpAnimations();
+        CONTEXT_AF.setDropAnimations();
+      }
+
+      if (!CIRCLES.UTILS.isTheSameXYZ(oldData.pickupPosition, data.pickupPosition, SAME_DIFF) || !CIRCLES.UTILS.isTheSameXYZ(oldData.pickupRotation, data.pickupRotation, SAME_DIFF) || !CIRCLES.UTILS.isTheSameXYZ(oldData.pickupScale, data.pickupScale, SAME_DIFF))
+      {
+        CONTEXT_AF.setPickUpAnimations();
+      }
+
+      if (!CIRCLES.UTILS.isTheSameXYZ(oldData.dropPosition, data.dropPosition, SAME_DIFF) || !CIRCLES.UTILS.isTheSameXYZ(oldData.dropRotation, data.dropRotation, SAME_DIFF) || !CIRCLES.UTILS.isTheSameXYZ(oldData.dropScale, data.dropScale, SAME_DIFF))
+      {
+        CONTEXT_AF.setDropAnimations();
+      }
     }
   },
   remove : function() {
@@ -59,31 +86,14 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     CONTEXT_AF.playerHolder.object3D.attach(CONTEXT_AF.el.object3D);
 
-    const thisPos = {x:CONTEXT_AF.el.object3D.position.x, y:CONTEXT_AF.el.object3D.position.y, z:CONTEXT_AF.el.object3D.position.z};
-    const thisRot = {x:THREE.MathUtils.radToDeg(CONTEXT_AF.el.object3D.rotation.x), y:THREE.MathUtils.radToDeg(CONTEXT_AF.el.object3D.rotation.y), z:THREE.MathUtils.radToDeg(CONTEXT_AF.el.object3D.rotation.z)};
-    const thisSca = {x:CONTEXT_AF.el.object3D.scale.x, y:CONTEXT_AF.el.object3D.scale.y, z:CONTEXT_AF.el.object3D.scale.z};
-
-    const pickupPos  = (data.pickupPosition.x < 100001.0) ? {x:data.pickupPosition.x, y:data.pickupPosition.y, z:data.pickupPosition.z} : thisPos;
-    const pickupRot  = (data.pickupRotation.x < 100001.0) ? {x:data.pickupRotation.x, y:data.pickupRotation.y, z:data.pickupRotation.z} : thisRot;
-    const pickupSca  = (data.pickupScale.x < 100001.0) ? {x:data.pickupScale.x, y:data.pickupScale.y, z:data.pickupScale.z} : thisSca;
-
     //set pickup transforms
     if (data.animate === true) {
-      CONTEXT_AF.el.removeAttribute('animation__cpo_position');
-      CONTEXT_AF.el.removeAttribute('animation__cpo_rotation');
-      CONTEXT_AF.el.removeAttribute('animation__cpo_scale');
-
-      CONTEXT_AF.el.setAttribute('animation__cpo_position', { property:'position', dur:(CIRCLES.UTILS.isTheSameXYZ(pickupPos, thisPos, SAME_DIFF) ? 0.0 : data.animateDurationMS), 
-                                                              isRawProperty:true, to:pickupPos, easing:'easeInOutQuad'});
-      CONTEXT_AF.el.setAttribute('animation__cpo_rotation', { property:'rotation', dur:(CIRCLES.UTILS.isTheSameXYZ(pickupRot, thisRot, SAME_DIFF) ? 0.0 : data.animateDurationMS), 
-                                                              isRawProperty:true, to:pickupRot, easing:'easeInOutQuad'});
-      CONTEXT_AF.el.setAttribute('animation__cpo_scale', {    property:'scale', dur:(CIRCLES.UTILS.isTheSameXYZ(pickupSca, thisSca, SAME_DIFF) ? 0.0 : data.animateDurationMS), 
-                                                              isRawProperty:true, to:pickupSca, easing:'easeInOutQuad'});
+      this.el.emit('cpo_pickup', null, false);
     }
     else {
-      CONTEXT_AF.el.object3D.position.set(pickupPos.x, pickupPos.y, pickupPos.z);
-      CONTEXT_AF.el.object3D.rotation.set(pickupRot.x, pickupRot.y, pickupRot.z);
-      CONTEXT_AF.el.object3D.scale.set(pickupSca.x, pickupSca.y, pickupSca.z);
+      CONTEXT_AF.el.object3D.position.set(data.pickupPosition.x, data.pickupPosition.y, data.pickupPosition.z);
+      CONTEXT_AF.el.object3D.rotation.set(data.pickupRotation.x, data.pickupRotation.y, data.pickupRotation.z);
+      CONTEXT_AF.el.object3D.scale.set(data.pickupScale.x, data.pickupScale.y, data.pickupScale.z);
     }
 
     CONTEXT_AF.pickedUp = true;
@@ -98,7 +108,6 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     //release
     CONTEXT_AF.origParent.object3D.attach(CONTEXT_AF.el.object3D); //using three's "attach" allows us to retain world transforms during pickup/release
-
     
     const releaseEventFunc = function() {
       //send off event for others
@@ -118,8 +127,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     if (data.dropPosition.x < 100001.0)
     {
       if (data.animate === true) {
-        CONTEXT_AF.el.setAttribute('animation__cpo_position', { property:'position', dur:data.animateDurationMS, 
-                                                                isRawProperty:true, to:{x:data.dropPosition.x, y:data.dropPosition.y, z:data.dropPosition.z}, easing:'easeInOutQuad'});
+        this.el.emit('cpo_drop_position', null, false);
       }
       else {
         CONTEXT_AF.el.object3D.position.set(data.dropPosition.x, data.dropPosition.y, data.dropPosition.z);
@@ -129,8 +137,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     if (data.dropRotation.x < 100001.0)
     {
       if (data.animate === true) {
-        CONTEXT_AF.el.setAttribute('animation__cpo_rotation', { property:'rotation', dur:data.animateDurationMS, 
-                                                                isRawProperty:true, to:{x:data.dropRotation.x, y:data.dropRotation.y, z:data.dropRotation.z}, easing:'easeInOutQuad'});
+        this.el.emit('cpo_drop_rotation', null, false);
       }
       else {
         CONTEXT_AF.el.object3D.rotation.set(data.dropRotation.x, data.dropRotation.y, data.dropRotation.z);
@@ -140,8 +147,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     if (data.dropScale.x < 100001.0)
     {
       if (data.animate === true) {
-        CONTEXT_AF.el.setAttribute('animation__cpo_scale', {    property:'scale', dur:data.animateDurationMS,
-                                                                isRawProperty:true, to:{x:data.dropScale.x, y:data.dropScale.y, z:data.dropScale.z}, easing:'easeInOutQuad'});
+        this.el.emit('cpo_drop_scale', null, false);
       }
       else {
         CONTEXT_AF.el.object3D.scale.set(data.dropScale.x, data.dropScale.y, data.dropScale.z);
@@ -161,5 +167,23 @@ AFRAME.registerComponent('circles-pickup-object', {
     else {
       CONTEXT_AF.pickup(true, CONTEXT_AF);
     }
+  },
+  setPickUpAnimations : function()
+  {
+    const CONTEXT_AF = this;
+    const data = this.data;
+
+    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_position', { property:'position', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.pickupPosition.x, y:data.pickupPosition.y, z:data.pickupPosition.z}, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_rotation', { property:'rotation', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.pickupRotation.x, y:data.pickupRotation.y, z:data.pickupRotation.z}, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_scale', { property:'scale', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.pickupScale.x, y:data.pickupScale.y, z:data.pickupScale.z}, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+  },
+  setDropAnimations : function()
+  {
+    const CONTEXT_AF = this;
+    const data = this.data;
+
+    CONTEXT_AF.el.setAttribute('animation__cpo_position', { property:'position', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropPosition.x, y:data.dropPosition.y, z:data.dropPosition.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_position'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_rotation', { property:'rotation', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropRotation.x, y:data.dropRotation.y, z:data.dropRotation.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_rotation'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_scale', { property:'scale', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropScale.x, y:data.dropScale.y, z:data.dropScale.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_scale'});
   }
 });
