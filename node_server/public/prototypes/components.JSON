@@ -411,6 +411,105 @@
             }
         }
     },
+    "dynamic-body" : {
+        "value" : "object",
+        "attributes" : {
+            "shape" : {
+                "value" : "string"
+            },
+            "mass" : {
+                "value" : "string"
+            },
+            "linearDamping" : {
+                "value" : "string"
+            },
+            "angularDamping" : {
+                "value" : "string"
+            },
+            "sphereRadius" : {
+                "value" : "string"
+            },
+            "cylinderAxis" : {
+                "value" : "string"
+            }
+        }
+    },
+    "static-body" : {
+        "value" : "object",
+        "attributes" : {
+            "shape" : {
+                "value" : "string"
+            },
+            "sphereRadius" : {
+                "value" : "string"
+            },
+            "cylinderAxis" : {
+                "value" : "string"
+            }
+        }
+    },
+    "constraint" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
+            },
+            "maxForce" : {
+                "value" : "string"
+            },
+            "collideConnected" : {
+                "value" : "string"
+            },
+            "wakeUpBodies" : {
+                "value" : "string"
+            },
+            "distance" : {
+                "value" : "string"
+            },
+            "pivot" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "targetPivot" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "axis" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "targetAxis" : {
+                "value" : "array",
+                "size" : "3"
+            }
+        }
+    },
+    "spring" : {
+        "value" : "object",
+        "attributes" : {
+            "target" : {
+                "value" : "string"
+            },
+            "restLength" : {
+                "value" : "string"
+            },
+            "stiffness" : {
+                "value" : "string"
+            },
+            "damping" : {
+                "value" : "string"
+            },
+            "localAnchorA" : {
+                "value" : "string"
+            },
+            "localAnchorB" : {
+                "value" : "string"
+            }
+        }
+    },
     "gltf-model" : {
         "value" : "string"
     },
@@ -573,6 +672,9 @@
             "dropScale" : {
                 "value" : "array",
                 "size" : "3"
+            },
+            "physicsObject" : {
+                "value" : "string"
             },
             "animate" : {
                 "value" : "string"
