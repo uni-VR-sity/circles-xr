@@ -19,13 +19,17 @@ function hideMessages()
 // Prototyping -------------------------------------------------------------------------------------------------------------------------------------
 
 // Displays prototype scene
-function displayPrototypeScene(sceneObjects)
+function displayPrototypeScene(sceneAttributes, sceneElements)
 {
-    var scene = '<a-scene embedded renderer="antialias:true;colorManagement:true;sortObjects:false;foveationLevel:3;highRefreshRate:true;physicallyCorrectLights:true;logarithmicDepthBuffer:false;precision:high;" shadow="autoUpdate:false;type:basic;" vr-mode-ui="enabled:true;" loading-screen="enabled:false;" device-orientation-permission-ui="enabled:true;" circles-platform-scene-shadows>';
+    var scene = '<a-scene embedded renderer="antialias:true;colorManagement:true;sortObjects:false;foveationLevel:3;highRefreshRate:true;physicallyCorrectLights:true;logarithmicDepthBuffer:false;precision:high;" shadow="autoUpdate:false;type:basic;" vr-mode-ui="enabled:true;" loading-screen="enabled:false;" device-orientation-permission-ui="enabled:true;" circles-platform-scene-shadows ';
+    scene += sceneAttributes;
+    scene += '>';
 
-        scene += sceneObjects;
+        scene += sceneElements;
     
     scene += '</a-scene>';
+
+    console.log(scene);
     
     document.getElementById('prototype-scene').innerHTML = scene;
 }
@@ -33,7 +37,7 @@ function displayPrototypeScene(sceneObjects)
 // ------------------------------------------------------------------------------------------
 
 // Displaying prototype editor
-function displayPrototypeEditor(editorInput, sceneElements)
+function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements)
 {
     // Updating title
     document.getElementById('prototype-title').innerHTML = currentPrototype;
@@ -53,7 +57,7 @@ function displayPrototypeEditor(editorInput, sceneElements)
     }
 
     // Displaying prototype scene
-    displayPrototypeScene(sceneElements);
+    displayPrototypeScene(sceneAttributes, sceneElements);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -92,7 +96,7 @@ function createPrototype(event)
             currentPrototype = response.prototypeName;
 
             // Displaying prototype editor
-            displayPrototypeEditor(response.startingString, response.sceneElements);
+            displayPrototypeEditor(response.startingString, response.sceneAttributes, response.sceneElements);
         }
         else 
         {
@@ -143,7 +147,7 @@ function updatePrototype(event)
             if (response.status == 'success')
             {
                 // Updating prototype scene
-                displayPrototypeScene(response.sceneElements);
+                displayPrototypeScene(response.sceneAttributes, response.sceneElements);
             }
             else
             {
@@ -262,7 +266,7 @@ function openPrototype(prototype)
             currentPrototype = prototype;
 
             // Displaying prototype editor
-            displayPrototypeEditor(response.editorInput, response.sceneElements);
+            displayPrototypeEditor(response.editorInput, response.sceneAttributes, response.sceneElements);
 
             // Closing create prototype overlay
             closeOverlay("open-prototype-overlay");

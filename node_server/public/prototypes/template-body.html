@@ -42,26 +42,4 @@
             <input id="button_microphone" type="submit" value="">
         </div>
 
-        <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-        <a-scene renderer="antialias: true;
-                           colorManagement: true;
-                           sortObjects: false;
-                           foveationLevel: 3;
-                           highRefreshRate: true;
-                           physicallyCorrectLights: true;
-                           logarithmicDepthBuffer: false;
-                           precision: high;"
-                 networked-scene="room: __ROOM_NAME__;
-                                  connectOnLoad: true;
-                                  onConnect: onConnect;
-                                  audio: false;
-                                  debug: false;
-                                  adapter: socketio;
-                                  serverURL: /"
-                 shadow="autoUpdate:false; type:basic;"
-                 vr-mode-ui="enabled:true;"
-                 loading-screen="enabled:false;"
-                 device-orientation-permission-ui="enabled:true;"
-                 circles-enter-ui
-                 circles-platform-scene-shadows>
-
+        

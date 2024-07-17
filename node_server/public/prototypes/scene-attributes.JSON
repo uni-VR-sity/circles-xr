@@ -1,0 +1,13 @@
+{
+    "background" : {
+        "value" : "object",
+        "attributes" : {
+            "color" : {
+                "value" : "string"
+            },
+            "transparent" : {
+                "value" : "string"
+            }
+        }
+    }
+}

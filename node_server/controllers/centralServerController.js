@@ -464,7 +464,7 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype HTML file
-    var sceneElements = updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON);
+    var sceneInformation = updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON);
 
     // Storing prototype in the database
     var prototypeInfo = {
@@ -500,7 +500,8 @@ const createNewPrototype = async (req, res, next) =>
       status: 'success',
       prototypeName: req.body.prototypeName,
       startingString: JSON.stringify(startingScene),
-      sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
+      sceneAttributes: sceneInformation.sceneAttributes,
+      sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneInformation.sceneElements),
     }
 
     res.json(successResponse);
@@ -587,7 +588,7 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
       // Checking if attribute exists
       if (componentInfo.attributes.hasOwnProperty(attribute))
       {
-        component += ' ' + attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
+        component += attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
       }
     }
   }
@@ -597,7 +598,7 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
   {
     if (!component.includes('http://'))
     {
-      component = component.slice(0, 4) + 'asset-library/' + component.slice(4);
+      component = component.slice(0, 4) + env.DOMAIN + '/asset-library/' + component.slice(4);
     }
   }
 
@@ -606,7 +607,7 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
 
 // ------------------------------------------------------------------------------------------
 
-// Creating prototype scene element
+// Creating prototype element
 const createPrototypeElement = function(object, allComponents)
 {
   var element = '<a-entity';
@@ -655,16 +656,16 @@ const createPrototypeElement = function(object, allComponents)
 // ------------------------------------------------------------------------------------------
 
 // Returning scene elements from prototype object
-const parsePrototype = function(prototypeObject)
+const parseSceneElements = function(prototypeObject)
 {
   var sceneElements = '';
 
-  // Reading component file
+  // Reading element components file
   var componentsJSON;
 
   try
   {
-    componentsJSON = fs.readFileSync(__dirname + '/../public/prototypes/components.JSON', { encoding: 'utf8', flag: 'r' });
+    componentsJSON = fs.readFileSync(__dirname + '/../public/prototypes/element-components.JSON', { encoding: 'utf8', flag: 'r' });
   }
   catch(e)
   {
@@ -715,12 +716,12 @@ const gatherSceneElements = function(prototypeObject)
     return null;
   }
 
-  // Parsing prototype object for prototype elements and used scene models
+  // Parsing prototype scene elements
   var prototypeSceneElements = '';
   
   if (prototypeObject.sceneObjects)
   {
-    prototypeSceneElements = parsePrototype(prototypeObject);
+    prototypeSceneElements = parseSceneElements(prototypeObject);
   }
 
   if (prototypeSceneElements == null)
@@ -740,10 +741,97 @@ const gatherSceneElements = function(prototypeObject)
 
 // ------------------------------------------------------------------------------------------
 
+// Returning scene attributes from prototype object
+const parseSceneAttributes = function(prototypeObject)
+{
+  var attributes = '';
+
+  if (prototypeObject.sceneAttributes)
+  {
+    // Reading scene attributes file
+    var attributesJSON;
+
+    try
+    {
+      attributesJSON = fs.readFileSync(__dirname + '/../public/prototypes/scene-attributes.JSON', { encoding: 'utf8', flag: 'r' });
+    }
+    catch(e)
+    {
+      console.log(e);
+      return null;
+    }
+
+    var allAttributes = JSON.parse(attributesJSON);
+
+    // Looping through scene attributes
+    for (const attribute in prototypeObject.sceneAttributes)
+    {
+      // Checking if attribute exists
+      if (allAttributes.hasOwnProperty(attribute))
+      {
+        attributes += attribute + '="' + addComponentValue(attribute, allAttributes[attribute], prototypeObject.sceneAttributes) + '"\n';
+      }
+    }
+  }
+
+  return attributes;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Putting scene tag together with attributes from template and prototype
+const gatherSceneTag = function(prototypeObject)
+{
+  // Gettting scene tag and its attributes
+  var sceneStart; 
+
+  try
+  {
+    sceneStart = fs.readFileSync(__dirname + '/../public/prototypes/template-scene-starter.html', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing prototype scene attributes
+  var prototypeSceneAttributes = parseSceneAttributes(prototypeObject);
+
+  if (prototypeSceneAttributes == null)
+  {
+    return null;
+  }
+
+  // Putting scene tag together
+  var sceneTag = '';
+
+  sceneTag += sceneStart;
+  sceneTag += prototypeSceneAttributes;
+  sceneTag += '>';
+
+  var sceneTagInformation = {
+    sceneTag: sceneTag,
+    prototypeSceneAttributes: prototypeSceneAttributes,
+  }
+
+  return sceneTagInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Updating prototype HTML file
 // Returns HTML scene object
 const updatePrototypeHTML = function(filePath, prototypeObject)
 {
+  // Getting scene tag
+  var sceneTagInformation = gatherSceneTag(prototypeObject);
+
+  if (!sceneTagInformation)
+  {
+    return null;
+  }
+
   // Getting scene elements
   var sceneElements = gatherSceneElements(prototypeObject);
 
@@ -781,6 +869,10 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   // Replacing __PROTOTYPE_TITLE__ with prototype title
   updatedHTML = updatedHTML.replaceAll(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
 
+  // Inserting scene tag and attributes
+  updatedHTML += sceneTagInformation.sceneTag;
+  updatedHTML += '\n';
+
   // Inserting scene elements
   updatedHTML += sceneElements;
   updatedHTML += '\n';
@@ -810,7 +902,12 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
     return null;
   }
 
-  return sceneElements;
+  var sceneInformation = {
+    sceneAttributes: sceneTagInformation.prototypeSceneAttributes,
+    sceneElements: sceneElements,
+  }
+  
+  return sceneInformation;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -839,13 +936,14 @@ const updatePrototype = async (req, res, next) =>
       if (updatedJSON)
       {
         // Updating HTML file
-        var sceneElements = updatePrototypeHTML(HTMLPath, updatedJSON);
+        var sceneInformation = updatePrototypeHTML(HTMLPath, updatedJSON);
 
-        if (sceneElements)
+        if (sceneInformation)
         {
           var successResponse = {
             status: 'success',
-            sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
+            sceneAttributes: sceneInformation.sceneAttributes,
+            sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneInformation.sceneElements),
           }
       
           res.json(successResponse);
@@ -1034,6 +1132,15 @@ const getPrototypeInfo = async (req, res, next) =>
 
         var prototypeObject = JSON.parse(prototypeJSON);
 
+        // Getting scene attributes (from prototype)
+        var sceneAttributes = parseSceneAttributes(prototypeObject);
+
+        if (sceneAttributes == null)
+        {
+          res.json(errorResponse);
+          return;
+        }
+
         // Getting scene elements (starting elements and from prototype)
         var sceneElements = gatherSceneElements(prototypeObject);
 
@@ -1066,6 +1173,7 @@ const getPrototypeInfo = async (req, res, next) =>
         var prototypeInfo = {
           status: 'success',
           editorInput: editorInput,
+          sceneAttributes: sceneAttributes,
           sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
         };
 
