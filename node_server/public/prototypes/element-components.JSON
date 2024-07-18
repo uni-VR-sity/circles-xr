@@ -752,6 +752,15 @@
             },
             "pedastal_visible" : {
                 "value" : "string"
+            },
+            "click_on_event" : {
+                "value" : "string"
+            },
+            "click_off_event" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
             }
         }
     },

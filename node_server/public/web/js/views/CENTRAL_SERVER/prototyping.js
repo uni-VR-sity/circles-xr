@@ -28,8 +28,6 @@ function displayPrototypeScene(sceneAttributes, sceneElements)
         scene += sceneElements;
     
     scene += '</a-scene>';
-
-    console.log(scene);
     
     document.getElementById('prototype-scene').innerHTML = scene;
 }
