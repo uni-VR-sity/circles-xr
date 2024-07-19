@@ -1283,6 +1283,9 @@ const servePrototypeCircle = async (req, res, next) =>
   const prototypeName = req.params.prototype_name;
   const pathStr = path.resolve(__dirname + '/../public/prototypes/created/' + prototypeName + '/' + prototypeName + '.html');
 
+  console.log(prototypeName);
+  console.log(pathStr);
+
   // Ensure the world file exists
   fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => 
   {
