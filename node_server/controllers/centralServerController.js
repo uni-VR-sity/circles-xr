@@ -1291,6 +1291,7 @@ const servePrototypeCircle = async (req, res, next) =>
   {
     if (error) 
     {
+      console.log('not found');
       return res.redirect('/explore');
     }
     else 
