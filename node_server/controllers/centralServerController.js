@@ -410,7 +410,7 @@ const createNewPrototype = async (req, res, next) =>
   if (req.body.prototypeName) 
   {
     const destinationFilePath = __dirname + '/../public/prototypes/created';
-    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
 
     const startingScene = {
       sceneAttributes : {
@@ -425,7 +425,7 @@ const createNewPrototype = async (req, res, next) =>
     };
 
     // Making sure prototype name is unique, sending error message if it already exists
-    if (await Prototypes.findOne({name: req.body.prototypeName}))
+    if (await Prototypes.findOne({fileName: fileName}))
     {
       errorResponse.error = 'Prototype name is unavailable';
   
@@ -922,7 +922,7 @@ const updatePrototype = async (req, res, next) =>
 
   if (req.body.prototypeName && req.body.prototypeEdits) 
   {
-    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
     const prototypePath = __dirname + '/../public/prototypes/created/' + fileName;
     const JSONPath = prototypePath + '/' + fileName + '.json';
     const HTMLPath = prototypePath + '/' + fileName + '.html';
@@ -998,7 +998,7 @@ const deletePrototype = async (req, res, next) =>
 
   if (req.body.prototypeName) 
   {
-    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
     const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
 
     // Getting prototype from database
@@ -1007,7 +1007,7 @@ const deletePrototype = async (req, res, next) =>
 
     try
     {
-      prototype = await Prototypes.findOne({name: req.body.prototypeName}).sort().exec();
+      prototype = await Prototypes.findOne({fileName: fileName}).sort().exec();
       prototypeOwner = await User.findOne(prototype.user);
     }
     catch(e)
@@ -1039,7 +1039,7 @@ const deletePrototype = async (req, res, next) =>
         // Deleting prototype from database
         try
         {
-          await Prototypes.deleteOne({name: req.body.prototypeName});
+          await Prototypes.deleteOne({fileName: fileName});
         }
         catch(e)
         {
@@ -1089,7 +1089,7 @@ const getPrototypeInfo = async (req, res, next) =>
 
   if (req.body.prototypeName) 
   {
-    const fileName = req.body.prototypeName.replaceAll(' ', '-');
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
     const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
     const JSONPath = prototypeFolderPath + '/' + fileName + '.json';
 
@@ -1099,7 +1099,7 @@ const getPrototypeInfo = async (req, res, next) =>
 
     try
     {
-      prototype = await Prototypes.findOne({name: req.body.prototypeName}).sort().exec();
+      prototype = await Prototypes.findOne({fileName: fileName}).sort().exec();
       prototypeOwner = await User.findOne(prototype.user);
     }
     catch(e)
@@ -1283,15 +1283,11 @@ const servePrototypeCircle = async (req, res, next) =>
   const prototypeName = req.params.prototype_name;
   const pathStr = path.resolve(__dirname + '/../public/prototypes/created/' + prototypeName + '/' + prototypeName + '.html');
 
-  console.log(prototypeName);
-  console.log(pathStr);
-
   // Ensure the world file exists
   fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => 
   {
     if (error) 
     {
-      console.log('not found');
       return res.redirect('/explore');
     }
     else 

@@ -71,7 +71,7 @@ const checkPrototypes = async function()
         try
         {
           console.log('deleting ' + prototype.fileName);
-          await Prototypes.deleteOne({name: prototype.fileName});
+          await Prototypes.deleteOne({fileName: prototype.fileName});
         }
         catch (e) 
         {
