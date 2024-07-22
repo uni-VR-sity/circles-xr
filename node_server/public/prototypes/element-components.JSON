@@ -411,6 +411,77 @@
             }
         }
     },
+    "text" : {
+        "value" : "object",
+        "attributes" : {
+            "align" : {
+                "value" : "string"
+            },
+            "alphaTest" : {
+                "value" : "string"
+            },
+            "anchor" : {
+                "value" : "string"
+            },
+            "baseline" : {
+                "value" : "string"
+            },
+            "color" : {
+                "value" : "string"
+            },
+            "font" : {
+                "value" : "string"
+            },
+            "fontImage" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "letterSpacing" : {
+                "value" : "string"
+            },
+            "lineHeight" : {
+                "value" : "string"
+            },
+            "opacity" : {
+                "value" : "string"
+            },
+            "shader" : {
+                "value" : "string"
+            },
+            "side" : {
+                "value" : "string"
+            },
+            "tabSize" : {
+                "value" : "string"
+            },
+            "transparent" : {
+                "value" : "string"
+            },
+            "value" : {
+                "value" : "string"
+            },
+            "whiteSpace" : {
+                "value" : "string"
+            },
+            "width" : {
+                "value" : "string"
+            },
+            "wrapCount" : {
+                "value" : "string"
+            },
+            "wrapPixels" : {
+                "value" : "string"
+            },
+            "xOffset" : {
+                "value" : "string"
+            },
+            "zOffset" : {
+                "value" : "string"
+            }
+        }
+    },
     "dynamic-body" : {
         "value" : "object",
         "attributes" : {
