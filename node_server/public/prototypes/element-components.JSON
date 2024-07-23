@@ -519,6 +519,41 @@
             }
         }
     },
+    "shape" : {
+        "value" : "object",
+        "attributes" : {
+            "shape" : {
+                "value" : "string"
+            },
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "orientation" : {
+                "value" : "array",
+                "size" : "4"
+            },
+            "radius" : {
+                "value" : "string"
+            },
+            "halfExtents" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "radiusTop" : {
+                "value" : "string"
+            },
+            "radiusBottom" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "numSegments" : {
+                "value" : "string"
+            }
+        }
+    },
     "constraint" : {
         "value" : "object",
         "attributes" : {
