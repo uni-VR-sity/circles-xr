@@ -23,7 +23,7 @@ block content
 
     // User row -----------------------------------------------------------------------------
     mixin userRow(user)
-        .row 
+        .row(class=user.username)
             p.username= user.username
 
             p.user-type= user.usertype
@@ -35,6 +35,10 @@ block content
                             user.usertype == 'Student', 
                             user.usertype == 'Tester', 
                             user.usertype == 'Participant')
+
+            .icon-container 
+                - var deleteFunction = 'deleteUser(\'' + user.username + '\')';
+                i(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp(event, "User", "' + user.username + '", "' + deleteFunction + '")')
 
             hr
 
@@ -57,8 +61,13 @@ block content
 
                         for message of updateUsertypeSuccess
                             p.success-message= message
+
+                        p#deleting-user-error.error-message
                     
                     input(type='submit' value='Update Users')
+
+                p.no-users-message No #{usertype} users
+
         else 
             p.manage-user-form.no-users-message(id=formId) No #{usertype} users
 

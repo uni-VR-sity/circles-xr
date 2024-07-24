@@ -59,6 +59,27 @@ const getUserInfo = function(req)
 
 // ------------------------------------------------------------------------------------------
 
+// Checking that user name is valid
+const validUsername = function(username)
+{
+  if (username.includes(' '))
+  {
+    return false;
+  }
+  else if (username.includes("'"))
+  {
+    return false;
+  }
+  else if (username.includes('"'))
+  {
+    return false;
+  }
+
+  return true;
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Creating jwt for magic link
 const createJWT_MagicLink = function(expiryTimeMin, circles)
 {
@@ -202,6 +223,14 @@ const registerUser = (req, res, next) =>
     }
     else
     {
+
+      // Checking that username does not contain any invalid characters
+      if (!validUsername(req.body.username))
+      {
+        req.session.errorMessage = 'Username contains invalid character (space, \', ")';
+        return res.redirect('/register');
+      }
+
       // Compiling all data for the new user
       const userData = {
         username: req.body.username,                                    // User entered username
@@ -1608,6 +1637,13 @@ const createUser = async (req, res, next) =>
 {
   if (req.body.username && req.body.usertype)
   {
+    // Checking that username does not contain any invalid characters
+    if (!validUsername(req.body.username))
+    {
+      req.session.singleCreateError = 'Username contains invalid character (space, \', ")';
+      return res.redirect('/manage-users');
+    }
+
     // Compiling all data for the new user
     const userData = {
       username: req.body.username,                    // User entered username
@@ -1707,51 +1743,59 @@ const bulkCreateUsers = async (req, res, next) =>
               password: env.DEFAULT_PASSWORD,                 // Default password
               displayName: entryInfo[0],                      // By default, display name is the same as the username
             }
-            
-            // Ensuring usertype is valid
-            var validUsertypes = [];
 
-            for (const key in CIRCLES.USER_TYPE)
+            // Checking that username does not contain any invalid characters
+            if (validUsername(userInfo.username))
             {
-              if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.MAGIC_GUEST)
+              // Ensuring usertype is valid
+              var validUsertypes = [];
+
+              for (const key in CIRCLES.USER_TYPE)
               {
-                validUsertypes.push(CIRCLES.USER_TYPE[key]);
-              }
-            }
-
-            if (validUsertypes.includes(userInfo.usertype))
-            {
-              try 
-              {
-                var user = null;
-
-                user = await User.create(userInfo);
-
-                if (user)
+                if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.MAGIC_GUEST)
                 {
-                  numCreated += 1;
-                }
-              } 
-              catch(err) 
-              {
-                const errorMessage = err.message;
-
-                // Usernames must be unique
-                // If there was an error because the username already exists in the database, output an error message to the user
-                if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
-                {
-                  req.session.bulkCreateError.push('The following entry contains an unavailable username: ' + entry);
-                }
-                else
-                {
-                  req.session.bulkCreateError.push('An unexpected error occured when creating the following user: ' + entry);
+                  validUsertypes.push(CIRCLES.USER_TYPE[key]);
                 }
               }
-              
+
+              if (validUsertypes.includes(userInfo.usertype))
+              {
+                try 
+                {
+                  var user = null;
+
+                  user = await User.create(userInfo);
+
+                  if (user)
+                  {
+                    numCreated += 1;
+                  }
+                } 
+                catch(err) 
+                {
+                  const errorMessage = err.message;
+
+                  // Usernames must be unique
+                  // If there was an error because the username already exists in the database, output an error message to the user
+                  if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+                  {
+                    req.session.bulkCreateError.push('The following entry contains an unavailable username: ' + entry);
+                  }
+                  else
+                  {
+                    req.session.bulkCreateError.push('An unexpected error occured when creating the following user: ' + entry);
+                  }
+                }
+                
+              }
+              else
+              {
+                req.session.bulkCreateError.push('The following entry has an invalid usertype: ' + entry);
+              }
             }
             else
             {
-              req.session.bulkCreateError.push('The following entry has an invalid usertype: ' + entry);
+              req.session.bulkCreateError.push('The following entry contains an username with an invalid character (space, \', ") : ' + entry);
             }
           }
           else
@@ -1767,7 +1811,7 @@ const bulkCreateUsers = async (req, res, next) =>
           }
         }
 
-        req.session.bulkCreateSuccess.push(numCreated + ' users were successfully created');
+        req.session.bulkCreateSuccess.push(numCreated + ' user(s) were successfully created');
         return res.redirect('/manage-users');
       });
     }
@@ -1825,6 +1869,58 @@ const updateUsertype = async (req, res, next) =>
   }
 
   return res.redirect('/manage-users');
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleting specified user
+const deleteUser = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.username) 
+  {
+    // Checking if currect user is an admin user
+    if (CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(req.user.usertype))
+    {
+      // Deleting user from database
+      try
+      {
+        await User.deleteOne({username: req.body.username});
+      }
+      catch(e)
+      {
+        console.log(e);
+    
+        errorResponse.error = req.body.username + 'could not be deleted, please try again';
+
+        res.json(errorResponse);
+        return;
+      }
+
+      var response = {
+        status: 'success',
+      }
+
+      res.json(response);
+      return;
+    }
+    else
+    {
+      errorResponse.error = 'Unauthorized access';
+    
+      res.json(errorResponse);
+      return;
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
 }
 
 // Your Magic Links Page ---------------------------------------------------------------------------------------------------------------------------
@@ -2374,6 +2470,7 @@ module.exports = {
   createUser,
   bulkCreateUsers,
   updateUsertype,
+  deleteUser,
   // Your Magic Links Page
   serveYourMagicLinks,
   renewMagicLink,

@@ -149,6 +149,7 @@ router.get('/manage-users', authenticated, viewController.serveManageUsers);
 router.post('/create-user', authenticated, viewController.createUser);
 router.post('/bulk-create-users', authenticated, viewController.bulkCreateUsers);
 router.post('/update-usertype', authenticated, viewController.updateUsertype);
+router.post('/delete-user', authenticated, viewController.deleteUser);
 
 router.get('/sample-upload-file', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
