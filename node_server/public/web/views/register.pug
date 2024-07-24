@@ -32,12 +32,15 @@ html
                             img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
 
                     #introduction 
+
+                        p.error-message(style='display:flex;justify-content:center;margin:25px 0') User registration is temporarily unavailable
+                        
                         p Create an account to begin exploring! Or 
                             a.link-icon(href="/guest-login") continue as guest
 
                     #register-form 
 
-                        form(action='/register-user' method='post')
+                        //form(action='/register-user' method='post')
 
                             if message
                                 p.error-message= message
@@ -57,5 +60,5 @@ html
                             .form-field.last-field.full-width-submit
                                 input(type='submit' value='Register')
 
-                        p.login-message Have an account? 
+                        p.login-message() Have an account? 
                             a.link-icon(href='/login') Log in here

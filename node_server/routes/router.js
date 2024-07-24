@@ -105,12 +105,14 @@ router.get('/logout', authenticated, (req, res, next) => {
 
 router.get('/register', notAuthenticated, viewController.serveRegister);
 
+/*
 router.post('/register-user', viewController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/register'), {
     message: "User registered successfully but login failed, please login again"
   });
 });
+*/
 
 // Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------
 
