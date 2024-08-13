@@ -11,6 +11,7 @@ const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
+const { createMailTransporter } = require('../../src/core/circles_mailTransporter');
 
 const User = require('../models/user');
 const Guest = require('../models/guest');
@@ -290,6 +291,35 @@ const registerUser = (req, res, next) =>
     req.session.errorMessage = 'Something went wrong, please try again';
     return res.redirect('/register');
   }
+}
+
+// ------------------------------------------------------------------------------------------
+
+const sendTestEmail = (req, res, next) => 
+{
+  console.log('sending test email');
+
+  const transporter = createMailTransporter();
+
+  const mailOptions = {
+    from: '"uni-VR-sity" <' + env.EMAIL + '>',
+    to: "",
+    subject: "Tester Email",
+    html: "<b>Hello world?</b>",
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error)
+    {
+      console.log(error);
+    }
+    else
+    {
+      console.log("test email sent");
+    }
+  });
+  
+  return res.redirect('/');
 }
 
 // Explore Page ------------------------------------------------------------------------------------------------------------------------------------
@@ -2446,6 +2476,7 @@ module.exports = {
   // Register Page
   serveRegister,
   registerUser,
+  sendTestEmail,
   // Explore Page
   serveExplore,
   updateSessionName,

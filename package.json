@@ -25,6 +25,7 @@
     "jstransformer-markdown-it": "^3.0.0",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.2",
+    "nodemailer": "^6.9.14",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
