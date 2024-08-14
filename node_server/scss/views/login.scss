@@ -60,7 +60,10 @@
 
                 .error-message {
                     @include center-flex;
+                    margin-top: -8px;
                     padding-bottom: $MEDIUM_MARGIN;
+                    max-width: 350px;
+                    text-align: left;
                 }
 
                 .form-field {

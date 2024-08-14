@@ -209,91 +209,109 @@ const serveRegister = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
-// Creates a new user and puts them in the user database
-const registerUser = (req, res, next) => 
+// Registering new user
+// https://www.youtube.com/watch?v=HI_KKUvcwtk
+const registerUser = (req, res, next) =>
 {
-  // Making sure all required fields are there (username, password, and password confirmation)
-  if (req.body.username && req.body.password && req.body.passwordConf) 
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  // Making sure all required fields are there (username, email, and password)
+  if (req.body.username && req.body.email && req.body.password) 
   {
-    // Making sure passwords match
-    // If they don't, send an error message to the user
-    if (req.body.password !== req.body.passwordConf) 
+    // Checking that username does not contain any invalid characters
+    if (!validUsername(req.body.username))
     {
-      console.log('ERROR: Passwords do not match');
-      renderRegister(res, 'Passwords do not match');
-    }
-    else
-    {
-
-      // Checking that username does not contain any invalid characters
-      if (!validUsername(req.body.username))
-      {
-        req.session.errorMessage = 'Username contains invalid character (space, \', ")';
-        return res.redirect('/register');
-      }
-
-      // Compiling all data for the new user
-      const userData = {
-        username: req.body.username,                                    // User entered username
-        usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
-        password: req.body.password,                                    // User entered password
-        displayName: req.body.username,                                 // By default, display name is the same as the username
-      };
-
-      var user = null;
-      var error = null;
-
-      // Creating new user in database
-      async function createNewUser(newUser) 
-      {
-        try {
-          user = await User.create(newUser);
-        } 
-        catch(err) 
-        {
-          error = err;
-        }
-      }
+      errorResponse.error = 'Username contains invalid character (space, \', ")';
       
-      createNewUser(userData).then(function() 
-      {
-        // Checking if there was an error while creating the user and if there was, sending the error to the console
-        // If user creation was successfull, outputting a success message to the user
-        if (error) 
-        {
-          console.log("createUser error on [" + userData.username + "]: " + error.message);
-
-          const errorMessage = error.message;
-
-          // Usernames must be unique
-          // If there was an error because the username already exists in the database, output an error message to the user
-          if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
-          {
-            req.session.errorMessage = 'Username is unavailable';
-            return res.redirect('/register');
-          }
-          else
-          {
-            req.session.errorMessage = 'Something went wrong, please try again';
-            return res.redirect('/register');
-          }
-        } 
-        else 
-        {
-          console.log("Successfully added user: " + user.username);
-          return next();
-        }
-      });
+      res.json(errorResponse);
+      return;
     }
-  } 
-  else 
+
+    // Creating email token
+    const payload = {
+      user: req.body.username,
+      email: req.body.email,
+    };
+
+    var jwtOptions = {
+      issuer: 'circlesxr.com',
+      audience: 'circlesxr.com',
+      algorithm: 'HS256',
+      expiresIn: '1d',
+    };
+
+    const emailToken = jwt.sign(payload, env.JWT_SECRET, jwtOptions);
+
+    // Compiling all data for the new user
+    const userData = {
+      username: req.body.username,                                    // User entered username
+      usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
+      email: req.body.email,                                          // User entered email
+      emailToken: emailToken,                                         // Token to verify email
+      password: req.body.password,                                    // User entered password
+      displayName: req.body.username,                                 // By default, display name is the same as the username
+    };
+
+    var user = null;
+    var error = null;
+
+    // Creating new user in database
+    async function createNewUser(newUser) 
+    {
+      try {
+        user = await User.create(newUser);
+      } 
+      catch(err) 
+      {
+        error = err;
+      }
+    }
+    
+    createNewUser(userData).then(function() 
+    {
+      // Checking if there was an error while creating the user and if there was, sending the error to the console
+      // If user creation was successfull, outputting a success message to the user
+      if (error) 
+      {
+        console.log("createUser error on [" + userData.username + "]: " + error.message);
+
+        const errorMessage = error.message;
+
+        // Usernames must be unique
+        // If there was an error because the username already exists in the database, output an error message to the user
+        if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+        {
+          errorResponse.error = 'Username is unavailable';
+      
+          res.json(errorResponse);
+          return;
+        }
+        else
+        {
+          res.json(errorResponse);
+          return;
+        }
+      } 
+      else 
+      {
+        var response = {
+          status: 'success',
+        };
+      
+        res.json(response);
+        return;
+      }
+    });
+  }
+  else
   {
-    req.session.errorMessage = 'Something went wrong, please try again';
-    return res.redirect('/register');
+    res.json(errorResponse);
+    return;
   }
 }
-
-// ------------------------------------------------------------------------------------------
 
 const sendTestEmail = (req, res, next) => 
 {
@@ -2476,7 +2494,6 @@ module.exports = {
   // Register Page
   serveRegister,
   registerUser,
-  sendTestEmail,
   // Explore Page
   serveExplore,
   updateSessionName,

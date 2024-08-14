@@ -11,6 +11,7 @@ html
 
         block scripts
             script(src='/web/js/forms.js')
+            script(src='/web/js/views/register.js')
             script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
 
     body.no-navigations
@@ -32,22 +33,24 @@ html
                             img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
 
                     #introduction 
-
-                        p.error-message(style='display:flex;justify-content:center;margin:25px 0') User registration is temporarily unavailable
                         
                         p Create an account to begin exploring! Or 
                             a.link-icon(href="/guest-login") continue as guest
 
                     #register-form 
 
-                        //form(action='/register-user' method='post')
+                        form(onsubmit='registerUser(event)' method='post')
 
-                            if message
-                                p.error-message= message
+                            p#registration-error.error-message
+                            p#registration-success.success-message
 
                             .form-field
                                 label.required-form-label Username
-                                input(type='text' name='username' placeholder='SuperFriend99' required)
+                                input(type='text' name='username' required)
+
+                            .form-field
+                                label.required-form-label Email
+                                input(type='email' name='email' required)
 
                             .form-field
                                 label.required-form-label Password 

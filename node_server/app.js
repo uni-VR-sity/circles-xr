@@ -186,11 +186,16 @@ passport.use(new passportLocalStrategy (
 
       getItems().then(function() {
         if (error) {
-          return done(error, user, { message: 'unexpected error' });
+          return done(error, user, { message: 'Unexpected error' });
         }
 
         if (!user) {
-          return done(error, user, { message: 'username invalid' });
+          return done(error, user, { message: 'Username invalid' });
+        }
+
+        if (!user.verified)
+        {
+          return done(error, false, { message: 'Unverified account' });
         }
 
         user.validatePassword(password, function (err, usr) {

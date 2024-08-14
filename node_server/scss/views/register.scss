@@ -56,9 +56,11 @@
                 width: fit-content;
                 margin: $LARGE_MARGIN auto;
 
-                .error-message {
+                .error-message, .success-message {
                     @include center-flex;
                     padding-bottom: $MEDIUM_MARGIN;
+                    margin-top: -8px;
+                    display: none;
                 }
 
                 .form-field {

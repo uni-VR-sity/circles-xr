@@ -43,8 +43,27 @@ router.get('/', centralServerController.serveHomepage);
 
 router.get('/login', notAuthenticated, viewController.serveLogin);
 
-router.post('/login-user', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
-  req.session.errorMessage = 'Username and/ or password incorrect';
+router.post('/login-user', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), async function(err, req, res, next) 
+{
+  // Checking if user account is verified to give appropriate error message
+  try 
+  {
+    var user = await User.findOne({ username: req.body.username }).exec();
+
+    if (!user.verified)
+    {
+      req.session.errorMessage = 'Please check your email to verify your account before logging in';
+    }
+    else
+    {
+      req.session.errorMessage = 'Username and/ or password incorrect';
+    }
+  } 
+  catch(err) 
+  {
+    req.session.errorMessage = 'Username and/ or password incorrect';
+  }
+
   return res.redirect('/login');
 });
 
@@ -104,6 +123,8 @@ router.get('/logout', authenticated, (req, res, next) => {
 // Register Routes ---------------------------------------------------------------------------------------------------------------------------------
 
 router.get('/register', notAuthenticated, viewController.serveRegister);
+
+router.post('/register-user', notAuthenticated, viewController.registerUser);
 
 /*
 router.post('/register-user', viewController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)

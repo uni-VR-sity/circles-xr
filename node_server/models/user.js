@@ -36,8 +36,28 @@ const UserSchema = new mongoose.Schema({
   email: {
     type:       String,
     unique:     false,
+    required:   true,
+    trim:       false,
+  },
+  emailToken: {
+    type:       String,
+    unique:     false,
     required:   false,
     trim:       false,
+  },
+  verified: {
+    type:       Boolean,
+    unique:     false,
+    required:   true,
+    trim:       false,
+    default:    false,
+  },
+  expireAt: {
+    type:       Date,
+    expires:    86400,  // Expires in 24 hours
+    unique:     false,
+    required:   false,
+    default:    Date.now
   },
   displayName: {
     type:       String,
@@ -164,6 +184,9 @@ const addSuperUser = async function()
   {
     const userData = {
       username: 'superuser',
+      email: 'info@uni-vr-sity.ca',
+      verified: true,
+      expireAt: null,
       usertype: CIRCLES.USER_TYPE.SUPERUSER,
       password: env.DEFAULT_PASSWORD,
       displayName: 'superuser',
