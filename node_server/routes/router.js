@@ -56,16 +56,18 @@ router.post('/login-user', passport.authenticate('local', { successRedirect: '/g
     }
     else
     {
-      req.session.errorMessage = 'Username and/ or password incorrect';
+      req.session.errorMessage = 'Username and/ or password is incorrect';
     }
   } 
   catch(err) 
   {
-    req.session.errorMessage = 'Username and/ or password incorrect';
+    req.session.errorMessage = 'Username and/ or password is incorrect';
   }
 
   return res.redirect('/login');
 });
+
+router.get('/verify-email/:token', viewController.verifyUserEmail);
 
 router.get('/get-display-name', authenticated, function(req, res)
 {

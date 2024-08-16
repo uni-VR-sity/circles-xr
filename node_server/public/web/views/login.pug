@@ -38,8 +38,11 @@ html
 
                         form(action='/login-user' method='post')
 
-                            if message
-                                p.error-message= message
+                            if errorMessage
+                                p.error= errorMessage
+
+                            if successMessage
+                                p.success= successMessage
 
                             .form-field
                                 label.required-form-label Username

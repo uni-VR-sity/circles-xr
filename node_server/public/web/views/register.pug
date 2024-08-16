@@ -41,8 +41,10 @@ html
 
                         form(onsubmit='registerUser(event)' method='post')
 
-                            p#registration-error.error-message
-                            p#registration-success.success-message
+                            p#registration-error.error
+                            p#registration-success.success
+
+                            i#loading-icon(class="fa-solid fa-spinner fa-spin-pulse")
 
                             .form-field
                                 label.required-form-label Username

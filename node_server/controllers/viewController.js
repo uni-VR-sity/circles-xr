@@ -12,6 +12,7 @@ const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
 const { createMailTransporter } = require('../../src/core/circles_mailTransporter');
+const crypto = require('crypto');
 
 const User = require('../models/user');
 const Guest = require('../models/guest');
@@ -122,7 +123,8 @@ const createJWT_MagicLink = function(expiryTimeMin, circles)
 // Rendering login page
 const serveLogin = async (req, res, next) => 
 {
-  let errorMessage = null;
+  var errorMessage = null;
+  var successMessage = null;
 
   if (req.session.errorMessage)
   {
@@ -130,8 +132,15 @@ const serveLogin = async (req, res, next) =>
     req.session.errorMessage = '';
   }
 
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = '';
+  }
+
   res.render(path.resolve(__dirname + '/../public/web/views/login'), {
-    message: errorMessage
+    errorMessage: errorMessage,
+    successMessage: successMessage,
   });
 }
 
@@ -230,27 +239,12 @@ const registerUser = (req, res, next) =>
       return;
     }
 
-    // Creating email token
-    const payload = {
-      user: req.body.username,
-      email: req.body.email,
-    };
-
-    var jwtOptions = {
-      issuer: 'circlesxr.com',
-      audience: 'circlesxr.com',
-      algorithm: 'HS256',
-      expiresIn: '1d',
-    };
-
-    const emailToken = jwt.sign(payload, env.JWT_SECRET, jwtOptions);
-
     // Compiling all data for the new user
     const userData = {
       username: req.body.username,                                    // User entered username
       usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
       email: req.body.email,                                          // User entered email
-      emailToken: emailToken,                                         // Token to verify email
+      emailToken: crypto.randomBytes(64).toString('hex'),             // Token to verify email
       password: req.body.password,                                    // User entered password
       displayName: req.body.username,                                 // By default, display name is the same as the username
     };
@@ -273,7 +267,7 @@ const registerUser = (req, res, next) =>
     createNewUser(userData).then(function() 
     {
       // Checking if there was an error while creating the user and if there was, sending the error to the console
-      // If user creation was successfull, outputting a success message to the user
+      // If user creation was successful, sending verification email
       if (error) 
       {
         console.log("createUser error on [" + userData.username + "]: " + error.message);
@@ -297,12 +291,48 @@ const registerUser = (req, res, next) =>
       } 
       else 
       {
-        var response = {
-          status: 'success',
+        // Sending email verification email with unique token
+        const transporter = createMailTransporter();
+
+        var emailContent = '<h3 style="margin-top:0; margin-bottom:20px">Welcome to uni-VR-sity!</h3><p style="margin-bottom:8px;">Hello ';
+        emailContent += userData.username;
+        emailContent += ', </p><p style="margin-top:0">You are almost ready to begin exploring, just click on the button below to verify your email! The link will expire in 24 hours.</p><a href="http://localhost:1111/verify-email/'
+        emailContent += userData.emailToken;
+        emailContent += '" style="display:inline-block; padding:0 15px; margin-top:7.5px; line-height:40px; text-decoration:none; border-radius:6px; background-color:#0f68bb; color:white">Verify Email</a>'
+
+        const mailOptions = {
+          from: '"uni-VR-sity" <' + env.EMAIL + '>',
+          to: userData.email,
+          subject: "uni-VR-sity Email Verification",
+          html: emailContent,
         };
-      
-        res.json(response);
-        return;
+
+        // Sending email
+        // If email is sent, returning success message
+        // Otherwise deleting user entry in database and returning an error message
+        transporter.sendMail(mailOptions, async (error, info) => 
+        {
+          if (error)
+          {
+            try
+            {
+              await User.deleteOne({username: userData.username});
+            }
+            catch(e) { }
+
+            res.json(errorResponse);
+            return;
+          }
+          else
+          {
+            var response = {
+              status: 'success',
+            };
+          
+            res.json(response);
+            return;
+          }
+        });
       }
     });
   }
@@ -313,31 +343,62 @@ const registerUser = (req, res, next) =>
   }
 }
 
-const sendTestEmail = (req, res, next) => 
+// ------------------------------------------------------------------------------------------
+
+// Verifying user email through unique token
+const verifyUserEmail = async (req, res, next) => 
 {
-  console.log('sending test email');
+  // url: /verify-email/token
+  // split result array: {"", "verify-email", "token"}
+  const token = req.url.split('/')[2];
 
-  const transporter = createMailTransporter();
+  // Getting user with email token from database
+  var user = null;
 
-  const mailOptions = {
-    from: '"uni-VR-sity" <' + env.EMAIL + '>',
-    to: "",
-    subject: "Tester Email",
-    html: "<b>Hello world?</b>",
-  };
+  try
+  {
+    user = await User.findOne({emailToken: token});
+  }
+  catch(e)
+  {
+    console.log(e);
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error)
-    {
-      console.log(error);
+    req.session.errorMessage = 'Something went wrong, please try again';
+    return res.redirect('/login');
+  }
+
+  // If user is found, updating them to be verified
+  // Otherwise returning that email verification link has expired
+  if (user)
+  {
+    var updatedUserData = {
+      verified: true,
+      emailToken: user._id,       // Can't be null because key must be unique
+      expireAt: null
     }
-    else
+
+    try
     {
-      console.log("test email sent");
+      await User.findOneAndUpdate({emailToken: token}, updatedUserData);
+
+      console.log(user.username + "'s email verified");
+
+      req.session.successMessage = 'Email successfully verified';
+      return res.redirect('/login');
     }
-  });
-  
-  return res.redirect('/');
+    catch(e)
+    {
+      console.log(e);
+
+      req.session.errorMessage = 'Something went wrong, please try again';
+      return res.redirect('/login');
+    }
+  }
+  else
+  {
+    req.session.errorMessage = 'Email verification link expired, please create a new account';
+    return res.redirect('/login');
+  }
 }
 
 // Explore Page ------------------------------------------------------------------------------------------------------------------------------------
@@ -2494,6 +2555,7 @@ module.exports = {
   // Register Page
   serveRegister,
   registerUser,
+  verifyUserEmail,
   // Explore Page
   serveExplore,
   updateSessionName,

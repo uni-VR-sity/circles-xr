@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema({
   },
   emailToken: {
     type:       String,
-    unique:     false,
+    unique:     true,
     required:   false,
     trim:       false,
   },

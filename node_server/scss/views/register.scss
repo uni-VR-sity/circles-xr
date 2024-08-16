@@ -22,7 +22,7 @@
         padding: $LARGE_MARGIN;
         box-sizing: border-box;
         position: relative;
-        background-color: $LIGHT_GREY;
+        background-color: $WHITE;
 
         #logo {
             max-width: 340px;
@@ -56,10 +56,32 @@
                 width: fit-content;
                 margin: $LARGE_MARGIN auto;
 
-                .error-message, .success-message {
+                .error, .success {
                     @include center-flex;
-                    padding-bottom: $MEDIUM_MARGIN;
-                    margin-top: -8px;
+                    margin-top: -$SMALL_MARGIN  ;
+                    margin-bottom: $MEDIUM_MARGIN;
+                    padding: $SMALL_MARGIN + 5px;
+                    max-width: 370px;
+                    text-align: left;
+                    box-sizing: border-box;
+                    display: none;
+                }
+
+                .error {
+                    color: $RED;
+                    background-color: $LIGHT_RED;
+                }
+
+                .success {
+                    color: $GREEN;
+                    background-color: $LIGHT_GREEN;
+                }
+
+                #loading-icon {
+                    @include center-flex;
+                    margin-top: -$SMALL_MARGIN  ;
+                    margin-bottom: $MEDIUM_MARGIN;
+                    font-size: $MEDIUM_ICON;
                     display: none;
                 }
 
