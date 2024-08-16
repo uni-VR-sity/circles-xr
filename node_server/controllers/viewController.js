@@ -1477,16 +1477,6 @@ const updateUserProfile = async (req, res, next) =>
       accountUpdated = true;
     }
 
-    // Checking if email was updated
-    if (req.body.email)
-    {
-      if (req.body.email !== user.email)
-      {
-        userData.email = req.body.email;
-        accountUpdated = true;
-      }
-    }
-
     // Checking if the user wants to delete their email from their account
     // If the checkbox was checked
     if (req.body.deleteEmail)

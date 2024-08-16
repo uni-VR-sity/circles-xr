@@ -18,7 +18,13 @@ block content
                 .icon-container 
                     i(class='fa-solid fa-user')
 
-                h1= userInfo.username 
+                h1= userInfo.username
+                
+                if userInfo.email   
+                    p= userInfo.email
+                else 
+                    p No email Registered
+
                 h3= userInfo.usertype
 
                 hr
@@ -37,17 +43,6 @@ block content
                     .form-field
                         label Display name
                         input(type='text' id='displayName' name='displayName' value=userInfo.displayName required)
-
-                    if !guest
-
-                        .form-field
-                            label Email
-                                i &nbsp(Optional)
-                            input(type='email' id='email' name='email' placeholder='super@email.com' value=userInfo.email)
-
-                            .checkbox-container
-                                input(type='checkbox' id='deleteEmail' name='deleteEmail')
-                                label(for='deleteEmail') Remove email from account
 
                         hr
 

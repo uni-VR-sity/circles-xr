@@ -9,6 +9,7 @@
         display: grid;
         grid-template-columns: 1fr 4.75fr;
         grid-template-areas: "profile-picture username"
+                             "profile-picture email"
                              "profile-picture usertype"
                              "divider divider";
     }
@@ -30,6 +31,15 @@
         @include start-flex;
         grid-area: username;
         align-items: end;
+        margin-top: $X_SMALL_MARGIN;
+        margin-left: $X_LARGE_MARGIN;
+        margin-bottom: $XX_SMALL_MARGIN;
+    }
+
+    p {
+        @include start-flex;
+        grid-area: email;
+        align-items: start;
         margin-left: $X_LARGE_MARGIN;
     }
 
@@ -39,6 +49,7 @@
         @include no-spacing;
         align-items: start;
         margin-left: $X_LARGE_MARGIN;
+        margin-bottom: $SMALL_MARGIN;
     }
 
     hr {
