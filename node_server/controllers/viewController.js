@@ -296,7 +296,9 @@ const registerUser = (req, res, next) =>
 
         var emailContent = '<h3 style="margin-top:0; margin-bottom:20px">Welcome to uni-VR-sity!</h3><p style="margin-bottom:8px;">Hello ';
         emailContent += userData.username;
-        emailContent += ', </p><p style="margin-top:0">You are almost ready to begin exploring, just click on the button below to verify your email! The link will expire in 24 hours.</p><a href="http://localhost:1111/verify-email/'
+        emailContent += ', </p><p style="margin-top:0">You are almost ready to begin exploring, just click on the button below to verify your email! The link will expire in 24 hours.</p><a href="';
+        emailContent += env.DOMAIN;
+        emailContent += '/verify-email/';
         emailContent += userData.emailToken;
         emailContent += '" style="display:inline-block; padding:0 15px; margin-top:7.5px; line-height:40px; text-decoration:none; border-radius:6px; background-color:#0f68bb; color:white">Verify Email</a>'
 
