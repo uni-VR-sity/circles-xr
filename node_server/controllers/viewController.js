@@ -345,8 +345,8 @@ const registerUser = (req, res, next) =>
   }
   else
   {
-    console.log('missing information for user registartion');
-    
+    console.log('missing information for user registration');
+
     res.json(errorResponse);
     return;
   }
