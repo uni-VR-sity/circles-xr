@@ -261,6 +261,8 @@ const registerUser = (req, res, next) =>
       catch(err) 
       {
         error = err;
+
+        console.log(error);
       }
     }
     
@@ -322,6 +324,8 @@ const registerUser = (req, res, next) =>
             }
             catch(e) { }
 
+            console.log(error);
+
             res.json(errorResponse);
             return;
           }
@@ -341,6 +345,8 @@ const registerUser = (req, res, next) =>
   }
   else
   {
+    console.log('missing information for user registartion');
+    
     res.json(errorResponse);
     return;
   }
