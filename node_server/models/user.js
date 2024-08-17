@@ -219,6 +219,19 @@ const addSuperUser = async function()
   }
 }
 
+const verifyExistingUsers = async function()
+{
+  try
+  {
+    await User.updateMany({}, {verified: true, expireAt: null});
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+}
+
 addSuperUser();
+verifyExistingUsers();
 
 module.exports = User;
