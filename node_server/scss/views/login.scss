@@ -1,25 +1,25 @@
 // DEFAULT ----------------------------------------------------------------------------------
 
 #login {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     background-image: url("/web/images/campfire.jpg");
     background-size: cover;
     background-attachment: fixed;
-    background-position: 50% 50%;
+    background-position: 50% 100%;
     min-height: 100%;
     margin: 0;
 
     // Left side (photo)
     #left {
         display: block;
-        width: 50%;
     }
 
     // Right side (content)
     #right {
         flex-direction: column;
-        width: 50%;
-        padding: $LARGE_MARGIN;
+        width: max-content;
+        padding: $LARGE_MARGIN calc($XX_LARGE_MARGIN * 2);
         box-sizing: border-box;
         position: relative;
         background-color: $WHITE;
@@ -40,7 +40,7 @@
             }
         }
 
-        #introduction, #login-form, #intro-video {
+        #introduction, #login-form {
             max-width: 500px;
             margin: 0 auto;
         }
@@ -48,6 +48,7 @@
         #introduction {
             margin-bottom: $LARGE_MARGIN;
             text-align: center;
+            width: 300px;
         }
 
         #login-form {
@@ -80,6 +81,10 @@
 
                 .form-field {
                     margin-bottom: $SMALL_MARGIN;
+
+                    label {
+                        width: 160px;
+                    }
                 }
             }
 
@@ -94,10 +99,12 @@
     }
 }
 
-// MOBILE -----------------------------------------------------------------------------------
-@media only screen and (max-width: $MOBILE_BREAK) 
+// TABLET -----------------------------------------------------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
 {
     #login {
+
+        grid-template-columns: 1fr;
 
         // Left side (photo)
         #left {
@@ -107,6 +114,11 @@
         // Right side (content)
         #right {
             width: 100%;
+            padding: $LARGE_MARGIN 0;
+
+            #introduction, #login-form {
+                padding: 0 $MEDIUM_MARGIN;
+            }
         }
     }
 }
