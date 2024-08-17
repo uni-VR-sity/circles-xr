@@ -325,6 +325,7 @@ const registerUser = (req, res, next) =>
           }
           else
           {
+            console.log('verification email sent to ' + userData.username);
             var response = {
               status: 'success',
             };
@@ -1734,7 +1735,7 @@ const serveManageUsers = async (req, res, next) =>
 // Creating new user on user request
 const createUser = async (req, res, next) => 
 {
-  if (req.body.username && req.body.usertype)
+  if (req.body.username && req.body.email && req.body.usertype)
   {
     // Checking that username does not contain any invalid characters
     if (!validUsername(req.body.username))
@@ -1746,6 +1747,9 @@ const createUser = async (req, res, next) =>
     // Compiling all data for the new user
     const userData = {
       username: req.body.username,                    // User entered username
+      email: req.body.email,                          // User entered email
+      verified: true,                                 // User automatically verified if created by admin user
+      expireAt: null,
       usertype: req.body.usertype,                    // User entered usertype
       password: env.DEFAULT_PASSWORD,                 // Default password
       displayName: req.body.username,                 // By default, display name is the same as the username
@@ -1833,12 +1837,15 @@ const bulkCreateUsers = async (req, res, next) =>
 
           // Ensuring entry has the correct amount of data
           // Otherwise outputting an error message for the entry
-          if (entryInfo.length === 2)
+          if (entryInfo.length === 3)
           {
             // Getting user info
             const userInfo = {
               username: entryInfo[0],                         // User entered username
-              usertype: entryInfo[1],                         // User entered usertype
+              email: entryInfo[1],                            // User entered email
+              verified: true,                                 // User automatically verified if created by admin user
+              expireAt: null,
+              usertype: entryInfo[2],                         // User entered usertype
               password: env.DEFAULT_PASSWORD,                 // Default password
               displayName: entryInfo[0],                      // By default, display name is the same as the username
             }

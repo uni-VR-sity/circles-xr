@@ -92,14 +92,18 @@ block content
                 form#create-single-user(action='/create-user' method='post')
                     
                     if singleCreateError
-                        p.error-message= singleCreateError
+                        p.error-message.single-create-error= singleCreateError
 
                     if singleCreateSuccess
-                        p.success-message= singleCreateSuccess
+                        p.success-message.single-create-success= singleCreateSuccess
 
                     .form-field
                         label.required-form-label Username 
                         input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                    .form-field
+                        label.required-form-label Email 
+                        input(type='email' name='email' placeholder='super@uni-vr-sity.ca' required)
 
                     .form-field
                         label.required-form-label Usertype 
@@ -119,7 +123,7 @@ block content
 
                         p Please follow the following format for records: 
                             span
-                                i username,usertype
+                                i username,email,usertype
 
                         p The acceptable usertypes are:
 

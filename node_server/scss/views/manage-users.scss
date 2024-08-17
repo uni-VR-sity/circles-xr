@@ -7,7 +7,12 @@
     .content-container {
         
         .success-message, .error-message {
-            display: block;
+            display: flex;
+        }
+
+        .single-create-success, .single-create-error
+        {
+            margin-top: 0;
             margin-bottom: $MEDIUM_MARGIN;
         }
 
