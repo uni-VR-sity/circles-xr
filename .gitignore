@@ -22,10 +22,10 @@ node_server/public/prototypes/created
 node_server/public/worlds
 
 # Ignore uploaded files
-node_server/uploads
+node_server/uploads/*
 
 # Ignore uploaded files
-node_server/whiteboardFiles
+node_server/whiteboardFiles/*
 
 =======
 # Ignore vscode
