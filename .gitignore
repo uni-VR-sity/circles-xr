@@ -30,6 +30,10 @@ node_server/uploads/*
 node_server/whiteboardFiles/*
 !node_server/whiteboardFiles/README.txt
 
+# Ignore data collection files
+node_server/collectedData/*
+!node_server/collectedData/README.txt
+
 =======
 # Ignore vscode
 .vscode

@@ -215,6 +215,10 @@ router.post('/update-whiteboard-file-position', authenticated, circleController.
 router.post('/update-user-model', authenticated, circleController.updateUserModel);
 router.post('/update-user-colour', authenticated, circleController.updateUserColour);
 
+// Data Collection Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.post('/save-collected-data', authenticated, circleController.saveCollectedData);
+
 // CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
 
 // More Circles Page Routes -----------------------------------------------------------------

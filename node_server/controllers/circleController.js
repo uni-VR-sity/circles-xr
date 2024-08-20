@@ -547,6 +547,40 @@ const updateUserColour = async (req, res, next) =>
   }
 }
 
+// Data Collection ---------------------------------------------------------------------------------------------------------------------------------
+
+const saveCollectedData = async (req, res, next) => 
+{
+  if (req.body.circle && req.body.user && req.body.totalTime)
+  {
+    // Creating log string
+
+    // Date
+    var log = new Date() + ',';
+    
+    // User
+    log += req.body.user + ',';
+
+    // Total time
+    log += req.body.totalTime;
+
+    log+= '\n';
+
+    // Adding log to .csv file
+    // (If this is the first log for the circle, .csv file is created)
+    const fileName = __dirname + '/../collectedData/' + req.body.circle + '.csv';
+
+    try
+    {
+      fs.appendFileSync(fileName, log, "utf8");
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -563,4 +597,6 @@ module.exports = {
   // Wardrobe
   updateUserModel,
   updateUserColour,
+  // Data Collection
+  saveCollectedData,
 }
