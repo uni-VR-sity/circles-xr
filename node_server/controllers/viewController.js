@@ -149,7 +149,7 @@ const serveLogin = async (req, res, next) =>
 const invalidAddress = function(req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/login'), {
-    message: 'Invalid address entered'
+    errorMessage: 'Invalid address entered'
   });
 }
 
