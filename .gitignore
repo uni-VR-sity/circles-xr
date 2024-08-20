@@ -16,16 +16,19 @@
 .env
 
 # Ignore created prototypes
-node_server/public/prototypes/created
+node_server/public/prototypes/created/*
+!node_server/public/prototypes/created/README.txt
 
 # Ignore compiled worlds
 node_server/public/worlds
 
 # Ignore uploaded files
 node_server/uploads/*
+!node_server/uploads/README.txt
 
 # Ignore uploaded files
 node_server/whiteboardFiles/*
+!node_server/whiteboardFiles/README.txt
 
 =======
 # Ignore vscode
