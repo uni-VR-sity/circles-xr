@@ -549,27 +549,80 @@ const updateUserColour = async (req, res, next) =>
 
 // Data Collection ---------------------------------------------------------------------------------------------------------------------------------
 
+// Saving data collected in an .csv
 const saveCollectedData = async (req, res, next) => 
 {
-  if (req.body.circle && req.body.user && req.body.totalTime)
+  if (req.body.circle)
   {
-    // Creating log string
+    const fileName = __dirname + '/../collectedData/' + req.body.circle + '.csv';
+    const possibleData = ['date', 'time', 'user', 'totalTime', 'timePerTask'];
 
-    // Date
-    var log = new Date() + ',';
-    
-    // User
-    log += req.body.user + ',';
+    var log = '';
+    var header = '';
 
-    // Total time
-    log += req.body.totalTime;
+    // Checking if .csv file exists for the circle
+    var fileExists = fs.existsSync(fileName);
 
-    log+= '\n';
+    // Going through possible data collected
+    for (const data of possibleData)
+    {
+      // If that data was collected, adding it to log
+      if (req.body.hasOwnProperty(data))
+      {
+        // If data is an array, adding each entry to the log, surrounded by quotation marks
+        // Otherwise, just adding entry to log
+        if (Array.isArray(req.body[data]))
+        {
+          log += '"';
+
+          for (var i = 0; i < req.body[data].length; i++)
+          {
+            log += req.body[data][i] + ',';
+          }
+
+          // Removing last comma (,) from log
+          log = log.slice(0, -1);
+
+          log += '",';
+        }
+        else
+        {
+          // Checking is data is "user"
+          // If it is, adding current user's username to log
+          if (data == 'user')
+          {
+            log += req.user.username + ',';
+          }
+          else
+          {
+            log += req.body[data] + ',';
+          }
+        }
+
+        // If .csv file does not exist for the circle, adding to header
+        if (!fileExists)
+        {
+          header += data + ',';
+        }
+      }
+    }
+
+    // Removing last comma (,) from log
+    log = log.slice(0, -1);
+
+    // If .csv file does not exist for the circle, adding header to log
+    // Otherwise, adding a new line at the start of the log
+    if (!fileExists)
+    {
+      log = header.slice(0, -1) + '\n' + log;
+    }
+    else
+    {
+      log = '\n' + log;
+    }
 
     // Adding log to .csv file
     // (If this is the first log for the circle, .csv file is created)
-    const fileName = __dirname + '/../collectedData/' + req.body.circle + '.csv';
-
     try
     {
       fs.appendFileSync(fileName, log, "utf8");

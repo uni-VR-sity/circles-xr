@@ -31,12 +31,30 @@
       <!---------------------------------------------------------------------------------------------------------------------->
 
       <a-entity id="data-collector"
-                circles-data-collection="endEvent:stopDataCollection">
+                circles-data-collection="dataToCollect:date,time,user,totalTime,timePerTask; taskEvents:task1Done,task2Done,task3Done">
       </a-entity>
 
-      <a-entity position="0 0 -3"
-                circles-button="click_on_event:stopDataCollection; target:#data-collector">
+      <a-entity position="-1.5 0 -3"
+                circles-button="click_on_event:startDataCollection; target:#data-collector">
       </a-entity>
+
+      <a-entity position="-0.5 0 -3"
+                circles-button="click_on_event:task1Done; target:#data-collector">
+      </a-entity>
+
+      <a-entity position="0.5 0 -3"
+                circles-button="click_on_event:task2Done; target:#data-collector">
+      </a-entity>
+
+      <a-entity position="1.5 0 -3"
+                circles-button="click_on_event:task3Done; target:#data-collector">
+      </a-entity>
+
+      <!--
+      <a-entity position="3 0 -3"
+                circles-button="click_on_event:endDataCollection; target:#data-collector">
+      </a-entity>
+      -->
 
     </a-scene>
 
