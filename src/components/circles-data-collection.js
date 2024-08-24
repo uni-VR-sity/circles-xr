@@ -7,9 +7,13 @@ AFRAME.registerComponent('circles-data-collection',
     {
         startEvent: {type:'string', default:'startDataCollection'},
         endEvent: {type:'string', default:'endDataCollection'},
-        dataToCollect : {type:'array'},
-        taskEvents : {type:'array'},
-        restart : {type:'boolean', default:true},
+        dataToCollect: {type:'array'},
+        taskEvents: {type:'array'},
+        restart: {type:'boolean', default:true},
+
+        gradeUser: {type:'boolean', default:false},
+        gradeVariable: {type:'string'},
+        gradingScheme: {type:'array'},
     },
     init: function()
     {
@@ -66,7 +70,7 @@ AFRAME.registerComponent('circles-data-collection',
         }
 
         // Total time
-        if (schema.dataToCollect.includes('totalTime'))
+        if (schema.dataToCollect.includes('totalTime') || schema.gradeVariable == 'totalTime')
         {
             this.startTime = currentDate;
         }
@@ -74,7 +78,7 @@ AFRAME.registerComponent('circles-data-collection',
         // Time per task
         // If time per task data is collected, listen for event that current task was completed
         // Otherwise listen for event to stop collecting data
-        if (schema.dataToCollect.includes('timePerTask') && schema.taskEvents.length > 0)
+        if ((schema.dataToCollect.includes('timePerTask') || schema.gradeVariable == 'averageTimePerTask') && schema.taskEvents.length > 0)
         {
             this.currentTask = 0;
             this.collectedData.timePerTask = [];
@@ -135,13 +139,13 @@ AFRAME.registerComponent('circles-data-collection',
         var currentDate = new Date();
 
         // Total time
-        if (schema.dataToCollect.includes('totalTime'))
+        if (schema.dataToCollect.includes('totalTime') || schema.gradeVariable == 'totalTime')
         {
             this.collectedData.totalTime = currentDate - this.startTime;
         }
 
         // Time per task
-        if (schema.dataToCollect.includes('timePerTask') && schema.taskEvents.length > 0)
+        if ((schema.dataToCollect.includes('timePerTask') || schema.gradeVariable == 'averageTimePerTask') && schema.taskEvents.length > 0)
         {
             this.collectedData.timePerTask[this.currentTask] = currentDate - this.collectedData.timePerTask[this.currentTask];
         }
@@ -151,6 +155,18 @@ AFRAME.registerComponent('circles-data-collection',
         {
             // Setting user to true to signal to get current user when creating log on server side
             this.collectedData.user = true;
+        }
+
+        // Calculating user's grade
+        if (schema.gradeUser)
+        {
+            this.calculateGrade();
+        }
+
+        // Adding grade to collected data
+        if (schema.dataToCollect.includes('grade'))
+        {
+            this.collectedData.grade = this.grade;
         }
 
         // Sending data to save as log
@@ -170,4 +186,66 @@ AFRAME.registerComponent('circles-data-collection',
             element.addEventListener(schema.startEvent, this.startCollection);
         }
     },
+    calculateGrade: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+        const schema = CONTEXT_AF.data;
+
+        // Checking that there is a grading scheme
+        if (schema.gradingScheme.length != 4)
+        {
+            this.grade = 'Error: Missing information (gradingScheme)';
+            return;
+        }
+
+        // Getting value grade is based on
+        var gradeValue;
+
+        if (schema.gradeVariable == 'totalTime')
+        {
+            gradeValue = this.collectedData.totalTime;
+        }
+        else if (schema.gradeVariable == 'averageTimePerTask')
+        {
+            // If time per task array does not exist, giving error message
+            if (!this.collectedData.timePerTask)
+            {
+                this.grade = 'Error: Missing information (taskEvents)';
+                return;
+            }
+
+            // Calculating average time per task
+            gradeValue = 0;
+
+            for (var i = 0; i < this.collectedData.timePerTask.length; i++)
+            {
+                gradeValue += this.collectedData.timePerTask[i];
+            }
+
+            gradeValue /= this.collectedData.timePerTask.length;
+        }
+
+        // Assigning grade based on grading scheme
+        if (gradeValue <= schema.gradingScheme[0])
+        {
+            this.grade = 'A';
+        }
+        else if (gradeValue <= schema.gradingScheme[1])
+        {
+            this.grade = 'B';
+        }
+        else if (gradeValue <= schema.gradingScheme[2])
+        {
+            this.grade = 'C';
+        }
+        else if (gradeValue <= schema.gradingScheme[3])
+        {
+            this.grade = 'D';
+        }
+        else
+        {
+            this.grade = 'F';
+        }
+    }
 });
