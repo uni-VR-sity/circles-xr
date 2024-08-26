@@ -30,31 +30,106 @@
 
       <!---------------------------------------------------------------------------------------------------------------------->
 
+      <!-- Data Collector -->
       <a-entity id="data-collector"
-                circles-data-collection="dataToCollect:date,time,user,totalTime,timePerTask,grade; taskEvents:task1Done,task2Done,task3Done; gradeUser:true; gradeVariable:totalTime; gradingScheme:1700,1900,2100,2300">
+                circles-data-collection="dataToCollect:date,time,user,totalTime,timePerTask,grade; taskEvents:task1Done,task2Done,task3Done,task4Done; gradeUser:true; gradeVariable:totalTime; gradingScheme:1700,1900,2100,2300; ui:true">
       </a-entity>
 
-      <a-entity position="-1.5 0 -3"
-                circles-button="click_on_event:startDataCollection; target:#data-collector">
+      <!-- Classroom -->
+      <a-entity id="classroom" 
+                gltf-model="url(http://localhost:1111/asset-library/classroom/room.glb)">
       </a-entity>
 
-      <a-entity position="-0.5 0 -3"
-                circles-button="click_on_event:task1Done; target:#data-collector">
+      <!-- Task 1 -->
+      <a-entity id="task-1"
+                position="0 0 -5"
+                rotation="0 180 0">
+
+        <a-entity position="-2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="0 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+
+        <!-- Task 1 button -->
+        <a-entity id="task-1-button"
+                  position="0 0.9 0"
+                  circles-button="click_on_event:task1Done; target:#data-collector">
+        </a-entity>
+
       </a-entity>
 
-      <a-entity position="0.5 0 -3"
-                circles-button="click_on_event:task2Done; target:#data-collector">
+      <!-- Task 2 -->
+      <a-entity id="task-2"
+                position="4 0 0"
+                rotation="0 90 0">
+
+        <a-entity position="-2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="0 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+
+        <!-- Task 2 button -->
+        <a-entity id="task-2-button"
+                  position="0 0.9 0"
+                  circles-button="click_on_event:task2Done; target:#data-collector">
+        </a-entity>
+
       </a-entity>
 
-      <a-entity position="1.5 0 -3"
-                circles-button="click_on_event:task3Done; target:#data-collector">
+      <!-- Task 3 -->
+      <a-entity id="task-3"
+                position="0 0 5">
+
+        <a-entity position="-2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="0 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+
+        <!-- Task 3 button -->
+        <a-entity id="task-3-button"
+                  position="0 0.9 0"
+                  circles-button="click_on_event:task3Done; target:#data-collector">
+        </a-entity>
+
       </a-entity>
 
-      <!--
-      <a-entity position="3 0 -3"
-                circles-button="click_on_event:endDataCollection; target:#data-collector">
+      <!-- Task 4 -->
+      <a-entity id="task-4"
+                position="-4 0 0"
+                rotation="0 -90 0">
+
+        <a-entity position="-2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="0 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+        <a-entity position="2.2 0 0"
+                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+        </a-entity>
+
+        <!-- Task 4 button -->
+        <a-entity id="task-4-button"
+                  position="0 0.9 0"
+                  circles-button="click_on_event:task4Done; target:#data-collector">
+        </a-entity>
+
       </a-entity>
-      -->
 
     </a-scene>
 

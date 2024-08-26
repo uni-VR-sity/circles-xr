@@ -14,6 +14,11 @@ AFRAME.registerComponent('circles-data-collection',
         gradeUser: {type:'boolean', default:false},
         gradeVariable: {type:'string'},
         gradingScheme: {type:'array'},
+
+        ui: {type:'boolean', default:true},
+        uiPosition: {type:'vec3', default:'0 1.4 -1.5'},
+        uiTitle: {type:'string', default:'Data Collection'},
+        uiInstructions: {type:'string', default:'[Some instructions...]'},
     },
     init: function()
     {
@@ -32,8 +37,149 @@ AFRAME.registerComponent('circles-data-collection',
         // split result array: {'http', '', 'domain', 'w', 'circle'}
         this.collectedData.circle = window.location.href.split('/')[4];
 
+        // Displaying UI
+        if (schema.ui)
+        {
+            this.displayStartUI();
+        }
+
         // Listening for event to start collecting data
         element.addEventListener(schema.startEvent, this.startCollection);
+    },
+    displayStartUI: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+        const schema = CONTEXT_AF.data;
+
+        // UI holder
+        var ui = document.createElement('a-entity');
+        ui.setAttribute('id', 'data-collection-ui');
+
+        ui.setAttribute('position', schema.uiPosition);
+
+        ui.setAttribute('geometry', {
+            primitive: 'plane',
+            width: 1.5,
+        });
+
+        ui.setAttribute('material', {
+            color: '#FFFFFF',
+        });
+
+        ui.setAttribute('circles-lookat', {
+            targetElement: document.querySelector('[camera]'),
+            constrainYAxis: true,
+            constraintedX: 0,
+            constraintedZ: 0,
+            smoothingAlpha: 0.01,
+        });
+
+            // Title
+            var title = document.createElement('a-entity');
+
+            title.setAttribute('position', {
+                x: 0,
+                y: 0.38,
+                z: 0,
+            });
+
+            title.setAttribute('text', {
+                value: schema.uiTitle,
+                color: '#000000',
+                align: 'center',
+                baseline: 'top',
+                width: 1.2,
+                wrapCount: 19,
+            });
+
+            ui.appendChild(title);
+
+            // Instructions
+            var instructions = document.createElement('a-entity');
+
+            instructions.setAttribute('position', {
+                x: 0,
+                y: 0.19,
+                z: 0,
+            });
+
+            instructions.setAttribute('text', {
+                value: schema.uiInstructions,
+                color: '#000000',
+                baseline: 'top',
+                width: 1.2,
+                wrapCount: 48
+            });
+
+            ui.appendChild(instructions);
+
+            // Start button
+            var startButton = document.createElement('a-entity');
+            startButton.classList.add('interactive');
+
+            startButton.setAttribute('position', {
+                x: 0,
+                y: -0.34,
+                z: 0.001,
+            });
+
+            startButton.setAttribute('geometry', {
+                primitive: 'plane',
+                height: 0.15,
+                width: 0.35,
+            });
+
+            startButton.setAttribute('material', {
+                color: '#0f68bb',
+            });
+
+            // Hover effect
+            startButton.addEventListener('mouseenter', function()
+            {
+                startButton.setAttribute('material', {
+                    color: '#0f5da7',
+                });
+            });
+
+            startButton.addEventListener('mouseleave', function() 
+            {
+                startButton.setAttribute('material', {
+                    color: '#0f68bb',
+                });
+            });
+
+            // Click effect
+            startButton.addEventListener('click', function()
+            {
+                // Emmiting event to start data collection
+                element.emit(schema.startEvent, null, false);
+
+                // Deleting instructions and start button from ui
+                instructions.parentNode.removeChild(instructions);
+                startButton.parentNode.removeChild(startButton);
+
+                // Hiding UI
+                ui.setAttribute('visible', 'false');
+            });
+
+                // Button text
+                var buttonText = document.createElement('a-entity');
+
+                buttonText.setAttribute('text', {
+                    value: 'Start',
+                    color: '#FFFFFF',
+                    align: 'center',
+                    baseline: 'center',
+                    width: 0.25,
+                    wrapCount: 7,
+                });
+
+                startButton.appendChild(buttonText);
+
+            ui.append(startButton);
+
+        document.getElementsByTagName('a-scene')[0].appendChild(ui);
     },
     startCollection: function()
     {
