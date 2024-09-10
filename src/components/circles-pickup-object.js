@@ -9,6 +9,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     dropRotation:       { type: "vec3", default:{x:100001.0, y:0.0, z:0.0} },   //where do we want this to orient as after it is released
     dropScale:          { type: "vec3", default:{x:100001.0, y:0.0, z:0.0} },   //what scale after it is released
     physicsObject:      { type: "boolean", default:false },
+    shapeNames:         { type: "array" },
     animate:            { type: "boolean", default:true },                     //whether we animate
     animateDurationMS:  { type: "number", default:400 },                        //how long animation is
     enabled:            { type: "boolean", default:true },                      //whethere this works
@@ -166,6 +167,18 @@ AFRAME.registerComponent('circles-pickup-object', {
     if (data.physicsObject)
     {
       CONTEXT_AF.el.setAttribute('dynamic-body', CONTEXT_AF.physicsAttributes);
+
+      if (data.shapeNames.length > 0)
+      {
+        // Resetting shape components
+        for (var i = 0; i < data.shapeNames.length; i++)
+        {
+          var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
+          CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
+  
+          CONTEXT_AF.el.setAttribute(data.shapeNames[i], shape);
+        }
+      }
     }
 
     CONTEXT_AF.pickedUp = false;
