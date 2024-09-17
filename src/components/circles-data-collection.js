@@ -11,6 +11,10 @@ AFRAME.registerComponent('circles-data-collection',
         taskEvents: {type:'array'},
         restart: {type:'boolean', default:true},
 
+        interactableObjects: {type:'array'},
+        trackRepeatedInteractions: {type:'boolean', default:'true'},
+
+        /*
         gradeUser: {type:'boolean', default:false},
         gradeVariable: {type:'string'},
         gradingScheme: {type:'array'},
@@ -19,6 +23,7 @@ AFRAME.registerComponent('circles-data-collection',
         uiPosition: {type:'vec3', default:'0 1.4 -1.5'},
         uiTitle: {type:'string', default:'Data Collection'},
         uiInstructions: {type:'string', default:'[Some instructions...]'},
+        */
     },
     init: function()
     {
@@ -28,6 +33,7 @@ AFRAME.registerComponent('circles-data-collection',
 
         this.startCollection = this.startCollection.bind(this);
         this.taskCompleted = this.taskCompleted.bind(this);
+        this.objectSelected = this.objectSelected.bind(this);
         this.endCollection = this.endCollection.bind(this);
 
         this.collectedData = {};
@@ -282,6 +288,12 @@ AFRAME.registerComponent('circles-data-collection',
             element.addEventListener(schema.taskEvents[this.currentTask], this.taskCompleted);
         }
     },
+    objectSelected: function(event)
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+        const schema = CONTEXT_AF.data;
+    },
     endCollection: function()
     {
         console.log('end data collection');
@@ -321,12 +333,6 @@ AFRAME.registerComponent('circles-data-collection',
         if (schema.gradeUser)
         {
             this.calculateGrade();
-        }
-
-        // Adding grade to collected data
-        if (schema.dataToCollect.includes('grade'))
-        {
-            this.collectedData.grade = this.grade;
         }
         */
 
