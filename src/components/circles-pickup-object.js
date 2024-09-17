@@ -201,7 +201,12 @@ AFRAME.registerComponent('circles-pickup-object', {
     const data = this.data;
 
     CONTEXT_AF.el.setAttribute('animation__cpo_pickup_position', { property:'position', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.pickupPosition.x, y:data.pickupPosition.y, z:data.pickupPosition.z}, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
-    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_rotation', { property:'rotation', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.pickupRotation.x, y:data.pickupRotation.y, z:data.pickupRotation.z}, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+    
+    // Single animation for rotation does not work (ex. property:rotation), has to be split up
+    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_rotationX', { property:'object3D.rotation.x', dur:data.animateDurationMS, isRawProperty:true, to:data.pickupRotation.x, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_rotationY', { property:'object3D.rotation.y', dur:data.animateDurationMS, isRawProperty:true, to:data.pickupRotation.y, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_pickup_rotationZ', { property:'object3D.rotation.z', dur:data.animateDurationMS, isRawProperty:true, to:data.pickupRotation.z, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
+
     CONTEXT_AF.el.setAttribute('animation__cpo_pickup_scale', { property:'scale', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.pickupScale.x, y:data.pickupScale.y, z:data.pickupScale.z}, easing:'easeInOutQuad', startEvents:'cpo_pickup'});
   },
   setDropAnimations : function()
@@ -210,7 +215,12 @@ AFRAME.registerComponent('circles-pickup-object', {
     const data = this.data;
 
     CONTEXT_AF.el.setAttribute('animation__cpo_position', { property:'position', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropPosition.x, y:data.dropPosition.y, z:data.dropPosition.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_position'});
-    CONTEXT_AF.el.setAttribute('animation__cpo_rotation', { property:'rotation', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropRotation.x, y:data.dropRotation.y, z:data.dropRotation.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_rotation'});
+
+    // Single animation for rotation does not work (ex. property:rotation), has to be split up
+    CONTEXT_AF.el.setAttribute('animation__cpo_rotationX', { property:'object3D.rotation.x', dur:data.animateDurationMS, isRawProperty:true, to:data.dropRotation.x, easing:'easeInOutQuad', startEvents:'cpo_drop_rotation'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_rotationY', { property:'object3D.rotation.y', dur:data.animateDurationMS, isRawProperty:true, to:data.dropRotation.y, easing:'easeInOutQuad', startEvents:'cpo_drop_rotation'});
+    CONTEXT_AF.el.setAttribute('animation__cpo_rotationZ', { property:'object3D.rotation.z', dur:data.animateDurationMS, isRawProperty:true, to:data.dropRotation.z, easing:'easeInOutQuad', startEvents:'cpo_drop_rotation'});
+
     CONTEXT_AF.el.setAttribute('animation__cpo_scale', { property:'scale', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropScale.x, y:data.dropScale.y, z:data.dropScale.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_scale'});
   }
 });
