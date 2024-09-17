@@ -37,15 +37,18 @@ AFRAME.registerComponent('circles-data-collection',
         // split result array: {'http', '', 'domain', 'w', 'circle'}
         this.collectedData.circle = window.location.href.split('/')[4];
 
+        /*
         // Displaying UI
         if (schema.ui)
         {
             this.displayStartUI();
         }
+        */
 
         // Listening for event to start collecting data
         element.addEventListener(schema.startEvent, this.startCollection);
     },
+    /*
     displayStartUI: function()
     {
         const CONTEXT_AF = this;
@@ -181,6 +184,16 @@ AFRAME.registerComponent('circles-data-collection',
 
         document.getElementsByTagName('a-scene')[0].appendChild(ui);
     },
+    displayEndUI: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+        const schema = CONTEXT_AF.data;
+
+        // Displaying UI
+        document.getElementById('data-collection-ui').setAttribute('visible', 'true');
+    },
+    */
     startCollection: function()
     {
         console.log('start data collection');
@@ -303,6 +316,7 @@ AFRAME.registerComponent('circles-data-collection',
             this.collectedData.user = true;
         }
 
+        /*
         // Calculating user's grade
         if (schema.gradeUser)
         {
@@ -314,18 +328,22 @@ AFRAME.registerComponent('circles-data-collection',
         {
             this.collectedData.grade = this.grade;
         }
+        */
 
         // Sending data to save as log
         var request = new XMLHttpRequest();
         request.open('POST', '/save-collected-data');
         request.setRequestHeader('Content-Type', 'application/json');
-
-        request.onload = function() 
-        {
-        }
-
         request.send(JSON.stringify(this.collectedData));
 
+        /*
+        // Displaying UI
+        if (schema.ui)
+        {
+            this.displayEndUI();
+        }
+        */
+        
         // Restarting data collection
         if (schema.restart)
         {
