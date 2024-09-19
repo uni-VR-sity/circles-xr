@@ -174,6 +174,8 @@ AFRAME.registerComponent('circles-pickup-object', {
         for (var i = 0; i < data.shapeNames.length; i++)
         {
           var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
+          
+          // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
           CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
   
           CONTEXT_AF.el.setAttribute(data.shapeNames[i], shape);

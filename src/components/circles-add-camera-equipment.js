@@ -28,6 +28,7 @@ AFRAME.registerComponent('circles-add-camera-equipment', {
         rigElem.setAttribute('movement-controls',{controls:'gamepad,keyboard,checkpoint', constrainToNavMesh:true, speed:0.2});
         rigElem.setAttribute('gamepad-controls', {enabled:false});  //default we want off for now (can make unsuspecting users nauseous ...)
         rigElem.setAttribute('checkpoint-controls',{mode:'teleport'});
+        rigElem.setAttribute('physics-collider',{});
         //console.log('Attached camera controls to rig');
 
         //add pointer if not a standalone HMD (we will use laser controls there instead)
