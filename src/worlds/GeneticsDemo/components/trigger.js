@@ -45,14 +45,22 @@ AFRAME.registerComponent('trigger', {
         if (CONTEXT_AF.currentState == "binding") {
             console.log('Object Bound to ' + test);
 
+            partner = document.querySelector("#" + attacker);
+
             if(test == "repressor_trigger"){
                 var mover = document.querySelector("#RNA_moving_rep");
                 mover.setAttribute('visible', 'true');
+                partner.setAttribute('visible', 'false');
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_rep"); //turn on the animation
                 setTimeout('pause("#RNA_moving_rep")', 6200); //pause the animation after a delay that is roughly the length of the animation
                 setTimeout('setInvisible("#RNA_moving_rep")', 6250); //make invisible to show that it has finished
+
+                //setTimeout(() => { partner.setAttribute('position', { x: -0.7, y: 1.65, z: -0.7 }).syncToPhysics(); }, 6255);
+                setTimeout(() => { setDynamicPosition(attacker, { x: -0.7, y: 1.65, z: -0.7 }); }, 6255);
+                setTimeout(() => { partner.setAttribute('visible', 'true'); }, 6260);
+
                 setTimeout('play("#RNA_moving_rep")', 6300); //make sure the animation cycles back to the start of the loop
                 setTimeout('pause("#RNA_moving_rep")', 6450);
 

@@ -19,7 +19,7 @@
         <circles-start-ui />
 
         <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:false;">
+        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:true;">
                 <a-assets>
                         <img id='skyMap' src='/global/assets/textures/equirectangular/WhiteBlue.jpg'
                                 crossorigin="anonymous">
@@ -27,64 +27,42 @@
 
                         <!-- DNA assets -->
                         <a-asset-item id="dna-glb" src="/worlds/GeneticsDemo/assets/models/DNA_new.glb"></a-asset-item>
-                        <a-asset-item id="dna_ends-glb"
-                                src="/worlds/GeneticsDemo/assets/models/DNA_ends.glb"></a-asset-item>
-                        <a-asset-item id="lacIPromoter_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacIPromoter_holder.glb"></a-asset-item>
-                        <a-asset-item id="lacI_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacI_holder.glb"></a-asset-item>
-                        <a-asset-item id="capSite_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/capSite_holder.glb"></a-asset-item>
-                        <a-asset-item id="lacOperator_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacOperator_holder.glb"></a-asset-item>
-                        <a-asset-item id="lacPromoter_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacPromoter_holder.glb"></a-asset-item>
-                        <a-asset-item id="lacY_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacY_holder.glb"></a-asset-item>
-                        <a-asset-item id="lacZ_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacZ_holder.glb"></a-asset-item>
-                        <a-asset-item id="lacA_holder-glb"
-                                src="/worlds/GeneticsDemo/assets/models/lacA_holder.glb"></a-asset-item>
+                        <a-asset-item id="dna_ends-glb" src="/worlds/GeneticsDemo/assets/models/DNA_ends.glb"></a-asset-item>
+                        <a-asset-item id="lacIPromoter_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacIPromoter_holder.glb"></a-asset-item>
+                        <a-asset-item id="lacI_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacI_holder.glb"></a-asset-item>
+                        <a-asset-item id="capSite_holder-glb" src="/worlds/GeneticsDemo/assets/models/capSite_holder.glb"></a-asset-item>
+                        <a-asset-item id="lacOperator_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacOperator_holder.glb"></a-asset-item>
+                        <a-asset-item id="lacPromoter_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacPromoter_holder.glb"></a-asset-item>
+                        <a-asset-item id="lacY_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacY_holder.glb"></a-asset-item>
+                        <a-asset-item id="lacZ_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacZ_holder.glb"></a-asset-item>
+                        <a-asset-item id="lacA_holder-glb" src="/worlds/GeneticsDemo/assets/models/lacA_holder.glb"></a-asset-item>
 
-                        <a-asset-item id="lacIPromoter-glb"
-                                src="/worlds/GeneticsDemo/assets/models/Free/lacIPromoter.glb"></a-asset-item>
+                        <a-asset-item id="lacIPromoter-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacIPromoter.glb"></a-asset-item>
                         <a-asset-item id="lacI-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacI.glb"></a-asset-item>
-                        <a-asset-item id="capSite-glb"
-                                src="/worlds/GeneticsDemo/assets/models/Free/capSite.glb"></a-asset-item>
-                        <a-asset-item id="lacOperator-glb"
-                                src="/worlds/GeneticsDemo/assets/models/Free/lacOperator.glb"></a-asset-item>
-                        <a-asset-item id="lacPromoter-glb"
-                                src="/worlds/GeneticsDemo/assets/models/Free/lacPromoter.glb"></a-asset-item>
+                        <a-asset-item id="capSite-glb" src="/worlds/GeneticsDemo/assets/models/Free/capSite.glb"></a-asset-item>
+                        <a-asset-item id="lacOperator-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacOperator.glb"></a-asset-item>
+                        <a-asset-item id="lacPromoter-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacPromoter.glb"></a-asset-item>
                         <a-asset-item id="lacY-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacY.glb"></a-asset-item>
                         <a-asset-item id="lacZ-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacZ.glb"></a-asset-item>
                         <a-asset-item id="lacA-glb" src="/worlds/GeneticsDemo/assets/models/Free/lacA.glb"></a-asset-item>
 
-                        <a-asset-item id="ribosome-glb"
-                                src="/worlds/GeneticsDemo/assets/models/ribosome.glb"></a-asset-item>
-                        <a-asset-item id="repressor-glb"
-                                src="/worlds/GeneticsDemo/assets/models/repressor.glb"></a-asset-item>
-                        <a-asset-item id="permease-glb"
-                                src="/worlds/GeneticsDemo/assets/models/permease.glb"></a-asset-item>
+                        <a-asset-item id="ribosome-glb" src="/worlds/GeneticsDemo/assets/models/ribosome.glb"></a-asset-item>
+                        <a-asset-item id="repressor-glb" src="/worlds/GeneticsDemo/assets/models/repressor.glb"></a-asset-item>
+                        <a-asset-item id="permease-glb" src="/worlds/GeneticsDemo/assets/models/permease.glb"></a-asset-item>
 
                         <a-asset-item id="CRP-glb" src="/worlds/GeneticsDemo/assets/models/CRP.glb"></a-asset-item>
-                        <a-asset-item id="CRP-bound-glb"
-                                src="/worlds/GeneticsDemo/assets/models/CRP_bound.glb"></a-asset-item>
-                        <a-asset-item id="CRP-final-glb"
-                                src="/worlds/GeneticsDemo/assets/models/CRP_final.glb"></a-asset-item>
+                        <a-asset-item id="CRP-bound-glb" src="/worlds/GeneticsDemo/assets/models/CRP_bound.glb"></a-asset-item>
+                        <a-asset-item id="CRP-final-glb" src="/worlds/GeneticsDemo/assets/models/CRP_final.glb"></a-asset-item>
                         <a-asset-item id="camp-glb" src="/worlds/GeneticsDemo/assets/models/camp.glb"></a-asset-item>
                         <a-asset-item id="lactose-glb" src="/worlds/GeneticsDemo/assets/models/lactose.glb"></a-asset-item>
                         <a-asset-item id="glucose-glb" src="/worlds/GeneticsDemo/assets/models/glucose.glb"></a-asset-item>
                         <a-asset-item id="RNApoly-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly.glb"></a-asset-item>
                         <a-asset-item id="beta-glb" src="/worlds/GeneticsDemo/assets/models/beta-gal.glb"></a-asset-item>
-                        <a-asset-item id="mRNA-lac-glb"
-                                src="/worlds/GeneticsDemo/assets/models/mRNA_lac.glb"></a-asset-item>
-                        <a-asset-item id="mRNA-rep-glb"
-                                src="/worlds/GeneticsDemo/assets/models/mRNA_rep.glb"></a-asset-item>
+                        <a-asset-item id="mRNA-lac-glb" src="/worlds/GeneticsDemo/assets/models/mRNA_lac.glb"></a-asset-item>
+                        <a-asset-item id="mRNA-rep-glb" src="/worlds/GeneticsDemo/assets/models/mRNA_rep.glb"></a-asset-item>
 
-                        <a-asset-item id="RNAmoveSmall-glb"
-                                src="/worlds/GeneticsDemo/assets/models/RNApoly_anim.glb"></a-asset-item>
-                        <a-asset-item id="RNAmoveBig-glb"
-                                src="/worlds/GeneticsDemo/assets/models/RNApoly_animBig.glb"></a-asset-item>
+                        <a-asset-item id="RNAmoveSmall-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly_anim.glb"></a-asset-item>
+                        <a-asset-item id="RNAmoveBig-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly_animBig.glb"></a-asset-item>
 
                         <!-- Circles' built-in assets [REQUIRED] -->
                         <circles-assets />
@@ -94,20 +72,23 @@
                 <circles-manager-avatar />
 
                 <!-- Room -->
-                <a-box id=box_floor position="0 -0.1 0" width="30" height="0.25" depth="30" static-body="shape:box;"
-                        shadow="receive:true; cast:false;"></a-box>
+                <a-entity>
+                        <a-box id=box_floor position="0 -0.1 0" width="30" height="0.25" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;"></a-box>
 
-                <a-box id=box_wall_back position="0 4 10" width="30" height="10" depth="0.25" static-body="shape:box;"
-                        shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                <a-box id=box_wall_front position="0 4 -10" width="30" height="10" depth="0.25" static-body="shape:box;"
-                        shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                <a-box id=box_wall_right position="10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
-                        shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                <a-box id=box_wall_right position="-10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
-                        shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_back position="0 4 10" width="30" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_front position="0 4 -10" width="30" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_right position="10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_right position="-10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
 
-                <a-box id=box_ceiling position="0 8 0" width="30" height="0.25" depth="30" static-body="shape:box;"
-                        shadow="receive:true; cast:false;"></a-box>
+                        <a-box id=box_ceiling position="0 8 0" width="30" height="0.25" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;"></a-box>
+                </a-entity>
+                
 
                 <a-entity id="controlStation" geometry="primitive: box; width:9; height: 3.5; depth: 0.15"
                         position="-2 1 1" rotation="-30 90 0" scale="0.4 0.4 0.4" material="color: #035AF7;">
@@ -251,20 +232,20 @@
 
                         <a-entity id="RNA_moving_rep"
                                 gltf-model="#RNAmoveSmall-glb" visible="false" animation-mixer="clip: repressor_move; loop: repeat; timeScale: 0;">
-                                <a-entity id="repressor_trigger" position="-0.75 1.15 -0.15" 
+                                <a-entity id="repressor_trigger" position="-0.75 1.15 -0.2" 
                                         static-body="shape: none;"
-                                        shape="shape: sphere; radius: 0.4;"
+                                        shape="shape: sphere; radius: 0.3;"
                                         trigger 
-                                        collision-filter="group: RNA; collidesWith: RNA; collisionForces: true;">
+                                        collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
                                 </a-entity>
                         </a-entity>
                         <a-entity id="RNA_moving_lac"
                                 gltf-model="#RNAmoveBig-glb" visible="false" animation-mixer="clip: lac_move; loop: repeat; timeScale: 0;">
                                 <a-entity id="lac_trigger" position="-0.7 1.65 -1" 
                                         static-body="shape: none;"
-                                        shape="shape: sphere; radius: 0.4;"
+                                        shape="shape: sphere; radius: 0.3;"
                                         trigger 
-                                        collision-filter="group: RNA; collidesWith: RNA; collisionForces: true;">
+                                        collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
                                 </a-entity>
                         </a-entity>
                 </a-entity>

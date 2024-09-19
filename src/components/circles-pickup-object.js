@@ -49,6 +49,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     }
 
     CONTEXT_AF.el.addEventListener('click', CONTEXT_AF.clickFunc);
+    CONTEXT_AF.el.addEventListener('throw', CONTEXT_AF.throwFunc);
   },
   update: function(oldData) {
     const CONTEXT_AF = this;
@@ -196,6 +197,10 @@ AFRAME.registerComponent('circles-pickup-object', {
     else {
       CONTEXT_AF.pickup(true, CONTEXT_AF);
     }
+  },
+  throwFunc : function(e) {
+    const CONTEXT_AF = (e) ? e.srcElement.components['circles-pickup-object'] : this;
+    CONTEXT_AF.release(true, CONTEXT_AF);
   },
   setPickUpAnimations : function()
   {
