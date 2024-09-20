@@ -1,3 +1,5 @@
+let holderCount = 0;
+
 AFRAME.registerComponent('collision-holder', {
     init: function () {
         // Setup self references
@@ -73,6 +75,8 @@ AFRAME.registerComponent('collision-holder', {
                 partner = document.querySelector("#h11");
                 partner.emit('setPartner');
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacIPromoter-free" && test == "h11") {
                 //this.el.parentNode.object3D.visible = false;
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacIPromoter.glb');
@@ -84,6 +88,8 @@ AFRAME.registerComponent('collision-holder', {
                 partner.emit('setPartner');
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacI-free" && test == "h2") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacI.glb');
 
@@ -91,6 +97,8 @@ AFRAME.registerComponent('collision-holder', {
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "capSite-free" && test == "h3") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/capSite.glb');
 
@@ -98,6 +106,8 @@ AFRAME.registerComponent('collision-holder', {
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacPromoter-free" && test == "h4") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacPromoter.glb');
 
@@ -108,6 +118,8 @@ AFRAME.registerComponent('collision-holder', {
                 partner.emit('setPartner');
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacPromoter-free" && test == "h14") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacPromoter.glb');
 
@@ -118,6 +130,8 @@ AFRAME.registerComponent('collision-holder', {
                 partner.emit('setPartner');
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacOperator-free" && test == "h5") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacOperator.glb');
 
@@ -125,6 +139,8 @@ AFRAME.registerComponent('collision-holder', {
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacZ-free" && test == "h6") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacZ.glb');
 
@@ -132,6 +148,8 @@ AFRAME.registerComponent('collision-holder', {
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacY-free" && test == "h7") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacY.glb');
 
@@ -139,6 +157,8 @@ AFRAME.registerComponent('collision-holder', {
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             } else if (attacker == "lacA-free" && test == "h8") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacA.glb');
 
@@ -146,8 +166,19 @@ AFRAME.registerComponent('collision-holder', {
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
+                holderCount++;
+                console.log('The number of DNA segments assembled is: ' + holderCount);
             }
 
+            if(holderCount == 8){
+                rep_trigger = document.querySelector('#repressor_trigger');
+                lac_trigger = document.querySelector('#lac_trigger');
+
+                rep_trigger.emit('setState', {value : 'unbound'});
+                lac_trigger.emit('setState', {value : 'unbound'});
+                console.log('DNA set is complete');
+                holderCount++;
+            }
         }
     },
 

@@ -120,32 +120,16 @@ function setPreset (value) {
     object.setAttribute('visible', 'false');
   }
 
-  function setDynamicPosition(id, position){
+  function setDynamicLocation(id, position, rotation){
     const object = document.querySelector('#' + id);
     console.log('Setting new dynamic position of ' + id);
 
     object.removeAttribute('dynamic-body');
 
     object.setAttribute('position', position);
+    object.setAttribute('rotation', rotation);
 
     object.emit('throw');
-    /*
-    let data = object.getAttribute('circles-pickup-object');
-    console.log('Shape name is ' + data.shapeNames[0]);
-
-    if (data.shapeNames.length > 0)
-      {
-        // Resetting shape components
-        for (var i = 0; i < data.shapeNames.length; i++)
-        {
-          var shape = object.getAttribute(data.shapeNames[i]);
-          
-          // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
-          object.removeAttribute(data.shapeNames[i]);
-  
-          object.setAttribute(data.shapeNames[i], shape);
-        }
-      }*/
 
     object.setAttribute('dynamic-body', {shape: 'none'});
 

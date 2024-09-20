@@ -4,7 +4,7 @@ AFRAME.registerComponent('trigger', {
         const CONTEXT_AF = this;
 
         // setup global variables
-        CONTEXT_AF.currentState = "unbound";
+        CONTEXT_AF.currentState = "inActive";
         CONTEXT_AF.type = "null";
 
         CONTEXT_AF.attacker = "null";
@@ -14,23 +14,27 @@ AFRAME.registerComponent('trigger', {
             //console.log('Holder has collided with body #' + e.detail.body.id);
 
             if (CONTEXT_AF.currentState == "unbound") {
-                console.log('Trigger has collided with body #' + e.detail.body.id);
-                e.detail.target.el;  // Original entity (holder).
-                console.log('Original entity= ' + e.detail.target.el.id);
-                e.detail.body.el;    // Other entity, which (holder) touched.
-                console.log('Touched entity= ' + e.detail.body.el.id);
+                //console.log('Trigger has collided with body #' + e.detail.body.id);
+                //e.detail.target.el;  // Original entity (holder).
+                //console.log('Original entity= ' + e.detail.target.el.id);
+                //e.detail.body.el;    // Other entity, which (holder) touched.
+                //console.log('Touched entity= ' + e.detail.body.el.id);
 
                 attacker = e.detail.body.el.id;
 
                 if (attacker == "RNApoly" && e.detail.target.el.id == "repressor_trigger") {
                     CONTEXT_AF.currentState = "binding";
-                    console.log('Trigger is binding');
+                    //console.log('Trigger is binding');
                 }else if(attacker == "RNApoly" && e.detail.target.el.id == "lac_trigger"){
                     CONTEXT_AF.currentState = "binding";
-                    console.log('Trigger is binding');
+                    //console.log('Trigger is binding');
                 }
             }
 
+        });
+
+        CONTEXT_AF.el.addEventListener('setState', function(evt){
+            CONTEXT_AF.currentState = evt.detail.value;
         });
     },
 
@@ -43,7 +47,7 @@ AFRAME.registerComponent('trigger', {
 
         // check if the indicator is running
         if (CONTEXT_AF.currentState == "binding") {
-            console.log('Object Bound to ' + test);
+            //console.log('Object Bound to ' + test);
 
             partner = document.querySelector("#" + attacker);
 
@@ -51,14 +55,14 @@ AFRAME.registerComponent('trigger', {
                 var mover = document.querySelector("#RNA_moving_rep");
                 mover.setAttribute('visible', 'true');
                 partner.setAttribute('visible', 'false');
+                partner.removeAttribute('dynamic-body');
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_rep"); //turn on the animation
                 setTimeout('pause("#RNA_moving_rep")', 6200); //pause the animation after a delay that is roughly the length of the animation
                 setTimeout('setInvisible("#RNA_moving_rep")', 6250); //make invisible to show that it has finished
 
-                //setTimeout(() => { partner.setAttribute('position', { x: -0.7, y: 1.65, z: -0.7 }).syncToPhysics(); }, 6255);
-                setTimeout(() => { setDynamicPosition(attacker, { x: -0.7, y: 1.65, z: -0.7 }); }, 6255);
+                setTimeout(() => { setDynamicLocation(attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 }); }, 6255);
                 setTimeout(() => { partner.setAttribute('visible', 'true'); }, 6260);
 
                 setTimeout('play("#RNA_moving_rep")', 6300); //make sure the animation cycles back to the start of the loop
@@ -69,11 +73,17 @@ AFRAME.registerComponent('trigger', {
             }else if(test == "lac_trigger"){
                 var mover = document.querySelector("#RNA_moving_lac");
                 mover.setAttribute('visible', 'true');
+                partner.setAttribute('visible', 'false');
+                partner.removeAttribute('dynamic-body');
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_lac"); //turn on the animation
                 setTimeout('pause("#RNA_moving_lac")', 16700); //pause the animation after a delay that is roughly the length of the animation
                 setTimeout('setInvisible("#RNA_moving_lac")', 16750); //make invisible to show that it has finished
+
+                setTimeout(() => { setDynamicLocation(attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 }); }, 16755);
+                setTimeout(() => { partner.setAttribute('visible', 'true'); }, 16760);
+
                 setTimeout('play("#RNA_moving_lac")', 16800); //make sure the animation cycles back to the start of the loop
                 setTimeout('pause("#RNA_moving_lac")', 16975);
 
@@ -81,7 +91,7 @@ AFRAME.registerComponent('trigger', {
 
             }
 
-            console.log('Trigger is bound');
+            //console.log('Trigger is bound');
         }
     },
 
