@@ -37,6 +37,7 @@ AFRAME.registerComponent('circles-data-collection',
         this.endCollection = this.endCollection.bind(this);
 
         this.collectedData = {};
+        this.currentInteractableObjects = [];
 
         // Getting current circle
         // url: http://domain/w/circle
@@ -54,8 +55,7 @@ AFRAME.registerComponent('circles-data-collection',
         // Listening for event to start collecting data
         element.addEventListener(schema.startEvent, this.startCollection);
     },
-    /*
-    displayStartUI: function()
+    /*displayStartUI: function()
     {
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
@@ -240,6 +240,21 @@ AFRAME.registerComponent('circles-data-collection',
             this.startTime = currentDate;
         }
 
+        // Objects interacted with
+        if (schema.dataToCollect.includes('objectsInteractedWith') && schema.interactableObjects.length > 0)
+        {
+            // Saving interactable objects in case they change before data collection ends
+            this.currentInteractableObjects = schema.interactableObjects;
+
+            this.collectedData.objectsInteractedWith = [];
+
+            // Listening a click for each object 
+            for (const object of this.currentInteractableObjects)
+            {
+                document.getElementById(object).addEventListener('click', this.objectSelected);
+            }
+        }
+
         // Time per task
         // If time per task data is collected, listen for event that current task was completed
         // Otherwise listen for event to stop collecting data
@@ -293,6 +308,22 @@ AFRAME.registerComponent('circles-data-collection',
         const CONTEXT_AF = this;
         const element = CONTEXT_AF.el;
         const schema = CONTEXT_AF.data;
+
+        var currentObject = event.currentTarget.id;
+
+        // If the same object should not be repeatedly tracked,
+        // Checking if the current object is the same as the previous object
+        // If it is, exiting the function
+        if (!schema.trackRepeatedInteractions && currentObject == this.collectedData.objectsInteractedWith.at(-1))
+        {
+            console.log(event.currentTarget.id + ' just interacted with');
+            return;
+        }
+
+        // Saving current object
+        this.collectedData.objectsInteractedWith.push(currentObject);
+        
+        console.log(event.currentTarget.id + ' interacted with');
     },
     endCollection: function()
     {
@@ -313,6 +344,16 @@ AFRAME.registerComponent('circles-data-collection',
         if (schema.dataToCollect.includes('totalTime') || schema.gradeVariable == 'totalTime')
         {
             this.collectedData.totalTime = currentDate - this.startTime;
+        }
+
+        // Objects interaction with
+        if (schema.dataToCollect.includes('objectsInteractedWith') && this.currentInteractableObjects.length > 0)
+        {
+            // Removing event listeners from each object
+            for (const object of this.currentInteractableObjects)
+            {
+                document.getElementById(object).removeEventListener('click', this.objectSelected);
+            }
         }
 
         // Time per task

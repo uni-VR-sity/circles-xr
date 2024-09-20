@@ -34,12 +34,45 @@
       <a-entity id="data-collector"
                 circles-data-collection="dataToCollect:date,time,user,totalTime,timePerTask,objectsInteractedWith;
                                          taskEvents:task1Done,task2Done,task3Done,task4Done; 
-                                         interactableObjects:task-1-button,task-2-button,task-3-button,task-4-button,large-graduated-cylinder-1,small-graduated-cylinder-1,volumetric-flask,test-tube-rack-1,beaker-1,erlenmeyer-flask,large-graduated-cylinder-2,test-tube-rack-2,beaker-2">
+                                         interactableObjects:task-1-button,task-2-button,task-3-button,task-4-button,large-graduated-cylinder-1,small-graduated-cylinder-1,volumetric-flask,test-tube-rack-1,beaker-1,erlenmeyer-flask,large-graduated-cylinder-2,test-tube-rack-2,beaker-2;
+                                         trackRepeatedInteractions:false;">
       </a-entity>
 
       <!-- Classroom -->
       <a-entity id="classroom" 
-                gltf-model="url(http://localhost:1111/asset-library/classroom/room.glb)">
+                gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/room.glb)">
+      </a-entity>
+
+      <!-- Data collection controls -->
+      <a-entity id="data-collection-controls"
+                position="0 0 -1.5">
+
+        <a-entity position="0 0 0"
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
+        </a-entity>
+
+        <!-- Start collection button -->
+        <a-entity id="start-collection-button"
+                  position="-0.45 0.9 0"
+                  circles-button="click_on_event:startDataCollection; target:#data-collector">
+        </a-entity>
+
+        <!-- Start collection text -->
+        <a-entity position="-0.45 0.95 0.25"
+                  text="value:Start Collection; align:center; color:#000000">
+        </a-entity>
+
+        <!-- End collection button -->
+        <a-entity id="end-collection-button"
+                  position="0.45 0.9 0"
+                  circles-button="click_on_event:endDataCollection; target:#data-collector">
+        </a-entity>
+
+        <!-- End collection text -->
+        <a-entity position="0.45 0.95 0.25"
+                  text="value:End Collection; align:center; color:#000000">
+        </a-entity>
+      
       </a-entity>
 
       <!-- Task 1 -->
@@ -48,13 +81,13 @@
                 rotation="0 180 0">
 
         <a-entity position="-2.2 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
         <a-entity position="0 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
         <a-entity position="2.2 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
 
         <!-- Task 1 button -->
@@ -77,13 +110,13 @@
                 rotation="0 90 0">
 
         <a-entity position="-2.2 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
         <a-entity position="0 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
         <a-entity position="2.2 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
 
         <!-- Task 2 button -->
@@ -105,13 +138,13 @@
                 position="0 0 5">
 
         <a-entity position="-2.2 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
         <a-entity position="0 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
         <a-entity position="2.2 0 0"
-                  gltf-model="url(http://localhost:1111/asset-library/classroom/desk.glb)">
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)">
         </a-entity>
 
         <!-- Task 3 button -->
