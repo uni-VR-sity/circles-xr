@@ -4,7 +4,7 @@ AFRAME.registerComponent('trigger', {
         const CONTEXT_AF = this;
 
         // setup global variables
-        CONTEXT_AF.currentState = "inActive";
+        CONTEXT_AF.currentState = "null";
         CONTEXT_AF.type = "null";
 
         CONTEXT_AF.attacker = "null";
@@ -14,7 +14,7 @@ AFRAME.registerComponent('trigger', {
             //console.log('Holder has collided with body #' + e.detail.body.id);
 
             if (CONTEXT_AF.currentState == "unbound") {
-                //console.log('Trigger has collided with body #' + e.detail.body.id);
+                console.log('Trigger has collided with body #' + e.detail.body.id);
                 //e.detail.target.el;  // Original entity (holder).
                 //console.log('Original entity= ' + e.detail.target.el.id);
                 //e.detail.body.el;    // Other entity, which (holder) touched.
@@ -24,11 +24,15 @@ AFRAME.registerComponent('trigger', {
 
                 if (attacker == "RNApoly" && e.detail.target.el.id == "repressor_trigger") {
                     CONTEXT_AF.currentState = "binding";
-                    //console.log('Trigger is binding');
+                    console.log('RepressorTrigger is binding');
                 }else if(attacker == "RNApoly" && e.detail.target.el.id == "lac_trigger"){
                     CONTEXT_AF.currentState = "binding";
-                    //console.log('Trigger is binding');
+                    console.log('LacTrigger is binding');
+                }else if(attacker == "repressor" && e.detail.target.el.id == "rep_trigger"){
+                    CONTEXT_AF.currentState = "binding";
+                    console.log('RepTrigger is binding');
                 }
+
             }
 
         });
@@ -47,7 +51,7 @@ AFRAME.registerComponent('trigger', {
 
         // check if the indicator is running
         if (CONTEXT_AF.currentState == "binding") {
-            //console.log('Object Bound to ' + test);
+            //console.log('Object Bound to ' + test.detail.id);
 
             partner = document.querySelector("#" + attacker);
 
@@ -89,6 +93,14 @@ AFRAME.registerComponent('trigger', {
 
                 setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 17100); //Reset the current state so that the trigger is available again
 
+            }else if(test == "rep_trigger"){
+                partner.removeAttribute('dynamic-body');
+
+                partner.setAttribute('position', { x: 0, y: 1.2, z: -6.7 });
+                partner.setAttribute('rotation', { x: 0, y: 0, z: 0 });
+
+                partner.classList.remove("interactive");
+                //setDynamicLocation(attacker, { x: 1.5, y: 1.2, z: -6.5 }, { x: 0, y: 0, z: 0 });
             }
 
             //console.log('Trigger is bound');
