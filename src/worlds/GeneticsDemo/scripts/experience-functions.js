@@ -82,7 +82,16 @@ function setPreset (value) {
     reset_button.setAttribute('circles-interactive-visible', 'true');
     
     //Create a randomly placed glucose molecule
-    mol_manager.emit('mol_spawn', {value : 'glucose', pos : 'null', rot : 'null'});
+    var sample = 0;
+    while (sample < 40){
+      mol_manager.emit('mol_spawn', {value : 'lactose', pos : 'null', rot : 'null'});
+      mol_manager.emit('mol_spawn', {value : 'glucose', pos : 'null', rot : 'null'});
+      //mol_manager.emit('mol_spawn', {value : 'galactose', pos : 'null', rot : 'null'});
+      //mol_manager.emit('mol_spawn', {value : 'allolactose', pos : 'null', rot : 'null'});
+      mol_manager.emit('mol_spawn', {value : 'camp', pos : 'null', rot : 'null'});
+      sample++;
+    }
+    //mol_manager.emit('mol_spawn', {value : 'galactose', pos : 'null', rot : 'null'});
   };
 
 
@@ -94,6 +103,16 @@ function setPreset (value) {
 
         let reset_button = document.querySelector('#resetButtonGroup');
         reset_button.setAttribute('circles-interactive-visible', 'false');
+
+        //Get a list of all the molecules
+        let sample = document.querySelectorAll('.molecule');
+        //console.log(sample[0]);
+
+        //Purge the molecules
+        for (let i = 0; i < sample.length; i++) {
+          sample[i].parentNode.removeChild(sample[i]);
+          console.log("killed");
+        }
 
         ActiveState = 'resetting';
     }
