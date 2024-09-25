@@ -109,8 +109,8 @@ AFRAME.registerComponent('molecule-manager', {
                 } else {
                     //Set molecule position to a random position within bounds
                     mol.setAttribute('position', {
-                        x: (Math.random() * 8 * plusOrMinus),
-                        y: (Math.random() * 3),
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
                         z: (Math.random() * -7)
                     });
                 }
@@ -202,8 +202,8 @@ AFRAME.registerComponent('molecule-manager', {
                 } else {
                     //Set molecule position to a random position within bounds
                     mol.setAttribute('position', {
-                        x: (Math.random() * 8 * plusOrMinus),
-                        y: (Math.random() * 3),
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
                         z: (Math.random() * -7)
                     });
                 }
@@ -295,8 +295,8 @@ AFRAME.registerComponent('molecule-manager', {
                 } else {
                     //Set molecule position to a random position within bounds
                     mol.setAttribute('position', {
-                        x: (Math.random() * 8 * plusOrMinus),
-                        y: (Math.random() * 3),
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
                         z: (Math.random() * -7)
                     });
                 }
@@ -388,8 +388,8 @@ AFRAME.registerComponent('molecule-manager', {
                 } else {
                     //Set molecule position to a random position within bounds
                     mol.setAttribute('position', {
-                        x: (Math.random() * 8 * plusOrMinus),
-                        y: (Math.random() * 3),
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
                         z: (Math.random() * -7)
                     });
                 }
@@ -493,8 +493,8 @@ AFRAME.registerComponent('molecule-manager', {
                 } else {
                     //Set molecule position to a random position within bounds
                     mol.setAttribute('position', {
-                        x: (Math.random() * 8 * plusOrMinus),
-                        y: (Math.random() * 3),
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
                         z: (Math.random() * -7)
                     });
                 }
@@ -594,8 +594,8 @@ AFRAME.registerComponent('molecule-manager', {
                 } else {
                     //Set molecule position to a random position within bounds
                     mol.setAttribute('position', {
-                        x: (Math.random() * 8 * plusOrMinus),
-                        y: (Math.random() * 3),
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
                         z: (Math.random() * -7)
                     });
                 }
@@ -657,6 +657,337 @@ AFRAME.registerComponent('molecule-manager', {
                 mol.appendChild(mol_label);
     
                 console.log('camp molecule has been created');
+                break;
+
+            case "beta-gal":
+                mol.classList.add("beta-gal");
+    
+                mol.setAttribute('scale', {
+                    x: 0.6,
+                    y: 0.6,
+                    z: 0.6
+                });
+    
+                // Setting molecule rotation
+                if (rotation != "null") {
+                    mol.setAttribute('rotation', {
+                        x: rotation[0],
+                        y: rotation[1],
+                        z: rotation[2]
+                    });
+                } else {
+                    mol.setAttribute('rotation', {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    });
+                }
+    
+                if (position != "null") {
+                    // Set molecule position to provided position
+                    mol.setAttribute('position', {
+                        x: position[0],
+                        y: position[1],
+                        z: position[2]
+                    });
+                } else {
+                    //Set molecule position to a random position within bounds
+                    mol.setAttribute('position', {
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
+                        z: (Math.random() * -7)
+                    });
+                }
+    
+                mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/beta-gal.glb)');
+                mol.setAttribute('dynamic-body', { shape: 'none' });
+                mol.setAttribute('shadow', {
+                    receive: 'false',
+                    cast: 'true'
+                });
+    
+                mol.setAttribute('shape__main', {
+                    shape: 'cylinder',
+                    height: 0.12,
+                    radiusTop: 0.35,
+                    radiusBottom: 0.35,
+                    numSegments: 16
+                });
+    
+                mol.setAttribute('circles-pickup-object', {
+                    physicsObject: 'true',
+                    shapeNames: 'shape__main',
+                    pickupRotation: '45 0 0',
+                    pickupScale: '0.8 0.8 0.8',
+                    dropScale: '0.6 0.6 0.6',
+                    animate: 'false'
+                });
+    
+                //Label creation********************************
+                // Creating mol label
+                var mol_label = document.createElement('a-text');
+    
+                mol_label.setAttribute('geometry', {
+                    primitive: 'plane',
+                    height: 0.15,
+                    width: 0.3
+                });
+    
+                mol_label.setAttribute('text', {
+                    value: type,
+                    align: 'center'
+                });
+    
+                mol_label.setAttribute('material', {
+                    color: 'black'
+                });
+    
+                mol_label.setAttribute('position', {
+                    x: 0,
+                    y: 0.15,
+                    z: 0
+                });
+
+                mol_label.setAttribute('scale', {
+                    x: 0.4,
+                    y: 0.4,
+                    z: 0.4
+                });
+    
+                mol_label.setAttribute('width', '2');
+    
+                mol_label.setAttribute('circles-lookat', {
+                    constrainYAxis: 'false'
+                });
+    
+                mol.appendChild(mol_label);
+    
+                console.log('Beta-gal molecule has been created');
+                break;
+
+            case "mRNA-rep":
+                let sample = document.querySelectorAll('.mRNA');
+                let tag = sample.length++;
+                
+                mol.setAttribute('id', 'mRNA-head-' + tag);
+
+                mol.classList.add("mRNA");
+
+                // Setting molecule rotation
+                if (rotation != "null") {
+                    mol.setAttribute('rotation', {
+                        x: rotation[0],
+                        y: rotation[1],
+                        z: rotation[2]
+                    });
+                } else {
+                    mol.setAttribute('rotation', {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    });
+                }
+    
+                if (position != "null") {
+                    // Set molecule position to provided position
+                    mol.setAttribute('position', {
+                        x: position[0],
+                        y: position[1],
+                        z: position[2]
+                    });
+                } else {
+                    //Set molecule position to a random position within bounds
+                    mol.setAttribute('position', {
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
+                        z: (Math.random() * -7)
+                    });
+                }
+    
+                mol.setAttribute('scale', {
+                    x: 1,
+                    y: 1,
+                    z: 1
+                });
+    
+                mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/mRNA_rep.glb)');
+                mol.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    mass: 1,
+                    angularDamping: 0.3
+                });
+
+                mol.setAttribute('shadow', {
+                    receive: 'false',
+                    cast: 'true'
+                });
+    
+                mol.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 0.12
+                });
+    
+                mol.setAttribute('circles-pickup-object', {
+                    physicsObject: 'true',
+                    shapeNames: 'shape__main'
+                });
+    
+                //Label creation********************************
+                // Creating mol label
+                var mol_label = document.createElement('a-text');
+    
+                mol_label.setAttribute('geometry', {
+                    primitive: 'plane',
+                    height: 0.15,
+                    width: 0.35
+                });
+
+                mol_label.setAttribute('scale', {
+                    x: 0.4,
+                    y: 0.4,
+                    z: 0.4
+                });
+    
+                mol_label.setAttribute('text', {
+                    value: type,
+                    align: 'center'
+                });
+    
+                mol_label.setAttribute('material', {
+                    color: 'black'
+                });
+    
+                mol_label.setAttribute('position', {
+                    x: 0,
+                    y: 0.25,
+                    z: 0
+                });
+    
+                mol_label.setAttribute('width', '1.5');
+    
+                mol_label.setAttribute('circles-lookat', {
+                    constrainYAxis: 'false'
+                });
+    
+                mol.appendChild(mol_label);
+
+                //Core creation********************************
+                // Creating mRNA core
+                var mol_core = document.createElement('a-entity');
+
+                mol_core.setAttribute('id', 'mRNA-core-' + tag);
+    
+                mol_core.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/mRNA_rep.glb)');
+                mol_core.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+    
+                mol_core.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 0.13
+                });
+                
+                mol_core.setAttribute('constraint', {
+                    target: '#tail-' + tag + '-1',
+                    type: 'pointToPoint',
+                    pivot: '0 0 0',
+                    targetPivot: '0 0.15 0',
+                    maxForce: 1,
+                    collideConnected: 'false'
+                });
+    
+                mol_core.setAttribute('visible', 'false');
+    
+                mol_core.setAttribute('collision-filter', {
+                    group: 'mRNA',
+                    collidesWith: 'mRNA'
+                });
+    
+                mol.appendChild(mol_core);
+
+                //Create first tail node
+                var mol_tail_01 = document.createElement('a-entity');
+
+                mol_tail_01.setAttribute('id', 'tail-' + tag + '-1');
+
+                mol_tail_01.setAttribute('scale', {
+                    x: 0.8,
+                    y: 1,
+                    z: 0.8
+                });
+
+                mol_tail_01.setAttribute('position', {
+                    x: -0.15,
+                    y: 0,
+                    z: 0
+                });
+    
+                mol_tail_01.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/tail_rep.glb)');
+                mol_tail_01.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    mass: 0.25,
+                    angularDamping: 0.5
+                });
+    
+                mol_tail_01.setAttribute('shape__main', {
+                    shape: 'cylinder',
+                    radiusTop: 0.05,
+                    radiusBottom: 0.085,
+                    height: 0.2,
+                    offset: '0 -0.075 0'
+                });
+                
+                mol_tail_01.setAttribute('constraint', {
+                    target: '#tail-' + tag + '-2',
+                    type: 'pointToPoint',
+                    pivot: '0 -0.2 0',
+                    targetPivot: '0 0 0',
+                    maxForce: 1,
+                    collideConnected: 'true'
+                });
+    
+                mol.appendChild(mol_tail_01);
+
+                //Create second tail node
+                var mol_tail_02 = document.createElement('a-entity');
+
+                mol_tail_02.setAttribute('id', 'tail-' + tag + '-2');
+
+                mol_tail_02.setAttribute('position', {
+                    x: -0.15,
+                    y: 0,
+                    z: 0
+                });
+    
+                mol_tail_02.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/tail_rep.glb)');
+                mol_tail_02.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    mass: 0.25,
+                    angularDamping: 0.5
+                });
+    
+                mol_tail_02.setAttribute('shape__main', {
+                    shape: 'cylinder',
+                    radiusTop: 0.05,
+                    radiusBottom: 0.085,
+                    height: 0.2,
+                    offset: '0 -0.075 0'
+                });
+                
+                /*
+                mol_tail_01.setAttribute('constraint', {
+                    target: '#tail-' + tag + '-2',
+                    type: 'pointToPoint',
+                    pivot: '0 0 0',
+                    targetPivot: '0 0.15 0',
+                    maxForce: 1,
+                    collideConnected: 'true'
+                });*/
+    
+                mol_tail_01.appendChild(mol_tail_02);
+
+                console.log('mRNA molecule has been created');
+    
                 break;
     
             default:
