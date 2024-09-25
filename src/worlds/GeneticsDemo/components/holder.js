@@ -6,7 +6,7 @@ AFRAME.registerComponent('collision-holder', {
         const CONTEXT_AF = this;
 
         // setup global variables
-        CONTEXT_AF.currentState = "unbound";
+        CONTEXT_AF.currentState = "null";
 
         CONTEXT_AF.attacker = "null";
 
@@ -45,6 +45,11 @@ AFRAME.registerComponent('collision-holder', {
                 }
             }
 
+        });
+
+        CONTEXT_AF.el.addEventListener('setState', function(evt){
+            console.log('Set holder state to unboound');
+            CONTEXT_AF.currentState = evt.detail.value;
         });
 
         CONTEXT_AF.el.addEventListener('setPartner', function(){

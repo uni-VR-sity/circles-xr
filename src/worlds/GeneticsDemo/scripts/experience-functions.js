@@ -1,6 +1,8 @@
 let GlobalPreset = 'null';
 let ActiveState = 'null';
 
+let ready = false;
+
 let scene;
 let mol_manager;
 
@@ -81,17 +83,27 @@ function startExperience() {
   let reset_button = document.querySelector('#resetButtonGroup');
   reset_button.setAttribute('circles-interactive-visible', 'true');
 
+  let holders = document.querySelectorAll('.holder');
+  console.log(holders[0]);
+
+  for (let i = 0; i < holders.length; i++){
+    holders[i].emit('setState', {value : 'unbound'});
+  }
+
   //Create a randomly placed glucose molecule
   var sample = 0;
   while (sample < 40) {
-    mol_manager.emit('mol_spawn', { value: 'lactose', pos: 'null', rot: 'null' });
-    mol_manager.emit('mol_spawn', { value: 'glucose', pos: 'null', rot: 'null' });
-    //mol_manager.emit('mol_spawn', {value : 'galactose', pos : 'null', rot : 'null'});
-    //mol_manager.emit('mol_spawn', {value : 'allolactose', pos : 'null', rot : 'null'});
-    mol_manager.emit('mol_spawn', { value: 'camp', pos: 'null', rot: 'null' });
+    mol_manager.emit('mol_initial_spawn', { value: 'lactose', pos: 'null', rot: 'null' });
+    mol_manager.emit('mol_initial_spawn', { value: 'glucose', pos: 'null', rot: 'null' });
+    //mol_manager.emit('mol_initial_spawn', {value : 'galactose', pos : 'null', rot : 'null'});
+    //mol_manager.emit('mol_initial_spawn', {value : 'allolactose', pos : 'null', rot : 'null'});
+    mol_manager.emit('mol_initial_spawn', { value: 'camp', pos: 'null', rot: 'null' });
     sample++;
   }
-  mol_manager.emit('mol_spawn', {value : 'mRNA-rep', pos : 'null', rot : 'null'});
+  //mol_manager.emit('mol_initial_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 1.85, z: -5.95 }, rot : 'null'});
+
+  //mol_manager.emit('mol_initial_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'});
+
 };
 
 
@@ -112,6 +124,12 @@ function resetExperience() {
     for (let i = 0; i < sample.length; i++) {
       sample[i].parentNode.removeChild(sample[i]);
       console.log("killed");
+    }
+
+    let holders = document.querySelectorAll('.holder');
+
+    for (let i = 0; i < holders.length; i++){
+      holders[i].emit('setState', {value : 'null'});
     }
 
     ActiveState = 'resetting';

@@ -12,6 +12,7 @@
         <script src="/worlds/GeneticsDemo/components/trigger.js"></script>
         <script src="/worlds/GeneticsDemo/components/molecule-manager.js"></script>
         <script src="/worlds/GeneticsDemo/scripts/experience-functions.js"></script>
+        <script src="/worlds/GeneticsDemo/components/reactive-mol.js"></script>
 </head>
 
 <body>
@@ -168,66 +169,66 @@
                                         rotation="-43.3, 61.61, 0" material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacIPromoter_holder" class="holder" gltf-model="#lacIPromoter_holder-glb"
+                        <a-entity id="lacIPromoter_holder" gltf-model="#lacIPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h1" static-body radius="0.085;" height="0.6"
+                                <a-cylinder collision-holder id="h1" class="holder" static-body radius="0.085;" height="0.6"
                                         position="-0.874 1.43 -0.472" rotation="-57, 3.02, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
-                                <a-cylinder collision-holder id="h11" static-body radius="0.085;" height="0.5"
+                                <a-cylinder collision-holder id="h11" class="holder" static-body radius="0.085;" height="0.5"
                                         position="-0.80 1.233 -0.221" rotation="-51.86, 29, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacI_holder" class="holder" gltf-model="#lacI_holder-glb"
+                        <a-entity id="lacI_holder" gltf-model="#lacI_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h2" static-body radius="0.09;" height="0.35"
+                                <a-cylinder collision-holder id="h2" class="holder" static-body radius="0.09;" height="0.35"
                                         position="-0.86 1.591 -0.733" rotation="-70.38, -20.5, 0.01"
                                         material="color:green;" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="capSite_holder" class="holder" gltf-model="#capSite_holder-glb"
+                        <a-entity id="capSite_holder" gltf-model="#capSite_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h3" static-body radius="0.09;" height="0.3"
+                                <a-cylinder collision-holder id="h3" class="holder" static-body radius="0.09;" height="0.3"
                                         position="-0.78 1.650 -0.919" rotation="-80, -27.61, 0.01"
                                         material="color:green;" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacPromoter_holder" class="holder" gltf-model="#lacPromoter_holder-glb"
+                        <a-entity id="lacPromoter_holder" gltf-model="#lacPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h4" static-body radius="0.09;" height="0.5"
+                                <a-cylinder collision-holder id="h4" class="holder" static-body radius="0.09;" height="0.5"
                                         position="-0.613 1.648 -1.120" rotation="-84.73, 135.9, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
-                                <a-cylinder collision-holder id="h14" static-body radius="0.09;" height="0.6"
+                                <a-cylinder collision-holder id="h14" class="holder" static-body radius="0.09;" height="0.6"
                                         position="-0.34 1.541 -1.25" rotation="-59.41, 102.09, 0"
                                         material="color:green; opacity: 0.6" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacOperator_holder" class="holder" gltf-model="#lacOperator_holder-glb"
+                        <a-entity id="lacOperator_holder" gltf-model="#lacOperator_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h5" static-body radius="0.1;" height="0.8"
+                                <a-cylinder collision-holder id="h5" class="holder" static-body radius="0.1;" height="0.8"
                                         position="0.01 1.258 -1.225" rotation="-50, 75, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacZ_holder" class="holder" gltf-model="#lacZ_holder-glb"
+                        <a-entity id="lacZ_holder" gltf-model="#lacZ_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h6" static-body radius="0.1;" height="0.8"
+                                <a-cylinder collision-holder id="h6" class="holder" static-body radius="0.1;" height="0.8"
                                         position="0.48 1.090 -1.01" rotation="-93.2, 60, 0"
                                         material="color:green; opacity: 0.3" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacY_holder" class="holder" gltf-model="#lacY_holder-glb"
+                        <a-entity id="lacY_holder" gltf-model="#lacY_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h7" static-body radius="0.1;" height="0.8"
+                                <a-cylinder collision-holder id="h7" class="holder" static-body radius="0.1;" height="0.8"
                                         position="0.850 1.287 -0.678" rotation="56.04, 31.26, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                         </a-entity>
-                        <a-entity id="lacA_holder" class="holder" gltf-model="#lacA_holder-glb"
+                        <a-entity id="lacA_holder" gltf-model="#lacA_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h8" static-body radius="0.1;" height="0.5"
+                                <a-cylinder collision-holder id="h8" class="holder"static-body radius="0.1;" height="0.5"
                                         position="0.98 1.493 -0.307" rotation="-89.74, -0.97, 0.01"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
@@ -525,7 +526,7 @@
                 </a-entity>
                 
 
-                <a-entity id="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6"
+                <a-entity id="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#beta-glb" dynamic-body="shape: none;"
                         shape__main="shape: cylinder; height: 0.12; radiusTop: 0.35; radiusBottom: 0.35; numSegments: 16"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main; pickupRotation: 45 0 0; pickupScale: 0.8 0.8 0.8; dropScale: 0.6 0.6 0.6; animate: false;">

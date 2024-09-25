@@ -10,6 +10,8 @@ AFRAME.registerComponent('trigger', {
         CONTEXT_AF.attacker = "null";
         CONTEXT_AF.partner;
 
+        CONTEXT_AF.manager = document.querySelector("#dna_model");
+
         // Setup trigger event listeners
         CONTEXT_AF.el.addEventListener('collide', function (e) {
             //console.log('Holder has collided with body #' + e.detail.body.id);
@@ -83,6 +85,7 @@ AFRAME.registerComponent('trigger', {
                 setTimeout('setInvisible("#RNA_moving_rep")', 6250); //make invisible to show that it has finished
 
                 setTimeout(() => { setDynamicLocation(CONTEXT_AF.attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 }); }, 6255);
+                setTimeout(() => { CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 2, z: -5.95 }, rot : 'null'}); }, 6255);
                 setTimeout(() => { CONTEXT_AF.partner.setAttribute('visible', 'true'); }, 6260);
 
                 setTimeout('play("#RNA_moving_rep")', 6300); //make sure the animation cycles back to the start of the loop
@@ -102,6 +105,7 @@ AFRAME.registerComponent('trigger', {
                 setTimeout('setInvisible("#RNA_moving_lac")', 16750); //make invisible to show that it has finished
 
                 setTimeout(() => { setDynamicLocation(CONTEXT_AF.attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 }); }, 16755);
+                setTimeout(() => { CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'}); }, 16755);
                 setTimeout(() => { CONTEXT_AF.partner.setAttribute('visible', 'true'); }, 16760);
 
                 setTimeout('play("#RNA_moving_lac")', 16800); //make sure the animation cycles back to the start of the loop
