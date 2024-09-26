@@ -84,7 +84,7 @@ function startExperience() {
   reset_button.setAttribute('circles-interactive-visible', 'true');
 
   let holders = document.querySelectorAll('.holder');
-  console.log(holders[0]);
+  //console.log(holders[0]);
 
   for (let i = 0; i < holders.length; i++){
     holders[i].emit('setState', {value : 'unbound'});
@@ -123,7 +123,7 @@ function resetExperience() {
     //Purge the molecules
     for (let i = 0; i < sample.length; i++) {
       sample[i].parentNode.removeChild(sample[i]);
-      console.log("killed");
+      //console.log("killed");
     }
 
     let holders = document.querySelectorAll('.holder');
@@ -138,14 +138,14 @@ function resetExperience() {
 };
 
 function pause(anim) {
-  console.log('Pause animation');
+  //console.log('Pause animation');
   document.querySelector(anim).setAttribute('animation-mixer', {
     timeScale: 0
   });
 }
 
 function play(anim) {
-  console.log('Play animation');
+  //console.log('Play animation');
   document.querySelector(anim).setAttribute('animation-mixer', {
     timeScale: 1
   });

@@ -17,7 +17,7 @@ AFRAME.registerComponent('trigger', {
             //console.log('Holder has collided with body #' + e.detail.body.id);
 
             if (CONTEXT_AF.currentState == "unbound") {
-                console.log('Trigger has collided with body #' + e.detail.body.id);
+                //console.log('Trigger has collided with body #' + e.detail.body.id);
                 //e.detail.target.el;  // Original entity (holder).
                 //console.log('Original entity= ' + e.detail.target.el.id);
                 //e.detail.body.el;    // Other entity, which (holder) touched.
@@ -27,13 +27,13 @@ AFRAME.registerComponent('trigger', {
 
                 if (CONTEXT_AF.attacker == "RNApoly" && e.detail.target.el.id == "repressor_trigger") {
                     CONTEXT_AF.currentState = "binding";
-                    console.log('RepressorTrigger is binding');
+                    //console.log('RepressorTrigger is binding');
                 }else if(CONTEXT_AF.attacker == "RNApoly" && e.detail.target.el.id == "lac_trigger"){
                     CONTEXT_AF.currentState = "binding";
-                    console.log('LacTrigger is binding');
+                    //console.log('LacTrigger is binding');
                 }else if(CONTEXT_AF.attacker == "repressor" && e.detail.target.el.id == "rep_trigger"){
                     CONTEXT_AF.currentState = "binding";
-                    console.log('RepTrigger is binding');
+                    //console.log('RepTrigger is binding');
                 }
 
             }
@@ -48,14 +48,14 @@ AFRAME.registerComponent('trigger', {
             if(evt.detail.value == 'true'){
 
                 CONTEXT_AF.currentState = 'null';
-                console.log('Repressor Blocking!');
+                //console.log('Repressor Blocking!');
 
             }else if(evt.detail.value == 'false'){
 
                 CONTEXT_AF.currentState = 'unbound';
 
             }else{
-                console.log('*Failed to Block*');
+                //console.log('*Failed to Block*');
             }
             
         });

@@ -15,7 +15,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             // set the current state
             CONTEXT_AF.currentPreset = evt.detail.value;
-            console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
+            //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
         });
 
         CONTEXT_AF.el.addEventListener('mol_initial_spawn', function (evt) {
@@ -134,7 +134,8 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
-                    shapeNames: 'shape__main'
+                    shapeNames: 'shape__main',
+                    pickupScale: '0.8 0.8 0.8'
                 });
     
                 //Label creation********************************
@@ -169,12 +170,14 @@ AFRAME.registerComponent('molecule-manager', {
                 });
     
                 mol.appendChild(mol_label);
-                console.log('Glucose molecule has been created');
+                //console.log('Glucose molecule has been created');
     
                 break;
 
             case "allolactose":
                 mol.classList.add("allolactose");
+
+                mol.setAttribute('mol-reactor', '');
     
                 mol.setAttribute('scale', {
                     x: 0.8,
@@ -219,7 +222,8 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
-                    shapeNames: 'shape__main'
+                    shapeNames: 'shape__main',
+                    pickupScale: '0.8 0.8 0.8'
                 });
     
                 //Label creation********************************
@@ -254,7 +258,7 @@ AFRAME.registerComponent('molecule-manager', {
                 });
     
                 mol.appendChild(mol_label);
-                console.log('Allolactose molecule has been created');
+                //console.log('Allolactose molecule has been created');
     
                 break;
 
@@ -304,7 +308,8 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
-                    shapeNames: 'shape__main'
+                    shapeNames: 'shape__main',
+                    pickupScale: '0.8 0.8 0.8'
                 });
     
                 //Label creation********************************
@@ -339,12 +344,14 @@ AFRAME.registerComponent('molecule-manager', {
                 });
     
                 mol.appendChild(mol_label);
-                console.log('Galactose molecule has been created');
+                //console.log('Galactose molecule has been created');
     
                 break;
 
             case "lactose":
                 mol.classList.add("lactose");
+
+                mol.setAttribute('mol-reactor', '');
     
                 mol.setAttribute('scale', {
                     x: 0.8,
@@ -395,7 +402,8 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
-                    shapeNames: 'shape__left, shape__right'
+                    shapeNames: 'shape__left, shape__right',
+                    pickupScale: '0.8 0.8 0.8',
                 });
     
                 //Label creation********************************
@@ -437,11 +445,13 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.appendChild(mol_label);
     
-                console.log('Lactose molecule has been created');
+                //console.log('Lactose molecule has been created');
                 break;
                 
             case "permease":
                 mol.classList.add("permease");
+
+                mol.setAttribute('mol-reactor', '');
     
                 mol.setAttribute('scale', {
                     x: 1,
@@ -530,11 +540,13 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.appendChild(mol_label);
     
-                console.log('Permease molecule has been created');
+                //console.log('Permease molecule has been created');
                 break;
                 
             case "camp":
                 mol.classList.add("camp");
+
+                mol.setAttribute('mol-reactor', '');
     
                 mol.setAttribute('scale', {
                     x: 0.8,
@@ -579,7 +591,8 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
-                    shapeNames: 'shape__main'
+                    shapeNames: 'shape__main',
+                    pickupScale: '0.8 0.8 0.8'
                 });
     
                 //Label creation********************************
@@ -621,11 +634,13 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.appendChild(mol_label);
     
-                console.log('camp molecule has been created');
+                //console.log('camp molecule has been created');
                 break;
 
             case "beta-gal":
                 mol.classList.add("beta-gal");
+
+                mol.setAttribute('mol-reactor', '');
     
                 mol.setAttribute('scale', {
                     x: 0.6,
@@ -719,7 +734,7 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.appendChild(mol_label);
     
-                console.log('Beta-gal molecule has been created');
+                //console.log('Beta-gal molecule has been created');
                 break;
 
             case "mRNA-rep":
@@ -1185,7 +1200,7 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol_tail_08.appendChild(mol_tail_09);
 
-                console.log('mRNA molecule has been created');
+                //console.log('mRNA molecule has been created');
     
                 break;
 
@@ -1652,7 +1667,7 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol_tail_08.appendChild(mol_tail_09);
 
-                console.log('mRNA molecule has been created');
+                //console.log('mRNA molecule has been created');
     
                 break;
     

@@ -48,7 +48,7 @@ AFRAME.registerComponent('collision-holder', {
         });
 
         CONTEXT_AF.el.addEventListener('setState', function(evt){
-            console.log('Set holder state to unboound');
+            //console.log('Set holder state to unboound');
             CONTEXT_AF.currentState = evt.detail.value;
         });
 

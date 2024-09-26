@@ -376,41 +376,41 @@
 
                 <!-- Free floating molecules-->
 
-                <a-entity id="CRP-01" position="-2 1 -3" rotation="0 45 0" scale="0.6 0.6 0.6"
+                <a-entity id="CRP_01" class="CRP" position="-2 1 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none;"
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;">
                         <a-text id="CRP-label-01" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
-                                scale="0.4 0.4 0.4" position="0 0.35 0" width="3.5"
+                                scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity id="CRP-02" position="2 1 -3" rotation="0 45 0" scale="0.6 0.6 0.6"
+                <a-entity id="CRP_02" class="CRP" position="2 1 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none;"
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;">
                         <a-text id="CRP-label-02" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
-                                scale="0.4 0.4 0.4" position="0 0.35 0" width="3.5"
+                                scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity class="camp" position="3 1 -2.5" rotation="0 45 0" scale="0.8 0.8 0.8"
+                <a-entity class="camp" position="3 1 -2.5" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#camp-glb" dynamic-body="shape: none;"
                         shape__main="shape: box; halfExtents: 0.05 0.05 0.05;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main; dropScale: 0.8 0.8 0.8;">
                         <a-text class="camp-label" text="value:camp; align:center"
                                 geometry="primitive:plane; height:0.3; width:0.6;" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 0.2 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity class="lactose" position="-3 1 -2.5" rotation="0 45 0" scale="0.8 0.8 0.8"
+                <a-entity class="lactose" position="-3 1 -2.5" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#lactose-glb" dynamic-body="shape: none;"
                         shape__left="shape: sphere; radius: 0.1; offset: -0.09 0 0;"
                         shape__right="shape: sphere; radius: 0.1; offset: 0.09 0 0;"
@@ -420,7 +420,8 @@
                                 position="0 0.25 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity class="glucose" position="-3.5 1 -3" scale="0.8 0.8 0.8" shadow="receive:false; cast:true;"
+                <a-entity class="glucose" position="-3.5 1 -3" scale="0.8 0.8 0.8"
+                        shadow="receive:false; cast:true;"
                         gltf-model="#glucose-glb" dynamic-body="shape: none;" shape__main="shape: sphere; radius: 0.1;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main;">
                         <a-text class="glucose-label" text="value:Glucose; align:center"
@@ -428,7 +429,7 @@
                                 position="0 0.25 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity id="permease" position="1.5 0.978 -2" rotation="0 45 0" scale="1 1 1"
+                <a-entity class="permease" position="1.5 0.978 -2" rotation="0 45 0" scale="1 1 1" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#permease-glb" dynamic-body="shape: none;"
                         shape__main="shape: cylinder; height: 0.6; radiusTop: 0.3; radiusBottom: 0.3; numSegments: 12"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main">
@@ -438,7 +439,7 @@
                         </a-text>
                 </a-entity>
 
-                <a-entity id="repressor" position="-1.5 0.978 -2" rotation="0 45 0" scale="1 1 1"
+                <a-entity class="repressor" position="-1.5 0.978 -2" rotation="0 45 0" scale="1 1 1"
                         shadow="receive:false; cast:true;" gltf-model="#repressor-glb" dynamic-body="shape: none;"
                         shape__left="shape: cylinder; height: 0.35; radiusTop: 0.05; radiusBottom: 0.2; offset: -0.075 -0.2 0;"
                         shape__right="shape: cylinder; height: 0.35; radiusTop: 0.05; radiusBottom: 0.2; offset: 0.075 -0.2 0;"
@@ -451,7 +452,7 @@
                                 position="0 0.65 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity id="ribosome" position="-1.5 1 -1" rotation="0 45 0" scale="2.5 2.5 2.5"
+                <a-entity id="ribosome" class="ribosome" position="-1.5 1 -1" rotation="0 45 0" scale="2.5 2.5 2.5" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#ribosome-glb" dynamic-body="shape: none;"
                         shape__right="shape: sphere; radius: 0.051; offset: 0.03 0.03 0"
                         shape__left="shape: sphere; radius: 0.051; offset: -0.03 0.03 0"
@@ -526,7 +527,7 @@
                 </a-entity>
                 
 
-                <a-entity id="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6" mol-reactor
+                <a-entity id="beta-gal" class="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#beta-glb" dynamic-body="shape: none;"
                         shape__main="shape: cylinder; height: 0.12; radiusTop: 0.35; radiusBottom: 0.35; numSegments: 16"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main; pickupRotation: 45 0 0; pickupScale: 0.8 0.8 0.8; dropScale: 0.6 0.6 0.6; animate: false;">
