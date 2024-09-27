@@ -179,10 +179,12 @@ AFRAME.registerComponent('collision-holder', {
                 repressor_trigger = document.querySelector('#repressor_trigger');
                 lac_trigger = document.querySelector('#lac_trigger');
                 rep_trigger = document.querySelector('#rep_trigger');
+                capSite_trigger = document.querySelector('#capSite_trigger');
 
                 repressor_trigger.emit('setState', {value : 'unbound'});
                 lac_trigger.emit('setState', {value : 'unbound'});
                 rep_trigger.emit('setState', {value : 'unbound'});
+                capSite_trigger.emit('setState', {value : 'unbound'});
                 console.log('DNA set is complete');
                 holderCount++;
             }

@@ -51,7 +51,14 @@ AFRAME.registerComponent('mol-reactor', {
         }
 
         CONTEXT_AF.el.addEventListener('setState', function(evt){
+
             CONTEXT_AF.currentState = evt.detail.value;
+            console.log('Set currentState to ' + CONTEXT_AF.currentState);
+            
+            if (CONTEXT_AF.currentState == "CRPbound"){
+                CONTEXT_AF.type = "CRP_bound";
+                CONTEXT_AF.el.classList.add("CRP_bound");
+            }
         });
 
         // Setup trigger event listeners
@@ -77,9 +84,25 @@ AFRAME.registerComponent('mol-reactor', {
                 }else if (isRepressor && CONTEXT_AF.type == "lactose") {
                     console.log("This molecule is hitting the repressor and should react");
                     CONTEXT_AF.currentState = "reacting";
-                }else if (isCRP && CONTEXT_AF.type == "CRP") {
+                }else if (isCRP && CONTEXT_AF.type == "camp") {
+                    console.log("This molecule is hitting a CRP, is a camp, and should react");
+
+                    setTimeout(() => { CONTEXT_AF.el.parentNode.removeChild(CONTEXT_AF.el); }, 0);
+
+                    e.detail.body.el.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/CRP_bound.glb');
+                    console.log("This molecule is:" + e.detail.body.el.id);
+
+                    //CONTEXT_AF.currentState = "CRPbound";
+                    e.detail.body.el.emit('setState', { value: 'CRPbound'});
+                }
+            }
+
+            if (CONTEXT_AF.currentState == "CRPbound"){
+                console.log("This CRP has been bound and the type is: " + CONTEXT_AF.type);
+
+                if (isCRP && CONTEXT_AF.type == "CRP_bound") {
                     console.log("This molecule is hitting a CRP, is a CRP, and should react");
-                    e.detail.body.el.emit('setState', "reacting");
+                    e.detail.body.el.emit('setState', { value: 'reacting'});
 
                     setTimeout(() => { CONTEXT_AF.el.parentNode.removeChild(CONTEXT_AF.el); }, 0);
 
@@ -130,15 +153,6 @@ AFRAME.registerComponent('mol-reactor', {
 
                     console.log("Reshaped " + e.detail.body.el.id);
 
-                    CONTEXT_AF.currentState = "reacting";
-                }else if (isCRP && CONTEXT_AF.type == "camp") {
-                    console.log("This molecule is hitting a CRP, is a camp, and should react");
-
-                    setTimeout(() => { CONTEXT_AF.el.parentNode.removeChild(CONTEXT_AF.el); }, 0);
-
-                    e.detail.body.el.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/CRP_bound.glb');
-
-                    //setTimeout(() => { CONTEXT_AF.currentState = "null"; }, 3000);
                     CONTEXT_AF.currentState = "reacting";
                 }
             }

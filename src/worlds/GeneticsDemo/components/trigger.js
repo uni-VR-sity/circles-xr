@@ -24,6 +24,7 @@ AFRAME.registerComponent('trigger', {
                 //console.log('Touched entity= ' + e.detail.body.el.id);
 
                 CONTEXT_AF.attacker = e.detail.body.el.id;
+                CONTEXT_AF.partner = e.detail.body.el;
 
                 if (CONTEXT_AF.attacker == "RNApoly" && e.detail.target.el.id == "repressor_trigger") {
                     CONTEXT_AF.currentState = "binding";
@@ -31,10 +32,15 @@ AFRAME.registerComponent('trigger', {
                 }else if(CONTEXT_AF.attacker == "RNApoly" && e.detail.target.el.id == "lac_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     //console.log('LacTrigger is binding');
-                }else if(CONTEXT_AF.attacker == "repressor" && e.detail.target.el.id == "rep_trigger"){
+                }else if(e.detail.body.el.classList.contains("repressor") && e.detail.target.el.id == "rep_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     //console.log('RepTrigger is binding');
+                }else if(e.detail.body.el.classList.contains("CRP_bound") && e.detail.target.el.id == "capSite_trigger"){
+                    CONTEXT_AF.currentState = "binding";
+                    console.log('capSite Trigger is binding');
                 }
+
+                //let isRepressor = e.detail.body.el.classList.contains("repressor");
 
             }
 
@@ -70,8 +76,6 @@ AFRAME.registerComponent('trigger', {
         // check if the indicator is running
         if (CONTEXT_AF.currentState == "binding") {
             //console.log('Object Bound to ' + test.detail.id);
-
-            CONTEXT_AF.partner = document.querySelector("#" + CONTEXT_AF.attacker);
 
             if(test == "repressor_trigger"){
                 var mover = document.querySelector("#RNA_moving_rep");
@@ -124,6 +128,15 @@ AFRAME.registerComponent('trigger', {
 
                 var blocker =  document.querySelector("#lac_trigger");
                 blocker.emit('blocked', {value : 'true'});
+                CONTEXT_AF.currentState = "bound";
+            }else if(test == "capSite_trigger"){
+                CONTEXT_AF.partner.removeAttribute('dynamic-body');
+
+                CONTEXT_AF.partner.setAttribute('position', { x: -1.148, y: 1.399, z: -6.42 });
+                CONTEXT_AF.partner.setAttribute('rotation', { x: 1.165, y: 62.94, z: 10.826 });
+
+                CONTEXT_AF.partner.classList.remove("interactive");
+
                 CONTEXT_AF.currentState = "bound";
             }
 

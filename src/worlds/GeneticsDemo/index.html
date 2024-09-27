@@ -171,67 +171,117 @@
                         </a-entity>
                         <a-entity id="lacIPromoter_holder" gltf-model="#lacIPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h1" class="holder" static-body radius="0.085;" height="0.6"
+                                <a-cylinder static-body radius="0.085;" height="0.6"
                                         position="-0.874 1.43 -0.472" rotation="-57, 3.02, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
-                                <a-cylinder collision-holder id="h11" class="holder" static-body radius="0.085;" height="0.5"
+                                <a-sphere id="h1" class="holder" collision-holder
+                                        position="-0.874 1.43 -0.472"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
+                                <a-cylinder static-body radius="0.085;" height="0.5"
                                         position="-0.80 1.233 -0.221" rotation="-51.86, 29, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h11" class="holder" collision-holder
+                                        position="-0.80 1.233 -0.221"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="lacI_holder" gltf-model="#lacI_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h2" class="holder" static-body radius="0.09;" height="0.35"
+                                <a-cylinder static-body radius="0.09;" height="0.35"
                                         position="-0.86 1.591 -0.733" rotation="-70.38, -20.5, 0.01"
                                         material="color:green;" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h2" class="holder" collision-holder
+                                        position="-0.86 1.591 -0.733"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="capSite_holder" gltf-model="#capSite_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h3" class="holder" static-body radius="0.09;" height="0.3"
+                                <a-cylinder static-body radius="0.09;" height="0.3"
                                         position="-0.78 1.650 -0.919" rotation="-80, -27.61, 0.01"
                                         material="color:green;" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h3" class="holder" collision-holder
+                                        position="-0.78 1.650 -0.919"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="lacPromoter_holder" gltf-model="#lacPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h4" class="holder" static-body radius="0.09;" height="0.5"
+                                <a-cylinder static-body radius="0.09;" height="0.5"
                                         position="-0.613 1.648 -1.120" rotation="-84.73, 135.9, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
-                                <a-cylinder collision-holder id="h14" class="holder" static-body radius="0.09;" height="0.6"
+                                <a-sphere id="h4" class="holder" collision-holder
+                                        position="-0.613 1.648 -1.120"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
+                                <a-cylinder static-body radius="0.09;" height="0.6"
                                         position="-0.34 1.541 -1.25" rotation="-59.41, 102.09, 0"
                                         material="color:green; opacity: 0.6" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h14" class="holder" collision-holder
+                                        position="-0.34 1.541 -1.25"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="lacOperator_holder" gltf-model="#lacOperator_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h5" class="holder" static-body radius="0.1;" height="0.8"
+                                <a-cylinder static-body radius="0.1;" height="0.8"
                                         position="0.01 1.258 -1.225" rotation="-50, 75, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h5" class="holder" collision-holder
+                                        position="0.01 1.258 -1.225"
+                                        static-body radius="0.35" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="lacZ_holder" gltf-model="#lacZ_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h6" class="holder" static-body radius="0.1;" height="0.8"
+                                <a-cylinder static-body radius="0.1;" height="0.8"
                                         position="0.48 1.090 -1.01" rotation="-93.2, 60, 0"
                                         material="color:green; opacity: 0.3" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h6" class="holder" collision-holder
+                                        position="0.48 1.090 -1.01"
+                                        static-body radius="0.35" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="lacY_holder" gltf-model="#lacY_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h7" class="holder" static-body radius="0.1;" height="0.8"
+                                <a-cylinder static-body radius="0.1;" height="0.8"
                                         position="0.850 1.287 -0.678" rotation="56.04, 31.26, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h7" class="holder" collision-holder
+                                        position="0.850 1.287 -0.678"
+                                        static-body radius="0.35" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="lacA_holder" gltf-model="#lacA_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder collision-holder id="h8" class="holder"static-body radius="0.1;" height="0.5"
+                                <a-cylinder static-body radius="0.1;" height="0.5"
                                         position="0.98 1.493 -0.307" rotation="-89.74, -0.97, 0.01"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
+                                <a-sphere id="h8" class="holder" collision-holder
+                                        position="0.98 1.493 -0.307"
+                                        static-body radius="0.3" visible="false"
+                                        collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
+                                </a-sphere>
                         </a-entity>
 
                         <a-entity id="RNA_moving_rep"
@@ -259,6 +309,13 @@
                                 collision-filter="group: repressor; collidesWith: repressor; collisionForces: false;"
                                 visible="false">
                         </a-entity>
+                        <a-entity id="capSite_trigger" position="-0.7 1.5 -0.8"
+                                static-body="shape: none;"
+                                shape="shape: sphere; radius: 0.3;"
+                                trigger 
+                                collision-filter="group: capSite; collidesWith: capSite; collisionForces: true;"
+                                visible="false">
+                        </a-entity>
                 </a-entity>
 
 
@@ -272,7 +329,7 @@
                         shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.0694 -0.2126 -0.1885;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:45 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacIPromoter; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -284,7 +341,7 @@
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0210 -0.0538 -0.0208;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0.5; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacI; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -295,7 +352,7 @@
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0205 -0.0261 -0.0012;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:capSite; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -310,7 +367,7 @@
                         shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.2084 0.0870 -0.1006;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacPromoter; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -325,7 +382,7 @@
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: 0.1596 -0.0434 -0.1259;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacOperator; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -339,7 +396,7 @@
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.1931 0.1211 -0.0265;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacZ; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -353,7 +410,7 @@
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.0940 0.1529 -0.1321;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacY; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -367,7 +424,7 @@
                         shape__end2="shape: sphere; radius: 0.07; offset: 0.0104 -0.1517 0.0164;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center1, shape__center2, shape__end1, shape__end2;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;">
+                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacA; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black;" scale="0.4 0.4 0.4" position="0 0 -0.3" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
@@ -381,7 +438,8 @@
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
+                        collision-filter="group: capSite; collidesWith: default, capSite; collisionForces: true;">
                         <a-text id="CRP-label-01" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
@@ -393,20 +451,11 @@
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
+                        collision-filter="group: capSite; collidesWith: default, capSite; collisionForces: true;">
                         <a-text id="CRP-label-02" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
-                                circles-lookat="constrainYAxis: false;"></a-text>
-                </a-entity>
-
-                <a-entity class="camp" position="3 1 -2.5" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#camp-glb" dynamic-body="shape: none;"
-                        shape__main="shape: box; halfExtents: 0.05 0.05 0.05;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main; dropScale: 0.8 0.8 0.8;">
-                        <a-text class="camp-label" text="value:camp; align:center"
-                                geometry="primitive:plane; height:0.3; width:0.6;" material="color: black"
-                                scale="0.4 0.4 0.4" position="0 0.2 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
