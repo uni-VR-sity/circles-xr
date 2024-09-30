@@ -15,7 +15,7 @@ AFRAME.registerComponent('mol-reactor', {
         CONTEXT_AF.mol_manager = document.querySelector('#dna_model');
 
         while (CONTEXT_AF.type == "null"){
-            let isLactose = CONTEXT_AF.el.classList.contains("lactose");
+            let isLactose = CONTEXT_AF.el.parentNode.classList.contains("lactose");
             let isAllolactose = CONTEXT_AF.el.classList.contains("allolactose");
             let isBeta = CONTEXT_AF.el.classList.contains("beta-gal");
             let isRibosome = CONTEXT_AF.el.classList.contains("ribosome");
@@ -70,7 +70,9 @@ AFRAME.registerComponent('mol-reactor', {
             //e.detail.body.el;    // Other entity, which (holder) touched.
             //console.log('Touched entity= ' + e.detail.body.el.id);
 
-            let isLactose = e.detail.body.el.classList.contains("lactose");
+            CONTEXT_AF.attacker = e.detail.body.el;
+
+            let isLactose = e.detail.body.el.parentNode.classList.contains("lactose");
             let isAllolactose = e.detail.body.el.classList.contains("allolactose");
             let isBeta = e.detail.body.el.classList.contains("beta-gal");
             let isRibosome = e.detail.body.el.classList.contains("ribosome");
@@ -80,6 +82,9 @@ AFRAME.registerComponent('mol-reactor', {
             if (CONTEXT_AF.currentState == "null"){
                 if (isLactose && CONTEXT_AF.type == "beta-gal") {
                     console.log("This molecule is hitting lactose and should react");
+                    CONTEXT_AF.currentState = "reacting";
+                }else if (isBeta && CONTEXT_AF.type == "lactose") {
+                    console.log("This molecule is hitting beta-gal and should react");
                     CONTEXT_AF.currentState = "reacting";
                 }else if (isRepressor && CONTEXT_AF.type == "lactose") {
                     console.log("This molecule is hitting the repressor and should react");
@@ -99,16 +104,16 @@ AFRAME.registerComponent('mol-reactor', {
 
             if (CONTEXT_AF.currentState == "CRPbound"){
                 console.log("This CRP has been bound and the type is: " + CONTEXT_AF.type);
-
+    
                 if (isCRP && CONTEXT_AF.type == "CRP_bound") {
                     console.log("This molecule is hitting a CRP, is a CRP, and should react");
                     e.detail.body.el.emit('setState', { value: 'reacting'});
-
+    
                     setTimeout(() => { CONTEXT_AF.el.parentNode.removeChild(CONTEXT_AF.el); }, 0);
-
+    
                     e.detail.body.el.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/CRP_final.glb');
                     e.detail.body.el.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/CRP_final.glb');
-
+    
                     e.detail.body.el.setAttribute('circles-pickup-object', {
                         physicsObject: true,
                         shapeNames: 'shape__topLeft, shape__middleLeft, shape__bottomLeft, shape__topRight, shape__middleRight, shape__bottomRight',
@@ -150,14 +155,34 @@ AFRAME.registerComponent('mol-reactor', {
                         radius: 0.14,
                         offset: '0.145 -0.135 0'
                     });
-
+    
                     console.log("Reshaped " + e.detail.body.el.id);
-
-                    CONTEXT_AF.currentState = "reacting";
+    
+                    CONTEXT_AF.currentState = "reacted";
                 }
             }
 
         });
     },
+
+    tick: function (){
+        
+        // setup self references
+        const CONTEXT_AF = this;
+
+        if(CONTEXT_AF.currentState == "reacting"){
+            if (CONTEXT_AF.attacker.classList.contains("beta-gal") && CONTEXT_AF.type == "lactose"){
+                let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
+                console.log("Spawn position is: " + temp_pos);
+
+                setTimeout(() => { CONTEXT_AF.el.parentNode.parentNode.removeChild(CONTEXT_AF.el.parentNode); }, 0);
+
+                CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'allolactose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
+                CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'galactose', pos: { x: temp_pos.x + 0.05, y: temp_pos.y, z: temp_pos.z - 0.05 }, rot: 'null' });
+
+                CONTEXT_AF.currentState = "reacted";
+            }
+        }
+    }
 
 });

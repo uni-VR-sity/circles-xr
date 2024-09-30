@@ -13,6 +13,7 @@
         <script src="/worlds/GeneticsDemo/components/molecule-manager.js"></script>
         <script src="/worlds/GeneticsDemo/scripts/experience-functions.js"></script>
         <script src="/worlds/GeneticsDemo/components/reactive-mol.js"></script>
+        <script src="/worlds/GeneticsDemo/components/magnetic.js"></script>
 </head>
 
 <body>
@@ -579,7 +580,8 @@
                 <a-entity id="beta-gal" class="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#beta-glb" dynamic-body="shape: none;"
                         shape__main="shape: cylinder; height: 0.12; radiusTop: 0.35; radiusBottom: 0.35; numSegments: 16"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main; pickupRotation: 45 0 0; pickupScale: 0.8 0.8 0.8; dropScale: 0.6 0.6 0.6; animate: false;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main; pickupRotation: 45 0 0; pickupScale: 0.8 0.8 0.8; dropScale: 0.6 0.6 0.6; animate: false;"
+                        collision-filter="group: beta-gal; collidesWith: default, beta-gal;">
                         <a-text id="beta-gal-label" text="value:beta-gal; align:center"
                                 geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
                                 position="0 0.35 0" width="3.5" circles-lookat="constrainYAxis: false;">

@@ -349,9 +349,14 @@ AFRAME.registerComponent('molecule-manager', {
                 break;
 
             case "lactose":
+                sample = document.querySelectorAll('.lactose');
+                tag = sample.length++;
+
+                mol.setAttribute('id', 'lactoseMain_' + tag);
+
                 mol.classList.add("lactose");
 
-                mol.setAttribute('mol-reactor', '');
+                //mol.setAttribute('mol-reactor', '');
     
                 mol.setAttribute('scale', {
                     x: 0.8,
@@ -405,6 +410,69 @@ AFRAME.registerComponent('molecule-manager', {
                     shapeNames: 'shape__left, shape__right',
                     pickupScale: '0.8 0.8 0.8',
                 });
+                
+                ///Make the reactive core!
+
+                var mol_miniCore = document.createElement('a-entity');
+
+                mol_miniCore.setAttribute('mol-reactor', '');
+
+                mol_miniCore.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+    
+                mol_miniCore.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 0.06
+                });
+                
+                mol_miniCore.setAttribute('constraint', {
+                    target: '#lactoseMain_' + tag,
+                    type: 'pointToPoint',
+                    pivot: '0 0 0',
+                    targetPivot: '0 0 0',
+                    collideConnected: 'false'
+                });
+    
+                mol_miniCore.setAttribute('collision-filter', {
+                    group: 'beta-gal',
+                    collidesWith: 'beta-gal',
+                    collisionForces: 'false'
+                });
+    
+                mol.appendChild(mol_miniCore);
+
+                ///Make the Magnet!
+
+                var mol_core = document.createElement('a-entity');
+
+                mol_core.setAttribute('id', 'magnetTarget_' + tag);
+                mol_core.setAttribute('magnet', '');
+
+                mol_core.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+    
+                mol_core.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 1
+                });
+                
+                mol_core.setAttribute('constraint', {
+                    target: '#lactoseMain_' + tag,
+                    type: 'pointToPoint',
+                    pivot: '0 0 0',
+                    targetPivot: '0 0 0',
+                    collideConnected: 'false'
+                });
+    
+                mol_core.setAttribute('collision-filter', {
+                    group: 'beta-gal',
+                    collidesWith: 'beta-gal',
+                    collisionForces: 'false'
+                });
+    
+                mol.appendChild(mol_core);
     
                 //Label creation********************************
                 // Creating mol label
@@ -638,6 +706,10 @@ AFRAME.registerComponent('molecule-manager', {
                 break;
 
             case "beta-gal":
+                sample = document.querySelectorAll('.beta-gal');
+                tag = sample.length++;
+
+                mol.setAttribute('id', 'beta-galMain_' + tag);
                 mol.classList.add("beta-gal");
 
                 mol.setAttribute('mol-reactor', '');
@@ -694,6 +766,11 @@ AFRAME.registerComponent('molecule-manager', {
                     dropScale: '0.6 0.6 0.6',
                     animate: 'false'
                 });
+
+                mol.setAttribute('collision-filter', {
+                    group: 'beta-gal',
+                    collidesWith: 'beta-gal, default'
+                });
     
                 //Label creation********************************
                 // Creating mol label
@@ -716,17 +793,11 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol_label.setAttribute('position', {
                     x: 0,
-                    y: 0.15,
+                    y: 0.25,
                     z: 0
                 });
-
-                mol_label.setAttribute('scale', {
-                    x: 0.4,
-                    y: 0.4,
-                    z: 0.4
-                });
     
-                mol_label.setAttribute('width', '2');
+                mol_label.setAttribute('width', '1.5');
     
                 mol_label.setAttribute('circles-lookat', {
                     constrainYAxis: 'false'
@@ -1670,7 +1741,117 @@ AFRAME.registerComponent('molecule-manager', {
                 //console.log('mRNA molecule has been created');
     
                 break;
+
+            case "repressor":
+                mol.classList.add("repressor");
     
+                mol.setAttribute('scale', {
+                    x: 1,
+                    y: 1,
+                    z: 1
+                });
+    
+                // Setting molecule rotation
+                if (rotation != "null") {
+                    mol.setAttribute('rotation', rotation);
+                } else {
+                    mol.setAttribute('rotation', {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    });
+                }
+    
+                if (position != "null") {
+                    // Set molecule position to provided position
+                    mol.setAttribute('position', position);
+                } else {
+                    //Set molecule position to a random position within bounds
+                    mol.setAttribute('position', {
+                        x: (((Math.random() * 8)+ 1) * plusOrMinus),
+                        y: ((Math.random() * 5) + 1),
+                        z: (Math.random() * -7)
+                    });
+                }
+    
+                mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/repressor.glb)');
+                mol.setAttribute('dynamic-body', { shape: 'none' });
+                mol.setAttribute('shadow', {
+                    receive: 'false',
+                    cast: 'true'
+                });
+    
+                mol.setAttribute('circles-pickup-object', {
+                    physicsObject: 'true',
+                    shapeNames: 'shape__left, shape__right, shape__top, shape__bottom'
+                });
+    
+                mol.setAttribute('shape__top', {
+                    shape: 'cylinder',
+                    height: 0.35,
+                    radiusTop: 0.05,
+                    radiusBottom: 0.2,
+                    offset: '-0.075 -0.2 0'
+                });
+                mol.setAttribute('shape__bottom', {
+                    shape: 'cylinder',
+                    height: 0.35,
+                    radiusTop: 0.05,
+                    radiusBottom: 0.2,
+                    offset: '0.075 -0.2 0'
+                });
+                mol.setAttribute('shape__left', {
+                    shape: 'sphere',
+                    radius: 0.25,
+                    offset: '-0.15 0.2 0'
+                });
+                mol.setAttribute('shape__right', {
+                    shape: 'sphere',
+                    radius: 0.25,
+                    offset: '0.15 0.2 0'
+                });
+
+                mol.setAttribute('collision-filter', {
+                    group: 'repressor',
+                    collidesWith: 'default, repressor'
+                });
+    
+                //Label creation********************************
+                // Creating mol label
+                var mol_label = document.createElement('a-text');
+    
+                mol_label.setAttribute('geometry', {
+                    primitive: 'plane',
+                    height: 0.15,
+                    width: 0.3
+                });
+    
+                mol_label.setAttribute('text', {
+                    value: type,
+                    align: 'center'
+                });
+    
+                mol_label.setAttribute('material', {
+                    color: 'black'
+                });
+    
+                mol_label.setAttribute('position', {
+                    x: 0,
+                    y: 0.5,
+                    z: 0
+                });
+    
+                mol_label.setAttribute('width', '1.5');
+    
+                mol_label.setAttribute('circles-lookat', {
+                    constrainYAxis: 'false'
+                });
+    
+                mol.appendChild(mol_label);
+                //console.log('Glucose molecule has been created');
+    
+                break;
+
             default:
                 //code block
                 console.log("Molecule type passed doesn't match anything in my books");

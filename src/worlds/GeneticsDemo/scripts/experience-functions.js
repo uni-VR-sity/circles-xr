@@ -100,9 +100,12 @@ function startExperience() {
     mol_manager.emit('mol_initial_spawn', { value: 'camp', pos: 'null', rot: 'null' });
     sample++;
   }
-  //mol_manager.emit('mol_initial_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 1.85, z: -5.95 }, rot : 'null'});
+  mol_manager.emit('mol_initial_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 1.85, z: -5.95 }, rot : 'null'});
+
+  mol_manager.emit('mol_initial_spawn', {value : 'beta-gal', pos : { x: 0.5, y: 1.85, z: 0 }, rot : 'null'});
 
   //mol_manager.emit('mol_initial_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'});
+  mol_manager.emit('mol_initial_spawn', {value : 'repressor', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'});
 
 };
 
