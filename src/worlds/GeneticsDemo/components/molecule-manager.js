@@ -369,9 +369,9 @@ AFRAME.registerComponent('molecule-manager', {
                     mol.setAttribute('rotation', rotation);
                 } else {
                     mol.setAttribute('rotation', {
-                        x: 0,
-                        y: 0,
-                        z: 0
+                        x: (Math.random() * 180),
+                        y: (Math.random() * 180),
+                        z: (Math.random() * 180)
                     });
                 }
     
@@ -425,14 +425,6 @@ AFRAME.registerComponent('molecule-manager', {
                     shape: 'sphere',
                     radius: 0.06
                 });
-                
-                mol_miniCore.setAttribute('constraint', {
-                    target: '#lactoseMain_' + tag,
-                    type: 'pointToPoint',
-                    pivot: '0 0 0',
-                    targetPivot: '0 0 0',
-                    collideConnected: 'false'
-                });
     
                 mol_miniCore.setAttribute('collision-filter', {
                     group: 'beta-gal',
@@ -455,15 +447,7 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol_core.setAttribute('shape__main', {
                     shape: 'sphere',
-                    radius: 1
-                });
-                
-                mol_core.setAttribute('constraint', {
-                    target: '#lactoseMain_' + tag,
-                    type: 'pointToPoint',
-                    pivot: '0 0 0',
-                    targetPivot: '0 0 0',
-                    collideConnected: 'false'
+                    radius: 2
                 });
     
                 mol_core.setAttribute('collision-filter', {
@@ -551,7 +535,7 @@ AFRAME.registerComponent('molecule-manager', {
                 }
     
                 mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/permease.glb)');
-                mol.setAttribute('dynamic-body', { shape: 'none' });
+                mol.setAttribute('static-body', { shape: 'none' });
                 mol.setAttribute('shadow', {
                     receive: 'false',
                     cast: 'true'
@@ -559,14 +543,15 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.setAttribute('shape__main', {
                     shape: 'cylinder',
+                    height: 0.6,
                     radiusTop: 0.3,
                     radiusBottom: 0.3,
                     numSegments: 16
                 });
-    
-                mol.setAttribute('circles-pickup-object', {
-                    physicsObject: 'true',
-                    shapeNames: 'shape__main'
+                mol.setAttribute('shape__bottom', {
+                    shape: 'sphere',
+                    radius: 0.3,
+                    offset: '0 -0.1 0'
                 });
     
                 //Label creation********************************
@@ -865,6 +850,10 @@ AFRAME.registerComponent('molecule-manager', {
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
                     shapeNames: 'shape__main'
+                });
+
+                mol.setAttribute('collision-filter', {
+                    collidesWith: 'mRNA, default'
                 });
     
                 //Label creation********************************
@@ -1332,6 +1321,10 @@ AFRAME.registerComponent('molecule-manager', {
                 mol.setAttribute('circles-pickup-object', {
                     physicsObject: 'true',
                     shapeNames: 'shape__main'
+                });
+
+                mol.setAttribute('collision-filter', {
+                    collidesWith: 'mRNA, default'
                 });
     
                 //Label creation********************************
@@ -1858,9 +1851,12 @@ AFRAME.registerComponent('molecule-manager', {
     
                 break;
         }
-    
-        // set other necessary attributes
-        mol.setAttribute('circles-pickup-object', { physicsObject: 'true' });
+
+        if(type != "permease"){
+            // set other necessary attributes
+            mol.setAttribute('circles-pickup-object', { physicsObject: 'true' });
+        }
+        
     
         return mol;
     },

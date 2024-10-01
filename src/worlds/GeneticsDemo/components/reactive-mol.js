@@ -18,7 +18,7 @@ AFRAME.registerComponent('mol-reactor', {
             let isLactose = CONTEXT_AF.el.parentNode.classList.contains("lactose");
             let isAllolactose = CONTEXT_AF.el.classList.contains("allolactose");
             let isBeta = CONTEXT_AF.el.classList.contains("beta-gal");
-            let isRibosome = CONTEXT_AF.el.classList.contains("ribosome");
+            let isRibosome = CONTEXT_AF.el.parentNode.classList.contains("ribosome");
             let isPermease = CONTEXT_AF.el.classList.contains("permease");
             let isCRP = CONTEXT_AF.el.classList.contains("CRP");
             let isCAMP = CONTEXT_AF.el.classList.contains("camp");
@@ -182,6 +182,16 @@ AFRAME.registerComponent('mol-reactor', {
 
                 CONTEXT_AF.currentState = "reacted";
             }
+        }
+
+        if(CONTEXT_AF.type == 'permease' && CONTEXT_AF.currentState == 'null'){
+            let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
+            console.log("Spawn position is: " + temp_pos);
+
+            setTimeout(() => { mol_manager.emit('mol_spawn', {value : 'lactose', pos : { x: temp_pos.x, y: temp_pos.y - 0.4, z: temp_pos.z }, rot : 'null'}); }, 10000);
+            setTimeout(() => { CONTEXT_AF.currentState = "null"; }, 10050);
+
+            CONTEXT_AF.currentState = "reacted";
         }
     }
 

@@ -460,35 +460,6 @@
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity class="lactose" position="-3 1 -2.5" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#lactose-glb" dynamic-body="shape: none;"
-                        shape__left="shape: sphere; radius: 0.1; offset: -0.09 0 0;"
-                        shape__right="shape: sphere; radius: 0.1; offset: 0.09 0 0;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__left, shape__right;">
-                        <a-text class="lactose-label" text="value:Lactose; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
-                                position="0 0.25 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
-                </a-entity>
-
-                <a-entity class="glucose" position="-3.5 1 -3" scale="0.8 0.8 0.8"
-                        shadow="receive:false; cast:true;"
-                        gltf-model="#glucose-glb" dynamic-body="shape: none;" shape__main="shape: sphere; radius: 0.1;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main;">
-                        <a-text class="glucose-label" text="value:Glucose; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
-                                position="0 0.25 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
-                </a-entity>
-
-                <a-entity class="permease" position="1.5 0.978 -2" rotation="0 45 0" scale="1 1 1" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#permease-glb" dynamic-body="shape: none;"
-                        shape__main="shape: cylinder; height: 0.6; radiusTop: 0.3; radiusBottom: 0.3; numSegments: 12"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main">
-                        <a-text id="permease-label" text="value:Permease; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
-                                position="0 0.5 0" width="3.5" circles-lookat="constrainYAxis: false;">
-                        </a-text>
-                </a-entity>
-
                 <a-entity class="repressor" position="-1.5 0.978 -2" rotation="0 45 0" scale="1 1 1"
                         shadow="receive:false; cast:true;" gltf-model="#repressor-glb" dynamic-body="shape: none;"
                         shape__left="shape: cylinder; height: 0.35; radiusTop: 0.05; radiusBottom: 0.2; offset: -0.075 -0.2 0;"
@@ -511,6 +482,10 @@
                         <a-text id="ribosome-label" text="value:Ribosome; align:center"
                                 geometry="primitive:plane; height:0.35;" material="color: black" scale="0.2 0.2 0.2"
                                 position="0 0.15 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="ribosome_magnet" magnet 
+                                static-body="shape: none;" 
+                                shape__main="shape: sphere; radius: 0.5"
+                                collision-filter="group: ribosome; collidesWith: ribosome; collisionForces: false;"></a-entity>
                 </a-entity>
 
                 <a-entity id="RNApoly" position="2 0.978 0" rotation="90 45 0" scale="0.5 0.5 0.5"
@@ -526,56 +501,6 @@
                                 circles-lookat="constrainYAxis: false;">
                         </a-text>
                 </a-entity>
-
-                <a-entity id="mRNA-head" class="mRNA" position="5 2 -2" scale="1 1 1" shadow="receive:false; cast:true;"
-                        gltf-model="#mRNA-rep-glb" dynamic-body="shape: none; mass: 1; angularDamping: 0.3;"
-                        shape__main="shape: sphere; radius: 0.12;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main;">
-                        <a-text class="mRNA-label" text="value:mRNA; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
-                                position="0 0.25 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
-                        <a-entity id="mRNA-core" class="mRNA" position="0 0 0" visible="false"
-                                gltf-model="#mRNA-lac-glb" static-body="shape: none;"
-                                constraint="target: #mRNA-tail-01; type: pointToPoint; pivot: 0 0 0;targetPivot: 0 0.13 0; maxForce: 1; collideConnected: false;"
-                                shape__main="shape: sphere; radius: 0.13;"
-                                collision-filter="group: mRNA; collidesWith: mRNA;">
-                        </a-entity>
-                        <a-entity id="mRNA-tail-01" class="mRNA" position="-0.25 0 0" scale="0.8 1 0.8" shadow="receive:false; cast:true;"
-                                gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;"
-                                constraint="target: #mRNA-tail-02; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; collideConnected: true;"
-                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                <a-entity id="mRNA-tail-02" class="mRNA" position="-0.25 0 0" shadow="receive:false; cast:true;"
-                                        gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5; linearDamping: 0.3;"
-                                        constraint="target: #mRNA-tail-03; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; collideConnected: true;"
-                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                        <a-entity id="mRNA-tail-03" class="mRNA" position="-0.25 0 0" shadow="receive:false; cast:true;"
-                                                gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5; linearDamping: 0.1;"
-                                                constraint="target: #mRNA-tail-04; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; collideConnected: true;"
-                                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                                <a-entity id="mRNA-tail-04" class="mRNA" position="-0.25 0 0"shadow="receive:false; cast:true;"
-                                                        gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5; linearDamping: 0.1;"
-                                                        constraint="target: #mRNA-tail-05; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; collideConnected: true;"
-                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                                        <a-entity id="mRNA-tail-05" class="mRNA" position="-0.25 0 0" shadow="receive:false; cast:true;"
-                                                                gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5; linearDamping: 0.1;"
-                                                                constraint="target: #mRNA-tail-06; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; collideConnected: true;"
-                                                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                                                <a-entity id="mRNA-tail-06" class="mRNA" position="-0.25 0 0"shadow="receive:false; cast:true;"
-                                                                        gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5; linearDamping: 0.1;"
-                                                                        constraint="target: #mRNA-tail-07; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; collideConnected: true;"
-                                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                                                        <a-entity id="mRNA-tail-07" class="mRNA" position="-0.25 0 0" shadow="receive:false; cast:true;"
-                                                                                gltf-model="#tail-rep-glb" dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5; linearDamping: 0.1;"
-                                                                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
-                                                                        </a-entity>
-                                                                </a-entity>
-                                                        </a-entity>
-                                                </a-entity>
-                                        </a-entity>
-                                </a-entity>
-                        </a-entity>
-                </a-entity>
-                
 
                 <a-entity id="beta-gal" class="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#beta-glb" dynamic-body="shape: none;"

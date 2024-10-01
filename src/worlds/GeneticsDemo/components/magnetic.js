@@ -13,9 +13,9 @@ AFRAME.registerComponent('magnet', {
 
         while (CONTEXT_AF.type == "null"){
             let isLactose = CONTEXT_AF.el.parentNode.classList.contains("lactose");
+            let isRibosome = CONTEXT_AF.el.parentNode.classList.contains("ribosome");
             let isAllolactose = CONTEXT_AF.el.classList.contains("allolactose");
             let isBeta = CONTEXT_AF.el.classList.contains("beta-gal");
-            let ismRNA = CONTEXT_AF.el.classList.contains("permease");
             let isCRP = CONTEXT_AF.el.classList.contains("CRP");
             let isCAMP = CONTEXT_AF.el.classList.contains("camp");
 
@@ -25,7 +25,7 @@ AFRAME.registerComponent('magnet', {
             }else if (isAllolactose){
                 CONTEXT_AF.type = "allolactose";
                 console.log("This molecule is allolactose!");
-            }else if (ismRNA){
+            }else if (isRibosome){
                 CONTEXT_AF.type = "ribosome";
                 console.log("This molecule is ribosome!");
             }else if (isCRP){
@@ -54,10 +54,11 @@ AFRAME.registerComponent('magnet', {
                 console.log('Touched entity= ' + e.detail.body.el.id);
 
                 let isBeta = e.detail.body.el.classList.contains("beta-gal");
+                let ismRNA = e.detail.body.el.classList.contains("mRNA");
 
                 if (isBeta && CONTEXT_AF.type == "lactose") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacIPromoter-free" && e.detail.target.el.id == "h11") {
+                } else if (ismRNA && CONTEXT_AF.type == "ribosome") {
                     CONTEXT_AF.currentState = "binding";
                 }
             }
@@ -89,8 +90,21 @@ AFRAME.registerComponent('magnet', {
             CONTEXT_AF.el.parentNode.setAttribute('constraint', {
                 type: 'pointToPoint',
                 target: "#" + attacker.id,
-                maxForce: 0.5,
+                maxForce: 0.3,
                 targetPivot: '0 0 0.23',
+                collideConnected: 'true'
+            });
+
+            CONTEXT_AF.currentState = "bound";
+        }else if(CONTEXT_AF.currentState == "binding" && CONTEXT_AF.type == "ribosome"){
+            console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
+            console.log('Target is: ' + attacker.id);
+            
+            CONTEXT_AF.el.parentNode.setAttribute('constraint', {
+                type: 'pointToPoint',
+                target: "#" + attacker.id,
+                maxForce: 0.3,
+                targetPivot: '0 0 0.5',
                 collideConnected: 'true'
             });
 
