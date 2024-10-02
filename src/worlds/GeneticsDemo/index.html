@@ -303,7 +303,7 @@
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
                                 </a-entity>
                         </a-entity>
-                        <a-entity id="rep_trigger" position="-0.025 1.3 -1.2" 
+                        <a-entity id="rep_trigger" position="-0.005 1.28 -1.22" rotation="0 -10 -35"
                                 static-body="shape: none;"
                                 shape="shape: sphere; radius: 0.3;"
                                 trigger 
@@ -435,12 +435,12 @@
                 <!-- Free floating molecules-->
 
                 <a-entity id="CRP_01" class="CRP" position="-2 1 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none;"
+                        shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
-                        collision-filter="group: capSite; collidesWith: default, capSite; collisionForces: true;">
+                        collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
                         <a-text id="CRP-label-01" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
@@ -448,33 +448,20 @@
                 </a-entity>
 
                 <a-entity id="CRP_02" class="CRP" position="2 1 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none;"
+                        shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
-                        collision-filter="group: capSite; collidesWith: default, capSite; collisionForces: true;">
+                        collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
                         <a-text id="CRP-label-02" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity class="repressor" position="-1.5 0.978 -2" rotation="0 45 0" scale="1 1 1"
-                        shadow="receive:false; cast:true;" gltf-model="#repressor-glb" dynamic-body="shape: none;"
-                        shape__left="shape: cylinder; height: 0.35; radiusTop: 0.05; radiusBottom: 0.2; offset: -0.075 -0.2 0;"
-                        shape__right="shape: cylinder; height: 0.35; radiusTop: 0.05; radiusBottom: 0.2; offset: 0.075 -0.2 0;"
-                        shape__topLeft="shape: sphere; radius: 0.25; offset: -0.15 0.2 0;"
-                        shape__topRight="shape: sphere; radius: 0.25; offset: 0.15 0.2 0;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__left, shape__right, shape__topLeft, shape__topRight;"
-                        collision-filter="group: repressor; collidesWith: default, repressor;">
-                        <a-text id="repressor-label" text="value:Repressor; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
-                                position="0 0.65 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
-                </a-entity>
-
-                <a-entity id="ribosome" class="ribosome" position="-1.5 1 -1" rotation="0 45 0" scale="2.5 2.5 2.5" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#ribosome-glb" dynamic-body="shape: none;"
+                <a-entity id="ribosome" class="ribosome" position="-1.5 1 -1" rotation="0 45 0" scale="2.5 2.5 2.5" 
+                        shadow="receive:false; cast:true;" gltf-model="#ribosome-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__right="shape: sphere; radius: 0.051; offset: 0.03 0.03 0"
                         shape__left="shape: sphere; radius: 0.051; offset: -0.03 0.03 0"
                         shape__bottom="shape: sphere; radius: 0.051; offset: 0 -0.05 0"
@@ -484,12 +471,16 @@
                                 position="0 0.15 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="ribosome_magnet" magnet 
                                 static-body="shape: none;" 
-                                shape__main="shape: sphere; radius: 0.5"
+                                shape__main="shape: sphere; radius: 0.75"
+                                collision-filter="group: ribosome; collidesWith: ribosome; collisionForces: false;"></a-entity>
+                        <a-entity id="ribosome_core" mol-reactor 
+                                static-body="shape: none;" 
+                                shape__main="shape: sphere; radius: 0.075"
                                 collision-filter="group: ribosome; collidesWith: ribosome; collisionForces: false;"></a-entity>
                 </a-entity>
 
-                <a-entity id="RNApoly" position="2 0.978 0" rotation="90 45 0" scale="0.5 0.5 0.5"
-                        shadow="receive:false; cast:true;" gltf-model="#RNApoly-glb" dynamic-body="shape: none;"
+                <a-entity id="RNApoly" class="RNApoly" position="2 0.978 0" rotation="90 45 0" scale="0.5 0.5 0.5"
+                        shadow="receive:false; cast:true;" gltf-model="#RNApoly-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__main="shape: cylinder; height: 0.9; radiusTop: 0.46; radiusBottom: 0.46; numSegments: 16;"
                         shape__right="shape: sphere; radius: 0.46; offset: 0 0.45 0"
                         shape__left="shape: sphere; radius: 0.46; offset: 0 -0.45 0"
@@ -499,17 +490,6 @@
                                 geometry="primitive:plane; height:0.35; width: 1.25;" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 0 -0.6" width="3.5"
                                 circles-lookat="constrainYAxis: false;">
-                        </a-text>
-                </a-entity>
-
-                <a-entity id="beta-gal" class="beta-gal" position="2 1.5 1" rotation="0 0 0" scale="0.6 0.6 0.6" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#beta-glb" dynamic-body="shape: none;"
-                        shape__main="shape: cylinder; height: 0.12; radiusTop: 0.35; radiusBottom: 0.35; numSegments: 16"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main; pickupRotation: 45 0 0; pickupScale: 0.8 0.8 0.8; dropScale: 0.6 0.6 0.6; animate: false;"
-                        collision-filter="group: beta-gal; collidesWith: default, beta-gal;">
-                        <a-text id="beta-gal-label" text="value:beta-gal; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.4 0.4 0.4"
-                                position="0 0.35 0" width="3.5" circles-lookat="constrainYAxis: false;">
                         </a-text>
                 </a-entity>
 

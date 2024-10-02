@@ -26,10 +26,10 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.attacker = e.detail.body.el.id;
                 CONTEXT_AF.partner = e.detail.body.el;
 
-                if (CONTEXT_AF.attacker == "RNApoly" && e.detail.target.el.id == "repressor_trigger") {
+                if (e.detail.body.el.classList.contains("RNApoly") && e.detail.target.el.id == "repressor_trigger") {
                     CONTEXT_AF.currentState = "binding";
                     //console.log('RepressorTrigger is binding');
-                }else if(CONTEXT_AF.attacker == "RNApoly" && e.detail.target.el.id == "lac_trigger"){
+                }else if(e.detail.body.el.classList.contains("RNApoly") && e.detail.target.el.id == "lac_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     //console.log('LacTrigger is binding');
                 }else if(e.detail.body.el.classList.contains("repressor") && e.detail.target.el.id == "rep_trigger"){
@@ -119,16 +119,40 @@ AFRAME.registerComponent('trigger', {
                 
 
             }else if(test == "rep_trigger"){
-                CONTEXT_AF.partner.removeAttribute('dynamic-body');
+                if(!CONTEXT_AF.partner.classList.contains("blocked")){
 
-                CONTEXT_AF.partner.setAttribute('position', { x: -0.293, y: 0.709, z: -6.853 });
-                CONTEXT_AF.partner.setAttribute('rotation', { x: -8.56, y: -10.6, z: -37.09 });
+                    CONTEXT_AF.partner.classList.remove("interactive");
+                    
+                    CONTEXT_AF.partner.setAttribute('constraint', {
+                        type: 'coneTwist',
+                        target: "#" + CONTEXT_AF.el.id,
+                        targetPivot: '0 -0.18 0',
+                        pivot: '0 0.35 0',
+                        axis: '0 0 1',
+                        collideConnected: 'false'
+                    });
 
-                CONTEXT_AF.partner.classList.remove("interactive");
+                    var blocker =  document.querySelector("#lac_trigger");
+                    blocker.emit('blocked', {value : 'true'});
+                    setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
+                    CONTEXT_AF.currentState = "bound";
 
-                var blocker =  document.querySelector("#lac_trigger");
-                blocker.emit('blocked', {value : 'true'});
-                CONTEXT_AF.currentState = "bound";
+                }else{
+                    if(!CONTEXT_AF.partner.classList.contains("interactive")){
+                        CONTEXT_AF.partner.classList.add("interactive");
+
+                        CONTEXT_AF.partner.removeAttribute('constraint');
+
+                        var blocker =  document.querySelector("#lac_trigger");
+                        setTimeout(() => { CONTEXT_AF.currentState = "unbound"; }, 3000);
+                        blocker.emit('blocked', {value : 'false'});
+    
+                    }else{
+                        setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
+                    }
+                    console.log('This repressor is capped and cannot trigger');
+                    CONTEXT_AF.currentState = "bound";
+                }
             }else if(test == "capSite_trigger"){
                 CONTEXT_AF.partner.removeAttribute('dynamic-body');
 
@@ -138,6 +162,7 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.partner.classList.remove("interactive");
 
                 CONTEXT_AF.currentState = "bound";
+                
             }
 
         }

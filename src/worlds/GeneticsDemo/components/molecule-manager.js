@@ -1,3 +1,5 @@
+let lactoseCount = 0;
+
 AFRAME.registerComponent('molecule-manager', {
     init: function () {
 
@@ -175,6 +177,11 @@ AFRAME.registerComponent('molecule-manager', {
                 break;
 
             case "allolactose":
+                sample = document.querySelectorAll('.allolactose');
+                tag = sample.length++;
+
+                mol.setAttribute('id', 'allolactoseMain_' + tag);
+
                 mol.classList.add("allolactose");
 
                 mol.setAttribute('mol-reactor', '');
@@ -224,6 +231,12 @@ AFRAME.registerComponent('molecule-manager', {
                     physicsObject: 'true',
                     shapeNames: 'shape__main',
                     pickupScale: '0.8 0.8 0.8'
+                });
+
+                mol.setAttribute('collision-filter', {
+                    group: 'allolactose',
+                    collidesWith: 'allolactose, default',
+                    collisionForces: 'true'
                 });
     
                 //Label creation********************************
@@ -350,7 +363,8 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "lactose":
                 sample = document.querySelectorAll('.lactose');
-                tag = sample.length++;
+                tag = lactoseCount++;
+                //lactoseCount++;
 
                 mol.setAttribute('id', 'lactoseMain_' + tag);
 
@@ -388,7 +402,10 @@ AFRAME.registerComponent('molecule-manager', {
                 }
     
                 mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/lactose.glb)');
-                mol.setAttribute('dynamic-body', { shape: 'none' });
+                mol.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    angularDamping: 0.3
+                });
                 mol.setAttribute('shadow', {
                     receive: 'false',
                     cast: 'true'
@@ -597,9 +614,12 @@ AFRAME.registerComponent('molecule-manager', {
                 break;
                 
             case "camp":
-                mol.classList.add("camp");
+                sample = document.querySelectorAll('.camp');
+                tag = sample.length++;
 
-                mol.setAttribute('mol-reactor', '');
+                mol.setAttribute('id', 'campMain_' + tag);
+
+                mol.classList.add("camp");
     
                 mol.setAttribute('scale', {
                     x: 0.8,
@@ -631,7 +651,10 @@ AFRAME.registerComponent('molecule-manager', {
                 }
     
                 mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/camp.glb)');
-                mol.setAttribute('dynamic-body', { shape: 'none' });
+                mol.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    angularDamping: 0.3
+                });
                 mol.setAttribute('shadow', {
                     receive: 'false',
                     cast: 'true'
@@ -647,6 +670,65 @@ AFRAME.registerComponent('molecule-manager', {
                     shapeNames: 'shape__main',
                     pickupScale: '0.8 0.8 0.8'
                 });
+
+                ///Make the reactive core!
+
+                var mol_miniCore = document.createElement('a-entity');
+
+                mol_miniCore.setAttribute('mol-reactor', '');
+
+                mol_miniCore.setAttribute('position', {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                });
+
+                mol_miniCore.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+    
+                mol_miniCore.setAttribute('shape__main', {
+                    shape: 'box',
+                    halfExtents: '0.053 0.053 0.053'
+                });
+    
+                mol_miniCore.setAttribute('collision-filter', {
+                    group: 'camp',
+                    collidesWith: 'camp, capSite',
+                    collisionForces: 'false'
+                });
+    
+                mol.appendChild(mol_miniCore);
+
+                ///Make the Magnet!
+
+                var mol_core = document.createElement('a-entity');
+
+                mol_core.setAttribute('id', 'magnetTarget_' + tag);
+                mol_core.setAttribute('magnet', '');
+
+                mol_core.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+
+                mol_core.setAttribute('position', {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                });
+    
+                mol_core.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 2
+                });
+    
+                mol_core.setAttribute('collision-filter', {
+                    group: 'camp',
+                    collidesWith: 'camp, capSite',
+                    collisionForces: 'false'
+                });
+    
+                mol.appendChild(mol_core);
     
                 //Label creation********************************
                 // Creating mol label
@@ -800,6 +882,7 @@ AFRAME.registerComponent('molecule-manager', {
                 mol.setAttribute('id', 'mRNA-head-' + tag);
 
                 mol.classList.add("mRNA");
+                mol.classList.add("rep");
 
                 // Setting molecule rotation
                 if (rotation != "null") {
@@ -853,7 +936,8 @@ AFRAME.registerComponent('molecule-manager', {
                 });
 
                 mol.setAttribute('collision-filter', {
-                    collidesWith: 'mRNA, default'
+                    group: 'ribosome',
+                    collidesWith: 'mRNA, default, ribosome'
                 });
     
                 //Label creation********************************
@@ -1271,6 +1355,7 @@ AFRAME.registerComponent('molecule-manager', {
                 mol.setAttribute('id', 'mRNA-head-' + tag);
 
                 mol.classList.add("mRNA");
+                mol.classList.add("lac");
 
                 // Setting molecule rotation
                 if (rotation != "null") {
@@ -1324,7 +1409,8 @@ AFRAME.registerComponent('molecule-manager', {
                 });
 
                 mol.setAttribute('collision-filter', {
-                    collidesWith: 'mRNA, default'
+                    group: 'ribosome',
+                    collidesWith: 'mRNA, default, ribosome'
                 });
     
                 //Label creation********************************
@@ -1736,6 +1822,11 @@ AFRAME.registerComponent('molecule-manager', {
                 break;
 
             case "repressor":
+                sample = document.querySelectorAll('.repressor');
+                tag = sample.length++;
+
+                mol.setAttribute('id', 'repressorMain_' + tag);
+
                 mol.classList.add("repressor");
     
                 mol.setAttribute('scale', {
@@ -1806,8 +1897,68 @@ AFRAME.registerComponent('molecule-manager', {
 
                 mol.setAttribute('collision-filter', {
                     group: 'repressor',
-                    collidesWith: 'default, repressor'
+                    collidesWith: 'repressor, default',
+                    collisionForces: 'true'
                 });
+
+                ///Make the reactive core!
+
+                var mol_miniCore = document.createElement('a-entity');
+
+                mol_miniCore.setAttribute('mol-reactor', '');
+
+                mol_miniCore.setAttribute('position', {
+                    x: 0,
+                    y: -0.4,
+                    z: 0
+                });
+
+                mol_miniCore.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+    
+                mol_miniCore.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 0.06
+                });
+    
+                mol_miniCore.setAttribute('collision-filter', {
+                    group: 'allolactose',
+                    collidesWith: 'allolactose',
+                    collisionForces: 'false'
+                });
+    
+                mol.appendChild(mol_miniCore);
+
+                ///Make the Magnet!
+
+                var mol_core = document.createElement('a-entity');
+
+                mol_core.setAttribute('id', 'magnetTarget_' + tag);
+                mol_core.setAttribute('magnet', '');
+
+                mol_core.setAttribute('static-body', { 
+                    shape: 'none'
+                });
+
+                mol_core.setAttribute('position', {
+                    x: 0,
+                    y: -0.4,
+                    z: 0
+                });
+    
+                mol_core.setAttribute('shape__main', {
+                    shape: 'sphere',
+                    radius: 1.75
+                });
+    
+                mol_core.setAttribute('collision-filter', {
+                    group: 'allolactose',
+                    collidesWith: 'allolactose',
+                    collisionForces: 'false'
+                });
+    
+                mol.appendChild(mol_core);
     
                 //Label creation********************************
                 // Creating mol label
@@ -1861,4 +2012,15 @@ AFRAME.registerComponent('molecule-manager', {
         return mol;
     },
 
+    tick: function(){
+        var sampleLactose = document.querySelectorAll('.lactose');
+        if (sampleLactose.length >= 80){
+            console.log('Deleted thise item: ' + sampleLactose[0].id);
+
+            sampleLactose[0].parentNode.removeChild(sampleLactose[0]);
+        }
+        if (lactoseCount >= 500){
+            lactoseCount = 1;
+        }
+    }
 });
