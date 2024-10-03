@@ -6,7 +6,7 @@ AFRAME.registerComponent('collision-holder', {
         const CONTEXT_AF = this;
 
         // setup global variables
-        CONTEXT_AF.currentState = "unbound";
+        CONTEXT_AF.currentState = "null";
 
         CONTEXT_AF.attacker = "null";
 
@@ -45,6 +45,11 @@ AFRAME.registerComponent('collision-holder', {
                 }
             }
 
+        });
+
+        CONTEXT_AF.el.addEventListener('setState', function(evt){
+            //console.log('Set holder state to unboound');
+            CONTEXT_AF.currentState = evt.detail.value;
         });
 
         CONTEXT_AF.el.addEventListener('setPartner', function(){
@@ -174,10 +179,12 @@ AFRAME.registerComponent('collision-holder', {
                 repressor_trigger = document.querySelector('#repressor_trigger');
                 lac_trigger = document.querySelector('#lac_trigger');
                 rep_trigger = document.querySelector('#rep_trigger');
+                capSite_trigger = document.querySelector('#capSite_trigger');
 
                 repressor_trigger.emit('setState', {value : 'unbound'});
                 lac_trigger.emit('setState', {value : 'unbound'});
                 rep_trigger.emit('setState', {value : 'unbound'});
+                capSite_trigger.emit('setState', {value : 'unbound'});
                 console.log('DNA set is complete');
                 holderCount++;
             }
