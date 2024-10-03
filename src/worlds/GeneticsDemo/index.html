@@ -18,10 +18,11 @@
 
 <body>
         <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+        <circles-basic-ui/>
         <circles-start-ui />
 
         <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:true;">
+        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:false;">
                 <a-assets>
                         <img id='skyMap' src='/global/assets/textures/equirectangular/WhiteBlue.jpg'
                                 crossorigin="anonymous">

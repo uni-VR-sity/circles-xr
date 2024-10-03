@@ -117,8 +117,8 @@ AFRAME.registerComponent('magnet', {
 
             CONTEXT_AF.currentState = "bound";
         }else if(CONTEXT_AF.currentState == "binding" && CONTEXT_AF.type == "ribosome"){
-            console.log('ParentNode is: ' + CONTEXT_AF.el.id);
-            console.log('Target is: ' + CONTEXT_AF.attacker.id);
+            //console.log('ParentNode is: ' + CONTEXT_AF.el.id);
+            //console.log('Target is: ' + CONTEXT_AF.attacker.id);
             
             CONTEXT_AF.el.parentNode.setAttribute('constraint', {
                 type: 'pointToPoint',
@@ -132,8 +132,8 @@ AFRAME.registerComponent('magnet', {
 
             CONTEXT_AF.currentState = "bound";
         }else if(CONTEXT_AF.currentState == "binding" && CONTEXT_AF.type == "repressor"){
-            console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
-            console.log('Target is: ' + CONTEXT_AF.attacker.id);
+            //console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
+            //console.log('Target is: ' + CONTEXT_AF.attacker.id);
 
             var mover = document.querySelector("#" + CONTEXT_AF.attacker.id);
 
@@ -155,10 +155,10 @@ AFRAME.registerComponent('magnet', {
             
             
         }else if(CONTEXT_AF.currentState == "binding" && CONTEXT_AF.type == "camp"){
-            console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
-            console.log('Target is: ' + CONTEXT_AF.attacker.id);
+            //console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
+            //console.log('Target is: ' + CONTEXT_AF.attacker.id);
             
-            CONTEXT_AF.attacker.classList.add("blocked");
+            //CONTEXT_AF.attacker.classList.add("blocked");
 
             CONTEXT_AF.el.parentNode.setAttribute('constraint', {
                 type: 'pointToPoint',

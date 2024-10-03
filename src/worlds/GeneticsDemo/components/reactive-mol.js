@@ -95,7 +95,7 @@ AFRAME.registerComponent('mol-reactor', {
                     //console.log("This molecule is hitting the repressor and should react");
                     CONTEXT_AF.currentState = "reacting";
                 }else if (isAllolactose && CONTEXT_AF.type == "repressor") {
-                    console.log("This molecule is hitting the repressor and should react");
+                    //console.log("This molecule is hitting the repressor and should react");
                     CONTEXT_AF.currentState = "reacting";
                 }else if (ismRNA && CONTEXT_AF.type == "ribosome") {
                     //console.log("This molecule is hitting an mRNA and should react");
@@ -103,13 +103,19 @@ AFRAME.registerComponent('mol-reactor', {
                 }else if (isCRP && CONTEXT_AF.type == "camp") {
                     //console.log("This molecule is hitting a CRP, is a camp, and should react");
 
-                    setTimeout(() => { CONTEXT_AF.el.parentNode.parentNode.removeChild(CONTEXT_AF.el.parentNode); }, 0);
+                    console.log("This is the object that is being deleted: " + e.detail.target.el.parentNode.id);
+
+                    var temp = document.getElementById(e.detail.target.el.parentNode.id);
+
+                    //setTimeout(() => { e.detail.target.el.parentNode.remove(e.detail.target.el.parentNode); }, 0);
 
                     e.detail.body.el.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/CRP_bound.glb');
                     //console.log("This molecule is:" + e.detail.body.el.id);
 
-                    //CONTEXT_AF.currentState = "CRPbound";
+                    CONTEXT_AF.currentState = "CRPbound";
                     e.detail.body.el.emit('setState', { value: 'CRPbound'});
+
+                    setTimeout(() => { temp.remove(); }, 500);
                 }
             }
 
@@ -186,22 +192,23 @@ AFRAME.registerComponent('mol-reactor', {
                 let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
                 //console.log("Spawn position is: " + temp_pos);
 
-                setTimeout(() => { CONTEXT_AF.el.parentNode.parentNode.removeChild(CONTEXT_AF.el.parentNode); }, 0);
-
                 CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'allolactose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
                 CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'galactose', pos: { x: temp_pos.x + 0.05, y: temp_pos.y, z: temp_pos.z - 0.05 }, rot: 'null' });
+
+                setTimeout(() => { CONTEXT_AF.el.parentNode.remove(); }, 0);
 
                 CONTEXT_AF.currentState = "reacted";
             }else if(CONTEXT_AF.attacker.classList.contains("mRNA") && CONTEXT_AF.type == "ribosome"){
                 let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
-                console.log("Spawn position is: " + temp_pos.y);
+                //console.log("Spawn position is: " + temp_pos.y);
 
                 if (CONTEXT_AF.attacker.classList.contains("lac")){
                     CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'beta-gal', pos: { x: temp_pos.x - 0.1, y: temp_pos.y, z: temp_pos.z + 0.1 }, rot: 'null' });
+                    CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'permease', pos: { x: temp_pos.x - 0.1, y: temp_pos.y + 0.5, z: temp_pos.z }, rot: 'null' });
                 }else if (CONTEXT_AF.attacker.classList.contains("rep")){
                     CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'repressor', pos: { x: temp_pos.x - 0.1, y: temp_pos.y, z: temp_pos.z + 0.1 }, rot: 'null' });
                 }
-                setTimeout(() => { CONTEXT_AF.attacker.parentNode.removeChild(CONTEXT_AF.attacker); }, 0);
+                setTimeout(() => { CONTEXT_AF.attacker.remove(); }, 0);
                 setTimeout(() => { CONTEXT_AF.currentState = "null"; }, 2000);
 
                 CONTEXT_AF.currentState = "reacted";
@@ -210,7 +217,6 @@ AFRAME.registerComponent('mol-reactor', {
                 //console.log("Allo Reacting!!!!! ");
                 if(!CONTEXT_AF.el.parentNode.classList.contains("blocked")){
                     CONTEXT_AF.el.parentNode.classList.add("blocked");
-
                 }
 
                 CONTEXT_AF.currentState = "null";

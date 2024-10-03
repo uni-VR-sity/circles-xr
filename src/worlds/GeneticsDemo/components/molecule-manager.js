@@ -557,6 +557,24 @@ AFRAME.registerComponent('molecule-manager', {
                     receive: 'false',
                     cast: 'true'
                 });
+
+                mol.setAttribute('animation', {
+                    property: 'position',
+                    to: position.x+' 6 '+position.z,
+                    dur: 3000,
+                    easing: 'linear',
+                    loop: 'false'
+                });
+
+                if (rotation != "null"){
+                    mol.setAttribute('animation__2', {
+                        property: 'rotation',
+                        to: rotation.x+' '+rotation.y+' '+rotation.z,
+                        dur: 3000,
+                        easing: 'linear',
+                        loop: 'false'
+                    });
+                }
     
                 mol.setAttribute('shape__main', {
                     shape: 'cylinder',
