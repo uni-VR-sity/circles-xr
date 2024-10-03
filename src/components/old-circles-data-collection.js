@@ -1,7 +1,7 @@
 'use strict';
 
 // Component
-AFRAME.registerComponent('circles-data-collection', 
+AFRAME.registerComponent('old-circles-data-collection', 
 {
     schema: 
     {
@@ -12,7 +12,7 @@ AFRAME.registerComponent('circles-data-collection',
         restart: {type:'boolean', default:true},
 
         interactableObjects: {type:'array'},
-        trackRepeatedInteractions: {type:'boolean', default:'true'},
+        trackRepeatedInteractions: {type:'boolean', default:true},
 
         /*
         gradeUser: {type:'boolean', default:false},

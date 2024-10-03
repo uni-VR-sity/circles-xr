@@ -555,7 +555,7 @@ const saveCollectedData = async (req, res, next) =>
   if (req.body.circle)
   {
     const fileName = __dirname + '/../collectedData/' + req.body.circle + '.csv';
-    const possibleData = ['date', 'time', 'user', 'totalTime', 'timePerTask','objectsInteractedWith'];
+    const possibleData = ['date', 'time', 'user', 'position', 'name', 'description'];
 
     var log = '';
     var header = '';
@@ -592,6 +592,10 @@ const saveCollectedData = async (req, res, next) =>
           if (data == 'user')
           {
             log += req.user.username + ',';
+          }
+          else if (req.body[data].includes(','))
+          {
+            log += '"' + req.body[data] + '",';
           }
           else
           {
