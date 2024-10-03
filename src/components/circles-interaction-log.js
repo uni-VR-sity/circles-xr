@@ -5,6 +5,7 @@ AFRAME.registerComponent('circles-interaction-log',
 {
     schema:
     {
+        event: {type:'string', default:'click'},
         name: {type:'string'},
         description: {type:'string'},
     },
@@ -14,7 +15,7 @@ AFRAME.registerComponent('circles-interaction-log',
         const element = CONTEXT_AF.el;
         const schema = CONTEXT_AF.data;
 
-        element.addEventListener('click', function()
+        element.addEventListener(schema.event, function()
         {
             var logData = {};
 
