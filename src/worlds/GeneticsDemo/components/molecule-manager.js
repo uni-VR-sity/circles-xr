@@ -1,4 +1,6 @@
 let lactoseCount = 0;
+let alloLactoseCount = 0;
+let mRNAcount = 0;
 
 AFRAME.registerComponent('molecule-manager', {
     init: function () {
@@ -178,7 +180,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "allolactose":
                 sample = document.querySelectorAll('.allolactose');
-                tag = sample.length++;
+                tag = alloLactoseCount++;
 
                 mol.setAttribute('id', 'allolactoseMain_' + tag);
 
@@ -428,7 +430,7 @@ AFRAME.registerComponent('molecule-manager', {
                     pickupScale: '0.8 0.8 0.8',
                 });
                 
-                ///Make the reactive core!
+                //Make the reactive core!
 
                 var mol_miniCore = document.createElement('a-entity');
 
@@ -560,7 +562,7 @@ AFRAME.registerComponent('molecule-manager', {
 
                 mol.setAttribute('animation', {
                     property: 'position',
-                    to: position.x+' 6 '+position.z,
+                    to: position.x+' 5 '+position.z,
                     dur: 3000,
                     easing: 'linear',
                     loop: 'false'
@@ -609,15 +611,15 @@ AFRAME.registerComponent('molecule-manager', {
                 });
     
                 mol_label.setAttribute('position', {
-                    x: 0,
-                    y: 0.5,
-                    z: 0
+                    x: 0.3,
+                    y: -0.5,
+                    z: 0.3
                 });
 
                 mol_label.setAttribute('scale', {
-                    x: 0.4,
-                    y: 0.4,
-                    z: 0.4
+                    x: 0.8,
+                    y: 0.8,
+                    z: 0.8
                 });
     
                 mol_label.setAttribute('width', '1.5');
@@ -895,7 +897,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "mRNA-rep":
                 sample = document.querySelectorAll('.mRNA');
-                tag = sample.length++;
+                tag = mRNAcount++;
                 
                 mol.setAttribute('id', 'mRNA-head-' + tag);
 
@@ -1368,7 +1370,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "mRNA-lac":
                 sample = document.querySelectorAll('.mRNA');
-                tag = sample.length++;
+                tag = mRNAcount++;
                 
                 mol.setAttribute('id', 'mRNA-head-' + tag);
 
@@ -2032,6 +2034,9 @@ AFRAME.registerComponent('molecule-manager', {
 
     tick: function(){
         var sampleLactose = document.querySelectorAll('.lactose');
+        var sampleAllo = document.querySelectorAll('.allolactose');
+        var samplemRNA = document.querySelectorAll('.mRNA');
+
         if (sampleLactose.length >= 80){
             console.log('Deleted thise item: ' + sampleLactose[0].id);
 
@@ -2039,6 +2044,24 @@ AFRAME.registerComponent('molecule-manager', {
         }
         if (lactoseCount >= 500){
             lactoseCount = 1;
+        }
+
+        if (sampleAllo.length >= 80){
+            console.log('Deleted thise item: ' + sampleAllo[0].id);
+
+            sampleAllo[0].parentNode.removeChild(sampleAllo[0]);
+        }
+        if (alloLactoseCount >= 500){
+            alloLactoseCount = 1;
+        }
+
+        if (samplemRNA.length >= 80){
+            console.log('Deleted thise item: ' + samplemRNA[0].id);
+
+            samplemRNA[0].parentNode.removeChild(samplemRNA[0]);
+        }
+        if (mRNAcount >= 500){
+            mRNAcount = 1;
         }
     }
 });

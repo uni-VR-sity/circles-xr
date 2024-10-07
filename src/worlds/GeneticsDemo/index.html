@@ -80,24 +80,30 @@
                 <!-- Room -->
                 <a-entity>
                         <a-box id=box_floor position="0 -0.1 0" width="30" height="0.25" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="color: #7a736e; roughness: 0.75;"></a-box>
+                        <a-box id=box_floor_nav position="0 0 0" width="17" height="0.2" depth="17" static-body="shape:box;" visible="false" nav-mesh></a-box>
+
+                        <a-box id=box_wall_back position="0 4 11" width="30" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_front position="0 4 -11" width="30" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_right position="11 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_right position="-11 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+
+                        <a-box id=box_ceiling position="0 7 0" width="30" height="0.25" depth="30" static-body="shape:box;"
                                 shadow="receive:true; cast:false;"></a-box>
 
-                        <a-box id=box_wall_back position="0 4 10" width="30" height="10" depth="0.25" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                        <a-box id=box_wall_front position="0 4 -10" width="30" height="10" depth="0.25" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                        <a-box id=box_wall_right position="10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                        <a-box id=box_wall_right position="-10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-
-                        <a-box id=box_ceiling position="0 8 0" width="30" height="0.25" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;"></a-box>
+                        <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
+                        <a-entity light="type: directional; castShadow: true; intensity: 0.4; 
+                                shadowMapHeight:1500; shadowMapWidth:1500; 
+                                shadowCameraLeft: -15; shadowCameraRight: 15; shadowCameraBottom: -15; shadowCameraTop: 15;" position="-5 8 1.5"></a-entity>
                 </a-entity>
                 
 
                 <a-entity id="controlStation" geometry="primitive: box; width:9; height: 3.5; depth: 0.15"
-                        position="-2 1 1" rotation="-30 90 0" scale="0.4 0.4 0.4" material="color: #035AF7;">
+                        position="-2 1 1" rotation="-30 90 0" scale="0.4 0.4 0.4" material="color: #464a73;">
                         <a-entity id="controlStationButtons" rotation="90 0 0">
                                 <!-- control buttons -->
                                 <a-entity id="LLGroup" position="-2.2 0.1 -0.7" scale="1.5 1.5 1.5">
@@ -342,7 +348,7 @@
                         shape__top="shape: sphere; radius: 0.07; offset: 0.0079 0.0492 0.0194;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0210 -0.0538 -0.0208;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0.5; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
                         shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacI; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
@@ -505,8 +511,8 @@
                                 description:The repressor becomes inactive when it comes in contact with an allolactose molecule and they are bound together. In this state it can't bind to the lac operator.;
                                 title_back:Repressor Active;
                                 description_back:The repressor is a molecule that gets created when a repressor mRNA interacts with the ribosome. That repressor in it's active state can then bind to the lac operator and inhibit lac mRNA production;
-                                label_text:Repressor;"><a-sphere static-body="shape: sphere; sphereRadius: 0.5;"
-                                        material="visible: false;"></a-sphere>
+                                label_text:Repressor;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.5;"
+                                material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
                                 shadow="receive:true; cast:true;">
@@ -531,7 +537,7 @@
                                 description:The Ribosome creates a repressor when it comes in contact with a repressor mRNA. The repressor mRNA is lost/removed in this process.;
                                 title_back:The Ribosome;
                                 description_back:The Ribosome creates a Permease and a beta-gal when it comes in contact with a lac mRNA. The lac mRNA is lost/removed in this process.;
-                                label_text:Ribosome;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
+                                label_text:Ribosome;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
@@ -556,7 +562,7 @@
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:Permease;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:Permease;">
+                                label_text:Permease;" shadow="receive:false; cast:true;">
                                 <a-entity static-body="shape: none;"
                                         shape__main="shape: cylinder; height: 0.6; radiusTop: 0.3; radiusBottom: 0.3; numSegments: 16;"
                                         material="visible: false;">
@@ -584,7 +590,7 @@
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:lac mRNA;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:mRNA;"><a-sphere static-body="shape: sphere; sphereRadius: 0.15;"
+                                label_text:mRNA;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.15;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
@@ -610,7 +616,7 @@
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:Beta-gal;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:Beta-gal;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
+                                label_text:Beta-gal;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
@@ -636,7 +642,7 @@
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:CRP;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:CRP;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
+                                label_text:CRP;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
@@ -661,7 +667,7 @@
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:Lactose;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:Lactose;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
+                                label_text:Lactose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
@@ -687,7 +693,7 @@
                                 description:Permease continuosly creates lactose molecules and as;
                                 title_back:RNA Polymerase;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:RNA Polymerase;"><a-sphere static-body="shape: sphere; sphereRadius: 0.4;"
+                                label_text:RNA Polymerase;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.4;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
@@ -712,7 +718,7 @@
                                 description:Permease continuosly creates lactose molecules and as;
                                 title_back:Glucose;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:Glucose;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
+                                label_text:Glucose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"

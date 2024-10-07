@@ -35,7 +35,7 @@ AFRAME.registerComponent('trigger', {
                 }else if(e.detail.body.el.classList.contains("repressor") && e.detail.target.el.id == "rep_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     //console.log('RepTrigger is binding');
-                }else if(e.detail.body.el.classList.contains("CRP_bound") && e.detail.target.el.id == "capSite_trigger"){
+                }else if(e.detail.body.el.classList.contains("CRP_final") && e.detail.target.el.id == "capSite_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     console.log('capSite Trigger is binding');
                 }
