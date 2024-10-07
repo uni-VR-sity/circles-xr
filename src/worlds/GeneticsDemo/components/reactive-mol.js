@@ -36,22 +36,22 @@ AFRAME.registerComponent('mol-reactor', {
                 //console.log("This molecule is beta-gal!");
             } else if (isRibosome) {
                 CONTEXT_AF.type = "ribosome";
-                console.log("This molecule is ribosome!");
+                //console.log("This molecule is ribosome!");
             } else if (isRepressor) {
                 CONTEXT_AF.type = "repressor";
-                console.log("This molecule is repressor!");
+                //console.log("This molecule is repressor!");
             } else if (isPermease) {
                 CONTEXT_AF.type = "permease";
-                console.log("This molecule is permease!");
+                //console.log("This molecule is permease!");
             } else if (isCRP) {
                 CONTEXT_AF.type = "CRP";
-                console.log("This molecule is CRP!");
+                //console.log("This molecule is CRP!");
             } else if (isCRPbound) {
                 CONTEXT_AF.type = "CRPbound";
-                console.log("This molecule is CRPbound!");
+                //console.log("This molecule is CRPbound!");
             } else if (isCAMP) {
                 CONTEXT_AF.type = "camp";
-                console.log("This molecule is camp and reactive!");
+                //console.log("This molecule is camp and reactive!");
             } else {
                 CONTEXT_AF.type = "unreactive";
                 console.log("* This molecule isn't supposed to be reactive *");
@@ -61,7 +61,7 @@ AFRAME.registerComponent('mol-reactor', {
         CONTEXT_AF.el.addEventListener('setState', function (evt) {
 
             CONTEXT_AF.currentState = evt.detail.value;
-            console.log('Set currentState of '+ CONTEXT_AF.el.id +' to ' + CONTEXT_AF.currentState);
+            //console.log('Set currentState of '+ CONTEXT_AF.el.id +' to ' + CONTEXT_AF.currentState);
 
             if (CONTEXT_AF.currentState == "CRPbound") {
                 CONTEXT_AF.type = "CRP_bound";
@@ -112,14 +112,14 @@ AFRAME.registerComponent('mol-reactor', {
                         var temp2 = document.getElementById('core_CRP_02');
                         //console.log("Temp Core: "+ temp2.id);
                         if (((temp2 == null || temp2.id == null) && e.detail.target.el.classList.contains('blocked')) || (e.detail.body.el.parentNode.classList.contains('blocked') && e.detail.target.el.classList.contains('blocked'))) {
-                            console.log("This CRP_02 molecule is hitting a CRPcore and should react");
-                            console.log("Type is: "+ CONTEXT_AF.type);
+                            //console.log("This CRP_02 molecule is hitting a CRPcore and should react");
+                            //console.log("Type is: "+ CONTEXT_AF.type);
                             //CONTEXT_AF.attacker = document.getElementById('CRP_01');
                             CONTEXT_AF.currentState = "reacting";
                             CONTEXT_AF.attacker.emit('setState', { value: 'reacting' });
                         } else {
                             setTimeout(() => { temp1.remove(); }, 0);
-                            console.log("Core_01 deleted");
+                            //console.log("Core_01 deleted");
                             CONTEXT_AF.currentState = "waiting";
                         }
 
@@ -129,21 +129,21 @@ AFRAME.registerComponent('mol-reactor', {
                         var temp2 = document.getElementById('core_CRP_01');
                         //console.log("Temp Core: "+ temp2.id);
                         if (((temp2 == null || temp2.id == null) && e.detail.target.el.classList.contains('blocked')) || (e.detail.body.el.parentNode.classList.contains('blocked') && e.detail.target.el.classList.contains('blocked'))) {
-                            console.log("This CRP_01 molecule is hitting a CRPcore and should react");
-                            console.log("Type is: "+ CONTEXT_AF.type);
+                            //console.log("This CRP_01 molecule is hitting a CRPcore and should react");
+                            //console.log("Type is: "+ CONTEXT_AF.type);
                             //CONTEXT_AF.attacker = document.getElementById('CRP_02');
                             CONTEXT_AF.currentState = "reacting";
                             CONTEXT_AF.attacker.emit('setState', { value: 'reacting' });
                         } else {
                             setTimeout(() => { temp1.remove(); }, 0);
-                            console.log("Core_02 deleted");
+                            //console.log("Core_02 deleted");
                             CONTEXT_AF.currentState = "waiting";
                         }
                     }
                 } else if (isCRP && CONTEXT_AF.type == "camp") {
                     //console.log("This molecule is hitting a CRP, is a camp, and should react");
 
-                    console.log("This is the object that is being deleted: " + e.detail.target.el.parentNode.id);
+                    //console.log("This is the object that is being deleted: " + e.detail.target.el.parentNode.id);
 
                     var temp = document.getElementById(e.detail.target.el.parentNode.id);
 
@@ -253,7 +253,7 @@ AFRAME.registerComponent('mol-reactor', {
 
                 CONTEXT_AF.currentState = "null";
             } else if (CONTEXT_AF.type == "CRPbound") {
-                console.log("This molecule is hitting a CRP, is a CRP, and should react");
+                //console.log("This molecule is hitting a CRP, is a CRP, and should react");
 
                 CONTEXT_AF.attacker.classList.add("CRP_final");
 

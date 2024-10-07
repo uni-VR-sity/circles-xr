@@ -1,4 +1,6 @@
 let lactoseCount = 0;
+let alloLactoseCount = 0;
+let mRNAcount = 0;
 
 AFRAME.registerComponent('molecule-manager', {
     init: function () {
@@ -178,7 +180,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "allolactose":
                 sample = document.querySelectorAll('.allolactose');
-                tag = sample.length++;
+                tag = alloLactoseCount++;
 
                 mol.setAttribute('id', 'allolactoseMain_' + tag);
 
@@ -895,7 +897,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "mRNA-rep":
                 sample = document.querySelectorAll('.mRNA');
-                tag = sample.length++;
+                tag = mRNAcount++;
                 
                 mol.setAttribute('id', 'mRNA-head-' + tag);
 
@@ -1368,7 +1370,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             case "mRNA-lac":
                 sample = document.querySelectorAll('.mRNA');
-                tag = sample.length++;
+                tag = mRNAcount++;
                 
                 mol.setAttribute('id', 'mRNA-head-' + tag);
 
@@ -2032,6 +2034,9 @@ AFRAME.registerComponent('molecule-manager', {
 
     tick: function(){
         var sampleLactose = document.querySelectorAll('.lactose');
+        var sampleAllo = document.querySelectorAll('.allolactose');
+        var samplemRNA = document.querySelectorAll('.mRNA');
+
         if (sampleLactose.length >= 80){
             console.log('Deleted thise item: ' + sampleLactose[0].id);
 
@@ -2039,6 +2044,24 @@ AFRAME.registerComponent('molecule-manager', {
         }
         if (lactoseCount >= 500){
             lactoseCount = 1;
+        }
+
+        if (sampleAllo.length >= 80){
+            console.log('Deleted thise item: ' + sampleAllo[0].id);
+
+            sampleAllo[0].parentNode.removeChild(sampleAllo[0]);
+        }
+        if (alloLactoseCount >= 500){
+            alloLactoseCount = 1;
+        }
+
+        if (samplemRNA.length >= 80){
+            console.log('Deleted thise item: ' + samplemRNA[0].id);
+
+            samplemRNA[0].parentNode.removeChild(samplemRNA[0]);
+        }
+        if (mRNAcount >= 500){
+            mRNAcount = 1;
         }
     }
 });

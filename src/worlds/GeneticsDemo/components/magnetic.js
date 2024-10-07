@@ -34,7 +34,7 @@ AFRAME.registerComponent('magnet', {
                 //console.log("This molecule is repressor!");
             }else if (isCRP){
                 CONTEXT_AF.type = "CRP";
-                console.log("This molecule is CRP!");
+                //console.log("This molecule is CRP!");
             }else if (isCAMP){
                 CONTEXT_AF.type = "camp";
                 //console.log("This molecule is camp!");
@@ -67,16 +67,16 @@ AFRAME.registerComponent('magnet', {
                 if (isBeta && CONTEXT_AF.type == "lactose") {
                     CONTEXT_AF.currentState = "binding";
                 } else if (ismRNA && CONTEXT_AF.type == "ribosome") {
-                    console.log('Touched an mRNA molecule and is binding!');
+                    //console.log('Touched an mRNA molecule and is binding!');
                     CONTEXT_AF.currentState = "binding";
                 } else if (isAllo && CONTEXT_AF.type == "repressor") {
-                    console.log('Touched an allolactase and is binding!');
+                    //console.log('Touched an allolactase and is binding!');
                     CONTEXT_AF.currentState = "binding";
                 } else if (isCRP && CONTEXT_AF.type == "CRP") {
-                    console.log('Touched a CRP molecule, is a CRP and is binding!');
+                    //console.log('Touched a CRP molecule, is a CRP and is binding!');
                     CONTEXT_AF.currentState = "binding";
                 } else if (isCRP && CONTEXT_AF.type == "camp") {
-                    console.log('Touched an CRP molecule and is binding!');
+                    //console.log('Touched an CRP molecule and is binding!');
                     CONTEXT_AF.currentState = "binding";
                     if(e.detail.body.el.classList.contains("blocked")){
                         CONTEXT_AF.currentState = "bound";
@@ -142,7 +142,7 @@ AFRAME.registerComponent('magnet', {
                 mover.setAttribute('constraint', {
                     type: 'pointToPoint',
                     target: "#" + CONTEXT_AF.el.parentNode.id,
-                    maxForce: 0.15,
+                    maxForce: 0.2,
                     targetPivot: '0 -0.4 0',
                     collideConnected: 'true'
                 });
