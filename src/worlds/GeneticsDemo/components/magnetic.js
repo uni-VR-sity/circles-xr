@@ -34,7 +34,7 @@ AFRAME.registerComponent('magnet', {
                 //console.log("This molecule is repressor!");
             }else if (isCRP){
                 CONTEXT_AF.type = "CRP";
-                //console.log("This molecule is CRP!");
+                console.log("This molecule is CRP!");
             }else if (isCAMP){
                 CONTEXT_AF.type = "camp";
                 //console.log("This molecule is camp!");
@@ -55,12 +55,13 @@ AFRAME.registerComponent('magnet', {
                 //console.log('Touched entity= ' + e.detail.body.el.id);
 
                 CONTEXT_AF.attacker = e.detail.body.el;
-                console.log('Touched entity= ' + e.detail.body.el.id);
+                //console.log('Touched entity= ' + e.detail.body.el.id);
+                //console.log('Target entity= ' + e.detail.target.el.id);
 
                 let isBeta = e.detail.body.el.classList.contains("beta-gal");
                 let ismRNA = e.detail.body.el.classList.contains("mRNA");
                 let isAllo = e.detail.body.el.classList.contains("allolactose");
-                let isCAMP = e.detail.body.el.classList.contains("camp");
+                let isCRPbound = e.detail.body.el.parentNode.classList.contains("CRP");
                 let isCRP = e.detail.body.el.classList.contains("CRP");
 
                 if (isBeta && CONTEXT_AF.type == "lactose") {
@@ -71,8 +72,8 @@ AFRAME.registerComponent('magnet', {
                 } else if (isAllo && CONTEXT_AF.type == "repressor") {
                     console.log('Touched an allolactase and is binding!');
                     CONTEXT_AF.currentState = "binding";
-                } else if (isCAMP && CONTEXT_AF.type == "CRP") {
-                    console.log('Touched an camp molecule and is binding!');
+                } else if (isCRP && CONTEXT_AF.type == "CRP") {
+                    console.log('Touched a CRP molecule, is a CRP and is binding!');
                     CONTEXT_AF.currentState = "binding";
                 } else if (isCRP && CONTEXT_AF.type == "camp") {
                     console.log('Touched an CRP molecule and is binding!');
@@ -158,17 +159,36 @@ AFRAME.registerComponent('magnet', {
             //console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
             //console.log('Target is: ' + CONTEXT_AF.attacker.id);
             
-            //CONTEXT_AF.attacker.classList.add("blocked");
+            if(!CONTEXT_AF.attacker.classList.contains("blocked")){
+                CONTEXT_AF.attacker.classList.add("blocked");
 
+                CONTEXT_AF.el.parentNode.setAttribute('constraint', {
+                    type: 'pointToPoint',
+                    target: "#" + CONTEXT_AF.attacker.id,
+                    maxForce: 0.15,
+                    targetPivot: '0 0.2 0',
+                    collideConnected: 'true'
+                });
+                setTimeout(() => { CONTEXT_AF.currentState = "unbound"; }, 500);
+
+                CONTEXT_AF.currentState = "bound";
+            }
+            
+        }else if(CONTEXT_AF.currentState == "binding" && CONTEXT_AF.type == "CRP" && CONTEXT_AF.attacker.classList.contains('blocked')){
+            console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
+            console.log('Target is: ' + CONTEXT_AF.attacker.id);
+            
             CONTEXT_AF.el.parentNode.setAttribute('constraint', {
                 type: 'pointToPoint',
                 target: "#" + CONTEXT_AF.attacker.id,
                 maxForce: 0.15,
-                targetPivot: '0 0.2 0',
+                targetPivot: '0 0 0',
                 collideConnected: 'true'
             });
+            setTimeout(() => { CONTEXT_AF.currentState = "unbound"; }, 1000);
 
             CONTEXT_AF.currentState = "bound";
+            
         }
     },
 

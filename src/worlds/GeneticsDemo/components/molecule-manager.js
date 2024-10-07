@@ -428,7 +428,7 @@ AFRAME.registerComponent('molecule-manager', {
                     pickupScale: '0.8 0.8 0.8',
                 });
                 
-                ///Make the reactive core!
+                //Make the reactive core!
 
                 var mol_miniCore = document.createElement('a-entity');
 
