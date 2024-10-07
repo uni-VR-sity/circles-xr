@@ -560,7 +560,7 @@ AFRAME.registerComponent('molecule-manager', {
 
                 mol.setAttribute('animation', {
                     property: 'position',
-                    to: position.x+' 6 '+position.z,
+                    to: position.x+' 5 '+position.z,
                     dur: 3000,
                     easing: 'linear',
                     loop: 'false'
@@ -609,15 +609,15 @@ AFRAME.registerComponent('molecule-manager', {
                 });
     
                 mol_label.setAttribute('position', {
-                    x: 0,
-                    y: 0.5,
-                    z: 0
+                    x: 0.3,
+                    y: -0.5,
+                    z: 0.3
                 });
 
                 mol_label.setAttribute('scale', {
-                    x: 0.4,
-                    y: 0.4,
-                    z: 0.4
+                    x: 0.8,
+                    y: 0.8,
+                    z: 0.8
                 });
     
                 mol_label.setAttribute('width', '1.5');

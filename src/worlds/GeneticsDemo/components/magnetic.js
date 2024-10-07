@@ -175,8 +175,8 @@ AFRAME.registerComponent('magnet', {
             }
             
         }else if(CONTEXT_AF.currentState == "binding" && CONTEXT_AF.type == "CRP" && CONTEXT_AF.attacker.classList.contains('blocked')){
-            console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
-            console.log('Target is: ' + CONTEXT_AF.attacker.id);
+            //console.log('ParentNode is: ' + CONTEXT_AF.el.parentNode.id);
+            //console.log('Target is: ' + CONTEXT_AF.attacker.id);
             
             CONTEXT_AF.el.parentNode.setAttribute('constraint', {
                 type: 'pointToPoint',

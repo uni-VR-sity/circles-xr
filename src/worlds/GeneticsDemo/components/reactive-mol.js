@@ -41,8 +41,8 @@ AFRAME.registerComponent('mol-reactor', {
                 CONTEXT_AF.type = "repressor";
                 console.log("This molecule is repressor!");
             } else if (isPermease) {
-                //CONTEXT_AF.type = "permease";
-                //console.log("This molecule is permease!");
+                CONTEXT_AF.type = "permease";
+                console.log("This molecule is permease!");
             } else if (isCRP) {
                 CONTEXT_AF.type = "CRP";
                 console.log("This molecule is CRP!");
@@ -218,8 +218,8 @@ AFRAME.registerComponent('mol-reactor', {
         const CONTEXT_AF = this;
 
         if (CONTEXT_AF.currentState == "reacting") {
-            console.log("Type is: "+ CONTEXT_AF.type);
-            console.log("Attacker is: "+ CONTEXT_AF.attacker.id);
+            //console.log("Type is: "+ CONTEXT_AF.type);
+            //console.log("Attacker is: "+ CONTEXT_AF.attacker.id);
             if (CONTEXT_AF.attacker.classList.contains("beta-gal") && CONTEXT_AF.type == "lactose") {
                 let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
                 //console.log("Spawn position is: " + temp_pos);
@@ -254,10 +254,8 @@ AFRAME.registerComponent('mol-reactor', {
                 CONTEXT_AF.currentState = "null";
             } else if (CONTEXT_AF.type == "CRPbound") {
                 console.log("This molecule is hitting a CRP, is a CRP, and should react");
-                
-                //CONTEXT_AF.attacker.emit('setState', { value: 'reacting' });
 
-                //setTimeout(() => { CONTEXT_AF.el.remove(); }, 0);
+                CONTEXT_AF.attacker.classList.add("CRP_final");
 
                 CONTEXT_AF.attacker.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/CRP_final.glb');
 
@@ -304,6 +302,18 @@ AFRAME.registerComponent('mol-reactor', {
                 });
 
                 console.log("Reshaped " + CONTEXT_AF.attacker.id);
+
+                if (CONTEXT_AF.attacker.id == "CRP_01"){
+                    var temp1 = document.getElementById('core_CRP_01');
+                    var temp2 = document.getElementById('magnet_CRP_01');
+                    setTimeout(() => { temp1.remove(); }, 0);
+                    setTimeout(() => { temp2.remove(); }, 0);
+                }else if (CONTEXT_AF.attacker.id == "CRP_02"){
+                    var temp1 = document.getElementById('core_CRP_02');
+                    var temp2 = document.getElementById('magnet_CRP_02');
+                    setTimeout(() => { temp1.remove(); }, 0);
+                    setTimeout(() => { temp2.remove(); }, 0);
+                }
 
                 setTimeout(() => { CONTEXT_AF.el.parentNode.remove(); }, 0);
 
