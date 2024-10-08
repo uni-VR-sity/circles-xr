@@ -70,6 +70,9 @@
                         <a-asset-item id="RNAmoveSmall-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly_anim.glb"></a-asset-item>
                         <a-asset-item id="RNAmoveBig-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly_animBig.glb"></a-asset-item>
 
+                        <a-asset-item id="ChalkBoard-gltf" src="/worlds/GeneticsDemo/assets/models/Board.glb"></a-asset-item>
+                        <img id="Arrow-img" src="/worlds/GeneticsDemo/assets/images/arrow_icon.png">
+
                         <!-- Circles' built-in assets [REQUIRED] -->
                         <circles-assets />
                 </a-assets>
@@ -99,6 +102,21 @@
                         <a-entity light="type: directional; castShadow: true; intensity: 0.4; 
                                 shadowMapHeight:1500; shadowMapWidth:1500; 
                                 shadowCameraLeft: -15; shadowCameraRight: 15; shadowCameraBottom: -15; shadowCameraTop: 15;" position="-5 8 1.5"></a-entity>
+                </a-entity>
+                
+                <!-- Chalk Board -->
+                <a-entity id="ChalkBoard" gltf-model="#ChalkBoard-gltf" position="6 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;">
+                        <a-entity id="Welcome" position="0.15 8.25 0" rotation="0 90 0" 
+                                text="value: Genetics Demo; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
+                                font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="10 10 10"></a-entity>
+                        <a-entity id="Instructions" position="0.15 6.55 0" rotation="0 90 0" 
+                                text="value: Genetics Demo is an interactive demonstration that shows the lac operon and the process of metabolizing lactose.; 
+                                color: #025d96; width: 1.7; wrapCount: 43.190; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                        <a-entity id="Leader" position="0.15 4.8634 0" rotation="0 90 0" 
+                                text="value: You can use the control panel behind you to setup the interactive experience on the left. If you would like to learn more about the molecules in the demo, check out the pedistals on the right; 
+                                color: #025d96; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                        <a-image id="arrowImageRight" src="#Arrow-img" position="0.15 3.25 4.5" rotation="0 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
+                        <a-image id="arrowImageLeft" src="#Arrow-img" position="0.15 3.25 -4.5" rotation="180 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
                 </a-entity>
                 
 
