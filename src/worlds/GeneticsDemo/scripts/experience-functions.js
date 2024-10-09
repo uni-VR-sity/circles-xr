@@ -155,6 +155,30 @@ function setInvisible(id) {
   object.setAttribute('visible', 'false');
 }
 
+function tutorialToggle() {
+  sample = document.querySelectorAll('.tutorial');
+  let Indicator = document.querySelector('#infoButton');
+
+  if(sample[0].getAttribute('visible')){
+    
+    // Set button to red
+    Indicator.setAttribute('circles-button', {
+      button_color: 'rgb(224, 37, 18)',
+      button_color_hover: 'rgb(145, 31, 19)'
+    });
+
+    sample.forEach((element) => element.setAttribute('visible', 'false'));
+  }else{
+    // Set button to green
+    Indicator.setAttribute('circles-button', {
+      button_color: 'rgb(101,199,93)',
+      button_color_hover: 'rgb(66,133,61)'
+    });
+
+    sample.forEach((element) => element.setAttribute('visible', 'true'));
+  }
+}
+
 function setDynamicLocation(id, position, rotation) {
   const object = document.querySelector('#' + id);
   console.log('Setting new dynamic position of ' + id);
