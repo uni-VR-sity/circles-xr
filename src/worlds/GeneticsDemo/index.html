@@ -69,6 +69,9 @@
 
                         <a-asset-item id="RNAmoveSmall-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly_anim.glb"></a-asset-item>
                         <a-asset-item id="RNAmoveBig-glb" src="/worlds/GeneticsDemo/assets/models/RNApoly_animBig.glb"></a-asset-item>
+                        <a-asset-item id="repressor-anim-glb" src="/worlds/GeneticsDemo/assets/models/repressor_anim.glb"></a-asset-item>
+                        <a-asset-item id="allolactose-anim-glb" src="/worlds/GeneticsDemo/assets/models/allolactose_anim.glb"></a-asset-item>
+                        <a-asset-item id="CRP-anim-glb" src="/worlds/GeneticsDemo/assets/models/CRP_final_anim.glb"></a-asset-item>
 
                         <a-asset-item id="ChalkBoard-gltf" src="/worlds/GeneticsDemo/assets/models/Board.glb"></a-asset-item>
                         <img id="Arrow-img" src="/worlds/GeneticsDemo/assets/images/arrow_icon.png">
@@ -121,6 +124,7 @@
                         <a-image id="arrowImageLeft" src="#Arrow-img" position="0.15 3.25 -4.5" rotation="180 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
                 </a-entity>
 
+                <!-- Tutorial Toggle Button -->
                 <a-box class="pedistal" position="5.75 0.5 0.25" width="0.3" height="1" depth="0.3" shadow="receive:true; cast:true;">
                         <a-entity id="infoButton" onclick="tutorialToggle()" position="0 0.5 0" scale="0.5 0.5 0.5"
                                 circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
@@ -128,7 +132,7 @@
                         </a-entity>
                 </a-box>
                 
-
+                <!-- Preset Buttons Table -->
                 <a-entity id="controlStation" geometry="primitive: box; width:9; height: 3.5; depth: 0.15"
                         position="-2 1 -1" rotation="-30 60 0" scale="0.3 0.3 0.3" material="color: #464a73;">
                         <a-entity id="controlStationButtons" rotation="90 0 0">
@@ -206,6 +210,7 @@
                                         rotation="-43.3, 61.61, 0" material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                         </a-entity>
+                        <!-- Place Holders -->
                         <a-entity id="lacIPromoter_holder" gltf-model="#lacIPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
                                 <a-cylinder id="h1-target" static-body radius="0.085;" height="0.6"
@@ -331,10 +336,11 @@
                                 </a-sphere>
                         </a-entity>
 
+                        <!-- DNA triggers -->
                         <a-entity id="RNA_moving_rep"
                                 gltf-model="#RNAmoveSmall-glb" visible="false" animation-mixer="clip: repressor_move; loop: repeat; timeScale: 0;">
                                 <a-sphere id="repressor_trigger" position="-0.75 1.15 -0.2" 
-                                        static-body radius="0.5"
+                                        static-body radius="0.4" visible="false"
                                         trigger
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
                                 </a-sphere>
@@ -342,19 +348,19 @@
                         <a-entity id="RNA_moving_lac"
                                 gltf-model="#RNAmoveBig-glb" visible="false" animation-mixer="clip: lac_move; loop: repeat; timeScale: 0;">
                                 <a-sphere id="lac_trigger" position="-0.6 1.65 -1.1" 
-                                        static-body radius="0.5"
+                                        static-body radius="0.4" visible="false"
                                         trigger
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-sphere id="rep_trigger" position="-0.005 1.28 -1.22" rotation="0 -10 -35"
-                                static-body radius="0.5"
+                                static-body radius="0.7" visible="false"
                                 trigger 
                                 collision-filter="group: repressor; collidesWith: repressor; collisionForces: false;"
                                 visible="false">
                         </a-sphere>
                         <a-sphere id="capSite_trigger" position="-0.7 1.5 -0.8"
-                                static-body radius="0.5"
+                                static-body radius="0.5" visible="false"
                                 trigger 
                                 collision-filter="group: capSite; collidesWith: capSite; collisionForces: true;"
                                 visible="false">
@@ -603,13 +609,17 @@
 
                 <a-box class="pedistal" position="0 0.525 8.5" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
-                        <a-entity id="repressor-ped" position="0 1 0" gltf-model="#repressor-glb" circles-artefact="label_offset: 0.0 0.75 0.0; label_arrow_position: down;
+                        <a-entity id="repressor-ped" rotation="0 0 45" position="0 1.05 0" gltf-model="#repressor-anim-glb" animation-mixer
+                                circles-artefact="label_offset: 0.0 0.75 0.0; label_arrow_position: down; inspectRotation:20 0 30;
                                 title:Repressor Inactive;
                                 description:The repressor becomes inactive when it comes in contact with an allolactose molecule and they are bound together. In this state it can't bind to the lac operator.;
                                 title_back:Repressor Active;
                                 description_back:The repressor is a molecule that gets created when a repressor mRNA interacts with the ribosome. That repressor in it's active state can then bind to the lac operator and inhibit lac mRNA production;
-                                label_text:Repressor;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.5;"
-                                material="visible: false;"></a-sphere>
+                                label_text:Repressor;" shadow="receive:false; cast:true;">
+                                <a-sphere static-body="shape: sphere; sphereRadius: 0.5;"
+                                        material="visible: false;">
+                                </a-sphere>
+                                <a-entity gltf-model="#allolactose-anim-glb" animation-mixer></a-entity>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
                                 shadow="receive:true; cast:true;">
@@ -628,7 +638,7 @@
                 <a-box class="pedistal" position="-2 0.525 8.5" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="ribosome-ped" position="0 0.8 0" gltf-model="#ribosome-glb" scale="2.5 2.5 2.5"
-                                circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down; inspectScale: 2.5 2.5 2.5;
+                                circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down; inspectScale: 2.5 2.5 2.5; inspectRotation:20 0 30;
                                 title:The Ribosome;
                                 description:The Ribosome creates a repressor when it comes in contact with a repressor mRNA. The repressor mRNA is lost/removed in this process.;
                                 title_back:The Ribosome;
@@ -652,7 +662,7 @@
 
                 <a-box class="pedistal" position="2 0.5 8.5" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
-                        <a-entity id="permease-ped" position="0 0.85 0" gltf-model="#permease-glb" circles-artefact="label_offset:0.0 0.65 0.0; label_arrow_position:down;
+                        <a-entity id="permease-ped" position="0 0.85 0" gltf-model="#permease-glb" circles-artefact="label_offset:0.0 0.65 0.0; label_arrow_position:down; inspectRotation:20 0 30;
                                 title:Permease;
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:Permease;
@@ -678,39 +688,47 @@
                 </a-box>
 
                 <a-box class="pedistal" position="-4 0.5 8" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
+                        collision-filter="group: mRNA-static; collidesWith: mRNA-static, default;">
                         <a-entity id="mRNA-ped" position="0 0.85 0" gltf-model="#mRNA-rep-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down;
                                 title:repressor mRNA;
-                                description:Permease continuosly creates lactose molecules and adds them to its environment.;
+                                description:A repressor mRNA is created when the RNA polymerase binds to the lacIPromoter. When a repressor mRNA comes into contact with the ribosome it produces a repressor.;
                                 title_back:lac mRNA;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
+                                description_back:A lac mRNA is created when the RNA polymerase binds to the lacPromoter if a repressor hasn't bound to the lac operator. When a lac mRNA comes into contact with the ribosome it produces an acetyltransferase, a beta-gal and a permease.;
                                 label_text:mRNA;" shadow="receive:false; cast:true;">
                                 <a-sphere static-body="shape: sphere; sphereRadius: 0.15;"
                                         material="visible: false;"
-                                        constraint="target: #tail-static-1; type: pointToPoint; pivot: 0 0 0; targetPivot: 0 0.1425 0; maxForce: 1; collideConnected: false;">
+                                        constraint="target: #tail-static-1; type: pointToPoint; pivot: 0 0 0; targetPivot: 0 0.1425 0; maxForce: 1; collideConnected: false;"
+                                        collision-filter="group: mRNA-static; collidesWith: mRNA-static, default;">
                                         <a-entity id="tail-static-1" scale="0.8 1 0.8" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
                                                 dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
                                                 shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
-                                                constraint="target: #tail-static-2; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                constraint="target: #tail-static-2; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;"
+                                                collision-filter="group: mRNA-static; collidesWith: mRNA-static;">
                                                 <a-entity id="tail-static-2" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
                                                         dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
                                                         shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
-                                                        constraint="target: #tail-static-3; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                        constraint="target: #tail-static-3; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;"
+                                                        collision-filter="group: mRNA-static; collidesWith: mRNA-static;">
                                                         <a-entity id="tail-static-3" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
                                                                 dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
                                                                 shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
-                                                                constraint="target: #tail-static-4; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                                constraint="target: #tail-static-4; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;"
+                                                                collision-filter="group: mRNA-static; collidesWith: mRNA-static;">
                                                                 <a-entity id="tail-static-4" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
                                                                         dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
                                                                         shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
-                                                                        constraint="target: #tail-static-5; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                                        constraint="target: #tail-static-5; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;"
+                                                                        collision-filter="group: mRNA-static; collidesWith: mRNA-static;">
                                                                         <a-entity id="tail-static-5" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
                                                                                 dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
                                                                                 shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
-                                                                                constraint="target: #tail-static-6; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                                                constraint="target: #tail-static-6; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;"
+                                                                                collision-filter="group: mRNA-static; collidesWith: mRNA-static;">
                                                                                 <a-entity id="tail-static-6" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
                                                                                         dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
-                                                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
+                                                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
+                                                                                        collision-filter="group: mRNA-static; collidesWith: mRNA-static;">
                                                                                 </a-entity>
                                                                         </a-entity>
                                                                 </a-entity>
@@ -736,11 +754,11 @@
                 <a-box class="pedistal" position="4 0.5 8" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="beta-gal-ped" position="0 0.85 0" rotation="0 -20 45" scale="0.6 0.6 0.6"
-                                gltf-model="#beta-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6;
+                                gltf-model="#beta-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6; inspectRotation:20 0 45;
                                 title:Beta-gal;
-                                description:Permease continuosly creates lactose molecules and adds them to its environment.;
+                                description:A beta-gal is produced when a lac mRNA comes into contact with the ribosome.;
                                 title_back:Beta-gal;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
+                                description_back:The beta-gal binds to lactose molecules and seperates them into allolactose and galactose.;
                                 label_text:Beta-gal;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -760,12 +778,12 @@
 
                 <a-box class="pedistal" position="-5.5 0.5 7" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
-                        <a-entity id="CRP-ped" position="0 0.85 0" scale="0.6 0.6 0.6" gltf-model="#CRP-final-glb"
-                                circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6;
-                                title:CRP;
-                                description:Permease continuosly creates lactose molecules and adds them to its environment.;
-                                title_back:CRP;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
+                        <a-entity id="CRP-ped" position="0 0.85 0" scale="0.6 0.6 0.6" gltf-model="#CRP-anim-glb" animation-mixer
+                                circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6; inspectRotation:0 0 30;
+                                title:C-Reactive Protein;
+                                description:The paired CRP being attached to the capSite promotes lac mRNA production allowing for more lactose production;
+                                title_back:C-Reactive Protein;
+                                description_back:C-Reactive Protein or CRP start off singular and unbound, but in the presence of cAMP proteins the CRP can bind in pairs and attach to the capSite.;
                                 label_text:CRP;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -785,11 +803,11 @@
 
                 <a-box class="pedistal" position="5.5 0.5 7" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
-                        <a-entity id="lactose-ped" position="0 0.7 0" gltf-model="#lactose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down;
+                        <a-entity id="lactose-ped" position="0 0.7 0" gltf-model="#lactose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down; inspectRotation:0 0 45;
                                 title:Lactose;
-                                description:Permease continuosly creates lactose molecules and adds them to its environment.;
+                                description:Lactose binds to beta-gal and once bound gets split into allolactose and galactose.;
                                 title_back:Lactose;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
+                                description_back:Lactose, if not already present in the environment, is continuosly created by permease.;
                                 label_text:Lactose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -810,13 +828,15 @@
                 <a-box class="pedistal" position="-7 0.5 6" width="0.3" height="0.75" depth="0.3"
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="RNApoly-ped" position="0 1.2 0" rotation="0 0 70" scale="0.6 0.6 0.6"
-                                gltf-model="#RNApoly-glb" circles-artefact="label_offset:0.0 0.8 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6;
+                                gltf-model="#RNApoly-glb" circles-artefact="label_offset:0.0 0.8 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6; inspectRotation:20 0 30;
                                 title:RNA Polymerase;
-                                description:Permease continuosly creates lactose molecules and as;
+                                description:The RNA polymerase can bind to the lacIPromoter to produce a repressor mRNA or it can bind to the lacPromoter to produce a lac mRNA.;
                                 title_back:RNA Polymerase;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:RNA Polymerase;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.4;"
-                                        material="visible: false;"></a-sphere>
+                                description_back:RNA polymerase is a multi-unit enzyme that binds to the DNA and synthesizes RNA molecule. (repressor mRNA and lac mRNA);
+                                label_text:RNA Polymerase;" shadow="receive:false; cast:true;">
+                                <a-sphere static-body="shape: sphere; sphereRadius: 0.4;"
+                                        material="visible: false;">
+                                </a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
                                 shadow="receive:true; cast:true;">
@@ -836,9 +856,9 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="glucose-ped" position="0 0.7 0" gltf-model="#glucose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down;
                                 title:Glucose;
-                                description:Permease continuosly creates lactose molecules and as;
+                                description:If glucose is present in the environment then cAMP proteins won't be present and the CRP won't bind to the capSite.;
                                 title_back:Glucose;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
+                                description_back:If glucose is present in the environment then cAMP proteins won't be present and the CRP won't bind to the capSite.;
                                 label_text:Glucose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -859,6 +879,7 @@
                 <!-- checkpoints -->
                 <a-entity>
                         <a-entity id="spawnPoint" circles-checkpoint circles-spawnpoint position="0 0.05 1"></a-entity>
+                        <a-entity circles-checkpoint position="4 0.05 -1"></a-entity>
                         <a-entity circles-checkpoint position="0 0.05 6"></a-entity>
                         <a-entity circles-checkpoint position="4 0.05 5"></a-entity>
                         <a-entity circles-checkpoint position="-4 0.05 5"></a-entity>
@@ -866,8 +887,8 @@
                         <a-entity circles-checkpoint position="-7 0.05 3"></a-entity>
                         <a-entity circles-checkpoint position="0 0.05 -3"></a-entity>
                         <a-entity circles-checkpoint position="0.5 0.05 -5"></a-entity>
-                        <a-entity circles-checkpoint position="5 0.05 -3"></a-entity>
-                        <a-entity circles-checkpoint position="-5 0.05 -3"></a-entity>
+                        <a-entity circles-checkpoint position="5 0.05 -7"></a-entity>
+                        <a-entity circles-checkpoint position="-5 0.05 -7"></a-entity>
                 </a-entity>
 
         </a-scene>
