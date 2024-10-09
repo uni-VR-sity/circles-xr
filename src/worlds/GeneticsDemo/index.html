@@ -22,7 +22,7 @@
         <circles-start-ui />
 
         <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:false;">
+        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:true;">
                 <a-assets>
                         <img id='skyMap' src='/global/assets/textures/equirectangular/WhiteBlue.jpg'
                                 crossorigin="anonymous">
@@ -105,7 +105,9 @@
                 </a-entity>
                 
                 <!-- Chalk Board -->
-                <a-entity id="ChalkBoard" gltf-model="#ChalkBoard-gltf" position="6 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;">
+                <a-entity id="ChalkBoard" gltf-model="#ChalkBoard-gltf" position="6 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;"
+                        static-body="shape: none;" shape__main="halfExtents: 0.2 3.5 5.8; offset: 0 5.3 0"
+                        shape__left="halfExtents: 0.2 3.9 0.2; offset: 0 2.2 5.85" shape__right="halfExtents: 0.2 3.9 0.2; offset: 0 2.2 -5.85">
                         <a-entity id="Welcome" position="0.15 8.25 0" rotation="0 90 0" 
                                 text="value: Genetics Demo; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
                                 font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="10 10 10"></a-entity>
@@ -118,10 +120,17 @@
                         <a-image id="arrowImageRight" src="#Arrow-img" position="0.15 3.25 4.5" rotation="0 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
                         <a-image id="arrowImageLeft" src="#Arrow-img" position="0.15 3.25 -4.5" rotation="180 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
                 </a-entity>
+
+                <a-box class="pedistal" position="5.75 0.5 0.25" width="0.3" height="1" depth="0.3" shadow="receive:true; cast:true;">
+                        <a-entity id="infoButton" onclick="tutorialToggle()" position="0 0.5 0" scale="0.5 0.5 0.5"
+                                circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
+                                <a-entity circles-label="text: Toggle Tutorial; offset: 0 0.6 -0.2; arrow_position: down;"></a-entity>
+                        </a-entity>
+                </a-box>
                 
 
                 <a-entity id="controlStation" geometry="primitive: box; width:9; height: 3.5; depth: 0.15"
-                        position="-2 1 1" rotation="-30 90 0" scale="0.4 0.4 0.4" material="color: #464a73;">
+                        position="-2 1 -1" rotation="-30 60 0" scale="0.3 0.3 0.3" material="color: #464a73;">
                         <a-entity id="controlStationButtons" rotation="90 0 0">
                                 <!-- control buttons -->
                                 <a-entity id="LLGroup" position="-2.2 0.1 -0.7" scale="1.5 1.5 1.5">
@@ -175,6 +184,8 @@
                                 </a-entity>
                         </a-entity>
                 </a-entity>
+                <a-entity class="tutorial" position="-2.2 2.2 -1.1" scale="0.8 0.8 0.8" visible="true"
+                        circles-description="title_text_front: Preset Controls; description_text_front: Press one of the buttons on the control panel to select a preset mode. Then press the start button to start the experience.; arrow_position: down;"></a-entity>
 
                 <!-- DNA -->
                 <a-entity id="dna_model" gltf-model="#dna_ends-glb" position="0 -0.75 -5" rotation="0 0 0"
@@ -197,152 +208,160 @@
                         </a-entity>
                         <a-entity id="lacIPromoter_holder" gltf-model="#lacIPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.085;" height="0.6"
+                                <a-cylinder id="h1-target" static-body radius="0.085;" height="0.6"
                                         position="-0.874 1.43 -0.472" rotation="-57, 3.02, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h1" class="holder" collision-holder
                                         position="-0.874 1.43 -0.472"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" visible="false"
+                                        constraint="target: #h1-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
-                                <a-cylinder static-body radius="0.085;" height="0.5"
+                                <a-cylinder id="h11-target" static-body radius="0.085;" height="0.5"
                                         position="-0.80 1.233 -0.221" rotation="-51.86, 29, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h11" class="holder" collision-holder
                                         position="-0.80 1.233 -0.221"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" visible="false"
+                                        constraint="target: #h11-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacI_holder" gltf-model="#lacI_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.09;" height="0.35"
+                                <a-cylinder id="h2-target" static-body radius="0.09;" height="0.35"
                                         position="-0.86 1.591 -0.733" rotation="-70.38, -20.5, 0.01"
                                         material="color:green;" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h2" class="holder" collision-holder
                                         position="-0.86 1.591 -0.733"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" visible="false"
+                                        constraint="target: #h2-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="capSite_holder" gltf-model="#capSite_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.09;" height="0.3"
+                                <a-cylinder id="h3-target" static-body radius="0.09;" height="0.3"
                                         position="-0.78 1.650 -0.919" rotation="-80, -27.61, 0.01"
                                         material="color:green;" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h3" class="holder" collision-holder
                                         position="-0.78 1.650 -0.919"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" visible="false"
+                                        constraint="target: #h3-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacPromoter_holder" gltf-model="#lacPromoter_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.09;" height="0.5"
+                                <a-cylinder id="h4-target" static-body radius="0.09;" height="0.5"
                                         position="-0.613 1.648 -1.120" rotation="-84.73, 135.9, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h4" class="holder" collision-holder
                                         position="-0.613 1.648 -1.120"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" material="color:green; opacity: 0.5" visible="false" 
+                                        constraint="target: #h4-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
-                                <a-cylinder static-body radius="0.09;" height="0.6"
+                                <a-cylinder id="h14-target" static-body radius="0.09;" height="0.6"
                                         position="-0.34 1.541 -1.25" rotation="-59.41, 102.09, 0"
                                         material="color:green; opacity: 0.6" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h14" class="holder" collision-holder
                                         position="-0.34 1.541 -1.25"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" material="color:green; opacity: 0.5" visible="false"
+                                        constraint="target: #h14-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacOperator_holder" gltf-model="#lacOperator_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.1;" height="0.8"
+                                <a-cylinder id="h5-target" static-body radius="0.1;" height="0.8"
                                         position="0.01 1.258 -1.225" rotation="-50, 75, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h5" class="holder" collision-holder
                                         position="0.01 1.258 -1.225"
-                                        static-body radius="0.35" visible="false"
+                                        dynamic-body radius="0.35" visible="false"
+                                        constraint="target: #h5-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacZ_holder" gltf-model="#lacZ_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.1;" height="0.8"
+                                <a-cylinder id="h6-target" static-body radius="0.1;" height="0.8"
                                         position="0.48 1.090 -1.01" rotation="-93.2, 60, 0"
                                         material="color:green; opacity: 0.3" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h6" class="holder" collision-holder
                                         position="0.48 1.090 -1.01"
-                                        static-body radius="0.35" visible="false"
+                                        dynamic-body radius="0.35" visible="false"
+                                        constraint="target: #h6-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacY_holder" gltf-model="#lacY_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.1;" height="0.8"
+                                <a-cylinder id="h7-target" static-body radius="0.1;" height="0.8"
                                         position="0.850 1.287 -0.678" rotation="56.04, 31.26, 0"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h7" class="holder" collision-holder
                                         position="0.850 1.287 -0.678"
-                                        static-body radius="0.35" visible="false"
+                                        dynamic-body radius="0.35" visible="false"
+                                        constraint="target: #h7-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacA_holder" gltf-model="#lacA_holder-glb"
                                 shadow="receive:false; cast:true;">
-                                <a-cylinder static-body radius="0.1;" height="0.5"
+                                <a-cylinder id="h8-target" static-body radius="0.1;" height="0.5"
                                         position="0.98 1.493 -0.307" rotation="-89.74, -0.97, 0.01"
                                         material="color:green; opacity: 0.5" visible="false">
                                 </a-cylinder>
                                 <a-sphere id="h8" class="holder" collision-holder
                                         position="0.98 1.493 -0.307"
-                                        static-body radius="0.3" visible="false"
+                                        dynamic-body radius="0.3" visible="false"
+                                        constraint="target: #h8-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
 
                         <a-entity id="RNA_moving_rep"
                                 gltf-model="#RNAmoveSmall-glb" visible="false" animation-mixer="clip: repressor_move; loop: repeat; timeScale: 0;">
-                                <a-entity id="repressor_trigger" position="-0.75 1.15 -0.2" 
-                                        static-body="shape: none;"
-                                        shape="shape: sphere; radius: 0.3;"
-                                        trigger 
+                                <a-sphere id="repressor_trigger" position="-0.75 1.15 -0.2" 
+                                        static-body radius="0.5"
+                                        trigger
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
-                                </a-entity>
+                                </a-sphere>
                         </a-entity>
                         <a-entity id="RNA_moving_lac"
                                 gltf-model="#RNAmoveBig-glb" visible="false" animation-mixer="clip: lac_move; loop: repeat; timeScale: 0;">
-                                <a-entity id="lac_trigger" position="-0.6 1.65 -1.1" 
-                                        static-body="shape: none;"
-                                        shape="shape: sphere; radius: 0.3;"
-                                        trigger 
+                                <a-sphere id="lac_trigger" position="-0.6 1.65 -1.1" 
+                                        static-body radius="0.5"
+                                        trigger
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
-                                </a-entity>
+                                </a-sphere>
                         </a-entity>
-                        <a-entity id="rep_trigger" position="-0.005 1.28 -1.22" rotation="0 -10 -35"
-                                static-body="shape: none;"
-                                shape="shape: sphere; radius: 0.3;"
+                        <a-sphere id="rep_trigger" position="-0.005 1.28 -1.22" rotation="0 -10 -35"
+                                static-body radius="0.5"
                                 trigger 
                                 collision-filter="group: repressor; collidesWith: repressor; collisionForces: false;"
                                 visible="false">
-                        </a-entity>
-                        <a-entity id="capSite_trigger" position="-0.7 1.5 -0.8"
-                                static-body="shape: none;"
-                                shape="shape: sphere; radius: 0.3;"
+                        </a-sphere>
+                        <a-sphere id="capSite_trigger" position="-0.7 1.5 -0.8"
+                                static-body radius="0.5"
                                 trigger 
                                 collision-filter="group: capSite; collidesWith: capSite; collisionForces: true;"
                                 visible="false">
-                        </a-entity>
+                        </a-sphere>
                 </a-entity>
+                <a-entity class="tutorial" position="0.5 2.25 -7" scale="0.8 0.8 0.8" visible="true"
+                        circles-description="title_text_front: DNA Strand; description_text_front: After setting a preset and pressing start you need to assemble the DNA strand. The pieces are floating around. You need to click them and release them in the correct spot. If placed in the correct spot it will snap into place.; arrow_position: down;"></a-entity>
 
 
                 <!-- Free Floating DNA segments -->
@@ -355,10 +374,19 @@
                         shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.0694 -0.2126 -0.1885;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:45 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:lacIPromoter; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacIPromoter-hover" 
+                                static-body="shape:none;" constraint="target: #lacIPromoter-free;"
+                                shape__center="shape: sphere; radius: 0.08; offset: -0.023 -0.0313 0.0024;"
+                                shape__top="shape: sphere; radius: 0.08; offset: -0.0458 0.0785 0.0843;"
+                                shape__bottom="shape: sphere; radius: 0.08; offset: 0.0103 -0.1332 -0.0895;"
+                                shape__topEnd="shape: sphere; radius: 0.08; offset: -0.0509 0.1916 0.1512;"
+                                shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.0694 -0.2126 -0.1885;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;">
+                        </a-entity>
                 </a-entity>
 
                 <a-entity id="lacI-free" position="-3 4 -6" rotation="45 0 0" gltf-model="#lacI-glb"
@@ -371,6 +399,12 @@
                         <a-text text="value:lacI; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacI-hover"
+                                static-body="shape:none;" constraint="target: #lacI-free;"
+                                shape__top="shape: sphere; radius: 0.07; offset: 0.0079 0.0492 0.0194;"
+                                shape__bottom="shape: sphere; radius: 0.07; offset: -0.0210 -0.0538 -0.0208;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;">
+                        </a-entity>
                 </a-entity>
 
                 <a-entity id="capSite-free" position="2 3 -4" rotation="45 0 0" gltf-model="#capSite-glb"
@@ -378,10 +412,16 @@
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0205 -0.0261 -0.0012;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:capSite; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="capSite-hover"
+                                static-body="shape:none;" constraint="target: #capSite-free;"
+                                shape__top="shape: sphere; radius: 0.07; offset: 0.015 0.0346 0.010;"
+                                shape__bottom="shape: sphere; radius: 0.07; offset: -0.0205 -0.0261 -0.0012;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;">
+                        </a-entity>
                 </a-entity>
 
                 <a-entity id="lacPromoter-free" position="0 3 -5" gltf-model="#lacPromoter-glb"
@@ -393,10 +433,19 @@
                         shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.2084 0.0870 -0.1006;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:lacPromoter; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacPromoter-hover" 
+                                static-body="shape:none;" constraint="target: #lacPromoter-free;"
+                                shape__center="shape: sphere; radius: 0.08; offset: -0.0187 0.0376 0.0554;"
+                                shape__top="shape: sphere; radius: 0.08; offset: -0.1430 -0.0393 0.0893;"
+                                shape__bottom="shape: sphere; radius: 0.08; offset: 0.0977 0.0791 -0.0144;"
+                                shape__topEnd="shape: sphere; radius: 0.08; offset: -0.2533 -0.1275 0.0925;"
+                                shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.2084 0.0870 -0.1006;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;">
+                        </a-entity>
                 </a-entity>
 
                 <a-entity id="lacOperator-free" position="-3 2 -3" gltf-model="#lacOperator-glb"
@@ -408,10 +457,18 @@
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: 0.1596 -0.0434 -0.1259;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:lacOperator; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacOperator-hover"
+                                static-body="shape:none;" constraint="target: #lacOperator-free;"
+                                shape__center="shape: sphere; radius: 0.07; offset: -0.0033 0.0165 -0.0113;"
+                                shape__top="shape: sphere; radius: 0.07; offset: -0.0839 0.0407 0.0548;"
+                                shape__bottom="shape: sphere; radius: 0.07; offset: 0.0734 -0.0073 -0.0787;"
+                                shape__topEnd="shape: sphere; radius: 0.07; offset: -0.1566 0.0476 0.1235;"
+                                shape__bottomEnd="shape: sphere; radius: 0.07; offset: 0.1596 -0.0434 -0.1259;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
                 <a-entity id="lacZ-free" position="1 4 -6" gltf-model="#lacZ-glb" dynamic-body="shape:none;"
@@ -422,10 +479,18 @@
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.1931 0.1211 -0.0265;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:lacZ; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacZ-hover"
+                                static-body="shape:none;" constraint="target: #lacZ-free;"
+                                shape__center="shape: sphere; radius: 0.07; offset: 0.0297 -0.0013 -0.0355;"
+                                shape__top="shape: sphere; radius: 0.07; offset: 0.1315 -0.0663 -0.0121;"
+                                shape__bottom="shape: sphere; radius: 0.07; offset: -0.0839 0.0675 -0.0429;"
+                                shape__topEnd="shape: sphere; radius: 0.07; offset: 0.2230 -0.1421 0.0266;"
+                                shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.1931 0.1211 -0.0265;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
                 <a-entity id="lacY-free" position="3 2.5 -5" gltf-model="#lacY-glb" dynamic-body="shape:none;"
@@ -436,10 +501,18 @@
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.0940 0.1529 -0.1321;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:lacY; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacY-hover"
+                                static-body="shape:none;" constraint="target: #lacY-free;"
+                                shape__center="shape: sphere; radius: 0.07; offset: 0.0129 0.02 -0.0168;"
+                                shape__top="shape: sphere; radius: 0.07; offset: 0.0585 -0.0493 0.0484;"
+                                shape__bottom="shape: sphere; radius: 0.07; offset: -0.0428 0.0916 -0.0739;"
+                                shape__topEnd="shape: sphere; radius: 0.07; offset: 0.0928 -0.1278 0.1070;"
+                                shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.0940 0.1529 -0.1321;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
                 <a-entity id="lacA-free" position="5 3 -3" rotation="90 0 0" gltf-model="#lacA-glb"
@@ -450,16 +523,23 @@
                         shape__end2="shape: sphere; radius: 0.07; offset: 0.0104 -0.1517 0.0164;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center1, shape__center2, shape__end1, shape__end2;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
-                        shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
+                        shadow="receive:false; cast:true;">
                         <a-text text="value:lacA; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black;" scale="0.4 0.4 0.4" position="0 0 -0.3" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
+                        <a-entity id="lacA-hover"
+                                static-body="shape:none;" constraint="target: #lacA-free;"
+                                shape__center1="shape: sphere; radius: 0.07; offset: 0.0098 0.0645 0.0373;"
+                                shape__center2="shape: sphere; radius: 0.07; offset: 0.0104 -0.0486 0.0526;"
+                                shape__end1="shape: sphere; radius: 0.07; offset: 0.0018 0.1569 -0.0116;"
+                                shape__end2="shape: sphere; radius: 0.07; offset: 0.0104 -0.1517 0.0164;"
+                                collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
 
                 <!-- Free floating molecules-->
 
-                <a-entity id="CRP_01" class="CRP" position="-2 1 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
+                <a-entity id="CRP_01" class="CRP" position="-2 2.5 -4" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
@@ -472,7 +552,7 @@
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity id="CRP_02" class="CRP" position="2 1 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
+                <a-entity id="CRP_02" class="CRP" position="4.5 1.5 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
                         shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
@@ -485,7 +565,7 @@
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
 
-                <a-entity id="ribosome" class="ribosome" position="-1.5 1 -1" rotation="0 45 0" scale="2.5 2.5 2.5" 
+                <a-entity id="ribosome" class="ribosome" position="2 1.5 -4" rotation="20 45 0" scale="2.5 2.5 2.5" 
                         shadow="receive:false; cast:true;" gltf-model="#ribosome-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__right="shape: sphere; radius: 0.051; offset: 0.03 0.03 0"
                         shape__left="shape: sphere; radius: 0.051; offset: -0.03 0.03 0"
@@ -504,7 +584,7 @@
                                 collision-filter="group: ribosome; collidesWith: ribosome; collisionForces: false;"></a-entity>
                 </a-entity>
 
-                <a-entity id="RNApoly" class="RNApoly" position="2 0.978 0" rotation="90 45 0" scale="0.5 0.5 0.5"
+                <a-entity id="RNApoly" class="RNApoly" position="5 0.978 -6" rotation="60 45 0" scale="0.5 0.5 0.5"
                         shadow="receive:false; cast:true;" gltf-model="#RNApoly-glb" dynamic-body="shape: none; angularDamping: 0.3"
                         shape__main="shape: cylinder; height: 0.9; radiusTop: 0.46; radiusBottom: 0.46; numSegments: 16;"
                         shape__right="shape: sphere; radius: 0.46; offset: 0 0.45 0"
@@ -522,8 +602,7 @@
                 <!-- Static Pedistals -->
 
                 <a-box class="pedistal" position="0 0.525 8.5" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="repressor-ped" position="0 1 0" gltf-model="#repressor-glb" circles-artefact="label_offset: 0.0 0.75 0.0; label_arrow_position: down;
                                 title:Repressor Inactive;
                                 description:The repressor becomes inactive when it comes in contact with an allolactose molecule and they are bound together. In this state it can't bind to the lac operator.;
@@ -547,8 +626,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="-2 0.525 8.5" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="ribosome-ped" position="0 0.8 0" gltf-model="#ribosome-glb" scale="2.5 2.5 2.5"
                                 circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down; inspectScale: 2.5 2.5 2.5;
                                 title:The Ribosome;
@@ -573,8 +651,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="2 0.5 8.5" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;" shadow="receive:false; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="permease-ped" position="0 0.85 0" gltf-model="#permease-glb" circles-artefact="label_offset:0.0 0.65 0.0; label_arrow_position:down;
                                 title:Permease;
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
@@ -601,15 +678,46 @@
                 </a-box>
 
                 <a-box class="pedistal" position="-4 0.5 8" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
-                        <a-entity id="mRNA-ped" position="0 0.85 0" gltf-model="#mRNA-lac-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down;
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
+                        <a-entity id="mRNA-ped" position="0 0.85 0" gltf-model="#mRNA-rep-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down;
                                 title:repressor mRNA;
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
                                 title_back:lac mRNA;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
-                                label_text:mRNA;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.15;"
-                                        material="visible: false;"></a-sphere>
+                                label_text:mRNA;" shadow="receive:false; cast:true;">
+                                <a-sphere static-body="shape: sphere; sphereRadius: 0.15;"
+                                        material="visible: false;"
+                                        constraint="target: #tail-static-1; type: pointToPoint; pivot: 0 0 0; targetPivot: 0 0.1425 0; maxForce: 1; collideConnected: false;">
+                                        <a-entity id="tail-static-1" scale="0.8 1 0.8" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
+                                                dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
+                                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
+                                                constraint="target: #tail-static-2; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                <a-entity id="tail-static-2" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
+                                                        dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
+                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
+                                                        constraint="target: #tail-static-3; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                        <a-entity id="tail-static-3" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
+                                                                dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
+                                                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
+                                                                constraint="target: #tail-static-4; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                                <a-entity id="tail-static-4" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
+                                                                        dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
+                                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
+                                                                        constraint="target: #tail-static-5; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                                        <a-entity id="tail-static-5" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
+                                                                                dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
+                                                                                shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;"
+                                                                                constraint="target: #tail-static-6; type: pointToPoint; pivot: 0 -0.2 0; targetPivot: 0 0 0; maxForce: 1; collideConnected: true;">
+                                                                                <a-entity id="tail-static-6" position="-0.15 0 0" gltf-model="#tail-rep-glb" 
+                                                                                        dynamic-body="shape: none; mass: 0.25; angularDamping: 0.5;" 
+                                                                                        shape__main="shape: cylinder; radiusTop: 0.05; radiusBottom: 0.085; height: 0.2; offset: 0 -0.075 0;">
+                                                                                </a-entity>
+                                                                        </a-entity>
+                                                                </a-entity>
+                                                        </a-entity>
+                                                </a-entity>
+                                        </a-entity>
+                                </a-sphere>
                         </a-entity>
                         <a-box class="pedistal" position="0 0.45 0" width="0.6" height="0.125" depth="0.6"
                                 shadow="receive:true; cast:true;">
@@ -626,8 +734,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="4 0.5 8" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="beta-gal-ped" position="0 0.85 0" rotation="0 -20 45" scale="0.6 0.6 0.6"
                                 gltf-model="#beta-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6;
                                 title:Beta-gal;
@@ -652,8 +759,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="-5.5 0.5 7" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="CRP-ped" position="0 0.85 0" scale="0.6 0.6 0.6" gltf-model="#CRP-final-glb"
                                 circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6;
                                 title:CRP;
@@ -678,8 +784,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="5.5 0.5 7" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="lactose-ped" position="0 0.7 0" gltf-model="#lactose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down;
                                 title:Lactose;
                                 description:Permease continuosly creates lactose molecules and adds them to its environment.;
@@ -703,8 +808,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="-7 0.5 6" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="RNApoly-ped" position="0 1.2 0" rotation="0 0 70" scale="0.6 0.6 0.6"
                                 gltf-model="#RNApoly-glb" circles-artefact="label_offset:0.0 0.8 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6;
                                 title:RNA Polymerase;
@@ -729,8 +833,7 @@
                 </a-box>
 
                 <a-box class="pedistal" position="7 0.5 6" width="0.3" height="0.75" depth="0.3"
-                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
-                        shadow="receive:true; cast:true;">
+                        static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="glucose-ped" position="0 0.7 0" gltf-model="#glucose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down;
                                 title:Glucose;
                                 description:Permease continuosly creates lactose molecules and as;

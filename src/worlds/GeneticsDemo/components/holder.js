@@ -12,35 +12,35 @@ AFRAME.registerComponent('collision-holder', {
 
         // Setup trigger event listeners
         CONTEXT_AF.el.addEventListener('collide', function (e) {
-            //console.log('Holder has collided with body #' + e.detail.body.id);
+            console.log('Holder has collided with body #' + e.detail.body.id);
 
             if (CONTEXT_AF.currentState == "unbound") {
                 e.detail.target.el;  // Original entity (holder).
-                //console.log('Original entity= ' + e.detail.target.el.id);
+                console.log('Original entity= ' + e.detail.target.el.id);
                 e.detail.body.el;    // Other entity, which (holder) touched.
-                //console.log('Touched entity= ' + e.detail.body.el.id);
+                console.log('Touched entity= ' + e.detail.body.el.id);
 
                 attacker = e.detail.body.el.id;
 
-                if (attacker == "lacIPromoter-free" && e.detail.target.el.id == "h1") {
+                if (attacker == "lacIPromoter-hover" && e.detail.target.el.id == "h1") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacIPromoter-free" && e.detail.target.el.id == "h11") {
+                } else if (attacker == "lacIPromoter-hover" && e.detail.target.el.id == "h11") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacI-free" && e.detail.target.el.id == "h2") {
+                } else if (attacker == "lacI-hover" && e.detail.target.el.id == "h2") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "capSite-free" && e.detail.target.el.id == "h3") {
+                } else if (attacker == "capSite-hover" && e.detail.target.el.id == "h3") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacPromoter-free" && e.detail.target.el.id == "h4") {
+                } else if (attacker == "lacPromoter-hover" && e.detail.target.el.id == "h4") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacPromoter-free" && e.detail.target.el.id == "h14") {
+                } else if (attacker == "lacPromoter-hover" && e.detail.target.el.id == "h14") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacOperator-free" && e.detail.target.el.id == "h5") {
+                } else if (attacker == "lacOperator-hover" && e.detail.target.el.id == "h5") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacZ-free" && e.detail.target.el.id == "h6") {
+                } else if (attacker == "lacZ-hover" && e.detail.target.el.id == "h6") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacY-free" && e.detail.target.el.id == "h7") {
+                } else if (attacker == "lacY-hover" && e.detail.target.el.id == "h7") {
                     CONTEXT_AF.currentState = "binding";
-                } else if (attacker == "lacA-free" && e.detail.target.el.id == "h8") {
+                } else if (attacker == "lacA-hover" && e.detail.target.el.id == "h8") {
                     CONTEXT_AF.currentState = "binding";
                 }
             }
@@ -68,9 +68,9 @@ AFRAME.registerComponent('collision-holder', {
 
         // check if the indicator is running
         if (CONTEXT_AF.currentState == "binding") {
-            //console.log('Object Bound to ' + test);
+            console.log('Object Bound to ' + test);
 
-            if (attacker == "lacIPromoter-free" && test == "h1") {
+            if (attacker == "lacIPromoter-hover" && test == "h1") {
                 //this.el.parentNode.object3D.visible = false;
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacIPromoter.glb');
 
@@ -82,7 +82,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacIPromoter-free" && test == "h11") {
+            } else if (attacker == "lacIPromoter-hover" && test == "h11") {
                 //this.el.parentNode.object3D.visible = false;
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacIPromoter.glb');
 
@@ -95,7 +95,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacI-free" && test == "h2") {
+            } else if (attacker == "lacI-hover" && test == "h2") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacI.glb');
 
                 var burner = document.querySelector("#lacI-free");
@@ -104,7 +104,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "capSite-free" && test == "h3") {
+            } else if (attacker == "capSite-hover" && test == "h3") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/capSite.glb');
 
                 var burner = document.querySelector("#capSite-free");
@@ -113,7 +113,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacPromoter-free" && test == "h4") {
+            } else if (attacker == "lacPromoter-hover" && test == "h4") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacPromoter.glb');
 
                 var burner = document.querySelector("#lacPromoter-free");
@@ -125,7 +125,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacPromoter-free" && test == "h14") {
+            } else if (attacker == "lacPromoter-hover" && test == "h14") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacPromoter.glb');
 
                 var burner = document.querySelector("#lacPromoter-free");
@@ -137,7 +137,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacOperator-free" && test == "h5") {
+            } else if (attacker == "lacOperator-hover" && test == "h5") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacOperator.glb');
 
                 var burner = document.querySelector("#lacOperator-free");
@@ -146,7 +146,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacZ-free" && test == "h6") {
+            } else if (attacker == "lacZ-hover" && test == "h6") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacZ.glb');
 
                 var burner = document.querySelector("#lacZ-free");
@@ -155,7 +155,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacY-free" && test == "h7") {
+            } else if (attacker == "lacY-hover" && test == "h7") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacY.glb');
 
                 var burner = document.querySelector("#lacY-free");
@@ -164,7 +164,7 @@ AFRAME.registerComponent('collision-holder', {
                 CONTEXT_AF.currentState = "set";
                 holderCount++;
                 console.log('The number of DNA segments assembled is: ' + holderCount);
-            } else if (attacker == "lacA-free" && test == "h8") {
+            } else if (attacker == "lacA-hover" && test == "h8") {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacA.glb');
 
                 var burner = document.querySelector("#lacA-free");
