@@ -23,8 +23,6 @@ function setPreset(value) {
   let Indicator = document.querySelector('#' + value + 'Button');
 
   mol_manager = document.querySelector('#dna_model');
-  //let prevPreset = mol_manager.getAttribute('molecule-manager')["currentPreset"];
-  //console.log('Previous preset is:' + GlobalPreset);
 
   let start_button = document.querySelector('#startButtonGroup');
 
@@ -36,7 +34,6 @@ function setPreset(value) {
         button_color_hover: 'rgb(66,133,61)'
       });
 
-      //manager.setAttribute('molecule-manager', {currentPreset: value});
       mol_manager.emit('set', { value });
       GlobalPreset = value;
 
@@ -84,7 +81,6 @@ function startExperience() {
   reset_button.setAttribute('circles-interactive-visible', 'true');
 
   let holders = document.querySelectorAll('.holder');
-  //console.log(holders[0]);
 
   for (let i = 0; i < holders.length; i++){
     holders[i].emit('setState', {value : 'unbound'});
@@ -95,8 +91,6 @@ function startExperience() {
   while (sample < 40) {
     mol_manager.emit('mol_initial_spawn', { value: 'lactose', pos: 'null', rot: 'null' });
     mol_manager.emit('mol_initial_spawn', { value: 'glucose', pos: 'null', rot: 'null' });
-    //mol_manager.emit('mol_initial_spawn', {value : 'galactose', pos : 'null', rot : 'null'});
-    //mol_manager.emit('mol_initial_spawn', {value : 'allolactose', pos : 'null', rot : 'null'});
     mol_manager.emit('mol_initial_spawn', { value: 'camp', pos: 'null', rot: 'null' });
     sample++;
   }
@@ -116,7 +110,6 @@ function resetExperience() {
 
     //Get a list of all the molecules
     let sample = document.querySelectorAll('.molecule');
-    //console.log(sample[0]);
 
     //Purge the molecules
     for (let i = 0; i < sample.length; i++) {

@@ -12,13 +12,13 @@ AFRAME.registerComponent('collision-holder', {
 
         // Setup trigger event listeners
         CONTEXT_AF.el.addEventListener('collide', function (e) {
-            console.log('Holder has collided with body #' + e.detail.body.id);
+            //console.log('Holder has collided with body #' + e.detail.body.id);
 
             if (CONTEXT_AF.currentState == "unbound") {
                 e.detail.target.el;  // Original entity (holder).
-                console.log('Original entity= ' + e.detail.target.el.id);
+                //console.log('Original entity= ' + e.detail.target.el.id);
                 e.detail.body.el;    // Other entity, which (holder) touched.
-                console.log('Touched entity= ' + e.detail.body.el.id);
+                //console.log('Touched entity= ' + e.detail.body.el.id);
 
                 attacker = e.detail.body.el.id;
 
