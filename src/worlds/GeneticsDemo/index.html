@@ -80,6 +80,9 @@
                         <circles-assets />
                 </a-assets>
 
+                <!-- Data Collector -->
+                <a-entity id="data-collector" circles-data-collector="dataToCollect:date, time, user, position, name, description"></a-entity>
+
                 <!-- Circles' built-in manager and avatar [REQUIRED] -->
                 <circles-manager-avatar />
 
@@ -212,7 +215,8 @@
                         </a-entity>
                         <!-- Place Holders -->
                         <a-entity id="lacIPromoter_holder" gltf-model="#lacIPromoter_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h1-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h1-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h1-target" static-body radius="0.085;" height="0.6"
                                         position="-0.874 1.43 -0.472" rotation="-57, 3.02, 0"
                                         material="color:green; opacity: 0.5" visible="false">
@@ -223,6 +227,10 @@
                                         constraint="target: #h1-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h1-label" text="value:lacIPromoter; align:center" geometry="primitive:plane; height:0.3; width:1"
+                                        material="color: black" scale="0.3 0.3 0.3"  position="-0.9 1.5 -0.3" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false">
+                                </a-text>
                                 <a-cylinder id="h11-target" static-body radius="0.085;" height="0.5"
                                         position="-0.80 1.233 -0.221" rotation="-51.86, 29, 0"
                                         material="color:green; opacity: 0.5" visible="false">
@@ -235,7 +243,8 @@
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacI_holder" gltf-model="#lacI_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h2-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h2-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h2-target" static-body radius="0.09;" height="0.35"
                                         position="-0.86 1.591 -0.733" rotation="-70.38, -20.5, 0.01"
                                         material="color:green;" visible="false">
@@ -246,9 +255,13 @@
                                         constraint="target: #h2-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h2-label" text="value:lacI; align:center" geometry="primitive:plane; height:0.3; width:0.5"
+                                        material="color: black" scale="0.3 0.3 0.3" position="-0.86 1.7 -0.72" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                         </a-entity>
                         <a-entity id="capSite_holder" gltf-model="#capSite_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h3-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h3-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h3-target" static-body radius="0.09;" height="0.3"
                                         position="-0.78 1.650 -0.919" rotation="-80, -27.61, 0.01"
                                         material="color:green;" visible="false">
@@ -259,9 +272,13 @@
                                         constraint="target: #h3-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h3-label" text="value:capSite; align:center" geometry="primitive:plane; height:0.3; width:0.6"
+                                        material="color: black" scale="0.3 0.3 0.3" position="-0.78 1.75 -0.9" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                         </a-entity>
                         <a-entity id="lacPromoter_holder" gltf-model="#lacPromoter_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h4-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h4-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h4-target" static-body radius="0.09;" height="0.5"
                                         position="-0.613 1.648 -1.120" rotation="-84.73, 135.9, 0"
                                         material="color:green; opacity: 0.5" visible="false">
@@ -272,6 +289,9 @@
                                         constraint="target: #h4-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h4-label" text="value:lacPromoter; align:center" geometry="primitive:plane; height:0.3; width:1"
+                                        material="color: black" scale="0.3 0.3 0.3" position="-0.5 1.75 -1.2" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                                 <a-cylinder id="h14-target" static-body radius="0.09;" height="0.6"
                                         position="-0.34 1.541 -1.25" rotation="-59.41, 102.09, 0"
                                         material="color:green; opacity: 0.6" visible="false">
@@ -284,7 +304,8 @@
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="lacOperator_holder" gltf-model="#lacOperator_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h5-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h5-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h5-target" static-body radius="0.1;" height="0.8"
                                         position="0.01 1.258 -1.225" rotation="-50, 75, 0"
                                         material="color:green; opacity: 0.5" visible="false">
@@ -295,9 +316,13 @@
                                         constraint="target: #h5-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h5-label" text="value:lacOperator; align:center" geometry="primitive:plane; height:0.3; width:1"
+                                        material="color: black" scale="0.3 0.3 0.3" position="0.07 1.4 -1.25" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                         </a-entity>
                         <a-entity id="lacZ_holder" gltf-model="#lacZ_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h6-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h6-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h6-target" static-body radius="0.1;" height="0.8"
                                         position="0.48 1.090 -1.01" rotation="-93.2, 60, 0"
                                         material="color:green; opacity: 0.3" visible="false">
@@ -308,9 +333,13 @@
                                         constraint="target: #h6-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h6-label" text="value:lacZ; align:center" geometry="primitive:plane; height:0.3; width:0.5"
+                                        material="color: black" scale="0.3 0.3 0.3" position="0.48 1.175 -1.01" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                         </a-entity>
                         <a-entity id="lacY_holder" gltf-model="#lacY_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h7-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h7-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h7-target" static-body radius="0.1;" height="0.8"
                                         position="0.850 1.287 -0.678" rotation="56.04, 31.26, 0"
                                         material="color:green; opacity: 0.5" visible="false">
@@ -321,9 +350,13 @@
                                         constraint="target: #h7-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h7-label" text="value:lacY; align:center" geometry="primitive:plane; height:0.3; width:0.5"
+                                        material="color: black" scale="0.3 0.3 0.3" position="0.87 1.39 -0.75" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                         </a-entity>
                         <a-entity id="lacA_holder" gltf-model="#lacA_holder-glb"
-                                shadow="receive:false; cast:true;">
+                                shadow="receive:false; cast:true;" circles-interactive-object
+                                onmouseenter="document.querySelector('#h8-label').setAttribute('visible', 'true')" onmouseleave="document.querySelector('#h8-label').setAttribute('visible', 'false')">
                                 <a-cylinder id="h8-target" static-body radius="0.1;" height="0.5"
                                         position="0.98 1.493 -0.307" rotation="-89.74, -0.97, 0.01"
                                         material="color:green; opacity: 0.5" visible="false">
@@ -334,6 +367,9 @@
                                         constraint="target: #h8-target;"
                                         collision-filter="group: holder; collidesWith: holder; collisionForces: false;">
                                 </a-sphere>
+                                <a-text id="h8-label" text="value:lacA; align:center" geometry="primitive:plane; height:0.3; width:0.5"
+                                        material="color: black" scale="0.3 0.3 0.3" position="0.99 1.62 -0.3" width="3.5"
+                                        circles-lookat="constrainYAxis: false;" visible="false"></a-text>
                         </a-entity>
 
                         <!-- DNA triggers -->
@@ -381,7 +417,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:45 0 0;"
                         shadow="receive:false; cast:true;">
-                        <a-text text="value:lacIPromoter; align:center" geometry="primitive:plane; height:0.35; width:1"
+                        <a-text text="value:lacIPromoter; align:center" geometry="primitive:plane; height:0.3; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="lacIPromoter-hover" 
@@ -402,7 +438,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
                         shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
-                        <a-text text="value:lacI; align:center" geometry="primitive:plane; height:0.35; width:1"
+                        <a-text text="value:lacI; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="lacI-hover"
@@ -419,7 +455,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
                         shadow="receive:false; cast:true;">
-                        <a-text text="value:capSite; align:center" geometry="primitive:plane; height:0.35; width:1"
+                        <a-text text="value:capSite; align:center" geometry="primitive:plane; height:0.3; width:0.6"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="capSite-hover"
@@ -486,7 +522,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
                         shadow="receive:false; cast:true;">
-                        <a-text text="value:lacZ; align:center" geometry="primitive:plane; height:0.35; width:1"
+                        <a-text text="value:lacZ; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="lacZ-hover"
@@ -508,7 +544,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
                         shadow="receive:false; cast:true;">
-                        <a-text text="value:lacY; align:center" geometry="primitive:plane; height:0.35; width:1"
+                        <a-text text="value:lacY; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="lacY-hover"
@@ -530,7 +566,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__center1, shape__center2, shape__end1, shape__end2;"
                         circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
                         shadow="receive:false; cast:true;">
-                        <a-text text="value:lacA; align:center" geometry="primitive:plane; height:0.35; width:1"
+                        <a-text text="value:lacA; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black;" scale="0.4 0.4 0.4" position="0 0 -0.3" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="lacA-hover"
@@ -553,7 +589,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
                         collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
                         <a-text id="CRP-label-01" text="value:CRP; align:center"
-                                geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
+                                geometry="primitive:plane; height:0.35; width:0.5" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
@@ -566,7 +602,7 @@
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
                         collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
                         <a-text id="CRP-label-02" text="value:CRP; align:center"
-                                geometry="primitive:plane; height:0.35; width:0.6" material="color: black"
+                                geometry="primitive:plane; height:0.35; width:0.5" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                 </a-entity>
@@ -596,7 +632,9 @@
                         shape__right="shape: sphere; radius: 0.46; offset: 0 0.45 0"
                         shape__left="shape: sphere; radius: 0.46; offset: 0 -0.45 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupRotation: 90 45 0; pickupScale: 0.5 0.5 0.5; animate: false;"
-                        collision-filter="group: RNA; collidesWith: default, RNA;">
+                        collision-filter="group: RNA; collidesWith: default, RNA;"
+                        circles-interaction-log__first="name:RNA polymerase; description:interaction;"
+                        circles-interaction-log__second="name:RNA polymerase; description:different; event: flag;">
                         <a-text id="RNApoly-label" text="value:RNA polymerase; align:center"
                                 geometry="primitive:plane; height:0.35; width: 1.25;" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 0 -0.6" width="3.5"
