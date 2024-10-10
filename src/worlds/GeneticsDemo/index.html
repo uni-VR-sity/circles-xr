@@ -614,8 +614,8 @@
                         shape__bottom="shape: sphere; radius: 0.051; offset: 0 -0.05 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__right, shape__left, shape__bottom; pickupPosition: 0 0 0.25; pickupScale: 2.5 2.5 2.5; animate: false;">
                         <a-text id="ribosome-label" text="value:Ribosome; align:center"
-                                geometry="primitive:plane; height:0.35;" material="color: black" scale="0.2 0.2 0.2"
-                                position="0 0.15 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
+                                geometry="primitive:plane; height:0.25; width:0.8;" material="color: black" scale="0.2 0.2 0.2"
+                                position="0 0.12 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="ribosome_magnet" magnet 
                                 static-body="shape: none;" 
                                 shape__main="shape: sphere; radius: 0.75"
@@ -633,8 +633,8 @@
                         shape__left="shape: sphere; radius: 0.46; offset: 0 -0.45 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupRotation: 90 45 0; pickupScale: 0.5 0.5 0.5; animate: false;"
                         collision-filter="group: RNA; collidesWith: default, RNA;"
-                        circles-interaction-log__first="name:RNA polymerase; description:interaction;"
-                        circles-interaction-log__second="name:RNA polymerase; description:different; event: flag;">
+                        circles-interaction-log__first="name:RNA polymerase; description:Picked up;"
+                        circles-interaction-log__second="name:RNA polymerase; description:Bound to laclPromoter and transcribing repressor mRNA; event: rep_flag;">
                         <a-text id="RNApoly-label" text="value:RNA polymerase; align:center"
                                 geometry="primitive:plane; height:0.35; width: 1.25;" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 0 -0.6" width="3.5"

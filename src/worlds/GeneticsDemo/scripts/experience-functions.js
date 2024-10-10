@@ -91,7 +91,7 @@ function startExperience() {
   while (sample < 40) {
     mol_manager.emit('mol_initial_spawn', { value: 'lactose', pos: 'null', rot: 'null' });
     mol_manager.emit('mol_initial_spawn', { value: 'glucose', pos: 'null', rot: 'null' });
-    mol_manager.emit('mol_initial_spawn', { value: 'camp', pos: 'null', rot: 'null' });
+    mol_manager.emit('mol_initial_spawn', { value: 'cAMP', pos: 'null', rot: 'null' });
     sample++;
   }
 
