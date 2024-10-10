@@ -8,7 +8,7 @@ AFRAME.registerComponent('circles-interaction-log',
         event: {type:'string', default:'click'},
         name: {type:'string'},
         description: {type:'string'},
-    },
+    }, multiple: true,
     init: function()
     {
         const CONTEXT_AF = this;

@@ -483,8 +483,8 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol_label.setAttribute('geometry', {
                     primitive: 'plane',
-                    height: 0.15,
-                    width: 0.3
+                    height: 0.12,
+                    width: 0.28
                 });
     
                 mol_label.setAttribute('text', {
@@ -498,14 +498,14 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol_label.setAttribute('position', {
                     x: 0,
-                    y: 0.25,
+                    y: 0.2,
                     z: 0
                 });
 
                 mol_label.setAttribute('scale', {
-                    x: 0.4,
-                    y: 0.4,
-                    z: 0.4
+                    x: 1,
+                    y: 1,
+                    z: 1
                 });
     
                 mol_label.setAttribute('width', '1.5');
@@ -633,7 +633,7 @@ AFRAME.registerComponent('molecule-manager', {
                 //console.log('Permease molecule has been created');
                 break;
                 
-            case "camp":
+            case "cAMP":
                 sample = document.querySelectorAll('.camp');
                 tag = sample.length++;
 
@@ -776,9 +776,9 @@ AFRAME.registerComponent('molecule-manager', {
                 });
 
                 mol_label.setAttribute('scale', {
-                    x: 0.4,
-                    y: 0.4,
-                    z: 0.4
+                    x: 0.8,
+                    y: 0.8,
+                    z: 0.8
                 });
     
                 mol_label.setAttribute('width', '2');

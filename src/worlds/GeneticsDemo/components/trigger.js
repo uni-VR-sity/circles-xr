@@ -87,6 +87,7 @@ AFRAME.registerComponent('trigger', {
                 play("#RNA_moving_rep"); //turn on the animation
                 setTimeout('pause("#RNA_moving_rep")', 6200); //pause the animation after a delay that is roughly the length of the animation
                 setTimeout('setInvisible("#RNA_moving_rep")', 6250); //make invisible to show that it has finished
+                document.getElementById(CONTEXT_AF.attacker).emit('rep_flag');
 
                 setTimeout(() => { setDynamicLocation(CONTEXT_AF.attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 }); }, 6255);
                 setTimeout(() => { CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 2, z: -5.95 }, rot : 'null'}); }, 6255);
@@ -107,6 +108,8 @@ AFRAME.registerComponent('trigger', {
                 play("#RNA_moving_lac"); //turn on the animation
                 setTimeout('pause("#RNA_moving_lac")', 16700); //pause the animation after a delay that is roughly the length of the animation
                 setTimeout('setInvisible("#RNA_moving_lac")', 16750); //make invisible to show that it has finished
+                //setTimeout(() => { document.getElementById(CONTEXT_AF.attacker).emit('lac_flag'); }, 0);
+                //document.getElementById(CONTEXT_AF.attacker).emit('lac_flag');
 
                 setTimeout(() => { setDynamicLocation(CONTEXT_AF.attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 }); }, 16755);
                 setTimeout(() => { CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'}); }, 16755);
