@@ -374,7 +374,8 @@
 
                         <!-- DNA triggers -->
                         <a-entity id="RNA_moving_rep"
-                                gltf-model="#RNAmoveSmall-glb" visible="false" animation-mixer="clip: repressor_move; loop: repeat; timeScale: 0;">
+                                gltf-model="#RNAmoveSmall-glb" visible="true" animation-mixer="clip: repressor_move; loop: repeat; timeScale: 0;"
+                                circles-interaction-log="name:RNA polymerase; description:Bound to laclPromoter and transcribing repressor mRNA; event: rep_flag;">
                                 <a-sphere id="repressor_trigger" position="-0.75 1.15 -0.2" 
                                         static-body radius="0.4" visible="false"
                                         trigger
@@ -382,10 +383,11 @@
                                 </a-sphere>
                         </a-entity>
                         <a-entity id="RNA_moving_lac"
-                                gltf-model="#RNAmoveBig-glb" visible="false" animation-mixer="clip: lac_move; loop: repeat; timeScale: 0;">
-                                <a-sphere id="lac_trigger" position="-0.6 1.65 -1.1" 
-                                        static-body radius="0.4" visible="false"
-                                        trigger
+                                gltf-model="#RNAmoveBig-glb" visible="true" animation-mixer="clip: lac_move; loop: repeat; timeScale: 0;"
+                                circles-interaction-log="name:RNA polymerase; description:Bound to lacPromoter and transcribing lac mRNA; event: lac_flag;">
+                                <a-sphere id="lac_trigger" position="-0.6 1.65 -1.1"
+                                        static-body="shape: sphere; sphereRadius: 0.4;" radius="0.3" visible="false"
+                                        trigger material="color:green; opacity: 0.4"
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
                                 </a-sphere>
                         </a-entity>
@@ -393,13 +395,15 @@
                                 static-body radius="0.7" visible="false"
                                 trigger 
                                 collision-filter="group: repressor; collidesWith: repressor; collisionForces: false;"
-                                visible="false">
+                                visible="false"
+                                circles-interaction-log="name:Repressor; description:Repressor bound to the Operator site; event: repressor_flag;">
                         </a-sphere>
                         <a-sphere id="capSite_trigger" position="-0.7 1.5 -0.8"
                                 static-body radius="0.5" visible="false"
                                 trigger 
                                 collision-filter="group: capSite; collidesWith: capSite; collisionForces: true;"
-                                visible="false">
+                                visible="false"
+                                circles-interaction-log="name:capSite; description:The final paired CRP has bound to the capSite; event: capSite_flag;">
                         </a-sphere>
                 </a-entity>
                 <a-entity class="tutorial" position="0.5 2.25 -7" scale="0.8 0.8 0.8" visible="true"
@@ -632,9 +636,7 @@
                         shape__right="shape: sphere; radius: 0.46; offset: 0 0.45 0"
                         shape__left="shape: sphere; radius: 0.46; offset: 0 -0.45 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupRotation: 90 45 0; pickupScale: 0.5 0.5 0.5; animate: false;"
-                        collision-filter="group: RNA; collidesWith: default, RNA;"
-                        circles-interaction-log__first="name:RNA polymerase; description:Picked up;"
-                        circles-interaction-log__second="name:RNA polymerase; description:Bound to laclPromoter and transcribing repressor mRNA; event: rep_flag;">
+                        collision-filter="group: RNA; collidesWith: default, RNA;">
                         <a-text id="RNApoly-label" text="value:RNA polymerase; align:center"
                                 geometry="primitive:plane; height:0.35; width: 1.25;" material="color: black"
                                 scale="0.4 0.4 0.4" position="0 0 -0.6" width="3.5"

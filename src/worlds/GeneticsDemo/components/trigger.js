@@ -25,22 +25,55 @@ AFRAME.registerComponent('trigger', {
 
                 CONTEXT_AF.attacker = e.detail.body.el.id;
                 CONTEXT_AF.partner = e.detail.body.el;
+                var mover_rep = 'null';
+                var mover_lac = 'null';
 
                 if (e.detail.body.el.classList.contains("RNApoly") && e.detail.target.el.id == "repressor_trigger") {
                     CONTEXT_AF.currentState = "binding";
+                    mover_rep = document.querySelector("#RNA_moving_rep");
                     //console.log('RepressorTrigger is binding');
                 }else if(e.detail.body.el.classList.contains("RNApoly") && e.detail.target.el.id == "lac_trigger"){
                     CONTEXT_AF.currentState = "binding";
+                    mover_lac = document.querySelector("#RNA_moving_lac");
                     //console.log('LacTrigger is binding');
                 }else if(e.detail.body.el.classList.contains("repressor") && e.detail.target.el.id == "rep_trigger"){
                     CONTEXT_AF.currentState = "binding";
+                    //CONTEXT_AF.el.emit('repressor_flag');
                     //console.log('RepTrigger is binding');
                 }else if(e.detail.body.el.classList.contains("CRP_final") && e.detail.target.el.id == "capSite_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     console.log('capSite Trigger is binding');
                 }
 
-                //let isRepressor = e.detail.body.el.classList.contains("repressor");
+                if(mover_rep != 'null' && CONTEXT_AF.type == "null"){
+                    mover_rep.addEventListener('animation-loop', function(){
+                        console.log('Finished rep animation!');
+                        pause("#RNA_moving_rep"); //turn off the animation
+            
+                        setDynamicLocation(CONTEXT_AF.attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 });
+                        CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 2, z: -5.95 }, rot : 'null'});
+                        CONTEXT_AF.partner.setAttribute('visible', 'true');
+            
+                        setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 1000); //Reset the current state so that the trigger is available again
+                    });
+                    console.log('Rep eventListener set');
+                    CONTEXT_AF.type = 'rep';
+                }
+
+                if(mover_lac != 'null' && CONTEXT_AF.type == "null"){
+                    mover_lac.addEventListener('animation-loop', function(){
+                        console.log('Finished lac animation!');
+                        pause("#RNA_moving_lac"); //turn off the animation
+    
+                        setDynamicLocation(CONTEXT_AF.attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 });
+                        CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'});
+                        CONTEXT_AF.partner.setAttribute('visible', 'true');
+    
+                        setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 1000); //Reset the current state so that the trigger is available again
+                    });
+                    console.log('Lac eventListener set');
+                    CONTEXT_AF.type = 'lac';
+                }
 
             }
 
@@ -85,18 +118,7 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_rep"); //turn on the animation
-                setTimeout('pause("#RNA_moving_rep")', 6200); //pause the animation after a delay that is roughly the length of the animation
-                setTimeout('setInvisible("#RNA_moving_rep")', 6250); //make invisible to show that it has finished
-                document.getElementById(CONTEXT_AF.attacker).emit('rep_flag');
-
-                setTimeout(() => { setDynamicLocation(CONTEXT_AF.attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 }); }, 6255);
-                setTimeout(() => { CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 2, z: -5.95 }, rot : 'null'}); }, 6255);
-                setTimeout(() => { CONTEXT_AF.partner.setAttribute('visible', 'true'); }, 6260);
-
-                setTimeout('play("#RNA_moving_rep")', 6300); //make sure the animation cycles back to the start of the loop
-                setTimeout('pause("#RNA_moving_rep")', 6450);
-
-                setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 6600); //Reset the current state so that the trigger is available again
+                //CONTEXT_AF.el.emit('rep_flag');
                 
             }else if(test == "lac_trigger"){
                 var mover = document.querySelector("#RNA_moving_lac");
@@ -106,20 +128,7 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_lac"); //turn on the animation
-                setTimeout('pause("#RNA_moving_lac")', 16700); //pause the animation after a delay that is roughly the length of the animation
-                setTimeout('setInvisible("#RNA_moving_lac")', 16750); //make invisible to show that it has finished
-                //setTimeout(() => { document.getElementById(CONTEXT_AF.attacker).emit('lac_flag'); }, 0);
-                //document.getElementById(CONTEXT_AF.attacker).emit('lac_flag');
-
-                setTimeout(() => { setDynamicLocation(CONTEXT_AF.attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 }); }, 16755);
-                setTimeout(() => { CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'}); }, 16755);
-                setTimeout(() => { CONTEXT_AF.partner.setAttribute('visible', 'true'); }, 16760);
-
-                setTimeout('play("#RNA_moving_lac")', 16800); //make sure the animation cycles back to the start of the loop
-                setTimeout('pause("#RNA_moving_lac")', 16975);
-
-                setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 17100); //Reset the current state so that the trigger is available again
-                
+                //CONTEXT_AF.el.emit('lac_flag');
 
             }else if(test == "rep_trigger"){
                 if(!CONTEXT_AF.partner.classList.contains("blocked")){
@@ -162,7 +171,11 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.partner.setAttribute('position', { x: -1.148, y: 1.399, z: -6.42 });
                 CONTEXT_AF.partner.setAttribute('rotation', { x: 1.165, y: 62.94, z: 10.826 });
 
+                document.querySelector("#lac_trigger").removeAttribute('static-body');
+                document.querySelector("#lac_trigger").setAttribute('static-body', { shape: 'sphere', sphereRadius: 0.7 });
+
                 CONTEXT_AF.partner.classList.remove("interactive");
+                //CONTEXT_AF.el.emit('capSite_flag');
 
                 CONTEXT_AF.currentState = "bound";
                 
