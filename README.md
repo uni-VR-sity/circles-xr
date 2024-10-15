@@ -268,15 +268,15 @@ CIRCLES.getMainCameraElement();
 //Example
 //You may also listen to the CIRCLES.READY event on the scene to find out when Circles is ready to manipulate
 CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.READY, function() {
-    //to change speed of character movement
+    //to change the speed of character movement
     CIRCLES.getAvatarRigElement().setAttribute('movement-controls', {speed:0.3});
 });
 ```
 
-And now the components available for you.
+And now the components are available for you.
 
 - [circles-artefact](https://github.com/PlumCantaloupe/circlesxr/blob/master/src/components/circles-artefact.js):
-This is a core component in our framework that explores learning around tools and objects. The circles-artefact allows you to create an object that has textual (and audio) descriptions and narratives, that can be picked up by an user's avatar and manipulated.
+This is a core component in our framework that explores learning around tools and objects. The circles-artefact allows you to create an object that has textual (and audio) descriptions and narratives, that can be picked up by a user's avatar and manipulated.
 
   | Property        | Type            | Description                                               | Default Value        |
   |-----------------|-----------------|-----------------------------------------------------------|----------------------|
@@ -287,14 +287,14 @@ This is a core component in our framework that explores learning around tools an
   | label_on        | boolean         | Whether label is visible/used.                            | true                 |
   | label_text      | string          | Label text.                                               | 'label_text'         |
   | label_offset    | vec3            | Position relative to artefact it is attached to.          | 0 0 0                |
-  | label_arrow_position  | string, oneOf: ['up', 'down', 'left', 'right']         | Which way the labels points.                 | 'up'         |
+  | label_arrow_position  | string, oneOf: ['up', 'down', 'left', 'right']         | Which way the label points.                 | 'up'         |
   | description_on  | boolean         | Whether description is visible/used.                            | true                 |
   | descriptionLookAt  | boolean         | Whether description rotates to follow avatar.                            | false                 |
   | description_offset    | vec3            | Position relative to artefact it is attached to.          | 0 1.22 0                |
-  | desc_arrow_position  | string, oneOf: ['up', 'down', 'left', 'right']         | Which way the labels points.                 | 'up'         |
+  | desc_arrow_position  | string, oneOf: ['up', 'down', 'left', 'right']         | Which way the label points.                 | 'up'         |
   | title           | string          | Title of description.                                     | 'No Title Set'       |
   | title_back      | string          | Title of description on back.                                     | ''       |
-  | description     | string          | Description text.                                         | 'No decription set'  |
+  | description     | string          | Description text.                                         | 'No description set'  |
   | description_back | string          | Description text on back.                                         | ''  |
   | audio           | audio           | Narration audio that can be added to play when artefact picked up.        | ''         |
   | volume          | number          | If there is narration audio attached to this, this controls volume.       | '1.0'         |
@@ -332,7 +332,7 @@ This is a core component in our framework that explores learning around tools an
 
   | Property           | Type            | Description                                               | Default Value        |
   |--------------------|-----------------|-----------------------------------------------------------|----------------------|
-  | type               | string, oneOf:['box', 'cylinder']            | Set whether the button pedastal is a cylinder or box shape.                                             | 'box'                  |
+  | type               | string, oneOf:['box', 'cylinder']            | Set whether the button pedestal is a cylinder or box shape.                                             | 'box'                  |
   | button_color       | color           | colour of button                                          | 'rgb(255, 100, 100)'                  |
   | button_color_hover | color           | colour of button on mouseover/hover.                      | 'rgb(255, 0, 0)'                      |
   | pedastal_color     | color           | colour of button pedestal                                 | 'rgb(255, 255, 255)'                  |
@@ -348,10 +348,10 @@ This is a core component in our framework that explores learning around tools an
 
   | Property        | Type            | Description                                               | Default Value        |
   |-----------------|-----------------|-----------------------------------------------------------|----------------------|
-  | offset          | vec3            | Adjust where the player is positioned, relative to checkpoint position.               | 0 0 0                |
+  | offset          | vec3            | Adjust where the player is positioned, relative to the checkpoint position.               | 0 0 0                |
   | useDefaultModel | boolean         | Whether the default "green cylinder" used (set false to use your own model).          | true               |
 
-  *Example 'circles-checkpoint' code: Note we are setting position of the checkpoint to also denote where the player is placed after clicking on this checkpoint.*
+  *Example 'circles-checkpoint' code: Note we are setting the position of the checkpoint to also denote where the player is placed after clicking on this checkpoint.*
 
   ```html
   <a-entity circles-checkpoint position="10 0 9.5"></a-entity>
@@ -381,7 +381,7 @@ This is a core component in our framework that explores learning around tools an
                                   arrow_position:         left;
                                   lookAtCamera            :true; "></a-entity>
   ```
-- [circles-interactive-object](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-interactive-object.js): Attach to an entity that you wish to be interactive, and add some visual feedback to the object i.e., hover effects like scale, highlight, or an outline. Also have teh ability to quickly add a sound effect to be played during click here.
+- [circles-interactive-object](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-interactive-object.js): Attach to an entity that you wish to be interactive, and add some visual feedback to the object i.e., hover effects like scale, highlight, or an outline. Also have the ability to quickly add a sound effect to be played during click here.
 
   _NOTE!!: There needs to be a material on the model before we "extend" it with a "highlight" using the "circles-material-extend-fresnel" component. A gltf likely already has one, but make sure if manually defining a metrial that the "material" attribute is listed **before** this component is added._
 
@@ -415,7 +415,7 @@ This is a core component in our framework that explores learning around tools an
     *Example 'circles-interactive-visible'*
 
     ```html
-    <!-- allows us to hide/show and interactuve object without it being stil interactuve when invisible -->
+    <!-- allows us to hide/show an interactive object without it being l interactive when invisible -->
     <a-entity geometry="primitive:sphere; radius:0.4" circles-interactive-object circles-interactive-visible="false"></a-entity>
 
     <!-- child node example -->
@@ -445,9 +445,9 @@ This is a core component in our framework that explores learning around tools an
   | Property        | Type            | Description                                               | Default Value        |
   |-----------------|-----------------|-----------------------------------------------------------|----------------------|
   | targetElement   | selector        | The element you "this" element to always point towards.                         | null, reverts to player camera  |
-  | enabled         | boolean         | Are we still rotating this element towards the target element.                  | 0 0 0                |
-  | constrainYAxis  | boolean         | Do we only want the roptation to happen on the y-axis.                          | 0 0 0                |
-  | updateRate      | number          | How often the new position is upfdated (in milliseconds).                       | 200               |
+  | enabled         | boolean         | Are we still rotating this element toward the target element.                  | 0 0 0                |
+  | constrainYAxis  | boolean         | Do we only want the rotation to happen on the y-axis.                          | 0 0 0                |
+  | updateRate      | number          | How often the new position is updated (in milliseconds).                       | 200               |
   | smoothingOn     | boolean         | Are we smoothing motion between updates.                                        | true                |
   | smoothingAlpha  | number          | How aggressively are we smoothing. Range [0.0, 1.0]. Smaller is more smoothing. | 0.05                |
 
@@ -457,7 +457,7 @@ This is a core component in our framework that explores learning around tools an
   <a-entity id="lookyElement" circles-lookat="targetElement:#myCam; constrainYAxis:true;"></a-entity>
   ```
 
-- [circles-networked-basic](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-networked-basic.js): **_[ Experimental ]_** This component allows the any object to be shared with other connected clients. It also attempts to handle cases of when clients disconnecting, and remove the duplication of networked object basic networked-aframe objects have. Unlike _circles-pickup-networked_ these objects do not need to be interactive and cannot be picked up. This networked component also enables A-Frame's _[text](https://github.com/aframevr/aframe/blob/master/docs/components/text.md)_ to be synched.
+- [circles-networked-basic](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-networked-basic.js): **_[ Experimental ]_** This component allows any object to be shared with other connected clients. It also attempts to handle cases of clients disconnecting, and remove the duplication of networked objects basic networked-aframe objects have. Unlike _circles-pickup-networked_ these objects do not need to be interactive and cannot be picked up. This networked component also enables A-Frame's _[text](https://github.com/aframevr/aframe/blob/master/docs/components/text.md)_ to be synched.
 
   _NOTE!!: ALl circles-networked objects require an element id_
 
@@ -477,14 +477,14 @@ This is a core component in our framework that explores learning around tools an
 
   | Property           | Type            | Description                                               | Default Value        |
   |--------------------|-----------------|-----------------------------------------------------------|----------------------|
-  | pickupPosition     | vec3            | position of object, relative to camera, when picked up                   | _if unset, will keep position relative to camera_ |
-  | pickupScale        | vec3            | position of object, relative to camera, when picked up                   | _if unset, will keep rotation relative to camera_ |
-  | dropPosition       | vec3            | position of object, relative to camera, when picked up                   | _if unset, will keep scale relative to camera_    |
-  | dropPosition       | vec3            | position of object, relative to original parent node, when released      | _if unset, will keep position relative to camera_ |
-  | dropRotation       | vec3            | rotation(deg) of object, relative to original parent node, when released | _if unset, will keep rotation relative to camera_ |
-  | dropScale          | vec3            | scale of object, relative to original parent node, when released         | _if unset, will keep scale relative to camera_    |
-  | animate            | boolean         | whether the object animates between different positions                  | false                        |
-  | animateDurationMS  | number          | how long animations take if animate=true               | 400                          |
+  | pickupPosition     | vec3            | position of an object, relative to the camera, when picked up                   | _if unset, will keep position relative to camera_ |
+  | pickupRotation     | vec3            | rotation(deg) of an object, relative to the camera, when picked up              | _if unset, will keep rotation relative to camera_ |
+  | pickupScale        | vec3            | scale of an object, relative to the camera, when picked up                      | _if unset, will keep scale relative to camera_    |
+  | dropPosition       | vec3            | position of an object, relative to the original parent node, when released      | _if unset, will keep position relative to camera_ |
+  | dropRotation       | vec3            | rotation(deg) of an object, relative to the original parent node, when released | _if unset, will keep rotation relative to camera_ |
+  | dropScale          | vec3            | scale of an object, relative to the original parent node, when released         | _if unset, will keep scale relative to camera_    |
+  | animate            | boolean         | whether the object animates between different positions                         | false                        |
+  | animateDurationMS  | number          | how long animations take if animate=true                                        | 400                          |
 
   *Example 'circles-pickup-object'*
 
@@ -492,9 +492,9 @@ This is a core component in our framework that explores learning around tools an
   <!-- make sure the object is also interactive -->
   <a-entity circles-pickup-object="animate:false;" circles-interactive-object="type:highlight;"></a-entity>
   ```
-- [circles-pickup-networked](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-pickup-object.js): **_[ Experimental ]_** This component allows the _circles-pickup-object_ to be shared with other connected clients. It also attempts to handle cases of when clients disconnecting, and remove the duplication of networked object basic networked-aframe objects have.
+- [circles-pickup-networked](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-pickup-object.js): **_[ Experimental ]_** This component allows the _circles-pickup-object_ to be shared with other connected clients. It also attempts to handle cases of clients disconnecting, and remove the duplication of networked objects basic networked-aframe objects have.
 
-  _NOTE!!: ALl circles-networked objects require an element id_
+  _NOTE!!: All circles-networked objects require an element id_
 
   | Property           | Type            | Description                                               | Default Value        |
   |--------------------|-----------------|-----------------------------------------------------------|----------------------|
@@ -533,11 +533,11 @@ This is a core component in our framework that explores learning around tools an
   *Example 'circles-portal'*
 
   ```html
-  <!-- allows us enter the wardrobe "world" to change avatar appearance. Note that it is using a built-in equirectangular texture "WhiteBlue.jpg" -->
+  <!-- allows us to enter the wardrobe "world" to change the avatar's appearance. Note that it is using a built-in equirectangular texture "WhiteBlue.jpg" -->
   <a-entity id="Portal-Wardrobe" circles-portal="img_src:/global/assets/textures/equirectangular/WhiteBlue.jpg; title_text:Wardrobe; link_url:/w/Wardrobe"></a-entity>
   ```
 
-- [circles-sendpoint](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-sendpoint.js): Attach to to a circles-button or circles-interactive-object entity when you want that button to send them to any checkpoint (with an id that we can point to).
+- [circles-sendpoint](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-sendpoint.js): Attach to a circles-button or circles-interactive-object entity when you want that button to send them to any checkpoint (with an id that we can point to).
 
   | Property        | Type            | Description                                               | Default Value        |
   |-----------------|-----------------|-----------------------------------------------------------|----------------------|
@@ -551,13 +551,13 @@ This is a core component in our framework that explores learning around tools an
   <!-- click on this button to be sent to the checkpoint above -->
   <a-entity circles-button circles-sendpoint="target:#checkpoint_far;" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
   ```
-- [circles-sound](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-sound.js): This is a component that extends A-Frame's [sound component](https://github.com/aframevr/aframe/blob/master/docs/components/sound.md), and connects to enter experience events, so that autoplay sounds do play after enter a Circles world.
+- [circles-sound](https://github.com/PlumCantaloupe/circlesxr/blob/main/src/components/circles-sound.js): This is a component that extends A-Frame's [sound component](https://github.com/aframevr/aframe/blob/master/docs/components/sound.md), and connects to enter experience events, so that autoplay sounds do play after entering a Circles world.
 
     | Property           | Type            | Description                                               | Default Value        |
     |--------------------|-----------------|-----------------------------------------------------------|----------------------|
     | src                | audio          | audio asset                               | ''                  |
-    | autoplay           | boolean        | will it play when the app starts.         | false               |
-    | type               | string, oneOf: ['basic', 'basic-diegetic', 'basic-nondiegetic', 'dialogue', 'music', 'soundeffect', 'foley', 'ambience', 'artefact']           | By changing type it changes how sound is played i.e., whthere it is spatial (in the world, diegetic) or not spatial (not in the world, a UI element, non-diegetic)                                       | 'basic' |
+    | autoplay           | boolean        | Will it play when the app starts.         | false               |
+    | type               | string, oneOf: ['basic', 'basic-diegetic', 'basic-nondiegetic', 'dialogue', 'music', 'soundeffect', 'foley', 'ambience', 'artefact']           | By changing type, it changes how sound is played i.e., whether it is spatial (in the world, diegetic) or not spatial (not in the world, a UI element, non-diegetic)                                       | 'basic' |
     | loop                | boolean          | does this sound loop           | false                  |
     | volume              | number          | how loud the sound is | 1.0                 |
     | state               | string, oneOf: ['play', 'stop', 'pause']          | Whether the sound is playing, stopped, or paused                 | 'stop                 |
@@ -620,7 +620,7 @@ This is a core component in our framework that explores learning around tools an
 
 Circles uses [Networked-Aframe](https://github.com/networked-aframe/networked-aframe) to sync avatars and various networked objects i.e., circles-artefacts. Please consult the [Networked-Aframe documentation](https://github.com/networked-aframe/networked-aframe/blob/master/README.md) if you wish to add your own _networked_ objects. However, for sending basic messages and smaller javascript objects to other clients, messages and synch events some functions have been added to Circles API. Hopefully, in the future, we can also explore persistent worlds that save their states even when no one is currently within them. However, for now, the world will match between users while they are within if you follow the example structure below.
 
-_For voice or vother large bandwidth items like video, you will have to run a janus server and use the [naf-janus-adapter](https://github.com/networked-aframe/naf-janus-adapter). For local development, it defaults to fast and reliable [websockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) communication._ that do not support voice and video.
+_For voice or other large bandwidth items like video, you will have to run a janus server and use the [naf-janus-adapter](https://github.com/networked-aframe/naf-janus-adapter). For local development, it defaults to fast and reliable [websockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) communication._ that do not support voice and video.
 
 You will find an example of synching simple switches in the "hub"/campfire world and the "ExampleWorld". The process for synching actions i.e., a light being turned off and on for all connected users follows (abridged from the "hub"/campfire example):
 
@@ -638,7 +638,7 @@ CIRCLES.getAllNAFElements();
 ```
 
 ```js
-//get the webcocket we will use to communicate between all users via the server (which will forward all events to all other users)
+//get the WebSocket we will use to communicate between all users via the server (which will forward all events to all other users)
 
 //connect to web sockets so we can sync the campfire lights between users
 CONTEXT_AF.socket = null;
@@ -652,10 +652,10 @@ CONTEXT_AF.campfireEventName = "campfire_event";
     CONTEXT_AF.campfire.addEventListener('click', function () {
       CONTEXT_AF.fireOn = !CONTEXT_AF.fireOn;
 
-      //change (this) client current world
+      //change (this) client's current world
       CONTEXT_AF.turnFire(CONTEXT_AF.fireOn);
 
-      //send event to change other client's worlds. Use CIRCLES object to get relevant infomation i.e., room and world. Room is used to know where server will send message.
+      //send an event to change other client's worlds. Use CIRCLES object to get relevant information i.e., room and world. Room is used to know where the server will send messages.
       CONTEXT_AF.socket.emit(CONTEXT_AF.campfireEventName, {campfireOn:CONTEXT_AF.fireOnue, room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
     }
   };
@@ -668,7 +668,7 @@ CONTEXT_AF.campfireEventName = "campfire_event";
         const wsReadyFunc = function() {
             CONTEXT_AF.createNetworkingSystem();
 
-            //always good practise to remove eventlisteners we are not using
+            //always good practice to remove event listeners we are not using
             CONTEXT_AF.el.sceneEl.removeEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
         };
         CONTEXT_AF.el.sceneEl.addEventListener(CIRCLES.EVENTS.WS_CONNECTED, wsReadyFunc);
@@ -693,7 +693,7 @@ CONTEXT_AF.campfireEventName = "campfire_event";
       }
     });
 
-    //receiving sync data from others (assuming all others is the same for now)
+    //receiving sync data from others (assuming all others are the same for now)
     CONTEXT_AF.socket.on(CIRCLES.EVENTS.RECEIVE_DATA_SYNC, function(data) {
       //make sure we are receiving data for this world (as others may be visiting other worlds simultaneously)
       if (data.world === CIRCLES.getCirclesWorldName()) {
