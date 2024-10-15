@@ -67,6 +67,55 @@ function setPreset(value) {
 
 };
 
+function toggleSlides(value){
+  let leftButton = document.querySelector('#leftScrollButton');
+  let rightButton = document.querySelector('#rightScrollButton');
+
+  let mainPage = document.querySelector('#slide_00');
+  let page01 = document.querySelector('#slide_01');
+  let page02 = document.querySelector('#slide_02');
+  let page03 = document.querySelector('#slide_03');
+
+  if(mainPage.getAttribute('visible') && value == 'right'){
+    leftButton.setAttribute('visible', 'true');
+    
+    page01.setAttribute('visible', 'true');
+    mainPage.setAttribute('visible', 'false');
+
+    //console.log("Flipped page");
+  }else if(page01.getAttribute('visible') && value == 'left'){
+    leftButton.setAttribute('visible', 'false');
+
+    mainPage.setAttribute('visible', 'true');
+    page01.setAttribute('visible', 'false');
+    
+    //console.log("Flipped page");
+  }else if(page01.getAttribute('visible') && value == 'right'){
+    page02.setAttribute('visible', 'true');
+    page01.setAttribute('visible', 'false');
+    
+    //console.log("Flipped page");
+  }else if(page02.getAttribute('visible') && value == 'left'){
+    page01.setAttribute('visible', 'true');
+    page02.setAttribute('visible', 'false');
+    
+    //console.log("Flipped page");
+  }else if(page02.getAttribute('visible') && value == 'right'){
+    rightButton.setAttribute('visible', 'false');
+
+    page03.setAttribute('visible', 'true');
+    page02.setAttribute('visible', 'false');
+    
+    //console.log("Flipped page");
+  }else if(page03.getAttribute('visible') && value == 'left'){
+    rightButton.setAttribute('visible', 'true');
+
+    page02.setAttribute('visible', 'true');
+    page03.setAttribute('visible', 'false');
+    
+    //console.log("Flipped page");
+  }
+};
 
 function startExperience() {
 

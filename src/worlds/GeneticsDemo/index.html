@@ -111,24 +111,57 @@
                 </a-entity>
                 
                 <!-- Chalk Board -->
-                <a-entity id="ChalkBoard" gltf-model="#ChalkBoard-gltf" position="6 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;"
+                <a-entity id="ChalkBoard" gltf-model="#ChalkBoard-gltf"
+                        position="6 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;"
                         static-body="shape: none;" shape__main="halfExtents: 0.2 3.5 5.8; offset: 0 5.3 0"
                         shape__left="halfExtents: 0.2 3.9 0.2; offset: 0 2.2 5.85" shape__right="halfExtents: 0.2 3.9 0.2; offset: 0 2.2 -5.85">
-                        <a-entity id="Welcome" position="0.15 8.25 0" rotation="0 90 0" 
-                                text="value: Genetics Demo; color: #025d96; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
-                                font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="10 10 10"></a-entity>
-                        <a-entity id="Instructions" position="0.15 6.55 0" rotation="0 90 0" 
-                                text="value: Genetics Demo is an interactive demonstration that shows the lac operon and the process of metabolizing lactose.; 
-                                color: #025d96; width: 1.7; wrapCount: 43.190; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
-                        <a-entity id="Leader" position="0.15 4.8634 0" rotation="0 90 0" 
-                                text="value: You can use the control panel behind you to setup the interactive experience on the left. If you would like to learn more about the molecules in the demo, check out the pedistals on the right; 
-                                color: #025d96; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
-                        <a-image id="arrowImageRight" src="#Arrow-img" position="0.15 3.25 4.5" rotation="0 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
-                        <a-image id="arrowImageLeft" src="#Arrow-img" position="0.15 3.25 -4.5" rotation="180 90 0" scale="1.25 1.25 1.25" visible="false"></a-image>
+                        <a-entity id="slide_00" visible="true">
+                                <a-entity id="Welcome" position="0.15 8.25 0" rotation="0 90 0" 
+                                        text="value: Genetics Demo; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
+                                        font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="10 10 10"></a-entity>
+                                <a-entity id="Instructions" position="0.15 6.55 0" rotation="0 90 0" 
+                                        text="value: Genetics Demo is an interactive demonstration that shows the lac operon and the process of metabolizing lactose.; 
+                                        color: #00243b; width: 1.7; wrapCount: 43.190; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                                <a-entity id="Leader" position="0.15 4.8634 0" rotation="0 90 0" 
+                                        text="value: You can use the control panel behind you to setup the interactive experience on the left. If you would like to learn more about the molecules in the demo, check out the pedistals on the right; 
+                                        color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                        </a-entity>
+                        <a-entity id="slide_01" visible="false">
+                                <a-entity position="0.15 8.25 0" rotation="0 90 0" 
+                                        text="value: Diagram; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
+                                        font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
+                                <a-entity position="0.15 6.5 0" rotation="0 90 0" 
+                                        text="value: This is where I would like to put a diagram of the DNA strand and explain that the user is meant to assemble the DNA strand by clicking the tubes.; 
+                                        color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                        </a-entity>
+                        <a-entity id="slide_02" visible="false">
+                                <a-entity position="0.15 8.25 0" rotation="0 90 0" 
+                                        text="value: Reactions; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
+                                        font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
+                                <a-entity position="0.15 6 0" rotation="0 90 0" 
+                                        text="value: Here I can explain the possible interactions after assembling the DNA strand. Like placing the RNA polymerase or binding the CRP to the capSite.; 
+                                        color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                        </a-entity>
+                        <a-entity id="slide_03" visible="false">
+                                <a-entity position="0.15 8.25 0" rotation="0 90 0" 
+                                        text="value: Pedistals; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
+                                        font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
+                                <a-entity position="0.15 6 0" rotation="0 90 0" 
+                                        text="value: Here I could encourage them to try things out and see what happens. I would also remind them that if they want some more in-depth explainations to checkout the artefacts on the pedistals.; 
+                                        color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
+                        </a-entity>
+                        <a-entity id="leftScrollButton" onclick="toggleSlides('left')" position="0 3.4 4.75" scale="3 1 3" rotation="0 0 -90"
+                                circles-button="button_color: rgb(0, 73, 120); button_color_hover: rgb(81, 128, 158)" visible="false">
+                                <a-image id="arrowImageLeft" src="#Arrow-img" position="0 0.225 0" rotation="90 -90 0" scale="0.25 0.25 0.25" visible="true"></a-image>
+                        </a-entity>
+                        <a-entity id="rightScrollButton" onclick="toggleSlides('right')" position="0 3.4 -4.75" scale="3 1 3" rotation="0 0 -90"
+                                circles-button="button_color: rgb(0, 73, 120); button_color_hover: rgb(81, 128, 158)">
+                                <a-image id="arrowImageRight" src="#Arrow-img" position="0 0.225 0" rotation="90 90 0" scale="0.25 0.25 0.25" visible="true"></a-image>
+                        </a-entity>
                 </a-entity>
 
                 <!-- Tutorial Toggle Button -->
-                <a-box class="pedistal" position="5.75 0.5 0.25" width="0.3" height="1" depth="0.3" shadow="receive:true; cast:true;">
+                <a-box class="pedistal" position="5.75 0.5 0.75" width="0.3" height="1" depth="0.3" shadow="receive:true; cast:true;">
                         <a-entity id="infoButton" onclick="tutorialToggle()" position="0 0.5 0" scale="0.5 0.5 0.5"
                                 circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
                                 <a-entity circles-label="text: Toggle Tutorial; offset: 0 0.6 -0.2; arrow_position: down;"></a-entity>
@@ -418,8 +451,8 @@
                         shape__bottom="shape: sphere; radius: 0.08; offset: 0.0103 -0.1332 -0.0895;"
                         shape__topEnd="shape: sphere; radius: 0.08; offset: -0.0509 0.1916 0.1512;"
                         shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.0694 -0.2126 -0.1885;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:45 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd; 
+                                animate: false; pickupScale:1 1 1; pickupPosition:0 0 0; pickupRotation:45 0 0;"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:lacIPromoter; align:center" geometry="primitive:plane; height:0.3; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
@@ -439,8 +472,8 @@
                         dynamic-body="shape:none;"
                         shape__top="shape: sphere; radius: 0.07; offset: 0.0079 0.0492 0.0194;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0210 -0.0538 -0.0208;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom; 
+                                animate: false; pickupRotation:45 0 0;"
                         shadow="receive:false; cast:true;" collision-filter="group: holder; collidesWith: default, holder; collisionForces: false;">
                         <a-text text="value:lacI; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
@@ -456,8 +489,7 @@
                 <a-entity id="capSite-free" position="2 3 -4" rotation="45 0 0" gltf-model="#capSite-glb"
                         dynamic-body="shape:none;" shape__top="shape: sphere; radius: 0.07; offset: 0.015 0.0346 0.010;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0205 -0.0261 -0.0012;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom; animate: false;"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:capSite; align:center" geometry="primitive:plane; height:0.3; width:0.6"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.15 -0.15" width="3.5"
@@ -477,8 +509,8 @@
                         shape__bottom="shape: sphere; radius: 0.08; offset: 0.0977 0.0791 -0.0144;"
                         shape__topEnd="shape: sphere; radius: 0.08; offset: -0.2533 -0.1275 0.0925;"
                         shape__bottomEnd="shape: sphere; radius: 0.08; offset: 0.2084 0.0870 -0.1006;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd; 
+                                animate: false; pickupRotation: 0 90 0;"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:lacPromoter; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
@@ -501,8 +533,7 @@
                         shape__bottom="shape: sphere; radius: 0.07; offset: 0.0734 -0.0073 -0.0787;"
                         shape__topEnd="shape: sphere; radius: 0.07; offset: -0.1566 0.0476 0.1235;"
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: 0.1596 -0.0434 -0.1259;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd; animate: false;"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:lacOperator; align:center" geometry="primitive:plane; height:0.35; width:1"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
@@ -523,11 +554,11 @@
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0839 0.0675 -0.0429;"
                         shape__topEnd="shape: sphere; radius: 0.07; offset: 0.2230 -0.1421 0.0266;"
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.1931 0.1211 -0.0265;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd; 
+                                animate: false; pickupRotation: -90 0 0"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:lacZ; align:center" geometry="primitive:plane; height:0.3; width:0.5"
-                                material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
+                                material="color: black" scale="0.4 0.4 0.4" position="0.1 0 0.25" width="3.5"
                                 circles-lookat="constrainYAxis: false;"></a-text>
                         <a-entity id="lacZ-hover"
                                 static-body="shape:none;" constraint="target: #lacZ-free;"
@@ -545,8 +576,7 @@
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0428 0.0916 -0.0739;"
                         shape__topEnd="shape: sphere; radius: 0.07; offset: 0.0928 -0.1278 0.1070;"
                         shape__bottomEnd="shape: sphere; radius: 0.07; offset: -0.0940 0.1529 -0.1321;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__center, shape__top, shape__bottom, shape__topEnd, shape__bottomEnd; animate: false;"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:lacY; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black" scale="0.4 0.4 0.4" position="0 0.3 0" width="3.5"
@@ -561,14 +591,14 @@
                                 collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
-                <a-entity id="lacA-free" position="5 3 -3" rotation="90 0 0" gltf-model="#lacA-glb"
+                <a-entity id="lacA-free" position="5 3 -3" rotation="-90 0 0" gltf-model="#lacA-glb"
                         dynamic-body="shape:none;"
                         shape__center1="shape: sphere; radius: 0.07; offset: 0.0098 0.0645 0.0373;"
                         shape__center2="shape: sphere; radius: 0.07; offset: 0.0104 -0.0486 0.0526;"
                         shape__end1="shape: sphere; radius: 0.07; offset: 0.0018 0.1569 -0.0116;"
                         shape__end2="shape: sphere; radius: 0.07; offset: 0.0104 -0.1517 0.0164;"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__center1, shape__center2, shape__end1, shape__end2;"
-                        circles-artefact="label_on: false; description_on: false; inspectScale:1 1 1; inspectPosition:0 0 0; textRotationY:90.0; inspectRotation:0 0 0;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__center1, shape__center2, shape__end1, shape__end2; 
+                                animate: false; pickupRotation: -90 90 0"
                         shadow="receive:false; cast:true;">
                         <a-text text="value:lacA; align:center" geometry="primitive:plane; height:0.3; width:0.5"
                                 material="color: black;" scale="0.4 0.4 0.4" position="0 0 -0.3" width="3.5"
@@ -590,7 +620,7 @@
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8; animate: false;"
                         collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
                         <a-text id="CRP-label-01" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.5" material="color: black"
@@ -603,7 +633,7 @@
                         shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
                         shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
                         shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8;"
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8; animate: false;"
                         collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
                         <a-text id="CRP-label-02" text="value:CRP; align:center"
                                 geometry="primitive:plane; height:0.35; width:0.5" material="color: black"
@@ -639,7 +669,7 @@
                         collision-filter="group: RNA; collidesWith: default, RNA;">
                         <a-text id="RNApoly-label" text="value:RNA polymerase; align:center"
                                 geometry="primitive:plane; height:0.35; width: 1.25;" material="color: black"
-                                scale="0.4 0.4 0.4" position="0 0 -0.6" width="3.5"
+                                scale="0.6 0.6 0.6" position="0 0 -0.65" width="3.5"
                                 circles-lookat="constrainYAxis: false;">
                         </a-text>
                 </a-entity>
