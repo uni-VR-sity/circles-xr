@@ -40,6 +40,10 @@ AFRAME.registerComponent('trigger', {
                     CONTEXT_AF.currentState = "binding";
                     //CONTEXT_AF.el.emit('repressor_flag');
                     //console.log('RepTrigger is binding');
+
+                    if(CONTEXT_AF.type == "null"){
+
+                    }
                 }else if(e.detail.body.el.classList.contains("CRP_final") && e.detail.target.el.id == "capSite_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     console.log('capSite Trigger is binding');
@@ -64,6 +68,11 @@ AFRAME.registerComponent('trigger', {
                     mover_lac.addEventListener('animation-loop', function(){
                         console.log('Finished lac animation!');
                         pause("#RNA_moving_lac"); //turn off the animation
+
+                        var tempRep = document.querySelector("#rep_trigger");
+                        tempRep.setAttribute('circles-interactive-object', { enabled: 'false'});
+                        var tempCap = document.querySelector("#capSite_trigger");
+                        tempCap.setAttribute('circles-interactive-object', { enabled: 'false'});
     
                         setDynamicLocation(CONTEXT_AF.attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 });
                         CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'});
@@ -81,6 +90,11 @@ AFRAME.registerComponent('trigger', {
 
         CONTEXT_AF.el.addEventListener('setState', function(evt){
             CONTEXT_AF.currentState = evt.detail.value;
+
+            if(CONTEXT_AF.el.id == 'repressor_trigger' || CONTEXT_AF.el.id == 'lac_trigger'){
+                CONTEXT_AF.el.setAttribute('circles-interactive-object', { enabled: 'true'});
+            }
+            //CONTEXT_AF.el.setAttribute('circles-interactive-object', { enabled: 'true'});
         });
 
         CONTEXT_AF.el.addEventListener('blocked', function(evt){
@@ -114,6 +128,7 @@ AFRAME.registerComponent('trigger', {
                 var mover = document.querySelector("#RNA_moving_rep");
                 mover.setAttribute('visible', 'true');
                 CONTEXT_AF.partner.setAttribute('visible', 'false');
+                CONTEXT_AF.el.setAttribute('circles-interactive-object', { enabled: 'false'});
                 CONTEXT_AF.partner.removeAttribute('dynamic-body');
                 CONTEXT_AF.currentState = "bound";
 
@@ -124,6 +139,14 @@ AFRAME.registerComponent('trigger', {
                 var mover = document.querySelector("#RNA_moving_lac");
                 mover.setAttribute('visible', 'true');
                 CONTEXT_AF.partner.setAttribute('visible', 'false');
+
+                /*
+                var tempRep = document.querySelector("#rep_trigger");
+                tempRep.setAttribute('circles-interactive-object', { enabled: 'true'});
+                var tempCap = document.querySelector("#capSite_trigger");
+                tempCap.setAttribute('circles-interactive-object', { enabled: 'true'});*/
+                CONTEXT_AF.el.setAttribute('circles-interactive-object', { enabled: 'false'});
+
                 CONTEXT_AF.partner.removeAttribute('dynamic-body');
                 CONTEXT_AF.currentState = "bound";
 
