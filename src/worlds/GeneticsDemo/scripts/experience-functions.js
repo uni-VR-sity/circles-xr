@@ -223,12 +223,14 @@ function tutorialToggle() {
 
 function setDynamicLocation(id, position, rotation) {
   const object = document.querySelector('#' + id);
-  console.log('Setting new dynamic position of ' + id);
+  console.log('Setting new dynamic position of ' + id + ' to ' + position.y);
 
   object.removeAttribute('dynamic-body');
 
   object.setAttribute('position', position);
-  object.setAttribute('rotation', rotation);
+  if(rotation != 'null'){
+    object.setAttribute('rotation', rotation);
+  }
 
   object.emit('throw');
 

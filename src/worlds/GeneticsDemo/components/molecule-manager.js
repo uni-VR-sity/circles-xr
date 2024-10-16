@@ -1,5 +1,7 @@
 let lactoseCount = 0;
 let alloLactoseCount = 0;
+let galactoseCount = 0;
+let glucoseCount = 0;
 let mRNAcount = 0;
 
 AFRAME.registerComponent('molecule-manager', {
@@ -93,6 +95,11 @@ AFRAME.registerComponent('molecule-manager', {
     
         switch (type) {
             case "glucose":
+                sample = document.querySelectorAll('.glucose');
+                tag = glucoseCount++;
+
+                mol.setAttribute('id', 'glucoseMain_' + tag);
+
                 mol.classList.add("glucose");
     
                 mol.setAttribute('scale', {
@@ -278,6 +285,11 @@ AFRAME.registerComponent('molecule-manager', {
                 break;
 
             case "galactose":
+                sample = document.querySelectorAll('.galactose');
+                tag = galactoseCount++;
+
+                mol.setAttribute('id', 'galactoseMain_' + tag);
+
                 mol.classList.add("galactose");
     
                 mol.setAttribute('scale', {
