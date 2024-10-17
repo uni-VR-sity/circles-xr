@@ -30,7 +30,7 @@ AFRAME.registerComponent('molecule-manager', {
 
             switch (CONTEXT_AF.currentPreset){
                 case 'HH':
-                    if (evt.detail.value != 'camp'){
+                    if (evt.detail.value != 'cAMP'){
                         var mol = CONTEXT_AF.createMol(evt.detail.value, evt.detail.pos, evt.detail.rot);
                         //Add that molecule to the scene
                         scene.appendChild(mol);
@@ -47,7 +47,7 @@ AFRAME.registerComponent('molecule-manager', {
                     break;
 
                 case 'HL':
-                    if (evt.detail.value != 'lactose' && evt.detail.value != 'camp'){
+                    if (evt.detail.value != 'lactose' && evt.detail.value != 'cAMP'){
                         var mol = CONTEXT_AF.createMol(evt.detail.value, evt.detail.pos, evt.detail.rot);
                         //Add that molecule to the scene
                         scene.appendChild(mol);
