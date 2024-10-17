@@ -2047,6 +2047,7 @@ AFRAME.registerComponent('molecule-manager', {
     tick: function(){
         var sampleLactose = document.querySelectorAll('.lactose');
         var sampleAllo = document.querySelectorAll('.allolactose');
+        var sampleGal = document.querySelectorAll('.galactose');
         var samplemRNA = document.querySelectorAll('.mRNA');
 
         if (sampleLactose.length >= 80){
@@ -2062,9 +2063,11 @@ AFRAME.registerComponent('molecule-manager', {
             console.log('Deleted thise item: ' + sampleAllo[0].id);
 
             sampleAllo[0].parentNode.removeChild(sampleAllo[0]);
+            sampleGal[0].parentNode.removeChild(sampleGal[0]);
         }
         if (alloLactoseCount >= 500){
             alloLactoseCount = 1;
+            galactoseCount = 1;
         }
 
         if (samplemRNA.length >= 80){
