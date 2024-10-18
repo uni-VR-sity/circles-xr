@@ -637,6 +637,7 @@ const saveCollectedData = async (req, res, next) =>
     }
   }
 
+  // Has to return something or logs stop going through
   res.json('complete');
 }
 
