@@ -13,6 +13,8 @@ AFRAME.registerComponent('circles-data-collector',
         const element = CONTEXT_AF.el;
         const schema = CONTEXT_AF.data;
 
+        this.count = 0;
+
         // Getting current circle
         // url: http://domain/w/circle
         // split result array: {'http', '', 'domain', 'w', 'circle'}
