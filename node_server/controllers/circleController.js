@@ -11,6 +11,7 @@ const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
+const readline = require('readline');
 
 const User = require('../models/user');
 const Guest = require('../models/guest');
@@ -549,19 +550,64 @@ const updateUserColour = async (req, res, next) =>
 
 // Data Collection ---------------------------------------------------------------------------------------------------------------------------------
 
+// Getting latest version log file
+// If there are not logs for the circle, null is returned
+const getLatestLogFile = function(logFolder, circle)
+{
+  // Getting all files in log folder
+  var existingLogs = fs.readdirSync(logFolder);
+
+  // Getting all log files associated with the current circle
+  function checkExistingLogs(log)
+  {
+    return log.includes(circle);
+  }
+
+  var circleLogs = existingLogs.filter(checkExistingLogs);
+
+  // If the circle has existing logs, getting the latest file
+  // Otherwise returning null
+  if (circleLogs.length > 0) 
+  {
+    // Going through each log to get the highest numerical value
+    var highestLog = 0;
+
+    for (const log of circleLogs)
+    {
+      // Getting what is after circle name --> Ex. ["", "0.csv"] or ["", "1.csv"]
+      var logNum = log.split(circle)[1][0];
+      
+      // Converting to an integer
+      logNum = parseInt(logNum);
+
+      // Checking if logNum is the highest log so far
+      //  If it is, saving it
+      if (logNum > highestLog)
+      {
+        highestLog = logNum;
+      }
+    }
+
+    return highestLog;
+  }
+  else
+  {
+    return null;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Saving data collected in an .csv
 const saveCollectedData = async (req, res, next) => 
 {
   if (req.body.circle)
   {
-    const fileName = __dirname + '/../collectedData/' + req.body.circle + '.csv';
     const possibleData = ['date', 'time', 'user', 'position', 'name', 'description'];
+    const logFolder = __dirname + '/../collectedData/';
 
     var log = '';
     var header = '';
-
-    // Checking if .csv file exists for the circle
-    var fileExists = fs.existsSync(fileName);
 
     // Going through possible data collected
     for (const data of possibleData)
@@ -603,33 +649,94 @@ const saveCollectedData = async (req, res, next) =>
           }
         }
 
-        // If .csv file does not exist for the circle, adding to header
-        if (!fileExists)
-        {
-          header += data + ',';
-        }
+        // Adding to header
+        header += data + ',';
       }
     }
 
-    // Removing last comma (,) from log
+    // Removing last comma (,) from log and header
     log = log.slice(0, -1);
+    header = header.slice(0, -1);
 
-    // If .csv file does not exist for the circle, adding header to log
-    // Otherwise, adding a new line at the start of the log
-    if (!fileExists)
+    // Getting the latest log file version
+    var latestVersion = getLatestLogFile(logFolder, req.body.circle);
+
+    // If there are already log files for the circle, checking if the header has changed and a new file should be created
+    // Otherwise, setting up to create the first log file
+    var currentFile;
+
+    if (latestVersion != null)
     {
-      log = header.slice(0, -1) + '\n' + log;
+      // Getting the first line (header) from latest log file
+      // https://www.geeksforgeeks.org/how-to-read-a-file-line-by-line-using-node-js/
+      var latestFile = req.body.circle + latestVersion + '.csv';
+      var latestHeader = '';
+
+      // Using a promise to wait for header to be read
+      function readLogPromise() 
+      {
+        return new Promise(function(resolve, reject)
+        {
+          
+          const logFile = readline.createInterface(
+          {
+            input: fs.createReadStream(logFolder + latestFile),
+            output: process.stdout,
+            terminal: false
+          });
+
+          logFile.on('error', function()
+          {
+            resolve();
+          });
+          
+          logFile.on('line', function(line)
+          {
+            latestHeader = line;
+
+            // Stopping after first line is read
+            // https://stackoverflow.com/questions/44153552/readline-doesnt-stop-line-reading-after-rl-close-emit-in-nodejs
+            logFile.close();
+            logFile.removeAllListeners();
+          });
+          
+          // When header has been read
+          logFile.on('close', function()
+          {
+            resolve();
+          });
+          
+        });
+      }
+
+      await readLogPromise();
+
+      // Checking if header has changed
+      // If it has, setting up for creating a new log file
+      // Otherwise, preparing log line to be added to the latest log file
+      if (header != latestHeader)
+      {
+        latestVersion++;
+        currentFile = req.body.circle + latestVersion + '.csv';
+        log = header + '\n' + log;
+      }
+      else
+      {
+        currentFile = latestFile;
+        log = '\n' + log;
+      }
     }
     else
     {
-      log = '\n' + log;
+      log = header + '\n' + log;
+      currentFile = req.body.circle + '0.csv';
     }
 
     // Adding log to .csv file
     // (If this is the first log for the circle, .csv file is created)
     try
     {
-      fs.appendFileSync(fileName, log, "utf8");
+      fs.appendFileSync(logFolder + currentFile, log, "utf8");
     }
     catch(e)
     {
