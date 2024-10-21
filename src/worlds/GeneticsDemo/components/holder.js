@@ -185,6 +185,9 @@ AFRAME.registerComponent('collision-holder', {
                 lac_trigger.emit('setState', {value : 'unbound'});
                 rep_trigger.emit('setState', {value : 'unbound'});
                 capSite_trigger.emit('setState', {value : 'unbound'});
+
+                CONTEXT_AF.el.parentNode.parentNode.emit('DNA_flag');
+
                 console.log('DNA set is complete');
                 holderCount++;
             }

@@ -22,6 +22,7 @@ AFRAME.registerComponent('molecule-manager', {
             // set the current state
             CONTEXT_AF.currentPreset = evt.detail.value;
             //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
+            
         });
 
         CONTEXT_AF.el.addEventListener('mol_initial_spawn', function (evt) {
@@ -2050,32 +2051,32 @@ AFRAME.registerComponent('molecule-manager', {
         var sampleGal = document.querySelectorAll('.galactose');
         var samplemRNA = document.querySelectorAll('.mRNA');
 
-        if (sampleLactose.length >= 80){
+        if (sampleLactose.length >= 60){
             console.log('Deleted thise item: ' + sampleLactose[0].id);
 
             sampleLactose[0].parentNode.removeChild(sampleLactose[0]);
         }
-        if (lactoseCount >= 500){
+        if (lactoseCount >= 300){
             lactoseCount = 1;
         }
 
-        if (sampleAllo.length >= 80){
+        if (sampleAllo.length >= 60){
             console.log('Deleted thise item: ' + sampleAllo[0].id);
 
             sampleAllo[0].parentNode.removeChild(sampleAllo[0]);
             sampleGal[0].parentNode.removeChild(sampleGal[0]);
         }
-        if (alloLactoseCount >= 500){
+        if (alloLactoseCount >= 300){
             alloLactoseCount = 1;
             galactoseCount = 1;
         }
 
-        if (samplemRNA.length >= 80){
+        if (samplemRNA.length >= 40){
             console.log('Deleted thise item: ' + samplemRNA[0].id);
 
             samplemRNA[0].parentNode.removeChild(samplemRNA[0]);
         }
-        if (mRNAcount >= 500){
+        if (mRNAcount >= 300){
             mRNAcount = 1;
         }
     }

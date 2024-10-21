@@ -144,6 +144,26 @@ function startExperience() {
     sample++;
   }
 
+  switch (GlobalPreset){
+    case 'HH':
+        mol_manager.emit('HH_flag');
+        break;
+
+    case 'LH':
+        mol_manager.emit('LH_flag');
+        break;
+
+    case 'HL':
+        mol_manager.emit('HL_flag');
+        break;
+
+    case 'LL':
+        mol_manager.emit('LL_flag');
+        break;
+
+    default: 
+        console.log('Unknown Preset!');
+  }
 
 };
 
@@ -171,6 +191,8 @@ function resetExperience() {
     for (let i = 0; i < holders.length; i++){
       holders[i].emit('setState', {value : 'null'});
     }
+
+    mol_manager.emit('reset_flag');
 
     ActiveState = 'resetting';
   }
@@ -227,7 +249,10 @@ function setDynamicLocation(id, position, rotation) {
 
   object.removeAttribute('dynamic-body');
 
-  object.setAttribute('position', position);
+  if(position != 'null'){
+    object.setAttribute('position', position);
+  }
+
   if(rotation != 'null'){
     object.setAttribute('rotation', rotation);
   }

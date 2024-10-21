@@ -38,7 +38,7 @@ AFRAME.registerComponent('trigger', {
                     //console.log('LacTrigger is binding');
                 }else if(e.detail.body.el.classList.contains("repressor") && e.detail.target.el.id == "rep_trigger"){
                     CONTEXT_AF.currentState = "binding";
-                    //CONTEXT_AF.el.emit('repressor_flag');
+                    CONTEXT_AF.el.emit('repressorBlocked_flag');
                     //console.log('RepTrigger is binding');
 
                     if(CONTEXT_AF.type == "null"){
@@ -169,6 +169,7 @@ AFRAME.registerComponent('trigger', {
 
                     var blocker =  document.querySelector("#lac_trigger");
                     blocker.emit('blocked', {value : 'true'});
+                    //CONTEXT_AF.el.emit('repressorBlocked_flag');
                     setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
                     CONTEXT_AF.currentState = "bound";
 
@@ -181,6 +182,7 @@ AFRAME.registerComponent('trigger', {
                         var blocker =  document.querySelector("#lac_trigger");
                         setTimeout(() => { CONTEXT_AF.currentState = "unbound"; }, 3000);
                         blocker.emit('blocked', {value : 'false'});
+                        CONTEXT_AF.el.emit('repressorUnblocked_flag');
     
                     }else{
                         setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
