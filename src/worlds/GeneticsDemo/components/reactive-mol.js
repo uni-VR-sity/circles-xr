@@ -237,8 +237,10 @@ AFRAME.registerComponent('mol-reactor', {
                 if (CONTEXT_AF.attacker.classList.contains("lac")) {
                     CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'beta-gal', pos: { x: temp_pos.x - 0.1, y: temp_pos.y, z: temp_pos.z + 0.1 }, rot: 'null' });
                     CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'permease', pos: { x: temp_pos.x - 0.1, y: temp_pos.y + 0.5, z: temp_pos.z }, rot: 'null' });
+                    CONTEXT_AF.el.parentNode.emit('lacmRNA_flag');
                 } else if (CONTEXT_AF.attacker.classList.contains("rep")) {
                     CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'repressor', pos: { x: temp_pos.x - 0.1, y: temp_pos.y, z: temp_pos.z + 0.1 }, rot: 'null' });
+                    CONTEXT_AF.el.parentNode.emit('repmRNA_flag');
                 }
                 setTimeout(() => { CONTEXT_AF.attacker.remove(); }, 0);
                 setTimeout(() => { CONTEXT_AF.currentState = "null"; }, 2000);

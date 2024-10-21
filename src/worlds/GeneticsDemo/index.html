@@ -171,7 +171,8 @@
                 </a-entity>
 
                 <!-- Tutorial Toggle Button -->
-                <a-box class="pedistal" position="5.75 0.5 0.75" width="0.3" height="1" depth="0.3" shadow="receive:true; cast:true;">
+                <a-box class="pedistal" position="5.75 0.5 0.75" width="0.3" height="1" depth="0.3" 
+                        static-body shadow="receive:true; cast:true;">
                         <a-entity id="infoButton" onclick="tutorialToggle()" position="0 0.5 0" scale="0.5 0.5 0.5"
                                 circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
                                 <a-entity circles-label="text: Toggle Tutorial; offset: 0 0.6 -0.2; arrow_position: down;"></a-entity>
@@ -180,7 +181,8 @@
                 
                 <!-- Preset Buttons Table -->
                 <a-entity id="controlStation" geometry="primitive: box; width:9; height: 3.5; depth: 0.15"
-                        position="-2 1 -1" rotation="-30 60 0" scale="0.3 0.3 0.3" material="color: #464a73;">
+                        position="-2 1 -1" rotation="-30 60 0" scale="0.3 0.3 0.3" material="color: #464a73;"
+                        static-body>
                         <a-entity id="controlStationButtons" rotation="90 0 0">
                                 <!-- control buttons -->
                                 <a-entity id="LLGroup" position="-2.2 0.1 -0.7" scale="1.5 1.5 1.5">
@@ -239,7 +241,13 @@
 
                 <!-- DNA -->
                 <a-entity id="dna_model" gltf-model="#dna_ends-glb" position="0 -0.75 -5" rotation="0 0 0"
-                        scale="1.5 1.5 1.5" shadow="receive:false; cast:true;" molecule-manager>
+                        scale="1.5 1.5 1.5" shadow="receive:false; cast:true;" molecule-manager
+                        circles-interaction-log__first="name:DNA_model; description:The DNA strand has been fully assembled; event: DNA_flag;"
+                        circles-interaction-log__second="name:DNA_model; description:Started demonstration with Low Glucose and Low Lactose as the preset; event: LL_flag;"
+                        circles-interaction-log__third="name:DNA_model; description:Started demonstration with High Glucose and High Lactose as the preset; event: HH_flag;"
+                        circles-interaction-log__fourth="name:DNA_model; description:Started demonstration with Low Glucose and High Lactose as the preset; event: LH_flag;"
+                        circles-interaction-log__fifth="name:DNA_model; description:Started demonstration with High Glucose and Low Lactose as the preset; event: HL_flag;"
+                        circles-interaction-log__sixth="name:DNA_model; description:Reset the demonstration and deleted all molecules; event: reset_flag;">
                         <!-- Static DNA ends -->
                         <a-entity>
                                 <a-cylinder static-body radius="0.1;" height="0.5" position="-0.652 1.024 -0.024"
@@ -449,7 +457,8 @@
                                 trigger circles-interactive-object="enabled: false;"
                                 onmouseenter="this.setAttribute('visible', 'true')" onmouseleave="this.setAttribute('visible', 'false')"
                                 collision-filter="group: repressor; collidesWith: repressor; collisionForces: false;"
-                                circles-interaction-log="name:Repressor; description:Repressor bound to the Operator site; event: repressor_flag;">
+                                circles-interaction-log__first="name:Repressor; description:Repressor bound to the Operator site and blocking lac mRNA production; event: repressorBlocked_flag;"
+                                circles-interaction-log__second="name:Repressor; description:Repressor detached from the Operator site and is no longer blocking lac mRNA production; event: repressorUnblocked_flag;">
                                 <a-text class="tutorial" text="value:Bind repressor Here; align:center" geometry="primitive:plane; height:0.3; width:1.3"
                                         material="color: black" scale="0.3 0.3 0.3"  position="0 -0.2 0" width="3.5"
                                         circles-lookat="constrainYAxis: false;" visible="true">
@@ -674,7 +683,9 @@
                         shape__right="shape: sphere; radius: 0.051; offset: 0.03 0.03 0"
                         shape__left="shape: sphere; radius: 0.051; offset: -0.03 0.03 0"
                         shape__bottom="shape: sphere; radius: 0.051; offset: 0 -0.05 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__right, shape__left, shape__bottom; pickupPosition: 0 0 0.25; pickupScale: 2.5 2.5 2.5; animate: false;">
+                        circles-pickup-object="physicsObject: true; shapeNames: shape__right, shape__left, shape__bottom; pickupPosition: 0 0 0.25; pickupScale: 2.5 2.5 2.5; animate: false;"
+                        circles-interaction-log__first="name:Ribosome; description:Ribosome connected with a repressor mRNA and created an repressor; event: repmRNA_flag;"
+                        circles-interaction-log__second="name:Ribosome; description:Ribosome connected with a lac mRNA and created, a beta-gal and a permease; event: lacmRNA_flag;">
                         <a-text id="ribosome-label" text="value:Ribosome; align:center"
                                 geometry="primitive:plane; height:0.25; width:0.8;" material="color: black" scale="0.2 0.2 0.2"
                                 position="0 0.12 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>

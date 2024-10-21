@@ -22,6 +22,7 @@ AFRAME.registerComponent('molecule-manager', {
             // set the current state
             CONTEXT_AF.currentPreset = evt.detail.value;
             //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
+            
         });
 
         CONTEXT_AF.el.addEventListener('mol_initial_spawn', function (evt) {
