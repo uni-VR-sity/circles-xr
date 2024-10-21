@@ -227,7 +227,10 @@ function setDynamicLocation(id, position, rotation) {
 
   object.removeAttribute('dynamic-body');
 
-  object.setAttribute('position', position);
+  if(position != 'null'){
+    object.setAttribute('position', position);
+  }
+
   if(rotation != 'null'){
     object.setAttribute('rotation', rotation);
   }

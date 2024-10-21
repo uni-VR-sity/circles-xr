@@ -23,7 +23,7 @@
         <circles-start-ui />
 
         <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:false;">
+        <a-scene id="scene" circles_scene_properties physics="gravity:0; debug:true;">
                 <a-assets>
                         <img id='skyMap' src='/global/assets/textures/equirectangular/WhiteBlue.jpg'
                                 crossorigin="anonymous">
@@ -420,7 +420,7 @@
                                 gltf-model="#RNAmoveSmall-glb" visible="true" animation-mixer="clip: repressor_move; loop: repeat; timeScale: 0;"
                                 circles-interaction-log="name:RNA polymerase; description:Bound to laclPromoter and transcribing repressor mRNA; event: rep_flag;">
                                 <a-sphere id="repressor_trigger" position="-0.75 1.15 -0.2" 
-                                        static-body radius="0.3" material="color: purple; opacity: 0.4" visible="false"
+                                        static-body="shape: sphere; sphereRadius: 0.4;" radius="0.3" material="color: purple; opacity: 0.4" visible="false"
                                         trigger circles-interactive-object="enabled: false;"
                                         onmouseenter="this.setAttribute('visible', 'true')" onmouseleave="this.setAttribute('visible', 'false')"
                                         collision-filter="group: RNA; collidesWith: RNA; collisionForces: false;">
@@ -445,7 +445,7 @@
                                 </a-sphere>
                         </a-entity>
                         <a-sphere id="rep_trigger" position="-0.005 1.28 -1.22" rotation="0 -10 -35"
-                                static-body radius="0.7" visible="false" material="color: red; opacity: 0.4"
+                                static-body="shape: sphere; sphereRadius: 0.9;" radius="0.7" visible="false" material="color: red; opacity: 0.4"
                                 trigger circles-interactive-object="enabled: false;"
                                 onmouseenter="this.setAttribute('visible', 'true')" onmouseleave="this.setAttribute('visible', 'false')"
                                 collision-filter="group: repressor; collidesWith: repressor; collisionForces: false;"
@@ -456,7 +456,7 @@
                                 </a-text>
                         </a-sphere>
                         <a-sphere id="capSite_trigger" position="-0.7 1.5 -0.8"
-                                static-body radius="0.5" visible="false" material="color: brown; opacity: 0.4"
+                                static-body="shape: sphere; sphereRadius: 0.7;" radius="0.5" visible="false" material="color: brown; opacity: 0.4"
                                 trigger circles-interactive-object="enabled: false;"
                                 onmouseenter="this.setAttribute('visible', 'true')" onmouseleave="this.setAttribute('visible', 'false')"
                                 collision-filter="group: capSite; collidesWith: capSite; collisionForces: false;"
@@ -472,7 +472,7 @@
 
 
                 <!-- Free Floating DNA segments -->
-                <a-entity id="lacIPromoter-free" position="-3 2.5 -2" rotation="45 0 0" gltf-model="#lacIPromoter-glb"
+                <a-entity id="lacIPromoter-free" class="DNA" position="-3 2.5 -2" rotation="45 0 0" gltf-model="#lacIPromoter-glb"
                         dynamic-body="shape:none;"
                         shape__center="shape: sphere; radius: 0.08; offset: -0.023 -0.0313 0.0024;"
                         shape__top="shape: sphere; radius: 0.08; offset: -0.0458 0.0785 0.0843;"
@@ -496,7 +496,7 @@
                         </a-entity>
                 </a-entity>
 
-                <a-entity id="lacI-free" position="-3 4 -6" rotation="45 0 0" gltf-model="#lacI-glb"
+                <a-entity id="lacI-free" class="DNA" position="-3 4 -6" rotation="45 0 0" gltf-model="#lacI-glb"
                         dynamic-body="shape:none;"
                         shape__top="shape: sphere; radius: 0.07; offset: 0.0079 0.0492 0.0194;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0210 -0.0538 -0.0208;"
@@ -514,7 +514,7 @@
                         </a-entity>
                 </a-entity>
 
-                <a-entity id="capSite-free" position="2 3 -4" rotation="45 0 0" gltf-model="#capSite-glb"
+                <a-entity id="capSite-free" class="DNA" position="2 3 -4" rotation="45 0 0" gltf-model="#capSite-glb"
                         dynamic-body="shape:none;" shape__top="shape: sphere; radius: 0.07; offset: 0.015 0.0346 0.010;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0205 -0.0261 -0.0012;"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__top, shape__bottom; animate: false;"
@@ -530,7 +530,7 @@
                         </a-entity>
                 </a-entity>
 
-                <a-entity id="lacPromoter-free" position="0 3 -5" gltf-model="#lacPromoter-glb"
+                <a-entity id="lacPromoter-free" class="DNA" position="0 3 -5" gltf-model="#lacPromoter-glb"
                         dynamic-body="shape:none;"
                         shape__center="shape: sphere; radius: 0.08; offset: -0.0187 0.0376 0.0554;"
                         shape__top="shape: sphere; radius: 0.08; offset: -0.1430 -0.0393 0.0893;"
@@ -554,7 +554,7 @@
                         </a-entity>
                 </a-entity>
 
-                <a-entity id="lacOperator-free" position="-3 2 -3" gltf-model="#lacOperator-glb"
+                <a-entity id="lacOperator-free" class="DNA" position="-3 2 -3" gltf-model="#lacOperator-glb"
                         dynamic-body="shape:none;"
                         shape__center="shape: sphere; radius: 0.07; offset: -0.0033 0.0165 -0.0113;"
                         shape__top="shape: sphere; radius: 0.07; offset: -0.0839 0.0407 0.0548;"
@@ -576,7 +576,7 @@
                                 collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
-                <a-entity id="lacZ-free" position="1 4 -6" gltf-model="#lacZ-glb" dynamic-body="shape:none;"
+                <a-entity id="lacZ-free" class="DNA" position="1 4 -6" gltf-model="#lacZ-glb" dynamic-body="shape:none;"
                         shape__center="shape: sphere; radius: 0.07; offset: 0.0297 -0.0013 -0.0355;"
                         shape__top="shape: sphere; radius: 0.07; offset: 0.1315 -0.0663 -0.0121;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0839 0.0675 -0.0429;"
@@ -598,7 +598,7 @@
                                 collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
-                <a-entity id="lacY-free" position="3 2.5 -5" gltf-model="#lacY-glb" dynamic-body="shape:none;"
+                <a-entity id="lacY-free" class="DNA" position="3 2.5 -5" gltf-model="#lacY-glb" dynamic-body="shape:none;"
                         shape__center="shape: sphere; radius: 0.07; offset: 0.0129 0.02 -0.0168;"
                         shape__top="shape: sphere; radius: 0.07; offset: 0.0585 -0.0493 0.0484;"
                         shape__bottom="shape: sphere; radius: 0.07; offset: -0.0428 0.0916 -0.0739;"
@@ -619,7 +619,7 @@
                                 collision-filter="group: holder; collidesWith: holder; collisionForces: true;"></a-entity>
                 </a-entity>
 
-                <a-entity id="lacA-free" position="5 3 -3" rotation="-90 0 0" gltf-model="#lacA-glb"
+                <a-entity id="lacA-free" class="DNA" position="5 3 -3" rotation="-90 0 0" gltf-model="#lacA-glb"
                         dynamic-body="shape:none;"
                         shape__center1="shape: sphere; radius: 0.07; offset: 0.0098 0.0645 0.0373;"
                         shape__center2="shape: sphere; radius: 0.07; offset: 0.0104 -0.0486 0.0526;"

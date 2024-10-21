@@ -14,10 +14,16 @@ AFRAME.registerComponent('bouncer', {
             //console.log('Touched entity= ' + e.detail.body.el.id);
 
             //e.detail.body.el.removeAttribute('dynamic-body');
+            let isMolecule = e.detail.body.el.classList.contains("molecule");
+            let isCRP = e.detail.body.el.classList.contains("CRP");
+            let isRibosome = e.detail.body.el.classList.contains("ribosome");
+            let isRNA = e.detail.body.el.classList.contains("RNApoly");
+            let isDNA = e.detail.body.el.classList.contains("DNA");
 
-            if (CONTEXT_AF.attacker == 'null'){
+            if (CONTEXT_AF.attacker == 'null' && (isMolecule || isCRP || isRibosome || isRNA || isDNA)){
                 let tempObj = document.querySelector('#' + e.detail.body.el.id);
-                let tempPos = tempObj.object3D.position;
+                let tempPos = new THREE.Vector3();
+                tempPos = tempObj.object3D.position;
 
                 CONTEXT_AF.attacker = e.detail.body.el;
                 setTimeout(() => { CONTEXT_AF.attacker = "null"; }, 500);

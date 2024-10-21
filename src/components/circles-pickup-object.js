@@ -48,6 +48,11 @@ AFRAME.registerComponent('circles-pickup-object', {
       CONTEXT_AF.setDropAnimations();
     }
 
+    if (data.physicsObject)
+    {
+      CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
+    }
+
     CONTEXT_AF.el.addEventListener('click', CONTEXT_AF.clickFunc);
     CONTEXT_AF.el.addEventListener('throw', CONTEXT_AF.throwFunc);
   },
