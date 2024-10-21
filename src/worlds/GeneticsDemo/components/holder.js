@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   Project - Genetics Interactive Demo
+//   Filename - holder.js
+//   Author - Elis Joynes
+//   Date - October 21st 2024
+//
+//   Description - This component handles the placeholder elements that get replaced by the DNA segements as it gets assembled.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let holderCount = 0;
 
 AFRAME.registerComponent('collision-holder', {
@@ -68,7 +79,7 @@ AFRAME.registerComponent('collision-holder', {
 
         // check if the indicator is running
         if (CONTEXT_AF.currentState == "binding") {
-            console.log('Object Bound to ' + test);
+            //console.log('Object Bound to ' + test);
 
             if (attacker == "lacIPromoter-hover" && test == "h1") {
                 //this.el.parentNode.object3D.visible = false;

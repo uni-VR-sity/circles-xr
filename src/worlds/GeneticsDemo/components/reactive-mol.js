@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   Project - Genetics Interactive Demo
+//   Filename - reactive-mol.js
+//   Author - Elis Joynes
+//   Date - October 21st 2024
+//
+//   Description - This component acts as a reactive core part of a molecule, paired with a magnetic 
+//   component to have a primary and secondary reaction, first triggered at a distance then by direct contact.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let CRPcount = 0;
 
 AFRAME.registerComponent('mol-reactor', {
@@ -202,7 +214,7 @@ AFRAME.registerComponent('mol-reactor', {
 
                     e.detail.body.el.appendChild(mol_core);
 
-                    console.log("This molecule is:" + e.detail.body.el.id);
+                    //console.log("This molecule is:" + e.detail.body.el.id);
 
                     CONTEXT_AF.currentState = "reacted";
                     e.detail.body.el.removeAttribute('mol-reactor');
@@ -303,7 +315,7 @@ AFRAME.registerComponent('mol-reactor', {
                     offset: '0.145 -0.135 0'
                 });
 
-                console.log("Reshaped " + CONTEXT_AF.attacker.id);
+                //console.log("Reshaped " + CONTEXT_AF.attacker.id);
 
                 if (CONTEXT_AF.attacker.id == "CRP_01"){
                     var temp1 = document.getElementById('core_CRP_01');
