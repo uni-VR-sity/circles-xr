@@ -133,7 +133,7 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_rep"); //turn on the animation
-                //CONTEXT_AF.el.emit('rep_flag');
+                CONTEXT_AF.el.emit('rep_flag');
                 
             }else if(test == "lac_trigger"){
                 var mover = document.querySelector("#RNA_moving_lac");
@@ -151,7 +151,7 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.currentState = "bound";
 
                 play("#RNA_moving_lac"); //turn on the animation
-                //CONTEXT_AF.el.emit('lac_flag');
+                CONTEXT_AF.el.emit('lac_flag');
 
             }else if(test == "rep_trigger"){
                 if(!CONTEXT_AF.partner.classList.contains("blocked")){
@@ -198,7 +198,7 @@ AFRAME.registerComponent('trigger', {
                 document.querySelector("#lac_trigger").setAttribute('static-body', { shape: 'sphere', sphereRadius: 0.7 });
 
                 CONTEXT_AF.partner.classList.remove("interactive");
-                //CONTEXT_AF.el.emit('capSite_flag');
+                CONTEXT_AF.el.emit('capSite_flag');
 
                 CONTEXT_AF.currentState = "bound";
                 
