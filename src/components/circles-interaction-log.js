@@ -8,7 +8,8 @@ AFRAME.registerComponent('circles-interaction-log',
         event: {type:'string', default:'click'},
         name: {type:'string'},
         description: {type:'string'},
-    }, multiple: true,
+    }, 
+    multiple: true,
     init: function()
     {
         const CONTEXT_AF = this;
@@ -29,7 +30,7 @@ AFRAME.registerComponent('circles-interaction-log',
             // Storing log description
             logData.description = schema.description;
 
-            // Getting cirecles-data-collector to save the log
+            // Getting circles-data-collector to save the log
             document.querySelector('[circles-data-collector]').components['circles-data-collector'].createLog(logData);
         });
     },
