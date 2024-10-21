@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   Project - Genetics Interactive Demo
+//   Filename - trigger.js
+//   Author - Elis Joynes
+//   Date - October 21st 2024
+//
+//   Description - The 'trigger' component is meant to handle the behaviour of any molecule that need to interact with the DNA strand directly. 
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 AFRAME.registerComponent('trigger', {
     init: function () {
         // Setup self references
@@ -46,12 +57,12 @@ AFRAME.registerComponent('trigger', {
                     }
                 }else if(e.detail.body.el.classList.contains("CRP_final") && e.detail.target.el.id == "capSite_trigger"){
                     CONTEXT_AF.currentState = "binding";
-                    console.log('capSite Trigger is binding');
+                    //console.log('capSite Trigger is binding');
                 }
 
                 if(mover_rep != 'null' && CONTEXT_AF.type == "null"){
                     mover_rep.addEventListener('animation-loop', function(){
-                        console.log('Finished rep animation!');
+                        //console.log('Finished rep animation!');
                         pause("#RNA_moving_rep"); //turn off the animation
             
                         setDynamicLocation(CONTEXT_AF.attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 });
@@ -60,13 +71,13 @@ AFRAME.registerComponent('trigger', {
             
                         setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 1000); //Reset the current state so that the trigger is available again
                     });
-                    console.log('Rep eventListener set');
+                    //console.log('Rep eventListener set');
                     CONTEXT_AF.type = 'rep';
                 }
 
                 if(mover_lac != 'null' && CONTEXT_AF.type == "null"){
                     mover_lac.addEventListener('animation-loop', function(){
-                        console.log('Finished lac animation!');
+                        //console.log('Finished lac animation!');
                         pause("#RNA_moving_lac"); //turn off the animation
 
                         var tempRep = document.querySelector("#rep_trigger");
@@ -80,7 +91,7 @@ AFRAME.registerComponent('trigger', {
     
                         setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 1000); //Reset the current state so that the trigger is available again
                     });
-                    console.log('Lac eventListener set');
+                    //console.log('Lac eventListener set');
                     CONTEXT_AF.type = 'lac';
                 }
 
@@ -187,7 +198,7 @@ AFRAME.registerComponent('trigger', {
                     }else{
                         setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
                     }
-                    console.log('This repressor is capped and cannot trigger');
+                    //console.log('This repressor is capped and cannot trigger');
                     CONTEXT_AF.currentState = "bound";
                 }
             }else if(test == "capSite_trigger"){

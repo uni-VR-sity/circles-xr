@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   Project - Genetics Interactive Demo
+//   Filename - experience-functions.js
+//   Author - Elis Joynes
+//   Date - October 21st 2024
+//
+//   Description - Controls the global functions necessary to make the whole experience work including anything 
+//   triggered by a button press or handling any of the tutorial elements.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let GlobalPreset = 'null';
 let ActiveState = 'null';
 
@@ -245,7 +257,7 @@ function tutorialToggle() {
 
 function setDynamicLocation(id, position, rotation) {
   const object = document.querySelector('#' + id);
-  console.log('Setting new dynamic position of ' + id + ' to ' + position.y);
+  //console.log('Setting new dynamic position of ' + id + ' to ' + position.y);
 
   object.removeAttribute('dynamic-body');
 

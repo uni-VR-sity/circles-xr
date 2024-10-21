@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   Project - Genetics Interactive Demo
+//   Filename - magnetic.js
+//   Author - Elis Joynes
+//   Date - October 21st 2024
+//
+//   Description - The magnetic component facilitates the attraction behaviour between specified molecules. It is usually paired 
+//   with a 'reactive-mol' component, allowing for a secondary reaction.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let magnetCount = 0;
 AFRAME.registerComponent('magnet', {
     init: function () {

@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   Project - Genetics Interactive Demo
+//   Filename - molecule-manager.js
+//   Author - Elis Joynes
+//   Date - October 21st 2024
+//
+//   Description - The molecule manager is responsible for the procedural creation and deletion of the molecules created in the 
+//   demonstration. It keeps track of how many molecules have been created and keeps them within an acceptable range.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let lactoseCount = 0;
 let alloLactoseCount = 0;
 let galactoseCount = 0;
