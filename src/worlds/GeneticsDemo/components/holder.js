@@ -86,6 +86,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacIPromoter.glb');
 
                 var burner = document.querySelector("#lacIPromoter-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+                
                 burner.parentNode.removeChild(burner);
 
                 partner = document.querySelector("#h11");
@@ -98,6 +105,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacIPromoter.glb');
 
                 var burner = document.querySelector("#lacIPromoter-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 partner = document.querySelector("#h1");
@@ -110,6 +124,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacI.glb');
 
                 var burner = document.querySelector("#lacI-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
@@ -119,6 +140,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/capSite.glb');
 
                 var burner = document.querySelector("#capSite-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
@@ -128,6 +156,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacPromoter.glb');
 
                 var burner = document.querySelector("#lacPromoter-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 partner = document.querySelector("#h14");
@@ -140,6 +175,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacPromoter.glb');
 
                 var burner = document.querySelector("#lacPromoter-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 partner = document.querySelector("#h4");
@@ -152,6 +194,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacOperator.glb');
 
                 var burner = document.querySelector("#lacOperator-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
@@ -161,6 +210,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacZ.glb');
 
                 var burner = document.querySelector("#lacZ-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
@@ -170,6 +226,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacY.glb');
 
                 var burner = document.querySelector("#lacY-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";
@@ -179,6 +242,13 @@ AFRAME.registerComponent('collision-holder', {
                 this.el.parentNode.setAttribute('gltf-model', '/worlds/GeneticsDemo/assets/models/lacA.glb');
 
                 var burner = document.querySelector("#lacA-free");
+                let body = burner.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    burner.emit('throw');
+                }
+
                 burner.parentNode.removeChild(burner);
 
                 CONTEXT_AF.currentState = "set";

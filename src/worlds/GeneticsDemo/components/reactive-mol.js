@@ -158,6 +158,12 @@ AFRAME.registerComponent('mol-reactor', {
                     //console.log("This is the object that is being deleted: " + e.detail.target.el.parentNode.id);
 
                     var temp = document.getElementById(e.detail.target.el.parentNode.id);
+                    let body = temp.getAttribute('dynamic-body');
+                    console.log('This is the result of the get dynamic-body: ' + body);
+                    if(body == null){
+                        console.log('This object was held so it needs to be released');
+                        temp.emit('throw');
+                    }
 
                     setTimeout(() => { temp.remove(); }, 0);
 
@@ -235,6 +241,12 @@ AFRAME.registerComponent('mol-reactor', {
             if (CONTEXT_AF.attacker.classList.contains("beta-gal") && CONTEXT_AF.type == "lactose") {
                 let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
                 //console.log("Spawn position is: " + temp_pos);
+                let body = CONTEXT_AF.el.parentNode.getAttribute('dynamic-body');
+                console.log('This is the result of the get dynamic-body: ' + body);
+                if(body == null){
+                    console.log('This object was held so it needs to be released');
+                    CONTEXT_AF.el.parentNode.emit('throw');
+                }
 
                 CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'allolactose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
                 CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'galactose', pos: { x: temp_pos.x + 0.05, y: temp_pos.y, z: temp_pos.z - 0.05 }, rot: 'null' });
