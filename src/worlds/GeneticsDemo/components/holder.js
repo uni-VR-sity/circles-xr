@@ -87,9 +87,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacIPromoter-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
                 
@@ -106,9 +106,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacIPromoter-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -125,9 +125,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacI-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -141,9 +141,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#capSite-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -157,9 +157,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacPromoter-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -176,9 +176,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacPromoter-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -195,9 +195,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacOperator-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -211,9 +211,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacZ-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -227,9 +227,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacY-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 
@@ -243,9 +243,9 @@ AFRAME.registerComponent('collision-holder', {
 
                 var burner = document.querySelector("#lacA-free");
                 let body = burner.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     burner.emit('throw');
                 }
 

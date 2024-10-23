@@ -180,6 +180,7 @@ AFRAME.registerComponent('trigger', {
 
                     var blocker =  document.querySelector("#lac_trigger");
                     blocker.emit('blocked', {value : 'true'});
+                    CONTEXT_AF.manager.emit('setTarget', {value : 'repressor'});
                     //CONTEXT_AF.el.emit('repressorBlocked_flag');
                     setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
                     CONTEXT_AF.currentState = "bound";
@@ -212,6 +213,7 @@ AFRAME.registerComponent('trigger', {
 
                 CONTEXT_AF.partner.classList.remove("interactive");
                 CONTEXT_AF.el.emit('capSite_flag');
+                CONTEXT_AF.manager.emit('setTarget', {value : 'capSite'});
 
                 CONTEXT_AF.currentState = "bound";
                 

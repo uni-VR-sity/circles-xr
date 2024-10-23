@@ -40,7 +40,7 @@ AFRAME.registerComponent('bouncer', {
 
                 setTimeout(() => { setDynamicLocation( tempObj.id, { x: tempPos.x, y: tempPos.y + 1, z: tempPos.z }, 'null'); }, 10);
                 
-                console.log('This object was put through the floor and has been respawned: ' + tempObj.id);
+                //console.log('This object was put through the floor and has been respawned: ' + tempObj.id);
                 //console.log('At this position= ' + tempPos.x + ', ' + tempPos.y + ', ' + tempPos.z);
             }
         });

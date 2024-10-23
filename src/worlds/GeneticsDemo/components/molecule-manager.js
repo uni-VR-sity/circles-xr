@@ -9,6 +9,13 @@
 //   demonstration. It keeps track of how many molecules have been created and keeps them within an acceptable range.
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+let repressorTarget = false;
+let capSiteTarget = false;
+let repmRNATarget = false;
+let lacmRNATarget = false;
+let repRiboTarget = false;
+let lacRiboTarget = false;
+let finalTarget = false;
 
 let lactoseCount = 0;
 let alloLactoseCount = 0;
@@ -32,6 +39,34 @@ AFRAME.registerComponent('molecule-manager', {
             //console.log('Preset heard!');
 
             // set the current state
+            CONTEXT_AF.currentPreset = evt.detail.value;
+            //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
+            
+        });
+
+        CONTEXT_AF.el.addEventListener('setTarget', function (evt) {
+            //console.log('Preset heard!');
+
+            // set the current state
+            switch(evt.detail.value){
+                case 'capSite':
+                    if(!capSiteTarget){
+                        capSiteTarget = true;
+                        console.log("Capsite Target has been hit!");
+                    }
+
+                    break;
+                case 'repressor':
+                    if(!repressorTarget){
+                        repressorTarget = true;
+                        console.log("Repressor Target has been hit!");
+                    }
+    
+                    break;
+
+                default: 
+                    console.log('Unknown Target!');
+            }
             CONTEXT_AF.currentPreset = evt.detail.value;
             //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
             
@@ -656,6 +691,10 @@ AFRAME.registerComponent('molecule-manager', {
                 mol.appendChild(mol_label);
     
                 //console.log('Permease molecule has been created');
+                
+                if(!lacRiboTarget){
+                    lacRiboTarget = true;
+                }
                 break;
                 
             case "cAMP":
@@ -1390,6 +1429,10 @@ AFRAME.registerComponent('molecule-manager', {
                 mol_tail_08.appendChild(mol_tail_09);
 
                 //console.log('mRNA molecule has been created');
+                if(!repmRNATarget){
+                    repmRNATarget = true;
+                    console.log("Repressor mRNA Target has been hit!");
+                }
     
                 break;
 
@@ -1863,6 +1906,10 @@ AFRAME.registerComponent('molecule-manager', {
                 mol_tail_08.appendChild(mol_tail_09);
 
                 //console.log('mRNA molecule has been created');
+                if(!lacmRNATarget){
+                    lacmRNATarget = true;
+                    console.log("lac mRNA Target has been hit!");
+                }
     
                 break;
 
@@ -2038,6 +2085,10 @@ AFRAME.registerComponent('molecule-manager', {
     
                 mol.appendChild(mol_label);
                 //console.log('Glucose molecule has been created');
+
+                if(!repRiboTarget){
+                    repRiboTarget = true;
+                }
     
                 break;
 
@@ -2090,6 +2141,11 @@ AFRAME.registerComponent('molecule-manager', {
         }
         if (mRNAcount >= 300){
             mRNAcount = 1;
+        }
+
+        if(repRiboTarget && lacRiboTarget && repressorTarget && capSiteTarget && repmRNATarget && lacmRNATarget && !finalTarget){
+            console.log("Congrats You've completed this demonstration!");
+            finalTarget = true;
         }
     }
 });

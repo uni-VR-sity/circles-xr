@@ -159,9 +159,9 @@ AFRAME.registerComponent('mol-reactor', {
 
                     var temp = document.getElementById(e.detail.target.el.parentNode.id);
                     let body = temp.getAttribute('dynamic-body');
-                    console.log('This is the result of the get dynamic-body: ' + body);
+                    //console.log('This is the result of the get dynamic-body: ' + body);
                     if(body == null){
-                        console.log('This object was held so it needs to be released');
+                        //console.log('This object was held so it needs to be released');
                         temp.emit('throw');
                     }
 
@@ -242,9 +242,9 @@ AFRAME.registerComponent('mol-reactor', {
                 let temp_pos = CONTEXT_AF.el.object3D.getWorldPosition(new THREE.Vector3());
                 //console.log("Spawn position is: " + temp_pos);
                 let body = CONTEXT_AF.el.parentNode.getAttribute('dynamic-body');
-                console.log('This is the result of the get dynamic-body: ' + body);
+                //console.log('This is the result of the get dynamic-body: ' + body);
                 if(body == null){
-                    console.log('This object was held so it needs to be released');
+                    //console.log('This object was held so it needs to be released');
                     CONTEXT_AF.el.parentNode.emit('throw');
                 }
 
