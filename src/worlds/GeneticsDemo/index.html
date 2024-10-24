@@ -7,6 +7,7 @@
         <!-- Physics script goes after the Circles' head scripts [IMPORTANT]-->
         <script src="/global/js/libs/aframe-physics-system.min.js"></script>
         <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
+        
 
         <script src="/worlds/GeneticsDemo/components/holder.js"></script>
         <script src="/worlds/GeneticsDemo/components/trigger.js"></script>
@@ -477,8 +478,8 @@
                         </a-sphere>
                 </a-entity>
                 <a-entity class="tutorial" position="0.5 2.25 -7" scale="0.8 0.8 0.8" visible="true"
-                        circles-description="title_text_front: DNA Strand; description_text_front: After setting a preset and pressing start you need to assemble the DNA strand. The pieces are floating around. You need to click them and release them in the correct spot. If placed in the correct spot it will snap into place.; arrow_position: down;"></a-entity>
-
+                        circles-description="title_text_front: DNA Strand; description_text_front: After setting a preset and pressing start you need to assemble the DNA strand. The pieces are floating around. You need to click them and release them in the correct spot. If placed in the correct spot it will snap into place.; arrow_position: down;">
+                </a-entity>
 
                 <!-- Free Floating DNA segments -->
                 <a-entity id="lacIPromoter-free" class="DNA" position="-3 2.5 -2" rotation="45 0 0" gltf-model="#lacIPromoter-glb"
