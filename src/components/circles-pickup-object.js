@@ -194,6 +194,83 @@ AFRAME.registerComponent('circles-pickup-object', {
     //sending a "pre" event to turn off controls before any animations might be done
     CONTEXT_AF.el.emit(CIRCLES.EVENTS.RELEASE_THIS_OBJECT_PRE, null, true);
   },
+  throwRelease : function(sendNetworkEvent, passedContext) {
+    const CONTEXT_AF  = (passedContext) ? passedContext : this;
+    const data        = CONTEXT_AF.data;
+    const SAME_DIFF   = 0.001;
+
+    //release
+    CONTEXT_AF.origParent.object3D.attach(CONTEXT_AF.el.object3D); //using three's "attach" allows us to retain world transforms during pickup/release
+    
+    const throwReleaseEventFunc = function() {
+      //send off event for others
+      //CONTEXT_AF.el.emit(CIRCLES.EVENTS.RELEASE_THIS_OBJECT, {sendNetworkEvent:sendNetworkEvent}, true);
+      if (data.animate === true) {
+        CONTEXT_AF.el.removeEventListener('animationcomplete__cpo_position', throwReleaseEventFunc);
+      }
+    };
+    if ((data.animate === true) && (data.dropPosition.x < 100001.0 || data.dropRotation.x < 100001.0 || data.dropScale.x < 100001.0)) {
+      CONTEXT_AF.el.addEventListener('animationcomplete__cpo_position', throwReleaseEventFunc);
+    }
+    else {
+      throwReleaseEventFunc();
+    }
+
+    //set drop transforms, if any
+    if (data.dropPosition.x < 100001.0)
+    {
+      if (data.animate === true) {
+        this.el.emit('cpo_drop_position', null, false);
+      }
+      else {
+        CONTEXT_AF.el.object3D.position.set(data.dropPosition.x, data.dropPosition.y, data.dropPosition.z);
+      }
+    }
+
+    if (data.dropRotation.x < 100001.0)
+    {
+      if (data.animate === true) {
+        this.el.emit('cpo_drop_rotation', null, false);
+      }
+      else {
+        CONTEXT_AF.el.object3D.rotation.set(data.dropRotation.x, data.dropRotation.y, data.dropRotation.z);
+      }
+    }
+
+    if (data.dropScale.x < 100001.0)
+    {
+      if (data.animate === true) {
+        this.el.emit('cpo_drop_scale', null, false);
+      }
+      else {
+        CONTEXT_AF.el.object3D.scale.set(data.dropScale.x, data.dropScale.y, data.dropScale.z);
+      }
+    }
+
+    if (data.physicsObject)
+    {
+      CONTEXT_AF.el.setAttribute('dynamic-body', CONTEXT_AF.physicsAttributes);
+
+      if (data.shapeNames.length > 0)
+      {
+        // Resetting shape components
+        for (var i = 0; i < data.shapeNames.length; i++)
+        {
+          var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
+          
+          // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
+          CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
+  
+          CONTEXT_AF.el.setAttribute(data.shapeNames[i], shape);
+        }
+      }
+    }
+
+    CONTEXT_AF.pickedUp = false;
+
+    //sending a "pre" event to turn off controls before any animations might be done
+    //CONTEXT_AF.el.emit(CIRCLES.EVENTS.RELEASE_THIS_OBJECT_PRE, null, true);
+  },
   clickFunc : function(e) {
     const CONTEXT_AF = (e) ? e.srcElement.components['circles-pickup-object'] : this;
     if (CONTEXT_AF.pickedUp === true) {
@@ -205,7 +282,12 @@ AFRAME.registerComponent('circles-pickup-object', {
   },
   throwFunc : function(e) {
     const CONTEXT_AF = (e) ? e.srcElement.components['circles-pickup-object'] : this;
-    CONTEXT_AF.release(true, CONTEXT_AF);
+    if (CONTEXT_AF.pickedUp === true) {
+      CONTEXT_AF.release(true, CONTEXT_AF);
+    }else{
+      CONTEXT_AF.throwRelease(true, CONTEXT_AF);
+    }
+    //CONTEXT_AF.throwRelease(true, CONTEXT_AF);
   },
   setPickUpAnimations : function()
   {

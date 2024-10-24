@@ -7,6 +7,7 @@
         <!-- Physics script goes after the Circles' head scripts [IMPORTANT]-->
         <script src="/global/js/libs/aframe-physics-system.min.js"></script>
         <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
+        
 
         <script src="/worlds/GeneticsDemo/components/holder.js"></script>
         <script src="/worlds/GeneticsDemo/components/trigger.js"></script>
@@ -83,6 +84,8 @@
                         <!-- Circles' built-in assets [REQUIRED] -->
                         <circles-assets />
                 </a-assets>
+
+                <a-entity id="confetti" particle-system="accelerationSpread: 20 0 20; color: white; enabled: true; particleCount: 300; opacity: 0.3; preset: default; size: 0.5; velocityValue: 0 15 0" position="5.584 1.250 -1.4" visible="true"></a-entity>
 
                 <!-- Data Collector -->
                 <a-entity id="data-collector" circles-data-collector="dataToCollect:date, time, user, position, name, description"></a-entity>
@@ -477,8 +480,18 @@
                         </a-sphere>
                 </a-entity>
                 <a-entity class="tutorial" position="0.5 2.25 -7" scale="0.8 0.8 0.8" visible="true"
-                        circles-description="title_text_front: DNA Strand; description_text_front: After setting a preset and pressing start you need to assemble the DNA strand. The pieces are floating around. You need to click them and release them in the correct spot. If placed in the correct spot it will snap into place.; arrow_position: down;"></a-entity>
-
+                        circles-description="title_text_front: DNA Strand; description_text_front: After setting a preset and pressing start you need to assemble the DNA strand. The pieces are floating around. You need to click them and release them in the correct spot. If placed in the correct spot it will snap into place.; arrow_position: down;">
+                </a-entity>
+                <a-text id="endText" geometry="primitive:plane; height:0.5; width:5"
+                        text="value:Congrats you've completed the demo!; align:center; wrapCount: 38;"
+                        material="color: black" scale="1 1 1"  position="0.5 3 -9.5" width="5.75" height="3"
+                        visible="false">
+                        <a-text id="endText" geometry="primitive:plane; height:1.75; width:5.75"
+                                text="value:If you want to try out a different preset please hit the Reset button on the control panel then choose a different preset. If you want to fully reset the experience then refresh the webpage.; align:center; wrapCount: 38;"
+                                material="color: black" scale="1 1 1"  position="0 -1 0" width="5.75" height="3"
+                                visible="false">
+                        </a-text>
+                </a-text>
 
                 <!-- Free Floating DNA segments -->
                 <a-entity id="lacIPromoter-free" class="DNA" position="-3 2.5 -2" rotation="45 0 0" gltf-model="#lacIPromoter-glb"
@@ -685,7 +698,7 @@
                         shape__bottom="shape: sphere; radius: 0.051; offset: 0 -0.05 0"
                         circles-pickup-object="physicsObject: true; shapeNames: shape__right, shape__left, shape__bottom; pickupPosition: 0 0 0.25; pickupScale: 2.5 2.5 2.5; animate: false;"
                         circles-interaction-log__first="name:Ribosome; description:Ribosome connected with a repressor mRNA and created an repressor; event: repmRNA_flag;"
-                        circles-interaction-log__second="name:Ribosome; description:Ribosome connected with a lac mRNA and created, a beta-gal and a permease; event: lacmRNA_flag;">
+                        circles-interaction-log__second="name:Ribosome; description:Ribosome connected with a lac mRNA and created a beta-gal and a permease; event: lacmRNA_flag;">
                         <a-text id="ribosome-label" text="value:Ribosome; align:center"
                                 geometry="primitive:plane; height:0.25; width:0.8;" material="color: black" scale="0.2 0.2 0.2"
                                 position="0 0.12 0" width="3.5" circles-lookat="constrainYAxis: false;"></a-text>
