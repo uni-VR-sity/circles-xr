@@ -50,11 +50,8 @@ AFRAME.registerComponent('trigger', {
                 }else if(e.detail.body.el.classList.contains("repressor") && e.detail.target.el.id == "rep_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     CONTEXT_AF.el.emit('repressorBlocked_flag');
-                    //console.log('RepTrigger is binding');
+                    console.log('RepTrigger is binding');
 
-                    if(CONTEXT_AF.type == "null"){
-
-                    }
                 }else if(e.detail.body.el.classList.contains("CRP_final") && e.detail.target.el.id == "capSite_trigger"){
                     CONTEXT_AF.currentState = "binding";
                     //console.log('capSite Trigger is binding');
@@ -117,6 +114,7 @@ AFRAME.registerComponent('trigger', {
             }else if(evt.detail.value == 'false'){
 
                 CONTEXT_AF.currentState = 'unbound';
+                console.log('*Unblocked*');
 
             }else{
                 //console.log('*Failed to Block*');
@@ -131,9 +129,14 @@ AFRAME.registerComponent('trigger', {
         
         let test = this.el.getAttribute('id');
 
+
         // check if the indicator is running
         if (CONTEXT_AF.currentState == "binding") {
             //console.log('Object Bound to ' + test.detail.id);
+
+            if(CONTEXT_AF.partner != null){
+                CONTEXT_AF.partner = document.querySelector("#" + CONTEXT_AF.partner.id);
+            }
 
             if(test == "repressor_trigger"){
                 var mover = document.querySelector("#RNA_moving_rep");
@@ -151,11 +154,6 @@ AFRAME.registerComponent('trigger', {
                 mover.setAttribute('visible', 'true');
                 CONTEXT_AF.partner.setAttribute('visible', 'false');
 
-                /*
-                var tempRep = document.querySelector("#rep_trigger");
-                tempRep.setAttribute('circles-interactive-object', { enabled: 'true'});
-                var tempCap = document.querySelector("#capSite_trigger");
-                tempCap.setAttribute('circles-interactive-object', { enabled: 'true'});*/
                 CONTEXT_AF.el.setAttribute('circles-interactive-object', { enabled: 'false'});
 
                 CONTEXT_AF.partner.removeAttribute('dynamic-body');
@@ -165,43 +163,47 @@ AFRAME.registerComponent('trigger', {
                 CONTEXT_AF.el.emit('lac_flag');
 
             }else if(test == "rep_trigger"){
-                if(!CONTEXT_AF.partner.classList.contains("blocked")){
+                if(CONTEXT_AF.partner != null){
+                    if(!CONTEXT_AF.partner.classList.contains("blocked")){
 
-                    CONTEXT_AF.partner.classList.remove("interactive");
-                    
-                    CONTEXT_AF.partner.setAttribute('constraint', {
-                        type: 'coneTwist',
-                        target: "#" + CONTEXT_AF.el.id,
-                        targetPivot: '0 -0.18 0',
-                        pivot: '0 0.35 0',
-                        axis: '0 0 1',
-                        collideConnected: 'false'
-                    });
-
-                    var blocker =  document.querySelector("#lac_trigger");
-                    blocker.emit('blocked', {value : 'true'});
-                    CONTEXT_AF.manager.emit('setTarget', {value : 'repressor'});
-                    //CONTEXT_AF.el.emit('repressorBlocked_flag');
-                    setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
-                    CONTEXT_AF.currentState = "bound";
-
-                }else{
-                    if(!CONTEXT_AF.partner.classList.contains("interactive")){
-                        CONTEXT_AF.partner.classList.add("interactive");
-
-                        CONTEXT_AF.partner.removeAttribute('constraint');
+                        CONTEXT_AF.partner.classList.remove("interactive");
+                        
+                        CONTEXT_AF.partner.setAttribute('constraint', {
+                            type: 'coneTwist',
+                            target: "#" + CONTEXT_AF.el.id,
+                            targetPivot: '0 -0.18 0',
+                            pivot: '0 0.35 0',
+                            axis: '0 0 1',
+                            collideConnected: 'false'
+                        });
 
                         var blocker =  document.querySelector("#lac_trigger");
-                        setTimeout(() => { CONTEXT_AF.currentState = "unbound"; }, 3000);
-                        blocker.emit('blocked', {value : 'false'});
-                        CONTEXT_AF.el.emit('repressorUnblocked_flag');
-    
-                    }else{
+                        blocker.emit('blocked', {value : 'true'});
+                        CONTEXT_AF.manager.emit('setTarget', {value : 'repressor'});
                         setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
+                        CONTEXT_AF.currentState = "bound";
+
+                    }else{
+                        if(!CONTEXT_AF.partner.classList.contains("interactive")){
+                            CONTEXT_AF.partner.classList.add("interactive");
+
+                            CONTEXT_AF.partner.removeAttribute('constraint');
+
+                            var blocker =  document.querySelector("#lac_trigger");
+                            setTimeout(() => { CONTEXT_AF.currentState = "unbound"; }, 3000);
+                            blocker.emit('blocked', {value : 'false'});
+                            CONTEXT_AF.el.emit('repressorUnblocked_flag');
+        
+                        }else{
+                            setTimeout(() => { CONTEXT_AF.currentState = "binding"; }, 3000);
+                        }
+                        //console.log('This repressor is capped and cannot trigger');
+                        CONTEXT_AF.currentState = "bound";
                     }
-                    //console.log('This repressor is capped and cannot trigger');
-                    CONTEXT_AF.currentState = "bound";
+                }else{
+                    CONTEXT_AF.currentState = "unbound";
                 }
+                
             }else if(test == "capSite_trigger"){
                 CONTEXT_AF.partner.removeAttribute('dynamic-body');
 

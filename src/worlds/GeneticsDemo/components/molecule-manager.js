@@ -52,6 +52,17 @@ AFRAME.registerComponent('molecule-manager', {
             lacRiboTarget = false;
             capSiteTarget = false;
             finalTarget = false;
+
+            let rep_trigger = document.querySelector('#rep_trigger');
+            let capSite_trigger = document.querySelector('#capSite_trigger');
+            let lac_trigger = document.querySelector('#lac_trigger');
+            let repressor_trigger = document.querySelector('#repressor_trigger');
+
+            repressor_trigger.emit('setState', {value : 'unbound'});
+            lac_trigger.emit('setState', {value : 'unbound'});
+            rep_trigger.emit('setState', {value : 'unbound'});
+            capSite_trigger.emit('setState', {value : 'unbound'});
+            lac_trigger.emit('blocked', {value : 'false'});
         });
 
         CONTEXT_AF.el.addEventListener('setTarget', function (evt) {
@@ -77,8 +88,6 @@ AFRAME.registerComponent('molecule-manager', {
                 default: 
                     console.log('Unknown Target!');
             }
-            CONTEXT_AF.currentPreset = evt.detail.value;
-            //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
             
         });
 

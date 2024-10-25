@@ -177,7 +177,7 @@ function startExperience() {
         break;
 
     default: 
-        console.log('Unknown Preset!');
+        console.log('Unknown Global Preset!');
   }
 
 };
