@@ -156,6 +156,9 @@ function startExperience() {
     sample++;
   }
 
+  mol_manager.emit('mol_initial_spawn', { value: 'CRP_01', pos: 'null', rot: 'null' });
+  mol_manager.emit('mol_initial_spawn', { value: 'CRP_02', pos: 'null', rot: 'null' });
+
   switch (GlobalPreset){
     case 'HH':
         mol_manager.emit('HH_flag');
@@ -189,6 +192,11 @@ function resetExperience() {
     let reset_button = document.querySelector('#resetButtonGroup');
     reset_button.setAttribute('circles-interactive-visible', 'false');
 
+    let sampleTutorial = document.querySelector('#endText');
+    if(sampleTutorial.getAttribute('visible')){
+      sampleTutorial.setAttribute('visible', 'false');
+    }
+
     //Get a list of all the molecules
     let sample = document.querySelectorAll('.molecule');
 
@@ -205,6 +213,7 @@ function resetExperience() {
     }
 
     mol_manager.emit('reset_flag');
+    mol_manager.emit('resetTargets');
 
     ActiveState = 'resetting';
   }

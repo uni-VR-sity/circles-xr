@@ -174,7 +174,7 @@
                 </a-entity>
 
                 <!-- Tutorial Toggle Button -->
-                <a-box class="pedistal" position="5.75 0.5 0.75" width="0.3" height="1" depth="0.3" 
+                <a-box position="5.75 0.5 0.75" width="0.3" height="1" depth="0.3" 
                         static-body shadow="receive:true; cast:true;">
                         <a-entity id="infoButton" onclick="tutorialToggle()" position="0 0.5 0" scale="0.5 0.5 0.5"
                                 circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
@@ -482,14 +482,13 @@
                 <a-entity class="tutorial" position="0.5 2.25 -7" scale="0.8 0.8 0.8" visible="true"
                         circles-description="title_text_front: DNA Strand; description_text_front: After setting a preset and pressing start you need to assemble the DNA strand. The pieces are floating around. You need to click them and release them in the correct spot. If placed in the correct spot it will snap into place.; arrow_position: down;">
                 </a-entity>
-                <a-text id="endText" geometry="primitive:plane; height:0.5; width:5"
+                <a-text id="endText" geometry="primitive:plane; height:0.75; width:7.5"
                         text="value:Congrats you've completed the demo!; align:center; wrapCount: 38;"
-                        material="color: black" scale="1 1 1"  position="0.5 3 -9.5" width="5.75" height="3"
+                        material="color: black" scale="1 1 1"  position="0.5 4.5 -10" width="9" height="6"
                         visible="false">
-                        <a-text id="endText" geometry="primitive:plane; height:1.75; width:5.75"
+                        <a-text geometry="primitive:plane; height:1.75; width:5.75"
                                 text="value:If you want to try out a different preset please hit the Reset button on the control panel then choose a different preset. If you want to fully reset the experience then refresh the webpage.; align:center; wrapCount: 38;"
-                                material="color: black" scale="1 1 1"  position="0 -1 0" width="5.75" height="3"
-                                visible="false">
+                                material="color: black" scale="1 1 1"  position="0 -1 0" width="5.75" height="3">
                         </a-text>
                 </a-text>
 
@@ -664,32 +663,6 @@
 
 
                 <!-- Free floating molecules-->
-
-                <a-entity id="CRP_01" class="CRP" position="-2 2.5 -4" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none; angularDamping: 0.3"
-                        shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
-                        shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
-                        shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8; animate: false;"
-                        collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
-                        <a-text id="CRP-label-01" text="value:CRP; align:center"
-                                geometry="primitive:plane; height:0.35; width:0.5" material="color: black"
-                                scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
-                                circles-lookat="constrainYAxis: false;"></a-text>
-                </a-entity>
-
-                <a-entity id="CRP_02" class="CRP" position="4.5 1.5 -3" rotation="0 45 0" scale="0.8 0.8 0.8" mol-reactor
-                        shadow="receive:false; cast:true;" gltf-model="#CRP-glb" dynamic-body="shape: none; angularDamping: 0.3"
-                        shape__main="shape: cylinder; height: 0.25; radiusTop: 0.14; radiusBottom: 0.14; numSegments: 12"
-                        shape__right="shape: sphere; radius: 0.14; offset: 0 0.135 0"
-                        shape__left="shape: sphere; radius: 0.14; offset: 0 -0.135 0"
-                        circles-pickup-object="physicsObject: true; shapeNames: shape__main, shape__right, shape__left; pickupScale: 0.8 0.8 0.8; animate: false;"
-                        collision-filter="group: capSite; collidesWith: default, capSite, camp; collisionForces: true;">
-                        <a-text id="CRP-label-02" text="value:CRP; align:center"
-                                geometry="primitive:plane; height:0.35; width:0.5" material="color: black"
-                                scale="0.4 0.4 0.4" position="0 -0.35 0" width="3.5"
-                                circles-lookat="constrainYAxis: false;"></a-text>
-                </a-entity>
 
                 <a-entity id="ribosome" class="ribosome" position="2 1.5 -4" rotation="20 45 0" scale="2.5 2.5 2.5" 
                         shadow="receive:false; cast:true;" gltf-model="#ribosome-glb" dynamic-body="shape: none; angularDamping: 0.3"
