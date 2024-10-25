@@ -44,6 +44,27 @@ AFRAME.registerComponent('molecule-manager', {
             
         });
 
+        CONTEXT_AF.el.addEventListener('resetTargets', function (evt) {
+            repressorTarget = false;
+            repmRNATarget = false;
+            lacmRNATarget = false;
+            repRiboTarget = false;
+            lacRiboTarget = false;
+            capSiteTarget = false;
+            finalTarget = false;
+
+            let rep_trigger = document.querySelector('#rep_trigger');
+            let capSite_trigger = document.querySelector('#capSite_trigger');
+            let lac_trigger = document.querySelector('#lac_trigger');
+            let repressor_trigger = document.querySelector('#repressor_trigger');
+
+            repressor_trigger.emit('setState', {value : 'unbound'});
+            lac_trigger.emit('setState', {value : 'unbound'});
+            rep_trigger.emit('setState', {value : 'unbound'});
+            capSite_trigger.emit('setState', {value : 'unbound'});
+            lac_trigger.emit('blocked', {value : 'false'});
+        });
+
         CONTEXT_AF.el.addEventListener('setTarget', function (evt) {
             //console.log('Preset heard!');
 
@@ -67,8 +88,6 @@ AFRAME.registerComponent('molecule-manager', {
                 default: 
                     console.log('Unknown Target!');
             }
-            CONTEXT_AF.currentPreset = evt.detail.value;
-            //console.log('Current Preset: ' + CONTEXT_AF.currentPreset);
             
         });
 
@@ -2092,6 +2111,236 @@ AFRAME.registerComponent('molecule-manager', {
     
                 break;
 
+            case "CRP_01":
+                mol.setAttribute('id', 'CRP_01');
+
+                mol.classList.add("CRP");
+    
+                mol.setAttribute('scale', {
+                    x: 0.8,
+                    y: 0.8,
+                    z: 0.8
+                });
+    
+                // Setting molecule rotation
+                if (rotation != "null") {
+                    mol.setAttribute('rotation', rotation);
+                } else {
+                    mol.setAttribute('rotation', {
+                        x: 0,
+                        y: 45,
+                        z: 0
+                    });
+                }
+    
+                if (position != "null") {
+                    // Set molecule position to provided position
+                    mol.setAttribute('position', position);
+                } else {
+                    //Set molecule position to a random position within bounds
+                    mol.setAttribute('position', {
+                        x: -2,
+                        y: 2.5,
+                        z: -4
+                    });
+                }
+
+                mol.setAttribute('mol-reactor', '');
+    
+                mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/CRP.glb)');
+                mol.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    angularDamping: '0.3'
+                });
+                mol.setAttribute('shadow', {
+                    receive: 'false',
+                    cast: 'true'
+                });
+    
+                mol.setAttribute('shape__main', {
+                    shape: 'cylinder',
+                    height: 0.25,
+                    radiusTop: 0.14,
+                    radiusBottom: 0.14,
+                    numSegments: 12
+                });
+
+                mol.setAttribute('shape__right', {
+                    shape: 'sphere',
+                    radius: 0.14,
+                    offset: '0 0.135 0',
+                });
+
+                mol.setAttribute('shape__left', {
+                    shape: 'sphere',
+                    radius: 0.14,
+                    offset: '0 -0.135 0',
+                });
+    
+                mol.setAttribute('circles-pickup-object', {
+                    physicsObject: 'true',
+                    shapeNames: 'shape__main, shape__right, shape__left',
+                    pickupScale: '0.8 0.8 0.8',
+                    animate: false
+                });
+
+                mol.setAttribute('collision-filter', {
+                    group: 'capSite',
+                    collidesWith: 'default, capSite, camp',
+                    collisionForces: true
+                });
+    
+                //Label creation********************************
+                // Creating mol label
+                var mol_label = document.createElement('a-text');
+    
+                mol_label.setAttribute('geometry', {
+                    primitive: 'plane',
+                    height: 0.35,
+                    width: 0.5
+                });
+    
+                mol_label.setAttribute('text', {
+                    value: 'CRP',
+                    align: 'center'
+                });
+    
+                mol_label.setAttribute('material', {
+                    color: 'black'
+                });
+    
+                mol_label.setAttribute('position', {
+                    x: 0,
+                    y: -0.35,
+                    z: 0
+                });
+    
+                mol_label.setAttribute('width', '3.5');
+    
+                mol_label.setAttribute('circles-lookat', {
+                    constrainYAxis: 'false'
+                });
+    
+                mol.appendChild(mol_label);
+                //console.log('CRP_01 molecule has been created');
+    
+                break;
+
+            case "CRP_02":
+                mol.setAttribute('id', 'CRP_02');
+
+                mol.classList.add("CRP");
+    
+                mol.setAttribute('scale', {
+                    x: 0.8,
+                    y: 0.8,
+                    z: 0.8
+                });
+    
+                // Setting molecule rotation
+                if (rotation != "null") {
+                    mol.setAttribute('rotation', rotation);
+                } else {
+                    mol.setAttribute('rotation', {
+                        x: 0,
+                        y: 45,
+                        z: 0
+                    });
+                }
+    
+                if (position != "null") {
+                    // Set molecule position to provided position
+                    mol.setAttribute('position', position);
+                } else {
+                    //Set molecule position to a random position within bounds
+                    mol.setAttribute('position', {
+                        x: 4.5,
+                        y: 1.5,
+                        z: -3
+                    });
+                }
+
+                mol.setAttribute('mol-reactor', '');
+    
+                mol.setAttribute('gltf-model', 'url(/worlds/GeneticsDemo/assets/models/CRP.glb)');
+                mol.setAttribute('dynamic-body', { 
+                    shape: 'none',
+                    angularDamping: '0.3'
+                });
+                mol.setAttribute('shadow', {
+                    receive: 'false',
+                    cast: 'true'
+                });
+    
+                mol.setAttribute('shape__main', {
+                    shape: 'cylinder',
+                    height: 0.25,
+                    radiusTop: 0.14,
+                    radiusBottom: 0.14,
+                    numSegments: 12
+                });
+
+                mol.setAttribute('shape__right', {
+                    shape: 'sphere',
+                    radius: 0.14,
+                    offset: '0 0.135 0',
+                });
+
+                mol.setAttribute('shape__left', {
+                    shape: 'sphere',
+                    radius: 0.14,
+                    offset: '0 -0.135 0',
+                });
+    
+                mol.setAttribute('circles-pickup-object', {
+                    physicsObject: 'true',
+                    shapeNames: 'shape__main, shape__right, shape__left',
+                    pickupScale: '0.8 0.8 0.8',
+                    animate: false
+                });
+
+                mol.setAttribute('collision-filter', {
+                    group: 'capSite',
+                    collidesWith: 'default, capSite, camp',
+                    collisionForces: true
+                });
+    
+                //Label creation********************************
+                // Creating mol label
+                var mol_label = document.createElement('a-text');
+    
+                mol_label.setAttribute('geometry', {
+                    primitive: 'plane',
+                    height: 0.35,
+                    width: 0.5
+                });
+    
+                mol_label.setAttribute('text', {
+                    value: 'CRP',
+                    align: 'center'
+                });
+    
+                mol_label.setAttribute('material', {
+                    color: 'black'
+                });
+    
+                mol_label.setAttribute('position', {
+                    x: 0,
+                    y: -0.35,
+                    z: 0
+                });
+    
+                mol_label.setAttribute('width', '3.5');
+    
+                mol_label.setAttribute('circles-lookat', {
+                    constrainYAxis: 'false'
+                });
+    
+                mol.appendChild(mol_label);
+                //console.log('CRP_01 molecule has been created');
+    
+                break;
+
             default:
                 //code block
                 console.log("Molecule type passed doesn't match anything in my books");
@@ -2145,6 +2394,15 @@ AFRAME.registerComponent('molecule-manager', {
 
         if(repRiboTarget && lacRiboTarget && repressorTarget && capSiteTarget && repmRNATarget && lacmRNATarget && !finalTarget){
             console.log("Congrats You've completed this demonstration!");
+            document.querySelector('#endText').setAttribute('visible', 'true');
+            sample = document.querySelectorAll('.tutorial');
+
+            console.log("Is the tutorial visible: " + sample[0].getAttribute('visible'));
+
+            if(sample[0].getAttribute('visible')){
+                tutorialToggle();
+                console.log("Tutorial turned off");
+            }
             finalTarget = true;
         }
     }
