@@ -63,6 +63,9 @@ AFRAME.registerComponent('molecule-manager', {
             rep_trigger.emit('setState', {value : 'unbound'});
             capSite_trigger.emit('setState', {value : 'unbound'});
             lac_trigger.emit('blocked', {value : 'false'});
+
+            lac_trigger.removeAttribute('static-body');
+            lac_trigger.setAttribute('static-body', { shape: 'sphere', sphereRadius: 0.7 });
         });
 
         CONTEXT_AF.el.addEventListener('setTarget', function (evt) {
