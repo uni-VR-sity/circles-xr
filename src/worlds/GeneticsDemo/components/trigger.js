@@ -65,6 +65,8 @@ AFRAME.registerComponent('trigger', {
                         setDynamicLocation(CONTEXT_AF.attacker, { x: -1.5, y: 1.85, z: -5.95 }, { x: 90, y: 70, z: 0 });
                         CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-rep', pos : { x: -1.5, y: 2, z: -5.95 }, rot : 'null'});
                         CONTEXT_AF.partner.setAttribute('visible', 'true');
+                        var mover = document.querySelector("#RNA_moving_rep");
+                        mover.setAttribute('visible', 'false');
             
                         setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 1000); //Reset the current state so that the trigger is available again
                     });
@@ -85,6 +87,8 @@ AFRAME.registerComponent('trigger', {
                         setDynamicLocation(CONTEXT_AF.attacker, { x: 1.65, y: 1.55, z: -5.3 }, { x: 90, y: 70, z: 0 });
                         CONTEXT_AF.manager.emit('mol_spawn', {value : 'mRNA-lac', pos : { x: 1.65, y: 1.55, z: -5.3 }, rot : 'null'});
                         CONTEXT_AF.partner.setAttribute('visible', 'true');
+                        var mover = document.querySelector("#RNA_moving_lac");
+                        mover.setAttribute('visible', 'false');
     
                         setTimeout(() => { CONTEXT_AF.currentState = 'unbound'; }, 1000); //Reset the current state so that the trigger is available again
                     });
