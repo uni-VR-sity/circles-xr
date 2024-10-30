@@ -31,8 +31,8 @@ node_server/whiteboardFiles/*
 !node_server/whiteboardFiles/README.txt
 
 # Ignore data collection files
-node_server/collectedData/*
-!node_server/collectedData/README.txt
+node_server/dataLogs/*
+!node_server/dataLogs/README.txt
 
 =======
 # Ignore vscode

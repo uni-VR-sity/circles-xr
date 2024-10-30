@@ -218,6 +218,7 @@ router.post('/update-user-colour', authenticated, circleController.updateUserCol
 // Data Collection Routes -----------------------------------------------------------------------------------------------------------------------
 
 router.post('/save-collected-data', authenticated, circleController.saveCollectedData);
+router.get('/download-logs/:circle', authenticated, viewController.downloadCollectedData);
 
 // CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
 

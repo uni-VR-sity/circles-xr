@@ -598,13 +598,13 @@ const getLatestLogFile = function(logFolder, circle)
 
 // ------------------------------------------------------------------------------------------
 
-// Saving data collected in an .csv
+// Saving data collected in an .csv log file
 const saveCollectedData = async (req, res, next) => 
 {
   if (req.body.circle)
   {
     const possibleData = ['date', 'time', 'user', 'position', 'name', 'description'];
-    const logFolder = __dirname + '/../collectedData/';
+    const logFolder = __dirname + '/../dataLogs/';
 
     var log = '';
     var header = '';

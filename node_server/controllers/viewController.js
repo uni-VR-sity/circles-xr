@@ -2,6 +2,8 @@
 
 require('../../src/core/circles_server');
 
+const express = require('express');
+const app = express();
 const path = require('path');
 const fs = require('fs');
 const dotenv = require('dotenv');
@@ -13,6 +15,7 @@ const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
 const { createMailTransporter } = require('../../src/core/circles_mailTransporter');
 const crypto = require('crypto');
+const zip = require('express-zip');
 
 const User = require('../models/user');
 const Guest = require('../models/guest');
@@ -2551,6 +2554,45 @@ const serveMoreCircles = async (req, res, next) =>
   request.send();
 }
 
+// Collected Data ----------------------------------------------------------------------------------------------------------------------------------
+
+// Sends collected data files for requested circle for download
+const downloadCollectedData = async (req, res, next) =>
+{
+  const logFolder = __dirname + '/../dataLogs/';
+
+  // url: /download-logs/circle
+  // split result array: {"", "download-logs" "circle"}
+  const circle = req.url.split('/')[2];
+
+  // Getting all files in log folder
+  var existingLogs = fs.readdirSync(logFolder);
+
+  // Getting all log files associated with the requested circle
+  function checkExistingLogs(log)
+  {
+    return log.includes(circle);
+  }
+
+  var circleLogs = existingLogs.filter(checkExistingLogs);
+
+  // Putting together information for each log file
+  var logFiles = [];
+
+  for (const log of circleLogs)
+  {
+    var file = {
+      path: logFolder + log,
+      name: log,
+    }
+
+    logFiles.push(file);
+  }
+
+  // Sending a zipped file of files to download
+  res.zip(logFiles, circle + '-Logs.zip');
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -2598,4 +2640,6 @@ module.exports = {
   deleteContent,
   // More Circles Page
   serveMoreCircles,
+  // Collected Data
+  downloadCollectedData,
 }
