@@ -88,7 +88,7 @@
                 <a-entity id="confetti" particle-system="accelerationSpread: 20 0 20; color: white; enabled: true; particleCount: 300; opacity: 0.3; preset: default; size: 0.5; velocityValue: 0 15 0" position="5.584 1.250 -1.4" visible="true"></a-entity>
 
                 <!-- Data Collector -->
-                <a-entity id="data-collector" circles-data-collector="dataToCollect:date, time, user, position, name, description"></a-entity>
+                <a-entity id="data-collector" circles-data-collector="dataToCollect:date, time, user, position, name, description; allowLogDownload:true; downloadUIRotation:0 -90 0; downloadUIPosition:9 2 2;"></a-entity>
 
                 <!-- Circles' built-in manager and avatar [REQUIRED] -->
                 <circles-manager-avatar />
@@ -121,7 +121,7 @@
                 
                 <!-- Chalk Board -->
                 <a-entity id="ChalkBoard" gltf-model="#ChalkBoard-gltf"
-                        position="6 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;"
+                        position="9 0.45 -1" rotation="0 180 0" scale="0.25 0.25 0.25" shadow="receive:false; cast:true;"
                         static-body="shape: none;" shape__main="halfExtents: 0.2 3.5 5.8; offset: 0 5.3 0"
                         shape__left="halfExtents: 0.2 3.9 0.2; offset: 0 2.2 5.85" shape__right="halfExtents: 0.2 3.9 0.2; offset: 0 2.2 -5.85">
                         <a-entity id="slide_00" visible="true">
@@ -174,7 +174,7 @@
                 </a-entity>
 
                 <!-- Tutorial Toggle Button -->
-                <a-box position="5.75 0.5 0.75" width="0.3" height="1" depth="0.3" 
+                <a-box position="8.75 0.5 0.75" width="0.3" height="1" depth="0.3" 
                         static-body shadow="receive:true; cast:true;">
                         <a-entity id="infoButton" onclick="tutorialToggle()" position="0 0.5 0" scale="0.5 0.5 0.5"
                                 circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
@@ -974,11 +974,11 @@
                 <!-- checkpoints -->
                 <a-entity>
                         <a-entity id="spawnPoint" circles-checkpoint circles-spawnpoint position="0 0.05 1"></a-entity>
-                        <a-entity circles-checkpoint position="4 0.05 -1"></a-entity>
+                        <a-entity circles-checkpoint position="6 0.05 -1"></a-entity><!-- In front of chalkboard -->
                         <a-entity circles-checkpoint position="0 0.05 6"></a-entity>
                         <a-entity circles-checkpoint position="4 0.05 5"></a-entity>
                         <a-entity circles-checkpoint position="-4 0.05 5"></a-entity>
-                        <a-entity circles-checkpoint position="7 0.05 3"></a-entity>
+                        <a-entity circles-checkpoint position="7 0.05 2.5"></a-entity><!-- In front of data-logger -->
                         <a-entity circles-checkpoint position="-7 0.05 3"></a-entity>
                         <a-entity circles-checkpoint position="0 0.05 -3"></a-entity>
                         <a-entity circles-checkpoint position="0.5 0.05 -5"></a-entity>
