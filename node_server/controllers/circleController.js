@@ -750,6 +750,48 @@ const saveCollectedData = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
+// Checking if there are logs to download for the specified circle
+const checkExistingLogs = async (req, res, next) =>
+{
+  const logFolder = __dirname + '/../dataLogs/';
+
+  var response = { exists: false };
+
+  if (req.body.circle)
+  {
+    // Getting all files in log folder
+    var existingLogs = fs.readdirSync(logFolder);
+
+    // Checking what kind of logs are request (all logs or only logs for the user)
+    if (req.body.allLogs == 'true')
+    {
+      // Checking if there is at least one log for the circle
+      // If there is, creating a link to download requested logs
+      for (const log of existingLogs)
+      {
+        if (log.includes(req.body.circle))
+        {
+          response.exists = true;
+          response.downloadLink = '/download-logs/' + req.body.circle;
+          
+          break;
+        }
+      }
+    }
+    else
+    {
+      if (req.body.user)
+      {
+        // TO DO!!!!!!!!!!!!!!!
+      }
+    }
+  }
+
+  res.json(response);
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Sends collected data files for requested circle for download
 const downloadCollectedData = async (req, res, next) =>
 {
@@ -805,5 +847,6 @@ module.exports = {
   updateUserColour,
   // Data Collection
   saveCollectedData,
+  checkExistingLogs,
   downloadCollectedData,
 }
