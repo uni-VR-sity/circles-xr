@@ -109,9 +109,11 @@ AFRAME.registerComponent('circles-data-collector',
 
         // UI background
         var ui = document.createElement('a-entity');
+        ui.setAttribute('id', 'data-collection-download-ui');
 
         ui.setAttribute('position', schema.downloadUIPosition);
-        ui.setAttribute('id', 'data-collection-download-ui');
+
+        ui.setAttribute('rotation', schema.downloadUIRotation);
 
         ui.setAttribute('geometry', {
             primitive: 'plane',
