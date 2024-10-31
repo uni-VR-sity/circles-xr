@@ -1,8 +1,5 @@
 {
     "world": {
         "name": "Data Collection"
-    },
-    "dataCollection": {
-        "downloadRestrictions": ["All"]
     }
 }

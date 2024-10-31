@@ -748,6 +748,87 @@ const saveCollectedData = async (req, res, next) =>
   res.json('complete');
 }
 
+// ------------------------------------------------------------------------------------------
+
+// Checking if there are logs to download for the specified circle
+const checkExistingLogs = async (req, res, next) =>
+{
+  const logFolder = __dirname + '/../dataLogs/';
+
+  var response = { exists: false };
+
+  if (req.body.circle)
+  {
+    // Getting all files in log folder
+    var existingLogs = fs.readdirSync(logFolder);
+
+    // Checking what kind of logs are request (all logs or only logs for the user)
+    if (req.body.allLogs == 'true')
+    {
+      // Checking if there is at least one log for the circle
+      // If there is, creating a link to download requested logs
+      for (const log of existingLogs)
+      {
+        if (log.includes(req.body.circle))
+        {
+          response.exists = true;
+          response.downloadLink = '/download-logs/' + req.body.circle;
+          
+          break;
+        }
+      }
+    }
+    else
+    {
+      if (req.body.user)
+      {
+        // TO DO!!!!!!!!!!!!!!!
+      }
+    }
+  }
+
+  res.json(response);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Sends collected data files for requested circle for download
+const downloadCollectedData = async (req, res, next) =>
+{
+  const logFolder = __dirname + '/../dataLogs/';
+
+  // url: /download-logs/circle
+  // split result array: {"", "download-logs" "circle"}
+  const circle = req.url.split('/')[2];
+
+  // Getting all files in log folder
+  var existingLogs = fs.readdirSync(logFolder);
+
+  // Getting all log files associated with the requested circle
+  function checkExistingLogs(log)
+  {
+    return log.includes(circle);
+  }
+
+  var circleLogs = existingLogs.filter(checkExistingLogs);
+
+  // Putting together information for each log file
+  var logFiles = [];
+
+  for (const log of circleLogs)
+  {
+    var file = {
+      path: logFolder + log,
+      name: log,
+    }
+
+    logFiles.push(file);
+  }
+
+  // Sending a zipped file of files to download
+  res.zip(logFiles, circle + '-Logs.zip');
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -766,4 +847,6 @@ module.exports = {
   updateUserColour,
   // Data Collection
   saveCollectedData,
+  checkExistingLogs,
+  downloadCollectedData,
 }
