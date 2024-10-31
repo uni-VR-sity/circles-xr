@@ -6,6 +6,9 @@ AFRAME.registerComponent('circles-data-collector',
     schema:
     {
         dataToCollect: {type:'array'},
+        allowLogDownload: {type:'boolean', default:false},
+        downloadUIPosition: {type:'vec3', default:'0 0 0'},
+        downloadUIRotation: {type:'vec3', default:'0 0 0'},
     },
     init: function()
     {
@@ -13,12 +16,18 @@ AFRAME.registerComponent('circles-data-collector',
         const element = CONTEXT_AF.el;
         const schema = CONTEXT_AF.data;
 
-        this.count = 0;
+        this.downloadAllLogs = this.downloadAllLogs.bind(this);
 
         // Getting current circle
         // url: http://domain/w/circle
         // split result array: {'http', '', 'domain', 'w', 'circle'}
         this.currentCircle = window.location.href.split('/')[4];
+
+        // If users can download logs, creating UI
+        if (schema.allowLogDownload)
+        {
+            this.createUI();
+        }
     },
     createLog: function(data)
     {
@@ -85,4 +94,146 @@ AFRAME.registerComponent('circles-data-collector',
         request.setRequestHeader('Content-Type', 'application/json');
         request.send(JSON.stringify(logData));
     },
+    createUI: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+        const schema = CONTEXT_AF.data;
+
+        // UI background
+        var ui = document.createElement('a-entity');
+
+        ui.setAttribute('position', schema.downloadUIPosition);
+
+        ui.setAttribute('geometry', {
+            primitive: 'plane',
+            height: 1.25,
+            width: 1.5,
+        });
+
+        ui.setAttribute('material', {
+            color: '#ffffff',
+        });
+
+            // Title
+            var title = document.createElement('a-entity');
+
+            title.setAttribute('position', {
+                x: 0,
+                y: 0.34,
+                z: 0,
+            });
+
+            title.setAttribute('text', {
+                value: 'Download Logs',
+                align: 'center',
+                color: '#000000',
+                width: 1.5,
+                wrapCount: 16,
+            });
+
+            ui.appendChild(title);
+
+            // Description
+            var description = document.createElement('a-entity');
+
+            description.setAttribute('position', {
+                x: 0,
+                y: 0.055,
+                z: 0,
+            });
+
+            description.setAttribute('text', {
+                value: 'Download the collected data logs:',
+                align: 'center',
+                color: '#000000',
+                lineHeight: 55,
+                width: 1.1,
+                wrapCount: 22,
+            });
+
+            ui.appendChild(description);
+
+            // Download button
+            var downloadButton = document.createElement('a-entity');
+            downloadButton.classList.add('interactive');
+
+            downloadButton.setAttribute('position', {
+                x: 0,
+                y: -0.32,
+                z: 0.01,
+            });
+
+            downloadButton.setAttribute('geometry', {
+                primitive: 'plane',
+                height: 0.2,
+                width: 0.5,
+            });
+
+            downloadButton.setAttribute('material', {
+                color: '#0f68bb',
+            });
+
+            downloadButton.addEventListener('mouseenter', function()
+            {
+                downloadButton.setAttribute('material', {
+                    color: '#0f5da7',
+                });
+            });
+
+            downloadButton.addEventListener('mouseleave', function()
+            {
+                downloadButton.setAttribute('material', {
+                    color: '#0f68bb',
+                });
+            });
+
+            downloadButton.addEventListener('click', this.downloadAllLogs);
+
+                // Download button text
+                var downloadButtonText = document.createElement('a-entity');
+    
+                downloadButtonText.setAttribute('text', {
+                    value: 'Download',
+                    align: 'center',
+                    width: 0.5,
+                    wrapCount: 11,
+                });
+
+                downloadButton.appendChild(downloadButtonText);
+
+            ui.appendChild(downloadButton);
+
+            // Error message
+            var errorMessage = document.createElement('a-entity');
+
+            errorMessage.setAttribute('visible', false);
+
+            errorMessage.setAttribute('position', {
+                x: 0,
+                y: -0.54,
+                z: 0,
+            });
+
+            errorMessage.setAttribute('text', {
+                value: 'Error: There are no logs to download',
+                align: 'center',
+                color: '#cb0000',
+                width: 1.1,
+                wrapCount: 35,
+            });
+
+            ui.appendChild(errorMessage);
+
+        // Adding ui to scene
+        document.getElementsByTagName('a-scene')[0].appendChild(ui);
+    },
+    downloadAllLogs: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+        const schema = CONTEXT_AF.data;
+
+        window.location.replace('/download-logs/' + this.currentCircle);
+    }
 });

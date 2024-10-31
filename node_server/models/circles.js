@@ -85,19 +85,6 @@ const CircleSchema = new mongoose.Schema({
       type:        mongoose.Schema.Types.ObjectId, 
       ref:        'users',
     }],
-    hasDataCollection: {
-      type:       Boolean,
-      unique:     false,
-      required:   true,
-      trim:       true,
-      default:    false,
-    },
-    logDownloadRestrictions: [{
-      type:       String,
-      unique:     false,
-      required:   false,
-      trim:       true,
-    }],
     whiteboardFiles: [{
       name: {
         type:       String,
@@ -228,9 +215,6 @@ const addCircles = async function()
     { name: 'extraInfo', type: 'array', circleName: 'extraInfo' },
     { name: 'contact', type: 'array', circleName: 'contact' },
   ];
-  const possibleDataCollectionSettings = [
-    { name: 'downloadRestrictions', type: 'array', circleName: 'logDownloadRestrictions' },
-  ];
 
   // Getting all world folders under public/worlds
   var folders = null;
@@ -335,14 +319,6 @@ const addCircles = async function()
               {
                 circleData = addCircleSettings(possibleWorldSettings, circleSettings.world, circleData);
               }
-
-              // Data collection setttings
-              if (circleSettings.dataCollection)
-              {
-                circleData.hasDataCollection = true;
-
-                circleData = addCircleSettings(possibleWorldSettings, circleSettings.dataCollection, circleData);
-              }
             }
 
             // Adding circle to database
@@ -384,32 +360,14 @@ const addCircles = async function()
                 // If there were world settings that have been removed, resetting relevant settings
                 resetCircleSettings(possibleWorldSettings, circle);
               }
-
-              // Data collection settings
-              if (circleSettings.dataCollection)
-              {
-                circle.hasDataCollection = true;
-
-                updateCircleSettings(possibleDataCollectionSettings, circleSettings.dataCollection, circle);
-              }
-              else
-              {
-                circle.hasDataCollection = false;
-
-                // If there were data collection settings that have been removed, resetting relevant settings
-                resetCircleSettings(possibleDataCollectionSettings, circle);
-              }
             }
             else
             {
               // If there were settings that have been removed, resetting all settings
               resetCircleSettings(possibleWorldSettings, circle);
-              resetCircleSettings(possibleDataCollectionSettings, circle);
             }
 
             await circle.save();
-
-            // TEST THIS!!!!
           }
         }
       }

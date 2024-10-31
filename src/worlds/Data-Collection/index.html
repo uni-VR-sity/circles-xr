@@ -32,8 +32,35 @@
 
       <!-- Data Collector -->
       <a-entity id="data-collector"
-                circles-data-collector="dataToCollect:date,time,user,name,position,description">
+                circles-data-collector="dataToCollect:date,time,user,name,position,description; allowLogDownload:true; downloadUIPosition:1.61 2.1 -7.4">
       </a-entity>
+
+      <!--
+      <a-entity position="1.61 2.1 -7.4"
+                geometry="primitive:plane; height:1.25; width:1.5;"
+                material="color:#FFFFFF">
+
+        <a-entity position="0 0.34 0"
+                  text="value:Download Logs; align:center; color:#000000; width:1.5; wrapCount:16;">
+        </a-entity>
+
+        <a-entity position="0 0.055 0"
+                  text="value:Download the collected data logs:; align:center; color:#000000; lineHeight:55; width:1.1; wrapCount:22;">
+        </a-entity>
+
+        <a-entity class="interactive"
+                  position="0 -0.32 0.01"
+                  geometry="primitive:plane; height:0.2; width:0.5"
+                  material="color:#0f68bb">
+          
+            <a-entity text="value:Download; align:center; width:0.5; wrapCount:11">
+
+          </a-entity>
+
+        </a-entity>
+
+      </a-entity>
+    -->
 
       <!-- Classroom -->
       <a-entity id="classroom" 
