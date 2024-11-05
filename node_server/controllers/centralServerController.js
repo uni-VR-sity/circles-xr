@@ -165,6 +165,13 @@ const serveHomepage = async (req, res, next) =>
     iconLinks: [null, 'https://www.linkedin.com/in/anastaciagorbenko/'],
   }
 
+  projectTeam[4] = {
+    photo: '/web/images/people/ElisJoynes.jpg',
+    name: 'Elis Joynes',
+    secondaryInfo: 'Developer',
+    iconLinks: ['https://www.elisjoynes.com/', 'https://www.linkedin.com/in/elis-joynes-a95848208'],
+  }
+
   res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/homepage'), {
     title: 'uni-VR-sity',
     userInfo: userInfo,

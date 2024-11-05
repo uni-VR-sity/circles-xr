@@ -25,9 +25,7 @@ block content
 
                 h2= article.title
 
-                h3= article.monthDay
-                    span , 
-                    span= article.year
+                h3= article.monthDay + ', ' + article.year
 
                 p
                     for line of article.description.split('<a href=')
