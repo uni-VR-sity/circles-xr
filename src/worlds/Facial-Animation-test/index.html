@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+
+    <script src="https://rawcdn.githack.com/elbobo/aframe-gltf-morph-component/07e9b80bd382cc1c19223468d35c453e7c76e9a2/dist/aframe-gltf-morph-component.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.5.3/document-register-element.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.1/dist/aframe-animation-timeline-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-timeline-component@2.0.0/dist/aframe-animation-timeline-component.min.js"></script>
+
+    <script src="/worlds/Facial-Animation-test/components/animated-face.js"></script>
+  </head>
+  <body>
+
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- This is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene id="scene" circles_scene_properties 
+              animation-timeline__1="timeline: #blinkAction; startEvents: blinkEyes; loop: 5;"
+              animation-timeline__2="timeline: #naturalSmileAction; startEvents: naturalSmile;"
+              animation-timeline__3="timeline: #smileAction; startEvents: smile; loop: 5;">
+      <a-assets>
+        <a-asset-item id="face-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_test_07.glb"></a-asset-item>
+
+        <a-timeline id="blinkAction" >
+          <a-timeline-animation select="#baseFace" name="eyesClosed" offset="1000"></a-timeline-animation>
+          <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
+        </a-timeline>
+
+        <a-timeline id="smileAction" >
+          <a-timeline-animation select="#baseFace" name="mouthSmile" offset="1000"></a-timeline-animation>
+          <a-timeline-animation select="#baseFace" name="relaxSmile" offset="300"></a-timeline-animation>
+        </a-timeline>
+
+        <a-timeline id="naturalSmileAction" >
+          <a-timeline-animation select="#baseFace" name="eyesClosed"></a-timeline-animation>
+          <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
+          <a-timeline-animation select="#baseFace" name="eyesClosed" offset="1000"></a-timeline-animation>
+          <a-timeline-group offset="500">
+            <a-timeline-animation select="#baseFace" name="mouthSmile"></a-timeline-animation>
+            <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
+          </a-timeline-group>
+          <a-timeline-animation select="#baseFace" name="relaxSmile" offset="500"></a-timeline-animation>
+        </a-timeline>
+
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+      <!-- CIRCLE GENERATION STARTS HERE -->
+
+      <a-entity id="baseFace" position="0 1.5 -5" rotation="0 180 0"
+              gltf-model="#face-glb" animated-face></a-entity>
+
+      <a-box position="0 0.5 -1" width="0.3" height="1" depth="0.3" 
+            static-body shadow="receive:true; cast:true;">
+            <a-entity id="blinkButton" onclick="document.getElementById('scene').emit('naturalSmile')" position="0 0.5 0" scale="0.5 0.5 0.5"
+                      circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
+            </a-entity>
+      </a-box>
+
+      <a-box position="1 0.5 -1" width="0.3" height="1" depth="0.3" 
+            static-body shadow="receive:true; cast:true;">
+            <a-entity id="squintButton" onclick="document.getElementById('scene').emit('smile')" position="0 0.5 0" scale="0.5 0.5 0.5"
+                      circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
+            </a-entity>
+      </a-box>
+
+      <a-box position="-1 0.5 -1" width="0.3" height="1" depth="0.3" 
+            static-body shadow="receive:true; cast:true;">
+            <a-entity id="squintButton" onclick="document.getElementById('scene').emit('blinkEyes')" position="0 0.5 0" scale="0.5 0.5 0.5"
+                      circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
+            </a-entity>
+      </a-box>
+
+      <!-- checkpoints -->
+      <a-entity>
+        <a-entity id="spawnPoint" circles-checkpoint circles-spawnpoint position="0 0.05 0"></a-entity>
+      </a-entity>
+
+    </a-scene>
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>

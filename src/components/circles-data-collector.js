@@ -7,8 +7,8 @@ AFRAME.registerComponent('circles-data-collector',
     {
         dataToCollect: {type:'array'},
         allowLogDownload: {type:'boolean', default:false},
-        downloadUIPosition: {type:'vec3', default:'0 0 0'},
-        downloadUIRotation: {type:'vec3', default:'0 0 0'},
+        downloadUIPosition: {type:'vec3', default:{x:0.0, y:0.0, z:0.0}},
+        downloadUIRotation: {type:'vec3', default:{x:0.0, y:0.0, z:0.0}},
     },
     init: function()
     {
