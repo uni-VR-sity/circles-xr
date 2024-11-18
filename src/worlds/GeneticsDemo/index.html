@@ -85,8 +85,6 @@
                         <circles-assets />
                 </a-assets>
 
-                <a-entity id="confetti" particle-system="accelerationSpread: 20 0 20; color: white; enabled: true; particleCount: 300; opacity: 0.3; preset: default; size: 0.5; velocityValue: 0 15 0" position="5.584 1.250 -1.4" visible="true"></a-entity>
-
                 <!-- Data Collector -->
                 <a-entity id="data-collector" circles-data-collector="dataToCollect:date, time, user, position, name, description; allowLogDownload:true; downloadUIRotation:0 -90 0; downloadUIPosition:9 2 2;"></a-entity>
 
@@ -132,7 +130,7 @@
                                         text="value: Genetics Demo is an interactive demonstration that shows the lac operon and the process of metabolizing lactose.; 
                                         color: #00243b; width: 1.7; wrapCount: 43.190; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                                 <a-entity id="Leader" position="0.15 4.8634 0" rotation="0 90 0" 
-                                        text="value: You can use the control panel behind you to setup the interactive experience on the left. If you would like to learn more about the molecules in the demo, check out the pedistals on the right; 
+                                        text="value: You can use the control panel behind you to set up the interactive experience on the left. If you would like to learn more about the molecules in the demo, check out the pedestals on the right.; 
                                         color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                         </a-entity>
                         <a-entity id="slide_01" visible="false">
@@ -149,7 +147,7 @@
                                         text="value: Reactions; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
                                         font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
                                 <a-entity position="0.15 6.5 0" rotation="0 90 0" 
-                                        text="value: There are two proteins that can affect this process. The repressor can bind the the operator site and block the RNA polymerase from transcribing any lac mRNA. The CRP can bind to the capSite, promoting lac mRNA production.; 
+                                        text="value: There are two proteins that can affect this process. The repressor can bind to the operator site and block the RNA polymerase from transcribing any lac mRNA. The CRP can bind to the capSite, promoting lac mRNA production.; 
                                         color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                                 <a-image src="#capSite-img" position="0.15 4 2" rotation="0 90 0" scale="3.25 2.25 3.25"></a-image>
                                 <a-image src="#repressor-img" position="0.15 4 -2" rotation="0 90 0" scale="3.25 2.25 3.25"></a-image>
@@ -159,7 +157,7 @@
                                         text="value: Pedistals; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
                                         font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
                                 <a-entity position="0.15 6 0" rotation="0 90 0" 
-                                        text="value: Have fun with the demonstration and see what happens! If you are curious to know more specifics, checkout the pedistals on the right. They have some more information on all the molecules and proteins involved in this demonstration.; 
+                                        text="value: Have fun with the demonstration and see what happens! If you are curious to know more specifics, checkout the pedestals on the right. They have some more information on all the molecules and proteins involved in this demonstration.; 
                                         color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                                 <a-image src="#Arrow-img" position="0.15 4 0" rotation="0 90 0" scale="1 1 1"></a-image>
                         </a-entity>
@@ -487,7 +485,7 @@
                         material="color: black" scale="1 1 1"  position="0.5 4.5 -10" width="9" height="6"
                         visible="false">
                         <a-text geometry="primitive:plane; height:1.75; width:5.75"
-                                text="value:If you want to try out a different preset please hit the Reset button on the control panel then choose a different preset. If you want to fully reset the experience then refresh the webpage.; align:center; wrapCount: 38;"
+                                text="value:If you want to try out a different preset please hit the Reset button on the control panel and then choose a different preset. If you want to fully reset the experience then refresh the webpage.; align:center; wrapCount: 38;"
                                 material="color: black" scale="1 1 1"  position="0 -1 0" width="5.75" height="3">
                         </a-text>
                 </a-text>
@@ -759,7 +757,7 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="permease-ped" position="0 0.85 0" gltf-model="#permease-glb" circles-artefact="label_offset:0.0 0.65 0.0; label_arrow_position:down; inspectRotation:20 0 30;
                                 title:Permease;
-                                description:Permease continuosly creates lactose molecules and adds them to its environment.;
+                                description:Permease continuously creates lactose molecules and adds them to its environment.;
                                 title_back:Permease;
                                 description_back:Permease are created when an mRNA comes into contact with the ribosome.;
                                 label_text:Permease;" shadow="receive:false; cast:true;">
@@ -853,7 +851,7 @@
                                 title:Beta-gal;
                                 description:A beta-gal is produced when a lac mRNA comes into contact with the ribosome.;
                                 title_back:Beta-gal;
-                                description_back:The beta-gal binds to lactose molecules and seperates them into allolactose and galactose.;
+                                description_back:The beta-gal binds to lactose molecules and separates them into allolactose and galactose.;
                                 label_text:Beta-gal;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -902,7 +900,7 @@
                                 title:Lactose;
                                 description:Lactose binds to beta-gal and once bound gets split into allolactose and galactose.;
                                 title_back:Lactose;
-                                description_back:Lactose, if not already present in the environment, is continuosly created by permease.;
+                                description_back:Lactose, if not already present in the environment, is continuously created by permease.;
                                 label_text:Lactose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>

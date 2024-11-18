@@ -24,6 +24,7 @@ function setup() {
   mol_manager = document.querySelector('#dna_model');
 
   scene = document.querySelector('#scene');
+
 }
 
 
