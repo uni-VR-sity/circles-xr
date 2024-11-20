@@ -65,39 +65,39 @@ AFRAME.registerComponent('animated-face', {
                                                                 to: 1, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'blinkEyeLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyesOpen', {   property: 'gltf-morph__eyesClosed.value', 
-                                                                to: 0, loop: false, dur: 300, autoplay: false, 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'openEyes'});
         CONTEXT_AF.el.setAttribute('animation__eyeOpenRight', {   property: 'gltf-morph__eyeBlinkRight.value', 
-                                                                to: 0, loop: false, dur: 300, autoplay: false, 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'openEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeOpenLeft', {   property: 'gltf-morph__eyeBlinkLeft.value', 
-                                                                to: 0, loop: false, dur: 300, autoplay: false, 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'openEyeLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__eyeSquintRight', {   property: 'gltf-morph__eyeSquintRight.value', 
-                                                                to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'squintEyes, squintEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeSquintLeft', {   property: 'gltf-morph__eyeSquintLeft.value', 
-                                                                to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'squintEyes, squintEyeLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyeSquintRelaxRight', {   property: 'gltf-morph__eyeSquintRight.value', 
-                                                                to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'relaxSquintEyes, relaxSquintEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeSquintRelaxLeft', {   property: 'gltf-morph__eyeSquintLeft.value', 
-                                                                to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'relaxSquintEyes, relaxSquintEyeLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRight', {   property: 'gltf-morph__cheekSquintRight.value', 
-                                                                to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'squintCheeks, squintCheekRight'});
         CONTEXT_AF.el.setAttribute('animation__cheekSquintLeft', {   property: 'gltf-morph__cheekSquintLeft.value', 
-                                                                to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'squintCheeks, squintCheekLeft'});
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRelaxRight', {   property: 'gltf-morph__cheekSquintRight.value', 
-                                                                to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'relaxSquintCheeks, relaxSquintCheekRight'});
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRelaxLeft', {   property: 'gltf-morph__cheekSquintLeft.value', 
-                                                                to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'relaxSquintCheeks, relaxSquintCheekLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__eyeWideRight', {   property: 'gltf-morph__eyeWideRight.value', 
@@ -182,13 +182,13 @@ AFRAME.registerComponent('animated-face', {
 
                     break;
 
-                case 'blinkBoth':
-                    CONTEXT_AF.closeEyes();
+                case 'blink':
+                    CONTEXT_AF.closeEyes(evt.detail.side, evt.detail.dur);
 
                     break;
 
-                case 'rollBoth':
-                    CONTEXT_AF.rollEyes();
+                case 'roll':
+                    CONTEXT_AF.rollEyes(evt.detail.side, evt.detail.dur);
 
                     break;
 
@@ -212,7 +212,7 @@ AFRAME.registerComponent('animated-face', {
                     break;
 
                 case 'pressSmile':
-                    CONTEXT_AF.pressSmile();
+                    CONTEXT_AF.pressSmile(evt.detail.side, evt.detail.dur);
 
                     break;
 
@@ -253,30 +253,95 @@ AFRAME.registerComponent('animated-face', {
     neutralizeMouth: async function (){
         this.el.emit('relaxSmile');
         this.el.emit('relaxMouthPress');
+        this.el.emit('relaxMouthPressRight');
+        this.el.emit('relaxMouthPressLeft');
+        this.el.emit('relaxSquintCheeks');
+        this.el.emit('relaxSquintCheekRight');
+        this.el.emit('relaxSquintCheekLeft');
         
         console.log('Neutral mouth');
     },
 
-    closeEyes: async function (){
-        this.neutralizeEyes();
-        await delay(300);
-        this.el.emit('closeEyes');
-        await delay(400);
-        this.neutralizeEyes();
-        console.log('Blink eyes');
+    closeEyes: async function (side, dur){
+        if(dur == null){
+            dur = 1;
+        }else{
+            console.log('closeEyes Dur = ' + dur);
+        }
+
+        if(side == 'both'){
+            this.neutralizeEyes();
+            await delay(300);
+            this.el.emit('closeEyes');
+            await delay(400 * dur);
+            this.neutralizeEyes();
+            console.log('Blink eyes');
+
+        }else if(side == 'right'){
+            this.neutralizeEyes();
+            await delay(300);
+            this.el.emit('blinkEyeRight');
+            await delay(400 * dur);
+            this.el.emit('openEyeRight');
+            console.log('Blink right eye');
+
+        }else if(side == 'left'){
+            this.neutralizeEyes();
+            await delay(300);
+            this.el.emit('blinkEyeLeft');
+            await delay(400 * dur);
+            this.el.emit('openEyeLeft');
+            console.log('Blink left eye');
+
+        }
+        
     },
 
-    rollEyes: async function (){
-        this.neutralizeEyes();
-        await delay(300);
-        this.el.emit('eyesLookUp');
-        await delay(500);
-        this.el.emit('eyesLookDown');
-        await delay(200);
-        this.el.emit('eyesLookUpNeutral');
-        await delay(500);
-        this.el.emit('eyesLookDownNeutral');
-        console.log('Roll eyes');
+    rollEyes: async function (side, dur){
+        if(dur == null){
+            dur = 1;
+        }else{
+            console.log('rollEyes Dur = ' + dur);
+        }
+
+        if(side == 'both'){
+            this.neutralizeEyes();
+            await delay(300);
+            this.el.emit('eyesLookUp');
+            await delay(500);
+            this.el.emit('eyesLookDown');
+            await delay(200 * dur);
+            this.el.emit('eyesLookUpNeutral');
+            await delay((200 * dur)+ 300);
+            this.el.emit('eyesLookDownNeutral');
+            console.log('Roll eyes');
+
+        }else if(side == 'right'){
+            this.neutralizeEyes();
+            await delay(300);
+            this.el.emit('eyeLookUpRight');
+            await delay(500);
+            this.el.emit('eyeLookDownRight');
+            await delay(200 * dur);
+            this.el.emit('eyeLookUpNeutralRight');
+            await delay((200 * dur)+ 300);
+            this.el.emit('eyeLookDownNeutralRight');
+            console.log('Roll right eye');
+
+        }else if(side == 'left'){
+            this.neutralizeEyes();
+            await delay(300);
+            this.el.emit('eyeLookUpLeft');
+            await delay(500);
+            this.el.emit('eyeLookDownLeft');
+            await delay(200 * dur);
+            this.el.emit('eyeLookUpNeutralLeft');
+            await delay((200 * dur)+ 300);
+            this.el.emit('eyeLookDownNeutralLeft');
+            console.log('Roll left eye');
+
+        }
+        
     },
 
     fullSmile: async function (){
@@ -288,12 +353,45 @@ AFRAME.registerComponent('animated-face', {
         console.log('Blink eyes');
     },
 
-    pressSmile: async function (){
-        this.neutralizeMouth();
-        await delay(200);
-        this.el.emit('mouthPress');
-        await delay(400);
-        this.neutralizeMouth();
-        console.log('Blink eyes');
+    pressSmile: async function (side, dur){
+        if(dur == null){
+            dur = 1;
+        }else{
+            console.log('rollEyes Dur = ' + dur);
+        }
+
+        if(side == 'both'){
+            this.neutralizeMouth();
+            await delay(200);
+            this.el.emit('mouthPress');
+            this.el.emit('squintCheeks');
+            await delay(600 * dur);
+            this.neutralizeMouth();
+            console.log('Press smile');
+
+        }else if(side == 'right'){
+            this.el.emit('relaxMouthPressRight');
+            this.el.emit('relaxSquintCheekRight');
+            await delay(200);
+            this.el.emit('mouthPressRight');
+            this.el.emit('squintCheekRight');
+            await delay(600 * dur);
+            this.el.emit('relaxMouthPressRight');
+            this.el.emit('relaxSquintCheekRight');
+            console.log('Press smile right');
+
+        }else if(side == 'left'){
+            this.el.emit('relaxMouthPressLeft');
+            this.el.emit('relaxSquintCheekLeft');
+            await delay(200);
+            this.el.emit('mouthPressLeft');
+            this.el.emit('squintCheekLeft');
+            await delay(600 * dur);
+            this.el.emit('relaxMouthPressLeft');
+            this.el.emit('relaxSquintCheekLeft');
+            console.log('Press smile left');
+
+        }
+        
     },
 });

@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/aframe-animation-timeline-component@2.0.0/dist/aframe-animation-timeline-component.min.js"></script>
 
     <script src="/worlds/Facial-Animation-test/components/animated-face.js"></script>
+    <script src="/worlds/Facial-Animation-test/scripts/gui.js" type="module"></script>
   </head>
   <body>
 
@@ -19,12 +20,7 @@
     <circles-start-ui/>
 
     <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-    <a-scene id="scene" circles_scene_properties 
-              animation-timeline__1="timeline: #blinkAction; startEvents: blinkEyes; loop: 5;"
-              animation-timeline__2="timeline: #naturalSmileAction; startEvents: naturalSmile;"
-              animation-timeline__3="timeline: #smileAction; startEvents: smile; loop: 5;"
-              animation-timeline__4="timeline: #pressSmileAction; startEvents: pressSmile;"
-              animation-timeline__5="timeline: #rollEyesAction; startEvents: eyeRoll;">
+    <a-scene id="scene" circles_scene_properties>
       <a-assets>
         <!-- Models used in the scene -->
         <a-asset-item id="faceLowpoly-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_test_09.glb"></a-asset-item>
@@ -94,21 +90,21 @@
 
       <a-box position="0 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="blinkButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'neutralize'})" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="blinkButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'neutralize'}); document.getElementById('baseFace').emit('moveMouth', {value: 'neutralize'});" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
 
       <a-box position="1 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blinkBoth'})" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blink', side: 'right'}); document.getElementById('baseFace').emit('moveMouth', {value: 'pressSmile', side: 'both'})" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
 
       <a-box position="-1 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blinkBoth'})" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveMouth', {value: 'pressSmile', side: 'both', dur: '3'})" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
