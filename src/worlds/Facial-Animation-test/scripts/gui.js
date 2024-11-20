@@ -1,7 +1,11 @@
 import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm';
 
 // Animations and states
-const animations = ['pressSmile', 'eyeRoll', 'blinkEyes'];
+const animations = ['mouthPress', 'relaxMouthPress',
+                    'fullSmile', 'relaxSmile',
+                    'closeEyes', 'openEyes',
+                    'squintEyes', 'relaxSquintEyes'
+                ];
 const states = ['Idle'];
 
 // GUI
@@ -17,8 +21,15 @@ gui.add(obj, 'State', states).onChange(value => {
 // Adding animations
 const animationsFolder = gui.addFolder('Animations');
 
+// Find the face to animate
+const animatedModels = document.getElementsByClassName("animated");
+const firstAnimated = animatedModels[0];
+console.log(firstAnimated.id);
+
 for (const animation of animations)
 {
-    obj[animation] = function() { document.getElementById('scene').emit(animation) };
+    obj[animation] = function() {
+        firstAnimated.emit(animation);
+    };
     animationsFolder.add(obj, animation);
 }
