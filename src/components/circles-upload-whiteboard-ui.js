@@ -50,43 +50,49 @@ const createAsset = function(file, location)
 // Creating pop up element (for computer and mobile)
 const generatePopUp_Computer_Mobile = function()
 {
-    // Container
-    var container = document.createElement('div');
+    // UI
+    var ui = document.createElement('div');
+    ui.setAttribute('class', 'circles-ui');
 
-    container.setAttribute('id', 'upload-content-container');
-    container.setAttribute('class', 'overlay');
+        // Container
+        var container = document.createElement('div');
 
-        // Title
-        var title = document.createElement('h2');
+        container.setAttribute('id', 'upload-content-container');
+        container.setAttribute('class', 'overlay');
 
-        title.innerHTML = 'Insert File';
+            // Title
+            var title = document.createElement('h2');
 
-        container.append(title);
+            title.innerHTML = 'Insert File';
 
-        // Close button container
-        var closeContainer = document.createElement('div');
+            container.append(title);
 
-        closeContainer.setAttribute('class', 'close-upload');
+            // Close button container
+            var closeContainer = document.createElement('div');
 
-            // Close button
-            var closeButton = document.createElement('i');
+            closeContainer.setAttribute('class', 'close-upload');
 
-            closeButton.setAttribute('class', 'fa-solid fa-xmark fa-2xl');
+                // Close button
+                var closeButton = document.createElement('i');
 
-            closeContainer.append(closeButton);
+                closeButton.setAttribute('class', 'fa-solid fa-xmark fa-2xl');
 
-        closeContainer.addEventListener('click', function()
-        {
-            document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
-        });
+                closeContainer.append(closeButton);
 
-        container.appendChild(closeContainer);
+            closeContainer.addEventListener('click', function()
+            {
+                document.querySelector('[circles-upload-whiteboard-ui]').setAttribute('circles-upload-whiteboard-ui', 'active:false');
+            });
 
-        // Line 
-        var line = document.createElement('hr');
-        container.appendChild(line);
+            container.appendChild(closeContainer);
 
-    document.getElementsByTagName('body')[0].appendChild(container);
+            // Line 
+            var line = document.createElement('hr');
+            container.appendChild(line);
+
+    ui.appendChild(container);
+
+    document.getElementsByTagName('body')[0].appendChild(ui);
 
 }
 
@@ -893,56 +899,53 @@ const displayContent = function(content)
 // Shortening file names to fit the width of the table data
 const shortenNames = function()
 {
-    // Getting the width of file elements
-    var sectionWidth = document.getElementsByClassName('other-file')[0].getBoundingClientRect().width;
-
-    // Taking 30px off of the width for padding
-    sectionWidth -= 30;
-
-    // Going through each file element and checking if the length of the file name is greater then the width of the section
-    // If it is, shorten it
-    var fileSections = document.getElementsByClassName('other-file');
-
-    for (var section of fileSections)
+    if (document.getElementsByClassName('other-file').length > 0)
     {
-        var nameElement = section.querySelector('.file-name');
-        var fileName = nameElement.innerHTML;
-        var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
-    }
+        // Getting the width of file elements
+        var sectionWidth = document.getElementsByClassName('other-file')[0].getBoundingClientRect().width;
 
-    if (nameLength > sectionWidth)
-    {
-        // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
-        
-        // Getting the file type
-        var splitName = fileName.split('.');
-        var type = splitName[splitName.length - 1];
+        // Taking 30px off of the width for padding
+        sectionWidth -= 40;
 
-        var condensedName = fileName;
-        
-        // Taking a character off the file name until the length of the name is less then the section width
-        while (nameLength > sectionWidth)
+        // Going through each file element and checking if the length of the file name is greater then the width of the section
+        // If it is, shorten it
+        var fileSections = document.getElementsByClassName('other-file');
+
+        for (var section of fileSections)
         {
-            // Getting the file name without the type
-            condensedName = condensedName.replace('...' + type, '');
+            var nameElement = section.querySelector('.file-name');
+            var fileName = nameElement.innerHTML;
+            var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
 
-            // Removing the last character of the name
-            condensedName = condensedName.substring(0, condensedName.length - 1);
-            condensedName += '...' + type;
+            if (nameLength > sectionWidth)
+            {
+                // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
+                
+                // Getting the file type
+                var splitName = fileName.split('.');
+                var type = splitName[splitName.length - 1];
 
-            // Checking the length of the name
-            nameElement.innerHTML = condensedName;
-            nameLength = nameElement.getBoundingClientRect().width;
-        }
+                var condensedName = fileName;
+                
+                // Taking a character off the file name until the length of the name is less then the section width
+                while (nameLength > sectionWidth)
+                {
+                    // Getting the file name without the type
+                    condensedName = condensedName.replace('...' + type, '');
 
-        // Changing all instances of the file name to the condensed version
-        var allFileNameElements = section.querySelectorAll('.file-name');
+                    // Removing the last character of the name
+                    condensedName = condensedName.substring(0, condensedName.length - 1);
+                    condensedName += '...' + type;
 
-        for (var nameElement of allFileNameElements)
-        {
-            var currentName = nameElement.innerHTML;
+                    // Checking the length of the name
+                    nameElement.innerHTML = condensedName;
+                    nameLength = nameElement.getBoundingClientRect().width;
+                }
 
-            nameElement.innerHTML = currentName.replace(fileName, condensedName);
+                // Changing file name to condensed version
+                var currentName = nameElement.innerHTML;
+                nameElement.innerHTML = currentName.replace(fileName, condensedName);
+            }
         }
     }
 }
