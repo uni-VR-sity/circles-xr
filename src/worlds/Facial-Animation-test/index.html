@@ -89,26 +89,26 @@
 
       <!-- CIRCLE GENERATION STARTS HERE -->
 
-      <a-entity id="baseFace" position="0 1.5 -5" rotation="0 180 0"
+      <a-entity id="baseFace" class="animated" position="0 1.5 -5" rotation="0 180 0"
               gltf-model="#faceLowpoly-glb" animated-face></a-entity>
 
       <a-box position="0 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="blinkButton" onclick="document.getElementById('scene').emit('pressSmile')" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="blinkButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'neutralize'})" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
 
       <a-box position="1 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="squintButton" onclick="document.getElementById('scene').emit('eyeRoll')" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blinkBoth'})" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
 
       <a-box position="-1 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="squintButton" onclick="document.getElementById('scene').emit('blinkEyes')" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blinkBoth'})" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>

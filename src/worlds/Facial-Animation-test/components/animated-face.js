@@ -1,14 +1,21 @@
 'use strict';
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 AFRAME.registerComponent('animated-face', {
     schema: {
-        name:              {type:'string',     default:'no_name_set'},
+        id:                             {type:'string',    default:'no_id_set'},
+        morph_eyeBlinkRight:            {type:'float',     default:            0},
+        morph_eyeBlinkLeft:             {type:'float',     default:            0},
+        morph_eyesClosed:               {type:'float',     default:            0},
     },
     init: function(){
         const CONTEXT_AF  = this;
         const data        = this.data;
 
-        //animation-timeline__1="timeline: #myTimeline"
+        data.id = CONTEXT_AF.el.id;
 
         //document.getElementById('scene').setAttribute('animation-timeline__1', {timeline: '#myTimeLine'});
         // Add the morph targets attached to the model 
@@ -49,61 +56,61 @@ AFRAME.registerComponent('animated-face', {
         // Add the animations to trigger the morphtargets
         // eye animations
         CONTEXT_AF.el.setAttribute('animation__eyesClosed', {   property: 'gltf-morph__eyesClosed.value', 
-                                                                from: 0, to: 1, loop: false, dur: 300, autoplay: false, 
+                                                                to: 1, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'closeEyes'});
         CONTEXT_AF.el.setAttribute('animation__eyeBlinkRight', {   property: 'gltf-morph__eyeBlinkRight.value', 
-                                                                from: 0, to: 1, loop: false, dur: 300, autoplay: false, 
+                                                                to: 1, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'blinkEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeBlinkLeft', {   property: 'gltf-morph__eyeBlinkLeft.value', 
-                                                                from: 0, to: 1, loop: false, dur: 300, autoplay: false, 
+                                                                to: 1, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'blinkEyeLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyesOpen', {   property: 'gltf-morph__eyesClosed.value', 
-                                                                from: 1, to: 0, loop: false, dur: 300, autoplay: false, 
+                                                                to: 0, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'openEyes'});
         CONTEXT_AF.el.setAttribute('animation__eyeOpenRight', {   property: 'gltf-morph__eyeBlinkRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 300, autoplay: false, 
+                                                                to: 0, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'openEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeOpenLeft', {   property: 'gltf-morph__eyeBlinkLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 300, autoplay: false, 
+                                                                to: 0, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'openEyeLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__eyeSquintRight', {   property: 'gltf-morph__eyeSquintRight.value', 
-                                                                from: 0, to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 1000, autoplay: false,
                                                                 startEvents: 'squintEyes, squintEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeSquintLeft', {   property: 'gltf-morph__eyeSquintLeft.value', 
-                                                                from: 0, to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 1000, autoplay: false,
                                                                 startEvents: 'squintEyes, squintEyeLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyeSquintRelaxRight', {   property: 'gltf-morph__eyeSquintRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'relaxSquintEyes, relaxSquintEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeSquintRelaxLeft', {   property: 'gltf-morph__eyeSquintLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'relaxSquintEyes, relaxSquintEyeLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRight', {   property: 'gltf-morph__cheekSquintRight.value', 
-                                                                from: 0, to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 1000, autoplay: false,
                                                                 startEvents: 'squintCheeks, squintCheekRight'});
         CONTEXT_AF.el.setAttribute('animation__cheekSquintLeft', {   property: 'gltf-morph__cheekSquintLeft.value', 
-                                                                from: 0, to: 1, loop: false, dur: 1000, autoplay: false,
+                                                                to: 1, loop: false, dur: 1000, autoplay: false,
                                                                 startEvents: 'squintCheeks, squintCheekLeft'});
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRelaxRight', {   property: 'gltf-morph__cheekSquintRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'relaxSquintCheeks, relaxSquintCheekRight'});
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRelaxLeft', {   property: 'gltf-morph__cheekSquintLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 500, autoplay: false,
+                                                                to: 0, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'relaxSquintCheeks, relaxSquintCheekLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__eyeWideRight', {   property: 'gltf-morph__eyeWideRight.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'wideEyes, wideEyeRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeWideNeutralRight', {   property: 'gltf-morph__eyeWideRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 300, autoplay: false,
+                                                                to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'wideEyesNeutral, wideEyeNeutralRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeWideLeft', {   property: 'gltf-morph__eyeWideLeft.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'wideEyes, wideEyeLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyeWideNeutralLeft', {   property: 'gltf-morph__eyeWideLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 300, autoplay: false,
+                                                                to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'wideEyesNeutral, wideEyeNeutralLeft'});
         
         // Look directions
@@ -111,60 +118,182 @@ AFRAME.registerComponent('animated-face', {
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'eyesLookUp'});
         CONTEXT_AF.el.setAttribute('animation__eyesLookUpNeutral', {   property: 'gltf-morph__eyesLookUp.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false,
+                                                                to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'eyesLookUpNeutral'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookUpRight', {   property: 'gltf-morph__eyeLookUpRight.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'eyeLookUpRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookUpNeutralRight', {   property: 'gltf-morph__eyeLookUpRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false,
+                                                                to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'eyeLookUpNeutralRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookUpLeft', {   property: 'gltf-morph__eyeLookUpLeft.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'eyeLookUpLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookUpNeutralLeft', {   property: 'gltf-morph__eyeLookUpLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false,
+                                                                to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'eyeLookUpNeutralLeft'});
 
         CONTEXT_AF.el.setAttribute('animation__eyesLookDown', {   property: 'gltf-morph__eyesLookDown.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'eyesLookDown'});
         CONTEXT_AF.el.setAttribute('animation__eyesLookDownNeutral', {   property: 'gltf-morph__eyesLookDown.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false,
+                                                                to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'eyesLookDownNeutral'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookDownRight', {   property: 'gltf-morph__eyeLookDownRight.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'eyeLookDownRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookDownNeutralRight', {   property: 'gltf-morph__eyeLookDownRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false,
+                                                                to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'eyeLookDownNeutralRight'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookDownLeft', {   property: 'gltf-morph__eyeLookDownLeft.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
                                                                 startEvents: 'eyeLookDownLeft'});
         CONTEXT_AF.el.setAttribute('animation__eyeLookDownNeutralLeft', {   property: 'gltf-morph__eyeLookDownLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false,
+                                                                to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'eyeLookDownNeutralLeft'});
         
         // mouth animations
         CONTEXT_AF.el.setAttribute('animation__mouthSmile', {   property: 'gltf-morph__mouthSmile.value',
-                                                                from: 0, to: 1, loop: false, dur: 500, autoplay: false, 
+                                                                to: 1, loop: false, dur: 500, autoplay: false, 
                                                                 startEvents: 'fullSmile'});
         CONTEXT_AF.el.setAttribute('animation__relaxSmile', {   property: 'gltf-morph__mouthSmile.value', 
-                                                                from: 1, to: 0, loop: false, dur: 200, autoplay: false, 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'relaxSmile'});
         CONTEXT_AF.el.setAttribute('animation__mouthPressRight', {   property: 'gltf-morph__mouthPressRight.value',
-                                                                from: 0, to: 1, loop: false, dur: 1000, autoplay: false, 
+                                                                to: 1, loop: false, dur: 500, autoplay: false, 
                                                                 startEvents: 'mouthPress, mouthPressRight'});
         CONTEXT_AF.el.setAttribute('animation__mouthPressRelaxRight', {   property: 'gltf-morph__mouthPressRight.value', 
-                                                                from: 1, to: 0, loop: false, dur: 500, autoplay: false, 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'relaxMouthPress, relaxMouthPressRight'});
         CONTEXT_AF.el.setAttribute('animation__mouthPressLeft', {   property: 'gltf-morph__mouthPressLeft.value',
-                                                                from: 0, to: 1, loop: false, dur: 1000, autoplay: false, 
+                                                                to: 1, loop: false, dur: 500, autoplay: false, 
                                                                 startEvents: 'mouthPress, mouthPressLeft'});
         CONTEXT_AF.el.setAttribute('animation__mouthPressRelaxLeft', {   property: 'gltf-morph__mouthPressLeft.value', 
-                                                                from: 1, to: 0, loop: false, dur: 500, autoplay: false, 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'relaxMouthPress, relaxMouthPressLeft'});
 
 
+        CONTEXT_AF.el.addEventListener('moveEyes', function(evt){
+
+            switch(evt.detail.value){
+
+                case 'neutralize':
+                    CONTEXT_AF.neutralizeEyes();
+
+                    break;
+
+                case 'blinkBoth':
+                    CONTEXT_AF.closeEyes();
+
+                    break;
+
+                case 'rollBoth':
+                    CONTEXT_AF.rollEyes();
+
+                    break;
+
+                default:
+                    console.log('*Unknown Eye Movement*');
+            }
+        });
+
+        CONTEXT_AF.el.addEventListener('moveMouth', function(evt){
+
+            switch(evt.detail.value){
+
+                case 'neutralize':
+                    CONTEXT_AF.neutralizeMouth();
+
+                    break;
+
+                case 'fullSmile':
+                    CONTEXT_AF.fullSmile();
+
+                    break;
+
+                case 'pressSmile':
+                    CONTEXT_AF.pressSmile();
+
+                    break;
+
+                default:
+                    console.log('*Unknown Eye Movement*');
+            }
+        });
     },
-})
+
+    update: function(oldData){
+        const CONTEXT_AF  = this;
+        const data        = this.data;
+        
+        if(oldData.morph_eyesClosed !== data.morph_eyesClosed){
+            document.getElementById('baseFace').setAttribute('gltf-morph__eyesClosed', { value: data.morph_eyesClosed});
+
+            console.log('eyesClosed updated');
+        }
+        
+    },
+
+    neutralizeEyes: async function (){
+        this.el.emit('wideEyesNeutral');
+        this.el.emit('openEyes');
+        this.el.emit('openEyeRight');
+        this.el.emit('openEyeLeft');
+        this.el.emit('relaxSquintEyes');
+        this.el.emit('eyesLookUpNeutral');
+        this.el.emit('eyeLookUpNeutralRight');
+        this.el.emit('eyeLookUpNeutralLeft');
+        this.el.emit('eyesLookDownNeutral');
+        this.el.emit('eyeLookDownNeutralRight');
+        this.el.emit('eyeLookDownNeutralLeft');
+        
+        console.log('Neutral eyes');
+    },
+
+    neutralizeMouth: async function (){
+        this.el.emit('relaxSmile');
+        this.el.emit('relaxMouthPress');
+        
+        console.log('Neutral mouth');
+    },
+
+    closeEyes: async function (){
+        this.neutralizeEyes();
+        await delay(300);
+        this.el.emit('closeEyes');
+        await delay(400);
+        this.neutralizeEyes();
+        console.log('Blink eyes');
+    },
+
+    rollEyes: async function (){
+        this.neutralizeEyes();
+        await delay(300);
+        this.el.emit('eyesLookUp');
+        await delay(500);
+        this.el.emit('eyesLookDown');
+        await delay(200);
+        this.el.emit('eyesLookUpNeutral');
+        await delay(500);
+        this.el.emit('eyesLookDownNeutral');
+        console.log('Roll eyes');
+    },
+
+    fullSmile: async function (){
+        this.neutralizeMouth();
+        await delay(200);
+        this.el.emit('fullSmile');
+        await delay(400);
+        this.neutralizeMouth();
+        console.log('Blink eyes');
+    },
+
+    pressSmile: async function (){
+        this.neutralizeMouth();
+        await delay(200);
+        this.el.emit('mouthPress');
+        await delay(400);
+        this.neutralizeMouth();
+        console.log('Blink eyes');
+    },
+});
