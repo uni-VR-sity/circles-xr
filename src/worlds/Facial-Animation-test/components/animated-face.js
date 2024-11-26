@@ -27,8 +27,6 @@ AFRAME.registerComponent('animated-face', {
         CONTEXT_AF.el.setAttribute('gltf-morph__eyesClosed', {morphtarget: 'eyesClosed', value: 0});
         CONTEXT_AF.el.setAttribute('gltf-morph__eyeSquintRight', {morphtarget: 'eyeSquint_right', value: 0});
         CONTEXT_AF.el.setAttribute('gltf-morph__eyeSquintLeft', {morphtarget: 'eyeSquint_left', value: 0});
-        CONTEXT_AF.el.setAttribute('gltf-morph__cheekSquintRight', {morphtarget: 'cheekSquint_right', value: 0});
-        CONTEXT_AF.el.setAttribute('gltf-morph__cheekSquintLeft', {morphtarget: 'cheekSquint_left', value: 0});
         CONTEXT_AF.el.setAttribute('gltf-morph__eyeWideRight', {morphtarget: 'eyeWide_right', value: 0});
         CONTEXT_AF.el.setAttribute('gltf-morph__eyeWideLeft', {morphtarget: 'eyeWide_left', value: 0});
         // look direction morph targets
@@ -51,6 +49,21 @@ AFRAME.registerComponent('animated-face', {
         CONTEXT_AF.el.setAttribute('gltf-morph__mouthSmile', {morphtarget: 'mouthSmile', value: 0});
         CONTEXT_AF.el.setAttribute('gltf-morph__mouthPressRight', {morphtarget: 'mouthPress_right', value: 0});
         CONTEXT_AF.el.setAttribute('gltf-morph__mouthPressLeft', {morphtarget: 'mouthPress_left', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__mouthStretchRight', {morphtarget: 'mouthStretch_right', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__mouthStretchLeft', {morphtarget: 'mouthStretch_left', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__mouth_right', {morphtarget: 'mouth_right', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__mouth_left', {morphtarget: 'mouth_left', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__mouthClose', {morphtarget: 'mouthClose', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__mouthOpen', {morphtarget: 'mouthOpen', value: 0});
+        // cheek morph targets
+        CONTEXT_AF.el.setAttribute('gltf-morph__cheekSquintRight', {morphtarget: 'cheekSquint_right', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__cheekSquintLeft', {morphtarget: 'cheekSquint_left', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__cheekPuff', {morphtarget: 'cheekPuff', value: 0});
+        // jaw morph targets
+        CONTEXT_AF.el.setAttribute('gltf-morph__jawForward', {morphtarget: 'jawForward', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__jawOpen', {morphtarget: 'jawOpen', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__jaw_right', {morphtarget: 'jaw_right', value: 0});
+        CONTEXT_AF.el.setAttribute('gltf-morph__jaw_left', {morphtarget: 'jaw_left', value: 0});
 
 
         // Add the animations to trigger the morphtargets
@@ -99,6 +112,9 @@ AFRAME.registerComponent('animated-face', {
         CONTEXT_AF.el.setAttribute('animation__cheekSquintRelaxLeft', {   property: 'gltf-morph__cheekSquintLeft.value', 
                                                                 to: 0, loop: false, dur: 300, autoplay: false,
                                                                 startEvents: 'relaxSquintCheeks, relaxSquintCheekLeft'});
+        CONTEXT_AF.el.setAttribute('animation__cheekPuff', {   property: 'gltf-morph__cheekPuff.value', 
+                                                                to: 1, loop: false, dur: 500, autoplay: false,
+                                                                startEvents: 'puffCheeks'});
 
         CONTEXT_AF.el.setAttribute('animation__eyeWideRight', {   property: 'gltf-morph__eyeWideRight.value', 
                                                                 to: 1, loop: false, dur: 500, autoplay: false,
