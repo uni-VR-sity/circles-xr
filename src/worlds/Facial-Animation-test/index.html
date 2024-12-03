@@ -5,8 +5,6 @@
 
     <script src="https://rawcdn.githack.com/elbobo/aframe-gltf-morph-component/07e9b80bd382cc1c19223468d35c453e7c76e9a2/dist/aframe-gltf-morph-component.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.5.3/document-register-element.js"></script>
-    <script src="https://unpkg.com/aframe-animation-component@^4.1.1/dist/aframe-animation-timeline-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-animation-timeline-component@2.0.0/dist/aframe-animation-timeline-component.min.js"></script>
 
     <script src="/worlds/Facial-Animation-test/components/animated-face.js"></script>
     <script src="/worlds/Facial-Animation-test/scripts/gui.js" type="module"></script>
@@ -23,58 +21,8 @@
     <a-scene id="scene" circles_scene_properties>
       <a-assets>
         <!-- Models used in the scene -->
-        <a-asset-item id="faceLowpoly-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_test_09.glb"></a-asset-item>
+        <a-asset-item id="faceLowpoly-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_test_10.glb"></a-asset-item>
         <a-asset-item id="faceHighpoly-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_testHighpoly_01.glb"></a-asset-item>
-
-        <!-- Actions used by the face -->
-        <a-timeline id="blinkAction" >
-          <a-timeline-animation select="#baseFace" name="eyesClosed" offset="1000"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
-        </a-timeline>
-
-        <a-timeline id="rollEyesAction" >
-          <a-timeline-animation select="#baseFace" name="eyesClosed" offset="500"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesLookUp" offset="500"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesLookUpNeutral"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesLookDown"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesLookDownNeutral"></a-timeline-animation>
-        </a-timeline>
-
-        <a-timeline id="smileAction" >
-          <a-timeline-animation select="#baseFace" name="mouthSmile" offset="1000"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="relaxSmile" offset="300"></a-timeline-animation>
-        </a-timeline>
-
-        <a-timeline id="pressSmileAction" >
-          <a-timeline-group>
-            <a-timeline-animation select="#baseFace" name="mouthPressRight" offset="500"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="mouthPressLeft" offset="500"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="cheekSquintRight" offset="500"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="cheekSquintLeft" offset="500"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="eyeSquintRight" offset="500"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="eyeSquintLeft" offset="500"></a-timeline-animation>
-          </a-timeline-group>
-          <a-timeline-group>
-            <a-timeline-animation select="#baseFace" name="mouthPressRelaxRight" offset="2000"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="mouthPressRelaxLeft" offset="2000"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="cheekSquintRelaxRight" offset="2000"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="cheekSquintRelaxLeft" offset="2000"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="eyeSquintRelaxRight" offset="2000"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="eyeSquintRelaxLeft" offset="2000"></a-timeline-animation>
-          </a-timeline-group>
-        </a-timeline>
-
-        <a-timeline id="naturalSmileAction" >
-          <a-timeline-animation select="#baseFace" name="eyesClosed"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
-          <a-timeline-animation select="#baseFace" name="eyesClosed" offset="1000"></a-timeline-animation>
-          <a-timeline-group offset="500">
-            <a-timeline-animation select="#baseFace" name="mouthSmile"></a-timeline-animation>
-            <a-timeline-animation select="#baseFace" name="eyesOpen"></a-timeline-animation>
-          </a-timeline-group>
-          <a-timeline-animation select="#baseFace" name="relaxSmile" offset="500"></a-timeline-animation>
-        </a-timeline>
 
         <!-- Circles' built-in assets [REQUIRED] -->
         <circles-assets/>
@@ -90,21 +38,21 @@
 
       <a-box position="0 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="blinkButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'neutralize'}); document.getElementById('baseFace').emit('moveMouth', {value: 'neutralize'});" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="blinkButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'neutralize'}); document.getElementById('baseFace').emit('moveMouth', {value: 'neutralize'}); document.getElementById('baseFace').setAttribute('animated-face', { state: 'null' });" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
 
       <a-box position="1 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blink', side: 'right'}); document.getElementById('baseFace').emit('moveMouth', {value: 'pressSmile', side: 'both'})" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveEyes', {value: 'blink', side: 'both', dur: 1}); document.getElementById('baseFace').emit('moveMouth', {value: 'angryOpen', side: 'both', dur: 5});" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
 
       <a-box position="-1 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">
-            <a-entity id="squintButton" onclick="document.getElementById('baseFace').emit('moveMouth', {value: 'pressSmile', side: 'both', dur: '3'})" position="0 0.5 0" scale="0.5 0.5 0.5"
+            <a-entity id="squintButton" onclick="document.getElementById('baseFace').setAttribute('animated-face', { state: 'idle' });" position="0 0.5 0" scale="0.5 0.5 0.5"
                       circles-button="button_color: rgb(101,199,93); button_color_hover: rgb(66,133,61)">
             </a-entity>
       </a-box>
