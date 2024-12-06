@@ -644,7 +644,7 @@ AFRAME.registerComponent('molecule-manager', {
 
                 mol.setAttribute('animation', {
                     property: 'position',
-                    to: position.x+' 5 '+position.z,
+                    to: position.x+' 6 '+position.z,
                     dur: 3000,
                     easing: 'linear',
                     loop: 'false'
