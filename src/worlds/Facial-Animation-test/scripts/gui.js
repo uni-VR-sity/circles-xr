@@ -1,10 +1,11 @@
 import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm';
 
 // Animations and states
-const animations = ['mouthPress', 'relaxMouthPress',
-                    'fullSmile', 'relaxSmile',
-                    'closeEyes', 'openEyes',
-                    'squintEyes', 'relaxSquintEyes'
+const animations = ['mouthPress', 'fullSmile',
+                    'noseSneerRight', 'noseNeutral',
+                    'tongueOut', 'tongueIn',
+                    'mouthNeutral', 'eyesNeutral',
+                    'eyesLookRight', 'eyesLookLeft'
                 ];
 const states = ['Idle'];
 

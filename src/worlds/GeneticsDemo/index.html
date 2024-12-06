@@ -29,6 +29,7 @@
                         <img id='skyMap' src='/global/assets/textures/equirectangular/WhiteBlue.jpg'
                                 crossorigin="anonymous">
                         <img id='concrete' src='/worlds/GeneticsDemo/assets/textures/concrete.jpg' crossorigin="anonymous">
+                        <a-asset-item id="cellWalls-glb" src="/worlds/GeneticsDemo/assets/models/cellWalls.glb"></a-asset-item>
 
                         <!-- DNA assets -->
                         <a-asset-item id="dna-glb" src="/worlds/GeneticsDemo/assets/models/DNA_new.glb"></a-asset-item>
@@ -94,27 +95,37 @@
                 <!-- Room -->
                 <a-entity>
                         <a-box id=box_floor position="0 -0.1 0" width="30" height="0.25" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="color: #7a736e; roughness: 0.75;"></a-box>
+                                shadow="receive:true; cast:false;" material="color: #7a736e; roughness: 0.75;" visible="false"></a-box>
                         <a-box id=box_floor_hit bouncer position="0 -0.7 0" width="31" height="1.5" depth="31" static-body="shape:box;"
                                 material="shader: flat; color: red;" visible="false"></a-box>
                         <a-box id=box_floor_nav position="0 0 0" width="17" height="0.2" depth="17" static-body="shape:box;" visible="false" nav-mesh></a-box>
 
-                        <a-box id=box_wall_back position="0 4 11" width="30" height="10" depth="0.25" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                        <a-box id=box_wall_front position="0 4 -11" width="30" height="10" depth="0.25" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                        <a-box id=box_wall_right position="11 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
-                        <a-box id=box_wall_right position="-11 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;"></a-box>
+                        <a-box id=box_wall_back position="0 4 10" width="30" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_corner1 position="8.75 4 8.75" rotation="-15 45 -15" width="10" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_front position="0 4 -10" width="30" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_corner2 position="8.75 4 -8.75" rotation="15 -45 15" width="10" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_right position="10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_corner3 position="-8.75 4 8.75" rotation="-15 -45 -15" width="10" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_right position="-10 4 0" width="0.25" height="10" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
+                        <a-box id=box_wall_corner4 position="-8.75 4 -8.75" rotation="15 45 15" width="10" height="10" depth="0.25" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" material="shader:flat; src:#concrete;" visible="false"></a-box>
 
-                        <a-box id=box_ceiling position="0 7 0" width="30" height="0.25" depth="30" static-body="shape:box;"
-                                shadow="receive:true; cast:false;"></a-box>
+                        <a-box id=box_ceiling position="0 6 0" width="30" height="0.25" depth="30" static-body="shape:box;"
+                                shadow="receive:true; cast:false;" visible="false"></a-box>
 
                         <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
                         <a-entity light="type: directional; castShadow: true; intensity: 0.4; 
                                 shadowMapHeight:1500; shadowMapWidth:1500; 
                                 shadowCameraLeft: -15; shadowCameraRight: 15; shadowCameraBottom: -15; shadowCameraTop: 15;" position="-5 8 1.5"></a-entity>
+                        <a-entity id="cellWall" gltf-model="#cellWalls-glb"
+                                position="0 0 0" rotation="0 0 0" scale="6 6 7" shadow="receive:true; cast:false;" material="shader:flat;"></a-entity>
                 </a-entity>
                 
                 <!-- Chalk Board -->
@@ -138,7 +149,7 @@
                                         text="value: Diagram; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
                                         font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
                                 <a-entity position="0.15 6.5 0" rotation="0 90 0" 
-                                        text="value: The DNA strand need to be assembled in order for the RNA polymerase to transcribe it's useful proteins. This is what the strand should look like when completed.; 
+                                        text="value: The DNA strand needs to be assembled in order for the RNA polymerase to transcribe its useful proteins. This is what the strand should look like when completed.; 
                                         color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                                 <a-image src="#DNA-img" position="0.15 4 0" rotation="0 90 0" scale="4.75 2.25 4.75"></a-image>
                         </a-entity>
@@ -147,7 +158,7 @@
                                         text="value: Reactions; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
                                         font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
                                 <a-entity position="0.15 6.5 0" rotation="0 90 0" 
-                                        text="value: There are two proteins that can affect this process. The repressor can bind to the operator site and block the RNA polymerase from transcribing any lac mRNA. The CRP can bind to the capSite, promoting lac mRNA production.; 
+                                        text="value: There are two proteins that can affect this process. The repressor can bind to the operator site and block the RNA polymerase from transcribing any lac mRNA. The CRP can bind to the CAP site, promoting lac mRNA production.; 
                                         color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                                 <a-image src="#capSite-img" position="0.15 4 2" rotation="0 90 0" scale="3.25 2.25 3.25"></a-image>
                                 <a-image src="#repressor-img" position="0.15 4 -2" rotation="0 90 0" scale="3.25 2.25 3.25"></a-image>
@@ -157,7 +168,7 @@
                                         text="value: Pedistals; color: #00243b; width: 1.7; wrapCount: 30; align: center; tabSize: 4.43; 
                                         font: /worlds/KIN-FreeFall/assets/font/BebasNeue-Regular-msdf.json; negate: false; lineHeight: 60" scale="7 7 7"></a-entity>
                                 <a-entity position="0.15 6 0" rotation="0 90 0" 
-                                        text="value: Have fun with the demonstration and see what happens! If you are curious to know more specifics, checkout the pedestals on the right. They have some more information on all the molecules and proteins involved in this demonstration.; 
+                                        text="value: Have fun with the demonstration and see what happens! If you are curious to know more specifics, check out the pedestals on the right. They have some more information on all the molecules and proteins involved in this demonstration.; 
                                         color: #00243b; width: 1.7; wrapCount: 41.46; align: center; tabSize: 4.43; font: /worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json; negate: false; lineHeight: 45" scale="6.5 6.5 6.5"></a-entity>
                                 <a-image src="#Arrow-img" position="0.15 4 0" rotation="0 90 0" scale="1 1 1"></a-image>
                         </a-entity>
@@ -705,9 +716,9 @@
                         <a-entity id="repressor-ped" rotation="0 0 45" position="0 1.05 0" gltf-model="#repressor-anim-glb" animation-mixer
                                 circles-artefact="label_offset: 0.0 0.75 0.0; label_arrow_position: down; inspectRotation:20 0 30;
                                 title:Repressor Inactive;
-                                description:The repressor becomes inactive when it comes in contact with an allolactose molecule and they are bound together. In this state it can't bind to the lac operator.;
+                                description:The repressor becomes inactive when it comes in contact with an allolactose molecule and they are bound together. In this state, it can't bind to the lac operator.;
                                 title_back:Repressor Active;
-                                description_back:The repressor is a molecule that gets created when a repressor mRNA interacts with the ribosome. That repressor in it's active state can then bind to the lac operator and inhibit lac mRNA production;
+                                description_back:The repressor is a protein that is encoded by the lacI gene. It gets created when a repressor mRNA interacts with the ribosome (in a process known as protein translation). That repressor in its active state can then bind to the lac operator and inhibit lac mRNA from being transcribed;
                                 label_text:Repressor;" shadow="receive:false; cast:true;">
                                 <a-sphere static-body="shape: sphere; sphereRadius: 0.5;"
                                         material="visible: false;">
@@ -733,9 +744,9 @@
                         <a-entity id="ribosome-ped" position="0 0.8 0" gltf-model="#ribosome-glb" scale="2.5 2.5 2.5"
                                 circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down; inspectScale: 2.5 2.5 2.5; inspectRotation:20 0 30;
                                 title:The Ribosome;
-                                description:The Ribosome creates a repressor when it comes in contact with a repressor mRNA. The repressor mRNA is lost/removed in this process.;
+                                description:The ribosome creates a repressor when it comes in contact with a repressor mRNA. The repressor mRNA is lost/removed in this process.;
                                 title_back:The Ribosome;
-                                description_back:The Ribosome creates a Permease and a beta-gal when it comes in contact with a lac mRNA. The lac mRNA is lost/removed in this process.;
+                                description_back:The ribosome creates a permease and a beta-galactosidase (abreviation: beta-gal) when it comes in contact with a lac mRNA. The lac mRNA is lost/removed in this process.;
                                 label_text:Ribosome;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -757,9 +768,9 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="permease-ped" position="0 0.85 0" gltf-model="#permease-glb" circles-artefact="label_offset:0.0 0.65 0.0; label_arrow_position:down; inspectRotation:20 0 30;
                                 title:Permease;
-                                description:Permease continuously creates lactose molecules and adds them to its environment.;
+                                description:The permease is encoded by the lacY gene. It is a transporter protein that imports lactose molecules into the cell adding them to its environment.;
                                 title_back:Permease;
-                                description_back:Permease are created when an mRNA comes into contact with the ribosome.;
+                                description_back:Permeases are created when a lac mRNA comes into contact with the ribosome.;
                                 label_text:Permease;" shadow="receive:false; cast:true;">
                                 <a-entity static-body="shape: none;"
                                         shape__main="shape: cylinder; height: 0.6; radiusTop: 0.3; radiusBottom: 0.3; numSegments: 16;"
@@ -784,10 +795,10 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;"
                         collision-filter="group: mRNA-static; collidesWith: mRNA-static, default;">
                         <a-entity id="mRNA-ped" position="0 0.85 0" gltf-model="#mRNA-rep-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down;
-                                title:repressor mRNA;
-                                description:A repressor mRNA is created when the RNA polymerase binds to the lacIPromoter. When a repressor mRNA comes into contact with the ribosome it produces a repressor.;
-                                title_back:lac mRNA;
-                                description_back:A lac mRNA is created when the RNA polymerase binds to the lacPromoter if a repressor hasn't bound to the lac operator. When a lac mRNA comes into contact with the ribosome it produces an acetyltransferase, a beta-gal and a permease.;
+                                title:Repressor mRNA;
+                                description:A repressor mRNA is created when the RNA polymerase binds to the lacI promoter. When a repressor mRNA comes into contact with the ribosome it produces a repressor.;
+                                title_back:Lac mRNA;
+                                description_back:A lac mRNA is created when the RNA polymerase binds to the lac promoter if a repressor hasn't bound to the lac operator. When a lac mRNA comes into contact with the ribosome it produces a beta-galactosidase (beta-gal), a permease, and an acetyltransferase.;
                                 label_text:mRNA;" shadow="receive:false; cast:true;">
                                 <a-sphere static-body="shape: sphere; sphereRadius: 0.15;"
                                         material="visible: false;"
@@ -848,10 +859,10 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="beta-gal-ped" position="0 0.85 0" rotation="0 -20 45" scale="0.6 0.6 0.6"
                                 gltf-model="#beta-glb" circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6; inspectRotation:20 0 45;
-                                title:Beta-gal;
+                                title:Beta-galactosidase (beta-gal);
                                 description:A beta-gal is produced when a lac mRNA comes into contact with the ribosome.;
-                                title_back:Beta-gal;
-                                description_back:The beta-gal binds to lactose molecules and separates them into allolactose and galactose.;
+                                title_back:Beta-galactosidase (beta-gal);
+                                description_back:The beta-gal is an enzyme that binds to lactose molecules and separates them into glucose and galactose (hydrolysis) or transforms lactose into allolactose (transgalactosylation) when lactose is plentiful.;
                                 label_text:Beta-gal;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.25;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -873,10 +884,10 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="CRP-ped" position="0 0.85 0" scale="0.6 0.6 0.6" gltf-model="#CRP-anim-glb" animation-mixer
                                 circles-artefact="label_offset:0.0 0.6 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6; inspectRotation:0 0 30;
-                                title:C-Reactive Protein;
-                                description:The paired CRP being attached to the capSite promotes lac mRNA production allowing for more lactose production;
-                                title_back:C-Reactive Protein;
-                                description_back:C-Reactive Protein or CRP start off singular and unbound, but in the presence of cAMP proteins the CRP can bind in pairs and attach to the capSite.;
+                                title:CRP (C-Reactive Protein);
+                                description:The paired or dimerized CRP being attached to the CAP site promotes lac mRNA transcription by recruiting RNA polymerase to bind to the lac promoter, increasing the rate of transcription, enzyme production and lactose metabolism;
+                                title_back:CRP (C-Reactive Protein);
+                                description_back:C-Reactive Protein or CRP start off singular and unbound, but in the presence of cAMP proteins, the cAMP binds to CRP before it can bind in pairs and attach to the CAP site.;
                                 label_text:CRP;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -898,9 +909,9 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="lactose-ped" position="0 0.7 0" gltf-model="#lactose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down; inspectRotation:0 0 45;
                                 title:Lactose;
-                                description:Lactose binds to beta-gal and once bound gets split into allolactose and galactose.;
+                                description:Lactose binds to beta-gal and once bound gets split into glucose and galactose, or is transformed into allolactose.;
                                 title_back:Lactose;
-                                description_back:Lactose, if not already present in the environment, is continuously created by permease.;
+                                description_back:Lactose, if not already present in the environment, is continuously let into the cell by permease.;
                                 label_text:Lactose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
@@ -923,9 +934,9 @@
                         <a-entity id="RNApoly-ped" position="0 1.2 0" rotation="0 0 70" scale="0.6 0.6 0.6"
                                 gltf-model="#RNApoly-glb" circles-artefact="label_offset:0.0 0.8 0.0; label_arrow_position:down; inspectScale:0.6 0.6 0.6; inspectRotation:20 0 30;
                                 title:RNA Polymerase;
-                                description:The RNA polymerase can bind to the lacIPromoter to produce a repressor mRNA or it can bind to the lacPromoter to produce a lac mRNA.;
+                                description:The RNA polymerase can bind to the lacI promoter to produce a repressor mRNA or it can bind to the lac promoter to produce a lac mRNA.;
                                 title_back:RNA Polymerase;
-                                description_back:RNA polymerase is a multi-unit enzyme that binds to the DNA and synthesizes RNA molecule. (repressor mRNA and lac mRNA);
+                                description_back:RNA polymerase is a multi-unit enzyme that binds to the DNA and transcribes it into mRNA. (repressor mRNA and lac mRNA);
                                 label_text:RNA Polymerase;" shadow="receive:false; cast:true;">
                                 <a-sphere static-body="shape: sphere; sphereRadius: 0.4;"
                                         material="visible: false;">
@@ -949,9 +960,9 @@
                         static-body="shape: none;" shape__main="shape: box; halfExtents: 0.3 0.5 0.3;">
                         <a-entity id="glucose-ped" position="0 0.7 0" gltf-model="#glucose-glb" circles-artefact="label_offset:0.0 0.5 0.0; label_arrow_position:down;
                                 title:Glucose;
-                                description:If glucose is present in the environment then cAMP proteins won't be present and the CRP won't bind to the capSite.;
+                                description:If glucose is present in the environment then cAMP proteins won't be present and the CRP won't bind to the CAP site.;
                                 title_back:Glucose;
-                                description_back:If glucose is present in the environment then cAMP proteins won't be present and the CRP won't bind to the capSite.;
+                                description_back:If glucose is present in the environment then cAMP proteins won't be present and the CRP won't bind to the CAP site.;
                                 label_text:Glucose;" shadow="receive:false; cast:true;"><a-sphere static-body="shape: sphere; sphereRadius: 0.2;"
                                         material="visible: false;"></a-sphere>
                         </a-entity>
