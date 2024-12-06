@@ -248,8 +248,19 @@ AFRAME.registerComponent('mol-reactor', {
                     CONTEXT_AF.el.parentNode.emit('throw');
                 }
 
-                CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'allolactose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
-                CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'galactose', pos: { x: temp_pos.x + 0.05, y: temp_pos.y, z: temp_pos.z - 0.05 }, rot: 'null' });
+                let lactoseCount = document.querySelectorAll('.lactose').length;
+                if(lactoseCount >= 10){
+                    let randNum = (Math.random() * 10)
+                    if(randNum >= 5){
+                        CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'allolactose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
+                    }else{
+                        CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'glucose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
+                        CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'galactose', pos: { x: temp_pos.x + 0.05, y: temp_pos.y, z: temp_pos.z - 0.05 }, rot: 'null' });
+                    }
+                }else{
+                    CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'glucose', pos: { x: temp_pos.x - 0.05, y: temp_pos.y, z: temp_pos.z + 0.05 }, rot: 'null' });
+                    CONTEXT_AF.mol_manager.emit('mol_spawn', { value: 'galactose', pos: { x: temp_pos.x + 0.05, y: temp_pos.y, z: temp_pos.z - 0.05 }, rot: 'null' });
+                }
 
                 setTimeout(() => { CONTEXT_AF.el.parentNode.remove(); }, 0);
 
