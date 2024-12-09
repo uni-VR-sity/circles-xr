@@ -98,6 +98,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     {
       CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
       CONTEXT_AF.el.removeAttribute('dynamic-body');
+      console.log("PhysicsAttributes: " + CONTEXT_AF.physicsAttributes.shape);
     }
 
     CONTEXT_AF.playerHolder.object3D.attach(CONTEXT_AF.el.object3D);
@@ -172,7 +173,10 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     if (data.physicsObject)
     {
+      console.log("PhysicsAttributes on release: " + CONTEXT_AF.physicsAttributes.shape);
       CONTEXT_AF.el.setAttribute('dynamic-body', CONTEXT_AF.physicsAttributes);
+      
+      console.log("PhysicsAttributes after release: " + CONTEXT_AF.physicsAttributes.shape);
 
       if (data.shapeNames.length > 0)
       {
@@ -180,11 +184,13 @@ AFRAME.registerComponent('circles-pickup-object', {
         for (var i = 0; i < data.shapeNames.length; i++)
         {
           var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
+          console.log("Shape original name: " + shape.shape);
           
           // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
           CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
   
           CONTEXT_AF.el.setAttribute(data.shapeNames[i], shape);
+          console.log("Shape new name: " + shape.shape);
         }
       }
     }
