@@ -172,7 +172,7 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     if (data.physicsObject)
     {
-      CONTEXT_AF.el.setAttribute('dynamic-body', CONTEXT_AF.physicsAttributes);
+      CONTEXT_AF.el.setAttribute('dynamic-body', {shape: CONTEXT_AF.physicsAttributes.shape, mass: CONTEXT_AF.physicsAttributes.mass, angluarDamping: CONTEXT_AF.physicsAttributes.angluarDamping, linearDamping: CONTEXT_AF.physicsAttributes.linearDamping, sphereRadius: CONTEXT_AF.physicsAttributes.sphereRadius, cylinderAxis: CONTEXT_AF.physicsAttributes.cylinderAxis});
 
       if (data.shapeNames.length > 0)
       {
@@ -184,7 +184,7 @@ AFRAME.registerComponent('circles-pickup-object', {
           // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
           CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
   
-          CONTEXT_AF.el.setAttribute(data.shapeNames[i], shape);
+          CONTEXT_AF.el.setAttribute(data.shapeNames[i], {shape: shape.shape, offset: shape.offset, orientation: shape.orientation, radius: shape.radius, halfExtents: shape.halfExtents, radiusTop: shape.radiusTop, radiusBottom: shape.radiusBottom, height: shape.height, numSegments: shape.numSegments, });
         }
       }
     }
@@ -249,7 +249,7 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     if (data.physicsObject)
     {
-      CONTEXT_AF.el.setAttribute('dynamic-body', CONTEXT_AF.physicsAttributes);
+      CONTEXT_AF.el.setAttribute('dynamic-body', {shape: CONTEXT_AF.physicsAttributes.shape, mass: CONTEXT_AF.physicsAttributes.mass, angluarDamping: CONTEXT_AF.physicsAttributes.angluarDamping, linearDamping: CONTEXT_AF.physicsAttributes.linearDamping, sphereRadius: CONTEXT_AF.physicsAttributes.sphereRadius, cylinderAxis: CONTEXT_AF.physicsAttributes.cylinderAxis});
 
       if (data.shapeNames.length > 0)
       {
@@ -261,7 +261,7 @@ AFRAME.registerComponent('circles-pickup-object', {
           // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
           CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
   
-          CONTEXT_AF.el.setAttribute(data.shapeNames[i], shape);
+          CONTEXT_AF.el.setAttribute(data.shapeNames[i], {shape: shape.shape, offset: shape.offset, orientation: shape.orientation, radius: shape.radius, halfExtents: shape.halfExtents, radiusTop: shape.radiusTop, radiusBottom: shape.radiusBottom, height: shape.height, numSegments: shape.numSegments, });
         }
       }
     }
