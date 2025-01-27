@@ -52,6 +52,7 @@ function updateProfile(event, guestUser)
             // If values have changed, updating form
             document.getElementById('displayName').value = formData.get('displayName');
 
+            /*
             if (!guestUser)
             {
                 if (formData.get('email').length > 0)
@@ -64,6 +65,7 @@ function updateProfile(event, guestUser)
                     document.getElementById('email').value = '';
                 }
             }
+            */
         }
     }
 
@@ -71,6 +73,7 @@ function updateProfile(event, guestUser)
 
     if (!guestUser)
     {
+        /*
         if (formData.get('email').length > 0)
         {
             dataString += '&email=' + formData.get('email');
@@ -80,6 +83,7 @@ function updateProfile(event, guestUser)
         {
             dataString += '&deleteEmail=' + formData.get('deleteEmail');
         }
+            */
 
         if (formData.get('passwordOld').length > 0)
         {
