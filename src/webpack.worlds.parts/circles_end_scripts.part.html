@@ -210,42 +210,66 @@
     ]
   });
 
+  var serverReady = false;
+  var modelsReady = false;
+
   // Called by Networked-Aframe when connected to server
-  function onConnect () {
+  function onConnect() 
+  {
     console.log("custom onConnect: ", new Date());
 
     CIRCLES.setupCirclesWebsocket();
 
-    //depending on scene loaded results in the mic button not working if clicked too fast
-    //it also means the mic button has no effect (when 'adapter-ready' fires the mic also cannot be enabled/diabled) ...
-    //I am not sure this is the best way to do this; but audio feedback is even worse ...
-    document.querySelector('#loading-animation-enter').style.display='none';
-    document.querySelectorAll('.user-gesture-button').forEach((elem)=> {
-      //if entering the wardrobe world no need to show "enter wardrobe button"
-      if (window.location.pathname.match(/wardrobe/i)) {
-        if (elem.id !== 'wardrobe-enter') {
+    serverReady = true;
+
+    enterScene();
+  }
+
+  // Called by circles-model-loader when all models are loaded in scene
+  function onModelLoad()
+  {
+    modelsReady = true;
+
+    enterScene();
+  }
+
+  // Allowing user to enter scene
+  function enterScene()
+  {
+    // If both server and models are ready
+    if (serverReady && modelsReady)
+    {
+      //depending on scene loaded results in the mic button not working if clicked too fast
+      //it also means the mic button has no effect (when 'adapter-ready' fires the mic also cannot be enabled/diabled) ...
+      //I am not sure this is the best way to do this; but audio feedback is even worse ...
+      document.querySelector('#loading-animation-enter').style.display='none';
+      document.querySelectorAll('.user-gesture-button').forEach((elem)=> {
+        //if entering the wardrobe world no need to show "enter wardrobe button"
+        if (window.location.pathname.match(/wardrobe/i)) {
+          if (elem.id !== 'wardrobe-enter') {
+            elem.style.display='block';
+          }
+        }
+        else {
           elem.style.display='block';
         }
-      }
-      else {
-        elem.style.display='block';
-      }
-    });
+      });
 
-    //need to re-direct to wardrobe world if the user isn't "dressed" yet
-    //make sure we add all urlParams together from provided link and existing url bar
-    //const queryString = ((window.location.search) ? window.location.search + '&' : '?') + ((urlArr.length > 1) ? urlArr[1] : window.location.search);
+      //need to re-direct to wardrobe world if the user isn't "dressed" yet
+      //make sure we add all urlParams together from provided link and existing url bar
+      //const queryString = ((window.location.search) ? window.location.search + '&' : '?') + ((urlArr.length > 1) ? urlArr[1] : window.location.search);
 
-    //we want to know if we have visited a world already during this session ...
-    //const urlParams = new URLSearchParams(queryString);
-    //urlParams.append('last_route', window.location.pathname);
-    // if (!urlParams.has('last_route')) {
-    //   urlParams.append('last_visited', '1');
-    // }
-    
-    //mic sometimes is on for some reason
-    if (CIRCLES.CONSTANTS.CIRCLES_WEBRTC_ENABLED && CIRCLES.CONSTANTS.CIRCLES_MIC_ENABLED) {
-      NAF.connection.adapter.enableMicrophone(false);
+      //we want to know if we have visited a world already during this session ...
+      //const urlParams = new URLSearchParams(queryString);
+      //urlParams.append('last_route', window.location.pathname);
+      // if (!urlParams.has('last_route')) {
+      //   urlParams.append('last_visited', '1');
+      // }
+      
+      //mic sometimes is on for some reason
+      if (CIRCLES.CONSTANTS.CIRCLES_WEBRTC_ENABLED && CIRCLES.CONSTANTS.CIRCLES_MIC_ENABLED) {
+        NAF.connection.adapter.enableMicrophone(false);
+      }
     }
   }
 </script>
