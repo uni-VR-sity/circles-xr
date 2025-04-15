@@ -1,0 +1,21 @@
+@import './variables.scss';
+@import './base.scss';
+@import './breakpoints.scss';
+@import './pure-overrides.scss';
+@import './homepage.scss';
+@import './profile.scss';
+@import './topbar.scss';
+
+.content {
+  max-width: $content-width;
+  margin: $content-vertical-gutter auto;
+  padding: $gutter;
+}
+
+.gutter-bottom {
+  margin-bottom: $gutter;
+}
+
+.gutter-bottom-doubled {
+  margin-bottom: calc($gutter * 2);
+}
