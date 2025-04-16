@@ -1,0 +1,1192 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- REQUIRED --------------------------------------------------------------------------------------------------------------->
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+
+    <!-- OUR COMPONENTS --------------------------------------------------------------------------------------------------------->
+    <script src="/worlds/STS-Spaceship/components/weight_bar.js"></script>
+    <script src="/worlds/STS-Spaceship/components/system_ready.js"></script>
+    <script src="/worlds/STS-Spaceship/components/enter_launch_sequence.js"></script>
+    <script src="/worlds/STS-Spaceship/components/fuel_button.js"></script>
+    <script src="/worlds/STS-Spaceship/components/players_ready.js"></script>
+    <script src="/worlds/STS-Spaceship/components/levers.js"></script>
+    <script src="/worlds/STS-Spaceship/components/turn_dial.js"></script>
+    <script src="/worlds/STS-Spaceship/components/break_tank.js"></script>
+
+    </head>
+    <body>
+
+    <!-- REQUIRED --------------------------------------------------------------------------------------------------------------->
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- REQUIRED -->
+    <a-scene circles_scene_properties>
+             
+
+      <a-assets>
+        <!-- OUR ASSETS --------------------------------------------------------------------------------------------------------->
+
+        <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+        
+        <!-- IMAGES -->
+        <img id="ui" src="/worlds/STS-Spaceship/assets/images/ui.png" crossorigin="anonymous">
+        <img id="sky" src="/worlds/STS-Spaceship/assets/images/black stars.jpg">
+        <img id="floor" src="/worlds/STS-Spaceship/assets/images/floor.jpg">
+        <img id="panel3" src="/worlds/STS-Spaceship/assets/images/panel 3.png">
+        <img id="panel1" src="/worlds/STS-Spaceship/assets/images/panel 1.png">
+        <img id="panel2" src="/worlds/STS-Spaceship/assets/images/middle.png">
+        <img id="panel4" src="/worlds/STS-Spaceship/assets/images/dash.png">
+        <img id="backwall" src="/worlds/STS-Spaceship/assets/images/backwall.jpg">
+        <img id="backwall" src="/worlds/STS-Spaceship/assets/images/backwall.jpg">
+        <img id="wall" src="/worlds/STS-Spaceship/assets/images/wall1.jpg">
+        <img id="panel5" src="/worlds/STS-Spaceship/assets/images/front_console_texture.jpg">
+         
+          <!-- 3D MODELS -->
+          <a-asset-item id="Cockpit" response-type="arraybuffer" src="/worlds/STS-Spaceship/assets/models/cockpit/version3.gltf"></a-asset-item>   
+
+        <img id="task0GUI" src="/worlds/STS-Spaceship/assets/textures/task0GUI.png">
+        <img id="task1GUI" src="/worlds/STS-Spaceship/assets/textures/task1GUI.png">
+        <img id="task2GUI" src="/worlds/STS-Spaceship/assets/textures/task2GUI.png">
+        <img id="task3GUI" src="/worlds/STS-Spaceship/assets/textures/task3GUI.png">
+        <img id="task4GUI" src="/worlds/STS-Spaceship/assets/textures/task4GUI.png">
+        <img id="task5GUI" src="/worlds/STS-Spaceship/assets/textures/task5GUI.png">
+        <img id="task6GUI" src="/worlds/STS-Spaceship/assets/textures/task6GUI.png">
+        <img id="task7GUI" src="/worlds/STS-Spaceship/assets/textures/task7GUI.png">
+        <img id="task8GUI" src="/worlds/STS-Spaceship/assets/textures/task8GUI.png">
+        <img id="task9GUI" src="/worlds/STS-Spaceship/assets/textures/task9GUI.png">
+        <img id="task10GUI" src="/worlds/STS-Spaceship/assets/textures/task10GUI.png">
+        <img id="task11GUI" src="/worlds/STS-Spaceship/assets/textures/task11GUI.png">
+
+        <img id="prelaunchSuccessGUI" src="/worlds/STS-Spaceship/assets/textures/prelaunchSuccess.png">
+        <img id="prelaunchFailGUI" src="/worlds/STS-Spaceship/assets/textures/prelaunchFail.png">
+        <img id="missionSuccessGUI" src="/worlds/STS-Spaceship/assets/textures/missionComplete.png">
+        <img id="missionFailGUI" src="/worlds/STS-Spaceship/assets/textures/missionFail.png">
+
+        <!-- REQUIRED ----------------------------------------------------------------------------------------------------------->
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- WORLD GENERATION STARTS HERE ----------------------------------------------------------------------------------------->
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+      <!-- Starting game -->
+        <!-- ambient music/sound -->
+        <a-entity circles-sound="type:music; src:/worlds/STS-Spaceship/assets/sounds/Robots Outro.mp3; autoplay:true; loop:true; volume:0.5;"></a-entity>
+         
+
+         <a-entity id="Scale test" scale="0.9 0.9 0.9">
+
+          <!-- LIGHT -->
+         <a-entity id="ambient" light="color: #eadac2; intensity: 0.420; type: ambient"></a-entity>
+
+        <!-- MAIN ROOM -->
+         <a-entity id="cockpit" gltf-model="#Cockpit" position="0 0.04057 0" rotation=""></a-entity>
+     
+         <!-- CHECKPOINTS -->
+        <a-entity geometry="primitive:cylinder; radius:0.5; height: 0.04"
+                  material="color:#ffa200"
+                  circles-checkpoint="useDefaultModel:false" 
+                  position="0.280 0.05158 3.28089"
+                  circles-interactive-object="type:outline">
+            </a-entity>
+            <a-entity geometry="primitive:cylinder; radius:0.5; height: 0.04"
+                  material="color:#ffa200"
+                  circles-checkpoint="useDefaultModel:false" 
+                  position="1.48974 0.052 0.99886"
+                  circles-interactive-object="type:outline">
+            </a-entity>
+            <a-entity geometry="primitive:cylinder; radius:0.5; height: 0.04"
+                  material="color:#ffa200"
+                  circles-checkpoint="useDefaultModel:false" 
+                  position="-0.90069 0.05158 0.93402"
+                  circles-interactive-object="type:outline">
+            </a-entity>
+            <a-entity geometry="primitive:cylinder; radius:0.5; height: 0.04"
+                  material="color:#ffa200"
+                  circles-checkpoint="useDefaultModel:false" 
+                  position="1.242 0 -1.065"
+                  circles-interactive-object="type:outline">
+            </a-entity>
+            <a-entity geometry="primitive:cylinder; radius:0.5; height: 0.04"
+                  material="color:#ffa200"
+                  circles-checkpoint="useDefaultModel:false" 
+                  position="-0.547 0 -1.076"
+                  circles-interactive-object="type:outline">
+            </a-entity>
+
+         <!-- NAVMESh -->
+         <a-entity id="navmesh" gltf-model="/worlds/STS-Spaceship/assets/models/navmesh.gltf" nav-mesh visible="false"></a-entity>
+
+       <!-- BACKGROUND -->
+
+        <a-entity light="color: #9eb1ff; intensity: 3.4; penumbra: 0.7; type: point" id="point" position="0 2.282 0"></a-entity>
+        <a-entity light="color: #f09b56; intensity: 0.9; type: hemisphere" id="light"></a-entity>
+        <a-entity geometry="primitive: plane" rotation="-90 0 0" material="src:#floor;" id="ground" scale="7.18939 8.86967 8.109" position="0 0  0.578"></a-entity>
+        <a-sky animation="property: object3D.rotation.x; to: -360; loop: true; easing: linear; dur: 96000" id="#skydome" src="#sky"></a-sky>
+
+        <!-- photo consoles -->
+        <a-entity geometry="" position="0.21595 2.64001 -0.51494" scale="1.97742 0.07465 2.6487" rotation="" material="src: #panel1; color: #616161;" id="panel1-2"></a-entity>
+        <a-entity geometry="" position="0.191 2.33052 -2.58551" scale="2.2227 0.07812 1.27871" rotation="-28.62611736032619 0 0" material="src: #panel3; color: #616161;" id="panel1"></a-entity>
+        <a-entity geometry="" position="0.28228 0.428 -1.382" scale="0.62407 0.462 2.09625" rotation="9.38218389526723 0 0" material="src: #panel2; color: #616161;" id="panel1-3"></a-entity>
+
+        <a-entity geometry="" position="0.318 1.48037 4.553" scale="7.07093 0.118 3.46484" rotation="90 90 90" material="src: #backwall;" id="panel1-4"></a-entity>
+
+        <a-entity geometry="" position="-2.011 0.70655 -0.21468" scale="4.21103 0.01654 0.901" rotation="21.598217045251513 90.00021045914971 0" material="src: #panel4; color: #616161;" id="panel1-3"></a-entity>
+        <a-entity geometry="" position="2.58599 0.707 -0.215" scale="4.211 0.017 0.901" rotation="-21 90 180" material="src: #panel4; color: #616161" id="panel1-5"></a-entity>
+   
+        <a-entity geometry="" position="3.20903 1.48037 2.19148" scale="7.07093 0.118 3.46484" rotation="90 0 90" material="src: #wall;  color: #969696" id="panel1-7"></a-entity>
+        <a-entity geometry="" position="-3.04088 1.48037 2.26084" scale="7.07093 0.118 3.46484" rotation="90 0 90" material="src: #wall;  color: #969696" id="panel1-7"></a-entity>
+   
+        <!-- Portal to discovery dome -->
+      <a-entity id="discoveryPortal" visible="false"
+                position="0 1.5 -6" rotation="0 -90 0"
+                circles-portal="img_src:/worlds/STS-Spaceship/assets/textures/domeImg.png; title_text:To Discovery Dome; link_url:/w/STS-InfoRoom"
+                shadow>
+          </a-entity>
+
+          <!-- Player 3 button -->
+          <a-entity id="player 3 button folder" scale="0.4 0.4 0.4" rotation="0 0 0" position="0.276 0.552 -2.614">
+          <a-entity geometry="depth:0.75; width:0.75; height:0.5" 
+                position="-3.5 0.25 0" 
+                material="color:#424243">
+          </a-entity>
+          <a-entity id="player3Ready"
+                circles-button="button_color: #fb9d9d; diameter: 0.75; button_color_hover: #ff7575; pedastal_color: #424243" 
+                position="-3.5 0.5 0">
+          </a-entity>
+        </a-entity>
+
+          <!-- Player 4 button -->
+          <a-entity id="player 4 button folder" scale="0.4 0.4 0.4" position="0.276 0.552 -2.614">
+          <a-entity geometry="depth:0.75; width:0.75; height:0.5" 
+                position="3.5 0.25 0" 
+                material="color:#424243">
+          </a-entity>
+          <a-entity id="player4Ready"
+                circles-button="button_color: #fb9d9d; diameter: 0.75; button_color_hover: #ff7575; pedastal_color: #424243" 
+                position="3.5 0.5 0">
+          </a-entity>
+          </a-entity>
+
+      <a-entity players_ready id="startingGameManager" visible="true">
+
+        <!-- Instructions -->
+        <a-entity id="Instructions" position="0.112 1.16">
+        <a-entity text="value:Each player press a ready\nbuttons to start the experience; 
+                        align:center; color:#FFFFFF; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="0 3 -6.85">
+        </a-entity>
+
+        <a-entity text="value:Mission Control; 
+                        align:center; color:#FFFFFF; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="-4.5 3.5 -6.85">
+        </a-entity>
+
+        <a-entity text="value:Spaceship; 
+                        align:center; color:#FFFFFF; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="4.5 3.5 -6.85">
+        </a-entity>
+      </a-entity>
+        <!-- Player Ready Texts -->
+        <a-entity id="PLayer Text" scale="0.866 0.866 0.866" position="0.324 -0.605 1.13">
+        <a-entity id="player1ReadyText"
+                  text="value:Player 1 Ready; 
+                        align:center; color:#4a4a4a; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="-4.5 3 -6.85">
+        </a-entity>
+
+        <a-entity id="player2ReadyText"
+                  text="value:Player 2 Ready; 
+                        align:center; color:#4a4a4a; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="-4.5 2.5 -6.85">
+        </a-entity>
+
+        <a-entity id="player3ReadyText"
+                  text="value:Player 3 Ready; 
+                        align:center; color:#4a4a4a; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="4.5 3 -6.85">
+        </a-entity>
+
+        <a-entity id="player4ReadyText"
+                  text="value:Player 4 Ready; 
+                        align:center; color:#4a4a4a; lineHeight:60"
+                  rotation="0 0 0" 
+                  scale="4 4 4" 
+                  position="4.5 2.5 -6.85">
+        </a-entity>
+      </a-entity>
+
+      </a-entity>
+
+      <script>
+        let startingSocket = io();
+
+        startingSocket.on('connect', (userData) => 
+        {
+          var startingManager = document.querySelector('#startingGameManager');
+
+          // Emitting if players 3 and 4 are ready or not every 100 milliseconds
+          ready = setInterval(function() 
+          {
+            startingSocket.emit('player3Ready', {ready: startingManager.getAttribute('players_ready')['player3'], room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+            startingSocket.emit('player4Ready', {ready: startingManager.getAttribute('players_ready')['player4'], room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+          }, 100);
+
+          // Listening for is players 1 and 2 are ready and updating their player ready texts accordingly
+          startingSocket.on('player1Ready', (data) => 
+          {
+            if (data.ready === true)
+            {
+              document.querySelector('#player1ReadyText').setAttribute('text', {color: '#00FF00'});
+            }
+            else
+            {
+              document.querySelector('#player1ReadyText').setAttribute('text', {color: '#4a4a4a'});
+            }
+          });
+
+          startingSocket.on('player2Ready', (data) => 
+          {
+            if (data.ready === true)
+            {
+              document.querySelector('#player2ReadyText').setAttribute('text', {color: '#00FF00'});
+            }
+            else
+            {
+              document.querySelector('#player2ReadyText').setAttribute('text', {color: '#4a4a4a'});
+            }
+          });
+
+          // Listening for if all players are ready to start the game
+          // If they are, begin the first task
+          startingSocket.on('allPlayersReady', (data) => 
+          {
+            // So this is only executed once
+            if (startingManager.getAttribute('visible') === true)
+            {
+              startingManager.setAttribute('visible', false);
+
+              document.querySelector('#player3Ready').setAttribute('circles-button', {button_color: '#424243', button_color_hover: '#424243'});
+              document.querySelector('#player4Ready').setAttribute('circles-button', {button_color: '#424243', button_color_hover: '#424243'});
+
+              // Updating GUI to display current task
+              document.querySelector('#guiOverlay').setAttribute('material', {src:'#task1GUI'});
+            }
+          });
+        });
+      </script>
+
+      <!-- TASK 2: Check cargo weight and determine if it’s too heavy -->
+      <a-entity id="Task2 Cargo" scale="0.5 0.5 0.5" position="1.159 0 1.079">
+      <!-- TV -->
+      <!-- screen folder start :0 -->
+        <a-entity id="Screen component" position="-0.147 1.358 0">
+      <!-- Screen -->
+      <a-entity id="weightScreen"
+                geometry="primitive:plane; height:1.5; width:1.5" 
+                rotation="0 90 0" 
+                position="-7.9 2 0" 
+                material="src: #FFFFFF">
+      </a-entity>
+
+      <!-- Weight Bar -->
+      <a-entity id="weightBar"
+                geometry="height:0; width:1.5; primitive:plane;" 
+                rotation="0 90 0" 
+                position="-7.895 1.25 0" 
+                material="color:#9db0fb">
+      </a-entity>
+
+      <!-- Base -->
+      <a-entity id="task2Component"
+                geometry="depth:2; height:2; width:0.15" 
+                position="-8 2 0" 
+                material="color:#2b2c31"
+                weight_bar>
+      </a-entity>
+      <!-- end screen folder :0 -->
+    </a-entity>
+    <!-- task 2 folder end :0 -->
+
+
+      <!-- Buttons -->
+
+      <!-- Up -->
+      <a-entity id="weightUp"
+                circles-button="button_color: #2b2c31; diameter: 0.75; button_color_hover: #2b2c31; pedastal_color: #2b2c31" 
+                position="-8 3.839 -1.7"
+                rotation="0 0 -90">
+      </a-entity>
+
+      <!-- Down -->
+      <a-entity id="weightDown"
+                circles-button="button_color: #2b2c31; diameter: 0.75; button_color_hover: #2b2c31; pedastal_color: #2b2c31" 
+                position="-8 2.940 -1.7"
+                rotation="0 0 -90">
+      </a-entity>
+    </a-entity>
+      <!-- TASK 3: Engaging seatbelts and turning on system -->
+
+      <a-entity id="Task 3">
+      <!-- Player 1 button -->
+      <a-entity id="Player 1 Button Folder" scale="0.400 0.400 0.400" position="0.725 0.383 0.880">
+      <a-entity geometry="depth:0.75; width:0.75; height:0.5" 
+                position="3 0.25 -5" 
+                material="color:#141419">
+      </a-entity>
+      <a-entity id="player1Button"
+                circles-button="button_color: #141419; diameter: 0.75; button_color_hover: #141419; pedastal_color: #141419" 
+                position="3 0.5 -5">
+      </a-entity>
+    </a-entity>
+      <!-- Player 2 button -->
+      <a-entity id="Player 2 Button Folder" scale="0.400 0.400 0.400" position="-0.125 0.358 0.915">
+      <a-entity geometry="depth:0.75; width:0.75; height:0.5" 
+                position="-3 0.25 -5" 
+                material="color:#141419">
+      </a-entity>
+      <a-entity id="player2Button"
+                circles-button="button_color: #141419; diameter: 0.75; button_color_hover: #141419; pedastal_color: #141419" 
+                position="-3 0.5 -5">
+      </a-entity>
+    </a-entity>
+      <a-entity id="Screen Folder ready" scale="0.400 0.400 0.400" rotation="90.000" position="0.218 -0.317 -2.886">
+      <!-- Screen -->
+      <a-entity id="task3Component"
+                system_ready
+                geometry="depth:0.25; width:2" 
+                rotation="-30 0 0" 
+                material="color:#2a2a2c"
+                position="0 1.5 -7">
+      </a-entity>
+      <a-entity id="player1Ready"
+                geometry="primitive:plane; height:0.75; width:0.75" 
+                rotation="-30 0 0" 
+                position="0.46 1.56 -6.85"
+                material="color:#FF0000">
+      </a-entity>
+      <a-entity id="player2Ready"
+                geometry="primitive:plane; height:0.75; width:0.75" 
+                rotation="-30 0 0" 
+                position="-0.46 1.56 -6.85"
+                material="color:#FF0000">
+      </a-entity>
+    </a-entity>
+    <!-- end player screen :0 -->
+    </a-entity>
+      <!-- TASK 4: The flight crew presses a button to request data, the mission control must read off a set of numbers for the crew to type in -->
+      <a-entity id="Task 4 NUMBERS" scale="0.6 0.6 0.6" position="-1.934 0.662 0.420">
+      <!-- Button to request data -->
+      <a-entity id="Button Folder" rotation ="0 0 22.824" position ="1.467 -3.428 1.888">
+      <a-entity geometry="depth:0.75; width:0.75; height:1" 
+                position="7 0.5 -1" 
+                material="color:#2b2c31">
+      </a-entity>
+      <a-entity id="dataRequest"
+                circles-button="button_color: #2b2c31; diameter: 0.75; button_color_hover: #2b2c31; pedastal_color: #2b2c31" 
+                position="7 1 -1">
+      </a-entity>
+
+      
+    </a-entity>
+      <!-- Screen -->
+      <!-- Base -->
+      <a-entity geometry="depth:3; height:2; width:0.15" 
+                position="8 2 1" 
+                material="color:#2b2c31">
+      </a-entity>
+      <a-entity geometry="primitive:plane; height:1.5; width:2.5" 
+                rotation="0 -90 0" 
+                position="7.9 2 1" 
+                material="color:#e6e6e6">
+      </a-entity>
+      <a-entity text="value: ___   ___   ___   ___   ___   ___;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.903 2.3 1">
+      </a-entity>
+    
+      <!-- Instructions -->
+      <a-entity id="dataRequestInstructions"
+                text="value: Press the button to request \n the code from mission control; 
+                      align:center; color:#000000; lineHeight:60" 
+                rotation="0 -90 0" 
+                scale="3 3 3" 
+                position="7.902 1.76 1">
+      </a-entity>
+
+      <!-- Number pad -->
+      <a-entity id="numberPad" position="0.09 0 0" visible="false">
+        <!-- The child elements have to be in order from 0 to 9 (with the backspace last) or the user clicks on the number pad won't work correctly -->
+        <a-entity id="pad">
+          <!-- 0 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.9 0.1" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 1 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.9 0.45" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 2 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.9 0.8" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 3 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.9 1.15" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 4 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.9 1.5" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 5 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.55 0.1" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 6 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.55 0.45" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 7 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.55 0.8" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 8 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.55 1.15" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- 9 -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.55 1.5" 
+                    material="color:#9db9fb">
+          </a-entity>
+          <!-- Backspace -->
+          <a-entity class="interactive"
+                    geometry="primitive:plane; height:0.3; width:0.3" 
+                    rotation="0 -90 0" 
+                    position="7.8 1.745 1.9" 
+                    material="color:#75a3ff">
+          </a-entity>
+        </a-entity>
+        <a-entity id="numbers" position="0.02 0 0">
+          <a-entity text="value:0;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.9 0.1">
+          </a-entity>
+          <a-entity text="value:1;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.9 0.45">
+          </a-entity>
+          <a-entity text="value:2;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.9 0.8">
+          </a-entity>
+          <a-entity text="value:3;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.9 1.15">
+          </a-entity>
+          <a-entity text="value:4;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.9 1.5">
+          </a-entity>
+          <a-entity text="value:5;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.55 0.1">
+          </a-entity>
+          <a-entity text="value:6;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.55 0.45">
+          </a-entity>
+          <a-entity text="value:7;
+                         align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.55 0.8">
+          </a-entity>
+          <a-entity text="value:8;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.55 1.15">
+          </a-entity>
+          <a-entity text="value:9;
+                          align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.78 1.55 1.5">
+          </a-entity>
+          <a-entity text="value:X;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                    rotation="0 -90 0" 
+                    scale="3 3 3" 
+                    position="7.8 1.745 1.9">
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <!-- Text for code -->
+      <!-- The order of the children matter and need to be from left to right or the display of the sequence will not display correctly -->
+      <a-entity id="code" position="0.103 0 0" enter_launch_sequence>
+        <a-entity text="value:;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.8 2.4 0.07">
+        </a-entity>
+        <a-entity text="value:;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.8 2.4 0.445">
+        </a-entity>
+        <a-entity text="value:;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.8 2.4 0.805">
+        </a-entity>
+        <a-entity text="value:;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.8 2.4 1.176">
+        </a-entity>
+        <a-entity text="value:;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.8 2.4 1.542">
+        </a-entity>
+        <a-entity text="value:;
+                      align:center; color:#000000; lineHeight:0.05;" 
+                rotation="0 -90 0" 
+                scale="4 4 4" 
+                position="7.8 2.4 1.91">
+        </a-entity>
+      </a-entity>
+
+      <script>
+        let task4Socket = io();
+
+        task4Socket.on('connect', (userData) => 
+        {
+            // Checking if task 3 is complete
+            // If it is, emit it and updated GUI
+            task3Check = setInterval(function()
+            {
+                if (document.querySelector('#task3Component').getAttribute('system_ready')['ready'] === true)
+                {
+                  taskManager.emit('task3Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                  clearInterval(task3Check);
+
+                  document.querySelector('#code').setAttribute('enter_launch_sequence', {isPrevComplete: true});
+
+                  // Updating GUI to display current task
+                  document.querySelector('#guiOverlay').setAttribute('material', {src:'#task4GUI'});
+
+                  document.querySelector('#dataRequest').setAttribute('circles-button', {button_color: '#9db9fb', button_color_hover: '#75a3ff'});
+                }
+            }, 1000);
+
+            // Listening for the data request button click and emit it when it is
+            document.querySelector('#dataRequest').addEventListener('click', function()
+            {
+              // Only running if task 3 is complete (checking spot_the_difference component)
+              if (document.querySelector('#code').getAttribute('enter_launch_sequence')['isPrevComplete'] === true)
+              {
+                task4Socket.emit('dataRequest', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+                // Hiding the data request instructions
+                document.querySelector('#dataRequestInstructions').setAttribute('visible', false);
+
+                // Make number pad visible
+                document.querySelector('#numberPad').setAttribute('visible', true);
+                }
+            });
+
+            // Listening for the launch sequence
+            // Storing the the sequence to compare to the launch sequence the flight crew enters
+            task4Socket.on('launchSequence', (data) => 
+            {
+              document.querySelector('#code').setAttribute('enter_launch_sequence', {sequence: data.sequence});
+            });
+        });
+      </script>
+</a-entity>
+
+      <!-- TASK 5: Flight crew must fill up gas tank to an amount only visible to mission control -->
+    <a-entity id="Task 5: Fuel" scale="0.5 0.5 0.5" position="0.303 0.371 0.998">
+      <!-- Base -->
+      <a-entity geometry="depth:2; height:2.5; width:0.15" 
+                position="0 2 7" 
+                rotation="0 90 0"
+                material="color:#2b2c31">
+      </a-entity>
+
+      <!-- Fuel tank background -->
+      <a-entity geometry="primitive:plane; height:1.3" 
+                position="0 1.8 6.9" 
+                rotation="0 180 0"
+                material="color:#FFFFFF">
+      </a-entity>
+      <a-entity geometry="primitive:plane; width:0.5; height:0.5" 
+                position="0 2.6 6.9" 
+                rotation="0 180 0"
+                material="color:#FFFFFF">
+      </a-entity>
+
+      <!-- Fuel tank -->
+      <a-entity id="fuelTank"
+                geometry="width:0.75; height:1; primitive:plane" 
+                position="0 1.8 6.89" 
+                rotation="0 180 0"
+                material="color:#d9d9d9">
+      </a-entity>
+
+      <!-- Fuel bar -->
+      <a-entity id="fuelBar"
+                geometry="width:0.75; height:0; primitive:plane" 
+                position="0 1.3 6.88" 
+                rotation="0 180 0"
+                material="color:#FFDD00">
+      </a-entity>
+
+      <!-- Button -->
+      <a-entity id="fuelButton"
+                fuel_button
+                circles-button="button_color: #2b2c31; diameter: 0.75; button_color_hover: #2b2c31; pedastal_color: #2b2c31" 
+                position="-1.6 2 7"
+                rotation="-90 0 0">
+      </a-entity>
+
+      <script>
+        let task5Socket = io();
+
+        task5Socket.on('connect', (userData) => 
+        {
+            // Emitting the fuel bar height every 30 milliseconds
+            setInterval(function() 
+            {
+              task5Socket.emit('fuelBarHeight', {height: document.querySelector('#fuelBar').getAttribute('geometry')['height'], room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+            }, 30);
+
+            // Listening for when the fuel bar has reached the ideal height
+            task5Socket.on('idealFuelReached', (data) =>
+            {
+              fuelBar = document.querySelector('#fuelBar');
+
+              // Updating that the ideal height has been reached in the component that deals with the fuel bar
+              document.querySelector('#fuelButton').setAttribute('fuel_button', {isIdeal: true});
+
+              // Updating color of fuel bar to indicate ideal amount is reached
+              fuelBar.setAttribute('material', {color: '#00FF00'});
+
+              // Updating the fuel bar height to be exactly the ideal amount
+              fuelBar.setAttribute('geometry', {height: data.idealAmount});
+
+              // Updating fuel bar position to level it out
+              fuelBar.setAttribute('position', {
+                x: fuelBar.getAttribute('position')['x'],
+                y: 1.3 + (data.idealAmount / 2),
+                z: fuelBar.getAttribute('position')['z']
+              });
+
+              document.querySelector('#fuelButton').setAttribute('circles-button', {button_color: '#2b2c31', button_color_hover: '#2b2c31'});
+            });
+        });
+      </script>
+</a-entity>
+      <!-- TASK 7: Place a row of levers into the right order of up/down -->
+
+      <a-entity id="Task7: 6buttons" scale="0.600 0.600 0.600">
+      <!-- Screen -->
+      <a-entity id="Screen Folder" position="-1.331 2.786 -1.288" rotation="-45.000 0 0 " scale="0.400 0.400 0.400">
+        <a-entity geometry="depth: 0.18; height: 2.5; width: 4" position="4.5 3 -7" material="color:#ffffff; src: #panel5" scale="1.939 0.998 1" id="front-panel">
+        </a-entity>
+      
+      <!-- Lever display on screen -->
+      <!-- Position -->
+      <a-entity id="positionScreen"
+                geometry="primitive:plane; height:0.25; width:3" 
+                position="4.5 3.5 -6.85"
+                material="color: #FFFFFF">
+      </a-entity>
+      <a-entity text="value:Position; 
+                      align:left; color:#FFFFFF; lineHeight:60"
+                rotation="0 0 0" 
+                scale="3 3 3" 
+                position="4.47 3.7 -6.85">
+      </a-entity>
+      <a-entity id="positionBar"
+                geometry="primitive:plane; height:0.25; width:0" 
+                material="color: #FFDD00" 
+                position="3 3.5 -6.845">
+      </a-entity>
+
+      <!-- Velocity -->
+      <a-entity id="velocityScreen"
+                geometry="primitive:plane; height:0.25; width:3" 
+                material="color: #FFFFFF" 
+                position="4.5 2.95 -6.85">
+      </a-entity>
+      <a-entity text="value:Velocity; 
+                      align:left; color:#FFFFFF; lineHeight:60"
+                rotation="0 0 0" 
+                scale="3 3 3" 
+                position="4.47 3.15 -6.85">
+      </a-entity>
+      <a-entity id="velocityBar"
+                geometry="primitive:plane; height:0.25; width:0" 
+                material="color: #FFDD00" 
+                position="3 2.95 -6.845">
+      </a-entity>
+
+      <!-- Altitude -->
+      <a-entity id="altitudeScreen"
+                geometry="height:0.25; width:3; primitive:plane" 
+                material="color: #FFFFFF" 
+                position="4.5 2.4 -6.85">
+      </a-entity>
+      <a-entity text="value:Altitude; 
+                      align:left; color:#FFFFFF; lineHeight:60"
+                rotation="0 0 0" 
+                scale="3 3 3" 
+                position="4.47 2.6 -6.85">
+      </a-entity>
+      <a-entity id="altitudeBar"
+                geometry="primitive:plane; height:0.25; width:0" 
+                material="color: #FFDD00" 
+                position="3 2.4 -6.845">
+      </a-entity>
+    </a-entity>
+      <!-- Buttons -->
+      <a-entity id="Levers/buttons folder" rotation="10.000 0 0" position="0.473 0.429 -0.373" scale="0.8 0.8 0.8">
+      <!-- Top -->
+      <a-entity id="topLeft"
+                circles-button="button_color: #333239; diameter: 0.75; button_color_hover: #333239; pedastal_color: #333239" 
+                position="-0.2 0.4 -2.9"
+                scale="0.75 0.75 0.75">
+      </a-entity>
+      <a-entity id="topRight"
+                circles-button="button_color: #333239; diameter: 0.75; button_color_hover: #333239; pedastal_color: #333239" 
+                position="0.2 0.4 -2.9"
+                scale="0.75 0.75 0.75">
+      </a-entity>
+
+      <!-- Middle -->
+      <a-entity id="middleLeft"
+                circles-button="button_color: #333239; diameter: 0.75; button_color_hover: #333239; pedastal_color: #333239" 
+                position="-0.2 0.4 -2.475"
+                scale="0.75 0.75 0.75">
+      </a-entity>
+      <a-entity id="middleRight"
+                circles-button="button_color: #333239; diameter: 0.75; button_color_hover: #333239; pedastal_color: #333239" 
+                position="0.2 0.4 -2.475"
+                scale="0.75 0.75 0.75">
+      </a-entity>
+
+      <!-- Bottom -->
+      <a-entity id="bottomLeft"
+                circles-button="button_color: #333239; diameter: 0.75; button_color_hover: #930101; pedastal_color: #333239" 
+                position="-0.2 0.4 -2.05"
+                scale="0.75 0.75 0.75">
+      </a-entity>
+      <a-entity id="bottomRight"
+                circles-button="button_color: #333239; diameter: 0.75; button_color_hover: #01931e; pedastal_color: #333239" 
+                position="0.2 0.4 -2.05"
+                scale="0.75 0.75 0.75">
+      </a-entity>
+
+      <!-- Base -->
+      <a-entity id="task7Component"
+                geometry="depth: 1.5; height: 0.5" 
+                position="0 0.25 -2.5" 
+                material="color: #333239"
+                levers>
+      </a-entity>
+    </a-entity>
+    <!-- end buttons folder :0 -->
+    </a-entity>
+      <!-- Task 9: Aligning the display towards the sun-->
+<a-entity id="Task 9: dial" scale="0.490 0.490 0.490" position="2.733 0.158 -1.428">
+
+      <a-entity scale="0.750 0.750 0.750" position="-1.268 0.166 0.760">
+
+        <!-- Screen -->
+      <a-entity geometry="primitive: circle; radius: 0.7" 
+                rotation="-90 0 0" 
+                material="" 
+                position="-5 0.751 3">
+      </a-entity>
+
+      <!-- Button -->
+      <a-entity id="spin"
+                circles-button="button_color: #FFFFFF; diameter: 0.75; button_color_hover: #FFFFFF; pedastal_color: #FFFFFF" 
+                position="-5 0.7 3"
+                scale="0.5 0.5 0.5">
+      </a-entity>
+
+      <a-entity id="alignmentContainer" position="-5 0.752 3" visible="false">
+        <a-entity geometry="primitive: triangle; vertexA: 0 0.25 0; vertexB: -0.1 -0.25 0; vertexC: 0.1 -0.25 0" 
+                  rotation="-90 -90 0" 
+                  material="color: #fbff00" 
+                  position="-0.25 0 0">
+        </a-entity>
+      </a-entity>
+
+      <!-- Dial -->
+      <a-entity id="dialContainer" position="-5 0.762 3">
+        <a-entity id="task9Component"
+                  geometry="primitive: plane; height: 0.025; width: 0.5" 
+                  rotation="-90 0 0" 
+                  material="color: #141419" 
+                  position="-0.25 0 0"
+                  turn_dial>
+        </a-entity>
+      </a-entity>
+
+    </a-entity>
+
+      <!-- Base -->
+      <a-entity geometry="primitive: box; width: 1.5; height: 0.75; depth: 1.5" 
+                material="color: #000000" 
+                position="-5 0.177 3" 
+                rotation="0 0 0"
+                scale="1 1.454 1">
+                
+      </a-entity>
+    </a-entity>
+      <script>
+        let task9Socket = io();
+
+        task9Socket.on('connect', (userData) => 
+        {
+            // Emitting the dial rotation every 5 milliseconds
+            setInterval(function() 
+            {
+              task9Socket.emit('dialRotation', {rotation: document.querySelector('#dialContainer').getAttribute('rotation')['y'], room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+            }, 5);
+
+            // Listening for when the dial is aligned
+            // When it is, show the alignment and highlght it
+            task9Socket.on('aligned', (data) =>
+            {
+              // Getting alignment indicator
+              var alignmentContainer = document.querySelector('#alignmentContainer');
+              var alignment = alignmentContainer.children[0];
+              
+              // Getting button that confirms alignment
+              var button = document.querySelector('#spin');
+
+              // Rotating alignment to the correct position
+              alignmentContainer.setAttribute('rotation', {y: data.alignment});
+
+              // Displaying alignment
+              alignmentContainer.setAttribute('visible', true);
+
+              // Changing buttons and alignment colour to indicate the task is complete
+              alignment.setAttribute('material', {color: '#00FF00'});
+              button.setAttribute('circles-button', {button_color: '#FFFFFF', button_color_hover: '#FFFFFF'});
+
+              // Changing component turn_dial attribute to show that the task is complete
+              document.querySelector('#dialContainer').children[0].setAttribute('turn_dial', {isAligned: true});
+
+            });
+        });
+      </script>
+</a-entity>
+      <!-- Task 10: Break off the external fuel tank from the ship -->
+      <a-entity id="Task 10: button" scale="0.500 0.500 0.500" position="0.284 0.873 -0.659">
+      <a-entity geometry="depth:0.75; width:0.75" 
+                position="0 0.5 -5" 
+                material="color:#424243">
+      </a-entity>
+      <a-entity id="task10Component"
+                break_tank
+                circles-button="button_color: #424243; diameter: 0.75; button_color_hover: #424243; pedastal_color: #424243" 
+                position="0 1 -5">
+      </a-entity>
+    </a-entity>
+
+      <!-- Controlling execution of tasks -->
+      <script>
+        let taskManager = io();
+
+        taskManager.on('connect', (userData) => 
+        {
+          // Listening for the timer value to update it
+          taskManager.on('timerValue', (data) => 
+          {
+            document.querySelector('#timer').setAttribute('text', {value: data.time});
+          });
+
+          // Listening for if the prelaunch tasks were a success and updating GUI accordingly
+          taskManager.on('prelaunchSuccess', (data) => 
+          {
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#prelaunchSuccessGUI'});
+          });
+
+          // Listening for if the prelaunch tasks were failed and updating GUI accordingly
+          taskManager.on('prelaunchFail', (data) => 
+          {
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#prelaunchFailGUI'});
+
+            // Turning off all tasks
+            document.querySelector('#task2Component').setAttribute('weight_bar', {isPrevComplete: false});
+            document.querySelector('#task3Component').setAttribute('system_ready', {isPrevComplete: false});
+            document.querySelector('#code').setAttribute('enter_launch_sequence', {isPrevComplete: false});
+            document.querySelector('#fuelButton').setAttribute('fuel_button', {isPrevComplete: false});
+            document.querySelector('#weightUp').setAttribute('circles-button', {button_color: '#2b2c31', button_color_hover: '#2b2c31'});
+            document.querySelector('#weightDown').setAttribute('circles-button', {button_color: '#2b2c31', button_color_hover: '#2b2c31'});
+            document.querySelector('#player1Button').setAttribute('circles-button', {button_color: '#141419', button_color_hover: '#141419'});
+            document.querySelector('#player2Button').setAttribute('circles-button', {button_color: '#141419', button_color_hover: '#141419'});
+            document.querySelector('#dataRequest').setAttribute('circles-button', {button_color: '#2b2c31', button_color_hover: '#2b2c31'});
+            document.querySelector('#fuelButton').setAttribute('circles-button', {button_color: '#2b2c31', button_color_hover: '#2b2c31'});
+            
+            // Display portal to lobby
+            document.querySelector('#discoveryPortal').setAttribute('visible', true);
+          });
+
+          // Listening for if the postlaunch tasks were a success and updating GUI accordingly
+          taskManager.on('postlaunchSuccess', (data) => 
+          {
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#missionSuccessGUI'});
+
+            // Opening lobby portal in 5 seconds
+            setTimeout(function () 
+            {
+              // Display portal to lobby
+              document.querySelector('#discoveryPortal').setAttribute('visible', true);
+              
+            }, 5000);
+          });
+
+          // Listening for if the postlaunch tasks were failed and updating GUI accordingly
+          taskManager.on('postlaunchFail', (data) => 
+          {
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#missionFailGUI'});
+
+            // Turning off all tasks
+            document.querySelector('#task7Component').setAttribute('levers', {isPrevComplete: false});
+            document.querySelector('#task9Component').setAttribute('turn_dial', {isPrevComplete: false});
+            document.querySelector('#task10Component').setAttribute('break_tank', {isPrevComplete: false});
+            document.querySelector('#topLeft').setAttribute('circles-button', {button_color: '#333239', button_color_hover: '#333239'});
+            document.querySelector('#middleLeft').setAttribute('circles-button', {button_color: '#333239', button_color_hover: '#333239'});
+            document.querySelector('#bottomLeft').setAttribute('circles-button', {button_color: '#333239', button_color_hover: '#333239'});
+            document.querySelector('#topRight').setAttribute('circles-button', {button_color: '#333239', button_color_hover: '#333239'});
+            document.querySelector('#middleRight').setAttribute('circles-button', {button_color: '#333239', button_color_hover: '#333239'});
+            document.querySelector('#bottomRight').setAttribute('circles-button', {button_color: '#333239', button_color_hover: '#333239'});
+            document.querySelector('#spin').setAttribute('circles-button', {button_color: '#FFFFFF', button_color_hover: '#FFFFFF'});
+            document.querySelector('#task10Component').setAttribute('circles-button', {button_color: '#424243', button_color_hover: '#424243'});
+
+            // Display portal to lobby
+            document.querySelector('#discoveryPortal').setAttribute('visible', true);
+            
+          });
+
+          // Listening for task 1 to be complete to begin task 2
+          taskManager.on('task1Complete', (data) => 
+          {
+            // Updating GUI to display current task
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#task2GUI'});
+
+            document.querySelector('#task2Component').setAttribute('weight_bar', {isPrevComplete: true});
+          });
+
+          // Checking if task 2 is complete
+          // If it is, begin task 3
+          task2Check = setInterval(function()
+          {
+              if (document.querySelector('#task2Component').getAttribute('weight_bar')['isGood'] === true)
+              {
+                // Updating GUI to display current task
+                document.querySelector('#guiOverlay').setAttribute('material', {src:'#task3GUI'});
+
+                taskManager.emit('task2Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+                document.querySelector('#task3Component').setAttribute('system_ready', {isPrevComplete: true});
+                clearInterval(task2Check);
+
+                // TASK 4 STARTED FROM task4Socket
+
+                // Checking if task 4 is complete
+                // If it is, begin task 5
+                task4Check = setInterval(function()
+                {
+                    if (document.querySelector('#code').getAttribute('enter_launch_sequence')['isMatch'] === true)
+                    {
+                      // Updating GUI to display current task
+                      document.querySelector('#guiOverlay').setAttribute('material', {src:'#task5GUI'});
+
+                      document.querySelector('#fuelButton').setAttribute('fuel_button', {isPrevComplete: true});
+                      taskManager.emit('task4Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                      clearInterval(task4Check);
+
+                      // Checking if task 5 is complete
+                      // If it is, emit it so task 6 can begin in mission control
+                      task5Check = setInterval(function()
+                      {
+                          if (document.querySelector('#fuelButton').getAttribute('fuel_button')['isIdeal'] === true)
+                          {
+                            // Updating GUI to display current task
+                            document.querySelector('#guiOverlay').setAttribute('material', {src:'#task6GUI'});
+
+                            taskManager.emit('task5Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                            clearInterval(task5Check);
+                          }
+
+                      }, 1000);
+                    }
+
+                }, 1000);
+
+              }
+
+          }, 1000);
+
+          // Listening for task 6 to be complete to begin task 7
+          taskManager.on('task6Complete', (data) => 
+          {
+            // Updating GUI to display current task
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#task7GUI'});
+
+            document.querySelector('#task7Component').setAttribute('levers', {isPrevComplete: true});
+          });
+
+          // Checking if task 7 is complete
+          // If it is, emit it so task 8 can begin in mission control
+          task7Check = setInterval(function()
+          {
+              if (document.querySelector('#task7Component').getAttribute('levers')['isGood'] === true)
+              {
+                // Updating GUI to display current task
+                document.querySelector('#guiOverlay').setAttribute('material', {src:'#task8GUI'});
+
+                taskManager.emit('task7Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                clearInterval(task7Check);
+              }
+
+          }, 1000);
+
+          // Listening for task 8 to be complete to begin task 9
+          taskManager.on('task8Complete', (data) => 
+          {
+            // Updating GUI to display current task
+            document.querySelector('#guiOverlay').setAttribute('material', {src:'#task9GUI'});
+
+            document.querySelector('#task9Component').setAttribute('turn_dial', {isPrevComplete: true});
+          });
+
+          // Checking if task 9 is complete
+          // If it is, begin task 10
+          task9Check = setInterval(function()
+          {
+              if (document.querySelector('#task9Component').getAttribute('turn_dial')['isAligned'] === true)
+              {
+                // Updating GUI to display current task
+                document.querySelector('#guiOverlay').setAttribute('material', {src:'#task10GUI'});
+
+                taskManager.emit('task9Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+
+                document.querySelector('#task10Component').setAttribute('break_tank', {isPrevComplete: true});
+
+                clearInterval(task9Check);
+              }
+
+          }, 1000);
+
+          // Checking if task 10 is complete
+          // If it is, emit it so task 11 can begin in mission control
+          task10Check = setInterval(function()
+          {
+              if (document.querySelector('#task10Component').getAttribute('break_tank')['isBrokenOff'] === true)
+              {
+                // Updating GUI to display current task
+                document.querySelector('#guiOverlay').setAttribute('material', {src:'#task11GUI'});
+
+                taskManager.emit('task10Complete', {room:CIRCLES.getCirclesGroupName(), world:CIRCLES.getCirclesWorldName()});
+                clearInterval(task10Check);
+              }
+
+          }, 1000);
+
+        });
+      </script>
+
+    </a-scene>
+
+    <!-- WORLD GENERATION END HERE -------------------------------------------------------------------------------------------->
+
+    <!-- REQUIRED ------------------------------------------------------------------------------------------------------------->
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>

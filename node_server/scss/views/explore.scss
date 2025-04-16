@@ -1,0 +1,725 @@
+// Session Information -----------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#session-information-container {
+
+    .content-container {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        grid-template-areas: "description description"
+                             "session-name-form session-wardrobe-button";
+    
+        // Description
+        #session-information-description {
+            grid-area: description;
+            margin-bottom: $X_LARGE_MARGIN;
+        }
+
+        // Display name form
+        #session-name-form {
+            grid-area: session-name-form;
+        }
+    
+        // Display name button
+        #session-name-button {
+            grid-area: session-name-button;
+            display: none;
+        }
+    
+        // Session wardrobe button
+        #session-wardrobe-button {
+            @include start-flex;
+            align-items: start;
+
+            @include dark-button(flex, 60%, 0);
+
+            a {
+                @include center-flex;
+                height: $FORM_HEIGHT;
+                aspect-ratio: auto;
+
+                .icon-container {
+                    display: inline-block;
+                    height: auto;
+                    width: auto;
+                    margin-right: calc($SMALL_MARGIN + 2px);
+
+                    i {
+                        color: $WHITE;
+                        font-size: $SMALL_ICON;
+                    }
+
+                    i::after {
+                        font: var(--fa-font-solid);
+                        content: '\f553';
+                    }
+                }
+
+                p {
+                    @include no-spacing;
+                    display: inline-block;
+                    font-weight: 400;
+                }
+            }
+
+            a:hover {
+                background-color: $HOVER_DARK_GREY;
+                cursor: pointer;
+
+                .icon-container {
+
+                    i::after {
+                        content: '\e085';
+                    }
+                }
+            }
+
+            /*
+            align-items: start;
+            grid-area: session-wardrobe-button;
+            margin-left: calc($LARGE_MARGIN * 2);
+
+            a {
+                display: grid;
+                grid-template-rows: 1fr 1fr;
+                justify-items: center;
+                background-color: $DARK_GREY;
+                height: 220px;
+                aspect-ratio: 1/1;
+                border-radius: 200px;
+
+                .icon-container {
+                    @include center-flex;
+                    align-items: end;
+                    height: 100%;
+                    outline: none;
+                    background-color: #ffffff00;
+
+                    i {
+                        color: $WHITE;
+                        font-size: $DEFAULT_LARGE_ICON;
+                        margin-bottom: calc($SMALL_MARGIN / 3);
+                    }
+
+                    i::after {
+                        font: var(--fa-font-solid);
+                        content: '\f553';
+                    }
+                }
+
+                p {
+                    color: $WHITE;
+                    font-weight: 500;
+                    margin-top: $SMALL_MARGIN;
+                }
+            }
+
+            a:hover {
+                background-color: $HOVER_DARK_GREY;
+                cursor: pointer;
+
+                .icon-container {
+
+                    i::after {
+                        content: '\e085';
+                    }
+                }
+            }
+            */
+        }
+    }
+}
+
+/*
+// TABLET (AND MOBILE) ----------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
+{   
+    #session-information-container {
+
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            grid-template-areas: "description description"
+                                    "session-name-button session-wardrobe-button"
+                                    "session-name-form session-name-form";
+
+            // Display name form
+            #session-name-form {
+                display: none;
+                margin-top: $X_LARGE_MARGIN;
+                margin-left: calc(-1 * $SECTION_PADDING);
+                margin-right: calc(-1 * $SECTION_PADDING);
+                padding: $LARGE_MARGIN $SECTION_PADDING;
+                background-color: $LIGHT_GREY;
+
+                label {
+                    width: 150px;
+                }
+            }
+            
+            // Display name button
+            #session-name-button {
+                @include center-flex;
+                @include primary-button(inline-block, 80%, 0);
+            }
+
+            // Session wardrobe button
+            #session-wardrobe-button {
+                @include no-spacing;
+                @include center-flex;
+                @include dark-button(flex, 80%, 0);
+
+                a {
+                    @include center-flex;
+                    height: $FORM_HEIGHT;
+                    aspect-ratio: auto;
+
+                    .icon-container {
+                        display: inline-block;
+                        height: auto;
+                        width: auto;
+                        margin-right: calc($SMALL_MARGIN + 2px);
+
+                        i {
+                            @include no-spacing;
+                            font-size: calc($MEDIUM_ICON - 4px);
+                        }
+                    }
+
+                    p {
+                        @include no-spacing;
+                        display: inline-block;
+                        font-weight: 400;
+                    }
+                }
+
+                a:hover {
+                    .icon-container {
+
+                        i::after {
+                            content: '\f553';
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+*/
+
+// Circles -----------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#circles-container {
+
+    // Top bar
+    #circles-top-bar-container {
+
+        #circles-top-bar {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-areas: "circles-tabs circles-search";
+            
+            // Tabs
+            #circles-tabs {
+                grid-area: circles-tabs;
+                grid-template-columns: repeat(4, 1fr);
+                // (grid-template-areas set using js)
+
+                #magic-circles {
+                    grid-area: magic-circles;
+                }
+
+                #all-circles {
+                    grid-area: all-circles;
+                }
+
+                #public-circles {
+                    grid-area: public-circles;
+                }
+
+                #your-circles {
+                    grid-area: your-circles;
+                }
+
+                #editable-circles {
+                    grid-area: editable-circles;
+                }
+
+                #mobile-tabs-icon {
+                    display: none;
+                }
+            }
+
+            // Search bar
+            #circles-search-bar {
+                @include end-flex;
+                grid-area: circles-search;
+                padding: 0 $SECTION_PADDING;
+                
+                input {
+                    width: 80%;
+                    border: none;
+                }
+            }
+        }
+    }
+
+    // Group selection
+    #circles-groups {
+        margin-bottom: $SMALL_MARGIN;
+
+        .content-container {
+            display: grid;
+            grid-template-columns: 2fr 0.5fr;
+            padding-top: $MEDIUM_MARGIN;
+            padding-bottom: $X_SMALL_MARGIN;
+
+            select {
+                width: 200px;
+                margin-right: $LARGE_MARGIN;
+            }
+
+            .manage-groups-icon {
+                @include end-flex;
+                @include icon-button($MEDIUM_ICON);
+                margin-right: -1px;
+            }
+        }
+    }
+
+    // All circles
+    #circles-display {
+        max-width: calc($MAX_CONTENT_WIDTH + (2 * $SECTION_PADDING));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+
+        .displayed-circle {
+            display: block;
+        }
+
+        .hidden-circle {
+            display: none;
+        }
+
+        .circle {
+            padding: $SMALL_MARGIN $SMALL_MARGIN;
+            margin: 0 calc($SECTION_PADDING - $SMALL_MARGIN);
+            text-align: center;
+            position: relative;
+
+            p {
+                a {
+                    color: $BLACK;
+                }
+
+                a::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+            }
+
+            img {
+                aspect-ratio: 1 / 1;
+                margin: 2.5% 0;
+                width: 95%;
+                object-fit: cover;
+                border-radius: $BORDER_RADIUS;
+            }
+
+            .circle-info-with-settings {
+                margin-top: $X_SMALL_MARGIN;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                grid-template-areas: "circle-settings circle-name";
+
+                .icon-container
+                {
+                    @include center-flex;
+                    @include icon-button($MEDIUM_ICON);
+                    grid-area: circle-settings;
+
+                    a {
+                        position: relative;
+                    }
+                }
+
+                p {
+                    @include start-flex;
+                    grid-area: circle-name;
+                    text-align: start;
+                    padding-right: 30px;
+                }
+            }
+
+            .circle-info-no-settings {
+                margin-top: calc($X_SMALL_MARGIN * 2);
+                margin-bottom: calc($X_SMALL_MARGIN);
+                text-align: center;
+            }
+        }
+
+        .circle:hover {
+            
+            img {
+                margin: 0;
+                width: 100%;
+            }
+        }
+
+        .circle-description-overlay {
+
+            .overlay {
+                width: 60%; 
+                height: 80%; 
+                box-sizing: border-box;
+                padding: $X_LARGE_MARGIN;
+                overflow-y: auto;
+
+                .circle-title-container {
+                    display: grid;
+                    grid-template-columns: 1fr 4.75fr;
+                    grid-template-areas: "image title close-button"
+                                         "image title close-button"
+                                         "image title close-button";
+
+                    img {
+                        grid-area: image;
+                        aspect-ratio: 1 / 1;
+                        width: 100%;
+                        object-fit: cover;
+                        border-radius: $BORDER_RADIUS;
+                    }
+
+                    .circle-title {
+                        grid-area: title;
+                        align-self: center;
+                        margin-left: $LARGE_MARGIN;
+
+                        h3 {
+                            @include no-spacing;
+                            margin-bottom: $X_SMALL_MARGIN;
+                        }
+    
+                        p {
+                            @include no-spacing;
+                            margin-bottom: $X_SMALL_MARGIN;
+                        }
+    
+                        .circle-link {
+                            @include no-spacing;
+                        }
+                    }
+
+                    .icon-container {
+                        @include end-flex;
+                        @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $RED);
+                        grid-area: close-button;
+                        align-items: start; 
+                    }
+                }
+
+                .circle-description {
+                    margin-top: $MEDIUM_MARGIN;
+
+                    b {
+                        display: inline-block;
+                    }
+
+                    .description-section {
+                        margin-bottom: $MEDIUM_MARGIN;
+                        list-style-position: outside;
+
+                        ul {
+                            @include no-spacing;
+                            margin-bottom: $X_SMALL_MARGIN;
+
+                            li {
+                                margin-left: 17px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #no-circles-message {
+        text-align: center;
+        display: none;
+    }
+
+    // Page selector
+    #circles-page-selector {
+        margin-top: $X_LARGE_MARGIN;
+
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+
+            .icon-container{
+                @include icon-button($MEDIUM_ICON, $WHITE, 8px 13px);
+            }
+
+            .icon-container:first-of-type {
+                @include end-flex;
+            }
+
+            .icon-container:last-of-type {
+                @include start-flex;
+            }
+
+            .page-number-container {
+                @include center-flex;
+
+                .page-number, .page-number-seperator {
+                    padding: 6px 14px;
+                    border-radius: 50px;
+                    margin: 0 10px;
+                }
+
+                .page-number:hover {
+                    @include icon-button-hover;
+                }
+
+                .current-page {
+                    background-color: $LIGHT_GREY;
+                }
+            }
+        }
+    }
+
+    // View more circles
+    #circles-view-more {
+        display: none;
+    }
+}
+
+/*
+// TABLET -----------------------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
+{       
+    #circles-container {
+
+        // Top bar
+        #circles-top-bar-container {
+            background-color: $WHITE;
+    
+            #circles-top-bar {
+                grid-template-columns: repeat(1, 1fr);
+                grid-template-areas: "circles-tabs"
+                                     "circles-search";
+                
+                // Tabs
+                #circles-tabs {
+                    grid-template-columns: 4fr 1fr;
+                    grid-template-areas: "all-circles mobile-tabs-icon"
+                                         "magic-circles mobile-tabs-icon"
+                                         "public-circles mobile-tabs-icon"
+                                         "your-circles mobile-tabs-icon"
+                                         "editable-circles mobile-tabs-icon";
+                    margin: 0;
+
+                    .selected-tab {
+                        background-color: $GREY;
+                        color: $BLACK;
+                    }
+    
+                    #magic-circles, #all-circles, #public-circles, #your-circles, #editable-circles {
+                        padding: $MEDIUM_MARGIN $SECTION_PADDING;
+                        text-align: start;
+                        margin: auto 0;
+                    }
+    
+                    #magic-circles {
+                        display: none;
+                    }
+
+                    #public-circles {
+                        display: none;
+                    }
+
+                    #your-circles {
+                        display: none;
+                    }
+    
+                    #editable-circles {
+                        display: none;
+                    }
+
+                    #mobile-tabs-icon {
+                        display: block;
+                        padding: $MEDIUM_MARGIN $SECTION_PADDING;
+                        text-align: end;
+                        
+                        .icon-container {
+
+                            i {
+                                font-size: $DEFAULT_LARGE_ICON;
+                            }
+                        }
+                    }
+                }
+
+                #circles-tabs:active .selected-tab, #circles-tabs:active #mobile-tabs-icon {
+                    background-color: $HOVER_GREY;
+                }
+    
+                // Search bar
+                #circles-search-bar {
+                    @include center-flex;
+                    padding: $MEDIUM_MARGIN $SECTION_PADDING;
+                
+                    input {
+                        width: calc(100% - 40px);
+                        border: $FORM_BORDER;
+                        border-right: none;
+                    }
+                }
+            }
+        }
+    
+        // Group selection
+        #circles-groups {
+            margin-bottom: 0;
+
+            .content-container {
+                padding-top: 0;
+                padding-bottom: $MEDIUM_MARGIN;
+
+                select {
+                    margin-right: $MEDIUM_MARGIN;
+                }
+
+                .icon-container {
+                    margin-right: -2px;
+                }
+            }
+        }
+    
+        // All circles
+        #circles-display {
+            grid-template-columns: repeat(3, 1fr);
+
+            .circle:hover {
+                img {
+                    margin: 2% 0;
+                    width: 96%;
+                }
+            }
+
+            .circle:active {
+                img {
+                    margin: 0;
+                    width: 100%;
+                }
+            }
+        }
+    
+        // Page selector
+        #circles-page-selector {
+            display: none;
+        }
+    
+        // View more circles
+        #circles-view-more {
+            display: block;
+            margin-top: $MEDIUM_MARGIN;
+
+            .content-container {
+                @include center-flex;
+                @include primary-button(inline-block, 100%);
+            }
+        }
+    }
+}
+
+// MOBILE -----------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK) 
+{   
+    #circles-container {
+    
+        // Group selection
+        #circles-groups {
+
+            .content-container {
+
+                select {
+                    width: 40%;
+                    margin-right: $SMALL_MARGIN;
+                }
+
+                .icon-container {
+                    margin-right: -1.5px;
+                }
+            }
+        }
+    
+        // All circles
+        #circles-display {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}
+*/
+
+// Magic Links -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT (AND TABLET) ---------------------------------------------------------------------
+
+#magic-links-container {
+
+    // Create link
+    #create-link {
+
+        .content-container {
+            @include outline-icon-button(inline-block, 175px);
+
+            p {
+                margin-bottom: $MEDIUM_MARGIN;
+            }
+
+            a {
+                margin-bottom: $X_LARGE_MARGIN;
+            }
+
+            .num-selected {
+                margin-left: $SMALL_MARGIN;
+            }
+
+            .success-message, .error-message {
+                margin-top: $LARGE_MARGIN;
+            }
+
+            .copy-magic-link {
+                display: none;
+                width: 100%;
+            }
+        }
+    }
+}
+
+/*
+// MOBILE -----------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK)
+{   
+    #magic-links-container {
+
+        // Create link
+        #create-link {
+    
+            .content-container {
+                @include outline-button(inline-block, 100%, 0);
+            }
+        }
+    }
+}
+*/

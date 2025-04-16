@@ -7,6 +7,10 @@
     <circles-start-scripts/>
   </head>
   <body>
+
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
     <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
     <circles-start-ui/>
     
@@ -14,27 +18,27 @@
     <a-scene circles_scene_properties>
       <!-- assets -->
       <a-assets timeout="10000">
-          <img id='darkMirrorMap' src='/worlds/VD_2_Theatre/assets/textures/DarkMirrorStill.jpg' crossorigin="anonymous">
+          <img id='darkMirrorMap' src='/worlds/VD-Theatre/assets/textures/DarkMirrorStill.jpg' crossorigin="anonymous">
 
-        <a-asset-item id="theatre-model"  src="/worlds/VD_2_Theatre/assets/models/TheatreBuilding.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="seats-model"    src="/worlds/VD_2_Theatre/assets/models/TheatreSeats.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="objects-model"  src="/worlds/VD_2_Theatre/assets/models/AmbientObjects.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="theatre-model"  src="/worlds/VD-Theatre/assets/models/TheatreBuilding.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="seats-model"    src="/worlds/VD-Theatre/assets/models/TheatreSeats.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="objects-model"  src="/worlds/VD-Theatre/assets/models/AmbientObjects.glb" response-type="arraybuffer"></a-asset-item>
 
         <!-- interactive objects -->
-        <a-asset-item id="bag-model"      src="/worlds/VD_2_Theatre/assets/models/Bag.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="shoe-model"     src="/worlds/VD_2_Theatre/assets/models/Shoe.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="ticket-model"   src="/worlds/VD_2_Theatre/assets/models/Ticket.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="poster1-model"  src="/worlds/VD_2_Theatre/assets/models/Poster1.glb" response-type="arraybuffer"></a-asset-item>
-        <a-asset-item id="poster2-model"  src="/worlds/VD_2_Theatre/assets/models/Poster2.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="bag-model"      src="/worlds/VD-Theatre/assets/models/Bag.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="shoe-model"     src="/worlds/VD-Theatre/assets/models/Shoe.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="ticket-model"   src="/worlds/VD-Theatre/assets/models/Ticket.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="poster1-model"  src="/worlds/VD-Theatre/assets/models/Poster1.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="poster2-model"  src="/worlds/VD-Theatre/assets/models/Poster2.glb" response-type="arraybuffer"></a-asset-item>
 
         <!-- 360 -->
         <img id='campfire360' src='/global/assets/textures/equirectangular/Campfire_360.jpg' crossorigin="anonymous">
 
-        <audio id="crowd1-snd"      src="/worlds/VD_2_Theatre/assets/audio/Theatre_crowd1.mp3"></audio>
-        <audio id="crowd2-snd"      src="/worlds/VD_2_Theatre/assets/audio/Theatre_crowd2.mp3"></audio>
-        <audio id="crowd3-snd"      src="/worlds/VD_2_Theatre/assets/audio/Theatre_crowd3.mp3"></audio>
-        <audio id="police-snd"      src="/worlds/VD_2_Theatre/assets/audio/Street_noise_police.mp3"></audio>
-        <audio id="darkMirror-snd"  src="/worlds/VD_2_Theatre/assets/audio/Dark_Mirror_soundtrack.mp3"></audio>
+        <audio id="crowd1-snd"      src="/worlds/VD-Theatre/assets/audio/Theatre_crowd1.mp3"></audio>
+        <audio id="crowd2-snd"      src="/worlds/VD-Theatre/assets/audio/Theatre_crowd2.mp3"></audio>
+        <audio id="crowd3-snd"      src="/worlds/VD-Theatre/assets/audio/Theatre_crowd3.mp3"></audio>
+        <audio id="police-snd"      src="/worlds/VD-Theatre/assets/audio/Street_noise_police.mp3"></audio>
+        <audio id="darkMirror-snd"  src="/worlds/VD-Theatre/assets/audio/Dark_Mirror_soundtrack.mp3"></audio>
 
         <!-- Circles' built-in assets [REQUIRED] -->
         <circles-assets/>

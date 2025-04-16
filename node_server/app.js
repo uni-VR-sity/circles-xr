@@ -34,6 +34,7 @@ const MongoStore    = require('connect-mongo');
 //database
 const mongoose      = require('mongoose');
 const User          = require('./models/user');
+const Guest         = require('./models/guest');
 const bodyParser    = require('body-parser');
 const dbURL         = 'mongodb://' + env.DATABASE_HOST + ':' +  env.DATABASE_PORT + '/circles';
 
@@ -74,7 +75,7 @@ app.use(
       "style-src":        ["*", "'unsafe-inline'"],
       "script-src":       ["*", "'self'", "'unsafe-inline'", "'unsafe-eval'", "unpkg.com", "aframe.io", "blob:"],
       "script-src-attr":  ["*", "'unsafe-inline'"],
-      "object-src":       ["'none'"],
+      "object-src":       ["'self'"],
     },
   })
 );
@@ -82,11 +83,11 @@ app.use(bodyParser.json());                                 //set body parser mi
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(sassMiddleware({
-  src: __dirname + '/scss',
-  dest: __dirname + '/public/web/css',
+  src: __dirname + '/scss/root.scss',
+  dest: __dirname + '/public/web/css/styles.css',
   debug: true,
   outputStyle: 'compressed',
-  prefix: '/web/css',
+  prefix: '/web/css/styles.css',
 }));
 
 app.use(function (req, res, next) {
@@ -101,6 +102,7 @@ app.use(express.static(__dirname + '/public'));             //set root path of s
 // Set up Passport
 const passport              = require('passport');
 const passportLocalStrategy = require('passport-local').Strategy;
+const DummyStrategy         = require('@voxpelli/passport-dummy').Strategy;
 const JwtStrategy           = require('passport-jwt').Strategy
 const ExtractJwt            = require('passport-jwt').ExtractJwt
 
@@ -111,36 +113,72 @@ const jwtOptions = {
   passReqToCallback: true
 };
 
-passport.use(
-  'jwt',
-  new JwtStrategy(jwtOptions, (req, token, done) => {
-    let user  = null;
-    let error = null;
-    async function getItems() {
-      try {
-        user = await User.findOne({ email: token.data }).exec();
-      } catch(err) {
-        error = err;
-      }
-    }
+// For magic link login
+// Creates a magic guest user that expires in 24 hours and has access to specified worlds
+passport.use('jwt', new JwtStrategy(jwtOptions, async (req, token, done) => 
+{
+  let user = null;
+  let error = null;
 
-    getItems().then(function() {
-      done(error, user);
-    });
-  })
-);
+  try 
+  {
+    let userInfo = {
+      usertype: CIRCLES.USER_TYPE.MAGIC_GUEST,
+      magicLinkWorlds: token.worlds,
+    };
+
+    user = await Guest.create(userInfo);
+  }
+  catch (err)
+  {
+    error = err;
+    console.log(error);
+  }
+  
+  done(error, user);
+
+}));
+
+// For guest login
+// Creates a guest user that expires in 24 hours
+// https://www.npmjs.com/package/@voxpelli/passport-dummy 
+passport.use(new DummyStrategy(async function(done) 
+{
+  let user = null;
+  let error = null;
+
+  try 
+  {
+    user = await Guest.create({});
+  } 
+  catch(err) 
+  {
+    error = err;
+  }
+
+  if (error)
+  {
+    console.log(error);
+    return done(error, user);
+  }
+  else
+  {
+    console.log(user.username + " successfully created");
+    return done(null, user);
+  }
+}));
 
 // Build the passport local strategy for authentication
 passport.use(new passportLocalStrategy (
   {
-    usernameField: 'email'
+    usernameField: 'username'
   },
   function (username, password, done) {
       let user  = null;
       let error = null;
       async function getItems() {
         try {
-          user = await User.findOne({ email: username }).exec();
+          user = await User.findOne({ username: username }).exec();
         } catch(err) {
           error = err;
         }
@@ -148,16 +186,21 @@ passport.use(new passportLocalStrategy (
 
       getItems().then(function() {
         if (error) {
-          return done(error, user, { message: 'unexpected error' });
+          return done(error, user, { message: 'Unexpected error' });
         }
 
         if (!user) {
-          return done(error, user, { message: 'username invalid' });
+          return done(error, user, { message: 'Username invalid' });
+        }
+
+        if (!user.verified)
+        {
+          return done(error, false, { message: 'Unverified account' });
         }
 
         user.validatePassword(password, function (err, usr) {
           if (err) {
-            return done(null, false, { message: 'Incorrect username or password' });
+            return done(err, false, { message: 'Incorrect username or password' });
           }
 
           return done(null, usr);
@@ -171,18 +214,37 @@ passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(id, done) 
+{
   let user  = null;
   let error = null;
-  async function getItems() {
-    try {
+  async function getItems() 
+  {
+    try 
+    {
       user = await User.findById(id);
-    } catch(err) {
+    } 
+    catch(err) 
+    {
       error = err;
+    }
+
+    if (!user)
+    {
+      try 
+      {
+        user = await Guest.findById(id);
+      } 
+      catch(err) 
+      {
+        error = err;
+      }
     }
   }
 
-  getItems().then(function(foundItems) {
+  getItems().then(function(foundItems) 
+  {
+    
     done(error, user);
   });
 });
@@ -195,10 +257,6 @@ app.use((req, res, next) => {
   if (req.isAuthenticated()) {
     res.locals.currentUser = {
       username: req.user.username,
-      firstname: req.user.firstname,
-      lastname: req.user.lastname,
-      email: req.user.email,
-      emailHash: crypto.createHash('md5').update(req.user.email).digest('hex'),
     };
   }
   next();

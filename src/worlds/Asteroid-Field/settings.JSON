@@ -1,0 +1,17 @@
+{
+    "world": {
+        "name": "Asteroid Field",
+        "credit": "CirclesXR",
+        "description": "Asteroid Field is a simple yet engaging VR game that demonstrates the abilities of the Circles framework in creating immersive, active video games. The goal is to avoid the asteroids as you navigate through the Asteroid Field!",
+        "extraInfo": [
+            {
+                "title": "Playing Instructions",
+                "description": "<subtitle>VR Headset:<new-line>Enter <'>VR Mode<'> to begin the game. Avoid the asteroids by jumping, crouching, and moving side to side.<new-line><new-line><subtitle>Desktop:<new-line>Use the WASD or arrow keys to move around through space."
+            }
+        ],
+        "contact": [
+            "Anastacia Gorbenko: anastaciagorbenko@yahoo.ca",
+            "Ali Arya: arya@carleton.ca"
+        ]
+    }
+}

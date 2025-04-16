@@ -20,6 +20,8 @@ const CIRCLES_MIC_ENABLED     = 'REPLACE_CIRCLES_MIC_ENABLED_REPLACE';
 
 const AUTH_TOKEN_EXPIRATION_MINUTES = 15;
 
+const MAX_FILE_UPLOAD_SIZE = 10;   // 10MB
+
 //models
 const DEFAULT_GLTF_HEAD       = '/global/assets/models/gltf/head/Head_Circle.glb';
 const DEFAULT_GLTF_HAIR       = '';
@@ -27,6 +29,9 @@ const DEFAULT_GLTF_BODY       = '/global/assets/models/gltf/body/Body_Rectangle.
 const DEFAULT_GLTF_HAND_LEFT  = '/global/assets/models/gltf/hands/left/Hand_Basic_L.glb';
 const DEFAULT_GLTF_HAND_RIGHT = '/global/assets/models/gltf/hands/right/Hand_Basic_R.glb';
 const DEFAULT_USER_BOUNDARY   = '/global/assets/models/gltf/User_Boundary.glb';
+const DEFAULT_SKIN_COLOUR     = 'rgb(227, 166, 102)';
+const DEFAULT_HAIR_COLOUR     = 'rgb(64, 46, 27)';
+const DEFAULT_BODY_COLOUR     = 'rgb(145, 187, 250)';
 
 //textures
 const DEFAULT_ENV_MAP         = '/global/assets/textures/equirectangular/WhiteBlue.jpg';
@@ -74,12 +79,16 @@ module.exports = {
   CIRCLES_WEBRTC_ENABLED,
   CIRCLES_MIC_ENABLED,
   AUTH_TOKEN_EXPIRATION_MINUTES,
+  MAX_FILE_UPLOAD_SIZE,
   DEFAULT_GLTF_HEAD,
   DEFAULT_GLTF_HAIR,
   DEFAULT_GLTF_BODY,
   DEFAULT_GLTF_HAND_LEFT,
   DEFAULT_GLTF_HAND_RIGHT,
   DEFAULT_USER_BOUNDARY,
+  DEFAULT_SKIN_COLOUR,
+  DEFAULT_HAIR_COLOUR,
+  DEFAULT_BODY_COLOUR,
   DEFAULT_ENV_MAP,
   DEFAULT_WIREFRAME_MAP,
   DEFAULT_FACE_HAPPY_MAP,

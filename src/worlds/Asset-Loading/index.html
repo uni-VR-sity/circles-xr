@@ -1,0 +1,41 @@
+<html>
+  <head>
+    
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+
+    <script src="/worlds/Asset-Loading/scripts/circles-model-loader.js"></script>
+    <script src="/worlds/Asset-Loading/scripts/circles-model.js"></script>
+
+  </head>
+  <body>
+
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- This is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene circles_scene_properties circles-model-loader>
+      <a-assets>
+
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+      <!---------------------------------------------------------------------------------------------------------------------->
+    
+      <a-entity circles-model="/worlds/Asset-Loading/assets/moose.glb" position="-3 0 -5" rotation="0 -90 0" scale="0.25 0.25 0.25"></a-entity>
+      <a-entity circles-model="/worlds/Asset-Loading/assets/wave.glb" position="0 0 -5" rotation="0 -90 0" scale="0.25 0.25 0.25"></a-entity>
+      <a-entity circles-model="/worlds/Asset-Loading/assets/cedar.glb" position="3 0 -5" rotation="0 -90 0" scale="0.25 0.25 0.25"></a-entity>
+
+    </a-scene>
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>

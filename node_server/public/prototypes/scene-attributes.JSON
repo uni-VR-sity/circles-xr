@@ -1,0 +1,63 @@
+{
+    "background" : {
+        "value" : "object",
+        "attributes" : {
+            "color" : {
+                "value" : "string"
+            },
+            "transparent" : {
+                "value" : "string"
+            }
+        }
+    },
+    "physics" : {
+        "value" : "object",
+        "attributes" : {
+            "debug" : {
+                "value" : "string"
+            },
+            "gravity" : {
+                "value" : "string"
+            },
+            "iterations" : {
+                "value" : "string"
+            },
+            "maxInterval" : {
+                "value" : "string"
+            },
+            "friction" : {
+                "value" : "string"
+            },
+            "restitution" : {
+                "value" : "string"
+            },
+            "contactEquationStiffness" : {
+                "value" : "string"
+            },
+            "contactEquationRelaxation" : {
+                "value" : "string"
+            },
+            "frictionEquationStiffness" : {
+                "value" : "string"
+            },
+            "frictionEquationRegularization" : {
+                "value" : "string"
+            },
+            "driver" : {
+                "value" : "string"
+            },
+            "workerFps" : {
+                "value" : "string"
+            },
+            "workerInterpolate" : {
+                "value" : "string"
+            },
+            "workerInterpBufferSize" : {
+                "value" : "string"
+            },
+            "workerDebug" : {
+                "value" : "string"
+            }
+        }
+    }
+}

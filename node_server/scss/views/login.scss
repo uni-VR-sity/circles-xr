@@ -1,0 +1,124 @@
+// DEFAULT ----------------------------------------------------------------------------------
+
+#login {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    background-image: url("/web/images/campfire.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: 50% 100%;
+    min-height: 100%;
+    margin: 0;
+
+    // Left side (photo)
+    #left {
+        display: block;
+    }
+
+    // Right side (content)
+    #right {
+        flex-direction: column;
+        width: max-content;
+        padding: $LARGE_MARGIN calc($XX_LARGE_MARGIN * 2);
+        box-sizing: border-box;
+        position: relative;
+        background-color: $WHITE;
+
+        #logo {
+            max-width: 340px;
+            margin: 0 auto;
+            margin-bottom: $LARGE_MARGIN;
+            
+            a {
+                display: block;
+                width: 25%;
+                margin: auto;
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+
+        #introduction, #login-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #introduction {
+            margin-bottom: $LARGE_MARGIN;
+            text-align: center;
+            width: 300px;
+        }
+
+        #login-form {
+            margin-bottom: $LARGE_MARGIN;
+            
+            form {
+                width: fit-content;
+                margin: 0 auto;
+                margin-bottom: $LARGE_MARGIN;
+
+                .error, .success {
+                    @include center-flex;
+                    margin-top: -$SMALL_MARGIN;
+                    margin-bottom: $MEDIUM_MARGIN;
+                    padding: $SMALL_MARGIN + 5px;
+                    max-width: 370px;
+                    text-align: left;
+                    box-sizing: border-box;
+                }
+
+                .error {
+                    color: $RED;
+                    background-color: $LIGHT_RED;
+                }
+
+                .success {
+                    color: $GREEN;
+                    background-color: $LIGHT_GREEN;
+                }
+
+                .form-field {
+                    margin-bottom: $SMALL_MARGIN;
+
+                    label {
+                        width: 160px;
+                    }
+                }
+            }
+
+            p {
+                text-align: center;
+            }
+
+            .register-message {
+                margin-bottom: $SMALL_MARGIN;
+            }
+        }
+    }
+}
+
+// TABLET -----------------------------------------------------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
+{
+    #login {
+
+        grid-template-columns: 1fr;
+
+        // Left side (photo)
+        #left {
+            display: none;
+        }
+
+        // Right side (content)
+        #right {
+            width: 100%;
+            padding: $LARGE_MARGIN 0;
+
+            #introduction, #login-form {
+                padding: 0 $MEDIUM_MARGIN;
+            }
+        }
+    }
+}

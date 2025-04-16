@@ -15,16 +15,37 @@
 # Ignore main environment file
 .env
 
-# Ignore compiled worlds
-node_server/public/worlds
-
-=======
 # ignore vscode
 .vscode
 
 #Ignore compiles SASS
 node_server/public/web/css/app.css
 node_server/public/web/css/color-picker.css
+
+# Ignore created prototypes
+node_server/public/prototypes/created/*
+!node_server/public/prototypes/created/README.txt
+
+# Ignore compiled worlds
+node_server/public/worlds
+
+# Ignore uploaded files
+node_server/uploads/*
+!node_server/uploads/README.txt
+
+# Ignore uploaded files
+node_server/whiteboardFiles/*
+!node_server/whiteboardFiles/README.txt
+
+# Ignore data collection files
+node_server/dataLogs/*
+!node_server/dataLogs/README.txt
+
+# Ignore vscode
+.vscode
+
+# Ignore compiles SASS
+node_server/public/web/css/styles.css
 
 *.DS_Store
 .AppleDouble

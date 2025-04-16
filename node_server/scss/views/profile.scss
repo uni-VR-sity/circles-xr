@@ -1,0 +1,137 @@
+// Title -------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#profile-title-container {
+    margin-bottom: $X_LARGE_MARGIN;
+
+    .content-container {
+        display: grid;
+        grid-template-columns: 1fr 4.75fr;
+        grid-template-areas: "profile-picture username"
+                             "profile-picture email"
+                             "profile-picture usertype"
+                             "divider divider";
+    }
+
+    .icon-container {
+        @include center-flex;
+        grid-area: profile-picture;
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        background-color: $LIGHT_GREY;
+        border-radius: 200px;
+
+        i {
+            font-size: 75px;
+        }
+    }
+
+    h1 {
+        @include start-flex;
+        grid-area: username;
+        align-items: end;
+        margin-top: $X_SMALL_MARGIN;
+        margin-left: $X_LARGE_MARGIN;
+        margin-bottom: $XX_SMALL_MARGIN;
+    }
+
+    p {
+        @include start-flex;
+        grid-area: email;
+        align-items: start;
+        margin-left: $X_LARGE_MARGIN;
+    }
+
+    h3 {
+        grid-area: usertype;
+        @include start-flex;
+        @include no-spacing;
+        align-items: start;
+        margin-left: $X_LARGE_MARGIN;
+        margin-bottom: $SMALL_MARGIN;
+    }
+
+    hr {
+        grid-area: divider;
+        margin-top: $X_LARGE_MARGIN
+    }
+}
+
+// Update Profile ----------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#update-profile-container {
+
+    .content-container {
+
+        display: grid;
+        grid-template-columns: 6fr 4fr;
+        grid-template-areas: "message message"
+                             "account avatar"
+                             "account-button avatar-button";
+        
+        // Message
+        .error-message, .success-message {
+            grid-area: message;
+            margin-top: 0;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
+        // Update profile form
+        form {
+            grid-area: account;
+            margin-bottom: $LARGE_MARGIN;
+            margin-right: $SECTION_MARGIN;
+
+            .form-field {
+                
+                label {
+                    width: 175px;
+                }
+                input {
+                    width: 300px;
+                }
+                
+                .checkbox-container {
+                    margin-left: 175px;
+
+                    label {
+                        width: 100%;
+                    }
+                }
+            }
+
+            hr {
+                margin-top: 30px;
+                margin-bottom: $LARGE_MARGIN;
+            }
+        }
+
+        // Avatar view
+        .avatar-view {
+            @include center-flex;
+            grid-area: avatar;
+            margin-bottom: $LARGE_MARGIN;
+            background-color: $LIGHT_GREY;
+        }
+
+        // Submit profile form
+        .submit-profile-form {
+            grid-area: account-button;
+            margin-right: $SECTION_MARGIN;
+
+            input {
+                margin-left: 175px;
+            }
+        }
+
+        // Customize avatar button
+        .customize-avatar-button {
+            @include primary-button;
+            @include center-flex;
+            grid-area: avatar-button;
+        }
+    }
+}

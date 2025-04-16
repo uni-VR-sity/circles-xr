@@ -1,0 +1,231 @@
+// DEFAULT ----------------------------------------------------------------------------------
+
+#manage-groups-overlay {
+    .overlay {
+        width: 80%; 
+        height: 80%; 
+        box-sizing: border-box;
+        padding: $X_LARGE_MARGIN;
+        display: flex;
+        flex-direction: column;
+
+        // Create new group
+        #create-group {
+            margin-bottom: $X_SMALL_MARGIN;
+
+            form {
+                display: grid;
+                grid-template-columns: 0.15fr 0.85fr 1.15fr 0.85fr 0.5fr; 
+                grid-template-areas: "group group subgroup subgroup submit";
+
+                #group-field-container {
+                    @include start-flex;
+                    grid-area: group;
+                    align-items: start;
+
+                    input {
+                        width: 60%;
+                    }
+                }
+
+                #subgroup-field-container {
+                    grid-area: subgroup;
+
+                    input {
+                        width: 32%;
+                    }
+                }
+
+                #submit-field-container {
+                    @include end-flex;
+                    grid-area: submit;
+                    align-items: start;
+                }
+            }
+
+            .error-message {
+                margin-top: 4px;
+                margin-bottom: $X_SMALL_MARGIN;
+            }
+        }
+
+        // Subgroup input field
+        .subgroup-field {
+            @include start-flex;
+            margin-bottom: $SMALL_MARGIN;
+
+            .add-subgroup-icon {
+                margin-left: $SMALL_MARGIN;
+
+                i {
+                    font-size: $MEDIUM_ICON;
+                    color: $BLUE;
+                }
+
+                i:hover {
+                    cursor: pointer;
+                    color: $HOVER_BLUE;
+                }
+            }
+
+            .remove-subgroup-icon {
+                @include icon-highlight($MEDIUM_ICON, $BLACK, $RED);
+                margin-left: $SMALL_MARGIN;
+            }
+        }
+
+        // Group table
+        #groups-container {
+            overflow-y: auto;
+            height: 100%;
+
+            .group {
+                margin-bottom: $SMALL_MARGIN;
+            }
+            
+            .group-row, .subgroup-row, .add-subgroup-row form, .circle-row {
+                padding: $SMALL_MARGIN;
+                display: grid;
+                grid-template-columns: 0.15fr 0.7fr 0.15fr 1.15fr 0.85fr 0.5fr;
+                grid-template-areas: "group-collapse group subgroup-collapse subgroup circle trash";
+            }
+
+            p, a {
+                @include start-flex;
+            }
+
+            hr {
+                border-color: $HOVER_GREY;
+            }
+
+            .greyed {
+                color: $GREY_TEXT;
+            }
+
+            .group-row {
+                background-color: $LIGHT_GREY;
+                border-radius: calc($BORDER_RADIUS * 2);
+
+                .collapse-icon {
+                    grid-area: group-collapse;
+                    @include start-flex;
+
+                    i {
+                        font-size: $DEFAULT_LARGE_ICON;
+                    }
+                }
+
+                .group-name {
+                    grid-area: group;
+                }
+
+                .subgroup-num {
+                    grid-area: subgroup;
+                }
+
+                .circle-num {
+                    grid-area: circle;
+                }
+
+                .trash-icon {
+                    @include end-flex;
+                    @include icon-button($MEDIUM_ICON, $LIGHT_GREY, 11px 13px);
+                    grid-area: trash;
+    
+                    i {
+                        color: $RED;
+                    }
+
+                    i:hover {
+                        background-color: $GREY;
+                    }
+                }
+            }
+
+            .group-row:hover, .subgroup-row {
+                cursor: pointer;
+            }
+
+            .row {
+                display: none;
+
+                .subgroup-row { 
+                    
+                    .collapse-icon {
+                        grid-area: subgroup-collapse;
+                        @include start-flex;
+
+                        i {
+                            font-size: $DEFAULT_LARGE_ICON;
+                        }
+                    }
+
+                    .subgroup-name {
+                        grid-area: subgroup;
+                    }
+
+                    .circle-num {
+                        grid-area: circle;
+                    }
+
+                    .trash-icon {
+                        @include end-flex;
+                        @include icon-button($MEDIUM_ICON, $WHITE, 11px 13px);
+                        grid-area: trash;
+        
+                        i {
+                            color: $RED;
+                        }
+                    }
+                }
+
+                .add-subgroup-row {
+
+                    form {
+                        grid-template-areas: "group-collapse group subgroup-collapse subgroup subgroup subgroup"
+                                            "group-collapse group subgroup-collapse error error error";
+                        padding-bottom: 0;
+
+                        .group-field {
+                            grid-area: group;
+                        }
+
+                        .subgroup-field {
+                            grid-area: subgroup;
+                            margin-bottom: 0;
+                        }
+
+                        .error-message {
+                            grid-area: error;
+                            margin-top: $SMALL_MARGIN;
+                            display: none;
+                        }
+                    }
+                }
+
+                .circle-row {
+                    grid-template-areas: "group-collapse group subgroup-collapse subgroup circle circle";
+                    padding: $MEDIUM_MARGIN;
+
+                    .circle-name {
+                        grid-area: circle;
+                        color: $BLACK;
+
+                        .icon-container {
+                            margin-left: $SMALL_MARGIN;
+                        }
+                    }
+
+                    .circle-name:hover {
+                        color: $BLUE;
+                    }
+                }
+            }
+
+            #no-groups-message {
+                @include center-flex;
+                height: 75%;
+            }
+        }
+    }
+}

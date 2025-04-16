@@ -1,0 +1,892 @@
+{
+    "id" : {
+        "value" : "string"
+    },
+    "position" : {
+        "value" : "array",
+        "size" : "3"
+    },
+    "rotation" : {
+        "value" : "array",
+        "size" : "3"
+    },
+    "scale" : {
+        "value" : "array",
+        "size" : "3"
+    },
+    "geometry" : {
+        "value" : "object",
+        "attributes" : {
+            "primitive" : {
+                "value" : "string"
+            },
+            "skipCache" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "width" : {
+                "value" : "string"
+            },
+            "depth" : {
+                "value" : "string"
+            },
+            "segmentsHeight" : {
+                "value" : "string"
+            },
+            "segmentsWidth" : {
+                "value" : "string"
+            },
+            "segmentsDepth" : {
+                "value" : "string"
+            },
+            "radius" : {
+                "value" : "string"
+            },
+            "segments" : {
+                "value" : "string"
+            },
+            "thetaStart" : {
+                "value" : "string"
+            },
+            "thetaLength" : {
+                "value" : "string"
+            },
+            "openEnded" : {
+                "value" : "string"
+            },
+            "radiusBottom" : {
+                "value" : "string"
+            },
+            "radiusTop" : {
+                "value" : "string"
+            },
+            "segmentsRadial" : {
+                "value" : "string"
+            },
+            "radiusInner" : {
+                "value" : "string"
+            },
+            "radiusOuter" : {
+                "value" : "string"
+            },
+            "segmentsTheta" : {
+                "value" : "string"
+            },
+            "segmentsPhi" : {
+                "value" : "string"
+            },
+            "phiStart" : {
+                "value" : "string"
+            },
+            "phiLength" : {
+                "value" : "string"
+            },
+            "radiusTubular" : {
+                "value" : "string"
+            },
+            "segmentsTubular" : {
+                "value" : "string"
+            },
+            "arc" : {
+                "value" : "string"
+            },
+            "p" : {
+                "value" : "string"
+            },
+            "q" : {
+                "value" : "string"
+            },
+            "vertexA" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "vertexB" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "vertexC" : {
+                "value" : "array",
+                "size" : "3"
+            }
+        }
+    },
+    "material" : {
+        "value" : "object",
+        "attributes" : {
+            "alphaTest" : {
+                "value" : "string"
+            },
+            "depthTest" : {
+                "value" : "string"
+            },
+            "flatShading" : {
+                "value" : "string"
+            },
+            "npot" : {
+                "value" : "string"
+            },
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "opacity" : {
+                "value" : "string"
+            },
+            "repeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "shader" : {
+                "value" : "string"
+            },
+            "side" : {
+                "value" : "string"
+            },
+            "transparent" : {
+                "value" : "string"
+            },
+            "vertexColorsEnabled" : {
+                "value" : "string"
+            },
+            "visible" : {
+                "value" : "string"
+            },
+            "blending" : {
+                "value" : "string"
+            },
+            "dithering" : {
+                "value" : "string"
+            },
+            "anisotropy" : {
+                "value" : "string"
+            },
+            "ambientOcclusionMap" : {
+                "value" : "string"
+            },
+            "ambientOcclusionMapIntensity" : {
+                "value" : "string"
+            },
+            "ambientOcclusionTextureRepeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "ambientOcclusionTextureOffset" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "color" : {
+                "value" : "string"
+            },
+            "displacementMap" : {
+                "value" : "string"
+            },
+            "displacementScale" : {
+                "value" : "string"
+            },
+            "displacementBias" : {
+                "value" : "string"
+            },
+            "displacementTextureRepeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "displacementTextureOffset" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "emissive" : {
+                "value" : "string"
+            },
+            "emissiveIntensity" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "envMap" : {
+                "value" : "string"
+            },
+            "fog" : {
+                "value" : "string"
+            },
+            "metalness" : {
+                "value" : "string"
+            },
+            "normalMap" : {
+                "value" : "string"
+            },
+            "normalScale" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "normalTextureRepeat" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "normalTextureOffset" : {
+                "value" : "array",
+                "size" : "2"
+            },
+            "roughness" : {
+                "value" : "string"
+            },
+            "sphericalEnvMap" : {
+                "value" : "string"
+            },
+            "width" : {
+                "value" : "string"
+            },
+            "wireframe" : {
+                "value" : "string"
+            },
+            "wireframeLinewidth" : {
+                "value" : "string"
+            },
+            "src" : {
+                "value" : "string"
+            },
+            "specular" : {
+                "value" : "string"
+            },
+            "shininess" : {
+                "value" : "string"
+            },
+            "combine" : {
+                "value" : "string"
+            },
+            "reflectivity" : {
+                "value" : "string"
+            },
+            "refract" : {
+                "value" : "string"
+            },
+            "refractionRatio" : {
+                "value" : "string"
+            },
+            "toneMapped" : {
+                "value" : "string"
+            }
+        }
+    },
+    "light" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "color" : {
+                "value" : "string"
+            },
+            "groundColor" : {
+                "value" : "string"
+            },
+            "intensity" : {
+                "value" : "string"
+            },
+            "decay" : {
+                "value" : "string"
+            },
+            "distance" : {
+                "value" : "string"
+            },
+            "angle" : {
+                "value" : "string"
+            },
+            "penumbra" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
+            },
+            "envMap" : {
+                "value" : "string"
+            },
+            "castShadow" : {
+                "value" : "string"
+            },
+            "shadowBias" : {
+                "value" : "string"
+            },
+            "shadowCameraAutomatic" : {
+                "value" : "string"
+            },
+            "shadowCameraBottom" : {
+                "value" : "string"
+            },
+            "shadowCameraFar" : {
+                "value" : "string"
+            },
+            "shadowCameraFov" : {
+                "value" : "string"
+            },
+            "shadowCameraLeft" : {
+                "value" : "string"
+            },
+            "shadowCameraNear" : {
+                "value" : "string"
+            },
+            "shadowCameraRight" : {
+                "value" : "string"
+            },
+            "shadowCameraTop" : {
+                "value" : "string"
+            },
+            "shadowCameraVisible" : {
+                "value" : "string"
+            },
+            "shadowMapHeight" : {
+                "value" : "string"
+            },
+            "shadowMapWidth" : {
+                "value" : "string"
+            }
+        }
+    },
+    "shadows" : {
+        "value" : "object",
+        "attributes" : {
+            "cast" : {
+                "value" : "string"
+            },
+            "receive" : {
+                "value" : "string"
+            }
+        }
+    },
+    "animation" : {
+        "value" : "object",
+        "attributes" : {
+            "property" : {
+                "value" : "string"
+            },
+            "isRawProperty" : {
+                "value" : "string"
+            },
+            "from" : {
+                "value" : "string"
+            },
+            "to" : {
+                "value" : "string"
+            },
+            "type" : {
+                "value" : "string"
+            },
+            "delay" : {
+                "value" : "string"
+            },
+            "dir" : {
+                "value" : "string"
+            },
+            "dur" : {
+                "value" : "string"
+            },
+            "easing" : {
+                "value" : "string"
+            },
+            "elasticity" : {
+                "value" : "string"
+            },
+            "loop" : {
+                "value" : "string"
+            },
+            "round" : {
+                "value" : "string"
+            },
+            "startEvents" : {
+                "value" : "string"
+            },
+            "pauseEvents" : {
+                "value" : "string"
+            },
+            "resumeEvents" : {
+                "value" : "string"
+            },
+            "autoplay" : {
+                "value" : "string"
+            },
+            "enabled" : {
+                "value" : "string"
+            }
+        }
+    },
+    "text" : {
+        "value" : "object",
+        "attributes" : {
+            "align" : {
+                "value" : "string"
+            },
+            "alphaTest" : {
+                "value" : "string"
+            },
+            "anchor" : {
+                "value" : "string"
+            },
+            "baseline" : {
+                "value" : "string"
+            },
+            "color" : {
+                "value" : "string"
+            },
+            "font" : {
+                "value" : "string"
+            },
+            "fontImage" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "letterSpacing" : {
+                "value" : "string"
+            },
+            "lineHeight" : {
+                "value" : "string"
+            },
+            "opacity" : {
+                "value" : "string"
+            },
+            "shader" : {
+                "value" : "string"
+            },
+            "side" : {
+                "value" : "string"
+            },
+            "tabSize" : {
+                "value" : "string"
+            },
+            "transparent" : {
+                "value" : "string"
+            },
+            "value" : {
+                "value" : "string"
+            },
+            "whiteSpace" : {
+                "value" : "string"
+            },
+            "width" : {
+                "value" : "string"
+            },
+            "wrapCount" : {
+                "value" : "string"
+            },
+            "wrapPixels" : {
+                "value" : "string"
+            },
+            "xOffset" : {
+                "value" : "string"
+            },
+            "zOffset" : {
+                "value" : "string"
+            }
+        }
+    },
+    "dynamic-body" : {
+        "value" : "object",
+        "attributes" : {
+            "shape" : {
+                "value" : "string"
+            },
+            "mass" : {
+                "value" : "string"
+            },
+            "linearDamping" : {
+                "value" : "string"
+            },
+            "angularDamping" : {
+                "value" : "string"
+            },
+            "sphereRadius" : {
+                "value" : "string"
+            },
+            "cylinderAxis" : {
+                "value" : "string"
+            }
+        }
+    },
+    "static-body" : {
+        "value" : "object",
+        "attributes" : {
+            "shape" : {
+                "value" : "string"
+            },
+            "sphereRadius" : {
+                "value" : "string"
+            },
+            "cylinderAxis" : {
+                "value" : "string"
+            }
+        }
+    },
+    "shape" : {
+        "value" : "object",
+        "attributes" : {
+            "shape" : {
+                "value" : "string"
+            },
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "orientation" : {
+                "value" : "array",
+                "size" : "4"
+            },
+            "radius" : {
+                "value" : "string"
+            },
+            "halfExtents" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "radiusTop" : {
+                "value" : "string"
+            },
+            "radiusBottom" : {
+                "value" : "string"
+            },
+            "height" : {
+                "value" : "string"
+            },
+            "numSegments" : {
+                "value" : "string"
+            }
+        }
+    },
+    "constraint" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
+            },
+            "maxForce" : {
+                "value" : "string"
+            },
+            "collideConnected" : {
+                "value" : "string"
+            },
+            "wakeUpBodies" : {
+                "value" : "string"
+            },
+            "distance" : {
+                "value" : "string"
+            },
+            "pivot" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "targetPivot" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "axis" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "targetAxis" : {
+                "value" : "array",
+                "size" : "3"
+            }
+        }
+    },
+    "spring" : {
+        "value" : "object",
+        "attributes" : {
+            "target" : {
+                "value" : "string"
+            },
+            "restLength" : {
+                "value" : "string"
+            },
+            "stiffness" : {
+                "value" : "string"
+            },
+            "damping" : {
+                "value" : "string"
+            },
+            "localAnchorA" : {
+                "value" : "string"
+            },
+            "localAnchorB" : {
+                "value" : "string"
+            }
+        }
+    },
+    "gltf-model" : {
+        "value" : "string"
+    },
+    "circles-artefact" : {
+        "value" : "object",
+        "attributes" : {
+            "title" : {
+                "value" : "string"
+            },
+            "description" : {
+                "value" : "string"
+            },
+            "title_back" : {
+                "value" : "string"
+            },
+            "description_back" : {
+                "value" : "string"
+            },
+            "description_on" : {
+                "value" : "string"
+            },
+            "description_offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "desc_arrow_position" : {
+                "value" : "string"
+            },
+            "audio" : {
+                "value" : "string"
+            },
+            "volume" : {
+                "value" : "string"
+            },
+            "inspectPosition" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "inspectScale" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "inspectRotation" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "origPosition" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "origRotation" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "origScale" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "textRotationY" : {
+                "value" : "string"
+            },
+            "descriptionLookAt" : {
+                "value" : "string"
+            },
+            "labelLookAt" : {
+                "value" : "string"
+            },
+            "constrainYAxis" : {
+                "value" : "string"
+            },
+            "updateRate" : {
+                "value" : "string"
+            },
+            "smoothingOn" : {
+                "value" : "string"
+            },
+            "smoothingAlpha" : {
+                "value" : "string"
+            },
+            "label_text" : {
+                "value" : "string"
+            },
+            "label_on" : {
+                "value" : "string"
+            },
+            "label_offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "label_arrow_position" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-description" : {
+        "value" : "object",
+        "attributes" : {
+            "title_text_front" : {
+                "value" : "string"
+            },
+            "title_text_back" : {
+                "value" : "string"
+            },
+            "description_text_front" : {
+                "value" : "string"
+            },
+            "description_text_back" : {
+                "value" : "string"
+            },
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "arrow_position" : {
+                "value" : "string"
+            },
+            "arrow_visible" : {
+                "value" : "string"
+            },
+            "lookAtCamera" : {
+                "value" : "string"
+            },
+            "constrainYAxis" : {
+                "value" : "string"
+            },
+            "updateRate" : {
+                "value" : "string"
+            },
+            "smoothingOn" : {
+                "value" : "string"
+            },
+            "smoothingAlpha" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-pickup-object" : {
+        "value" : "object",
+        "attributes" : {
+            "pickupPosition" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "pickupRotation" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "pickupScale" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "dropPosition" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "dropRotation" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "dropScale" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "physicsObject" : {
+                "value" : "string"
+            },
+            "animate" : {
+                "value" : "string"
+            },
+            "animateDurationMS" : {
+                "value" : "string"
+            },
+            "enabled" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-interactive-object" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "highlight_color" : {
+                "value" : "string"
+            },
+            "neutral_scale" : {
+                "value" : "string"
+            },
+            "hover_scale" : {
+                "value" : "string"
+            },
+            "click_scale" : {
+                "value" : "string"
+            },
+            "click_sound" : {
+                "value" : "string"
+            },
+            "sound_volume" : {
+                "value" : "string"
+            },
+            "enabled" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-checkpoint" : {
+        "value" : "object",
+        "attributes" : {
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "useDefaultModel" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-spawnpoint" : {
+        "value" : "object",
+        "attributes" : {}
+    },
+    "circles-button" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "button_color" : {
+                "value" : "string"
+            },
+            "button_color_hover" : {
+                "value" : "string"
+            },
+            "pedastal_color" : {
+                "value" : "string"
+            },
+            "diameter" : {
+                "value" : "string"
+            },
+            "pedastal_visible" : {
+                "value" : "string"
+            },
+            "click_on_event" : {
+                "value" : "string"
+            },
+            "click_off_event" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-sendpoint" : {
+        "value" : "object",
+        "attributes" : {
+            "target" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-sphere-env-map" : {
+        "value" : "object",
+        "attributes" : {
+            "src" : {
+                "value" : "string"
+            },
+            "format" : {
+                "value" : "string"
+            }
+        }
+    }
+}

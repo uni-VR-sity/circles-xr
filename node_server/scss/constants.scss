@@ -1,0 +1,495 @@
+// Constant Variables ------------------------------------------------------------------------------------------------------------------------------
+
+$LINE_HEIGHT: 1.8;
+
+// Breakpoints
+$TABLET_BREAK: 950px;
+$MOBILE_BREAK: 650px;
+
+// Colours
+$WHITE: #FFFFFF;
+$BLACK: #000000;
+$GREY_TEXT: #6B6B6B;
+$TRANSPARENT_LIGHT_GREY: #edededf3;
+$LIGHT_GREY: #ededed;
+$GREY: #D7D7D7;
+$HOVER_GREY: #c5c5c5;
+$MEDIUM_GREY: #A8A8A8;
+$DARK_GREY: #575757;
+$HOVER_DARK_GREY: #4c4c4c;
+$BLUE: #0f68bb;
+$HOVER_BLUE: #0f5da7;
+$DARK_BLUE: #104C84;
+$CONTRAST_COLOR: #E85D75;
+$RED: #cb0000;
+$HOVER_RED: #ae0000;
+$DISABLED_RED: #e3b1b1;
+$LIGHT_RED: #EFDCDC;
+$GREEN: #008000;
+$DISABLED_GREEN: #99d599;
+$LIGHT_GREEN: #EBF5EB;
+$YELLOW: #ffb700;
+
+// Dimensions
+$MAX_CONTENT_WIDTH: 1200px;
+$DEFAULT_NAV_HEIGHT:70px;
+$TABLET_NAV_HEIGHT: 55px;
+$MOBILE_NAV_HEIGHT: 58px;
+
+// Margins and Padding
+$NAVIGATION_MARGIN: 60px;
+$SECTION_MARGIN: 80px;
+$SECTION_PADDING: 30px;
+$XX_SMALL_MARGIN: 5px;
+$X_SMALL_MARGIN: 10px;
+$SMALL_MARGIN: 15px;
+$MEDIUM_MARGIN: 25px;
+$LARGE_MARGIN: 40px;
+$X_LARGE_MARGIN: 50px;
+$XX_LARGE_MARGIN: 60px;
+$XXX_LARGE_MARGIN: 70px;
+
+$BORDER_RADIUS: 6px;
+
+// Forms
+$FORM_BORDER: 2px solid $GREY;
+$FORM_ACTIVE_BORDER: 2px solid $BLUE;
+$FORM_HEIGHT: 45px;
+
+// Icons
+$DEFAULT_XXX_LARGE_ICON: 60px;
+$DEFAULT_XX_LARGE_ICON: 45px;
+$DEFAULT_X_LARGE_ICON: 35px;
+$DEFAULT_LARGE_ICON: 25px;
+$MOBILE_LARGE_ICON: 22.5px;
+$MEDIUM_ICON: 22px;
+$SMALL_ICON: 14px;
+
+// Mixins ------------------------------------------------------------------------------------------------------------------------------------------
+
+// RESETS -----------------------------------------------------------------------------------
+
+@mixin no-spacing {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin reset {
+    @include no-spacing;
+    border: none;
+    border-collapse: collapse;
+}
+
+@mixin no-selection {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+// FLEX DISPLAYS ----------------------------------------------------------------------------
+
+@mixin start-flex {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+@mixin center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin end-flex {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+// BUTTONS ----------------------------------------------------------------------------------
+
+// Primary button (blue)
+@mixin primary-button-regular($display: inline-block, $width: auto, $padding: 0 20px) {
+    @include no-selection;
+    display: $display;
+    width: $width;
+    vertical-align: middle;
+    text-align: center;
+    padding: $padding;
+    line-height: $FORM_HEIGHT;
+    border-radius: $BORDER_RADIUS;
+    background-color: $BLUE; 
+    color: $WHITE;
+}
+
+@mixin primary-button-hover {
+    background-color: $HOVER_BLUE; 
+    cursor: pointer;
+}
+
+@mixin primary-button($display: inline-block, $width: auto, $padding: 0 20px) {
+
+    a {
+        @include primary-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include primary-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover {
+            @include primary-button-regular($display, $width, $padding);
+        }
+
+        a:active {
+            @include primary-button-hover;
+        }
+    }
+}
+
+// Secondary button (grey)
+@mixin secondary-button-regular($display: inline-block, $width: auto, $padding: 0 20px) {
+    @include primary-button-regular($display, $width, $padding);
+    background-color: $GREY; 
+    color: $BLACK;
+}
+
+@mixin secondary-button-hover {
+    @include primary-button-hover;
+    background-color: $HOVER_GREY;
+}
+
+@mixin secondary-button($display: inline-block, $width: auto, $padding: 0 20px) {
+
+    a {
+        @include secondary-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include secondary-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover {
+            @include secondary-button-regular($display, $width, $padding);
+        }
+
+        a:active {
+            @include secondary-button-hover;
+        }
+    }
+}
+
+// Dark button (dark grey)
+@mixin dark-button-regular($display: inline-block, $width: auto, $padding: 0 20px) {
+    @include primary-button-regular($display, $width, $padding);
+    background-color: $DARK_GREY; 
+    color: $WHITE;
+}
+
+@mixin dark-button-hover {
+    @include primary-button-hover;
+    background-color: $HOVER_DARK_GREY;
+}
+
+@mixin dark-button($display: inline-block, $width: auto, $padding: 0 20px) {
+
+    a {
+        @include dark-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include dark-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover {
+            @include dark-button-regular($display, $width, $padding);
+        }
+
+        a:active {
+            @include dark-button-hover;
+        }
+    }
+}
+
+// Red button
+@mixin red-button-regular($display: inline-block, $width: auto, $padding: 0 20px) {
+    @include primary-button-regular($display, $width, $padding);
+    background-color: $RED; 
+    color: $WHITE;
+}
+
+@mixin red-button-hover {
+    @include primary-button-hover;
+    background-color: $HOVER_RED;
+}
+
+@mixin red-button($display: inline-block, $width: auto, $padding: 0 20px) {
+
+    a {
+        @include red-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include red-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover {
+            @include red-button-regular($display, $width, $padding);
+        }
+
+        a:active {
+            @include red-button-hover;
+        }
+    }
+}
+
+// Outline button (dark grey border)
+@mixin outline-button-regular($display: inline-block, $width: 100px, $padding: 0 35px) {
+    @include primary-button-regular($display, $width, $padding);
+    background-color: transparent; 
+    outline: 2px solid $DARK_GREY;
+    outline-offset: -2px;
+    color: $HOVER_DARK_GREY;
+    font-weight: 500;
+}
+
+@mixin outline-button-hover() {
+    outline: 2.5px solid $DARK_GREY;
+    outline-offset: -2.5px;
+    font-weight: 700;
+}
+
+@mixin outline-button($display: inline-block, $width: 100px, $padding: 0 35px) {
+
+    a {
+        @include outline-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        @include outline-button-hover();
+        cursor: pointer;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover::after {
+            content:'';
+            margin: 0;
+        }
+
+        a:active::after {
+            @include outline-button-hover();
+        }
+    }
+}
+
+// Outline button (dark grey border, with icon on hover)
+@mixin outline-icon-button-regular($display: inline-block, $width: 100px, $padding: 0 35px) {
+    @include outline-button-regular($display, $width, $padding);
+}
+
+@mixin outline-icon-button-hover($icon: '\f061') {
+    font: var(--fa-font-solid);
+    content: $icon;
+    margin-left: 10px;
+}
+
+@mixin outline-icon-button($display: inline-block, $width: 100px, $padding: 0 35px, $icon: '\f061') {
+
+    a {
+        @include outline-icon-button-regular($display, $width, $padding);
+    }
+
+    a:hover {
+        cursor: pointer;
+    }
+
+    a:hover::after {
+        @include outline-icon-button-hover($icon);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        a:hover::after {
+            content:'';
+            margin: 0;
+        }
+
+        a:active::after {
+            @include outline-icon-button-hover($icon: '\f061');
+        }
+    }
+}
+
+// Icon button
+@mixin icon-button-regular($font-size, $background-colour: $WHITE, $padding: 10px) {
+    padding: $padding;
+    border-radius: 50px;
+    color: $BLACK;
+    font-size: $font-size;
+    background-color: $background-colour;
+}
+
+@mixin icon-button-hover {
+    background-color: $LIGHT_GREY;
+    cursor: pointer;
+}
+
+@mixin icon-button($font-size, $background-colour: $WHITE, $padding: 10px) {
+
+    i {
+        @include icon-button-regular($font-size, $background-colour, $padding);
+    }
+
+    i:hover {
+        @include icon-button-hover;
+    }
+
+    a {
+        @include icon-button-regular($font-size, $background-colour, $padding);
+    }
+
+    a:hover {
+        @include icon-button-hover;
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        i:hover {
+            @include icon-button-regular($font-size, $background-colour, $padding);
+        }
+
+        i:active {
+            @include icon-button-hover;
+        }
+
+        a:hover {
+            @include icon-button-regular($font-size, $background-colour, $padding);
+        }
+
+        a:active {
+            @include icon-button-hover;
+        }
+    }
+}
+
+// Icon button highlight
+@mixin icon-highlight-regular($font-size, $colour) {
+    color: $colour;
+    font-size: $font-size;
+}
+
+@mixin icon-highlight-hover($colour: $DARK_GREY) {
+    color: $colour;
+    cursor: pointer;
+}
+
+@mixin icon-highlight($font-size, $colour: $BLACK, $hover-colour: $DARK_GREY) {
+    i {
+        @include icon-highlight-regular($font-size, $colour);
+    }
+
+    i:hover {
+        @include icon-highlight-hover($hover-colour);
+    }
+
+    a {
+        @include icon-highlight-regular($font-size, $colour);
+    }
+
+    a:hover {
+        @include icon-highlight-hover($hover-colour);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        i:hover {
+            @include icon-highlight-regular($font-size, $colour);
+        }
+
+        i:active {
+            @include icon-highlight-hover($hover-colour);
+        }
+
+        a:hover {
+            @include icon-highlight-regular($font-size, $colour);
+        }
+
+        a:active {
+            @include icon-highlight-hover($hover-colour);
+        }
+    }
+}
+
+// Icon button grow
+@mixin icon-grow-regular($font-size, $colour) {
+    color: $colour;
+    font-size: $font-size;
+}
+
+@mixin icon-grow-hover($font-size, $grow-by, $right-grow) {
+    font-size: $font-size + $grow-by;
+
+    @if $right-grow {
+        margin-right: -2.5px;
+    }
+    @else {
+        margin-left: -2.5px;
+    }
+
+    cursor: pointer;
+}
+
+@mixin icon-grow($font-size, $right-grow: true, $grow-by: 5px, $colour: $BLACK) {
+    i {
+        @include icon-grow-regular($font-size, $colour);
+    }
+
+    i:hover {
+        @include icon-grow-hover($font-size, $grow-by, $right-grow);
+    }
+
+    a {
+        @include icon-grow-regular($font-size, $colour);
+    }
+
+    a:hover {
+        @include icon-grow-hover($font-size, $grow-by, $right-grow);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        i:hover {
+            @include icon-grow-regular($font-size, $colour);
+        }
+
+        i:active {
+            @include icon-grow-hover($font-size, $grow-by, $right-grow);
+        }
+
+        a:hover {
+            @include icon-grow-regular($font-size, $colour);
+        }
+
+        a:active {
+            @include icon-grow-hover($font-size, $grow-by, $right-grow);
+        }
+    }
+}

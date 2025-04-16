@@ -85,17 +85,16 @@ class MediaPDFOculusFix {
     }
 }
 
-function scaleToAspectRatio(el, ratio) {
-    const width = Math.min(1.0, 1.0 / ratio);
-    const height = Math.min(1.0, ratio);
-    el.object3DMap.mesh.scale.set(width, height, 1);
-    el.object3DMap.mesh.matrixNeedsUpdate = true;
-}
-
 AFRAME.registerComponent("circles-pdf-loader", {
     schema: {
         src: { type: "string" },
-        scale: {type:'number', default:1.5},
+        scale: { type: 'number', default: 1.5 },
+        minimumDimension: { type:'number', default: 1 },
+        width: { type:'number', default: -1 },
+        height: { type:'number', default: -1 },
+        controlHeight: { type:'number', default: 0 },
+        controlColor: { type: 'color', default: '#FFFFFF'},
+        doubleSided: { type: 'boolean', default: false },
         projection: { type: "string", default: "flat" },
         contentType: { type: "string" },
         index: { default: 0 },
@@ -103,65 +102,133 @@ AFRAME.registerComponent("circles-pdf-loader", {
     },
     multiple: false,
     init: function() {
-        this.mediaPDFOculusFix = new MediaPDFOculusFix();
+        const CONTEXT_AF = this;
+
+        CONTEXT_AF.mediaPDFOculusFix = new MediaPDFOculusFix();
 
         // Loaded via <script> tag, create shortcut to access PDF.js exports.
-        this.pdfjs = window['pdfjs-dist/build/pdf'];
+        CONTEXT_AF.pdfjs = window['pdfjs-dist/build/pdf'];
 
-        // The workerSrc property shall be specified.
-        this.pdfjs.GlobalWorkerOptions.workerSrc = '/global/js/libs/pdf.worker.min.js';
+        // The workerSrc property shall be specified
+        CONTEXT_AF.pdfjs.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
 
-        this.canvas = document.createElement("canvas");
-        this.canvasContext = this.canvas.getContext("2d");
+        CONTEXT_AF.canvas = document.createElement("canvas");
+        CONTEXT_AF.canvasContext = CONTEXT_AF.canvas.getContext("2d");
 
-        this.texture = new THREE.CanvasTexture(this.canvas);
-        this.texture.encoding = THREE.sRGBEncoding;
-        this.texture.minFilter = THREE.LinearFilter;
+        CONTEXT_AF.texture = new THREE.CanvasTexture(CONTEXT_AF.canvas);
+        CONTEXT_AF.texture.encoding = THREE.sRGBEncoding;
+        CONTEXT_AF.texture.minFilter = THREE.LinearFilter;
 
-        this.pageRendering = false; // Check conflict
-
-        this.createControls();
+        CONTEXT_AF.pageRendering = false; // Check conflict
     },
     createControls: function() {
         const CONTEXT_AF = this;
-        const CONTROL_BUTTON_SIZE = 0.25;
 
-        CONTEXT_AF.controlsWrapper = document.createElement('a-entity');
-        CONTEXT_AF.controlsWrapper.setAttribute('id', 'pdf_controls_wrapper');
-        CONTEXT_AF.controlsWrapper.setAttribute('position', {x:0, y:-0.7, z:0});
-        CONTEXT_AF.el.appendChild(CONTEXT_AF.controlsWrapper);
+        var maxDimension;
 
-        CONTEXT_AF.nextBtn = document.createElement('a-entity');
-        CONTEXT_AF.nextBtn.setAttribute('id', 'pdfNextBtn');
-        CONTEXT_AF.nextBtn.setAttribute('class', 'button');
-        CONTEXT_AF.nextBtn.setAttribute('position', {x:0.2, y:0, z:0});
-        CONTEXT_AF.nextBtn.setAttribute('rotation', {x:0, y:0, z:90});
-        CONTEXT_AF.nextBtn.setAttribute('geometry', {primitive:'plane', width:CONTROL_BUTTON_SIZE, height:CONTROL_BUTTON_SIZE});
-        CONTEXT_AF.nextBtn.setAttribute('material', {src:CIRCLES.CONSTANTS.ICON_RELEASE, color:'rgb(255,255,255)', shader:'flat', transparent:true,side:'double'});
-        CONTEXT_AF.nextBtn.setAttribute('circles-interactive-object', {type:'scale'});
-        CONTEXT_AF.controlsWrapper.appendChild(CONTEXT_AF.nextBtn);
-        CONTEXT_AF.nextBtn.addEventListener('click', function (evt){
-            if (CONTEXT_AF.pageNum >= CONTEXT_AF.pdf.numPages) {
-                return;
+        if (CONTEXT_AF.height > CONTEXT_AF.width)
+        {
+            maxDimension = CONTEXT_AF.height;
+        }
+        else
+        {
+            maxDimension = CONTEXT_AF.width;
+        }
+
+        const CONTROL_BUTTON_SIZE = maxDimension / 6;
+        
+        CONTEXT_AF.controls = true;
+
+        // If using width override, storing height of element in schema
+        if (CONTEXT_AF.data.height <= 0 && CONTEXT_AF.data.width > 0)
+        {
+            if (CONTEXT_AF.pdf.numPages > 1)
+            {
+                CONTEXT_AF.data.controlHeight = CONTROL_BUTTON_SIZE + ((0.15 * CONTEXT_AF.height) - (CONTROL_BUTTON_SIZE / 2));
+                CONTEXT_AF.data.height = CONTEXT_AF.height;
             }
-            CONTEXT_AF.changePage(CONTEXT_AF.pageNum + 1);
-        });
-
-        CONTEXT_AF.prevBtn = document.createElement('a-entity');
-        CONTEXT_AF.prevBtn.setAttribute('id', 'pdfPrevBtn');
-        CONTEXT_AF.prevBtn.setAttribute('class', 'button');
-        CONTEXT_AF.prevBtn.setAttribute('position', {x:-0.2, y:0, z:0});
-        CONTEXT_AF.prevBtn.setAttribute('rotation', {x:0, y:0, z:-90});
-        CONTEXT_AF.prevBtn.setAttribute('geometry', {primitive:'plane', width:CONTROL_BUTTON_SIZE, height:CONTROL_BUTTON_SIZE});
-        CONTEXT_AF.prevBtn.setAttribute('material', {src:CIRCLES.CONSTANTS.ICON_RELEASE, color:'rgb(255,255,255)', shader:'flat', transparent:true,side:'double'});
-        CONTEXT_AF.prevBtn.setAttribute('circles-interactive-object', {type:'scale'});
-        CONTEXT_AF.controlsWrapper.appendChild(CONTEXT_AF.prevBtn);
-        CONTEXT_AF.prevBtn.addEventListener('click', function (evt){
-            if (CONTEXT_AF.pageNum <= 1) {
-                return;
+            else
+            {
+                CONTEXT_AF.data.height = CONTEXT_AF.height;
             }
-            CONTEXT_AF.changePage(CONTEXT_AF.pageNum - 1);
-        });
+        }
+
+        // If there is more then 1 page, make controls
+        if (CONTEXT_AF.pdf.numPages > 1)
+        {
+            CONTEXT_AF.controlsWrapper = document.createElement('a-entity');
+            CONTEXT_AF.controlsWrapper.setAttribute('id', 'pdf_controls_wrapper');
+            CONTEXT_AF.controlsWrapper.setAttribute('position', {x:0, y:(CONTEXT_AF.height/-2) - (0.15 * CONTEXT_AF.height), z:0});
+            CONTEXT_AF.el.appendChild(CONTEXT_AF.controlsWrapper);
+
+            CONTEXT_AF.nextBtn = document.createElement('a-entity');
+            CONTEXT_AF.nextBtn.setAttribute('id', 'pdfNextBtn');
+            CONTEXT_AF.nextBtn.setAttribute('class', 'button pdfControllerButton');
+            CONTEXT_AF.nextBtn.setAttribute('position', {x:CONTEXT_AF.width/6, y:0, z:0});
+            CONTEXT_AF.nextBtn.setAttribute('rotation', {x:0, y:0, z:90});
+            CONTEXT_AF.nextBtn.setAttribute('geometry', {primitive:'plane', width:CONTROL_BUTTON_SIZE, height:CONTROL_BUTTON_SIZE});
+            CONTEXT_AF.nextBtn.setAttribute('material', {src:CIRCLES.CONSTANTS.ICON_RELEASE,color:CONTEXT_AF.data.controlColor,shader:'flat', transparent:true});
+            CONTEXT_AF.nextBtn.setAttribute('circles-interactive-object', {type:'scale'});
+            CONTEXT_AF.controlsWrapper.appendChild(CONTEXT_AF.nextBtn);
+            CONTEXT_AF.nextBtn.addEventListener('click', function (evt)
+            {
+                if (CONTEXT_AF.pageNum >= CONTEXT_AF.pdf.numPages) 
+                {
+                    return;
+                }
+                CONTEXT_AF.changePage(CONTEXT_AF.pageNum + 1);
+                if (CONTEXT_AF.pageNum === CONTEXT_AF.pdf.numPages)
+                {
+                    CONTEXT_AF.nextBtn.setAttribute('circles-interactive-object', {enabled:false});
+                    CONTEXT_AF.prevBtn.setAttribute('circles-interactive-object', {enabled:true});
+
+                    CONTEXT_AF.nextBtn.setAttribute('material', {opacity:0.35});
+                    CONTEXT_AF.prevBtn.setAttribute('material', {opacity:1});
+                }
+                else
+                {
+                    CONTEXT_AF.nextBtn.setAttribute('circles-interactive-object', {enabled:true});
+                    CONTEXT_AF.prevBtn.setAttribute('circles-interactive-object', {enabled:true});
+
+                    CONTEXT_AF.nextBtn.setAttribute('material', {opacity:1});
+                    CONTEXT_AF.prevBtn.setAttribute('material', {opacity:1});
+                }
+            });
+
+            CONTEXT_AF.prevBtn = document.createElement('a-entity');
+            CONTEXT_AF.prevBtn.setAttribute('id', 'pdfPrevBtn');
+            CONTEXT_AF.prevBtn.setAttribute('class', 'button pdfControllerButton');
+            CONTEXT_AF.prevBtn.setAttribute('position', {x:CONTEXT_AF.width/-6, y:0, z:0});
+            CONTEXT_AF.prevBtn.setAttribute('rotation', {x:0, y:0, z:-90});
+            CONTEXT_AF.prevBtn.setAttribute('geometry', {primitive:'plane', width:CONTROL_BUTTON_SIZE, height:CONTROL_BUTTON_SIZE});
+            CONTEXT_AF.prevBtn.setAttribute('material', {src:CIRCLES.CONSTANTS.ICON_RELEASE,color:CONTEXT_AF.data.controlColor,shader:'flat', transparent:true,side:'double',opacity:0.35});
+            CONTEXT_AF.prevBtn.setAttribute('circles-interactive-object', {type:'scale', enabled:false});
+            CONTEXT_AF.controlsWrapper.appendChild(CONTEXT_AF.prevBtn);
+            CONTEXT_AF.prevBtn.addEventListener('click', function (evt)
+            {
+                if (CONTEXT_AF.pageNum <= 1) 
+                {
+                    return;
+                }
+                CONTEXT_AF.changePage(CONTEXT_AF.pageNum - 1);
+                if (CONTEXT_AF.pageNum === 1)
+                {
+                    CONTEXT_AF.nextBtn.setAttribute('circles-interactive-object', {enabled:true});
+                    CONTEXT_AF.prevBtn.setAttribute('circles-interactive-object', {enabled:false});
+
+                    CONTEXT_AF.nextBtn.setAttribute('material', {opacity:1});
+                    CONTEXT_AF.prevBtn.setAttribute('material', {opacity:0.35});
+                }
+                else
+                {
+                    CONTEXT_AF.nextBtn.setAttribute('circles-interactive-object', {enabled:true});
+                    CONTEXT_AF.prevBtn.setAttribute('circles-interactive-object', {enabled:true});
+
+                    CONTEXT_AF.nextBtn.setAttribute('material', {opacity:1});
+                    CONTEXT_AF.prevBtn.setAttribute('material', {opacity:1});
+                }
+            });
+        }
     },
     tick : function(time, timeDelta) {
         this.mediaPDFOculusFix.tick(this.el);
@@ -197,13 +264,13 @@ AFRAME.registerComponent("circles-pdf-loader", {
             return;
         }
 
-        if (pageNum < 1 || pageNum > CONTEXT_AF.pdf.numPages - 1) {
-            //console.warn('The page ' + pageNum + ' selected is out of range of PDF pages [1, ' + CONTEXT_AF.pdf.numPages + '] available.');
+        if (pageNum < 1 || pageNum > CONTEXT_AF.pdf.numPages) {
+            console.warn('The page ' + pageNum + ' selected is out of range of PDF pages [1, ' + CONTEXT_AF.pdf.numPages + '] available.');
             return;
         }
 
         if (CONTEXT_AF.pageRendering) { // Check if other page is rendering
-            //probably shoudl have loading image here
+            //probably should have loading image here
         } 
         else {
             //let's save which page we are at so we can save it for later
@@ -215,7 +282,28 @@ AFRAME.registerComponent("circles-pdf-loader", {
                 // Prepare canvas using PDF page dimensions
                 CONTEXT_AF.canvas.height = viewport.height;
                 CONTEXT_AF.canvas.width = viewport.width;
-                ratio = CONTEXT_AF.canvas.height / CONTEXT_AF.canvas.width;
+                ratio = CONTEXT_AF.canvas.width / CONTEXT_AF.canvas.height;
+
+                if (CONTEXT_AF.data.width <= 0)
+                {
+                    // Potrait
+                    if (ratio > 1)
+                    {
+                        CONTEXT_AF.height = CONTEXT_AF.data.minimumDimension;
+                        CONTEXT_AF.width = width = ratio * CONTEXT_AF.height;
+                    }
+                    // Landscape
+                    else
+                    {
+                        CONTEXT_AF.width = CONTEXT_AF.data.minimumDimension;
+                        CONTEXT_AF.height = CONTEXT_AF.width / ratio;
+                    }
+                }
+                else
+                {
+                    CONTEXT_AF.width = CONTEXT_AF.data.width;
+                    CONTEXT_AF.height = CONTEXT_AF.width / ratio;
+                }
             
                 // Render PDF page into canvas context
                 let renderContext = {
@@ -230,21 +318,40 @@ AFRAME.registerComponent("circles-pdf-loader", {
                     CONTEXT_AF.pageRendering = true;
                     CONTEXT_AF.renderTask = null;
 
-                    if (!CONTEXT_AF.mesh) {
-                        const material = new THREE.MeshBasicMaterial();
-                        const geometry = new THREE.PlaneGeometry(1, 1, 1, 1, CONTEXT_AF.texture.flipY);
-                        material.side = THREE.DoubleSide;
+                    // Disposing of old geometry and material
+                    if (CONTEXT_AF.mesh)
+                    {
+                        CONTEXT_AF.el.getObject3D('mesh').geometry.dispose();
 
-                        CONTEXT_AF.mesh = new THREE.Mesh(geometry, material);
-                        CONTEXT_AF.el.setObject3D("mesh", CONTEXT_AF.mesh);
+                        if (CONTEXT_AF.el.getObject3D('mesh').material.map)
+                        {
+                            CONTEXT_AF.el.getObject3D('mesh').material.map.dispose();
+                        }
+
+                        CONTEXT_AF.el.getObject3D('mesh').material.dispose();
                     }
+
+                    const material = new THREE.MeshBasicMaterial();
+                    const geometry = new THREE.PlaneGeometry(CONTEXT_AF.width, CONTEXT_AF.height, 1, 1, CONTEXT_AF.texture.flipY);
+
+                    if (CONTEXT_AF.data.doubleSided)
+                    {
+                        material.side = THREE.DoubleSide;
+                    }
+
+                    CONTEXT_AF.mesh = new THREE.Mesh(geometry, material);
+                    CONTEXT_AF.el.setObject3D("mesh", CONTEXT_AF.mesh);
 
                     CONTEXT_AF.mesh.material.transparent        = false;
                     CONTEXT_AF.mesh.material.map                = CONTEXT_AF.texture;
                     CONTEXT_AF.mesh.material.map.needsUpdate    = true;
                     CONTEXT_AF.mesh.material.needsUpdate        = true;
 
-                    scaleToAspectRatio(CONTEXT_AF.el, ratio);
+                    // Adding controls if there are none
+                    if (!CONTEXT_AF.controls)
+                    {
+                        CONTEXT_AF.createControls();
+                    }
 
                     // if (this.canvasContext) {
                     //     this.canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -254,6 +361,19 @@ AFRAME.registerComponent("circles-pdf-loader", {
                     CONTEXT_AF.pageRendering = false;
                 });
             });
+        }
+    },
+    remove: function()
+    {
+        const CONTEXT_AF = this;
+        const element = CONTEXT_AF.el;
+
+        // Removing controllers
+        var controllers = element.querySelector('#pdf_controls_wrapper');
+        
+        if (controllers)
+        {
+            controllers.remove();
         }
     }
 });

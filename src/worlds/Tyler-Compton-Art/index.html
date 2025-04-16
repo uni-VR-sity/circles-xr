@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
+
+  </head>
+  <body>
+
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene circles_scene_properties button>
+      <a-assets>
+
+        <!-- assets -->
+        
+        <a-asset-item id="deer" src="/worlds/Tyler-Compton-Art/assets/deer.glb" response-type="arraybuffer"></a-asset-item>
+        <a-asset-item id="bear" src="/worlds/Tyler-Compton-Art/assets/beer_model.glb" response-type="arraybuffer"></a-asset-item>
+     
+
+        <img id="deer_img" src="/worlds/Tyler-Compton-Art/assets/deer_art.jpg">
+        <img id="bear_img" src="/worlds/Tyler-Compton-Art/assets/bear.png">
+        <img id="wood" src="/worlds/Tyler-Compton-Art/assets/wood.jpg">
+ 
+  
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+    
+<!-- 
+      <a-entity position="0 1.038 6.859"  scale="15.485 5.361 0.272" geometry="primitive:box" material="" id="wall_geo"></a-entity>
+      <a-entity position="0 1.038 -8.302"  scale="15.485 5.361 0.272" geometry="primitive:box" material="" id="wall_geo"></a-entity>
+      <a-entity position="-7.01216 1.038 -0.73274" scale="15.485 5.361 0.272" rotation="0 90 0" geometry="" material="" id="wall_geo-2"></a-entity> -->
+
+      <!-- <a-entity geometry="primitive: plane" position="0 0.033 0"scale="30 30 30" material="src: #wood" rotation="-90 0 0"></a-entity> -->
+
+        <!-- BIO TEXT     -->
+    <a-entity geometry="primitive: box" material="color: #737373" id="text-box" position="-1.72 1.62 -5.370" scale="4.166 2.3 0.243"></a-entity>
+
+    <a-entity id="text" position="-0.7279 2.491 -5.247" scale="3.387 3.387 3.387" text="value: Artist: Tyler Compton;"></a-entity>
+  
+    <a-entity id="text_body" position="-1.697 2.01197  -5.243" scale="2.927 2.927 2.927" text__body="value: Born: Winnipeg, MB, Canada; color: #9c9c9c; align: center"></a-entity>
+    
+    <a-entity id="text_body" position="-1.69714 1.7 -5.24328" scale="2.927 2.927 2.927" text__body="value: Language of ancestors: Ojibwe; color: #9c9c9c; align: center"></a-entity>
+    
+    <a-entity id="text_body" position="-1.69714 1.4 -5.24328" scale="2.92671 2.92671 2.92671" text__body="value: Registered member of Roseau River Anishinabe First Nation; color: #9c9c9c; align: center"></a-entity>
+
+    <a-entity id="text_body" position="-1.69714 1.0 -5.24328" scale="2.92671 2.92671 2.92671" text__body="value: 3D models were created by taking inspiration from his use of layered colours and shapes.; color: #9c9c9c; align: center"></a-entity>
+
+
+
+
+
+      <a-entity position="-1.25731 0 6.13929" rotation="0 90 0" scale="0.4 0.4 0.4" gltf-model="/worlds/Tyler-Compton-Art/assets/deer.glb"></a-entity>
+
+      <a-image src="#deer_img" material="" geometry=""position="-4.386 2.001 6.307" rotation="0 180 0" scale="2.000 2.5 2" id="deer_plane"></a-image>
+
+      <a-entity id="bear_model" position="-5.84787 0 0" rotation="0 -3.8260000000000005 0" scale="0.2 0.2 0.2" gltf-model="/worlds/Tyler-Compton-Art/assets/beer_model.glb"></a-entity>
+       <a-image id="bear_img_plane" position="-6.678 1.81105 -2.44136" src="#bear_img" material="" geometry="" rotation="0 90 0" scale="2 2 2"></a-image>
+      
+      <a-entity environment="preset: forest; grid: none"></a-entity>
+
+       <!-- layerd art -->
+       <a-entity id="bear layed" position="-7.18452 1.04929 3.06268" rotation="0 90 0" scale="0.015 0.015 0.015" gltf-model="/worlds/Tyler-Compton-Art/assets/bear_layered_light.glb"></a-entity>
+       <a-entity id="deer layered" position="1.14386 1.56091 6.82408" rotation="90 180 0" scale="0.03 0.03 0.03" gltf-model="/worlds/Tyler-Compton-Art/assets/deer_layer_light.glb"></a-entity>
+
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>

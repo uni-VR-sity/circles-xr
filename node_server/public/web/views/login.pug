@@ -1,0 +1,62 @@
+html
+    head
+
+        title Welcome to uni-VR-sity
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+        block stylesheets
+            link(rel='icon' href='/web/images/logos/uni-VR-sity-logo-with-background.png' type='image/x-icon')
+            link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+            link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
+
+        block scripts
+            script(src='/web/js/forms.js')
+            script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+    body.no-navigations
+
+        // Webpage ---------------------------------------------------------------------------------------------------------------------------------
+        main 
+
+            // Login --------------------------------------------------------------------------------
+            section#login
+
+                // Left side (photo) ----------------------------------------------------------------
+                #left 
+
+                // Right side (content) -------------------------------------------------------------
+                #right
+
+                    #logo 
+                        a.logo(href='/')
+                            img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
+
+                    #introduction 
+                        p Log into uni-VR-sity to explore our projects
+
+                    #login-form 
+
+                        form(action='/login-user' method='post')
+
+                            if errorMessage
+                                p.error= errorMessage
+
+                            if successMessage
+                                p.success= successMessage
+
+                            .form-field
+                                label.required-form-label Username
+                                input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                            .form-field
+                                label.required-form-label Password 
+                                input(type='password' name='password' required)
+
+                            .form-field.last-field.full-width-submit
+                                input(type='submit' value='Login')
+
+                        p.register-message Don't have an account? 
+                            a.link-icon(href='/register') Register here
+
+                        p.guest-message Or 
+                            a.link-icon(href='/guest-login') continue as guest

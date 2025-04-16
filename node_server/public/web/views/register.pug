@@ -1,67 +1,69 @@
 html
-  head
-    title Circles - #{title}
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    block stylesheets
-      link(rel="stylesheet" type="text/css" href="/web/css/vendor/pure-min.css")
-      link(rel="stylesheet" type="text/css" href="/web/css/app.css")
-      link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+    head
 
-  body
-    .homepage
-        .homepage__left
-        .homepage__right
-          .homepage__register
-            h1(class="text--centered") #{title} : Sorry, this feature is DISABLED for public prototype
-            form(action="register" method="post" class="pure-form pure-form-aligned")
-              fieldset
-                .pure-control-group
-                  label UserName
-                    span.required *
-                  input(type='text' name='username' placeholder='SuperFriend99' required)
-                .pure-control-group
-                  label Full name
-                    span.required *
-                  input.field-divided(type='text' name='firstname' placeholder='First' required)
-                  input.field-divided(type='text' name='lastname' placeholder='Last' required)
-                .pure-control-group
-                  label Email
-                    span.required *
-                  input.field-long(type='email' name='email' placeholder='hello@world.ca' required)
-                .pure-control-group
-                  label Password
-                    span.required *
-                  input.field-long(type='password' name='password' required)
-                .pure-control-group
-                  label Confirm password
-                    span.required *
-                  input.field-long(type='password' name='passwordConf' required)
-                .pure-control-group
-                  //- select.field-select(name='model_head')
-                  label Head Model & Color
-                  select.field-select(name='headModel')!= userOptions.headOptions
-                  input.colorPicker.field-long(name='color_head' type='text' value='rgb(255, 255, 255)')
-                .pure-control-group
-                  //- select.field-select(name='model_hair')
-                  label Hair Model & Color
-                  select.field-select(name='hairModel')!= userOptions.hairOptions
-                  input.colorPicker.field-long(name='color_hair' type='text' value='rgb(255, 255, 255)')
-                .pure-control-group
-                  //- select.field-select(name='model_body')
-                  label Body Model & Color
-                  select.field-select(name='bodyModel')!= userOptions.bodyOptions
-                  input.colorPicker.field-long(name='color_body' type='text' value='rgb(255, 255, 255)')
-                .pure-control-group
-                  //- select.field-select(name='model_hand_left')
-                  label Hand Left Colour
-                  //select.field-select(name='handLeftModel')!= userOptions.handLeftOptions
-                  input.colorPicker.field-long(name='color_hand_left' type='text' value='rgb(255, 255, 255)')
-                .pure-control-group
-                  //- select.field-select(name='model_hand_right')
-                  label Hand Right Colour
-                  //select.field-select(name='handRightModel')!= userOptions.handRightOptions
-                  input.colorPicker.field-long(name='color_hand_right' type='text' value='rgb(255, 255, 255)')
-                .pure-controls
-                  input(type='submit' value='Register' class="pure-button pure-input-1-2 pure-button-primary")
-            p.text--centered
-              a(href="/") Return to home page
+        title Register for uni-VR-sity
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+        block stylesheets
+            link(rel='icon' href='/web/images/logos/uni-VR-sity-logo-with-background.png' type='image/x-icon')
+            link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+            link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
+
+        block scripts
+            script(src='/web/js/forms.js')
+            script(src='/web/js/views/register.js')
+            script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+    body.no-navigations
+
+        // Webpage ---------------------------------------------------------------------------------------------------------------------------------
+        main 
+
+            // Login --------------------------------------------------------------------------------
+            section#register
+
+                // Left side (photo) ----------------------------------------------------------------
+                #left 
+
+                // Right side (content) -------------------------------------------------------------
+                #right
+
+                    #logo 
+                        a.logo(href='/')
+                            img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
+
+                    #introduction 
+                        
+                        p Create an account to begin exploring! Or 
+                            a.link-icon(href="/guest-login") continue as guest
+
+                    #register-form 
+
+                        form(onsubmit='registerUser(event)' method='post')
+
+                            p#registration-error.error
+                            p#registration-success.success
+
+                            i#loading-icon(class="fa-solid fa-spinner fa-spin-pulse")
+
+                            .form-field
+                                label.required-form-label Username
+                                input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                            .form-field
+                                label.required-form-label Email
+                                input(type='email' name='email' placeholder='super@uni-vr-sity.ca' required)
+
+                            .form-field
+                                label.required-form-label Password 
+                                input(type='password' name='password' required)
+
+                            .form-field
+                                label.required-form-label Confirm password 
+                                input(type='password' name='passwordConf' required)
+
+                            .form-field.last-field.full-width-submit
+                                input(type='submit' value='Register')
+
+                        p.login-message() Have an account? 
+                            a.link-icon(href='/login') Log in here

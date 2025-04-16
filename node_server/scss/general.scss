@@ -1,0 +1,347 @@
+// Headings and Text -------------------------------------------------------------------------------------------------------------------------------------
+
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+hr {
+    border-top: 1px solid $BLACK;
+    margin: 0;
+}
+
+h1 {
+    @include no-spacing;
+    margin-bottom: $SECTION_PADDING;
+    font-weight: 700; 
+    font-size: 35px;
+ }
+
+h2 {
+    @include no-spacing;
+    margin-bottom: $SECTION_PADDING;
+    font-weight: 300; 
+    font-size: 28px;
+    text-transform: uppercase;
+}
+
+h3 {
+    @include no-spacing;
+    margin-bottom: $SECTION_PADDING;
+    font-weight: 500; 
+    font-size: 20px;
+}
+
+p, i, a, label, input, select, textarea, option, li, span {
+    @include no-spacing;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400; 
+    font-size: 16px;
+    line-height: $LINE_HEIGHT;
+}
+
+b {
+    line-height: $LINE_HEIGHT;
+}
+
+a {
+   text-decoration: none;
+   color: $BLUE;
+   cursor: pointer;
+}
+
+.important-text {
+    font-weight: 700;
+    color: $BLUE;
+}
+
+.link-underline:hover {
+    text-decoration: underline;
+}
+
+// Icons -------------------------------------------------------------------------------------------------------------------------------------------
+
+.icon-container {
+    @include no-spacing;
+    display: inline-block;
+}
+
+.pseudo-icon::before, .pseudo-icon::after {
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+ }
+
+// Used when word/ sentence is a link
+.link-icon::after {
+    font: var(--fa-font-solid);
+    content: '\f105';
+    font-size: 12px;
+    margin-left: 2px;
+    margin-right: 3px;
+}
+
+.link-icon:hover::after {
+    content: '\f061';
+    font-size: 12px;
+    margin-left: 5px;
+    margin-right: 3px;
+}
+
+// Used when section is a link
+.link-icon-section {
+    
+    p::after {
+        font: var(--fa-font-solid);
+        content: '\f105';
+        font-size: 12px;
+        margin-left: 2px;
+        margin-right: 3px;
+    }
+}
+
+.link-icon-section:hover {
+    cursor: pointer;
+
+    p::after {
+        content: '\f061';
+        font-size: 12px;
+        margin-left: 5px;
+        margin-right: 3px;
+    }
+}
+
+// Success and Error Messages ----------------------------------------------------------------------------------------------------------------------
+
+p.success-message {
+    @include start-flex;
+    color: $GREEN;
+    margin-top: $MEDIUM_MARGIN;
+    display: none;
+}
+
+p.success-message::before {
+    font: var(--fa-font-solid);
+    content: '\f058';
+    margin-right: $SMALL_MARGIN;
+    font-size: $MEDIUM_ICON;
+}
+
+p.error-message {
+    @include start-flex;
+    color: $RED;
+    margin-top: $MEDIUM_MARGIN;
+    display: none;
+}
+
+p.error-message::before {
+    font: var(--fa-font-solid);
+    content: '\f06a';
+    margin-right: $SMALL_MARGIN;
+    font-size: $MEDIUM_ICON;
+}
+
+// Top Bar -----------------------------------------------------------------------------------------------------------------------------------------
+
+.top-bar-container {
+    background-color: $GREY;
+    width: 100%;
+
+    .top-bar {
+        @include no-selection;
+        max-width: calc($MAX_CONTENT_WIDTH + ($SECTION_PADDING * 2));
+        margin: 0 auto;
+
+        .top-bar-tabs {
+            background-color: $GREY;
+            display: grid;
+            margin: 0 $SECTION_PADDING;
+
+            h3 {
+                @include no-spacing;
+                padding: $MEDIUM_MARGIN 0;
+            }
+
+            a {
+                @include no-spacing;
+                display: block;
+                font-size: 20px;
+                line-height: 1;
+                padding: $MEDIUM_MARGIN 0;
+            }
+
+            .selected-tab {
+                background-color: $DARK_GREY;
+                color: $WHITE;
+            }
+
+            .tab {
+                text-align: center;
+            }
+
+            .tab:not(.selected-tab):hover
+            {
+                background-color: $HOVER_GREY;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+// Instruction Container -----------------------------------------------------------------------------------------------------------------------------------------
+
+.instruction-container {
+    border: $GREEN 3px solid;
+    background-color: $LIGHT_GREEN;
+    width: 100%;
+    padding: $MEDIUM_MARGIN;
+    margin-bottom: $SMALL_MARGIN;
+    box-sizing: border-box;
+}
+
+// Lists ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ul {
+    margin-top: $LINE_HEIGHT;
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+// Tables --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+table {
+    border-collapse: collapse;
+    margin: $SMALL_MARGIN 0;
+
+    thead {
+        border-bottom: $BLACK solid 2px;
+        text-align: center;
+    }
+
+    tr {
+
+        td:not(:last-child) {
+            border-right: $BLACK solid 2px;
+        } 
+        
+        td {
+            vertical-align: top;
+            padding: $X_SMALL_MARGIN $MEDIUM_MARGIN;
+        }
+    }
+}
+
+// Scroll Gallery ------------------------------------------------------------------------------------------------------------------------------------------------
+
+.scroll-gallery-container {
+    display: grid;
+    grid-gap: $SECTION_MARGIN;
+
+    .arrow {
+        align-content: center;
+
+        .icon-container {
+            @include icon-highlight ($DEFAULT_X_LARGE_ICON, $BLACK);
+        }
+    }
+
+    #left-arrow {
+        justify-self: left;
+    }
+
+    #right-arrow {
+        justify-self: right;
+    }
+
+    .scroll-gallery-item {
+        display: grid;
+        justify-items: center;
+        text-align: center;
+
+        img {
+            width: 100%;
+            margin-bottom: $LARGE_MARGIN;
+            border-radius: $BORDER_RADIUS;
+        }
+
+        h2,  h3 {
+            margin-bottom: $SMALL_MARGIN;
+        }
+
+        a {
+            margin-top: $SMALL_MARGIN;
+        }
+
+        .gallery-item-icon-links {
+            display: flex;
+            grid-gap: $MEDIUM_MARGIN;
+            margin-top: $X_SMALL_MARGIN;
+
+            .icon-container {
+                @include icon-highlight($MEDIUM_ICON, $BLACK);
+            }
+        }
+    }
+}
+
+.descriptive-scroll-gallery-container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-gap: $SECTION_MARGIN;
+
+    .arrow {
+        align-content: center;
+
+        .icon-container {
+            @include icon-highlight ($DEFAULT_X_LARGE_ICON, $BLACK);
+        }
+    }
+
+    #left-arrow {
+        justify-self: left;
+    }
+
+    #right-arrow {
+        justify-self: right;
+    }
+
+    .scroll-gallery-item {
+        display: grid;
+        grid-template-columns: 0.25fr 1fr;
+        grid-gap: $LARGE_MARGIN;
+
+        img {
+            width: 100%;
+            border-radius: $BORDER_RADIUS;
+        }
+
+        .description-container
+        {
+            align-self: center;
+            
+            h2 {
+                margin-bottom: $SMALL_MARGIN;
+            }
+
+            p {
+                margin-bottom: $SMALL_MARGIN;
+            }
+        }
+    }
+}
+
+.gallery-page-indicator-container {
+    @include center-flex;
+                
+    .page-indicator {
+        display: inline-block;
+        margin: 0 $XX_SMALL_MARGIN;
+        margin-top: $LARGE_MARGIN;
+
+        .icon-container {
+                
+            i {
+                font-size: $SMALL_ICON;
+            }
+        }
+    }
+}

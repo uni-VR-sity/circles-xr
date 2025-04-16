@@ -59,12 +59,41 @@ const MODEL_FORMAT = {
 };
 
 const USER_TYPE = {
+  SUPERUSER   : 'Superuser',
+  ADMIN       : 'Admin',
   STUDENT     : 'Student',
   TEACHER     : 'Teacher',
   RESEARCHER  : 'Researcher',
   PARTICIPANT : 'Participant',
-  TESTER      : 'TESTER',
-  NONE        : 'NONE',
+  TESTER      : 'Tester',
+  GUEST       : 'Guest',
+  MAGIC_GUEST : 'Magic Guest',
+};
+
+const USER_CATEGORIES = {
+  ADMIN_USERS : [USER_TYPE.SUPERUSER, USER_TYPE.ADMIN],
+  MANAGER_USERS : [USER_TYPE.TEACHER, USER_TYPE.RESEARCHER],
+  STANDARD_USERS: [USER_TYPE.STUDENT, USER_TYPE.PARTICIPANT, USER_TYPE.TESTER],
+};
+
+const VALID_TEXT_TYPES = {
+  PDF     : 'pdf',
+};
+
+const VALID_IMAGE_TYPES = {
+  PNG     : 'png',
+  JPG     : 'jpg',
+  JPEG    : 'jpeg',
+};
+
+const VALID_VIDEO_TYPES = {
+  MP4     : 'mp4',
+  MOV     : 'mov',
+  AVI     : 'avi',
+};
+
+const VALID_3D_TYPES = {
+
 };
 
 const MODEL_HEAD_TYPE = {
@@ -381,6 +410,11 @@ module.exports = {
   MODEL_TYPE,
   MODEL_FORMAT,
   USER_TYPE,
+  USER_CATEGORIES,
+  VALID_TEXT_TYPES,
+  VALID_IMAGE_TYPES,
+  VALID_VIDEO_TYPES,
+  VALID_3D_TYPES,
   MODEL_HEAD_TYPE,
   MODEL_HAIR_TYPE,
   MODEL_BODY_TYPE,

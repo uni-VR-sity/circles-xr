@@ -1,0 +1,329 @@
+<html>
+  <head>
+
+    <meta charset="utf-8">
+
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+
+  </head>
+  <body>
+
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene circles_scene_properties>
+
+      <a-assets>
+
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+
+      </a-assets>
+
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+      <!---------------------------------------------------------------------------------------------------------------------->
+
+      <!-- Data Collector -->
+      <a-entity id="data-collector"
+                circles-data-collector="dataToCollect:date,time,user,name,position,description; allowLogDownload:true; downloadUIPosition:1.61 2.1 -7.4">
+      </a-entity>
+
+      <!--
+      <a-entity position="1.61 2.1 -7.4"
+                geometry="primitive:plane; height:1.25; width:1.5;"
+                material="color:#FFFFFF">
+
+        <a-entity position="0 0.34 0"
+                  text="value:Download Logs; align:center; color:#000000; width:1.5; wrapCount:16;">
+        </a-entity>
+
+        <a-entity position="0 0.055 0"
+                  text="value:Download the collected data logs:; align:center; color:#000000; lineHeight:55; width:1.1; wrapCount:22;">
+        </a-entity>
+
+        <a-entity class="interactive"
+                  position="0 -0.32 0.01"
+                  geometry="primitive:plane; height:0.2; width:0.5"
+                  material="color:#0f68bb">
+          
+            <a-entity text="value:Download; align:center; width:0.5; wrapCount:11">
+
+          </a-entity>
+
+        </a-entity>
+
+      </a-entity>
+    -->
+
+      <!-- Classroom -->
+      <a-entity id="classroom" 
+                gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/room.glb)">
+      </a-entity>
+
+      <!-- Student Desks -->
+      <a-entity id="student-desks" 
+                position="-1.9 0 0">
+        
+        <!-- Row 1 -->
+        <a-entity id="row1" 
+                  position="0 0 5.4">
+          
+          <a-entity position="-1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+          <a-entity position="1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+        </a-entity>
+
+        <!-- Row 2 -->
+        <a-entity id="row2" 
+                  position="0 0 3">
+          
+          <a-entity position="-1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+          <a-entity position="1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+        </a-entity>
+
+        <!-- Row 3 -->
+        <a-entity id="row3" 
+                  position="0 0 0.7">
+
+          <a-entity position="-1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+          <a-entity position="1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+        </a-entity>
+
+        <!-- Row 4 -->
+        <a-entity id="row4" 
+                  position="0 0 -1.6">
+          
+          <a-entity position="-1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+          <a-entity position="1.4 0 0">
+            <a-entity position="0 0 0.7"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+            </a-entity>
+            <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/desk.glb)"></a-entity>
+          </a-entity>
+
+        </a-entity>
+
+      </a-entity>
+
+      <!-- Teacher Desk -->
+      <a-entity id="teacher-desk" 
+                position="-0.75 0 -4.8" 
+                rotation="0 180 0">
+
+        <a-entity position="0 0 0.7" 
+                  gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/chair.glb)">
+        </a-entity>
+        <a-entity gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/teacher-desk.glb)"></a-entity>
+          
+      </a-entity>
+
+      <!-- Podium -->
+      <a-entity id="podium" 
+                position="3.25 0 -4.8" 
+                rotation="0 180 0"
+                gltf-model="url(https://uni-vr-sity.ca/asset-library/classroom/podium.glb)">
+      </a-entity>
+
+      <!-- Checkpoints -->
+      <a-entity id="checkpoints">
+
+          <a-entity position="2.65 0 4.8" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+          <a-entity position="2.65 0 2.7" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+          <a-entity position="2.65 0 0.6" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+          <a-entity position="2.65 0 -1.5" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+          <a-entity position="3.25 0 -5.9" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+          <a-entity position="-0.75 0 -5.5" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+          <a-entity position="-3 0 -5.4" 
+                    circles-checkpoint
+                    circles-interaction-log="name:Checkpoint;description:Teleport">
+          </a-entity>
+
+      </a-entity>
+      
+      <!-- Chalkbaord -->
+      <a-entity id="chalkboard" 
+                position="1.61 2.1 -7.48" 
+                geometry="primitive:box;height:2.5;width:6;depth:0.1;"
+                material="color:#242424;">
+      </a-entity>
+
+      <!-- Interactable Objects -->
+      <a-entity>
+
+          <a-entity position="-0.5 0.91 -1.57"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/large-graduated-cylinder.glb)"
+                    circles-pickup-object="dropPosition:-0.5 0.91 -1.57; dropRotation:0 0 0;"
+                    circles-interaction-log="name:Large Graduated Cylinder;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-0.38 0.91 -1.59"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/medium-graduated-cylinder.glb)"
+                    circles-pickup-object="dropPosition:-0.38 0.91 -1.59; dropRotation:0 0 0;"
+                    circles-interaction-log="name:Medium Graduated Cylinder;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-0.08 0.91 -1.78"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/volumentric-flask.glb)"
+                    circles-pickup-object="dropPosition:-0.08 0.91 -1.78; dropRotation:0 0 0;"
+                    circles-interaction-log="name:Volumentric Flask;description:Interaction">
+          </a-entity>
+
+          <a-entity position="0.13 0.91 -1.52" 
+                    rotation="0 -23 0"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/full-test-tube-rack.glb)"
+                    circles-pickup-object="dropPosition:0.13 0.91 -1.52; dropRotation:0 -23 0;"
+                    circles-interaction-log="name:Full Test Tube Rack;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-3.64 0.91 3.15" 
+                    rotation="0 10 0"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/empty-test-tube-rack.glb)"
+                    circles-pickup-object="dropPosition:-3.64 0.91 3.15; dropRotation:0 10 0;"
+                    circles-interaction-log="name:Used Test Tube Rack;description:Interaction">
+
+            <a-entity position="-0.06 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+            <a-entity position="-0.02 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+
+          </a-entity>
+
+          <a-entity position="-3.46 0.92 3.31" 
+                    rotation="88.95 -215 0"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)"
+                    circles-pickup-object="dropPosition:-3.46 0.92 3.31; dropRotation:88.95 -215 0;"
+                    circles-interaction-log="name:Test Tube;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-3.37 0.92 3.31" 
+                    rotation="88.95 -225 0"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)"
+                    circles-pickup-object="dropPosition:-3.37 0.92 3.31; dropRotation:88.95 -225 0;"
+                    circles-interaction-log="name:Test Tube;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-3.16 0.91 2.93"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/large-graduated-cylinder.glb)"
+                    circles-pickup-object="dropPosition:-3.16 0.91 2.93; dropRotation:0 0 0;"
+                    circles-interaction-log="name:Large Graduated Cylinder;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-0.79 0.91 5.62"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/erlenmeyer-flask.glb)"
+                    circles-pickup-object="dropPosition:-0.79 0.91 5.62; dropRotation:0 0 0;"
+                    circles-interaction-log="name:Erlenmeyer Flask;description:Interaction">
+          </a-entity>
+
+          <a-entity position="-0.45 0.91 5.49" 
+                    rotation="0 2.5 0"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/empty-test-tube-rack.glb)"
+                    circles-pickup-object="dropPosition:-0.45 0.91 5.49; dropRotation:0 2.5 0;"
+                    circles-interaction-log="name:Used Test Tube Rack;description:Interaction">
+              
+            <a-entity position="-0.1 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+            <a-entity position="-0.06 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+            <a-entity position="-0.02 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+            <a-entity position="0.06 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+            <a-entity position="0.1 0.016 0"
+                      gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/test-tube.glb)">
+            </a-entity>
+
+          </a-entity>
+
+          <a-entity position="-0.02 0.91 5.7"
+                    gltf-model="url(https://uni-vr-sity.ca/asset-library/science-props/beaker.glb)"
+                    circles-pickup-object="dropPosition:-0.02 0.91 5.7; dropRotation:0 0 0;"
+                    circles-interaction-log="name:Beaker;description:Interaction">
+          </a-entity>
+
+      </a-entity>
+
+    </a-scene>
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+
+  </body>
+</html>

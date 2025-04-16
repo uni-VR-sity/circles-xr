@@ -1,0 +1,11 @@
+Model Information:
+* title:	Satellite
+* source:	https://sketchfab.com/3d-models/satellite-d232fe608c874009bad9613c8093a972
+* author:	Daan van Leeuwen (https://sketchfab.com/superwortel)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Satellite" (https://sketchfab.com/3d-models/satellite-d232fe608c874009bad9613c8093a972) by Daan van Leeuwen (https://sketchfab.com/superwortel) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

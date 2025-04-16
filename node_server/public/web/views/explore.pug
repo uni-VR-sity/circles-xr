@@ -1,50 +1,379 @@
-extends layout.pug
+extends template.pug
 
-block append stylesheets
-  link(rel="stylesheet" type="text/css" href="/web/css/vendor/color-picker.css")
+block append scripts
+    script(src='/web/js/views/explore.js')
 
 block content
-  - var userCanGenMagicLinks  = userInfo.userType === CIRCLES.USER_TYPE.TEACHER || userInfo.userType === CIRCLES.USER_TYPE.RESEARCHER;
-  - var targetUsersText       = (userInfo.userType === CIRCLES.USER_TYPE.TEACHER) ? CIRCLES.USER_TYPE.STUDENT : CIRCLES.USER_TYPE.PARTICIPANT;
-  - var buttonText            = 'Create ' + targetUsersText + ' Links';
 
-  h2 Circles' Worlds
-  div(class="gutter-bottom-doubled")
-    div(id="worlds_list_wrapper" class="pure-menu gutter-bottom")
-    //will ask for worlds list from server and populate here
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var adminUser = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(userInfo.usertype);
+    - var managerUser = CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(userInfo.usertype);
+    - var standardUser = CIRCLES.USER_CATEGORIES.STANDARD_USERS.includes(userInfo.usertype);
+    - var guest = userInfo.usertype === CIRCLES.USER_TYPE.GUEST;
+    - var magicGuest = userInfo.usertype === CIRCLES.USER_TYPE.MAGIC_GUEST;
 
-  if userCanGenMagicLinks
+    - var group;
+    - var subgroup;
+    - var circle;
+    - var section;
+    - var line;
+    - var splitLine;
+    - var paragraph;
+    - var developer;
 
-    div(id="MagicLinksWrapper" class="gutter-bottom-doubled")
-      h3 #{targetUsersText} Links for "Magic" Automatic Login 
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
 
-      form(class='pure-form pure-form-aligned')
-        fieldset
-          legend Create Magic Links
-          div(class='pure-control-group')
-            - let n = 0;
-            - let selected = false;
-            - let val = 0;
-            label(for='MagicLinkExpiry') Select Expiry in Days
-            select(name='MagicLinkExpiry', id='MagicLinkExpiry', class="pure-input-1-3")
-              while n < 365
-                - val = n++;
-                - selected = (val === 7)
-                option(value!= val, selected!= selected)!= val
-                - selected = false
-          div(class='pure-control-group')
-            label(for='MagicLinkGroup') Create Group Name
-            input(name='MagicLinkGroup', id='MagicLinkGroup', type="text", placeholder="explore", class="pure-input-1-3")
-            button(type="button", class="pure-button pure-button", onclick='autogenerateGroupName(MagicLinkGroup, 4)') create new group
-          div(class='pure-control-group')
-            label(for='MagicLinkWorld') Select Entry World
-            select(name='MagicLinkWorld', id='MagicLinkWorld', , class="pure-input-1-3")
-            //will populate this select element when we load in worlds
-            //-   each val, index in window.all_circles_worlds 
-            //-     option=val
-          div(class='pure-controls')
-            input(type='button', class="pure-button pure-button-primary", value=buttonText, onclick='createMagicLinks("' + userInfo.userName + '","' + userInfo.email + '","' + userInfo.userType + '")')
+    // Circle display -----------------------------------------------------------------------
+    // Stacking links/ cards tutorial: https://inclusive-components.design/cards/
+    mixin displayCircle(circle)
+        - var overlayID = circle.name + '-overlay';
+        - var circleURL = '/w/' + circle.name;
+        - var profileURL = '/worlds/' + circle.name + '/profile.jpg'
+        - var altText = circle.displayName + "'s profile image";
+        - var manageURL = '/manage-circle/' + circle.name;
 
-      p Selection the expiry and world, then click on the blue <span style='color:#0078e7; font-weight:bold;'>[#{buttonText}]</span> button above to generate "magic links" to the selected world for each #{targetUsersText}. Just copy and send each link to each #{targetUsersText} to automatically log them in. Ask them to save the link so they can login repeatedly. 
-      p <em>Note these links expire in <span id='countdownElem' style='color:#0078e7; font-weight:bold;'>15 minutes</span></em>.
-      div(id="MagicLinksContent" class="gutter-bottom-doubled")
+        .circle.hidden-circle(id=circle.name)
+            if circle.hasProfileImage
+                img(src=profileURL alt=altText)
+            else 
+                img(src='/web/images/default-circle-profile.png' alt=altText)
+
+            // Checking if circle is in editable words array (if user can edit it)
+            // If it is, showing edit symbol
+            if (editableCircles.groups[0].noGroup.find(x => x.name === circle.name) || editableCircles.groups[1].noGroup.find(x => x.name === circle.name))
+                
+                .circle-info-with-settings
+                    p
+                        a(onclick='openOverlay("' + overlayID + '")')= circle.displayName
+                    
+                    .icon-container
+                        a(class='fa-solid fa-gear' href=manageURL)
+
+            else 
+                .circle-info-no-settings
+                    p
+                        a(onclick='openOverlay("' + overlayID + '")')= circle.displayName
+
+        .circle-description-overlay.overlay-container(id=overlayID)
+            .overlay 
+
+                .circle-title-container
+                    if circle.hasProfileImage
+                        img(src=profileURL alt=altText)
+                    else 
+                        img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                    .circle-title
+                        h3= circle.displayName 
+
+                        if circle.credit
+                            p= circle.credit
+
+                        .circle-link
+                            a(href=circleURL).link-icon Visit Circle
+
+                    .icon-container
+                        i(class="fa-solid fa-xmark" onclick='closeOverlay("' + overlayID + '")')
+
+                .circle-description 
+                    
+                    if circle.description
+                        .description-section
+                            for line of circle.description.split('<a href=')
+                                if line.includes('</a>')
+                                    a.link-underline(href=line.split("'")[1] target='_blank')= line.split('>')[1].split('<')[0]
+                                    span= line.split('</a>')[1]
+                                else 
+                                    span= line
+
+                    if circle.extraInfo.length > 0
+                        for section of circle.extraInfo
+                            .description-section
+                                b= section.title.replaceAll("<'>", '"')
+                                    span :
+                                    
+                                for paragraph of section.description.split('<new-line><new-line>')
+                                    ul.paragraph 
+                                        for line of paragraph.split('<new-line>')
+                                            for splitLine of line.split('<a href=')
+                                                if splitLine.includes('<subtitle>')
+                                                    i= splitLine.split('<subtitle>')[1].replaceAll("<'>", '"')
+                                                else if splitLine.includes('<list>')
+                                                    li= splitLine.split('<list>')[1].replaceAll("<'>", '"')
+                                                else if splitLine.includes('</a>')
+                                                    a.link-underline(href=splitLine.split('"')[1] target='_blank')= splitLine.split('>')[1].split('<')[0]
+                                                    span= splitLine.split('</a>')[1]
+                                                else 
+                                                    p= splitLine.replaceAll("<'>", '"')
+
+                    if circle.contact.length > 0
+                        .description-section
+                            b Contact the Developer(s): 
+                                for developer of circle.contact 
+                                    p= developer
+
+    // Circle section display ---------------------------------------------------------------
+    mixin displayCircleSection(section, sectionType)
+        - var sectionJSON = JSON.stringify(section);
+        - var sectionJSON = sectionJSON.replaceAll(/'/gm, /\'/gm);
+
+        script.
+            initializeCircleSection('!{sectionJSON}', '#{sectionType}');
+
+        // Circles with no groups
+        if section.noGroup.length > 0
+            for circle of section.noGroup
+                +displayCircle(circle)
+
+        // Circles with groups
+        if section.groups.length > 0
+            for group of section.groups
+
+                // Circles with no subgroups
+                if group.noGroup.length > 0
+                    for circle of group.noGroup
+                        +displayCircle(circle)
+
+                // Circles with subgroups
+                if group.subgroups.length > 0
+                    for subgroup of group.subgroups
+                        for circle of subgroup.circles
+                            +displayCircle(circle)
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
+
+        // Session information --------------------------------------------------------------
+        section#session-information-container
+            .content-container
+
+                // Session information description ------------------------------------------
+                #session-information-description
+                    h2 Session Information
+
+                    p Set how your avatar is displayed for this session. Change it permanently on your
+                        span 
+                            a.link-icon(href='/profile') profile page
+
+                // Display name form --------------------------------------------------------
+                #session-name-form
+                    form(onsubmit='updateSessionName(event)' method="post")
+                        fieldset
+
+                            .form-field.last-field
+                                label(style='white-space:nowrap') Display Name
+                                input(type='text' name='sessionName' value=sessionName required)
+                                input.inline-submit(type='submit' value='Set Name')
+
+                    p.success-message
+
+                    p.error-message
+
+                // Display name button (tablet and mobile) ----------------------------------
+                #session-name-button
+                    a Display Name
+
+                // Avatar button ------------------------------------------------------------
+                //#session-wardrobe-button
+                    a(href='/w/Wardrobe')
+                        .icon-container
+                            i
+
+                        p Wardrobe
+
+        // Circles --------------------------------------------------------------------------
+        section#circles-container
+
+            // Top bar ----------------------------------------------------------------------
+            #circles-top-bar-container.top-bar-container
+                #circles-top-bar.top-bar
+
+                    // Tabs -----------------------------------------------------------------
+                    // Admin and manager users:     All Circles, Public Circles, Your Circles, Editable Circles
+                    // Standard users:              All Circles, Public Circles, Your Circles
+                    // Magic Guests:                Magic Circles, Public Circles
+                    // Guests:                      Public Circles
+                    #circles-tabs.top-bar-tabs
+                    
+                        if magicGuest
+                            #magic-circles.tab(onclick='displaySection("magic")')
+                                h3 Magic Circles 
+
+                        if adminUser || managerUser || standardUser
+                            #all-circles.tab(onclick='displaySection("all")')
+                                h3 All Circles
+                            
+                        #public-circles.tab(onclick='displaySection("public")')
+                            h3 Public Circles
+
+                        if adminUser || managerUser || standardUser
+                            #your-circles.tab(onclick='displaySection("your")')
+                                h3 Your Circles
+
+                        if adminUser || managerUser
+                            #editable-circles.tab(onclick='displaySection("editable")')
+                                h3 Editable Circles
+
+                        #mobile-tabs-icon   
+                            .icon-container
+                                i(class='fa-solid fa-chevron-down')
+
+                        // Fixing css on tabs depending on how many are shown
+                        script.
+                            styleTabs(#{adminUser}, #{managerUser}, #{standardUser}, #{magicGuest});
+
+                    // Search bar -----------------------------------------------------------
+                    #circles-search-bar
+                        //+searchBar()
+
+                        //script.
+                            circlesSearchBar();
+
+            // Group selection --------------------------------------------------------------
+            #circles-groups
+                .content-container
+
+                    .circles-selectors
+                        select#circles-group-selector
+
+                        select#circles-subgroup-selector
+
+                    if adminUser
+                    
+                        include includes/manage-groups.pug
+
+                        .icon-container.manage-groups-icon
+                            i#manage-groups-button(class='fa-solid fa-gear' onclick='openOverlay("manage-groups-overlay")')
+
+                    script.
+                        detectGroupSelect();
+
+            p#no-circles-message No circles available
+
+            // All circles ------------------------------------------------------------------
+            #circles-display
+
+                // Creating circle elements in all sections
+                +displayCircleSection(magicCircles, 'magic')
+                +displayCircleSection(publicCircles, 'public')
+                +displayCircleSection(userCircles, 'your')
+
+                - var groupJSON = JSON.stringify(editableCircles);
+                - var groupJSON = groupJSON.replaceAll(/'/gm, /\'/gm);
+                - var groupJSON = groupJSON.replaceAll(/<">/gm, /\"/gm)
+
+                script.
+                    initializeCircleSection('!{groupJSON}', 'editable');
+                    initializeAllCircleSection();
+
+                // Displaying default section when page is loaded
+                if magicGuest
+                    script.
+                        displaySection('magic');
+                else if guest 
+                    script.
+                        displaySection('public');
+                else 
+                    script.
+                        displaySection('all');
+
+            // Page selector ----------------------------------------------------------------
+            //#circles-page-selector
+                .content-container
+
+                    .icon-container 
+                        i(class='fa-solid fa-chevron-left')
+
+                    .page-number-container 
+
+                        .page-number.current-page
+                            p 1
+
+                        .page-number
+                            p 2
+
+                        .page-number
+                            p 3
+
+                        .page-number-seperator
+                            p . . .
+
+                        .page-number
+                            p 5
+
+                    .icon-container
+                        i(class='fa-solid fa-chevron-right')
+
+            // View more circles ------------------------------------------------------------
+            #circles-view-more
+                .content-container
+                    a View More
+
+        // Magic links ----------------------------------------------------------------------
+        if adminUser || managerUser
+            section#magic-links-container
+
+                // Creating ---------------------------------------------------------------------
+                #create-link
+                    .content-container
+
+                        h2 Magic Links
+
+                        p Select the expiry, forwarding group, and circle(s), then click on the blue 
+                            span.important-text [Create] 
+                            span button below to generate a magic link. Just copy and send the link to automatically give them access to the circle(s) as a guest user.
+
+                        a(href='/your-magic-links') See Created Links
+
+                        form#magic-link-form(onsubmit='createMagicLink(event)' method='post')
+                            fieldset
+
+                                .form-field
+                                    label.required-form-label Expiration
+
+                                    select(id='link-expiry' name='linkExpiry')
+                                        option(value='7' selected) 7 days
+
+                                        - for (var i = 30; i <= 90; i += 30)
+                                            option(value=i) !{i} days
+
+                                        option(value='custom') Custom...
+                                        option(value='never') Never
+
+                                    .inline-field
+                                        input(id='custom-link-expiry' type='date' name='customLinkExpiry')
+
+                                    script.
+                                        customDateForm('link-expiry', 'custom-link-expiry');
+
+                                .form-field
+                                    label.required-form-label Link name
+                                    input(type='text' name='forwardingName' placeholder='ClassVR' required)
+
+                                .form-field
+                                    for group of editableCircles.groups
+                                        for circle of group.noGroup
+                                            .horizontal-checkbox-container
+                                                - var boxID = circle.name + '-checkbox';
+                                                input(type='checkbox' id=boxID name='magicCircle' value=circle.name)
+                                                label(for=boxID)=circle.displayName
+
+                                script.
+                                    checkCheckboxWidth('magic-link-form');
+
+                                //.form-field
+                                    label.required-form-label Circles
+                                    input(type='button' value='Select Circles')
+                                    span.num-selected 0 selected
+
+                                .form-field.last-field
+                                    input(type='submit' value='Create')
+
+                        p.success-message
+
+                        p.error-message
+
+                        .copy-magic-link
+                            +copyLink('magic-link')
+
+    include includes/footer.pug

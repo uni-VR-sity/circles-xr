@@ -1,0 +1,142 @@
+// Create Users ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#create-users-container {
+
+    .content-container {
+        
+        .success-message, .error-message {
+            display: flex;
+        }
+
+        .single-create-success, .single-create-error
+        {
+            margin-top: 0;
+            margin-bottom: $MEDIUM_MARGIN;
+        }
+
+        form {
+            margin-top: $LARGE_MARGIN;
+        }
+
+        #create-bulk-users {
+
+            .form-field {
+
+                label {
+                    width: auto;
+                }
+            }
+        }
+    }
+}
+
+// Manage Users ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#manage-users-container {
+
+    // Top bar
+    #manage-users-top-bar-container {
+
+        #manage-users-top-bar {
+
+            #manage-users-tabs {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    }
+
+    // Users
+    #users-container {
+
+        .content-container {
+
+            .manage-user-form {
+                display: none;
+                
+                .row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1.25fr auto;
+                    grid-template-areas: "username user-type update-type delete-user"
+                                        "divider divider divider divider";
+
+                    p, select, .icon-container {
+                        margin: $MEDIUM_MARGIN 0;
+                        align-self: center;
+                    }
+
+                    .username {
+                        grid-area: username;
+                        padding-left: $X_LARGE_MARGIN;
+                    }
+        
+                    .user-type {
+                        grid-area: user-type;
+                        padding-left: $MEDIUM_MARGIN;
+                    }
+
+                    select {
+                        grid-area: update-type;
+                        width: calc(100% - $SMALL_MARGIN);
+                    }
+
+                    .icon-container {
+                        grid-area: delete-user;
+                        @include icon-button($MEDIUM_ICON, $WHITE, 11px 13px);
+                        margin-right: $SMALL_MARGIN;
+                        margin-left: $SMALL_MARGIN;
+
+                        i {
+                            color: $RED;
+                        }
+                    }
+
+                    hr {
+                        grid-area: divider;
+                    }
+                }
+
+                .no-users-message {
+                    display: none;
+                    text-align: center;
+                    margin-top: $LARGE_MARGIN;
+                }
+            }
+
+            .form-field {
+                display: grid;
+                align-items: start;
+                grid-template-columns: 3fr 1fr;
+                grid-template-areas: "messages submit-button";
+
+                .messages {
+                    grid-area: messages;
+
+                    .error-message, .success-message {
+                        display: flex;
+                    }
+
+                    #deleting-user-error {
+                        display: none;
+                    }
+                }
+
+                input {
+                    grid-area: submit-button;
+                    justify-self: end;
+                    margin-top: $SMALL_MARGIN;
+                    margin-right: $X_LARGE_MARGIN;
+                    width: fit-content;
+                }
+            }
+            
+            .no-users-message {
+                text-align: center;
+                margin-top: $LARGE_MARGIN;
+            }
+        }
+    }
+}

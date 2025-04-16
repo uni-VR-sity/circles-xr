@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly Space Shuttle
+* source:	https://sketchfab.com/3d-models/low-poly-space-shuttle-430a040458ad4db5b4fcde4c7db15e1a
+* author:	Firecow (https://sketchfab.com/firecow)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly Space Shuttle" (https://sketchfab.com/3d-models/low-poly-space-shuttle-430a040458ad4db5b4fcde4c7db15e1a) by Firecow (https://sketchfab.com/firecow) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

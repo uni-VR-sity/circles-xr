@@ -1,0 +1,380 @@
+// Body --------------------------------------------------------------------------------------------------------------------------------------------
+
+body {
+    @include no-spacing;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+body.no-navigations {
+    @include no-spacing;
+    min-height: 100vh;
+    display: block;
+
+    main {
+        height: 100%;
+    }
+}
+
+// Navigation Bar ----------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+nav {
+    @include no-spacing;
+    margin: 0 auto;
+    margin-bottom: $NAVIGATION_MARGIN;
+    background-color: $WHITE;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    grid-template-areas: "nav-logo nav-items nav-profile";
+
+    // Logo
+    .logo-container {
+        @include start-flex;
+        justify-self: start;
+        align-self: center;
+        grid-area: nav-logo;
+        height: $DEFAULT_NAV_HEIGHT;
+        padding: 0 $SECTION_PADDING;
+
+        a {
+            height: 55%;
+
+            img {
+                height: 100%;
+            }
+        }
+    }
+
+    // Hamburger icon
+    .nav-hamburger {
+        grid-area: nav-hamburger;
+        display: none;
+    }
+
+    // Navigation items
+    .nav-items-container {
+        @include center-flex;
+        grid-area: nav-items;
+
+        .nav-items {
+            @include no-spacing;
+            list-style: none;
+            height: 100%;
+        
+            li {
+                display: inline-block;
+                background-color: $WHITE;
+                height: 100%;
+        
+                a {
+                    display: inline-block;
+                    line-height: $DEFAULT_NAV_HEIGHT;
+                    color: $BLACK;
+                    padding: 0 50px;
+                }
+            }
+            
+            li:hover {
+                background-color: $LIGHT_GREY;
+                cursor: pointer;
+            }
+        }
+    }
+
+    // Profile
+    .profile-container {
+        grid-area: nav-profile;
+        justify-self: end;
+        position: relative;
+        min-width: 200px;
+
+        // Information
+        .profile-information {
+            @include center-flex;
+            height: 100%;
+            padding: 0 50px 0 35px;
+            margin: 0;
+
+            .icon-container {
+                margin-right: 17px;
+
+                i {
+                    font-size: $DEFAULT_LARGE_ICON;
+                }
+            }
+
+            .username {
+                @include no-spacing;
+                display: inline-block;
+            }
+        }
+
+        // Drop down menu
+        .profile-dropdown {
+            position: absolute;
+            right: 0;
+            min-width: 100%;
+            z-index: 1;
+            background-color: $WHITE;
+            display: none;
+            box-shadow: 0 8px 15px 0 #0000001a;
+        
+            ul {
+                @include no-spacing;
+                list-style: none;
+                display: block;
+
+                li:hover {
+                    background-color: $LIGHT_GREY;
+                }
+            
+                a {
+                    display: block;
+                    padding: 15px 35px;
+                    color: $BLACK;
+                    text-wrap: nowrap;
+                }
+            
+                a.red {
+                    color: $RED;
+                }
+            }
+        }
+    }
+
+    .profile-container:hover {
+        background-color: $LIGHT_GREY;
+        cursor: pointer;
+
+        .profile-dropdown {
+            display: block;
+        }
+    }
+}
+
+// TABLET -----------------------------------------------------------------------------------
+@media only screen and (max-width: $TABLET_BREAK) 
+{   
+    nav {
+        margin-bottom: $NAVIGATION_MARGIN;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "nav-logo nav-profile"
+                             "nav-items nav-items";
+
+        // Navigation items
+        .nav-items-container {
+            background-color: $LIGHT_GREY;
+
+            .nav-items {
+
+                li {
+                    background-color: $LIGHT_GREY;
+
+                    a {
+                        line-height: $TABLET_NAV_HEIGHT;
+                        padding: 0 55px;
+                    }
+                }
+
+                li:hover {
+                    background-color: $LIGHT_GREY;
+                }
+
+                li:active {
+                    background-color: $GREY;
+                }
+            }
+        }
+
+        // Profile
+        .profile-container {
+            min-width: 200px;
+
+            // Information
+            .profile-information {
+                padding: 0 45px 0 35px;
+            }
+
+            // Drop down menu
+            .profile-dropdown {
+                
+                ul {
+                    
+                    li:hover {
+                        background-color: $WHITE;
+                    }
+
+                    li:active {
+                        background-color: $LIGHT_GREY;
+                    }
+
+                    a {
+                        padding: 15px 32px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MOBILE -----------------------------------------------------------------------------------
+@media only screen and (max-width: $MOBILE_BREAK) 
+{   
+    nav {
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas: "nav-logo nav-hamburger"
+                             "nav-items nav-items"
+                             "nav-profile nav-profile";
+
+        // Logo
+        .logo-container a {
+            width: 125px;
+        }
+
+        // Hamburger icon
+        .nav-hamburger {
+            @include end-flex;
+            justify-self: end;
+            height: 100%;
+            padding: 0 25px;
+            margin: 0;
+
+            i {
+                font-size: 26px;
+            }
+        }
+
+        // Navigation items
+        .nav-items-container {
+            display: none;
+
+            .nav-items {
+                width: 100%;
+        
+                li {
+                    display: block;
+                    background-color: $WHITE;
+                    padding-left: 65px;
+                    font-size: 15px;
+        
+                    a {
+                        @include no-spacing;
+                        width: 100%;
+                        line-height: $MOBILE_NAV_HEIGHT;
+                    }
+                }
+        
+                li:hover {
+                    background-color: $WHITE;
+                }
+
+                li:active {
+                    background-color: $LIGHT_GREY;
+                }
+            }
+        }
+
+        // Profile
+        .profile-container {
+            width: 100%;
+            position: static;
+            display: none;
+
+            // Information
+            .profile-information {
+                background-color: $LIGHT_GREY;
+                justify-content: start;
+                padding: 0 28px;
+                height: auto;
+        
+                .username {
+                    line-height: $MOBILE_NAV_HEIGHT - 2px;
+                }
+        
+                .icon-container i {
+                    font-size: $MOBILE_LARGE_ICON;
+                }
+            }
+        
+            // Drop down menu
+            .profile-dropdown {
+                position: static;
+                width: 100%;
+                display: block;
+        
+                li {
+                    background-color: $WHITE;
+                    padding-left: 65px;
+                    font-size: 15px;
+        
+                    a {
+                        padding: 0;
+                        width: 100%;
+                        line-height: $MOBILE_NAV_HEIGHT;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Footer ------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+footer {
+    margin-top: $SECTION_MARGIN;
+    background-color: $DARK_GREY;
+    padding: $SMALL_MARGIN $SECTION_PADDING;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    p {
+        color: $WHITE;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .footer-email {
+        @include start-flex;
+    }
+
+    .footer-copyright {
+        @include end-flex;
+    }
+}
+
+// Page Sections -----------------------------------------------------------------------------------------------------------------------------------
+section {
+    @include no-spacing;
+    padding-top: $SECTION_MARGIN;
+    width: 100%;
+}
+
+section:first-of-type, .title-container + section{
+    padding-top: 0;
+}
+
+.content-container {
+    margin: 0 auto;
+    padding: 0 $SECTION_PADDING;
+    max-width: $MAX_CONTENT_WIDTH;
+}
+
+.title-container {
+    margin-bottom: $NAVIGATION_MARGIN;
+}
+
+.section-divider {
+    width: 300px;
+    margin: 0 auto;
+    margin-top: $SECTION_MARGIN;
+    height: 1.5px;
+    border: none;
+    background: black;
+}

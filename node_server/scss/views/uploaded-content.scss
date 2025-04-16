@@ -1,0 +1,178 @@
+// New Content -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#new-content-container {
+
+    .content-container {
+
+        form {
+            margin-top: $MEDIUM_MARGIN;
+
+            .instruction-container {
+                
+                table {
+                    width: 100%;
+                    margin-top: $SMALL_MARGIN;
+
+                    tr {
+
+                        td {
+                            width: 25%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .error-message, .success-message {
+            display: flex;
+        }
+
+        hr {
+            margin-top: $LARGE_MARGIN;
+        }
+    }
+}
+
+// Uploaded Content --------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#uploaded-content-container {
+
+    .content-container {
+
+        #no-content-message {
+            text-align: center;
+        }
+
+        .file-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: $MEDIUM_MARGIN;
+            row-gap: $MEDIUM_MARGIN;
+            margin-top: -$MEDIUM_MARGIN;
+            
+            .file {
+                position: relative;
+                
+                img, video {
+                    width: 100%;
+                    aspect-ratio: 1 / 1;
+                    object-fit: cover;
+                }
+
+                .file-description, .file-delete-confirmation {
+                    display: grid;
+                    grid-template-rows: 1fr 0.6fr 0.7fr;
+                    background-color: $TRANSPARENT_LIGHT_GREY;
+                    overflow: hidden;
+                    position: absolute;
+                    width: calc(100% + 0.5px);
+                    height: 0;
+                    bottom: 100%;
+                    left: 0;
+                    right: 0;
+                    transition: .4s ease;
+
+                    .file-name-container, .delete-message {
+                        margin-top: $MEDIUM_MARGIN;
+                        text-align: center;
+
+                        p {
+                            display: inline;
+                            white-space: nowrap;
+                        }
+                    }
+
+                    .icon-container {
+                        @include center-flex;
+                    }
+
+                    .file-icon {
+                        align-items: end;
+
+                        i {
+                            font-size: $DEFAULT_X_LARGE_ICON;
+                        }
+                    }
+
+                    .trash-icon {
+                        @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $RED);
+                    }
+
+                    .delete-buttons {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        column-gap: $SMALL_MARGIN;
+
+                        .cancel-button {
+                            @include outline-button(inline-block, 65%, 0);
+                            @include end-flex;
+                            width: 100%;
+
+                            a {
+                                line-height: 35px;
+                                font-size: 14px;
+                            }
+                        }
+
+                        .delete-button {
+                            @include red-button(inline-block, 65%, 0);
+                            @include start-flex;
+                            width: 100%;
+
+                            a {
+                                line-height: 35px;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+
+                .file-delete-confirmation {
+                    display: none;
+                }
+            }
+
+            .file:hover {
+
+                .file-description, .file-delete-confirmation {
+                    bottom: -0.5px;
+                    height: calc(100% + 0.5px);
+                }
+            }
+
+            .other-file {
+                display: grid;
+                grid-template-rows: 1fr 0.6fr 0.7fr;
+                background-color: $LIGHT_GREY;
+                overflow: hidden;
+                aspect-ratio: 1 / 1;
+
+                .file-name-container {
+                    margin-top: $MEDIUM_MARGIN;
+                    text-align: center;
+
+                    p {
+                        display: inline;
+                        white-space: nowrap;
+                    }
+                }
+
+                .icon-container {
+                    @include center-flex;
+                }
+
+                .file-icon {
+                    align-items: end;
+
+                    i {
+                        font-size: $DEFAULT_X_LARGE_ICON;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+  </head>
+
+  <body>
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene circles_scene_properties change-costume>
+     
+      <!-- assets -->
+      <a-assets timeout="10000">
+        <a-camera position="0 1.4 3" rotation="-1 0 0"></a-camera>
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- Circles' built-in avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+      <!-- ADDED STUFF -->
+      <!-- CHARACTER -->
+      <script src="/worlds/STS-InfoRoom/customavatar.js"></script>
+
+      <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+      <!-- ambient music/sound -->
+      <a-entity circles-sound="type:music; src:/worlds/STS-InfoRoom/assets/K. Leimer - Very Tired.mp3; autoplay:true; loop:true; volume:0.5;"></a-entity>
+      
+      <!-- //start the ambient sounds
+      const ambientSounds = document.querySelectorAll('.ambient-music');
+      ambientSounds.forEach(function(soundEntity)
+      {
+          soundEntity.components['sound'].playSound();
+      }
+      ) -->
+          <!-- IMAGES -->
+          <img id="sky" src="/worlds/STS-InfoRoom/assets/3861675.jpg">
+
+          <img id="task1" src="/worlds/STS-InfoRoom/assets/images/screens.jpg">
+          <img id="task2" src="/worlds/STS-InfoRoom/assets/images/cargo.png">
+         
+          <img id="task4" src="/worlds/STS-InfoRoom/assets/images/launch.png">
+          <img id="task5" src="/worlds/STS-InfoRoom/assets/images/etf.png">
+          <img id="task6" src="/worlds/STS-InfoRoom/assets/images/countdown.png">
+          <img id="task7" src="/worlds/STS-InfoRoom/assets/images/navigation.png">
+          <img id="task8" src="/worlds/STS-InfoRoom/assets/images/ground.png">
+          <img id="task9" src="/worlds/STS-InfoRoom/assets/images/IMU.png">
+          <img id="task10" src="/worlds/STS-InfoRoom/assets/images/fueltank.jpg">
+          <img id="task11" src="/worlds/STS-InfoRoom/assets/images/trajexctoyr.png">
+         
+        </a-assets>
+
+         <!-- LIGHT -->
+         <a-entity id="ambient" light="color: #eadac2; intensity: 0.420; type: ambient"></a-entity>
+
+         <!-- checkpoints!! -->
+         <a-entity circles-checkpoint="" position="-0.03735 00.023 -6.02723" id="1" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+         <a-entity circles-checkpoint="" position="-3.48683 0.023 -4.65677" id="2" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+          <a-entity circles-checkpoint="" position="3.43018 00.023 -4.97525" id="3" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+          <a-entity circles-checkpoint="" position="5.06585 0.023 -1.66812" id="4" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+          <a-entity circles-checkpoint="" position="-5.53549 0.023 -1.04513" id="5" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+            <a-entity circles-checkpoint="" position="6.13198 00.023 1.43558" id="6" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+         <a-entity circles-checkpoint="" position="-4.78857 0.023 1.36702" id="7" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+          <a-entity circles-checkpoint="" position="3.76537 0.023 3.97967" id="8" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+         <a-entity circles-checkpoint="" position="0.0193 0.023 5.23942" id="9" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="1.08 1.08 1.08" shadow="cast: false; receive: false" visible="false"></a-entity><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+          <a-entity circles-checkpoint="" position="-3.40927 00.023 4.52645" id="10" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+         <a-entity circles-checkpoint="" position="0.19174 00.023 0.11114" id="11" class="checkpoint interactive" checkpoint="" material="color: rgb(57, 187, 130); emissive: rgb(7,137,80); roughness: 0.8" geometry="primitive: cylinder; radius: 0.5; height: 0.04" scale="" circles-material-extend-fresnel="fresnelOpacity: 0" sound="volume: 0.5" circles-interactive-object="type: outline"><a-entity class="object_highlight" geometry="primitive: cylinder; radius: 0.5; height: 0.04" checkpoint="" material="color: rgb(255,255,255); shader: flat; side: back" scale="" shadow="cast: false; receive: false" visible="false"></a-entity></a-entity>
+
+         <a-entity id="descrip" position="0.16349 0.468 -0.28597" rotation="-43.35743523093479 0 0" scale="1.5 1.5 1.5">
+          <a-entity id="title" text="value: The History of Space Travel & The Odyssey; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+          </a-entity>
+          <a-entity id="desc" text="value: Welcome to the Discovery Dome! If you are curious about reading about how each aspect of the game you're playing relates back to real rocket science, you've come to the right place! Each of the artifacts in this room explains how each task that you're playing is linked to the real science used in space travel by NASA. Feel free to explore and read about all of the interesting research behind this project!
+          - Team Obsidian; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+          </a-entity>
+          <a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #000000" id="billboard"></a-entity>
+          
+          </a-entity>
+
+ <!-- Task 1 -->
+ <a-entity id="descrip" position="0 0 -6.363" rotation="0 0 0">
+  <a-entity id="title" text="value: Task 1: Mission Control Computer Screens; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.160">
+ </a-entity>
+ <a-entity id="desc" text="value: Today Mission Control is responsible for being the eyes and ears for astronauts on Earth. Mission controllers use a variety of computers to monitor everything from weather conditions on Earth to spacecraft communications. Mission Control is filled with computers with abbreviated titles written on top of them. Each computer monitors a different aspect of the mission.- Encyclopedia.com; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+ </a-entity>
+ <a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204"  material="color: #244686" id="billboard"></a-entity>
+ <a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task1" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 2 -->
+<a-entity id="descrip" position="3.25419 0 -5.04889" rotation="0 -44.856865780792155 0">
+ <a-entity id="title" text="value: Task 2: Cargo Weight; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: Back in November 1987, NASA had increased the limit for a shuttle's landing weight so that they would be able to carry additional cargo. This change allowed the delivering of materials to the International Space Station much easier! This task of making sure the weight of the spaceship is correct is super important! In fact, it was revealed that the payload backlog issue before this change resulted in the Challenger accident.; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task2" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 4 -->
+<a-entity id="descrip" position="0 0 6.15978" rotation="0 180 0">
+<a-entity id="title" text="value: Task 4: Launch Sequencer; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: This task is based on the real-life role of an onboard launch sequencer in Mission Control! They are required to passively monitor the launch systems while also watching for requests from the launch processing system (LPS) for data. In the chaos of Mission Control, this would be quite difficult! To replicate this, we have the flight crew act as the LPS to request data from mission control and have them effectively communicate the information required for the launch sequence.; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task4" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 5 -->
+<a-entity id="descrip" position="-6.01247 0 1.36596" rotation="0 99.6975211417389 0">
+<a-entity id="title" text="value: Task 5: Fuel Gauge; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: In a real launch, the shuttle requires an external tank of fuel to propel the main engine from liftoff until the main engine is cutoff. 18 seconds later, the ET would be separated from the ship. This could be triggered automatically or manually! To emulate this experience, we have mission control receive a display of ideal fuel for the ET that the flight crew is filling. The teams must communicate together to fill the tank to the correct amount before takeoff!; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task5" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 6 -->
+<a-entity id="descrip" position="5.93654 0 1.541" rotation="0 -90 0">
+<a-entity id="title" text="value: Task 6: Countdown; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: This task is when all parties have agreed that the spacecraft is ready to be sent into orbit to start its journey and mission.  It shall countdown for when the shuttle should start to take off from earth and start its path to go to the Earth's orbit.; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task6" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 7 -->
+<a-entity id="descrip" position="-5.92583 0 -1.52515" rotation="0 68.0914502889373 0">
+<a-entity id="title" text="value: Task 7: Navigation Guidance; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: During a flight, the guidance software on a spacecraft is constantly tracking the current state of the ship through data retrieved from the navigation software. This data includes the position, attitude, and velocity of the vehicle, wow! This system then calculates what commands are required to be issued for the vehicle to travel from its current state to its desired state. This is replicated for the flight crew as they are required to manually input the desired ship state to the guidance system with a series of buttons.; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task7" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 8 -->
+<a-entity id="descrip" position="5.86114 0 -1.80384" rotation="0 -72.1921092286886 0">
+<a-entity id="title" text="value: Task 8: Spot the Difference; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: In an official flight or on a space station, the computers aboard the flight must receive and process telemetry from a bunch of different ground-base stations worldwide! To mimic this, we task mission control with making sure that all the ground stations across the world are properly connected and in sync with the shuttle. They must sort through the images of satellites around the world and determine which one is not connected so that it can be fixed!; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task8" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 9 -->
+<a-entity id="descrip" position="4.04315 0 4.52321" rotation="0 -141.0908570509652 0">
+<a-entity id="title" text="value: Task 9: Star-Tracker Alignment; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: A typical shuttle orbiter has three inertial measuring units (IMU) that are used for guidance and navigation throughout all phases of flight. The orbiter system also had two-star trackers so that it could align the IMUs while in orbit! These trackers can automatically or manually align on a star. To replicate this, Mission Control is able to view the correct alignment for the IMUs and must communicate to the flight crew so that they can manually align it!; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task9" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 10 -->
+<a-entity id="descrip" position="-3.54352 0 4.83796" rotation="0 141.78871964543458 0">
+<a-entity id="title" text="value: Task 10: Breaking Off the External Fuel Tank; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: In this task, you pressed a button to launch a fuel tank into space off-screen. In a real launch, approximately 8.5 minutes into the flight, the bottom fuel tank is broken off from the shuttle. Fuel tanks allow NASA shuttles to make it to space after liftoff. The tank is the only component of the Space Shuttle that is not reused!; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task10" id="imagesphere"></a-entity>
+</a-entity>
+
+<!-- Task 11 -->
+<a-entity id="descrip" position="-3.80916 0 -4.88368" rotation="0 26.702125084276886 0">
+<a-entity id="title" text="value: Task 11: Align Trajectory; align: center; color: #FFFFFF; lineHeight: 60; width: 1.04; wrapCount: 27.49" rotation="" scale="" position="0.00572 1.54283 -1.16">
+</a-entity>
+<a-entity id="desc" text="value: In this task, you will make sure you align the spacecrafts onto the most efficient path to use the least amount of fuel and have the most amount of thrust to overcome the weight of the spacecraft when flying into orbit. This is important since fuel is scarce when it comes to sending a spacecraft into orbit therefore we must use the least amount of fuel when going into orbit.; align: center; color: #FFFFFF; lineHeight: 60; width: 0.99; wrapCount: 38.12; yOffset: 0.28" rotation="" scale="" position="0.006 1.05851 -1.16">
+</a-entity>
+<a-entity geometry="" scale="1.105 1.105 0.035" position="0 1.159 -1.204" material="color: #244686" id="billboard"></a-entity>
+<a-entity geometry="primitive: plane" scale="0.8 0.8 0.8" position="0 2.231 -1.204" material="src: #task11" id="imagesphere"></a-entity>
+</a-entity>
+
+<a-entity geometry="primitive: plane" scale="2.2724 1.03351 2.2724" position="0.17422 0.0167 -1.51564" material="src: /worlds/STS-InfoRoom/assets/images/STS Odyssey.jpg; color: #ffffff; emissive: #000000" id="logo" rotation="-90 0 0"></a-entity>
+         <!-- NAVMESh -->
+         <!-- <a-entity id="navmesh" gltf-model="./assets/models/navmesh.gltf"
+          nav-mesh visible="false"></a-entity> -->
+
+       <!-- BACKGROUND -->
+       <a-entity class="dome" rotation="" scale="8 8 8" gltf-model="/worlds/STS-InfoRoom/assets/models/dome/scene.gltf" visible="" position="0 -0.072 0"></a-entity><a-entity light="color: #9eb1ff; intensity: 3.4; penumbra: 0.7; type: point" id="point" position="0 2.282 0"></a-entity>
+        
+       <a-entity animation="property: object3D.rotation.z; to: -360; loop: true; easing: linear; dur: 20000" class="shuttle" rotation="0 0 -42.38702577351844" scale="0.005 0.005 0.005" gltf-model="/worlds/STS-InfoRoom/assets/models/shuttle/scene.gltf" visible="" position="-20.33924 3.667 3.48084"></a-entity>
+       
+       <a-entity animation="property: object3D.rotation.y; to: -360; loop: true; easing: linear; dur: 20000" class="sat" rotation="0 -123.55200000000002 -88.70296246230511" scale="0.45 0.45 0.45" gltf-model="/worlds/STS-InfoRoom/assets/models/satelitte/scene.gltf" visible="" position="15.8935 3.667 9.83247"></a-entity>
+       <a-entity light="color: #f09b56; intensity: 0.9; type: hemisphere" id="light"></a-entity>
+        <a-entity geometry="primitive: plane" rotation="-90 0 0" material="color: #002b42;" id="ground" scale="18.465 18.465 18.465" position="0 0  0.578"></a-entity>
+        <a-sky  id="#skydome" src="#sky"></a-sky>
+
+        <!-- PORTAL -->
+        <a-entity id="spaceshipPortal"
+        position="1.586 0.510 -1.884" 
+        rotation="0 -90 0" 
+        scale="0.5 0.5 0.5"
+        circles-portal="img_src:/worlds/STS-InfoRoom/worlds/STS-InfoRoom/assets/images/black stars.jpg; title_text:Back to Lobby; link_url:/w/STS-Lobby">
+</a-entity>
+      </a-scene>
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+  </body>
+</html>
+<!-- 
+Sources
+[1]
+Wikipedia Contributors, “Launch Control Center,” Wikipedia, Nov. 27, 2022. https://en.wikipedia.org/wiki/Launch_Control_Center#Safety_Console_Coordinator_.28SAFETY.29 (accessed Apr. 11, 2023).
+[2]
+A. Spector and D. Gifford, “The space shuttle primary computer system,” Communications of the ACM, vol. 27, no. 9, pp. 872–900, Sep. 1984, doi: https://doi.org/10.1145/358234.358246.
+[3]
+“NASA - Countdown 101,” Nasa.gov, 2023. https://www.nasa.gov/mission_pages/shuttle/launch/countdown101.html (accessed Apr. 11, 2023).
+[4]
+“Computers in space,” Dansdata.com, 2017. http://www.dansdata.com/spacecomp.htm (accessed Apr. 11, 2023). -->

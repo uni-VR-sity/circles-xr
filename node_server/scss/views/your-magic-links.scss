@@ -1,0 +1,170 @@
+// Magic Links -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#magic-links-container {
+
+    .content-container {
+
+        .magic-link {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-areas: "link-name link-name link-name"
+                                 "info circles buttons"
+                                 "info circles buttons"
+                                 "renewal renewal renewal"
+                                 "delete delete delete"
+                                 "divider divider divider";
+            margin-bottom: $LARGE_MARGIN;
+
+            .link-name {
+                grid-area: link-name;
+                margin-bottom: $MEDIUM_MARGIN;
+            }
+
+            .link-info {
+                grid-area: info;
+                margin-bottom: $LARGE_MARGIN;
+
+                a, i {
+                    display: block;
+                }
+
+                .link-expiry {
+                    grid-area: expiry;
+                    color: $GREEN;
+                    margin-top: $X_SMALL_MARGIN;
+                    margin-bottom: $MEDIUM_MARGIN;
+                }
+
+                .expires-soon {
+                    color: $RED;
+                }
+            }
+
+            .link-circles {
+                grid-area: circles;
+                margin-bottom: $LARGE_MARGIN;
+
+                b {
+                    display: block;
+                    margin-bottom: $X_SMALL_MARGIN;
+                }
+
+                ul {
+                    margin-bottom: 0;
+                    
+                    li {
+                        line-height: $LINE_HEIGHT;
+                        margin: 0;
+                    }
+                }
+            }
+
+            .link-buttons {
+                grid-area: buttons;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                column-gap: $SMALL_MARGIN;
+
+                .renew-button {
+                    @include start-flex;
+                    @include secondary-button(inline-block, 100%, 0);
+                    align-items: start;
+                }
+
+                .delete-button {
+                    @include end-flex;
+                    @include red-button(inline-block, 100%, 0);
+                    align-items: start;
+                }
+            }
+
+            .renewal-container, .delete-confirmation-container {
+                background-color: $LIGHT_GREY;
+                border-radius: $BORDER_RADIUS;
+                padding: $SMALL_MARGIN $MEDIUM_MARGIN;
+                margin-bottom: $SMALL_MARGIN;
+                display: none;
+            }   
+
+            .renewal-container {
+                grid-area: renewal;
+                grid-template-columns: 2.75fr 1fr;
+                grid-template-areas: "form buttons";
+
+                form {
+                    grid-area: form;
+
+                    label {
+                        width: auto;
+                        margin-right: $MEDIUM_MARGIN;
+                    }
+
+                    .select-expiry {
+                        margin-left: 0;
+                    }
+                }
+
+                .renewal-buttons {
+                    grid-area: buttons;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    column-gap: $SMALL_MARGIN;
+
+                    .renew-button {
+                        @include end-flex;
+                        align-items: start;
+                        
+                        input {
+                            width: 130px;
+                        }
+                    }
+
+                    .cancel-button {
+                        @include end-flex;
+                        @include outline-button(inline-block, 130px, 0);
+                        align-items: start;
+                    }
+                }
+            }
+
+            .delete-confirmation-container {
+                grid-area: delete;
+
+                .message {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: $MEDIUM_MARGIN;
+                }
+
+                .delete-buttons {
+                    display: inline-block;
+
+                    .delete-button, .cancel-button {
+                        display: inline-block;
+                    }
+
+                    .delete-button {
+                        @include red-button(inline-block, 130px, 0);
+                        align-items: start;
+                        margin-right: $SMALL_MARGIN;
+                    }
+
+                    .cancel-button {
+                        @include outline-button(inline-block, 130px, 0);
+                        align-items: start;
+                    }
+                }
+            }
+
+            hr {
+                grid-area: divider;
+            }
+        }
+
+        .no-links-message {
+            text-align: center;
+        }
+    }
+}

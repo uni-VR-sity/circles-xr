@@ -1,0 +1,169 @@
+extends template.pug
+
+block append scripts
+    script(src='/web/js/views/manage-circle.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var user;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+    
+    // User row -----------------------------------------------------------------------------
+    mixin userRow(user, viewingEditable, editEditable)
+        .row(id=user.username.replaceAll(' ', '-'))
+            p.username= user.username
+
+            p.user-type= user.usertype
+
+            - var canEdit = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(user.usertype) || CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype);
+            
+            if viewingEditable 
+                .viewing-access
+                    if user.viewing
+                        if user.editing && canEdit
+                            .icon-container.permitted-icon.disabled
+                                i
+                        else 
+                            .icon-container.permitted-icon
+                                i(onclick='restrictViewing("' + user.username + '", "' + circle.name + '")')
+                    else 
+                        if user.editing && canEdit
+                            .icon-container.restricted-icon.disabled
+                                i
+                        else 
+                            .icon-container.restricted-icon
+                                i(onclick='permitViewing("' + user.username + '", "' + circle.name + '")')
+
+            else 
+                .viewing-access 
+                    if user.viewing
+                        .icon-container.permitted-icon.disabled
+                            i
+                    else 
+                        .icon-container.restricted-icon.disabled
+                            i
+
+            if editEditable
+                .editing-access
+                    if user.editing
+                        .icon-container.permitted-icon
+                            i(onclick='restrictEditing("' + user.username + '", "' + circle.name + '")')
+                    else 
+                        .icon-container.restricted-icon
+                            i(onclick='permitEditing("' + user.username + '", "' + circle.name + '")')
+
+            else 
+                .editing-access
+                    if user.editing
+                        .icon-container.permitted-icon.disabled
+                            i
+                    else 
+                        .icon-container.restricted-icon.disabled
+                            i
+
+            hr
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
+
+        // Title ----------------------------------------------------------------------------
+        section#circle-title-container
+            .content-container
+
+                - var profileURL = '/worlds/' + circle.name + '/profile.jpg'
+                - var altText = circle.displayName + "'s profile image";
+
+                if circle.hasProfileImage
+                    img(src=profileURL alt=altText)
+                else 
+                    img(src='/web/images/default-circle-profile.png' alt=altText)
+
+                h1= circle.displayName
+
+                .circle-access-restriction
+                    if circle.viewingRestrictions
+                        h3#circle-restriction-text Private
+                        #circle-restriction-symbol.icon-container
+                            i.has-access-rectriction(onclick='makePublic("' + circle.name + '")')
+                    else 
+                        h3#circle-restriction-text Public
+                        #circle-restriction-symbol.icon-container
+                            i.no-access-rectriction(onclick='makePrivate("' + circle.name + '")')
+
+                .circle-group 
+                    .group-text
+                        if circleGroup != null
+
+                            p= circleGroup
+
+                            if circleSubgroup != null 
+                                p &nbsp&nbsp|&nbsp&nbsp !{circleSubgroup}
+
+                        else 
+                            p No Group
+
+                    .icon-container 
+                        i(class='fa-solid fa-pencil' onclick='openOverlay("circle-group-overlay")')
+
+        include includes/update-circle-group.pug
+
+        // User access ----------------------------------------------------------------------
+        section#user-access-container
+
+            if circle.viewingRestrictions
+
+                // Header -------------------------------------------------------------------
+                .header-row
+                    .content-container
+
+                        .row 
+                            b.username User 
+
+                            b.user-type User Type 
+
+                            b.viewing-access Viewing Access 
+
+                            b.editing-access Editing Access
+
+                // User rows ----------------------------------------------------------------
+                .content-container
+
+                    for user of userPermissions
+                        
+                        if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
+                            +userRow(user, true, true)
+
+                        else 
+                            +userRow(user, true, false)
+
+            else
+                .content-container
+                    i.warning * Make circle private to edit viewing permissions
+
+                // Header -------------------------------------------------------------------
+                .header-row
+                    .content-container
+
+                        .row 
+                            b.username User 
+
+                            b.user-type User Type 
+
+                            b.viewing-access Viewing Access 
+
+                            b.editing-access Editing Access
+
+                // User rows ----------------------------------------------------------------
+                .content-container
+
+                    for user of userPermissions
+
+                        if CIRCLES.USER_CATEGORIES.MANAGER_USERS.includes(user.usertype)
+                            +userRow(user, false, true)
+
+                        else 
+                            +userRow(user, false, false)
+    
+    include includes/footer.pug

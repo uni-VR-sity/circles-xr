@@ -78,18 +78,22 @@ AFRAME.registerComponent('circles-enter-ui', {
         });
 
         //clicking on customize avatar brings user to wardobe world
-        document.querySelector('#wardrobe-enter').addEventListener('click', function() {
-            //goto url (but make sure we pass along the url params for group, avatar data etc.)
-            //add last_route
-            const params_orig = new URLSearchParams(window.location.search);
-            if (!params_orig.has('last_route')) {
-                params_orig.append('last_route', window.location.pathname);
-            }
-            else {
-                params_orig.set('last_route', window.location.pathname);
-            }
-
-            window.location.href = '/w/Wardrobe?' + params_orig.toString();
-        });
+        let wardobeButton = document.querySelector('#wardrobe-enter');
+        if (wardobeButton)
+        {
+            wardobeButton.addEventListener('click', function() {
+                //goto url (but make sure we pass along the url params for group, avatar data etc.)
+                //add last_route
+                const params_orig = new URLSearchParams(window.location.search);
+                if (!params_orig.has('last_route')) {
+                    params_orig.append('last_route', window.location.pathname);
+                }
+                else {
+                    params_orig.set('last_route', window.location.pathname);
+                }
+    
+                window.location.href = '/w/Wardrobe?' + params_orig.toString();
+            });
+        }
     }
-    });
+});

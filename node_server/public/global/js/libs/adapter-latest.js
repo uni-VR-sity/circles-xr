@@ -2714,7 +2714,6 @@ SDPUtils.parseRtcpFb = function (line) {
     parameter: parts.join(' ')
   };
 };
-
 // Generate a=rtcp-fb lines from RTCRtpCodecCapability or RTCRtpCodecParameters.
 SDPUtils.writeRtcpFb = function (codec) {
   var lines = '';
