@@ -10,10 +10,10 @@
     
     <!--Environment Script-->
     <script src="https://unpkg.com/aframe-environment-component@1.5.x/dist/aframe-environment-component.min.js"></script>
-    <script src="js/manager.js"></script>
-    <script src="js/hold.js"></script>
-    <script src="js/rover.js"></script>
-    <script src="js/interactEvents.js"></script>
+    <script src="/worlds/Rover-Repair/js/manager.js"></script>
+    <script src="/worlds/Rover-Repair/js/hold.js"></script>
+    <script src="/worlds/Rover-Repair/js/rover.js"></script>
+    <script src="/worlds/Rover-Repair/js/interactEvents.js"></script>
   </head>
   <body>
 
@@ -31,67 +31,67 @@
 
         <!--images-->
         <!--sojourner hologram images-->
-        <img id="soj_wheel_00" src="assets/imgs/sojourner_wheel_red.png">
-        <img id="soj_wheel_01" src="assets/imgs/sojourner_wheel_blue.png">
-        <img id="soj_laser_00" src="assets/imgs/sojourner_laser_red.png">
-        <img id="soj_laser_01" src="assets/imgs/sojourner_laser_blue.png">
-        <img id="soj_cam_00"   src="assets/imgs/sojourner_camera_red.png">
-        <img id="soj_cam_01"   src="assets/imgs/sojourner_camera_blue.png">
+        <img id="soj_wheel_00" src="/worlds/Rover-Repair/assets/imgs/sojourner_wheel_red.png">
+        <img id="soj_wheel_01" src="/worlds/Rover-Repair/assets/imgs/sojourner_wheel_blue.png">
+        <img id="soj_laser_00" src="/worlds/Rover-Repair/assets/imgs/sojourner_laser_red.png">
+        <img id="soj_laser_01" src="/worlds/Rover-Repair/assets/imgs/sojourner_laser_blue.png">
+        <img id="soj_cam_00"   src="/worlds/Rover-Repair/assets/imgs/sojourner_camera_red.png">
+        <img id="soj_cam_01"   src="/worlds/Rover-Repair/assets/imgs/sojourner_camera_blue.png">
 
         <!--perseverance hologram images-->
-        <img id="pers_part_radar_00" src="assets/imgs/perseverance_rimfax_red.png">
-        <img id="pers_part_radar_01" src="assets/imgs/perseverance_rimfax_blue.png">
-        <img id="pers_part_cam_00" src="assets/imgs/perseverance_supercam_red.png">
-        <img id="pers_part_cam_01" src="assets/imgs/perseverance_supercam_blue.png">
-        <img id="pers_part_Meda_00" src="assets/imgs/perseverance_meda_red.png">
-        <img id="pers_part_Meda_01" src="assets/imgs/perseverance_meda_blue.png">
+        <img id="pers_part_radar_00" src="/worlds/Rover-Repair/assets/imgs/perseverance_rimfax_red.png">
+        <img id="pers_part_radar_01" src="/worlds/Rover-Repair/assets/imgs/perseverance_rimfax_blue.png">
+        <img id="pers_part_cam_00" src="/worlds/Rover-Repair/assets/imgs/perseverance_supercam_red.png">
+        <img id="pers_part_cam_01" src="/worlds/Rover-Repair/assets/imgs/perseverance_supercam_blue.png">
+        <img id="pers_part_Meda_00" src="/worlds/Rover-Repair/assets/imgs/perseverance_meda_red.png">
+        <img id="pers_part_Meda_01" src="/worlds/Rover-Repair/assets/imgs/perseverance_meda_blue.png">
 
         <!--curiosity hologram images-->
-        <img id="curi_part_hand_00" src="assets/imgs/curiosity_roboticHand_red.png">
-        <img id="curi_part_hand_01" src="assets/imgs/curiosity_roboticHand_blue.png">
-        <img id="curi_part_bat_00" src="assets/imgs/curiosity_powerSystem_red.png">
-        <img id="curi_part_bat_01" src="assets/imgs/curiosity_powerSystem_blue.png">
-        <img id="curi_part_cam_00" src="assets/imgs/curiosity_camera_red.png">
-        <img id="curi_part_cam_01" src="assets/imgs/curiosity_camera_blue.png">
+        <img id="curi_part_hand_00" src="/worlds/Rover-Repair/assets/imgs/curiosity_roboticHand_red.png">
+        <img id="curi_part_hand_01" src="/worlds/Rover-Repair/assets/imgs/curiosity_roboticHand_blue.png">
+        <img id="curi_part_bat_00" src="/worlds/Rover-Repair/assets/imgs/curiosity_powerSystem_red.png">
+        <img id="curi_part_bat_01" src="/worlds/Rover-Repair/assets/imgs/curiosity_powerSystem_blue.png">
+        <img id="curi_part_cam_00" src="/worlds/Rover-Repair/assets/imgs/curiosity_camera_red.png">
+        <img id="curi_part_cam_01" src="/worlds/Rover-Repair/assets/imgs/curiosity_camera_blue.png">
 
         <!--Environment Assets-->
-        <a-asset-item id="desk_gltf"         src="assets/models/desk/scene.gltf"        crossorigin="anonymous"></a-asset-item>    <!--desk assets-->
-        <a-asset-item id="desk_drawer_gltf"  src="assets/models/desk_drawer/scene.gltf" crossorigin="anonymous"></a-asset-item>    <!--drawer assets-->
-        <a-asset-item id="3d_printer_gltf"   src="assets/models/3d_printer/scene.gltf"  crossorigin="anonymous"></a-asset-item>    <!--printer asset-->
-        <a-asset-item id="holo_base_gltf"    src="assets/models/hologram_base/scene.gltf" crossorigin="anonymous"></a-asset-item>  <!--hologram asset-->
-        <a-asset-item id="large_screen_gltf" src="assets/models/large_screen/scene.gltf" crossorigin="anonymous"></a-asset-item>   <!--large screen asset-->
-        <a-asset-item id="bigger_screen_gltf" src="assets/models/bigger_screen/scene.gltf" crossorigin="anonymous"></a-asset-item> 
+        <a-asset-item id="desk_gltf"         src="/worlds/Rover-Repair/assets/models/desk/scene.gltf"        crossorigin="anonymous"></a-asset-item>    <!--desk assets-->
+        <a-asset-item id="desk_drawer_gltf"  src="/worlds/Rover-Repair/assets/models/desk_drawer/scene.gltf" crossorigin="anonymous"></a-asset-item>    <!--drawer assets-->
+        <a-asset-item id="3d_printer_gltf"   src="/worlds/Rover-Repair/assets/models/3d_printer/scene.gltf"  crossorigin="anonymous"></a-asset-item>    <!--printer asset-->
+        <a-asset-item id="holo_base_gltf"    src="/worlds/Rover-Repair/assets/models/hologram_base/scene.gltf" crossorigin="anonymous"></a-asset-item>  <!--hologram asset-->
+        <a-asset-item id="large_screen_gltf" src="/worlds/Rover-Repair/assets/models/large_screen/scene.gltf" crossorigin="anonymous"></a-asset-item>   <!--large screen asset-->
+        <a-asset-item id="bigger_screen_gltf" src="/worlds/Rover-Repair/assets/models/bigger_screen/scene.gltf" crossorigin="anonymous"></a-asset-item> 
 
         <!--sojourner assets-->
-        <a-asset-item id="soju_body_gltf"   src="assets/models/soju/soju_body/scene.gltf" crossorigin="anonymous"></a-asset-item>
-        <a-asset-item id="soju_wheel_gltf"  src="assets/models/soju/soju_wheel/scene.gltf" crossorigin="anonymous"></a-asset-item>
-        <a-asset-item id="soju_laser_gltf"  src="assets/models/soju/laser/scene.gltf"     crossorigin="anonymous"></a-asset-item>
-        <a-asset-item id="soju_cam_gltf"    src="assets/models/soju/camera/scene.gltf"    crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="soju_body_gltf"   src="/worlds/Rover-Repair/assets/models/soju/soju_body/scene.gltf" crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="soju_wheel_gltf"  src="/worlds/Rover-Repair/assets/models/soju/soju_wheel/scene.gltf" crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="soju_laser_gltf"  src="/worlds/Rover-Repair/assets/models/soju/laser/scene.gltf"     crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="soju_cam_gltf"    src="/worlds/Rover-Repair/assets/models/soju/camera/scene.gltf"    crossorigin="anonymous"></a-asset-item>
 
         <!--perseverance assets-->
-        <a-asset-item id="pers_body_gltf" src="assets/models/perseverance_assets/body/scene.gltf" crossorigin="anonymous"></a-asset-item>   
-        <a-asset-item id="pers_cam_gltf" src="assets/models/perseverance_assets/camera/scene.gltf" crossorigin="anonymous"></a-asset-item>   
-        <a-asset-item id="pers_MEDA_gltf" src="assets/models/perseverance_assets/MEDA/scene.gltf" crossorigin="anonymous"></a-asset-item>   
-        <a-asset-item id="pers_radar_gltf" src="assets/models/perseverance_assets/radar/scene.gltf" crossorigin="anonymous"></a-asset-item>   
+        <a-asset-item id="pers_body_gltf" src="/worlds/Rover-Repair/assets/models/perseverance_assets/body/scene.gltf" crossorigin="anonymous"></a-asset-item>   
+        <a-asset-item id="pers_cam_gltf" src="/worlds/Rover-Repair/assets/models/perseverance_assets/camera/scene.gltf" crossorigin="anonymous"></a-asset-item>   
+        <a-asset-item id="pers_MEDA_gltf" src="/worlds/Rover-Repair/assets/models/perseverance_assets/MEDA/scene.gltf" crossorigin="anonymous"></a-asset-item>   
+        <a-asset-item id="pers_radar_gltf" src="/worlds/Rover-Repair/assets/models/perseverance_assets/radar/scene.gltf" crossorigin="anonymous"></a-asset-item>   
 
         <!--curiosity assets-->
-        <a-asset-item id="curi_body_gltf" src="assets/models/curiosity/body/scene.gltf"         crossorigin="anonymous"></a-asset-item>
-        <a-asset-item id="curi_hand_gltf" src="assets/models/curiosity/arm/scene.gltf"          crossorigin="anonymous"></a-asset-item>
-        <a-asset-item id="curi_bat_gltf"  src="assets/models/curiosity/power_system/scene.gltf" crossorigin="anonymous"></a-asset-item>
-        <a-asset-item id="curi_cam_gltf"  src="assets/models/curiosity/camera/scene.gltf"       crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="curi_body_gltf" src="/worlds/Rover-Repair/assets/models/curiosity/body/scene.gltf"         crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="curi_hand_gltf" src="/worlds/Rover-Repair/assets/models/curiosity/arm/scene.gltf"          crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="curi_bat_gltf"  src="/worlds/Rover-Repair/assets/models/curiosity/power_system/scene.gltf" crossorigin="anonymous"></a-asset-item>
+        <a-asset-item id="curi_cam_gltf"  src="/worlds/Rover-Repair/assets/models/curiosity/camera/scene.gltf"       crossorigin="anonymous"></a-asset-item>
 
         <!--room assets-->
-        <a-asset-item id="base_gltf" src="assets/models/full_base_compressed.glb" crossorigin="anonymous"></a-asset-item>   
-        <a-asset-item id="nav_gltf" src="assets/models/full_base_nav/scene.gltf" crossorigin="anonymous"></a-asset-item>   
+        <a-asset-item id="base_gltf" src="/worlds/Rover-Repair/assets/models/full_base_compressed.glb" crossorigin="anonymous"></a-asset-item>   
+        <a-asset-item id="nav_gltf" src="/worlds/Rover-Repair/assets/models/full_base_nav/scene.gltf" crossorigin="anonymous"></a-asset-item>   
 
         <!--audio assets-->
-        <audio id="abient_music" src="assets/sounds/MS20_song.mp3" preload="auto" anonmymous></audio>
-        <audio id="place_sound" src="assets/sounds/item_selected.mp3" preload="auto" anonmymous></audio>
-        <audio id="drawer_sound" src="assets/sounds/drawer_sound.mp3" preload="auto" anonmymous></audio>
-        <audio id="print_sound" src="assets/sounds/printer_click.mp3" preload="auto" anonmymous></audio>
-        <audio id="soj_speak" src="assets/sounds/tech_2.mp3" preload="auto" anonmymous></audio>
-        <audio id="pers_speak" src="assets/sounds/tech_1.mp3" preload="auto" anonmymous></audio>
-        <audio id="curi_speak" src="assets/sounds/tech_3.mp3" preload="auto" anonmymous></audio>
+        <audio id="abient_music" src="/worlds/Rover-Repair/assets/sounds/MS20_song.mp3" preload="auto" anonmymous></audio>
+        <audio id="place_sound" src="/worlds/Rover-Repair/assets/sounds/item_selected.mp3" preload="auto" anonmymous></audio>
+        <audio id="drawer_sound" src="/worlds/Rover-Repair/assets/sounds/drawer_sound.mp3" preload="auto" anonmymous></audio>
+        <audio id="print_sound" src="/worlds/Rover-Repair/assets/sounds/printer_click.mp3" preload="auto" anonmymous></audio>
+        <audio id="soj_speak" src="/worlds/Rover-Repair/assets/sounds/tech_2.mp3" preload="auto" anonmymous></audio>
+        <audio id="pers_speak" src="/worlds/Rover-Repair/assets/sounds/tech_1.mp3" preload="auto" anonmymous></audio>
+        <audio id="curi_speak" src="/worlds/Rover-Repair/assets/sounds/tech_3.mp3" preload="auto" anonmymous></audio>
 
         <circles-assets/>
       </a-assets>

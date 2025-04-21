@@ -97,7 +97,7 @@ function setNewObject (object, direction) {
   sceneObject.removeAttribute('geometry');
 
   // set gltf model to newObject
-  sceneObject.setAttribute('gltf-model', `/worlds/KIN_FreeFall/assets/models/experimentObjects/${newObject.name}.glb`);
+  sceneObject.setAttribute('gltf-model', `/worlds/KIN-FreeFall/assets/models/experimentObjects/${newObject.name}.glb`);
 
   // set new model scale
   // sceneObject.setAttribute('scale', `${newObject.scale.x} ${newObject.scale.y} ${newObject.scale.z}`);

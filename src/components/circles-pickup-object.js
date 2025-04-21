@@ -67,7 +67,7 @@ AFRAME.registerComponent('circles-pickup-object', {
       CONTEXT_AF.el.setAttribute('circles-interactive-object', {enabled:data.enabled});
     }
 
-    if (data.animate == true && oldData.animate)
+    if (data.animate == true && oldData.animate != null)
     {
       if (oldData.animate == false)
       {

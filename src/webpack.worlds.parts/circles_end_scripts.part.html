@@ -228,9 +228,17 @@
   // Called by circles-model-loader when all models are loaded in scene
   function onModelLoad()
   {
+    console.log('models loaded');
+    
     modelsReady = true;
 
     enterScene();
+  }
+
+  // If there is no circles-model-loader in scene, calling onModelLoad()
+  if (document.querySelectorAll('[circles-model-loader]').length == 0)
+  {
+    onModelLoad();
   }
 
   // Allowing user to enter scene

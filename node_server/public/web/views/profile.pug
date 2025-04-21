@@ -44,19 +44,21 @@ block content
                         label Display name
                         input(type='text' id='displayName' name='displayName' value=userInfo.displayName required)
 
-                        hr
+                        if !guest
 
-                        .form-field 
-                            label Old password
-                            input(type='password' name='passwordOld')
+                            hr
 
-                        .form-field 
-                            label New password
-                            input(type='password' name='passwordNew')
+                            .form-field 
+                                label Old password
+                                input(type='password' name='passwordOld')
 
-                        .form-field.last-field
-                            label Confirm password
-                            input(type='password' name='passwordConf')
+                            .form-field 
+                                label New password
+                                input(type='password' name='passwordNew')
+
+                            .form-field.last-field
+                                label Confirm password
+                                input(type='password' name='passwordConf')
 
                 // Avatar form --------------------------------------------------------------
                 .avatar-view 
