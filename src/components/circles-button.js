@@ -9,7 +9,9 @@ AFRAME.registerComponent('circles-button', {
     diameter:           {type:'number', default:0.5},
     pedastal_visible:   {type:'boolean', default:true},
     click_on_event:     {type:'string', default:''},
+    click_on_event_details:     {type:'string', default:''}, // Ex. "key":"value",
     click_off_event:    {type:'string', default:''},
+    click_off_event_details:     {type:'string', default:''}, // Ex. "key":"value",
     target:             {type:'string', default:''},
   },
   init: function () {
@@ -114,16 +116,16 @@ AFRAME.registerComponent('circles-button', {
       {
         if (data.click_off_event)
         {
-          targetElement.emit(data.click_off_event, null, false);
+          targetElement.emit(data.click_off_event, JSON.parse("{" + data.click_off_event_details + "}"), false);
         }
         else
         {
-          targetElement.emit(data.click_on_event, null, false);
+          targetElement.emit(data.click_on_event, JSON.parse("{" + data.click_on_event_details + "}"), false);
         }
       }
       else
       {
-        targetElement.emit(data.click_on_event, null, false);
+        targetElement.emit(data.click_on_event, JSON.parse("{" + data.click_on_event_details + "}"), false);
       }
   
       CONTEXT_AF.on = !CONTEXT_AF.on;

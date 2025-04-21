@@ -37,7 +37,7 @@ AFRAME.registerComponent('collision-indicator', {
       width: 8,
       wrapCount: 22,
       align: "center",
-      font: "/worlds/KIN_FreeFall/assets/font/Nunito-Bold-msdf.json",
+      font: "/worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json",
       negate: "false"
     });
     CONTEXT_AF.el.appendChild(text);
@@ -53,7 +53,7 @@ AFRAME.registerComponent('collision-indicator', {
       width: 8,
       wrapCount: 22,
       align: "center",
-      font: "/worlds/KIN_FreeFall/assets/font/Nunito-Bold-msdf.json",
+      font: "/worlds/KIN-FreeFall/assets/font/Nunito-Bold-msdf.json",
       negate: "false"
     });
     CONTEXT_AF.el.appendChild(text2);
