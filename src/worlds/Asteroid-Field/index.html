@@ -31,24 +31,30 @@
 
     <!-- a-scene with 'circles-properties' component (no networking) [REQUIRED] -->
     <a-scene circles_NN_scene_properties 
+             circles-model-manager
              background="color: #000000" 
              animation__hit1="property: background.color; type: color; from: #000000; to: #000000; dur: 500; startEvents: hitAnimation;"
              animation__hit2="property: background.color; type: color; from: #000000; to: #000000; dur: 500; delay: 500; startEvents: hitAnimation;"
              physics="debug:false;">
 
-      <a-assets timeout="10000">
+      <a-assets>
 
+        <!--
         <img id="title-img" src="/worlds/Asteroid-Field/assets/images/title.png">
         <img id="play-img" src="/worlds/Asteroid-Field/assets/images/play.png">
         <img id="play-hover-img" src="/worlds/Asteroid-Field/assets/images/play-hover.png">
         <img id="restart-img" src="/worlds/Asteroid-Field/assets/images/restart.png">
         <img id="restart-hover-img" src="/worlds/Asteroid-Field/assets/images/restart-hover.png">
+        -->
 
         <!-- Hearts -->
+        <!--
         <a-asset-item id="red-heart-gltf" src="/worlds/Asteroid-Field/assets/models/redHeart.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
         <a-asset-item id="grey-heart-gltf" src="/worlds/Asteroid-Field/assets/models/greyHeart.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
+        -->
 
         <!-- Asteroids -->
+        <!--
         <a-asset-item id="asteroid-1-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid1.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
         <a-asset-item id="asteroid-2-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid2.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
         <a-asset-item id="asteroid-3-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid3.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
@@ -59,6 +65,7 @@
         <a-asset-item id="asteroid-8-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid8.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
         <a-asset-item id="asteroid-9-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid9.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
         <a-asset-item id="asteroid-10-gltf" src="/worlds/Asteroid-Field/assets/models/asteroid10.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
+        -->
 
         <!-- Letters -->
         <!--
@@ -72,6 +79,27 @@
 
       <!-- Circles' built-in manager and avatar (no avatar) [REQUIRED] -->
       <circles-NA-manager-avatar/>
+
+      <!-- Loading models -->
+      <a-entity id="red-heart-gltf" circles-model="/worlds/Asteroid-Field/assets/models/redHeart.glb"></a-entity>
+      <a-entity id="grey-heart-gltf" circles-model="/worlds/Asteroid-Field/assets/models/greyHeart.glb"></a-entity>
+
+      <a-entity id="asteroid-1-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid1.glb"></a-entity>
+      <a-entity id="asteroid-2-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid2.glb"></a-entity>
+      <a-entity id="asteroid-3-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid3.glb"></a-entity>
+      <a-entity id="asteroid-4-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid4.glb"></a-entity>
+      <a-entity id="asteroid-5-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid5.glb"></a-entity>
+      <a-entity id="asteroid-6-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid6.glb"></a-entity>
+      <a-entity id="asteroid-7-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid7.glb"></a-entity>
+      <a-entity id="asteroid-8-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid8.glb"></a-entity>
+      <a-entity id="asteroid-9-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid9.glb"></a-entity>
+      <a-entity id="asteroid-10-gltf" circles-model="/worlds/Asteroid-Field/assets/models/asteroid10.glb"></a-entity>
+
+      <a-entity id="title-gltf" circles-model="/worlds/Asteroid-Field/assets/models/title.glb"></a-entity>
+      <a-entity id="play-gltf" circles-model="/worlds/Asteroid-Field/assets/models/play.glb"></a-entity>
+      <a-entity id="play-hover-gltf" circles-model="/worlds/Asteroid-Field/assets/models/play-hover.glb"></a-entity>
+      <a-entity id="restart-gltf" circles-model="/worlds/Asteroid-Field/assets/models/restart.glb"></a-entity>
+      <a-entity id="restart-hover-gltf" circles-model="/worlds/Asteroid-Field/assets/models/restart-hover.glb"></a-entity>
 
       <!---------------------------------------------------------------------------------------------------------------------->
 
@@ -125,36 +153,36 @@
             <!-- 1 -->
             <a-entity id="active-life-1"
                       position="-1.5 0 0"
-                      gltf-model="#red-heart-gltf">
+                      circles-model-display="red-heart-gltf">
             </a-entity>
 
             <a-entity id="disabled-life-1"
                       position="-1.5 0 0"
-                      gltf-model="#grey-heart-gltf"
+                      circles-model-display="grey-heart-gltf"
                       visible="false">
             </a-entity>
 
             <!-- 2 -->
             <a-entity id="active-life-2"
                       position="0 0 0"
-                      gltf-model="#red-heart-gltf">
+                      circles-model-display="red-heart-gltf">
             </a-entity>
 
             <a-entity id="disabled-life-2"
                       position="0 0 0"
-                      gltf-model="#grey-heart-gltf"
+                      circles-model-display="grey-heart-gltf"
                       visible="false">
             </a-entity>
 
             <!-- 3 -->
             <a-entity id="active-life-3"
                       position="1.5 0 0"
-                      gltf-model="#red-heart-gltf">
+                      circles-model-display="red-heart-gltf">
             </a-entity>
 
             <a-entity id="disabled-life-3"
                       position="1.5 0 0"
-                      gltf-model="#grey-heart-gltf"
+                      circles-model-display="grey-heart-gltf"
                       visible="false">
             </a-entity>
 
@@ -170,52 +198,42 @@
                 visible="false">
 
         <!-- Title -->
-        <!--
         <a-entity position="0 1.5 0"
-                  gltf-model="#title-gltf">
-        </a-entity>
-        -->
-
-        <a-entity position="0 1.5 0"
-                  geometry="primitive:plane; height:4; width:9.5"
-                  material="src:#title-img; shader:flat; transparent:true">
+                  circles-model-display="title-gltf">
         </a-entity>
 
         <!-- Asteroids -->
-        <!--
         <a-entity position="-6.5 -2 -10"
                   rotation="0 -50 0"
-                  gltf-model="#asteroid-1-gltf">
+                  circles-model-display="asteroid-1-gltf">
         </a-entity>
 
         <a-entity position="-6.8 -4.6 -3"
                   rotation="-23 70 8.5"
-                  gltf-model="#asteroid-3-gltf">
+                  circles-model-display="asteroid-3-gltf">
         </a-entity>
 
         <a-entity position="-7.5 4.5 -1"
                   rotation="-23 70 8.5"
-                  gltf-model="#asteroid-5-gltf">
+                  circles-model-display="asteroid-5-gltf">
         </a-entity>
 
         <a-entity position="5 -1.8 -0.5"
                   rotation="0 -50 0"
-                  gltf-model="#asteroid-7-gltf">
+                  circles-model-display="asteroid-7-gltf">
         </a-entity>
 
         <a-entity position="2.7 5.5 -3"
                   rotation="0 -50 0"
-                  gltf-model="#asteroid-9-gltf">
+                  circles-model-display="asteroid-9-gltf">
         </a-entity>
 
         <a-entity position="7 2 0"
                   rotation="-50 -42 40"
-                  gltf-model="#asteroid-10-gltf">
+                  circles-model-display="asteroid-10-gltf">
         </a-entity>
-        -->
 
         <!-- Button -->
-        <!--
         <a-entity id="play-button"
                   position="0 -2 0"
                   rotation="-15"
@@ -226,33 +244,13 @@
         <a-entity id="play-default"
                   position="0 -2 0"
                   rotation="-15"
-                  gltf-model="#play-gltf">
+                  circles-model-display="play-gltf">
         </a-entity>
 
         <a-entity id="play-hover"
                   position="0 -2 0"
                   rotation="-15"
-                  gltf-model="#play-hover-gltf"
-                  visible="false">
-        </a-entity>
-        -->
-
-        <a-entity id="play-button"
-                  position="0 -2.75 0"
-                  geometry="primitive:box; height:1.5; width:4"
-                  visible="false">
-        </a-entity>
-
-        <a-entity id="play-default"
-                  position="0 -2.75 0"
-                  geometry="primitive:plane; height:1.5; width:4"
-                  material="src:#play-img; shader:flat; transparent:true">
-        </a-entity>
-
-        <a-entity id="play-hover"
-                  position="0 -2.75 0"
-                  geometry="primitive:plane; height:1.5; width:4"
-                  material="src:#play-hover-img; shader:flat; transparent:true"
+                  circles-model-display="play-hover-gltf"
                   visible="false">
         </a-entity>
 
@@ -263,52 +261,42 @@
                 visible="false">
 
         <!-- Title -->
-        <!--
         <a-entity position="0 1.5 0"
-                  gltf-model="#title-gltf">
-        </a-entity>
-        -->
-
-        <a-entity position="0 1.5 0"
-                  geometry="primitive:plane; height:4; width:9.5"
-                  material="src:#title-img; shader:flat; transparent:true">
+                  circles-model-display="title-gltf">
         </a-entity>
 
         <!-- Asteroids -->
-        <!--
         <a-entity position="-6.5 -2 -10"
                   rotation="0 -50 0"
-                  gltf-model="#asteroid-1-gltf">
+                  circles-model-display="asteroid-1-gltf">
         </a-entity>
 
         <a-entity position="-6.8 -4.6 -3"
                   rotation="-23 70 8.5"
-                  gltf-model="#asteroid-3-gltf">
+                  circles-model-display="asteroid-3-gltf">
         </a-entity>
 
         <a-entity position="-7.5 4.5 -1"
                   rotation="-23 70 8.5"
-                  gltf-model="#asteroid-5-gltf">
+                  circles-model-display="asteroid-5-gltf">
         </a-entity>
 
         <a-entity position="5 -1.8 -0.5"
                   rotation="0 -50 0"
-                  gltf-model="#asteroid-7-gltf">
+                  circles-model-display="asteroid-7-gltf">
         </a-entity>
 
         <a-entity position="2.7 5.5 -3"
                   rotation="0 -50 0"
-                  gltf-model="#asteroid-9-gltf">
+                  circles-model-display="asteroid-9-gltf">
         </a-entity>
 
         <a-entity position="7 2 0"
                   rotation="-50 -42 40"
-                  gltf-model="#asteroid-10-gltf">
+                  circles-model-display="asteroid-10-gltf">
         </a-entity>
-        -->
 
         <!-- Button -->
-        <!--
         <a-entity id="restart-button"
                   position="0 -2 0"
                   rotation="-15"
@@ -319,33 +307,13 @@
         <a-entity id="restart-default"
                   position="0 -2 0"
                   rotation="-15"
-                  gltf-model="#restart-gltf">
+                  circles-model-display="restart-gltf">
         </a-entity>
 
         <a-entity id="restart-hover"
                   position="0 -2 0"
                   rotation="-15"
-                  gltf-model="#restart-hover-gltf"
-                  visible="false">
-        </a-entity>
-        -->
-
-        <a-entity id="restart-button"
-                  position="0 -2.75 0"
-                  geometry="primitive:box; height:1.5; width:6.5"
-                  visible="false">
-        </a-entity>
-
-        <a-entity id="restart-default"
-                  position="0 -2.75 0"
-                  geometry="primitive:plane; height:1.5; width:6.5"
-                  material="src:#restart-img; shader:flat; transparent:true">
-        </a-entity>
-
-        <a-entity id="restart-hover"
-                  position="0 -2.75 0"
-                  geometry="primitive:plane; height:1.5; width:6.5"
-                  material="src:#restart-hover-img; shader:flat; transparent:true"
+                  circles-model-display="restart-hover-gltf"
                   visible="false">
         </a-entity>
 

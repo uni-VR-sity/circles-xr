@@ -21,7 +21,7 @@ require('./circles-manager');
 require('./circles-material-extend-fresnel');
 require('./circles-material-override');
 require('./circles-model-display');
-require('./circles-model-loader');
+require('./circles-model-manager');
 require('./circles-model');
 require('./circles-label');
 require('./circles-lookat');
