@@ -220,7 +220,7 @@ const addCircles = async function()
   var folders = null;
   try
   {
-    folders = await fs.promises.readdir(__dirname + '/../public/worlds/');
+    folders = await fs.promises.readdir(__dirname + '/../../src/worlds/');
   }
   catch(e) 
   {
@@ -234,7 +234,7 @@ const addCircles = async function()
       // Skipping over Wardrobe circle as everyone has access to it
       if (folder != 'Wardrobe')
       {
-        const path = __dirname + '/../public/worlds/' + folder;
+        const path = __dirname + '/../../src/worlds/' + folder;
 
         // Checking if path is a directory
         var stat = null;
@@ -397,7 +397,7 @@ const removeDeletedCircles = async function()
 
   try
   {
-    serverWorlds = await fs.promises.readdir(__dirname + '/../public/worlds/');
+    serverWorlds = await fs.promises.readdir(__dirname + '/../../src/worlds/');
   }
   catch (e) 
   {
