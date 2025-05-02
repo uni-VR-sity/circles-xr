@@ -11,7 +11,7 @@
   <circles-start-ui/>
 
   <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-  <a-scene circles_scene_properties>
+  <a-scene circles_scene_properties circles-model-manager>
     <a-assets>
 
       <!-- Circles' built-in assets [REQUIRED] -->
@@ -22,6 +22,11 @@
     <circles-manager-avatar/>
 
     <!-- start your code: put your A-frame, Circles XR, and custom components here -->
+
+    <a-entity id="tree" circles-model="/worlds/Basic-Start/trees.fbx"></a-entity>
+    
+    <a-entity circles-model-display="tree"></a-entity>
+
     <!-- end your code: -->
   </a-scene>
 
