@@ -58,8 +58,6 @@ AFRAME.registerComponent('circles-model-display',
                 {
                     element.setObject3D('mesh', modelDetails);
                     element.emit('model-loaded', {format: format, model: modelDetails});
-                    console.log(modelDetails);
-                    console.log(element.object3D);
                 }
                 else
                 {
