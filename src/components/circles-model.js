@@ -9,16 +9,19 @@ AFRAME.registerComponent('circles-model',
         const element = this.el;
         const schema = this.data;
 
-        this.modelMesh = null;
+        this.model = null;
+        this.format = null;
         this.complete = false;
 
         // Loading model based on file type
         if (schema.endsWith('.gltf') || schema.endsWith('.glb'))
         {
+            this.format = 'gltf';
             this.gltfLoader();
         }
         else if (schema.endsWith('.fbx'))
         {
+            this.format = 'fbx';
             this.fbxLoader();
         }
         else
@@ -36,7 +39,7 @@ AFRAME.registerComponent('circles-model',
 
         gltfLoader.load(schema, (gltf) => 
         {
-            this.modelMesh = gltf.scene || gltf.scenes[0];
+            this.model = gltf;
             this.complete = true;
         },
         undefined,
@@ -56,7 +59,7 @@ AFRAME.registerComponent('circles-model',
 
         fbxLoader.load(schema, (fbx) => 
         {
-            this.modelMesh = fbx;
+            this.model = fbx;
             this.complete = true;
         },
         undefined,
@@ -71,10 +74,14 @@ AFRAME.registerComponent('circles-model',
     {
         return this.complete;
     },
-
     // Returning model mesh
-    getMesh: function()
+    getModel: function()
     {
-        return this.modelMesh;
+        return this.model;
+    },
+    // Returning model format
+    getFormat: function()
+    {
+        return this.format;
     }
 });

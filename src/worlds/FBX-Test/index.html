@@ -11,7 +11,7 @@
   <circles-start-ui/>
 
   <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-  <a-scene circles_scene_properties>
+  <a-scene circles_scene_properties circles-model-manager>
     <a-assets>
 
       <!-- Circles' built-in assets [REQUIRED] -->
@@ -22,6 +22,16 @@
     <circles-manager-avatar/>
 
     <!-- start your code: put your A-frame, Circles XR, and custom components here -->
+
+    <a-entity id="fish" circles-model="/worlds/FBX-Test/models/fish/fishClown.fbx"></a-entity>
+    <a-entity id="trees" circles-model="/worlds/FBX-Test/models/trees.fbx"></a-entity>
+
+    <a-entity circles-model-display="fish"
+              position="0 1.5 -2"
+              rotation="0 90 0"
+              scale="0.05 0.05 0.05"
+              animation-mixer="clip:swim">
+    </a-entity>
 
     <!-- end your code: -->
   </a-scene>
