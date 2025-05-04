@@ -130,7 +130,6 @@ function showCurrentScrollGalleryPage(galleryContainerID)
 
             if (currentPageContents[i].description && galleryItems[i].querySelector('.gallery-item-description'))
             {
-                console.log(currentPageContents[i].description);
                 galleryItems[i].querySelector('.gallery-item-description').innerHTML = currentPageContents[i].description.replaceAll("/'/gm", "'");
             }
 
