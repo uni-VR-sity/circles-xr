@@ -34,9 +34,8 @@ AFRAME.registerComponent('circles-transition',
             this.fadePlane.setAttribute('position', {x: 0, y: 0, z: -0.05});
             this.fadePlane.setAttribute('scale', {x: 0.2, y: 0.2, z: 1});
             this.fadePlane.setAttribute('material', {alphaTest: 0, color: '#000000', roughness: 1, opacity: 1});
-
             document.querySelector('[camera]').appendChild(this.fadePlane);
-
+            
             // Specifying the function to enter the circle
             this.enterFunction = this.fadeIn;
         }
@@ -107,6 +106,9 @@ AFRAME.registerComponent('circles-transition',
         // Setting up fade attributes to fade in
         this.fadeOpacity = this.fadePlane.getAttribute('material').opacity;
         this.fadeDirection = -1;
+
+        // Making sure text will show through plane (can't access mesh in init())
+        this.fadePlane.getObject3D('mesh').renderOrder = 1;
 
         // Fading fade screen
         this.fadeInterval = setInterval(this.fade, 10);
