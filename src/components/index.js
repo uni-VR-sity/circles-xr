@@ -43,6 +43,7 @@ require('./circles-sound');
 require('./circles-spawn-at-random-checkpoint');
 require('./circles-spawnpoint');
 require('./circles-sphere-env-map');
+require('./circles-transition');
 require('./circles-upload-whiteboard-ui');
 require('./circles-user-networked');
 require('./circles-video-controls');

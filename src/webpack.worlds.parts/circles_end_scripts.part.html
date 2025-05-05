@@ -213,26 +213,50 @@
   var serverReady = false;
   var modelsReady = false;
 
+  var circleTransitioner = document.querySelector('[circles-transition]');
+
   // Called by Networked-Aframe when connected to server
-  function onConnect() 
+  async function onConnect() 
   {
     console.log("custom onConnect: ", new Date());
 
     CIRCLES.setupCirclesWebsocket();
+    
+    // Making sure transitioner is defined
+    var TransitionerCheckInterval = setInterval(function()
+    {
+      if (circleTransitioner.components['circles-transition'])
+      {
+        // Indicating server is ready in transitioner
+        circleTransitioner.components['circles-transition'].setServerReady();
 
-    serverReady = true;
+        clearInterval(TransitionerCheckInterval);
+      }
+    }, 100);
 
-    enterScene();
+    //serverReady = true;
+    //enterCircle();
   }
 
   // Called by circles-model-loader when all models are loaded in scene
-  function onModelLoad()
+  async function onModelLoad()
   {
     console.log('models loaded');
-    
-    modelsReady = true;
 
-    enterScene();
+    // Making sure transitioner is defined
+    var TransitionerCheckInterval = setInterval(function()
+    {
+      if (circleTransitioner.components['circles-transition'])
+      {
+        // Indicating models are ready in transitioner
+        circleTransitioner.components['circles-transition'].setModelsReady();
+
+        clearInterval(TransitionerCheckInterval);
+      }
+    }, 100);
+    
+    //modelsReady = true;
+    //enterCircle();
   }
 
   // If there is no circles-model-manager in scene, calling onModelLoad()
@@ -241,8 +265,8 @@
     onModelLoad();
   }
 
-  // Allowing user to enter scene
-  function enterScene()
+  // Allowing user to enter circle
+  function enterCircle()
   {
     // If both server and models are ready
     if (serverReady && modelsReady)

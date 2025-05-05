@@ -35,9 +35,34 @@ AFRAME.registerComponent('circles-model-display',
         if (this.modelElement.components['circles-model'].isComplete())
         {
             // If mesh loaded successfully, displaying it
-            if (this.modelElement.components['circles-model'].getMesh() != null)
+            var model = this.modelElement.components['circles-model'].getModel();
+
+            if (model != null)
             {
-                this.el.setObject3D('mesh', this.modelElement.components['circles-model'].getMesh().clone());
+                // Getting model details
+                var format = this.modelElement.components['circles-model'].getFormat();
+                var modelDetails = null;
+
+                if (format == 'gltf')
+                {
+                    var modelDetails = model.scene || model.scenes[0];
+                    modelDetails.animations = model.animations;
+                }
+                else if (format == 'fbx')
+                {
+                    var modelDetails = model;
+                }
+                
+                // Displaying model
+                if (model.animations.length > 0)
+                {
+                    element.setObject3D('mesh', modelDetails);
+                    element.emit('model-loaded', {format: format, model: modelDetails});
+                }
+                else
+                {
+                    element.setObject3D('mesh', modelDetails.clone());
+                }
             }
             else
             {
