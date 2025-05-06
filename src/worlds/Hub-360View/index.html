@@ -11,17 +11,35 @@
   <circles-start-ui/>
 
   <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-  <a-scene circles_scene_properties>
+  <a-scene circles_scene_properties background="color: #c3f2f7">
     <a-assets>
 
       <!-- Circles' built-in assets [REQUIRED] -->
       <circles-assets/>
+
+      <!-- 360 -->
+      <img id='link_1_360'        src='/global/images/WIT_1_Screen.jpg' crossorigin="anonymous">
+                
     </a-assets>
 
     <!-- Circles' built-in manager and avatar [REQUIRED] -->
     <circles-manager-avatar/>
 
     <!-- start your code: put your A-frame, Circles XR, and custom components here -->
+
+    <!-- links to other worlds -->
+    <a-entity id="link_1"
+      position="-0.559 1.7 4.134" rotation="0 56.215 0" scale="0.5 0.5 0.5"
+      circles-portal="img_src:#link_1_360; title_text:Campfire Hub; link_url:/w/Campfire-Hub;"
+      shadow></a-entity>
+
+    <a-entity id="floor"
+      rotation="90 0 0" scale="1 1 1"
+      geometry="primitive: plane; height: 10; width: 10" 
+      material="shader: flat; side: double; color: #5f7047;"></a-entity>
+
+
+
     <!-- end your code: -->
   </a-scene>
 
