@@ -154,6 +154,8 @@ AFRAME.registerComponent('animated-face', {
         }
     },
 
+    // NOTE: we might try using transverse to try and make this shorter and look for morph targets and targetNames
+    // here's an example: https://github.com/elbobo/aframe-gltf-morph-component/blob/master/dist/aframe-gltf-morph-component.js
     createMorphTargets: async function (context){
         context.el.setAttribute('gltf-morph__eyeBlinkRight', {morphtarget: 'eyeBlink_right', value: 0});
         context.el.setAttribute('gltf-morph__eyeBlinkLeft', {morphtarget: 'eyeBlink_left', value: 0});
