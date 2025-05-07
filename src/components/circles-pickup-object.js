@@ -10,7 +10,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     dropScale:          { type: "vec3", default:{x:100001.0, y:0.0, z:0.0} },   //what scale after it is released
     physicsObject:      { type: "boolean", default:false },
     shapeNames:         { type: "array" },
-    animate:            { type: "boolean", default:true },                     //whether we animate
+    animate:            { type: "boolean", default:false },                     //whether we animate
     animateDurationMS:  { type: "number", default:400 },                        //how long animation is
     enabled:            { type: "boolean", default:true },                      //whethere this works
   },
@@ -67,7 +67,7 @@ AFRAME.registerComponent('circles-pickup-object', {
       CONTEXT_AF.el.setAttribute('circles-interactive-object', {enabled:data.enabled});
     }
 
-    if (data.animate == true && oldData.animate)
+    if (data.animate == true && oldData.animate != null)
     {
       if (oldData.animate == false)
       {
@@ -116,6 +116,7 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     //let others know
     CONTEXT_AF.el.emit(CIRCLES.EVENTS.PICKUP_THIS_OBJECT, {sendNetworkEvent:sendNetworkEvent}, true);
+    CIRCLES.getCirclesManagerElement().emit(CIRCLES.EVENTS.PICKUP_THIS_OBJECT, {el:CONTEXT_AF.el}, false);
   },
   release : function(sendNetworkEvent, passedContext) {
     const CONTEXT_AF  = (passedContext) ? passedContext : this;
@@ -124,16 +125,39 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     //release
     CONTEXT_AF.origParent.object3D.attach(CONTEXT_AF.el.object3D); //using three's "attach" allows us to retain world transforms during pickup/release
-    
+
+    const thisPos = {x:CONTEXT_AF.el.object3D.position.x, y:CONTEXT_AF.el.object3D.position.y, z:CONTEXT_AF.el.object3D.position.z};
+    const thisRot = {x:THREE.MathUtils.radToDeg(CONTEXT_AF.el.object3D.rotation.x), y:THREE.MathUtils.radToDeg(CONTEXT_AF.el.object3D.rotation.y), z:THREE.MathUtils.radToDeg(CONTEXT_AF.el.object3D.rotation.z)};
+    const thisSca = {x:CONTEXT_AF.el.object3D.scale.x, y:CONTEXT_AF.el.object3D.scale.y, z:CONTEXT_AF.el.object3D.scale.z};
+
+    const dropPos  = (data.dropPosition.x < 100001.0) ? {x:data.dropPosition.x, y:data.dropPosition.y, z:data.dropPosition.z} : thisPos;
+    const dropRot  = (data.dropRotation.x < 100001.0) ? {x:data.dropRotation.x, y:data.dropRotation.y, z:data.dropRotation.z} : thisRot;
+    const dropSca  = (data.dropScale.x < 100001.0) ? {x:data.dropScale.x, y:data.dropScale.y, z:data.dropScale.z} : thisSca;
+
+    let artReleaseTimeout = null;
+
     const releaseEventFunc = function() {
+      //console.log('releaseEventFunc');
+
+      CONTEXT_AF.el.setAttribute('position', {x:dropPos.x, y:dropPos.y, z:dropPos.z});
+      CONTEXT_AF.el.setAttribute('rotation', {x:dropRot.x, y:dropRot.y, z:dropRot.z});
+      CONTEXT_AF.el.setAttribute('scale', {x:dropSca.x, y:dropSca.y, z:dropSca.z});
+
       //send off event for others
       CONTEXT_AF.el.emit(CIRCLES.EVENTS.RELEASE_THIS_OBJECT, {sendNetworkEvent:sendNetworkEvent}, true);
-      if (data.animate === true) {
-        CONTEXT_AF.el.removeEventListener('animationcomplete__cpo_position', releaseEventFunc);
+      CIRCLES.getCirclesManagerElement().emit(CIRCLES.EVENTS.RELEASE_THIS_OBJECT, {el:CONTEXT_AF.el}, false);
+      if (data.animate === true && artReleaseTimeout !== null) {
+        clearTimeout(artReleaseTimeout);
+        //CONTEXT_AF.el.removeEventListener('animationcomplete__cpo_position', releaseEventFunc);
       }
     };
-    if ((data.animate === true) && (data.dropPosition.x < 100001.0 || data.dropRotation.x < 100001.0 || data.dropScale.x < 100001.0)) {
-      CONTEXT_AF.el.addEventListener('animationcomplete__cpo_position', releaseEventFunc);
+    
+    if ((data.animate === true)  && (data.dropPosition.x < 100001.0 || data.dropRotation.x < 100001.0 || data.dropScale.x < 100001.0)) {
+      //need to set release after all animations are done as they were not completing when expected leading to artefacts not dropping to the right place.
+      artReleaseTimeout = setTimeout(function() {
+        releaseEventFunc();
+      }, data.animateDurationMS + 300);
+      //CONTEXT_AF.el.addEventListener('animationcomplete__cpo_position', releaseEventFunc);
     }
     else {
       releaseEventFunc();

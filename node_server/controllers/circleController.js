@@ -66,18 +66,25 @@ const serveWorld = (req, res, next) => {
     const user = req.user;
     const pathStr = path.resolve(__dirname + '/../public/worlds/' + world_id + '/index.html');
 
+    // If developer mode is active, recompiling world
+    if (env.DEVELOPER_MODE)
+    {
+      recompileCircle(world_id);
+    }
+
     modifyServeWorld(world_id, searchParamsObj, user, pathStr, req, res);
 }
 
 // ------------------------------------------------------------------------------------------
 
 const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) => {
-    // Ensure the world file exists
+  // Ensure the world file exists
     fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => {
       if (error) {
-        return res.redirect('/profile');
+        return res.redirect('/explore');
       }
       else {
+
         var specialStatus = '';
   
         const u_name = ((searchParamsObj.has('name')) ? searchParamsObj.get('name') : req.session.sessionName);
@@ -165,6 +172,82 @@ const serveRelativeWorldContent = (req, res, next) => {
   const relURL = req.params[0];
   const newURL = '/worlds/' + worldID + '/' + relURL;
   return res.redirect(newURL);
+}
+
+// ------------------------------------------------------------------------------------------
+
+const recompileCircle = (circle) => 
+{
+  const publicCirclePath = __dirname + '/../public/worlds/' + circle;
+  const srcCirclePath = __dirname + '/../../src/worlds/' + circle;
+
+  // Read in parts content to insert (default parts)
+  let circles_header              =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_header.part.html', 'utf8');
+  let circles_basic_ui            =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_basic_ui.part.html', 'utf8');
+  let circles_enter_ui            =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_enter_ui.part.html', 'utf8');
+  let circles_scene_properties    =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_scene_properties.part.html', 'utf8');
+  let circles_assets              =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_assets.part.html', 'utf8');
+  let circles_avatar              =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_avatar_manager.part.html', 'utf8');
+  let circles_end_scripts         =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_end_scripts.part.html', 'utf8');
+  
+  // Read in parts content to insert (no networking parts)
+  let circles_NN_scene_properties =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noNetworking/circles_NN_scene_properties.part.html', 'utf8');
+  let circles_NN_end_scripts      =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noNetworking/circles_NN_end_scripts.part.html', 'utf8');
+  
+  // Read in parts content to insert (no avatar parts)
+  let circles_NA_enter_ui         =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noAvatar/circles_NA_enter_ui.part.html', 'utf8');
+  let circles_NA_avatar           =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noAvatar/circles_NA_avatar_manager.part.html', 'utf8');
+  
+  const nafAudioRegex   = new RegExp(/\{\{(\s+)?NAF_AUDIO(\s+)?\}\}/,   'gmi');
+  const nafAdapterRegex = new RegExp(/\{\{(\s+)?NAF_ADAPTER(\s+)?\}\}/, 'gmi');
+  const nafServerRegex  = new RegExp(/\{\{(\s+)?NAF_SERVER(\s+)?\}\}/,  'gmi');
+  
+  // Insert env vars into parts
+  circles_scene_properties = circles_scene_properties.toString().replace(nafAudioRegex,   env.NAF_AUDIO);
+  circles_scene_properties = circles_scene_properties.toString().replace(nafAdapterRegex, env.NAF_ADAPTER);
+  circles_scene_properties = circles_scene_properties.toString().replace(nafServerRegex,  env.NAF_SERVER);
+  
+  // Removing the current public worlds folder
+  fs.rmSync(publicCirclePath, {recursive: true, force: true});
+
+  // Copying the circle folder from scr to public
+  fs.cpSync(srcCirclePath, publicCirclePath, {recursive: true});
+
+  // Getting all files from circle folder to find the .html file
+  var files = fs.readdirSync(publicCirclePath);
+  var htmlFile = null;
+
+  for (const file of files)
+  {
+    if (file.endsWith('.html'))
+    {
+      htmlFile = file;
+    }
+  }
+
+  // Getting content from circle's .html file
+  var content = fs.readFileSync(publicCirclePath + '/' + htmlFile, { encoding: 'utf8', flag: 'r' });
+
+  // Inserting new parts (default parts)
+  content = content.toString();
+  content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
+  content = content.replace(/<circles-basic-ui(\s+)?\/>/i, circles_basic_ui);
+  content = content.replace(/<circles-start-ui(\s+)?\/>/i, circles_enter_ui);
+  content = content.replace(/circles_scene_properties/i, circles_scene_properties);
+  content = content.replace(/<circles-assets(\s+)?\/>/i, circles_assets);
+  content = content.replace(/<circles-manager-avatar(\s+)?\/>/i, circles_avatar);
+  content = content.replace(/<circles-end-scripts(\s+)?\/>/i, circles_end_scripts);
+
+  // Inserting new parts (no networking parts)
+  content = content.replace(/circles_NN_scene_properties/i, circles_NN_scene_properties);
+  content = content.replace(/<circles-NN-end-scripts(\s+)?\/>/i, circles_NN_end_scripts);
+
+  // Inserting new parts (no avatar parts)
+  content = content.replace(/<circles-NA-start-ui(\s+)?\/>/i, circles_NA_enter_ui);
+  content = content.replace(/<circles-NA-manager-avatar(\s+)?\/>/i, circles_NA_avatar);
+
+  // Updating circle's .html file
+  fs.writeFileSync(publicCirclePath + '/' + htmlFile, content); 
 }
 
 // Whiteboard --------------------------------------------------------------------------------------------------------------------------------------

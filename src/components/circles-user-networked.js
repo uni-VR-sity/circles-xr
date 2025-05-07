@@ -12,7 +12,9 @@ AFRAME.registerComponent('circles-user-networked', {
     color_body:                 {type: 'string',    default: ''}, 
 
     visiblename:                {type: 'string',    default: ''},
-    usertype:                   {type: 'string',    default: ''}
+    usertype:                   {type: 'string',    default: ''},
+    userDevice:                 {type: 'string',    default: ''},
+    userWorld:                  {type: 'string',    default: ''},
   },
   multiple: false, //do not allow multiple instances of this component on this entity
   init: function() {
@@ -39,31 +41,25 @@ AFRAME.registerComponent('circles-user-networked', {
             color_hair:             playerOneNode.getAttribute('circles-hair-color'),
             color_body:             playerOneNode.getAttribute('circles-body-color'),
             visiblename:            playerOneNode.getAttribute('circles-visiblename'),
-            usertype:               playerOneNode.getAttribute('circles-usertype')
+            usertype:               playerOneNode.getAttribute('circles-usertype'),
+            userDevice:             CIRCLES.getVRPlatform(),
+            userWorld:              CIRCLES.getCirclesWorldName()
           });
 
           //set device icon here too ... I guess :/
           let avatarNode3 = CONTEXT_AF.el.querySelector('.deviceicon_front');
           let avatarNode4 = CONTEXT_AF.el.querySelector('.deviceicon_back');
           let iconPath    = CIRCLES.CONSTANTS.ICON_DEVICE_UNKNOWN;
+          let vrPlatform  = CIRCLES.getVRPlatform();
 
-          if (AFRAME.utils.device.isMobile()) {
+          if (vrPlatform === CIRCLES.VR_PLATFORMS.HMD_WIRED || vrPlatform === CIRCLES.VR_PLATFORMS.HMD_STANDALONE) {
+            iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_HMD6DOF;
+          }
+          else if (vrPlatform === CIRCLES.VR_PLATFORMS.MOBILE_PHONE || vrPlatform === CIRCLES.VR_PLATFORMS.MOBILE_TABLET) {
             iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_MOBILE;
           }
-          else if (AFRAME.utils.device.isMobileVR()) {
-            iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_HMD3DOF;
-          }
-          else if (AFRAME.utils.device.isTablet()) {
-            iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_MOBILE;
-          }
-          else {
-            //desktop and desktop HMD
-            if (AFRAME.utils.device.checkHeadsetConnected()) {
-              iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_HMD6DOF;
-            }
-            else {
-              iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_DESKTOP;
-            }
+          else if (vrPlatform === CIRCLES.VR_PLATFORMS.DESKTOP) {  
+            iconPath = CIRCLES.CONSTANTS.ICON_DEVICE_DESKTOP;
           }
 
           //set icon textures
@@ -114,7 +110,6 @@ AFRAME.registerComponent('circles-user-networked', {
     if ( oldData.color_body !== CONTEXT_AF.data.color_body ) {
       let avatarNode = CONTEXT_AF.el.querySelector('.user_body');
       avatarNode.setAttribute('circles-color', {color: CONTEXT_AF.data.color_body});
-      //avatarNode.emit(CIRCLES.EVENTS.AVATAR_COSTUME_CHANGED, CONTEXT_AF.el, true);
     }
 
     //visiblename change
@@ -125,6 +120,8 @@ AFRAME.registerComponent('circles-user-networked', {
       avatarNode1.setAttribute('text', {value: CONTEXT_AF.data.visiblename});
       avatarNode2.setAttribute('text', {value: CONTEXT_AF.data.visiblename});
     }
+
+    CIRCLES.getCirclesSceneElement().emit(CIRCLES.EVENTS.AVATAR_COSTUME_CHANGED, CONTEXT_AF.el, true);
   },
   // tick: function(time, timeDelta) {},
   // tock: function(time, timeDelta) {},

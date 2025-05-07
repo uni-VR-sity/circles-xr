@@ -8,7 +8,7 @@
 function setUpAsteroid(asteroid, schema)
 {
     // Model
-    asteroid.setAttribute('gltf-model', '#asteroid-' + schema.model + '-gltf');
+    asteroid.setAttribute('circles-model-display', 'asteroid-' + schema.model + '-gltf');
 
     // Position
     asteroid.setAttribute('position', {
