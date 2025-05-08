@@ -619,6 +619,12 @@
     "gltf-model" : {
         "value" : "string"
     },
+    "circles-model" : {
+        "value" : "string"
+    },
+    "circles-model-display" : {
+        "value" : "string"
+    },
     "circles-artefact" : {
         "value" : "object",
         "attributes" : {

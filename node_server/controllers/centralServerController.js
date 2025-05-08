@@ -600,7 +600,7 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
     }
   }
 
-  // If component is a glft-model or src and does not contain a url (ex. does not contain "http://"), add asset library path
+  // If component is a glft-model or src and does not contain a url (ex. does not contain "http://"), add asset library path (keeping url())
   if (componentName === 'gltf-model' || componentName === 'src')
   {
     if (!component.includes('http://'))
@@ -608,6 +608,15 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
       component = component.slice(0, 4) + env.DOMAIN + '/asset-library/' + component.slice(4);
     }
   }
+
+  // If component is a circles-model and does not contain a url (ex. does not contain "http://"), add asset library path (with no url())
+  if (componentName === 'circles-model')
+    {
+      if (!component.includes('http://'))
+      {
+        component = env.DOMAIN + '/asset-library/' + component;
+      }
+    }
 
   return component;
 }

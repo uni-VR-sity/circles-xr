@@ -59,5 +59,8 @@
                 "value" : "string"
             }
         }
+    },
+    "circles-model-manager" : {
+        "value" : "string"
     }
 }
