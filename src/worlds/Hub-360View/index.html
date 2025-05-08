@@ -2,6 +2,14 @@
 <head>
   <!-- Circles' head scripts [REQUIRED] -->
   <circles-start-scripts/>
+
+  <!-- imersive video component -->
+  <script src="https://unpkg.com/aframe-immersive-video-component/dist/aframe-immersive-video-component.min.js"></script>
+  
+  <!-- video UI -->
+  <script src="scripts/play-pause.js"></script>
+  <script src="scripts/video-bar.js"></script>
+
 </head>
 <body>
   <!-- 2D UI elements overylayed on the 3D scene for user options -->
@@ -19,7 +27,13 @@
 
       <!-- 360 -->
       <img id='link_1_360'        src='/global/images/WIT_1_Screen.jpg' crossorigin="anonymous">
-                
+      
+      <!-- video link https://www.storyblocks.com/video/stock/waterfall-in-green-rainforest-360vr-tropical-tuasan-falls-in-mountain-jungle-waterfall-in-the-tropical-forest-camiguin-philippines-mindanao-347542865 -->
+      <video id="video3D" src="assets/videos/5402769-uhd_3840_2160_30fps.mp4" autoplay loop="true" crossorigin="anonymous"></video>
+      <img id="play" src="assets/images/play-button.png" crossorigin="anonymous">
+      <img id="pause" src="assets/images/pause-button.png" crossorigin="anonymous">
+      <audio id="toggle_snd" src="assets/audio/item_selected.mp3" preload="auto" crossorigin="anonymous"></audio>
+
     </a-assets>
 
     <!-- Circles' built-in manager and avatar [REQUIRED] -->
@@ -38,7 +52,32 @@
       geometry="primitive: plane; height: 10; width: 10" 
       material="shader: flat; side: double; color: #5f7047;"></a-entity>
 
+      <!-- add the video sphere -->
+      <a-videosphere src="#video3D"></a-videosphere>
 
+      <!-- add the play button in the scene to play and puase the video -->
+      <a-image  id="videoControls" 
+                src="#play" 
+                position="0 1 -2"
+                play-pause
+                circles-interactive-object="type:scale; click_sound:#toggle_snd">
+      </a-image>
+      <!-- full lenght of video -->
+      <a-entity id="videoBar"
+                geometry="primitive:box"
+                position="0 0.37862 -2"
+                scale="2 0.08 0.02"
+                material="color:#888888">
+      </a-entity>
+      <!-- current video time -->
+      <a-entity id="videoProgressBar"
+                geometry="primitive:box"
+                position="0 0.37862 -1.98"
+                scale="0 0.08 0.02"
+                material="color:#FF0000"
+                video-bar="video_length:52; video_bl: 2.0; video_blc: 0.0;">
+      </a-entity>
+  
 
     <!-- end your code: -->
   </a-scene>

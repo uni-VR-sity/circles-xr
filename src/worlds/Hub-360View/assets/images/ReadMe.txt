@@ -1,0 +1,1 @@
+Place all necessary images for this world within this folder.
