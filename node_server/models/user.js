@@ -41,7 +41,6 @@ const UserSchema = new mongoose.Schema({
   },
   emailToken: {
     type:       String,
-    unique:     true,
     required:   false,
     trim:       false,
   },
@@ -122,6 +121,14 @@ const UserSchema = new mongoose.Schema({
     default:    CIRCLES.CONSTANTS.DEFAULT_SKIN_COLOUR
   }
 });
+
+UserSchema.index(
+  { emailToken: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { emailToken: { $type: 'string' } }
+  }
+);
 
 // Verify password for this user
 UserSchema.methods.validatePassword = function (password, next) {
