@@ -30,22 +30,30 @@ oAuth2Client.setCredentials({ refresh_token: env.EMAIL_REFRESH_TOKEN });
 // Sending email
 const createMailTransporter = () =>
 {
-    const accessToken = oAuth2Client.getAccessToken();
+    try
+    {
+        const accessToken = oAuth2Client.getAccessToken();
 
-    const transport = nodemailer.createTransport({
-        service: 'gmail',
-        auth:
-        {
-            type: 'OAuth2',
-            user: env.EMAIL,
-            clientId: env.EMAIL_CLIENT_ID,
-            clientSecret: env.EMAIL_CLIENT_SECRET,
-            refreshToken: env.EMAIL_REFRESH_TOKEN,
-            accessToken: accessToken,
-        }
-    });
+        const transport = nodemailer.createTransport({
+            service: 'gmail',
+            auth:
+            {
+                type: 'OAuth2',
+                user: env.EMAIL,
+                clientId: env.EMAIL_CLIENT_ID,
+                clientSecret: env.EMAIL_CLIENT_SECRET,
+                refreshToken: env.EMAIL_REFRESH_TOKEN,
+                accessToken: accessToken,
+            }
+        });
 
-    return transport;
+        return transport;
+    }
+    catch(e)
+    {
+        console.log(e);
+        return null;
+    }
 }
 
 // ------------------------------------------------------------------------------------------
