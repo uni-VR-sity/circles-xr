@@ -241,6 +241,7 @@ router.post('/update-prototype', authenticated, centralServerController.updatePr
 router.post('/get-prototypes', authenticated, centralServerController.getPrototypes);
 router.post('/delete-prototype', authenticated, centralServerController.deletePrototype);
 router.post('/get-prototype-info', authenticated, centralServerController.getPrototypeInfo);
+router.post('/upload-model', authenticated, centralServerController.uploadModel);
 
 router.get('/prototype/:prototype_name', centralServerController.servePrototypeCircle);
 

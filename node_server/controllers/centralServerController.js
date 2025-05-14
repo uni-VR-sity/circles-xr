@@ -396,11 +396,16 @@ const getServersList = async (req, res, next) =>
 // Rendering prototyping page
 const servePrototyping = async (req, res, next) =>
 {
+  // Getting models uploaded by user
+  var uploadedModels = await Uploads.find({ user: req.user, category: 'model' }, 'displayName name type');
+
+  // Rendering the prototyping page
   const userInfo = getUserInfo(req);
   
   res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/prototyping'), {
     title: 'prototyping',
     userInfo: userInfo,
+    uploadedModels: uploadedModels,
   });
 }
 
@@ -1219,6 +1224,149 @@ const getPrototypeInfo = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
+// Storing model uploaded by user
+const uploadModel = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  // Setting file size restriction
+  form.options.maxFileSize = CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE * 1024 * 1024;
+
+  // Setting location to upload file to
+  form.uploadDir = path.join(__dirname, '/../uploads');
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      if (err.code === formidable.errors.biggerThanMaxFileSize)
+      {
+        errorResponse.error = 'Model is too large, please ensure your model is under ' + CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE + 'MB';
+      }
+      else
+      {
+        errorResponse.error = 'Model could not be uploaded, please try again';
+      }
+
+      res.json(errorResponse);
+      return;
+    }
+
+    const file = files.modelFile;
+
+    // Getting valid file types
+    var validFiles = [];
+
+    for (const key in CIRCLES.VALID_3D_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
+    }
+
+    // originalFilename: filename.fileType
+    // split result array: {"filename", ..., "fileType"}
+    const filenameSplit = file.originalFilename.split('.');
+    
+    // Getting filename
+    var filename = '';
+
+    for (var i = 0; i < filenameSplit.length - 1; i++)
+    {
+      filename += (filenameSplit[i] + '.');
+    }
+    
+    filename = filename.slice(0, -1);
+
+    // Getting file type
+    const fileType = file.originalFilename.split('.').pop();
+
+    // Making sure file type is valid
+    if (validFiles.includes(fileType))
+    {
+      const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
+
+      // Renaming file to be in uploads folder with unique name
+      try
+      {
+        fs.renameSync(file.filepath, fileURL);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(file.filepath, {recursive: true});
+
+        errorResponse.error = 'File could not be uploaded, please try again';
+        
+        res.json(errorResponse);
+        return;
+      }
+
+      // If the user has file(s) with the same name, adding a number to the end of the filename
+      var similarFileNames = [];
+      similarFileNames = await Uploads.find({ user: await User.findById(req.user._id).exec(), displayName: new RegExp('(?<!.)' + filename + '([0-9]+)?[.]', 'gi'), type: fileType });
+      console.log('/' +  filename + '[0-9]?/');
+      if (similarFileNames.length > 0)
+      {
+        file.originalFilename = filename + (similarFileNames.length + 1) + '.' + fileType;
+      }
+
+      // Storing the file in the database
+      const fileInfo = {
+        user: await User.findById(req.user._id).exec(),
+        displayName: file.originalFilename,
+        name: file.newFilename + '.' + fileType,
+        url: fileURL,
+        type: fileType,
+        category: 'model',
+      }
+
+      try
+      {
+        await Uploads.create(fileInfo);
+        
+        var successResponse = {
+          status: 'success',
+          model: {displayName: fileInfo.displayName, name: fileInfo.name, type: fileInfo.type },
+        }
+
+        res.json(successResponse);
+        return;
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(fileURL, {recursive: true});
+
+        errorResponse.error = 'File could not be uploaded, please try again';
+        
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      errorResponse.error = 'Incorrect model type uploaded. Only .gltf, .glb, and .fbx models are allowed';
+      
+      res.json(errorResponse);
+      return;
+    }
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
 // Adding user information to prototype HTML
 const addPrototypeUserInfo = function(req, prototypeName, prototypeHTML)
 {
@@ -1498,6 +1646,7 @@ module.exports = {
     getPrototypes,
     deletePrototype,
     getPrototypeInfo,
+    uploadModel,
     servePrototypeCircle,
     // Museum Games Page
     serveMuseumGames,

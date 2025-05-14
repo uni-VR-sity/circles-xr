@@ -299,50 +299,58 @@ const registerUser = (req, res, next) =>
         // Sending email verification email with unique token
         const transporter = createMailTransporter();
 
-        var emailContent = '<h3 style="margin-top:0; margin-bottom:20px">Welcome to uni-VR-sity!</h3><p style="margin-bottom:8px;">Hello ';
-        emailContent += userData.username;
-        emailContent += ', </p><p style="margin-top:0">You are almost ready to begin exploring, just click on the button below to verify your email! The link will expire in 24 hours.</p><a href="';
-        emailContent += env.DOMAIN;
-        emailContent += '/verify-email/';
-        emailContent += userData.emailToken;
-        emailContent += '" style="display:inline-block; padding:0 15px; margin-top:7.5px; line-height:40px; text-decoration:none; border-radius:6px; background-color:#0f68bb; color:white">Verify Email</a>'
-
-        const mailOptions = {
-          from: '"uni-VR-sity" <' + env.EMAIL + '>',
-          to: userData.email,
-          subject: "uni-VR-sity Email Verification",
-          html: emailContent,
-        };
-
-        // Sending email
-        // If email is sent, returning success message
-        // Otherwise deleting user entry in database and returning an error message
-        transporter.sendMail(mailOptions, async (error, info) => 
+        if (transporter)
         {
-          if (error)
+          var emailContent = '<h3 style="margin-top:0; margin-bottom:20px">Welcome to uni-VR-sity!</h3><p style="margin-bottom:8px;">Hello ';
+          emailContent += userData.username;
+          emailContent += ', </p><p style="margin-top:0">You are almost ready to begin exploring, just click on the button below to verify your email! The link will expire in 24 hours.</p><a href="';
+          emailContent += env.DOMAIN;
+          emailContent += '/verify-email/';
+          emailContent += userData.emailToken;
+          emailContent += '" style="display:inline-block; padding:0 15px; margin-top:7.5px; line-height:40px; text-decoration:none; border-radius:6px; background-color:#0f68bb; color:white">Verify Email</a>'
+
+          const mailOptions = {
+            from: '"uni-VR-sity" <' + env.EMAIL + '>',
+            to: userData.email,
+            subject: "uni-VR-sity Email Verification",
+            html: emailContent,
+          };
+
+          // Sending email
+          // If email is sent, returning success message
+          // Otherwise deleting user entry in database and returning an error message
+          transporter.sendMail(mailOptions, async (error, info) => 
           {
-            try
+            if (error)
             {
-              await User.deleteOne({username: userData.username});
+              try
+              {
+                await User.deleteOne({username: userData.username});
+              }
+              catch(e) { }
+
+              console.log(error);
+
+              res.json(errorResponse);
+              return;
             }
-            catch(e) { }
-
-            console.log(error);
-
-            res.json(errorResponse);
-            return;
-          }
-          else
-          {
-            console.log('verification email sent to ' + userData.username);
-            var response = {
-              status: 'success',
-            };
-          
-            res.json(response);
-            return;
-          }
-        });
+            else
+            {
+              console.log('verification email sent to ' + userData.username);
+              var response = {
+                status: 'success',
+              };
+            
+              res.json(response);
+              return;
+            }
+          });
+        }
+        else
+        {
+          res.json(errorResponse);
+          return;
+        }
       }
     });
   }
@@ -1784,12 +1792,14 @@ const createUser = async (req, res, next) =>
         return res.redirect('/manage-users');
       }
 
+      console.log(error);
       req.session.singleCreateError = 'Something went wrong, please try again';
       return res.redirect('/manage-users');
     }
   }
   else
   {
+    console.log('Information missing to create user')
     req.session.singleCreateError = 'Something went wrong, please try again';
     return res.redirect('/manage-users');
   }
@@ -2251,17 +2261,19 @@ const serveUploadedContent = async (req, res, next) =>
     validVideos.push('.' + CIRCLES.VALID_VIDEO_TYPES[key]);
   }
 
+  /*
   for (const key in CIRCLES.VALID_3D_TYPES)
   {
     valid3D.push('.' + CIRCLES.VALID_3D_TYPES[key]);
   }
+  */
 
   // Getting user content
   var content = [];
 
   var currentUser = req.user;
 
-  content = await Uploads.find({user: currentUser});
+  content = await Uploads.find({ user: currentUser, category: { $ne: 'model' } });
 
   // Rendering the uploadedContent page
   const userInfo = getUserInfo(req);
@@ -2329,10 +2341,12 @@ const uploadContent = async (req, res, next) =>
       validFiles.push(CIRCLES.VALID_VIDEO_TYPES[key]);
     }
 
+    /*
     for (const key in CIRCLES.VALID_3D_TYPES)
     {
       validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
     }
+    */
 
     // Checking that the file is of the correct type
     // Otherwise, sending an error message
@@ -2390,14 +2404,13 @@ const uploadContent = async (req, res, next) =>
 
       return res.redirect('/uploaded-content');
     }
-
-    // This file type means no file was uploaded
-    else if (fileType === 'octet-stream')
+    // This file type and a size of 0 means no file was uploaded
+    else if (fileType === 'octet-stream' && file.size == 0)
     {
       // Deleting file from folder
       fs.rmSync(file.filepath, {recursive: true});
 
-      req.session.errorMessage = 'No file uploaded';
+      req.session.errorMessage = 'No file chosen';
       return res.redirect('/uploaded-content');
     }
     else

@@ -619,12 +619,6 @@
     "gltf-model" : {
         "value" : "string"
     },
-    "circles-model" : {
-        "value" : "string"
-    },
-    "circles-model-display" : {
-        "value" : "string"
-    },
     "circles-artefact" : {
         "value" : "object",
         "attributes" : {
@@ -716,6 +710,50 @@
             }
         }
     },
+    "circles-button" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "button_color" : {
+                "value" : "string"
+            },
+            "button_color_hover" : {
+                "value" : "string"
+            },
+            "pedastal_color" : {
+                "value" : "string"
+            },
+            "diameter" : {
+                "value" : "string"
+            },
+            "pedastal_visible" : {
+                "value" : "string"
+            },
+            "click_on_event" : {
+                "value" : "string"
+            },
+            "click_off_event" : {
+                "value" : "string"
+            },
+            "target" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-checkpoint" : {
+        "value" : "object",
+        "attributes" : {
+            "offset" : {
+                "value" : "array",
+                "size" : "3"
+            },
+            "useDefaultModel" : {
+                "value" : "string"
+            }
+        }
+    },
     "circles-description" : {
         "value" : "object",
         "attributes" : {
@@ -758,6 +796,41 @@
             }
         }
     },
+    "circles-interactive-object" : {
+        "value" : "object",
+        "attributes" : {
+            "type" : {
+                "value" : "string"
+            },
+            "highlight_color" : {
+                "value" : "string"
+            },
+            "neutral_scale" : {
+                "value" : "string"
+            },
+            "hover_scale" : {
+                "value" : "string"
+            },
+            "click_scale" : {
+                "value" : "string"
+            },
+            "click_sound" : {
+                "value" : "string"
+            },
+            "sound_volume" : {
+                "value" : "string"
+            },
+            "enabled" : {
+                "value" : "string"
+            }
+        }
+    },
+    "circles-model" : {
+        "value" : "string"
+    },
+    "circles-model-display" : {
+        "value" : "string"
+    },
     "circles-pickup-object" : {
         "value" : "object",
         "attributes" : {
@@ -799,83 +872,6 @@
             }
         }
     },
-    "circles-interactive-object" : {
-        "value" : "object",
-        "attributes" : {
-            "type" : {
-                "value" : "string"
-            },
-            "highlight_color" : {
-                "value" : "string"
-            },
-            "neutral_scale" : {
-                "value" : "string"
-            },
-            "hover_scale" : {
-                "value" : "string"
-            },
-            "click_scale" : {
-                "value" : "string"
-            },
-            "click_sound" : {
-                "value" : "string"
-            },
-            "sound_volume" : {
-                "value" : "string"
-            },
-            "enabled" : {
-                "value" : "string"
-            }
-        }
-    },
-    "circles-checkpoint" : {
-        "value" : "object",
-        "attributes" : {
-            "offset" : {
-                "value" : "array",
-                "size" : "3"
-            },
-            "useDefaultModel" : {
-                "value" : "string"
-            }
-        }
-    },
-    "circles-spawnpoint" : {
-        "value" : "object",
-        "attributes" : {}
-    },
-    "circles-button" : {
-        "value" : "object",
-        "attributes" : {
-            "type" : {
-                "value" : "string"
-            },
-            "button_color" : {
-                "value" : "string"
-            },
-            "button_color_hover" : {
-                "value" : "string"
-            },
-            "pedastal_color" : {
-                "value" : "string"
-            },
-            "diameter" : {
-                "value" : "string"
-            },
-            "pedastal_visible" : {
-                "value" : "string"
-            },
-            "click_on_event" : {
-                "value" : "string"
-            },
-            "click_off_event" : {
-                "value" : "string"
-            },
-            "target" : {
-                "value" : "string"
-            }
-        }
-    },
     "circles-sendpoint" : {
         "value" : "object",
         "attributes" : {
@@ -883,6 +879,10 @@
                 "value" : "string"
             }
         }
+    },
+    "circles-spawnpoint" : {
+        "value" : "object",
+        "attributes" : {}
     },
     "circles-sphere-env-map" : {
         "value" : "object",

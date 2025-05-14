@@ -320,3 +320,149 @@ function deletePrototype(prototype)
 
     request.send('prototypeName=' + prototype);
 }
+
+// ------------------------------------------------------------------------------------------
+
+// Uploading user selected model
+async function uploadModel(event)
+{
+    // Preventing page refresh
+    event.preventDefault(); 
+
+    // Getting form data
+    var form = event.target;
+    var formData = new FormData(form);
+
+    // If a file was selected, sending request to upload new model
+    if (formData.get('modelFile').size > 0)
+    {
+        // Hiding previous success and error messages
+        hideMessages();
+
+        fetch('/upload-model', {method: form.method, body: formData})
+        .then(response => response.json())
+        .then(data => 
+        {
+            if (data.status == 'success')
+            {
+                // Displaying uploaded model
+                var model = document.createElement('div');
+                model.classList.add('model');
+                model.classList.add('file');
+                model.setAttribute('id', data.model.name);
+
+                    var modelType = document.createElement('h3');
+                    modelType.innerHTML = data.model.type;
+                    model.appendChild(modelType);
+
+                    var modelNameContainer = document.createElement('div');
+                    modelNameContainer.classList.add('name-container');
+
+                        var modelName = document.createElement('p');
+                        modelName.classList.add('file-name');
+                        modelName.innerHTML = data.model.displayName;
+                        modelNameContainer.appendChild(modelName);
+
+                    model.appendChild(modelNameContainer);
+
+                    var modelOptionsContainer = document.createElement('div');
+                    modelOptionsContainer.classList.add('model-options');
+
+                        var copyIconContainer = document.createElement('div');
+                        copyIconContainer.classList.add('icon-container');
+                        copyIconContainer.classList.add('copy-icon');
+
+                            var copyIcon = document.createElement('a');
+                            copyIcon.classList.add('fa-regular');
+                            copyIcon.classList.add('fa-copy');
+                            copyIcon.setAttribute('onclick', 'copyModelName(event, "' + data.model.displayName + '")');
+                            copyIconContainer.appendChild(copyIcon);
+                        
+                        modelOptionsContainer.appendChild(copyIconContainer);
+
+                        var trashIconContainer = document.createElement('div');
+                        trashIconContainer.classList.add('icon-container');
+                        trashIconContainer.classList.add('trash-icon');
+
+                            var trashIcon = document.createElement('a');
+                            trashIcon.classList.add('fa-regular');
+                            trashIcon.classList.add('fa-trash-can');
+                            trashIcon.setAttribute('onclick', 'deleteConfirmationPopUp(event, "Model", "' + data.model.displayName + '", "deleteModel(\'' + data.model.name + '\')")');
+                            trashIconContainer.appendChild(trashIcon);
+
+                        modelOptionsContainer.appendChild(trashIconContainer);
+
+                    model.appendChild(modelOptionsContainer);
+
+                document.getElementById('models-container').appendChild(model);
+
+            }
+            else
+            {
+                document.getElementById('prototype-model-error').innerHTML = data.error;
+                document.getElementById('prototype-model-error').style.display = 'flex';
+            }
+        });
+
+        // Resetting form
+        document.getElementById('model-upload-form').reset();
+    }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleting selected model
+async function deleteModel(model)
+{
+    fetch('/delete-uploaded-content', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file: model }),})
+    .then(response => response.json())
+    .then(data => 
+    {
+        // Deleting model element
+        document.getElementById(model).remove();
+
+        // If that was the last model, displaying no models available message
+        if (document.getElementsByClassName('file').length === 0)
+        {
+            document.getElementById('no-content-message').style.display = 'block';
+        }
+    });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Copying model name
+function copyModelName(event, model)
+{
+    // Removing event listener if copy button was previously clicked
+    event.target.removeEventListener('mouseleave', hideCopyIndicator);
+
+    // Copying model name to clipboard
+    navigator.clipboard.writeText(model);
+
+    // Displaying indicator that name was copied
+    event.target.classList.remove('fa-regular');
+    event.target.classList.remove('fa-copy');
+    
+    event.target.classList.add('fa-solid');
+    event.target.classList.add('fa-check');
+
+    event.target.addEventListener('mouseleave', hideCopyIndicator);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Hiding copy indicator a little after user stops hovering copy button
+function hideCopyIndicator(event)
+{
+    event.target.removeEventListener('mouseleave', hideCopyIndicator);
+
+    setTimeout(function()
+    {
+        event.target.classList.remove('fa-solid');
+        event.target.classList.remove('fa-check');
+
+        event.target.classList.add('fa-regular');
+        event.target.classList.add('fa-copy');
+    }, 250);
+}

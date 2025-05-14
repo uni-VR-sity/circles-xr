@@ -60,7 +60,7 @@ function deleteFile(filename, file)
         // Deleting file element
         document.getElementById(file).remove();
 
-        // If that was the last group row, displaying no groups available message
+        // If that was the last file, displaying no files available message
         if (document.getElementsByClassName('file').length === 0)
         {
             document.getElementById('no-content-message').style.display = 'block';

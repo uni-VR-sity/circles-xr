@@ -1,0 +1,59 @@
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // Model display ------------------------------------------------------------------------
+    mixin displayModel(model)
+        .model.file(id=model.name)
+            h3= model.type
+
+            .name-container
+                p.file-name= model.displayName
+
+            .model-options
+
+                .icon-container.copy-icon 
+                    a(class='fa-regular fa-copy' onclick='copyModelName(event, "' + model.displayName + '")')
+
+                .icon-container.trash-icon
+                    a(class='fa-regular fa-trash-can' onclick='deleteConfirmationPopUp(event, "Model", "' + model.displayName + '", "deleteModel(\'' + model.name + '\')")')
+
+    // Open prototype overlay ----------------------------------------------------------------------------------------------------------------------
+    #prototype-models-overlay.overlay-container(style='display:flex')
+        .overlay 
+    
+            // Title ------------------------------------------------------------------------
+            #title-container
+                h2 Models
+
+                .icon-container
+                    i(class="fa-solid fa-xmark" onclick='closeOverlay("prototype-models-overlay"); hideMessages()')
+
+            // New Model Upload -------------------------------------------------------------
+            #new-model-upload
+                p Use models in your prototype by specifying model file after "custom/" (ex. custom/model.gltf)
+
+                //form(action='/upload-model' method='post' enctype='multipart/form-data')
+                form(id='model-upload-form' onsubmit='uploadModel(event)' method='post' enctype='multipart/form-data')
+                    input(id='model-file' type='file' name='modelFile' accept='.gltf,.glb,.fbx' onchange="this.form.requestSubmit()")
+                    input(type='button' value='Upload Model' onclick="document.getElementById('model-file').click()")
+
+                p#prototype-model-error.error-message
+
+            // Models -----------------------------------------------------------------------
+            #uploaded-models-container
+
+                if uploadedModels.length > 0
+                    p#no-models-message You have no uploaded models
+                else
+                    p#no-models-message(style='display:flex') You have no uploaded models
+
+                #models-container
+
+                    for model of uploadedModels
+                        +displayModel(model)
+
+                    script
+                        include ../../includes/shortenNames.js

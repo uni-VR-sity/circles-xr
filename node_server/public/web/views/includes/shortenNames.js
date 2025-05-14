@@ -3,8 +3,8 @@
 // Getting the width of file elements
 var sectionWidth = document.getElementsByClassName('file')[0].getBoundingClientRect().width;
 
-// Taking 60px off of the width for padding
-sectionWidth -= 60;
+// Taking 100px off of the width for padding
+sectionWidth -= 100;
 
 // Going through each file element and checking if the length of the file name is greater then the width of the section
 // If it is, shorten it

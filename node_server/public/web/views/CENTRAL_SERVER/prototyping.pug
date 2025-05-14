@@ -64,12 +64,16 @@ html
                     a(onclick='getExistingPrototypes()') Open
 
                 .prototype-button
+                    a(onclick='openOverlay("prototype-models-overlay")') Models
+
+                .prototype-button
                     a(onclick='openOverlay("create-prototype-overlay")') New Prototype
 
         // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main#prototyping-main
 
             include includes/create-prototype.pug
+            include includes/prototype-models.pug
             include includes/open-prototype.pug
 
             // Prototyping ------------------------------------------------------------------
