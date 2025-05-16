@@ -1,54 +1,57 @@
 // Shortens file names to display to user
 
-// Getting the width of file elements
-var sectionWidth = document.getElementsByClassName('file')[0].getBoundingClientRect().width;
-
-// Taking 100px off of the width for padding
-sectionWidth -= 100;
-
-// Going through each file element and checking if the length of the file name is greater then the width of the section
-// If it is, shorten it
 var fileSections = document.getElementsByClassName('file');
 
-for (var section of fileSections)
+if (fileSections.length > 0)
 {
-    var nameElement = section.querySelector('.file-name');
-    var fileName = nameElement.innerHTML;
-    var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
+    // Getting the width of file elements
+    var sectionWidth = document.getElementsByClassName('file')[0].getBoundingClientRect().width;
 
-    if (nameLength > sectionWidth)
+    // Taking 100px off of the width for padding
+    sectionWidth -= 100;
+
+    // Going through each file element and checking if the length of the file name is greater then the width of the section
+    // If it is, shorten it
+    for (var section of fileSections)
     {
-        // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
-        
-        // Getting the file type
-        var splitName = fileName.split('.');
-        var type = splitName[splitName.length - 1];
+        var nameElement = section.querySelector('.file-name');
+        var fileName = nameElement.innerHTML;
+        var nameLength = section.querySelector('.file-name').getBoundingClientRect().width;
 
-        var condensedName = fileName;
-        
-        // Taking a character off the file name until the length of the name is less then the section width
-        while (nameLength > sectionWidth)
+        if (nameLength > sectionWidth)
         {
-            // Getting the file name without the type
-            condensedName = condensedName.replace('...' + type, '');
+            // The condensed name with be, for example, filena...txt (preserving the file type at the end of the name)
+            
+            // Getting the file type
+            var splitName = fileName.split('.');
+            var type = splitName[splitName.length - 1];
 
-            // Removing the last character of the name
-            condensedName = condensedName.substring(0, condensedName.length - 1);
-            condensedName += '...' + type;
+            var condensedName = fileName;
+            
+            // Taking a character off the file name until the length of the name is less then the section width
+            while (nameLength > sectionWidth)
+            {
+                // Getting the file name without the type
+                condensedName = condensedName.replace('...' + type, '');
 
-            // Checking the length of the name
-            nameElement.innerHTML = condensedName;
-            nameLength = nameElement.getBoundingClientRect().width;
-        }
+                // Removing the last character of the name
+                condensedName = condensedName.substring(0, condensedName.length - 1);
+                condensedName += '...' + type;
 
-        // Changing all instances of the file name to the condensed version
-        var allFileNameElements = section.querySelectorAll('.file-name');
+                // Checking the length of the name
+                nameElement.innerHTML = condensedName;
+                nameLength = nameElement.getBoundingClientRect().width;
+            }
 
-        for (var nameElement of allFileNameElements)
-        {
-            var currentName = nameElement.innerHTML;
+            // Changing all instances of the file name to the condensed version
+            var allFileNameElements = section.querySelectorAll('.file-name');
 
-            nameElement.innerHTML = currentName.replace(fileName, condensedName);
+            for (var nameElement of allFileNameElements)
+            {
+                var currentName = nameElement.innerHTML;
+
+                nameElement.innerHTML = currentName.replace(fileName, condensedName);
+            }
         }
     }
 }

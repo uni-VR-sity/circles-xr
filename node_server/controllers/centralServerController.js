@@ -476,7 +476,7 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype HTML file
-    var sceneInformation = updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON);
+    var sceneInformation = await updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON, req.user);
 
     // Storing prototype in the database
     var prototypeInfo = {
@@ -568,7 +568,7 @@ const updatePrototypeJSON = function(filePath, edits)
 // ------------------------------------------------------------------------------------------
 
 // Creating string to add component to element depending on its values
-const addComponentValue = function(componentName, componentInfo, prototypeObject)
+const addComponentValue = async function(componentName, componentInfo, prototypeObject, user)
 {
   var component = '';
 
@@ -600,7 +600,7 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
       // Checking if attribute exists
       if (componentInfo.attributes.hasOwnProperty(attribute))
       {
-        component += attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
+        component += attribute + ':' + await addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName], user) + ';';
       }
     }
   }
@@ -619,7 +619,28 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
     {
       if (!component.includes('http://'))
       {
-        component = env.DOMAIN + '/asset-library/' + component;
+        // If model was uploaded by user, getting file name from database
+        // Otherwise getting model from asset library
+        if (component.includes('custom/'))
+        {
+          // Getting file name from database
+          var model = await Uploads.findOne({ user: user, displayName: component.split('/')[1] }, 'name');
+
+          // If model was found, adding its path
+          // Otherwise leaving component empty
+          if (model)
+          {
+            component = env.DOMAIN + '/uploads/' + model.name;
+          }
+          else
+          {
+            component = '';
+          }
+        }
+        else
+        {
+          component = env.DOMAIN + '/asset-library/' + component;
+        }
       }
     }
 
@@ -629,7 +650,7 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
 // ------------------------------------------------------------------------------------------
 
 // Creating prototype element
-const createPrototypeElement = function(object, allComponents)
+const createPrototypeElement = async function(object, allComponents, user)
 {
   var element = '<a-entity';
 
@@ -642,7 +663,7 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component before __ exists
       if (allComponents.hasOwnProperty(component.split('__')[0]))
       {
-        element += ' ' + component + '="' + addComponentValue(component, allComponents[component.split('__')[0]], object) + '"';
+        element += ' ' + component + '="' + await addComponentValue(component, allComponents[component.split('__')[0]], object, user) + '"';
       }
     }
     else
@@ -650,7 +671,7 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component exists
       if (allComponents.hasOwnProperty(component))
       {
-        element += ' ' + component + '="' + addComponentValue(component, allComponents[component], object) + '"';
+        element += ' ' + component + '="' + await addComponentValue(component, allComponents[component], object, user) + '"';
       }
     }
   }
@@ -664,7 +685,7 @@ const createPrototypeElement = function(object, allComponents)
     {
       for (const childObject of object.children)
       {
-        element += createPrototypeElement(childObject, allComponents);
+        element += await createPrototypeElement(childObject, allComponents, user);
       }
     }
   }
@@ -677,7 +698,7 @@ const createPrototypeElement = function(object, allComponents)
 // ------------------------------------------------------------------------------------------
 
 // Returning scene elements from prototype object
-const parseSceneElements = function(prototypeObject)
+const parseSceneElements = async function(prototypeObject, user)
 {
   var sceneElements = '';
 
@@ -700,7 +721,7 @@ const parseSceneElements = function(prototypeObject)
   // Creating an a-entity element for each scene element
   for (const object of prototypeObject.sceneObjects)
   {
-    sceneElements += createPrototypeElement(object, allComponents);
+    sceneElements += await createPrototypeElement(object, allComponents, user);
   }
 
   return sceneElements;
@@ -709,7 +730,7 @@ const parseSceneElements = function(prototypeObject)
 // ------------------------------------------------------------------------------------------
 
 // Putting scene elements together from template and prototype
-const gatherSceneElements = function(prototypeObject)
+const gatherSceneElements = async function(prototypeObject, user)
 {
   // Getting assets from template
   var templateAssets;
@@ -742,7 +763,7 @@ const gatherSceneElements = function(prototypeObject)
   
   if (prototypeObject.sceneObjects)
   {
-    prototypeSceneElements = parseSceneElements(prototypeObject);
+    prototypeSceneElements = await parseSceneElements(prototypeObject, user);
   }
 
   if (prototypeSceneElements == null)
@@ -763,7 +784,7 @@ const gatherSceneElements = function(prototypeObject)
 // ------------------------------------------------------------------------------------------
 
 // Returning scene attributes from prototype object
-const parseSceneAttributes = function(prototypeObject)
+const parseSceneAttributes = async function(prototypeObject, user)
 {
   var attributes = '';
 
@@ -790,7 +811,7 @@ const parseSceneAttributes = function(prototypeObject)
       // Checking if attribute exists
       if (allAttributes.hasOwnProperty(attribute))
       {
-        attributes += attribute + '="' + addComponentValue(attribute, allAttributes[attribute], prototypeObject.sceneAttributes) + '"\n';
+        attributes += attribute + '="' + await addComponentValue(attribute, allAttributes[attribute], prototypeObject.sceneAttributes, user) + '"\n';
       }
     }
   }
@@ -801,7 +822,7 @@ const parseSceneAttributes = function(prototypeObject)
 // ------------------------------------------------------------------------------------------
 
 // Putting scene tag together with attributes from template and prototype
-const gatherSceneTag = function(prototypeObject)
+const gatherSceneTag = async function(prototypeObject, user)
 {
   // Gettting scene tag and its attributes
   var sceneStart; 
@@ -817,7 +838,7 @@ const gatherSceneTag = function(prototypeObject)
   }
 
   // Parsing prototype scene attributes
-  var prototypeSceneAttributes = parseSceneAttributes(prototypeObject);
+  var prototypeSceneAttributes = await parseSceneAttributes(prototypeObject, user);
 
   if (prototypeSceneAttributes == null)
   {
@@ -843,10 +864,10 @@ const gatherSceneTag = function(prototypeObject)
 
 // Updating prototype HTML file
 // Returns HTML scene object
-const updatePrototypeHTML = function(filePath, prototypeObject)
+const updatePrototypeHTML = async function(filePath, prototypeObject, user)
 {
   // Getting scene tag
-  var sceneTagInformation = gatherSceneTag(prototypeObject);
+  var sceneTagInformation = await gatherSceneTag(prototypeObject, user);
 
   if (!sceneTagInformation)
   {
@@ -854,7 +875,7 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   }
 
   // Getting scene elements
-  var sceneElements = gatherSceneElements(prototypeObject);
+  var sceneElements = await gatherSceneElements(prototypeObject, user);
 
   if (!sceneElements)
   {
@@ -957,7 +978,7 @@ const updatePrototype = async (req, res, next) =>
       if (updatedJSON)
       {
         // Updating HTML file
-        var sceneInformation = updatePrototypeHTML(HTMLPath, updatedJSON);
+        var sceneInformation = await updatePrototypeHTML(HTMLPath, updatedJSON, req.user);
 
         if (sceneInformation)
         {
@@ -1154,7 +1175,7 @@ const getPrototypeInfo = async (req, res, next) =>
         var prototypeObject = JSON.parse(prototypeJSON);
 
         // Getting scene attributes (from prototype)
-        var sceneAttributes = parseSceneAttributes(prototypeObject);
+        var sceneAttributes = await parseSceneAttributes(prototypeObject, req.user);
 
         if (sceneAttributes == null)
         {
@@ -1163,7 +1184,7 @@ const getPrototypeInfo = async (req, res, next) =>
         }
 
         // Getting scene elements (starting elements and from prototype)
-        var sceneElements = gatherSceneElements(prototypeObject);
+        var sceneElements = await gatherSceneElements(prototypeObject, req.user);
 
         if (!sceneElements)
         {
@@ -1286,7 +1307,7 @@ const uploadModel = async (req, res, next) =>
     const fileType = file.originalFilename.split('.').pop();
 
     // Making sure file type is valid
-    if (validFiles.includes(fileType))
+    if (validFiles.includes(fileType.toLowerCase()))
     {
       const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
 
@@ -1311,7 +1332,7 @@ const uploadModel = async (req, res, next) =>
       // If the user has file(s) with the same name, adding a number to the end of the filename
       var similarFileNames = [];
       similarFileNames = await Uploads.find({ user: await User.findById(req.user._id).exec(), displayName: new RegExp('(?<!.)' + filename + '([0-9]+)?[.]', 'gi'), type: fileType });
-      console.log('/' +  filename + '[0-9]?/');
+
       if (similarFileNames.length > 0)
       {
         file.originalFilename = filename + (similarFileNames.length + 1) + '.' + fileType;

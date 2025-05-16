@@ -55,5 +55,11 @@ block content
                     for model of uploadedModels
                         +displayModel(model)
 
+                    script.
+                        document.getElementById('prototype-models-overlay').style.display = 'flex';
+                    
                     script
                         include ../../includes/shortenNames.js
+
+                    script.
+                        document.getElementById('prototype-models-overlay').style.display = 'none';

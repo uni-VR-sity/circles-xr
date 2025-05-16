@@ -345,6 +345,14 @@ async function uploadModel(event)
         {
             if (data.status == 'success')
             {
+                var modelsContainer = document.getElementById('models-container');
+
+                // If there were no models in container previously, hiding no model text
+                if (modelsContainer.querySelectorAll('.model').length == 0)
+                {
+                    document.getElementById('no-models-message').style.display = 'none';
+                }
+
                 // Displaying uploaded model
                 var model = document.createElement('div');
                 model.classList.add('model');
@@ -394,7 +402,7 @@ async function uploadModel(event)
 
                     model.appendChild(modelOptionsContainer);
 
-                document.getElementById('models-container').appendChild(model);
+                    modelsContainer.appendChild(model);
 
             }
             else
@@ -424,7 +432,7 @@ async function deleteModel(model)
         // If that was the last model, displaying no models available message
         if (document.getElementsByClassName('file').length === 0)
         {
-            document.getElementById('no-content-message').style.display = 'block';
+            document.getElementById('no-models-message').style.display = 'flex';
         }
     });
 }
