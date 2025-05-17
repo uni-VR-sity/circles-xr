@@ -5,22 +5,35 @@ var currentPrototype;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
-// Hiding error messages
+// Hiding error and warning messages
 function hideMessages()
 {
+    // Hiding errors
     var errors = document.getElementsByClassName('error-message');
 
     for (const error of errors)
     {
         error.style.display = 'none';
     }
+
+    // Hiding warnings
+    var warnings = document.getElementsByClassName('warning-message');
+
+    for (const warning of warnings)
+    {
+        warning.style.display = 'none';
+    }
+
+    // Deleting prototype input messages
+    document.getElementById('prototype-input-messages').innerHTML = '';
 }
 
 // Prototyping -------------------------------------------------------------------------------------------------------------------------------------
 
 // Displays prototype scene
-function displayPrototypeScene(sceneAttributes, sceneElements)
+function displayPrototypeScene(sceneAttributes, sceneElements, warnings)
 {
+    // Displaying scene
     var scene = '<a-scene embedded renderer="antialias:true;colorManagement:true;sortObjects:false;foveationLevel:3;highRefreshRate:true;physicallyCorrectLights:true;logarithmicDepthBuffer:false;precision:high;" shadow="autoUpdate:false;type:basic;" vr-mode-ui="enabled:true;" loading-screen="enabled:false;" device-orientation-permission-ui="enabled:true;" circles-platform-scene-shadows ';
     scene += sceneAttributes;
     scene += '>';
@@ -30,12 +43,23 @@ function displayPrototypeScene(sceneAttributes, sceneElements)
     scene += '</a-scene>';
     
     document.getElementById('prototype-scene').innerHTML = scene;
+
+    // Displaying warning messages
+    var messageContainer = document.getElementById('prototype-input-messages');
+
+    for (const warning of warnings)
+    {
+        var warningMessage = document.createElement('p');
+        warningMessage.classList.add('warning-message');
+        warningMessage.innerHTML = warning;
+        messageContainer.appendChild(warningMessage);
+    }
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Displaying prototype editor
-function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements)
+function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements, warnings)
 {
     // Updating title
     document.getElementById('prototype-title').innerHTML = currentPrototype;
@@ -55,7 +79,7 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements)
     }
 
     // Displaying prototype scene
-    displayPrototypeScene(sceneAttributes, sceneElements);
+    displayPrototypeScene(sceneAttributes, sceneElements, warnings);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -94,7 +118,7 @@ function createPrototype(event)
             currentPrototype = response.prototypeName;
 
             // Displaying prototype editor
-            displayPrototypeEditor(response.startingString, response.sceneAttributes, response.sceneElements);
+            displayPrototypeEditor(response.startingString, response.sceneAttributes, response.sceneElements, response.warningMessages);
         }
         else 
         {
@@ -145,12 +169,16 @@ function updatePrototype(event)
             if (response.status == 'success')
             {
                 // Updating prototype scene
-                displayPrototypeScene(response.sceneAttributes, response.sceneElements);
+                displayPrototypeScene(response.sceneAttributes, response.sceneElements, response.warningMessages);
             }
             else
             {
-                document.getElementById('prototype-input-error').innerHTML = response.error;
-                document.getElementById('prototype-input-error').style.display = 'flex';
+                var messageContainer = document.getElementById('prototype-input-messages');
+
+                var errorMessage = document.createElement('p');
+                errorMessage.classList.add('error-message');
+                errorMessage.innerHTML = response.error;
+                messageContainer.appendChild(errorMessage);
             }
         }
 
@@ -158,8 +186,12 @@ function updatePrototype(event)
     } 
     catch (e) 
     {
-        document.getElementById('prototype-input-error').innerHTML = 'Error in JSON syntax';
-        document.getElementById('prototype-input-error').style.display = 'flex';
+        var messageContainer = document.getElementById('prototype-input-messages');
+
+        var errorMessage = document.createElement('p');
+        errorMessage.classList.add('error-message');
+        errorMessage.innerHTML = 'Error in JSON syntax';
+        messageContainer.appendChild(errorMessage);
     }
 }
 
@@ -264,7 +296,7 @@ function openPrototype(prototype)
             currentPrototype = prototype;
 
             // Displaying prototype editor
-            displayPrototypeEditor(response.editorInput, response.sceneAttributes, response.sceneElements);
+            displayPrototypeEditor(response.editorInput, response.sceneAttributes, response.sceneElements, response.warningMessages);
 
             // Closing create prototype overlay
             closeOverlay("open-prototype-overlay");
