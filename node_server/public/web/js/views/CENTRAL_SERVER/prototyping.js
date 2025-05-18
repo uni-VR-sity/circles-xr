@@ -3,6 +3,7 @@
 // Global Variables --------------------------------------------------------------------------------------------------------------------------------
 var currentPrototype;
 var updateShortcutActive = false;
+var inputEventsActive = false;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements, war
     // Hiding success and error messages
     hideMessages();
 
-    // Activating ctrl-s/ cmd-s update shortcut if it is not already active
+    // Activating ctrl-s/ cmd-s update shortcut
     if (!updateShortcutActive)
     {
         updateShortcutActive = true;
@@ -98,6 +99,22 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements, war
     for (const element of prototypeEditorElements)
     {
         element.style.visibility = 'visible';
+    }
+
+    // Activating events to prevent scene movement when typing in input
+    if (!inputEventsActive)
+    {
+        inputEventsActive = true;
+
+        document.getElementById('prototyping-input').addEventListener('focus', function(e)
+        {
+            document.querySelector('[circles-snap-turning]').setAttribute('circles-snap-turning', { enabled: false });
+        });
+
+        document.getElementById('prototyping-input').addEventListener('blur', function(e)
+        {
+            document.querySelector('[circles-snap-turning]').setAttribute('circles-snap-turning', { enabled: true });
+        });
     }
 
     // Displaying prototype scene
