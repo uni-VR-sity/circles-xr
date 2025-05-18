@@ -2,8 +2,23 @@
 
 // Global Variables --------------------------------------------------------------------------------------------------------------------------------
 var currentPrototype;
+var updateShortcutActive = false;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
+
+// Overriding ctrl-s/ cmd-s functionailty to update prototype instead
+function updateShortcut(e)
+{
+    if (e.key == 's' && (e.ctrlKey || e.metaKey))
+    {
+        // Preventing default save action
+        e.preventDefault();
+
+        document.getElementById('prototyping-form').requestSubmit();
+    }
+}
+
+// ------------------------------------------------------------------------------------------
 
 // Hiding error and warning messages
 function hideMessages()
@@ -69,6 +84,13 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements, war
 
     // Hiding success and error messages
     hideMessages();
+
+    // Activating ctrl-s/ cmd-s update shortcut if it is not already active
+    if (!updateShortcutActive)
+    {
+        updateShortcutActive = true;
+        document.addEventListener('keydown', updateShortcut);
+    }
 
     // Displaying prototype editor
     var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
@@ -338,6 +360,10 @@ function deletePrototype(prototype)
                 {
                     element.style.visibility = 'hidden';
                 }
+
+                // Deactivating ctrl-s/ cmd-s update
+                document.removeEventListener('keydown', updateShortcut);
+                updateShortcutActive = false;
             }
 
             // Displaying overlay again to update
