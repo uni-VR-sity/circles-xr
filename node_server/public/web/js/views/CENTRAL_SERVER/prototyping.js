@@ -4,10 +4,11 @@
 var currentPrototype;
 var updateShortcutActive = false;
 var inputEventsActive = false;
+var tabFunctionalityDisabled = true;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
-// Overriding ctrl-s/ cmd-s functionailty to update prototype instead
+// Overriding ctrl-s/ cmd-s functionality to update prototype instead
 function updateShortcut(e)
 {
     if (e.key == 's' && (e.ctrlKey || e.metaKey))
@@ -106,14 +107,38 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements, war
     {
         inputEventsActive = true;
 
+        // Disabling snap turning and tab functionality when input editor is focused
         document.getElementById('prototyping-input').addEventListener('focus', function(e)
         {
             document.querySelector('[circles-snap-turning]').setAttribute('circles-snap-turning', { enabled: false });
+
+            tabFunctionalityDisabled = true;
         });
 
+        // Enabling snap turning and tab functionality when input editor is not focused
         document.getElementById('prototyping-input').addEventListener('blur', function(e)
         {
             document.querySelector('[circles-snap-turning]').setAttribute('circles-snap-turning', { enabled: true });
+
+            tabFunctionalityDisabled = false;
+        });
+
+        // Overriding tab functionality to leave tab spaces when input editor is focused
+        document.getElementById('prototyping-input').addEventListener('keydown', function(e)
+        {
+            if (e.key == 'Tab')
+            {
+                if (tabFunctionalityDisabled)
+                {
+                    e.preventDefault();
+
+                    var cursorPosition = e.target.selectionStart;
+
+                    e.target.value = e.target.value.substring(0, e.target.selectionStart) + "    " + e.target.value.substring(e.target.selectionEnd);
+
+                    this.selectionEnd = cursorPosition + 4;
+                }
+            }
         });
     }
 

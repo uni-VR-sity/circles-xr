@@ -631,44 +631,44 @@ const addComponentValue = async function(componentName, componentInfo, prototype
 
   // If component is a circles-model and does not contain a url (ex. does not contain "http://"), add asset library path (with no url())
   if (componentName === 'circles-model')
+  {
+    if (!component.includes('http://'))
     {
-      if (!component.includes('http://'))
+      // If model was uploaded by user, getting file name from database
+      // Otherwise getting model from asset library
+      if (component.includes('custom/'))
       {
-        // If model was uploaded by user, getting file name from database
-        // Otherwise getting model from asset library
-        if (component.includes('custom/'))
-        {
-          // Getting file name from database
-          var model = await Uploads.findOne({ user: user, displayName: component.split('/')[1] }, 'name');
+        // Getting file name from database
+        var model = await Uploads.findOne({ user: user, displayName: component.split('/')[1] }, 'name');
 
-          // If model was found, adding its path
-          // Otherwise leaving component empty and displaying warning message
-          if (model)
-          {
-            component = env.DOMAIN + '/uploads/' + model.name;
-          }
-          else
-          {
-            warningMessages.push('Custom model "' + component.split('/')[1] + '" missing');
-            component = '';
-          }
+        // If model was found, adding its path
+        // Otherwise leaving component empty and displaying warning message
+        if (model)
+        {
+          component = env.DOMAIN + '/uploads/' + model.name;
         }
         else
         {
-          // Making sure that the model exists in asset library
-          // Otherwise leaving component empty and displaying warning message
-          if (fs.existsSync(__dirname + '/../public/asset-library/' + component))
-          {
-            component = env.DOMAIN + '/asset-library/' + component;
-          }
-          else
-          {
-            warningMessages.push(component + ' does not exist in asset library');
-            component = '';
-          }
+          warningMessages.push('Custom model "' + component.split('/')[1] + '" missing');
+          component = '';
+        }
+      }
+      else
+      {
+        // Making sure that the model exists in asset library
+        // Otherwise leaving component empty and displaying warning message
+        if (fs.existsSync(__dirname + '/../public/asset-library/' + component))
+        {
+          component = env.DOMAIN + '/asset-library/' + component;
+        }
+        else
+        {
+          warningMessages.push(component + ' does not exist in asset library');
+          component = '';
         }
       }
     }
+  }
 
   var componentInformation = {
     component: component,
@@ -1427,12 +1427,12 @@ const uploadModel = async (req, res, next) =>
       }
 
       // If the user has file(s) with the same name, adding a number to the end of the filename
-      var similarFileNames = [];
-      similarFileNames = await Uploads.find({ user: await User.findById(req.user._id).exec(), displayName: new RegExp('(?<!.)' + filename + '([0-9]+)?[.]', 'gi'), type: fileType });
+      var similarFilenames = [];
+      similarFilenames = await Uploads.find({ user: await User.findById(req.user._id).exec(), displayName: new RegExp('(?<!.)' + filename + '([0-9]+)?[.]', 'gi'), type: fileType });
 
-      if (similarFileNames.length > 0)
+      if (similarFilenames.length > 0)
       {
-        file.originalFilename = filename + (similarFileNames.length + 1) + '.' + fileType;
+        file.originalFilename = filename + (similarFilenames.length + 1) + '.' + fileType;
       }
 
       // Storing the file in the database
