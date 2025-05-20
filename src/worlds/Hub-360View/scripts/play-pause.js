@@ -2,6 +2,7 @@ AFRAME.registerComponent('play-pause', {
     init: function () {
         // get the 360 video and the play-pause element from the scene
         let myVideo = document.querySelector('#video3D');
+        let myAudio = document.querySelector('#video3D_snd');
         let videoControls = document.querySelector('#videoControls');
         //console.log("registered play-pause");
         
@@ -11,9 +12,11 @@ AFRAME.registerComponent('play-pause', {
             //console.log("we clicked on the play button");
             if (myVideo.paused) {
                 myVideo.play();
+                myAudio.play();
                 videoControls.setAttribute('src', '#pause');
             } else {
                 myVideo.pause();
+                myAudio.pause();
                 videoControls.setAttribute('src', '#play');
             }
         });
