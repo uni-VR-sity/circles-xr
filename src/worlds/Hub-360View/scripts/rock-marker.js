@@ -1,3 +1,4 @@
+// This tutorial was used to make this interaction: https://www.youtube.com/watch?v=2cQWMHwACJM
 AFRAME.registerComponent('rock-marker', {
     init: function() {
 
