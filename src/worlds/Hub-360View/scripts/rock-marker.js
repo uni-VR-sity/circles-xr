@@ -8,7 +8,7 @@ AFRAME.registerComponent('rock-marker', {
             let scene = document.querySelector('a-scene');
 
             let newRock = document.createElement('a-entity');
-            // we might have to refernece a rock model instead of creating a new model each time we want a new rock in the scene
+            // NOTE: we might have to refernece a rock model instead of creating a new model each time we want a new rock in the scene
             newRock.setAttribute('geometry', {
                 primitive: 'sphere'
             });
@@ -17,7 +17,7 @@ AFRAME.registerComponent('rock-marker', {
             // puts the rock on the surface we click on
             newRock.setAttribute('position', p);
             // this lets us attach rocks on rocks, 
-            // don't forget to add the empty parameters '{}' otherwise adding this component doesn't work 
+            // NOTE: don't forget to add the empty parameters '{}' otherwise adding this component doesn't work 
             newRock.setAttribute('rock-marker', {});
             // makes it so we can click on the rock
             newRock.setAttribute('circles-interactive-object', {});
