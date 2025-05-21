@@ -5,6 +5,7 @@ const path       = require('path');
 const viewController = require('../controllers/viewController');
 const circleController = require('../controllers/circleController');
 const centralServerController = require('../controllers/centralServerController');
+const animationController = require('../controllers/animationController');
 const User       = require('../models/user');
 const passport   = require('passport');
 const express    = require('express');
@@ -221,7 +222,7 @@ router.post('/save-collected-data', authenticated, circleController.saveCollecte
 router.post('/check-existing-logs', authenticated, circleController.checkExistingLogs);
 router.get('/download-logs/:circle', authenticated, circleController.downloadCollectedData);
 
-// CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
+// CENTRAL SERVER ROUTES ----------------------------------------------------------------------------------------------------------------------
 
 // More Circles Page Routes -----------------------------------------------------------------
 
@@ -248,6 +249,10 @@ router.get('/prototype/:prototype_name', centralServerController.servePrototypeC
 // Museum Games Page Routes -----------------------------------------------------------------
 
 router.get('/museum-games', centralServerController.serveMuseumGames);
+
+// ANIMATION ROUTES -------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/get-phones', animationController.getPhones);
 
 // Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 
