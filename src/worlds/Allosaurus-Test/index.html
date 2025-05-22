@@ -1,0 +1,76 @@
+<html>
+
+  <head>
+
+    <!-- Circles' head scripts [REQUIRED] -->
+    <circles-start-scripts/>
+
+    <script src="/worlds/Allosaurus-Test/scripts/facial-animation.js"></script>
+
+  </head>
+
+  <body>
+    
+    <!-- 2D UI elements overylayed on the 3D scene for user options -->
+    <circles-basic-ui/>
+    
+    <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
+    <circles-start-ui/>
+
+    <!-- a-scene with 'circles-properties' component [REQUIRED] -->
+    <a-scene circles_scene_properties>
+      
+      <a-assets>
+        <!-- Circles' built-in assets [REQUIRED] -->
+        <circles-assets/>
+      </a-assets>
+
+      <!-- Circles' built-in manager and avatar [REQUIRED] -->
+      <circles-manager-avatar/>
+
+      <a-entity id="animation-test" 
+                facial-animation
+                geometry="primitive:box"
+                material="color:black"
+                position="0 1 -5",
+                animation__1="property:components.material.material.color; type:color; to:red; startEvents:red; autoplay:false; easing:linear; dur: 0.045;"
+                animation__2="property:components.material.material.color; type:color; to:orange; startEvents:orange; autoplay:false; easing:linear; dur: 0.045;"
+                animation__3="property:components.material.material.color; type:color; to:yellow; startEvents:yellow; autoplay:false; easing:linear; dur: 0.045;"
+                animation__4="property:components.material.material.color; type:color; to:green; startEvents:green; autoplay:false; easing:linear; dur: 0.045;"
+                animation__5="property:components.material.material.color; type:color; to:blue; startEvents:blue; autoplay:false; easing:linear; dur: 0.045;"
+                animation__6="property:components.material.material.color; type:color; to:purple; startEvents:purple; autoplay:false; easing:linear; dur: 0.045;"
+                animation__7="property:components.material.material.color; type:color; to:white; startEvents:white; autoplay:false; easing:linear; dur: 0.045;">
+      </a-entity>
+      
+    </a-scene>
+
+    <script>
+
+      var ComponentCheckInterval = setInterval(function()
+      {
+        var component = document.getElementById('animation-test').components['facial-animation'];
+
+        if (component)
+        {
+          component.setUpAnimation('æ', 'red');
+          component.setUpAnimation('l', 'orange');
+          component.setUpAnimation('u', 'yellow');
+          component.setUpAnimation('s', 'green');
+          component.setUpAnimation('ɔ', 'blue');
+          component.setUpAnimation('ɹ', 'purple');
+          component.setUpAnimation('s', 'white');
+
+          component.play('');
+
+          clearInterval(ComponentCheckInterval);
+        }
+      }, 100);
+    
+    </script>
+
+    <!-- Circles' end scripts [REQUIRED] -->
+    <circles-end-scripts/>
+
+  </body>
+
+</html>
