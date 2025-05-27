@@ -5,7 +5,10 @@
     <!-- Circles' head scripts [REQUIRED] -->
     <circles-start-scripts/>
 
+    <script src="/worlds/Allosaurus-Test/phones/phone-animation-list.js"></script>
+
     <script src="/worlds/Allosaurus-Test/scripts/facial-animation.js"></script>
+    <script src="/worlds/Allosaurus-Test/scripts/audio-listener.js"></script>
 
   </head>
 
@@ -29,7 +32,7 @@
       <circles-manager-avatar/>
 
       <a-entity id="animation-test" 
-                facial-animation
+                circles-facial-animation
                 geometry="primitive:box"
                 material="color:black"
                 position="0 1 -5",
@@ -48,19 +51,11 @@
 
       var ComponentCheckInterval = setInterval(function()
       {
-        var component = document.getElementById('animation-test').components['facial-animation'];
+        var component = document.getElementById('animation-test').components['circles-facial-animation'];
 
         if (component)
         {
-          component.setUpAnimation('æ', 'red');
-          component.setUpAnimation('l', 'orange');
-          component.setUpAnimation('u', 'yellow');
-          component.setUpAnimation('s', 'green');
-          component.setUpAnimation('ɔ', 'blue');
-          component.setUpAnimation('ɹ', 'purple');
-          component.setUpAnimation('s', 'white');
-
-          component.play('');
+          component.playAnimation('/worlds/Allosaurus-Test/audio/sample.wav');
 
           clearInterval(ComponentCheckInterval);
         }

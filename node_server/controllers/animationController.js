@@ -9,8 +9,11 @@ const { spawn } = require('child_process');
 // Getting phones from specific audio clip using allosaurus
 const getPhones = async (req, res, next) =>
 {
+  var reponseGiven = false;
+  var audioFile = 'src' + req.body.audio;
+
   // Running allosaurus
-  const allosaurusProcess = spawn('python', ['-m', 'allosaurus.run', '-i', 'sample.wav', '--timestamp', 'True'], { env: { ...process.env, PYTHONIOENCODING: 'utf-8' } });
+  const allosaurusProcess = spawn('python', ['-m', 'allosaurus.run', '-i', audioFile, '--timestamp', 'True'], { env: { ...process.env, PYTHONIOENCODING: 'utf-8' } });
 
   // Listening for allosaurus output
   allosaurusProcess.stdout.on('data', (data) => 
@@ -46,24 +49,34 @@ const getPhones = async (req, res, next) =>
       }
     }
 
-    var response = {
-      status: 'success',
-      phones: phones,
-    }
+    if (!reponseGiven)
+    {
+      reponseGiven = true;
 
-    res.json(response);
+      var response = {
+        status: 'success',
+        phones: phones,
+      }
+
+      res.json(response);
+    }
   });
   
   // Listening for allosaurus error
   allosaurusProcess.stderr.on('data', (error) => 
   {
-    console.error('Allosaurus Error: ' + error);
+    console.log('Allosaurus Error: ' + error);
 
-    var response = {
-      status: 'error',
+    if (!reponseGiven)
+    {
+      reponseGiven = true;
+
+      var response = {
+        status: 'error',
+      }
+
+      res.json(response);
     }
-
-    res.json(response);
   });
 }
 

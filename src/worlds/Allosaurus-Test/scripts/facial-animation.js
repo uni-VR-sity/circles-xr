@@ -1,6 +1,6 @@
 'use strict';
 
-AFRAME.registerComponent('facial-animation', 
+AFRAME.registerComponent('circles-facial-animation', 
 {
     schema: {},
 
@@ -9,26 +9,47 @@ AFRAME.registerComponent('facial-animation',
         const element = this.el;
         const schema = this.data;
 
-        this.playAnimation = this.playAnimation.bind(this);
+        this.playPhone = this.playPhone.bind(this);
 
-        this.phoneAnimationSet = new Map();
+        this.phoneAnimationTable = new Map();
         
-        this.currentPhoneSet = null;
-        this.currentPhone;
+        this.currentAudioPhones = null;
         this.currentAnimationTimeouts = [];
 
         // Attaching sound component to element
         element.setAttribute('sound', {});
+        
+        // Setting up phone animations
+        this.setUpAnimations();
+
     },
 
-    // Adding specified phone and animation to phone animation set
-    setUpAnimation: function(phone, animation)
+    // Setting up phone animations from phones/phone-animation-list.js in world folder
+    setUpAnimations: function()
     {
-        this.phoneAnimationSet.set(phone, animation);
+        const element = this.el;
+        const schema = this.data;
+
+        for (const phone of phoneAnimationList)
+        {
+            // Adding phone and associated animation to table
+            this.phoneAnimationTable.set(phone.phone, phone.animation);
+
+            // Adding animation component to element
+            element.setAttribute('animation__' + phone.animation.substring(1), {
+                property: 'components.material.material.color',
+                type: 'color',
+                to: phone.animation,
+                startEvents: phone.animation,
+                autoplay: false,
+                easing: 'linear',
+                dur: 0.045,
+            });
+        }
     },
 
     // Playing facial animation for specified audio clip
-    play: async function(audioClip)
+    playAnimation: async function(audioClip)
     {
         const element = this.el;
         const schema = this.data;
@@ -44,7 +65,8 @@ AFRAME.registerComponent('facial-animation',
         // Getting phones and timestamps from audio clip
         await this.getPhones(audioClip);
 
-        if (this.currentPhoneSet)
+        // If phones were returned successfully, playing facial animation
+        if (this.currentAudioPhones)
         {
             // Playing audio clip
             element.setAttribute('sound', {src: audioClip});
@@ -53,9 +75,9 @@ AFRAME.registerComponent('facial-animation',
             // Setting timeouts to play each animation phone
             this.currentPhone = 0;
 
-            for (const phone of this.currentPhoneSet)
+            for (const phone of this.currentAudioPhones)
             {
-                this.currentAnimationTimeouts.push(setTimeout(this.playAnimation, phone.start * 1000));
+                this.currentAnimationTimeouts.push(setTimeout(this.playPhone, phone.start * 1000));
             }
         }
     },
@@ -63,20 +85,21 @@ AFRAME.registerComponent('facial-animation',
     // Getting phones and timestamps from specified audio clip
     getPhones: async function(audioClip)
     {
-        await fetch('/get-phones', {method: 'POST', body: JSON.stringify({ audio: audioClip })})
+        await fetch('/get-phones', {method: 'POST', body: new URLSearchParams({ audio: audioClip })})
         .then(response => response.json())
         .then(data => 
         {
             if (data.status == 'success')
             {
-                this.currentPhoneSet = data.phones;
+                this.currentAudioPhones = data.phones;
+                this.currentAudioPhones.reverse();
 
                 return;
             }
             else
             {
                 console.log('facial-animation: Error getting phone set for "' + audioClip + '"');
-                this.currentPhoneSet = null;
+                this.currentAudioPhones = null;
 
                 return;
             }
@@ -84,16 +107,17 @@ AFRAME.registerComponent('facial-animation',
     },
 
     // Playing animation for current phone
-    playAnimation: function()
+    playPhone: function()
     {
         const element = this.el;
         const schema = this.data;
 
-        var animation = this.phoneAnimationSet.get(this.currentPhoneSet[this.currentPhone].phone);
+        var currentPhone = this.currentAudioPhones.pop();
+        var animation = this.phoneAnimationTable.get(currentPhone.phone);
 
         if (animation)
         {
-            console.log(this.currentPhoneSet[this.currentPhone].phone);
+            console.log(currentPhone.phone);
             element.emit(animation);
         }
         
