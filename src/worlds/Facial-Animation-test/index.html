@@ -6,7 +6,7 @@
     <script src="https://rawcdn.githack.com/elbobo/aframe-gltf-morph-component/07e9b80bd382cc1c19223468d35c453e7c76e9a2/dist/aframe-gltf-morph-component.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.5.3/document-register-element.js"></script>
 
-    <scrip src="/worlds/Facial-Animation-test/components/animated-eyes.js"></scrip>
+    <script src="/worlds/Facial-Animation-test/components/animated-eyes.js"></script>
     <script src="/worlds/Facial-Animation-test/components/animated-face.js"></script>
     <script src="/worlds/Facial-Animation-test/scripts/gui.js" type="module"></script>
   </head>
@@ -35,7 +35,7 @@
       <!-- CIRCLE GENERATION STARTS HERE -->
 
       <a-entity id="baseFace" class="animated" position="0 1.5 -5" rotation="0 180 0"
-              gltf-model="#faceLowpoly-glb" animated-face animated-eyes></a-entity>
+              gltf-model="#faceLowpoly-glb" animated-face></a-entity>
 
       <a-box position="0 0.5 -1" width="0.3" height="1" depth="0.3" 
             static-body shadow="receive:true; cast:true;">

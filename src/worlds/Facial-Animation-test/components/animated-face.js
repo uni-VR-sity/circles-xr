@@ -386,8 +386,8 @@ AFRAME.registerComponent('animated-face', {
         context.el.setAttribute('animation__browOuterUpRelaxLeft', {   property: 'gltf-morph__browOuterUpLeft.value', 
                                                                 to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'browOuterUpRelaxLeft, browOuterUpRelax, neutralizeBrows'});
-        //console.log('Finished creating brow animations');
-        */ 
+        console.log('Finished creating brow animations');
+        */
 
         // mouth animations
         context.el.setAttribute('animation__mouthSmile', {   property: 'gltf-morph__mouthSmile.value',
@@ -580,7 +580,7 @@ AFRAME.registerComponent('animated-face', {
                                                                 startEvents: 'tongueIn, mouthClose'});
         //console.log('Finished creating tongue animations');
     },
-/*
+
     closeEyes: async function (side, dur){
         if(dur == null){
             dur = 1;
@@ -896,7 +896,7 @@ AFRAME.registerComponent('animated-face', {
         console.log('scared brows');
         
     },
-*/
+
     fullSmile: async function (dur){
         if(dur == null){
             dur = 1;

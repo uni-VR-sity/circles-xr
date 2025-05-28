@@ -142,6 +142,12 @@ AFRAME.registerComponent('animated-eyes', {
         context.el.setAttribute('gltf-morph__browOuterUpRight', {morphtarget: 'browOuterUp_right', value: 0});
         context.el.setAttribute('gltf-morph__browOuterUpLeft', {morphtarget: 'browOuterUp_left', value: 0});
         // QUESTION: do we want browDown + browOuterUp too? 
+
+        // cheek morph targets
+        context.el.setAttribute('gltf-morph__cheekSquintRight', {morphtarget: 'cheekSquint_right', value: 0});
+        context.el.setAttribute('gltf-morph__cheekSquintLeft', {morphtarget: 'cheekSquint_left', value: 0});
+        context.el.setAttribute('gltf-morph__cheekPuff', {morphtarget: 'cheekPuff', value: 0});
+        
         console.log("eye morph targets created");
     },
 
@@ -305,6 +311,7 @@ AFRAME.registerComponent('animated-eyes', {
                                                                 to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'browOuterUpRelaxLeft, browOuterUpRelax, neutralizeBrows'});
         //console.log('Finished creating brow animations');
+        console.log('finished creating eye animations! - in eyes');
     },
 
     closeEyes: async function (side, dur){
