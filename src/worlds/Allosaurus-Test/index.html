@@ -7,7 +7,7 @@
 
     <script src="/worlds/Allosaurus-Test/phones/phone-animation-list.js"></script>
 
-    <script src="/worlds/Allosaurus-Test/scripts/facial-animation.js"></script>
+    <script src="/worlds/Allosaurus-Test/scripts/facial-animator.js"></script>
     <script src="/worlds/Allosaurus-Test/scripts/audio-listener.js"></script>
 
   </head>
@@ -32,34 +32,32 @@
       <circles-manager-avatar/>
 
       <a-entity id="animation-test" 
-                circles-facial-animation
+                circles-facial-animator
                 geometry="primitive:box"
                 material="color:black"
-                position="0 1 -5",
-                animation__1="property:components.material.material.color; type:color; to:red; startEvents:red; autoplay:false; easing:linear; dur: 0.045;"
-                animation__2="property:components.material.material.color; type:color; to:orange; startEvents:orange; autoplay:false; easing:linear; dur: 0.045;"
-                animation__3="property:components.material.material.color; type:color; to:yellow; startEvents:yellow; autoplay:false; easing:linear; dur: 0.045;"
-                animation__4="property:components.material.material.color; type:color; to:green; startEvents:green; autoplay:false; easing:linear; dur: 0.045;"
-                animation__5="property:components.material.material.color; type:color; to:blue; startEvents:blue; autoplay:false; easing:linear; dur: 0.045;"
-                animation__6="property:components.material.material.color; type:color; to:purple; startEvents:purple; autoplay:false; easing:linear; dur: 0.045;"
-                animation__7="property:components.material.material.color; type:color; to:white; startEvents:white; autoplay:false; easing:linear; dur: 0.045;">
+                position="0 2 -5">
+      </a-entity>
+
+      <a-entity id="animation-button"
+                geometry="primitive:box"
+                material="color:grey"
+                position="0 0.4 -2"
+                scale="0.5 0.8 0.5">
+
+        <a-entity circles-button="target:#animation-test; click_on_event:start-animation"
+                  position="0 0.5 0">
+        </a-entity>
+
       </a-entity>
       
     </a-scene>
 
     <script>
 
-      var ComponentCheckInterval = setInterval(function()
+      document.getElementById('animation-test').addEventListener('start-animation', function()
       {
-        var component = document.getElementById('animation-test').components['circles-facial-animation'];
-
-        if (component)
-        {
-          component.playAnimation('/worlds/Allosaurus-Test/audio/sample.wav');
-
-          clearInterval(ComponentCheckInterval);
-        }
-      }, 100);
+        document.getElementById('animation-test').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
+      });
     
     </script>
 

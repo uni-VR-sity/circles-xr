@@ -1,8 +1,11 @@
 'use strict';
 
-AFRAME.registerComponent('circles-facial-animation', 
+AFRAME.registerComponent('circles-facial-animator', 
 {
-    schema: {},
+    schema: 
+    {
+        animateEvent: {type: 'string', default: 'response-ready'},
+    },
 
     init: function()
     {
@@ -10,6 +13,7 @@ AFRAME.registerComponent('circles-facial-animation',
         const schema = this.data;
 
         this.playPhone = this.playPhone.bind(this);
+        this.animateEventListener = this.animateEventListener.bind(this);
 
         this.phoneAnimationTable = new Map();
         
@@ -22,6 +26,8 @@ AFRAME.registerComponent('circles-facial-animation',
         // Setting up phone animations
         this.setUpAnimations();
 
+        // Listening for animate event to play facial animation
+        element.addEventListener(schema.animateEvent, this.animateEventListener);
     },
 
     // Setting up phone animations from phones/phone-animation-list.js in world folder
@@ -48,9 +54,24 @@ AFRAME.registerComponent('circles-facial-animation',
         }
     },
 
+    // Listening for animate event to play animation
+    animateEventListener: function(event)
+    {
+        if (event.detail.audioClip)
+        {
+            this.playAnimation(event.detail.audioClip);
+        }
+        else
+        {
+            console.log('circles-facial-animator: ' + event.type + ' event did not include audioClip variable');
+        }
+    },
+
     // Playing facial animation for specified audio clip
     playAnimation: async function(audioClip)
     {
+        console.log('playing ' + audioClip);
+        
         const element = this.el;
         const schema = this.data;
 
@@ -98,7 +119,7 @@ AFRAME.registerComponent('circles-facial-animation',
             }
             else
             {
-                console.log('facial-animation: Error getting phone set for "' + audioClip + '"');
+                console.log('circles-facial-animator: Error getting phone set for "' + audioClip + '"');
                 this.currentAudioPhones = null;
 
                 return;
