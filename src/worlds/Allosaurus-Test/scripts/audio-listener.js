@@ -21,70 +21,77 @@ AFRAME.registerComponent('circles-audio-listener',
         this.mediaRecorder;
         this.audioChunks = [];
         
-        this.transcription;
+        this.transcription = '';
         this.listening = false;
-
-        // Setting up audio listener
-        this.setUpListener();
 
         // Listening to start and stop audio listener
         element.addEventListener(schema.startEvent, this.startListening);
         element.addEventListener(schema.endEvent, this.stopListening);
     },
 
-    // Setting up audio listener
-    setUpListener: function()
+    // Starting audio listener
+    startListening: async function()
     {
         const element = this.el;
         const schema = this.data;
 
-        this.mediaRecorder = new MediaRecorder(this.stream);
-
-        this.mediaRecorder.ondataavailable = event => 
-        {
-            this.audioChunks.push(event.data);
-        };
-
-        this.mediaRecorder.onstop = async() => 
-        {
-            // Creating blob from the audio chunks
-            const audioBlob = new Blob(this.audioChunks, { type:'audio/webm' });
-            
-            // Clearing audio chunks for next recording
-            this.audioChunks = [];
-
-            // Sending blob to Flask server
-            const formData = new FormData();
-            formData.append('audioFile', audioBlob, 'recording.webm');
-
-            try 
-            {
-                const response = await fetch('http://localhost:5000/transcribe', {method: 'POST', body: formData});
-                
-                const data = await response.json();
-                this.transcription = data.responseText;
-
-                // Emitting event with transcription
-                schema.outputTarget.emit('transcription-ready', {transcription: this.transcription});
-            } 
-            catch (error) 
-            {
-                console.log('circles-audio-listener: Error transcribing audio: ' + error);
-            }
-        }
-    },
-
-    // Starting audio listener
-    startListening: async function()
-    {
         if (!this.listening)
         {
+            console.log('circles-audio-listener: Listening started');
+
             this.listening = true;
 
             // Requesting microphone access
             if (!this.stream) 
             {
                 this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            }
+
+            this.mediaRecorder = new MediaRecorder(this.stream);
+
+            this.mediaRecorder.ondataavailable = event => 
+            {
+                this.audioChunks.push(event.data);
+            };
+
+            this.mediaRecorder.onstop = async() => 
+            {
+                // Creating blob from the audio chunks
+                const audioBlob = new Blob(this.audioChunks, { type:'audio/webm' });
+                
+                // Clearing audio chunks for next recording
+                this.audioChunks = [];
+
+                // Sending blob to Flask server to transcribe
+                const formData = new FormData();
+                formData.append('audioFile', audioBlob, 'recording.webm');
+
+                try 
+                {
+                    const response = await fetch('http://localhost:5000/transcribe', {method: 'POST', body: formData});
+                    
+                    const data = await response.json();
+                    this.transcription = data.responseText;
+                    console.log(this.transcription);
+
+                    // Emitting event with transcription
+                    // If a target element was specified, emitting event to target
+                    // Otherwise emitting event to itself
+                    var targetElement = document.getElementById(schema.outputTarget);
+
+                    if (targetElement)
+                    {
+                        targetElement.emit('text-ready', {text: this.transcription});
+                    }
+                    else
+                    {
+                        element.emit('text-ready', {text: this.transcription});
+                    };
+                } 
+                catch (error) 
+                {
+                    console.log('circles-audio-listener: Error transcribing audio: ' + error);
+                }
             }
 
             // Starting to listen
@@ -95,6 +102,8 @@ AFRAME.registerComponent('circles-audio-listener',
     // Stopping audio listener
     stopListening: function()
     {
+        console.log('circles-audio-listener: Listening stopped');
+
         this.mediaRecorder.stop();
         this.listening = false;
     },

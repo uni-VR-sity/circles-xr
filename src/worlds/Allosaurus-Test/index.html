@@ -9,6 +9,7 @@
 
     <script src="/worlds/Allosaurus-Test/scripts/facial-animator.js"></script>
     <script src="/worlds/Allosaurus-Test/scripts/audio-listener.js"></script>
+    <script src="/worlds/Allosaurus-Test/scripts/ai-agent.js"></script>
 
   </head>
 
@@ -31,6 +32,8 @@
       <!-- Circles' built-in manager and avatar [REQUIRED] -->
       <circles-manager-avatar/>
 
+      <a-entity id="audio-listener" circles-audio-listener></a-entity>
+
       <a-entity id="animation-test" 
                 circles-facial-animator
                 geometry="primitive:box"
@@ -44,7 +47,7 @@
                 position="0 0.4 -2"
                 scale="0.5 0.8 0.5">
 
-        <a-entity circles-button="target:#animation-test; click_on_event:start-animation"
+        <a-entity circles-button="target:#animation-button; click_on_event:start; click_off_event:stop"
                   position="0 0.5 0">
         </a-entity>
 
@@ -54,10 +57,17 @@
 
     <script>
 
-      document.getElementById('animation-test').addEventListener('start-animation', function()
+      document.getElementById('animation-button').addEventListener('start', function()
       {
-        document.getElementById('animation-test').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
+        document.getElementById('audio-listener').emit('start-listening');
       });
+
+      document.getElementById('animation-button').addEventListener('stop', function()
+      {
+        document.getElementById('audio-listener').emit('stop-listening');
+      });
+
+      //document.getElementById('animation-test').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
     
     </script>
 
