@@ -22,8 +22,11 @@ AFRAME.registerComponent('animated-face', {
 
         data.id = CONTEXT_AF.el.id;
         
-        // create eye morph targets + animations
+        // create morph targets + animations for face components
         CONTEXT_AF.el.setAttribute('animated-eyes', {});
+        CONTEXT_AF.el.setAttribute('animated-cheeks', {});
+        CONTEXT_AF.el.setAttribute('animated-nose', {});
+
         console.log("Eyes created! =D in face");
         //document.getElementById('scene').setAttribute('animation-timeline__1', {timeline: '#myTimeLine'});
         // Add the morph targets attached to the model 
