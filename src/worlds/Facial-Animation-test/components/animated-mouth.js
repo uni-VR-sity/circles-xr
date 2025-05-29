@@ -54,7 +54,7 @@ AFRAME.registerComponent('animated-mouth', {
                     break;
 
                 default:
-                    console.log('*Unknown Eye Movement*');
+                    console.log('*Unknown Mouth Movement*');
             }
         });
     },
