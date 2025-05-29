@@ -81,6 +81,12 @@ AFRAME.registerComponent('animated-cheeks', {
         context.el.setAttribute('animation__cheekSquintRelaxLeft', {   property: 'gltf-morph__cheekSquintLeft.value', 
                                                                 to: 0, loop: false, dur: 200, autoplay: false,
                                                                 startEvents: 'relaxSquintCheeks, relaxSquintCheekLeft'});
+        context.el.setAttribute('animation__cheekPuff', {   property: 'gltf-morph__cheekPuff.value', 
+                                                                to: 1, loop: false, dur: 300, autoplay: false,
+                                                                startEvents: 'cheekPuff'});
+        context.el.setAttribute('animation__relaxPuff', {   property: 'gltf-morph__cheekPuff.value', 
+                                                                to: 0, loop: false, dur: 200, autoplay: false, 
+                                                                startEvents: 'relaxPuff, mouthNeutral'});
         //console.log('cheek animations created');
     },
 });
