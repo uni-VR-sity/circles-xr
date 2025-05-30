@@ -70,7 +70,7 @@ AFRAME.registerComponent('circles-facial-animator',
     // Playing facial animation for specified audio clip
     playAnimation: async function(audioClip)
     {
-        console.log('playing ' + audioClip);
+        console.log('Playing: ' + audioClip);
         
         const element = this.el;
         const schema = this.data;

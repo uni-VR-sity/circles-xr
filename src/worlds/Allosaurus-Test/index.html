@@ -32,9 +32,9 @@
       <!-- Circles' built-in manager and avatar [REQUIRED] -->
       <circles-manager-avatar/>
 
-      <a-entity id="audio-listener" circles-audio-listener></a-entity>
-
-      <a-entity id="animation-test" 
+      <a-entity id="agent" 
+                circles-audio-listener
+                circles-ai-agent
                 circles-facial-animator
                 geometry="primitive:box"
                 material="color:black"
@@ -59,12 +59,14 @@
 
       document.getElementById('animation-button').addEventListener('start', function()
       {
-        document.getElementById('audio-listener').emit('start-listening');
+        //document.getElementById('audio-listener').emit('start-listening');
+        document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How is the weather today?');
       });
 
       document.getElementById('animation-button').addEventListener('stop', function()
       {
-        document.getElementById('audio-listener').emit('stop-listening');
+        //document.getElementById('audio-listener').emit('stop-listening');
+        document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How is the weather today?');
       });
 
       //document.getElementById('animation-test').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});

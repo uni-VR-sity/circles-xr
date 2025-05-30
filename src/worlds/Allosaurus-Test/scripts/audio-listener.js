@@ -72,7 +72,8 @@ AFRAME.registerComponent('circles-audio-listener',
                     
                     const data = await response.json();
                     this.transcription = data.responseText;
-                    console.log(this.transcription);
+                    
+                    console.log('Transcription: ' + this.transcription);
 
                     // Emitting event with transcription
                     // If a target element was specified, emitting event to target

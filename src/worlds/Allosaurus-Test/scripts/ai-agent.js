@@ -38,6 +38,9 @@ AFRAME.registerComponent('circles-ai-agent',
     // Sending input to be processed by AI
     processInput: async function(input)
     {
+        const element = this.el;
+        const schema = this.data;
+
         // Getting response to input
         try 
         {
@@ -49,7 +52,8 @@ AFRAME.registerComponent('circles-ai-agent',
 
             const data = await inputResponse.json();
             this.response = data.responseText;
-            console.log(this.response);
+            
+            console.log('Response: ' + this.response);
         } 
         catch (error) 
         {
@@ -72,11 +76,21 @@ AFRAME.registerComponent('circles-ai-agent',
             }
 
             const blob = await audioResponse.blob();
-            var audioUrl = URL.createObjectURL(blob);
+            //var audioURL = URL.createObjectURL(blob);
 
-            console.log(audioUrl); // MAKE SURE AUDIO IS SAVED IN PROPER SPOT
+            // Emitting event with audio path
+            // If a target element was specified, emitting event to target
+            // Otherwise emitting event to itself
+            var targetElement = document.getElementById(schema.responseTarget);
 
-            // EMIT EVENT
+            if (targetElement)
+            {
+                targetElement.emit('response-ready', {audioBlob: blob});
+            }
+            else
+            {
+                element.emit('response-ready', {audioBlob: blob});
+            };
         } 
         catch (error) 
         {
