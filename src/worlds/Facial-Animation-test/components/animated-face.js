@@ -24,6 +24,7 @@ AFRAME.registerComponent('animated-face', {
         
         // create morph targets + animations for face components
         CONTEXT_AF.el.setAttribute('animated-eyes', {});
+        CONTEXT_AF.el.setAttribute('animated-brows', {});
         CONTEXT_AF.el.setAttribute('animated-cheeks', {});
         CONTEXT_AF.el.setAttribute('animated-nose', {});
         CONTEXT_AF.el.setAttribute('animated-mouth', {});
