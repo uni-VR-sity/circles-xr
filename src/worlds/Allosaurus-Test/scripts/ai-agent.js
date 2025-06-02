@@ -76,7 +76,6 @@ AFRAME.registerComponent('circles-ai-agent',
             }
 
             const blob = await audioResponse.blob();
-            //var audioURL = URL.createObjectURL(blob);
 
             // Emitting event with audio path
             // If a target element was specified, emitting event to target

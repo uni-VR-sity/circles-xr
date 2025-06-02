@@ -59,17 +59,16 @@
 
       document.getElementById('animation-button').addEventListener('start', function()
       {
-        //document.getElementById('audio-listener').emit('start-listening');
-        document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How is the weather today?');
+        //document.getElementById('agent').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
+        //document.getElementById('agent').emit('start-listening');
+        document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How are you?');
       });
 
       document.getElementById('animation-button').addEventListener('stop', function()
       {
-        //document.getElementById('audio-listener').emit('stop-listening');
-        document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How is the weather today?');
+        //document.getElementById('agent').emit('stop-listening');
+       // document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How are you?');
       });
-
-      //document.getElementById('animation-test').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
     
     </script>
 

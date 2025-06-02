@@ -252,7 +252,8 @@ router.get('/museum-games', centralServerController.serveMuseumGames);
 
 // ANIMATION ROUTES -------------------------------------------------------------------------------------------------------------------------------
 
-router.post('/get-phones', authenticated, animationController.getPhones);
+router.post('/get-phones-from-audio', authenticated, animationController.getPhonesFromAudio);
+router.post('/get-phones-from-blob', authenticated, animationController.getPhonesFromBlob);
 
 // Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 

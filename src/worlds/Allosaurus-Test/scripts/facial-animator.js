@@ -55,40 +55,43 @@ AFRAME.registerComponent('circles-facial-animator',
     },
 
     // Listening for animate event to play animation
-    animateEventListener: function(event)
+    animateEventListener: async function(event)
     {
         if (event.detail.audioClip)
         {
+            await this.getPhonesFromAudio(event.detail.audioClip);
             this.playAnimation(event.detail.audioClip);
+        }
+        else if (event.detail.audioBlob)
+        {
+            await this.getPhonesFromBlob(event.detail.audioBlob);
+            this.playAnimation(URL.createObjectURL(event.detail.audioBlob));
         }
         else
         {
-            console.log('circles-facial-animator: ' + event.type + ' event did not include audioClip variable');
+            console.log('circles-facial-animator: ' + event.type + ' event did not include audioClip or audioBlob variable');
         }
     },
 
     // Playing facial animation for specified audio clip
     playAnimation: async function(audioClip)
     {
-        console.log('Playing: ' + audioClip);
-        
         const element = this.el;
         const schema = this.data;
-
-        // Clearing any playing animations and sounds
-        for (const timeout of this.currentAnimationTimeouts)
-        {
-            clearTimeout(timeout);
-        }
-
-        element.components.sound.stopSound();
-
-        // Getting phones and timestamps from audio clip
-        await this.getPhones(audioClip);
 
         // If phones were returned successfully, playing facial animation
         if (this.currentAudioPhones)
         {
+            console.log('Playing: ' + audioClip);
+
+            // Clearing any playing animations and sounds
+            for (const timeout of this.currentAnimationTimeouts)
+            {
+                clearTimeout(timeout);
+            }
+
+            element.components.sound.stopSound();
+
             // Playing audio clip
             element.setAttribute('sound', {src: audioClip});
             element.components.sound.playSound();
@@ -104,9 +107,9 @@ AFRAME.registerComponent('circles-facial-animator',
     },
 
     // Getting phones and timestamps from specified audio clip
-    getPhones: async function(audioClip)
+    getPhonesFromAudio: async function(audioClip)
     {
-        await fetch('/get-phones', {method: 'POST', body: new URLSearchParams({ audio: audioClip })})
+        await fetch('/get-phones-from-audio', {method: 'POST', body: new URLSearchParams({ audio: audioClip })})
         .then(response => response.json())
         .then(data => 
         {
@@ -120,6 +123,30 @@ AFRAME.registerComponent('circles-facial-animator',
             else
             {
                 console.log('circles-facial-animator: Error getting phone set for "' + audioClip + '"');
+                this.currentAudioPhones = null;
+
+                return;
+            }
+        });
+    },
+
+    // Getting phones and timestamps from blob
+    getPhonesFromBlob: async function(audioBlob)
+    {
+        await fetch('/get-phones-from-blob', {method: 'POST', headers: {'Content-Type': 'audio/wav'}, body: audioBlob})
+        .then(response => response.json())
+        .then(data => 
+        {
+            if (data.status == 'success')
+            {
+                this.currentAudioPhones = data.phones;
+                this.currentAudioPhones.reverse();
+
+                return;
+            }
+            else
+            {
+                console.log('circles-facial-animator: Error getting phone set for "' + audioBlob + '"');
                 this.currentAudioPhones = null;
 
                 return;

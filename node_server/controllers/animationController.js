@@ -1,20 +1,94 @@
 'use strict';
 
-require('../../src/core/circles_server')
+require('../../src/core/circles_server');
 
+const fs = require('fs');
 const { spawn } = require('child_process');
+const { exec } = require('child_process');
+const uniqueFilename = require('unique-filename');
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Getting phones from specific audio clip using allosaurus
-const getPhones = async (req, res, next) =>
+// Getting phones from audio clip
+const getPhonesFromAudio = (req, res, next) =>
 {
-  var reponseGiven = false;
   var audioFile = 'src' + req.body.audio;
+
+  getPhones(res, audioFile, false);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Getting audio clip and phones from blob
+const getPhonesFromBlob = (req, res, next) =>
+{
+  // Creating audio clip file from blob
+  const mp3AudioFile = uniqueFilename(__dirname) + '.mp3';
+
+  const writeStream = fs.createWriteStream(mp3AudioFile);
+  req.pipe(writeStream);
+
+  // Listening for file to finish writing
+  writeStream.on('finish', () => 
+  {
+    // Converting .mp3 to .wav
+    const wavAudioFile = mp3AudioFile.replace('.mp3', '.wav');
+
+    // Running ffmpeg
+    exec('ffmpeg -y -i ' + mp3AudioFile + ' ' + wavAudioFile, (err) => 
+    {
+      // If there was an error, returning error message
+      // Otherwise getting phones from from wav audio file
+      if (err)
+      {
+        console.log(err);
+
+        var response = {
+          status: 'error',
+        }
+
+        res.json(response);
+      }
+      else
+      {
+        getPhones(res, wavAudioFile, true);
+
+        // Deleting .mp3 file
+        fs.unlink(mp3AudioFile, (err => 
+        {
+          if (err)
+          {
+            console.log(err);
+          }
+        }));
+      }
+    });
+  });
+
+  // Listing for file writing error
+  writeStream.on('error', (err) => 
+  {
+    console.log(err);
+
+    var response = {
+      status: 'error',
+    }
+
+    res.json(response);
+  });
+
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Getting phones from specific audio clip using allosaurus
+const getPhones = function(res, audioFile, deleteFile)
+{
+  var responseGiven = false;
 
   // Running allosaurus
   const allosaurusProcess = spawn('python', ['-m', 'allosaurus.run', '-i', audioFile, '--timestamp', 'True'], { env: { ...process.env, PYTHONIOENCODING: 'utf-8' } });
-
+  
   // Listening for allosaurus output
   allosaurusProcess.stdout.on('data', (data) => 
   {
@@ -49,9 +123,9 @@ const getPhones = async (req, res, next) =>
       }
     }
 
-    if (!reponseGiven)
+    if (!responseGiven)
     {
-      reponseGiven = true;
+      responseGiven = true;
 
       var response = {
         status: 'success',
@@ -60,6 +134,18 @@ const getPhones = async (req, res, next) =>
 
       res.json(response);
     }
+
+    // Deleting audio file
+    if (deleteFile)
+    {
+      fs.unlink(audioFile, (err => 
+      {
+        if (err)
+        {
+          console.log(err);
+        }
+      }));
+    }
   });
   
   // Listening for allosaurus error
@@ -67,21 +153,35 @@ const getPhones = async (req, res, next) =>
   {
     console.log('Allosaurus Error: ' + error);
 
-    if (!reponseGiven)
+    if (!responseGiven)
     {
-      reponseGiven = true;
-
+      responseGiven = true;
+      
       var response = {
         status: 'error',
       }
 
       res.json(response);
     }
+
+    // Deleting audio file
+    if (deleteFile)
+    {
+      fs.unlink(audioFile, (err => 
+      {
+        if (err)
+        {
+          console.log(err);
+        }
+      }));
+    }
   });
+  
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
-   getPhones, 
+   getPhonesFromAudio, 
+   getPhonesFromBlob,
 }
