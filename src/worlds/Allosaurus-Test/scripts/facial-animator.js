@@ -168,6 +168,10 @@ AFRAME.registerComponent('circles-facial-animator',
             console.log(currentPhone.phone);
             element.emit(animation);
         }
+        else
+        {
+            console.log('circles-facial-animation: Animation missing for ' + currentPhone.phone + ' phone');
+        }
         
         this.currentPhone++;
     }
