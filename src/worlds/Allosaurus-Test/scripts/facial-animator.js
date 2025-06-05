@@ -42,15 +42,15 @@ AFRAME.registerComponent('circles-facial-animator',
             this.phoneAnimationTable.set(phone.phone, phone.animation);
 
             // Adding animation component to element
-            element.setAttribute('animation__' + phone.animation.substring(1), {
-                property: 'components.material.material.color',
-                type: 'color',
-                to: phone.animation,
-                startEvents: phone.animation,
-                autoplay: false,
-                easing: 'linear',
-                dur: 0.045,
-            });
+            // element.setAttribute('animation__' + phone.animation.substring(1), {
+            //     property: 'components.material.material.color',
+            //     type: 'color',
+            //     to: phone.animation,
+            //     startEvents: phone.animation,
+            //     autoplay: false,
+            //     easing: 'linear',
+            //     dur: 0.045,
+            // });
         }
     },
 
@@ -59,11 +59,15 @@ AFRAME.registerComponent('circles-facial-animator',
     {
         if (event.detail.audioClip)
         {
+            console.log('circles-facial-animator: Getting phones from audio clip');
+
             await this.getPhonesFromAudio(event.detail.audioClip);
             this.playAnimation(event.detail.audioClip);
         }
         else if (event.detail.audioBlob)
         {
+            console.log('circles-facial-animator: Getting phones from audio blob');
+            
             await this.getPhonesFromBlob(event.detail.audioBlob);
             this.playAnimation(URL.createObjectURL(event.detail.audioBlob));
         }
@@ -82,7 +86,7 @@ AFRAME.registerComponent('circles-facial-animator',
         // If phones were returned successfully, playing facial animation
         if (this.currentAudioPhones)
         {
-            console.log('Playing: ' + audioClip);
+            console.log('circles-facial-animator: Playing ' + audioClip);
 
             // Clearing any playing animations and sounds
             for (const timeout of this.currentAnimationTimeouts)
@@ -116,6 +120,15 @@ AFRAME.registerComponent('circles-facial-animator',
             if (data.status == 'success')
             {
                 this.currentAudioPhones = data.phones;
+
+                // Adding neutral phone to the end to close mouth when done talking
+                this.currentAudioPhones.push(
+                {
+                    start: this.currentAudioPhones[this.currentAudioPhones.length - 1].start + this.currentAudioPhones[this.currentAudioPhones.length - 1].duration,
+                    duration: this.currentAudioPhones[this.currentAudioPhones.length - 1].duration,
+                    phone: 'neutral'
+                });
+                
                 this.currentAudioPhones.reverse();
 
                 return;
@@ -140,6 +153,15 @@ AFRAME.registerComponent('circles-facial-animator',
             if (data.status == 'success')
             {
                 this.currentAudioPhones = data.phones;
+                
+                // Adding neutral phone to the end to close mouth when done talking
+                this.currentAudioPhones.push(
+                {
+                    start: (Number(this.currentAudioPhones[this.currentAudioPhones.length - 1].start) + 0.35).toString(),
+                    duration: '',
+                    phone: 'neutral'
+                });
+                
                 this.currentAudioPhones.reverse();
 
                 return;
@@ -166,9 +188,10 @@ AFRAME.registerComponent('circles-facial-animator',
         if (animation)
         {
             console.log(currentPhone.phone);
+            element.emit('viseme-sil');
             element.emit(animation);
         }
-        else
+        else if (animation != '')
         {
             console.log('circles-facial-animation: Animation missing for ' + currentPhone.phone + ' phone');
         }

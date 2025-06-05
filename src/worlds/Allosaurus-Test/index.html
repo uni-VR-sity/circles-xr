@@ -11,6 +11,20 @@
     <script src="/worlds/Allosaurus-Test/scripts/audio-listener.js"></script>
     <script src="/worlds/Allosaurus-Test/scripts/ai-agent.js"></script>
 
+    <script src="https://rawcdn.githack.com/elbobo/aframe-gltf-morph-component/07e9b80bd382cc1c19223468d35c453e7c76e9a2/dist/aframe-gltf-morph-component.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.5.3/document-register-element.js"></script>
+    
+    <!-- <script src="/worlds/Facial-Animation-test/scripts/gui.js" type="module"></script> -->
+
+    <script src="/worlds/Facial-Animation-test/components/animated-eyes.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-brows.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-cheeks.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-nose.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-mouth.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-jaw.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-tongue.js"></script>
+    <script src="/worlds/Facial-Animation-test/components/animated-face.js"></script>
+
   </head>
 
   <body>
@@ -25,6 +39,8 @@
     <a-scene circles_scene_properties>
       
       <a-assets>
+        <a-asset-item id="faceLowpoly-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_test_10.glb"></a-asset-item>
+        <a-asset-item id="faceHighpoly-glb" src="/worlds/Facial-Animation-test/assets/BaseFace_morph_testHighpoly_01.glb"></a-asset-item>
         <!-- Circles' built-in assets [REQUIRED] -->
         <circles-assets/>
       </a-assets>
@@ -33,6 +49,18 @@
       <circles-manager-avatar/>
 
       <a-entity id="agent" 
+                class="animated" 
+                position="0 1.5 -6" 
+                rotation="0 180 0"
+                gltf-model="#faceLowpoly-glb" 
+                animated-face
+                circles-audio-listener
+                circles-ai-agent
+                circles-facial-animator>
+      </a-entity>
+
+      <!--
+      <a-entity id="agent" 
                 circles-audio-listener
                 circles-ai-agent
                 circles-facial-animator
@@ -40,6 +68,7 @@
                 material="color:black"
                 position="0 2 -5">
       </a-entity>
+      -->
 
       <a-entity id="animation-button"
                 geometry="primitive:box"

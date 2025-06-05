@@ -42,6 +42,8 @@ AFRAME.registerComponent('circles-ai-agent',
         const schema = this.data;
 
         // Getting response to input
+        console.log('circles-ai-agent: Getting response');
+        
         try 
         {
             const inputResponse = await fetch('http://127.0.0.1:5000/chat', {
@@ -53,7 +55,7 @@ AFRAME.registerComponent('circles-ai-agent',
             const data = await inputResponse.json();
             this.response = data.responseText;
             
-            console.log('Response: ' + this.response);
+            console.log('circles-ai-agent: ' + this.response);
         } 
         catch (error) 
         {
@@ -62,6 +64,8 @@ AFRAME.registerComponent('circles-ai-agent',
         }
 
         // Getting audio for response
+        console.log('circles-ai-agent: Creating audio clip from response');
+
         try 
         {
             const audioResponse = await fetch('http://127.0.0.1:5000/speech', { 

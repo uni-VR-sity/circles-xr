@@ -14,7 +14,7 @@ const mouthAnimations = ['mouthNeutral',
                         /*'mouthShrugUpper', 'relaxShrugUpper', 'mouthShrugLower', 'relaxShrugLower',*/ 'mouthShrug',
                         /*'mouthLowerDownRight', 'mouthLowerDownRelaxRight', 'mouthLowerDownLeft', 'mouthLowerDownRelaxLeft',*/ 'mouthLowerDown',
                         'mouthOpen', /*'mouthClose', 'relaxMouthClose'*/
-                        'viseme-BMP', 'viseme-FF', 'viseme-TH', 'viseme-TLDN', 'viseme-kk', 'viseme-CH',
+                        'viseme-BMP', 'viseme-FF', 'viseme-TH', 'viseme-TLDN', 'viseme-KK', 'viseme-CH',
                         'viseme-SS', 'viseme-RR', 'viseme-AA', 'viseme-E', 'viseme-I', 'viseme-O', 'viseme-U'
                 ];
 const states = ['Idle'];
@@ -40,7 +40,7 @@ console.log(firstAnimated.id);
 for (const animation of mouthAnimations)
 {
     obj[animation] = function() {
-        //firstAnimated.emit('visemes-neutral');
+        firstAnimated.emit('viseme-sil');
         firstAnimated.emit(animation);
     };
     animationsFolder.add(obj, animation);

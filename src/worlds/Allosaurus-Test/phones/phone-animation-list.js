@@ -383,10 +383,6 @@ const phoneAnimationList =
         "animation": "viseme-CH"
     },
     {
-        "phone": "j",
-        "animation": "viseme-CH"
-    },
-    {
         "phone": "tɕ",
         "animation": "viseme-CH"
     },
@@ -491,6 +487,10 @@ const phoneAnimationList =
     },
     {
         "phone": "e̞",
+        "animation": "viseme-E"
+    },
+    {
+        "phone": "j",
         "animation": "viseme-E"
     },
     {
@@ -848,6 +848,10 @@ const phoneAnimationList =
         "phone": "ʉ̞",
         "animation": "viseme-U"
     },
+    {
+        "phone": "ʏ",
+        "animation": "viseme-U"
+    },
 
     // Viseme: RR ------------------------------------------------------------------------------
 
@@ -955,5 +959,9 @@ const phoneAnimationList =
     {
         "phone": "ː",
         "animation": ""
+    },
+    {
+        "phone": "neutral",
+        "animation": "viseme-sil"
     },
 ]

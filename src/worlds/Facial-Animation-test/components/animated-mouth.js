@@ -247,27 +247,27 @@ AFRAME.registerComponent('animated-mouth', {
 
 
         // Viseme animations
-        context.el.setAttribute('animation__neutral-1', { property: 'gltf-morph__mouthSmile.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthPressRelaxRight', { property: 'gltf-morph__mouthPressRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthPressRelaxLeft', { property: 'gltf-morph__mouthPressLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxFrownRight', { property: 'gltf-morph__mouthFrownRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxFrownLeft', { property: 'gltf-morph__mouthFrownLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthLeftNeutral', { property: 'gltf-morph__mouthLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthRightNeutral', { property: 'gltf-morph__mouthRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxPucker', { property: 'gltf-morph__mouthPucker.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxFunnel', { property: 'gltf-morph__mouthFunnel.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthStretchRelaxRight', { property: 'gltf-morph__mouthStretchRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthStretchRelaxLeft', { property: 'gltf-morph__mouthStretchLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthUpperUpRelaxRight', { property: 'gltf-morph__mouthUpperUpRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthUpperUpRelaxLeft', { property: 'gltf-morph__mouthUpperUpLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxRollUpper', { property: 'gltf-morph__mouthRollUpper.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxShrugUpper', { property: 'gltf-morph__mouthShrugUpper.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'}); 
-        context.el.setAttribute('animation__mouthLowerDownRelaxRight', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__mouthLowerDownRelaxLeft', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxRollLower', { property: 'gltf-morph__mouthRollLower.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxShrugLower', { property: 'gltf-morph__mouthShrugLower.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxMouthOpen', { property: 'gltf-morph__mouthOpen.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
-        context.el.setAttribute('animation__relaxMouthClose', { property: 'gltf-morph__mouthClose.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'visemes-neutral'});
+        context.el.setAttribute('animation__sil-1', { property: 'gltf-morph__mouthSmile.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-2', { property: 'gltf-morph__mouthPressRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-3', { property: 'gltf-morph__mouthPressLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-4', { property: 'gltf-morph__mouthFrownRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-5', { property: 'gltf-morph__mouthFrownLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-6', { property: 'gltf-morph__mouthLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-7', { property: 'gltf-morph__mouthRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-8', { property: 'gltf-morph__mouthPucker.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-9', { property: 'gltf-morph__mouthFunnel.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-10', { property: 'gltf-morph__mouthStretchRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-11', { property: 'gltf-morph__mouthStretchLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-12', { property: 'gltf-morph__mouthUpperUpRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-13', { property: 'gltf-morph__mouthUpperUpLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-14', { property: 'gltf-morph__mouthRollUpper.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-15', { property: 'gltf-morph__mouthShrugUpper.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'}); 
+        context.el.setAttribute('animation__sil-16', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-17', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-18', { property: 'gltf-morph__mouthRollLower.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-19', { property: 'gltf-morph__mouthShrugLower.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-20', { property: 'gltf-morph__mouthOpen.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
+        context.el.setAttribute('animation__sil-21', { property: 'gltf-morph__mouthClose.value', to: 0, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-sil'});
 
         context.el.setAttribute('animation__BMP-1', { property: 'gltf-morph__mouthPressLeft.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-BMP'});
         context.el.setAttribute('animation__BMP-2', { property: 'gltf-morph__mouthPressRight.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-BMP'});                     
@@ -276,8 +276,8 @@ AFRAME.registerComponent('animated-mouth', {
 
         context.el.setAttribute('animation__FF-1', { property: 'gltf-morph__mouthPressLeft.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
         context.el.setAttribute('animation__FF-2', { property: 'gltf-morph__mouthPressRight.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
-        context.el.setAttribute('animation__FF-3', { property: 'gltf-morph__mouthUpperUpRight.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
-        context.el.setAttribute('animation__FF-4', { property: 'gltf-morph__mouthUpperUpLeft.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
+        context.el.setAttribute('animation__FF-3', { property: 'gltf-morph__mouthUpperUpRight.value', to: 0.15, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
+        context.el.setAttribute('animation__FF-4', { property: 'gltf-morph__mouthUpperUpLeft.value', to: 0.15, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
         context.el.setAttribute('animation__FF-5', { property: 'gltf-morph__mouthRollLower.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
         context.el.setAttribute('animation__FF-6', { property: 'gltf-morph__mouthOpen.value', to: 0.15, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-FF'});
 
@@ -286,26 +286,30 @@ AFRAME.registerComponent('animated-mouth', {
         context.el.setAttribute('animation__TH-3', { property: 'gltf-morph__mouthOpen.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-TH'});
         context.el.setAttribute('animation__TH-4', { property: 'gltf-morph__mouthPucker.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-TH'});
 
-        context.el.setAttribute('animation__TLDN-1', { property: 'gltf-morph__mouthFunnel.value', to: 0.6, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-TLDN'});
-        context.el.setAttribute('animation__TLDN-2', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.75, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-TLDN'});
-        context.el.setAttribute('animation__TLDN-3', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.75, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-TLDN'});
+        context.el.setAttribute('animation__TLDN-1', { property: 'gltf-morph__mouthFunnel.value', to: 0.5, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-TLDN'});
+        context.el.setAttribute('animation__TLDN-2', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.5, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-TLDN'});
+        context.el.setAttribute('animation__TLDN-3', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.5, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-TLDN'});
         context.el.setAttribute('animation__TLDN-4', { property: 'gltf-morph__mouthOpen.value', to: 0.20, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-TLDN'});
 
-        context.el.setAttribute('animation__KK-1', { property: 'gltf-morph__mouthFunnel.value', to: 0.8, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-KK'});
-        context.el.setAttribute('animation__KK-2', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.8, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-KK'});
-        context.el.setAttribute('animation__KK-3', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.8, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-KK'});
+        context.el.setAttribute('animation__KK-1', { property: 'gltf-morph__mouthFunnel.value', to: 0.5, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-KK'});
+        context.el.setAttribute('animation__KK-2', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.6, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-KK'});
+        context.el.setAttribute('animation__KK-3', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.6, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-KK'});
 
-        context.el.setAttribute('animation__CH-1', { property: 'gltf-morph__mouthFunnel.value', to: 1, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-CH'});
-        context.el.setAttribute('animation__CH-2', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.75, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-CH'});
-        context.el.setAttribute('animation__CH-3', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.75, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-CH'});
+        context.el.setAttribute('animation__CH-1', { property: 'gltf-morph__mouthFunnel.value', to: 0.75, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-CH'});
+        context.el.setAttribute('animation__CH-2', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.5, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-CH'});
+        context.el.setAttribute('animation__CH-3', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.5, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-CH'});
         
         context.el.setAttribute('animation__SS-1', { property: 'gltf-morph__mouthPressLeft.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
         context.el.setAttribute('animation__SS-2', { property: 'gltf-morph__mouthPressRight.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
-        context.el.setAttribute('animation__SS-3', { property: 'gltf-morph__mouthUpperUpRight.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
-        context.el.setAttribute('animation__SS-4', { property: 'gltf-morph__mouthUpperUpLeft.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
-        context.el.setAttribute('animation__SS-5', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.6, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-SS'});
-        context.el.setAttribute('animation__SS-6', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.6, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-SS'});
-        
+        context.el.setAttribute('animation__SS-3', { property: 'gltf-morph__mouthUpperUpRight.value', to: 0.15, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
+        context.el.setAttribute('animation__SS-4', { property: 'gltf-morph__mouthUpperUpLeft.value', to: 0.15, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
+        context.el.setAttribute('animation__SS-5', { property: 'gltf-morph__mouthLowerDownRight.value', to: 0.15, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-SS'});
+        context.el.setAttribute('animation__SS-6', { property: 'gltf-morph__mouthLowerDownLeft.value', to: 0.15, loop: false, dur: 300, autoplay: false, startEvents: 'viseme-SS'});
+        context.el.setAttribute('animation__SS-7', { property: 'gltf-morph__mouthRollUpper.value', to: 0.2, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
+        context.el.setAttribute('animation__SS-8', { property: 'gltf-morph__mouthRollLower.value', to: 0.2, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
+        context.el.setAttribute('animation__SS-9', { property: 'gltf-morph__mouthOpen.value', to: 0.20, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-SS'});
+
+
         context.el.setAttribute('animation__RR-1', { property: 'gltf-morph__mouthPressLeft.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-RR'});
         context.el.setAttribute('animation__RR-2', { property: 'gltf-morph__mouthPressRight.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-RR'});
         context.el.setAttribute('animation__RR-3', { property: 'gltf-morph__mouthOpen.value', to: 0.25, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-RR'});
@@ -321,10 +325,10 @@ AFRAME.registerComponent('animated-mouth', {
         context.el.setAttribute('animation__I-3', { property: 'gltf-morph__mouthOpen.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-I'});
         
         context.el.setAttribute('animation__O-1', { property: 'gltf-morph__mouthOpen.value', to: 0.6, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-O'});
-        context.el.setAttribute('animation__O-2', { property: 'gltf-morph__mouthPucker.value', to: 0.6, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-O'});
+        context.el.setAttribute('animation__O-2', { property: 'gltf-morph__mouthPucker.value', to: 0.5, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-O'});
         
         context.el.setAttribute('animation__U-1', { property: 'gltf-morph__mouthOpen.value', to: 0.3, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-U'});
-        context.el.setAttribute('animation__U-2', { property: 'gltf-morph__mouthPucker.value', to: 0.8, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-U'});
+        context.el.setAttribute('animation__U-2', { property: 'gltf-morph__mouthPucker.value', to: 0.7, loop: false, dur: 100, autoplay: false, startEvents: 'viseme-U'});
         
         //console.log('Finished creating mouth animations');
     },
