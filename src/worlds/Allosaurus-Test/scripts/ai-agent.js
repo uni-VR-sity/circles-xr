@@ -5,7 +5,6 @@ AFRAME.registerComponent('circles-ai-agent',
     schema: 
     {
         inputEvent: {type: 'string', default: 'text-ready'},
-        responseFileLocation: {type: 'string', default: ''},
         responseTarget: {type: 'string'},
     },
 
@@ -17,6 +16,7 @@ AFRAME.registerComponent('circles-ai-agent',
         this.inputListener = this.inputListener.bind(this);
 
         this.response = '';
+        this.audioBlob = null;
 
         // Listening for input
         element.addEventListener(schema.inputEvent, this.inputListener); 
@@ -79,7 +79,7 @@ AFRAME.registerComponent('circles-ai-agent',
                 console.log('circles-ai-agent: HTTP error: ' + audioResponse.status);
             }
 
-            const blob = await audioResponse.blob();
+            this.audioBlob = await audioResponse.blob();
 
             // Emitting event with audio path
             // If a target element was specified, emitting event to target
@@ -88,11 +88,11 @@ AFRAME.registerComponent('circles-ai-agent',
 
             if (targetElement)
             {
-                targetElement.emit('response-ready', {audioBlob: blob});
+                targetElement.emit('response-ready', {audioBlob: this.audioBlob});
             }
             else
             {
-                element.emit('response-ready', {audioBlob: blob});
+                element.emit('response-ready', {audioBlob: this.audioBlob});
             };
         } 
         catch (error) 
@@ -104,6 +104,18 @@ AFRAME.registerComponent('circles-ai-agent',
     // Getting AI response
     getResponseText: function()
     {
-        return this.response
-    }
+        return this.response;
+    },
+
+    // Getting AI reponse audio blob
+    getAudioBlob: function()
+    {
+        return this.audioBlob;
+    },
+
+    // Getting AI reponse audio clip
+    getAudioClip: function()
+    {
+        return URL.createObjectURL(this.audioBlob);
+    },
 });

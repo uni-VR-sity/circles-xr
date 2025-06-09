@@ -23,35 +23,15 @@ AFRAME.registerComponent('circles-facial-animator',
         // Attaching sound component to element
         element.setAttribute('sound', {});
         
-        // Setting up phone animations
-        this.setUpAnimations();
-
-        // Listening for animate event to play facial animation
-        element.addEventListener(schema.animateEvent, this.animateEventListener);
-    },
-
-    // Setting up phone animations from phones/phone-animation-list.js in world folder
-    setUpAnimations: function()
-    {
-        const element = this.el;
-        const schema = this.data;
-
+        // Creating phone animation table
         for (const phone of phoneAnimationList)
         {
             // Adding phone and associated animation to table
             this.phoneAnimationTable.set(phone.phone, phone.animation);
-
-            // Adding animation component to element
-            // element.setAttribute('animation__' + phone.animation.substring(1), {
-            //     property: 'components.material.material.color',
-            //     type: 'color',
-            //     to: phone.animation,
-            //     startEvents: phone.animation,
-            //     autoplay: false,
-            //     easing: 'linear',
-            //     dur: 0.045,
-            // });
         }
+
+        // Listening for animate event to play facial animation
+        element.addEventListener(schema.animateEvent, this.animateEventListener);
     },
 
     // Listening for animate event to play animation
@@ -105,6 +85,7 @@ AFRAME.registerComponent('circles-facial-animator',
 
             for (const phone of this.currentAudioPhones)
             {
+                console.log(phone);
                 this.currentAnimationTimeouts.push(setTimeout(this.playPhone, phone.start * 1000));
             }
         }
