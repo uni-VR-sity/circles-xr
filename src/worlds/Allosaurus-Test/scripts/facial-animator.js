@@ -85,7 +85,6 @@ AFRAME.registerComponent('circles-facial-animator',
 
             for (const phone of this.currentAudioPhones)
             {
-                console.log(phone);
                 this.currentAnimationTimeouts.push(setTimeout(this.playPhone, phone.start * 1000));
             }
         }

@@ -10,6 +10,9 @@
     <script src="/worlds/Allosaurus-Test/scripts/facial-animator.js"></script>
     <script src="/worlds/Allosaurus-Test/scripts/audio-listener.js"></script>
     <script src="/worlds/Allosaurus-Test/scripts/ai-agent.js"></script>
+    <script src="/worlds/Allosaurus-Test/scripts/QUEUE-facial-animator.js"></script>
+    <script src="/worlds/Allosaurus-Test/scripts/QUEUE-ai-agent.js"></script>
+    <script src="/worlds/Allosaurus-Test/scripts/QUEUE2-ai-agent.js"></script>
 
     <script src="https://rawcdn.githack.com/elbobo/aframe-gltf-morph-component/07e9b80bd382cc1c19223468d35c453e7c76e9a2/dist/aframe-gltf-morph-component.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/0.5.3/document-register-element.js"></script>
@@ -50,13 +53,35 @@
 
       <a-entity id="agent" 
                 class="animated" 
-                position="0 1.5 -6" 
+                position="-3 1.5 -6" 
                 rotation="0 180 0"
                 gltf-model="#faceLowpoly-glb" 
                 animated-face
                 circles-audio-listener
                 circles-ai-agent
                 circles-facial-animator>
+      </a-entity>
+
+      <a-entity id="queue-agent" 
+                class="animated" 
+                position="0 1.5 -6" 
+                rotation="0 180 0"
+                gltf-model="#faceLowpoly-glb" 
+                animated-face
+                circles-audio-listener
+                queue-circles-ai-agent
+                queue-circles-facial-animator>
+      </a-entity>
+
+      <a-entity id="queue2-agent" 
+                class="animated" 
+                position="3 1.5 -6" 
+                rotation="0 180 0"
+                gltf-model="#faceLowpoly-glb" 
+                animated-face
+                circles-audio-listener
+                queue2-circles-ai-agent
+                queue-circles-facial-animator>
       </a-entity>
 
       <!--
@@ -73,10 +98,34 @@
       <a-entity id="animation-button"
                 geometry="primitive:box"
                 material="color:grey"
-                position="0 0.4 -2"
+                position="-0.5 0.4 -2"
                 scale="0.5 0.8 0.5">
 
         <a-entity circles-button="target:#animation-button; click_on_event:start; click_off_event:stop"
+                  position="0 0.5 0">
+        </a-entity>
+
+      </a-entity>
+
+      <a-entity id="queue-animation-button"
+                geometry="primitive:box"
+                material="color:grey"
+                position="0 0.4 -2"
+                scale="0.5 0.8 0.5">
+
+        <a-entity circles-button="target:#queue-animation-button; click_on_event:start; click_off_event:stop"
+                  position="0 0.5 0">
+        </a-entity>
+
+      </a-entity>
+
+      <a-entity id="queue2-animation-button"
+                geometry="primitive:box"
+                material="color:grey"
+                position="0.5 0.4 -2"
+                scale="0.5 0.8 0.5">
+
+        <a-entity circles-button="target:#queue2-animation-button; click_on_event:start; click_off_event:stop"
                   position="0 0.5 0">
         </a-entity>
 
@@ -86,6 +135,8 @@
 
     <script>
 
+      // Original
+      
       document.getElementById('animation-button').addEventListener('start', function()
       {
         //document.getElementById('agent').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
@@ -96,7 +147,37 @@
       document.getElementById('animation-button').addEventListener('stop', function()
       {
         //document.getElementById('agent').emit('stop-listening');
-       // document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How are you?');
+        document.getElementById('agent').components['circles-ai-agent'].processInput('Hello. How are you?');
+      });
+
+      // Queue
+
+      document.getElementById('queue-animation-button').addEventListener('start', function()
+      {
+        //document.getElementById('agent').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
+        //document.getElementById('agent').emit('start-listening');
+        document.getElementById('queue-agent').components['queue-circles-ai-agent'].processInput('Hello. How are you?');
+      });
+
+      document.getElementById('queue-animation-button').addEventListener('stop', function()
+      {
+        //document.getElementById('agent').emit('stop-listening');
+        document.getElementById('queue-agent').components['queue-circles-ai-agent'].processInput('Hello. How are you?');
+      });
+      
+      // Queue 2
+
+      document.getElementById('queue2-animation-button').addEventListener('start', function()
+      {
+        //document.getElementById('agent').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
+        //document.getElementById('agent').emit('start-listening');
+        document.getElementById('queue2-agent').components['queue2-circles-ai-agent'].processInput('Hello. How are you?');
+      });
+
+      document.getElementById('queue2-animation-button').addEventListener('stop', function()
+      {
+        //document.getElementById('agent').emit('stop-listening');
+        document.getElementById('queue2-agent').components['queue2-circles-ai-agent'].processInput('Hello. How are you?');
       });
     
     </script>

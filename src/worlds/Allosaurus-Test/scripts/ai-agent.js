@@ -53,7 +53,7 @@ AFRAME.registerComponent('circles-ai-agent',
             });
 
             const data = await inputResponse.json();
-            this.response = data.responseText;
+            this.response = data.responseText /* "Hello! I'm just a program, so I don't have feelings, but I'm here and ready to help you. How can I assist you today?" */;
             
             console.log('circles-ai-agent: ' + this.response);
         } 

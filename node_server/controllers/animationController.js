@@ -22,6 +22,9 @@ const getPhonesFromAudio = (req, res, next) =>
 // Getting audio clip and phones from blob
 const getPhonesFromBlob = (req, res, next) =>
 {
+  var responseGiven = false;
+  var ffmpegError = '';
+
   // Creating audio clip file from blob
   const mp3AudioFile = uniqueFilename(__dirname) + '.mp3';
 
@@ -34,33 +37,44 @@ const getPhonesFromBlob = (req, res, next) =>
     // Converting .mp3 to .wav
     const wavAudioFile = mp3AudioFile.replace('.mp3', '.wav');
 
-    // Running ffmpeg
-    exec('ffmpeg -y -i ' + mp3AudioFile + ' ' + wavAudioFile, (err) => 
+    const ffmpegProcess = spawn('ffmpeg', ['-i', mp3AudioFile, wavAudioFile]);
+
+    // (ffmpeg outputs everything to stderr)
+    ffmpegProcess.stderr.on('data', (err) => 
     {
-      // If there was an error, returning error message
-      // Otherwise getting phones from from wav audio file
-      if (err)
+      ffmpegError += err;
+    });
+
+    ffmpegProcess.on('close', (code) =>
+    {
+      if (!responseGiven)
       {
-        console.log(err);
-
-        var response = {
-          status: 'error',
-        }
-
-        res.json(response);
-      }
-      else
-      {
-        getPhones(res, wavAudioFile, true);
-
-        // Deleting .mp3 file
-        fs.unlink(mp3AudioFile, (err => 
+        responseGiven = true;
+        // If processing was successful, getting phones from .wav file
+        // Otherwise, returning error message
+        if (code == 0)
         {
-          if (err)
+          getPhones(res, wavAudioFile, true);
+
+          // Deleting .mp3 file
+          fs.unlink(mp3AudioFile, (err => 
           {
-            console.log(err);
+            if (err)
+            {
+              console.log('Error Deleting MP3 File: ' + err);
+            }
+          }));
+        }
+        else
+        {
+          console.log('ffmpeg Error: ' + ffmpegError);
+
+          var response = {
+            status: 'error',
           }
-        }));
+
+          res.json(response);
+        }
       }
     });
   });
@@ -68,13 +82,18 @@ const getPhonesFromBlob = (req, res, next) =>
   // Listing for file writing error
   writeStream.on('error', (err) => 
   {
-    console.log(err);
+    console.log('Write Stream Error:' + err);
 
-    var response = {
-      status: 'error',
+    if (!responseGiven)
+    {
+      responseGiven = true;
+
+      var response = {
+        status: 'error',
+      }
+
+      res.json(response);
     }
-
-    res.json(response);
   });
 
 }
