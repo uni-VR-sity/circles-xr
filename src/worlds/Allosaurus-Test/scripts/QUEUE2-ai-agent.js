@@ -110,6 +110,11 @@ AFRAME.registerComponent('queue2-circles-ai-agent',
                             i++;
                         }
                     }
+                    // In case response does not end with punctuation
+                    else if (i == this.currentInput.response.length)
+                    {
+                        this.currentInput.sentences.push(workingSentence);
+                    }
                 }
 
                 // (reverse to use pop())
