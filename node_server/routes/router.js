@@ -5,6 +5,7 @@ const path       = require('path');
 const viewController = require('../controllers/viewController');
 const circleController = require('../controllers/circleController');
 const centralServerController = require('../controllers/centralServerController');
+const animationController = require('../controllers/animationController');
 const User       = require('../models/user');
 const passport   = require('passport');
 const express    = require('express');
@@ -221,7 +222,7 @@ router.post('/save-collected-data', authenticated, circleController.saveCollecte
 router.post('/check-existing-logs', authenticated, circleController.checkExistingLogs);
 router.get('/download-logs/:circle', authenticated, circleController.downloadCollectedData);
 
-// CENTRAL SERVER ONLY ROUTES ----------------------------------------------------------------------------------------------------------------------
+// CENTRAL SERVER ROUTES ----------------------------------------------------------------------------------------------------------------------
 
 // More Circles Page Routes -----------------------------------------------------------------
 
@@ -241,12 +242,18 @@ router.post('/update-prototype', authenticated, centralServerController.updatePr
 router.post('/get-prototypes', authenticated, centralServerController.getPrototypes);
 router.post('/delete-prototype', authenticated, centralServerController.deletePrototype);
 router.post('/get-prototype-info', authenticated, centralServerController.getPrototypeInfo);
+router.post('/upload-model', authenticated, centralServerController.uploadModel);
 
 router.get('/prototype/:prototype_name', centralServerController.servePrototypeCircle);
 
 // Museum Games Page Routes -----------------------------------------------------------------
 
 router.get('/museum-games', centralServerController.serveMuseumGames);
+
+// ANIMATION ROUTES -------------------------------------------------------------------------------------------------------------------------------
+
+router.post('/get-phones-from-audio', authenticated, animationController.getPhonesFromAudio);
+router.post('/get-phones-from-blob', authenticated, animationController.getPhonesFromBlob);
 
 // Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 

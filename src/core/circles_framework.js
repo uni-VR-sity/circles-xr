@@ -93,7 +93,9 @@ const VALID_VIDEO_TYPES = {
 };
 
 const VALID_3D_TYPES = {
-
+  GLTF    : 'gltf',
+  GLB     : 'glb',
+  FBX     : 'fbx',
 };
 
 const MODEL_HEAD_TYPE = {

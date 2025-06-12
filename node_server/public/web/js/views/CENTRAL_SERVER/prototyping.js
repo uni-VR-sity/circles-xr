@@ -2,25 +2,55 @@
 
 // Global Variables --------------------------------------------------------------------------------------------------------------------------------
 var currentPrototype;
+var updateShortcutActive = false;
+var inputEventsActive = false;
+var tabFunctionalityDisabled = true;
 
 // General -----------------------------------------------------------------------------------------------------------------------------------------
 
-// Hiding error messages
+// Overriding ctrl-s/ cmd-s functionality to update prototype instead
+function updateShortcut(e)
+{
+    if (e.key == 's' && (e.ctrlKey || e.metaKey))
+    {
+        // Preventing default save action
+        e.preventDefault();
+
+        document.getElementById('prototyping-form').requestSubmit();
+    }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Hiding error and warning messages
 function hideMessages()
 {
+    // Hiding errors
     var errors = document.getElementsByClassName('error-message');
 
     for (const error of errors)
     {
         error.style.display = 'none';
     }
+
+    // Hiding warnings
+    var warnings = document.getElementsByClassName('warning-message');
+
+    for (const warning of warnings)
+    {
+        warning.style.display = 'none';
+    }
+
+    // Deleting prototype input messages
+    document.getElementById('prototype-input-messages').innerHTML = '';
 }
 
 // Prototyping -------------------------------------------------------------------------------------------------------------------------------------
 
 // Displays prototype scene
-function displayPrototypeScene(sceneAttributes, sceneElements)
+function displayPrototypeScene(sceneAttributes, sceneElements, warnings)
 {
+    // Displaying scene
     var scene = '<a-scene embedded renderer="antialias:true;colorManagement:true;sortObjects:false;foveationLevel:3;highRefreshRate:true;physicallyCorrectLights:true;logarithmicDepthBuffer:false;precision:high;" shadow="autoUpdate:false;type:basic;" vr-mode-ui="enabled:true;" loading-screen="enabled:false;" device-orientation-permission-ui="enabled:true;" circles-platform-scene-shadows ';
     scene += sceneAttributes;
     scene += '>';
@@ -30,12 +60,23 @@ function displayPrototypeScene(sceneAttributes, sceneElements)
     scene += '</a-scene>';
     
     document.getElementById('prototype-scene').innerHTML = scene;
+
+    // Displaying warning messages
+    var messageContainer = document.getElementById('prototype-input-messages');
+
+    for (const warning of warnings)
+    {
+        var warningMessage = document.createElement('p');
+        warningMessage.classList.add('warning-message');
+        warningMessage.innerHTML = warning;
+        messageContainer.appendChild(warningMessage);
+    }
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Displaying prototype editor
-function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements)
+function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements, warnings)
 {
     // Updating title
     document.getElementById('prototype-title').innerHTML = currentPrototype;
@@ -46,6 +87,13 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements)
     // Hiding success and error messages
     hideMessages();
 
+    // Activating ctrl-s/ cmd-s update shortcut
+    if (!updateShortcutActive)
+    {
+        updateShortcutActive = true;
+        document.addEventListener('keydown', updateShortcut);
+    }
+
     // Displaying prototype editor
     var prototypeEditorElements = document.getElementsByClassName('hide-until-ready');
 
@@ -54,8 +102,48 @@ function displayPrototypeEditor(editorInput, sceneAttributes, sceneElements)
         element.style.visibility = 'visible';
     }
 
+    // Activating events to prevent scene movement when typing in input
+    if (!inputEventsActive)
+    {
+        inputEventsActive = true;
+
+        // Disabling snap turning and tab functionality when input editor is focused
+        document.getElementById('prototyping-input').addEventListener('focus', function(e)
+        {
+            document.querySelector('[circles-snap-turning]').setAttribute('circles-snap-turning', { enabled: false });
+
+            tabFunctionalityDisabled = true;
+        });
+
+        // Enabling snap turning and tab functionality when input editor is not focused
+        document.getElementById('prototyping-input').addEventListener('blur', function(e)
+        {
+            document.querySelector('[circles-snap-turning]').setAttribute('circles-snap-turning', { enabled: true });
+
+            tabFunctionalityDisabled = false;
+        });
+
+        // Overriding tab functionality to leave tab spaces when input editor is focused
+        document.getElementById('prototyping-input').addEventListener('keydown', function(e)
+        {
+            if (e.key == 'Tab')
+            {
+                if (tabFunctionalityDisabled)
+                {
+                    e.preventDefault();
+
+                    var cursorPosition = e.target.selectionStart;
+
+                    e.target.value = e.target.value.substring(0, e.target.selectionStart) + "    " + e.target.value.substring(e.target.selectionEnd);
+
+                    this.selectionEnd = cursorPosition + 4;
+                }
+            }
+        });
+    }
+
     // Displaying prototype scene
-    displayPrototypeScene(sceneAttributes, sceneElements);
+    displayPrototypeScene(sceneAttributes, sceneElements, warnings);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -94,7 +182,7 @@ function createPrototype(event)
             currentPrototype = response.prototypeName;
 
             // Displaying prototype editor
-            displayPrototypeEditor(response.startingString, response.sceneAttributes, response.sceneElements);
+            displayPrototypeEditor(response.startingString, response.sceneAttributes, response.sceneElements, response.warningMessages);
         }
         else 
         {
@@ -145,12 +233,16 @@ function updatePrototype(event)
             if (response.status == 'success')
             {
                 // Updating prototype scene
-                displayPrototypeScene(response.sceneAttributes, response.sceneElements);
+                displayPrototypeScene(response.sceneAttributes, response.sceneElements, response.warningMessages);
             }
             else
             {
-                document.getElementById('prototype-input-error').innerHTML = response.error;
-                document.getElementById('prototype-input-error').style.display = 'flex';
+                var messageContainer = document.getElementById('prototype-input-messages');
+
+                var errorMessage = document.createElement('p');
+                errorMessage.classList.add('error-message');
+                errorMessage.innerHTML = response.error;
+                messageContainer.appendChild(errorMessage);
             }
         }
 
@@ -158,8 +250,12 @@ function updatePrototype(event)
     } 
     catch (e) 
     {
-        document.getElementById('prototype-input-error').innerHTML = 'Error in JSON syntax';
-        document.getElementById('prototype-input-error').style.display = 'flex';
+        var messageContainer = document.getElementById('prototype-input-messages');
+
+        var errorMessage = document.createElement('p');
+        errorMessage.classList.add('error-message');
+        errorMessage.innerHTML = 'Error in JSON syntax';
+        messageContainer.appendChild(errorMessage);
     }
 }
 
@@ -264,7 +360,7 @@ function openPrototype(prototype)
             currentPrototype = prototype;
 
             // Displaying prototype editor
-            displayPrototypeEditor(response.editorInput, response.sceneAttributes, response.sceneElements);
+            displayPrototypeEditor(response.editorInput, response.sceneAttributes, response.sceneElements, response.warningMessages);
 
             // Closing create prototype overlay
             closeOverlay("open-prototype-overlay");
@@ -306,6 +402,10 @@ function deletePrototype(prototype)
                 {
                     element.style.visibility = 'hidden';
                 }
+
+                // Deactivating ctrl-s/ cmd-s update
+                document.removeEventListener('keydown', updateShortcut);
+                updateShortcutActive = false;
             }
 
             // Displaying overlay again to update
@@ -319,4 +419,158 @@ function deletePrototype(prototype)
     }
 
     request.send('prototypeName=' + prototype);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Uploading user selected model
+async function uploadModel(event)
+{
+    // Preventing page refresh
+    event.preventDefault(); 
+
+    // Getting form data
+    var form = event.target;
+    var formData = new FormData(form);
+
+    // If a file was selected, sending request to upload new model
+    if (formData.get('modelFile').size > 0)
+    {
+        // Hiding previous success and error messages
+        hideMessages();
+
+        fetch('/upload-model', {method: form.method, body: formData})
+        .then(response => response.json())
+        .then(data => 
+        {
+            if (data.status == 'success')
+            {
+                var modelsContainer = document.getElementById('models-container');
+
+                // If there were no models in container previously, hiding no model text
+                if (modelsContainer.querySelectorAll('.model').length == 0)
+                {
+                    document.getElementById('no-models-message').style.display = 'none';
+                }
+
+                // Displaying uploaded model
+                var model = document.createElement('div');
+                model.classList.add('model');
+                model.classList.add('file');
+                model.setAttribute('id', data.model.name);
+
+                    var modelType = document.createElement('h3');
+                    modelType.innerHTML = data.model.type;
+                    model.appendChild(modelType);
+
+                    var modelNameContainer = document.createElement('div');
+                    modelNameContainer.classList.add('name-container');
+
+                        var modelName = document.createElement('p');
+                        modelName.classList.add('file-name');
+                        modelName.innerHTML = data.model.displayName;
+                        modelNameContainer.appendChild(modelName);
+
+                    model.appendChild(modelNameContainer);
+
+                    var modelOptionsContainer = document.createElement('div');
+                    modelOptionsContainer.classList.add('model-options');
+
+                        var copyIconContainer = document.createElement('div');
+                        copyIconContainer.classList.add('icon-container');
+                        copyIconContainer.classList.add('copy-icon');
+
+                            var copyIcon = document.createElement('a');
+                            copyIcon.classList.add('fa-regular');
+                            copyIcon.classList.add('fa-copy');
+                            copyIcon.setAttribute('onclick', 'copyModelName(event, "' + data.model.displayName + '")');
+                            copyIconContainer.appendChild(copyIcon);
+                        
+                        modelOptionsContainer.appendChild(copyIconContainer);
+
+                        var trashIconContainer = document.createElement('div');
+                        trashIconContainer.classList.add('icon-container');
+                        trashIconContainer.classList.add('trash-icon');
+
+                            var trashIcon = document.createElement('a');
+                            trashIcon.classList.add('fa-regular');
+                            trashIcon.classList.add('fa-trash-can');
+                            trashIcon.setAttribute('onclick', 'deleteConfirmationPopUp(event, "Model", "' + data.model.displayName + '", "deleteModel(\'' + data.model.name + '\')")');
+                            trashIconContainer.appendChild(trashIcon);
+
+                        modelOptionsContainer.appendChild(trashIconContainer);
+
+                    model.appendChild(modelOptionsContainer);
+
+                    modelsContainer.appendChild(model);
+
+            }
+            else
+            {
+                document.getElementById('prototype-model-error').innerHTML = data.error;
+                document.getElementById('prototype-model-error').style.display = 'flex';
+            }
+        });
+
+        // Resetting form
+        document.getElementById('model-upload-form').reset();
+    }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleting selected model
+async function deleteModel(model)
+{
+    fetch('/delete-uploaded-content', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file: model }),})
+    .then(response => response.json())
+    .then(data => 
+    {
+        // Deleting model element
+        document.getElementById(model).remove();
+
+        // If that was the last model, displaying no models available message
+        if (document.getElementsByClassName('file').length === 0)
+        {
+            document.getElementById('no-models-message').style.display = 'flex';
+        }
+    });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Copying model name
+function copyModelName(event, model)
+{
+    // Removing event listener if copy button was previously clicked
+    event.target.removeEventListener('mouseleave', hideCopyIndicator);
+
+    // Copying model name to clipboard
+    navigator.clipboard.writeText(model);
+
+    // Displaying indicator that name was copied
+    event.target.classList.remove('fa-regular');
+    event.target.classList.remove('fa-copy');
+    
+    event.target.classList.add('fa-solid');
+    event.target.classList.add('fa-check');
+
+    event.target.addEventListener('mouseleave', hideCopyIndicator);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Hiding copy indicator a little after user stops hovering copy button
+function hideCopyIndicator(event)
+{
+    event.target.removeEventListener('mouseleave', hideCopyIndicator);
+
+    setTimeout(function()
+    {
+        event.target.classList.remove('fa-solid');
+        event.target.classList.remove('fa-check');
+
+        event.target.classList.add('fa-regular');
+        event.target.classList.add('fa-copy');
+    }, 250);
 }

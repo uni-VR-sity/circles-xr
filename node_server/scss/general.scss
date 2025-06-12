@@ -140,6 +140,20 @@ p.error-message::before {
     font-size: $MEDIUM_ICON;
 }
 
+p.warning-message {
+    @include start-flex;
+    color: $ORANGE;
+    margin-top: $MEDIUM_MARGIN;
+    display: none;
+}
+
+p.warning-message::before {
+    font: var(--fa-font-solid);
+    content: '\f071';
+    margin-right: $SMALL_MARGIN;
+    font-size: $MEDIUM_ICON;
+}
+
 // Top Bar -----------------------------------------------------------------------------------------------------------------------------------------
 
 .top-bar-container {

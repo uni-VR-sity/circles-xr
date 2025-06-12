@@ -396,11 +396,16 @@ const getServersList = async (req, res, next) =>
 // Rendering prototyping page
 const servePrototyping = async (req, res, next) =>
 {
+  // Getting models uploaded by user
+  var uploadedModels = await Uploads.find({ user: req.user, category: 'model' }, 'displayName name type');
+
+  // Rendering the prototyping page
   const userInfo = getUserInfo(req);
   
   res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/prototyping'), {
     title: 'prototyping',
     userInfo: userInfo,
+    uploadedModels: uploadedModels,
   });
 }
 
@@ -471,7 +476,7 @@ const createNewPrototype = async (req, res, next) =>
     }
 
     // Creating prototype HTML file
-    var sceneInformation = updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON);
+    var sceneInformation = await updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON, req.user);
 
     // Storing prototype in the database
     var prototypeInfo = {
@@ -505,6 +510,7 @@ const createNewPrototype = async (req, res, next) =>
 
     var successResponse = {
       status: 'success',
+      warningMessages: sceneInformation.warningMessages,
       prototypeName: req.body.prototypeName,
       startingString: JSON.stringify(startingScene),
       sceneAttributes: sceneInformation.sceneAttributes,
@@ -563,9 +569,10 @@ const updatePrototypeJSON = function(filePath, edits)
 // ------------------------------------------------------------------------------------------
 
 // Creating string to add component to element depending on its values
-const addComponentValue = function(componentName, componentInfo, prototypeObject)
+const addComponentValue = async function(componentName, componentInfo, prototypeObject, user)
 {
   var component = '';
+  var warningMessages = [];
 
   // If value is a string
   if (componentInfo.value === "string")
@@ -595,29 +602,89 @@ const addComponentValue = function(componentName, componentInfo, prototypeObject
       // Checking if attribute exists
       if (componentInfo.attributes.hasOwnProperty(attribute))
       {
-        component += attribute + ':' + addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName]) + ';';
+        var attributeComponent = await addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName], user)
+        
+        component += attribute + ':' + attributeComponent.component + ';';
+        warningMessages.push(...attributeComponent.warningMessages);
       }
     }
   }
 
-  // If component is a glft-model or src and does not contain a url (ex. does not contain "http://"), add asset library path
+  // If component is a glft-model or src and does not contain a url (ex. does not contain "http://"), add asset library path (keeping url())
   if (componentName === 'gltf-model' || componentName === 'src')
   {
     if (!component.includes('http://'))
     {
-      component = component.slice(0, 4) + env.DOMAIN + '/asset-library/' + component.slice(4);
+      // Making sure that the model exists in asset library
+      // Otherwise leaving component empty and displaying warning message
+      if (fs.existsSync(__dirname + '/../public/asset-library/' + component.slice(4, -1)))
+      {
+        component = component.slice(0, 4) + env.DOMAIN + '/asset-library/' + component.slice(4);
+      }
+      else
+      {
+        warningMessages.push('"' + component.slice(4, -1) + '" does not exist in asset library');
+        component = '';
+      }
     }
   }
 
-  return component;
+  // If component is a circles-model and does not contain a url (ex. does not contain "http://"), add asset library path (with no url())
+  if (componentName === 'circles-model')
+  {
+    if (!component.includes('http://'))
+    {
+      // If model was uploaded by user, getting file name from database
+      // Otherwise getting model from asset library
+      if (component.includes('custom/'))
+      {
+        // Getting file name from database
+        var model = await Uploads.findOne({ user: user, displayName: component.split('/')[1] }, 'name');
+
+        // If model was found, adding its path
+        // Otherwise leaving component empty and displaying warning message
+        if (model)
+        {
+          component = env.DOMAIN + '/uploads/' + model.name;
+        }
+        else
+        {
+          warningMessages.push('Custom model "' + component.split('/')[1] + '" missing');
+          component = '';
+        }
+      }
+      else
+      {
+        // Making sure that the model exists in asset library
+        // Otherwise leaving component empty and displaying warning message
+        if (fs.existsSync(__dirname + '/../public/asset-library/' + component))
+        {
+          component = env.DOMAIN + '/asset-library/' + component;
+        }
+        else
+        {
+          warningMessages.push(component + ' does not exist in asset library');
+          component = '';
+        }
+      }
+    }
+  }
+
+  var componentInformation = {
+    component: component,
+    warningMessages: warningMessages,
+  } 
+
+  return componentInformation;
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Creating prototype element
-const createPrototypeElement = function(object, allComponents)
+const createPrototypeElement = async function(object, allComponents, user)
 {
   var element = '<a-entity';
+  var warningMessages = [];
 
   // Looping through all components in object
   for (var component in object)
@@ -628,7 +695,10 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component before __ exists
       if (allComponents.hasOwnProperty(component.split('__')[0]))
       {
-        element += ' ' + component + '="' + addComponentValue(component, allComponents[component.split('__')[0]], object) + '"';
+        var componentValue = await addComponentValue(component, allComponents[component.split('__')[0]], object, user);
+        
+        element += ' ' + component + '="' + componentValue.component + '"';
+        warningMessages.push(...componentValue.warningMessages);
       }
     }
     else
@@ -636,7 +706,10 @@ const createPrototypeElement = function(object, allComponents)
       // Checking if component exists
       if (allComponents.hasOwnProperty(component))
       {
-        element += ' ' + component + '="' + addComponentValue(component, allComponents[component], object) + '"';
+        var componentValue = await addComponentValue(component, allComponents[component], object, user);
+
+        element += ' ' + component + '="' + componentValue.component + '"';
+        warningMessages.push(...componentValue.warningMessages);
       }
     }
   }
@@ -650,22 +723,31 @@ const createPrototypeElement = function(object, allComponents)
     {
       for (const childObject of object.children)
       {
-        element += createPrototypeElement(childObject, allComponents);
+        childElement = await createPrototypeElement(childObject, allComponents, user);
+
+        element += childElement.element;
+        warningMessages.push(...childElement.warningMessages);
       }
     }
   }
 
   element += '</a-entity>\n';
   
-  return element;
+  var elementInformation = {
+    element: element,
+    warningMessages: warningMessages,
+  };
+
+  return elementInformation;
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Returning scene elements from prototype object
-const parseSceneElements = function(prototypeObject)
+const parseSceneElements = async function(prototypeObject, user)
 {
   var sceneElements = '';
+  var warningMessages = [];
 
   // Reading element components file
   var componentsJSON;
@@ -686,16 +768,24 @@ const parseSceneElements = function(prototypeObject)
   // Creating an a-entity element for each scene element
   for (const object of prototypeObject.sceneObjects)
   {
-    sceneElements += createPrototypeElement(object, allComponents);
+    var elementInformation = await createPrototypeElement(object, allComponents, user);
+
+    sceneElements += elementInformation.element;
+    warningMessages.push(...elementInformation.warningMessages);
   }
 
-  return sceneElements;
+  var sceneElementsInformation = {
+    sceneElements: sceneElements,
+    warningMessages: warningMessages,
+  }
+
+  return sceneElementsInformation;
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Putting scene elements together from template and prototype
-const gatherSceneElements = function(prototypeObject)
+const gatherSceneElements = async function(prototypeObject, user)
 {
   // Getting assets from template
   var templateAssets;
@@ -725,15 +815,19 @@ const gatherSceneElements = function(prototypeObject)
 
   // Parsing prototype scene elements
   var prototypeSceneElements = '';
+  var warningMessages = [];
   
   if (prototypeObject.sceneObjects)
   {
-    prototypeSceneElements = parseSceneElements(prototypeObject);
-  }
+    var elementsInformation = await parseSceneElements(prototypeObject, user);
 
-  if (prototypeSceneElements == null)
-  {
-    return null;
+    if (elementsInformation == null)
+    {
+      return null;
+    }
+    
+    prototypeSceneElements = elementsInformation.sceneElements;
+    warningMessages.push(...elementsInformation.warningMessages);
   }
 
   // Putting assets and elements together
@@ -743,15 +837,21 @@ const gatherSceneElements = function(prototypeObject)
   sceneElements += templateElements;
   sceneElements += prototypeSceneElements;
 
-  return sceneElements;
+  var sceneElementsInformation = {
+    sceneElements: sceneElements,
+    warningMessages: warningMessages,
+  };
+
+  return sceneElementsInformation;
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Returning scene attributes from prototype object
-const parseSceneAttributes = function(prototypeObject)
+const parseSceneAttributes = async function(prototypeObject, user)
 {
   var attributes = '';
+  var warningMessages = [];
 
   if (prototypeObject.sceneAttributes)
   {
@@ -776,19 +876,29 @@ const parseSceneAttributes = function(prototypeObject)
       // Checking if attribute exists
       if (allAttributes.hasOwnProperty(attribute))
       {
-        attributes += attribute + '="' + addComponentValue(attribute, allAttributes[attribute], prototypeObject.sceneAttributes) + '"\n';
+        var attributeValue = await addComponentValue(attribute, allAttributes[attribute], prototypeObject.sceneAttributes, user);
+
+        attributes += attribute + '="' + attributeValue.component + '"\n';
+        warningMessages.push(...attributeValue.warningMessages);
       }
     }
   }
 
-  return attributes;
+  var attributesInformation = {
+    attributes: attributes,
+    warningMessages: warningMessages,
+  }
+
+  return attributesInformation;
 }
 
 // ------------------------------------------------------------------------------------------
 
 // Putting scene tag together with attributes from template and prototype
-const gatherSceneTag = function(prototypeObject)
+const gatherSceneTag = async function(prototypeObject, user)
 {
+  var warningMessages = [];
+
   // Gettting scene tag and its attributes
   var sceneStart; 
 
@@ -803,23 +913,27 @@ const gatherSceneTag = function(prototypeObject)
   }
 
   // Parsing prototype scene attributes
-  var prototypeSceneAttributes = parseSceneAttributes(prototypeObject);
+  var sceneAttributesInformation = await parseSceneAttributes(prototypeObject, user);
 
-  if (prototypeSceneAttributes == null)
+  if (sceneAttributesInformation == null)
   {
     return null;
   }
+
+  var sceneAttributes = sceneAttributesInformation.attributes;
+  warningMessages.push(...sceneAttributesInformation.warningMessages);
 
   // Putting scene tag together
   var sceneTag = '';
 
   sceneTag += sceneStart;
-  sceneTag += prototypeSceneAttributes;
+  sceneTag += sceneAttributes;
   sceneTag += '>';
 
   var sceneTagInformation = {
     sceneTag: sceneTag,
-    prototypeSceneAttributes: prototypeSceneAttributes,
+    sceneAttributes: sceneAttributes,
+    warningMessages: warningMessages,
   }
 
   return sceneTagInformation;
@@ -829,23 +943,30 @@ const gatherSceneTag = function(prototypeObject)
 
 // Updating prototype HTML file
 // Returns HTML scene object
-const updatePrototypeHTML = function(filePath, prototypeObject)
+const updatePrototypeHTML = async function(filePath, prototypeObject, user)
 {
+  var warningMessages = [];
+
   // Getting scene tag
-  var sceneTagInformation = gatherSceneTag(prototypeObject);
+  var sceneTagInformation = await gatherSceneTag(prototypeObject, user);
 
   if (!sceneTagInformation)
   {
     return null;
   }
 
-  // Getting scene elements
-  var sceneElements = gatherSceneElements(prototypeObject);
+  warningMessages.push(...sceneTagInformation.warningMessages);
 
-  if (!sceneElements)
+  // Getting scene elements
+  var sceneElementsInformation = await gatherSceneElements(prototypeObject, user);
+
+  if (!sceneElementsInformation)
   {
     return null;
   }
+
+  var sceneElements = sceneElementsInformation.sceneElements;
+  warningMessages.push(...sceneElementsInformation.warningMessages);
 
   // Creating updated HTML file with new scene elements
   const templateBeforeFilePaths = [
@@ -910,8 +1031,9 @@ const updatePrototypeHTML = function(filePath, prototypeObject)
   }
 
   var sceneInformation = {
-    sceneAttributes: sceneTagInformation.prototypeSceneAttributes,
+    sceneAttributes: sceneTagInformation.sceneAttributes,
     sceneElements: sceneElements,
+    warningMessages: warningMessages,
   }
   
   return sceneInformation;
@@ -943,12 +1065,13 @@ const updatePrototype = async (req, res, next) =>
       if (updatedJSON)
       {
         // Updating HTML file
-        var sceneInformation = updatePrototypeHTML(HTMLPath, updatedJSON);
+        var sceneInformation = await updatePrototypeHTML(HTMLPath, updatedJSON, req.user);
 
         if (sceneInformation)
         {
           var successResponse = {
             status: 'success',
+            warningMessages: sceneInformation.warningMessages,
             sceneAttributes: sceneInformation.sceneAttributes,
             sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneInformation.sceneElements),
           }
@@ -1094,6 +1217,8 @@ const getPrototypeInfo = async (req, res, next) =>
     error: 'Something went wrong, please try again',
   }
 
+  var warningMessages = [];
+
   if (req.body.prototypeName) 
   {
     const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
@@ -1140,22 +1265,28 @@ const getPrototypeInfo = async (req, res, next) =>
         var prototypeObject = JSON.parse(prototypeJSON);
 
         // Getting scene attributes (from prototype)
-        var sceneAttributes = parseSceneAttributes(prototypeObject);
+        var sceneAttributesInformation = await parseSceneAttributes(prototypeObject, req.user);
 
-        if (sceneAttributes == null)
+        if (sceneAttributesInformation == null)
         {
           res.json(errorResponse);
           return;
         }
+
+        var sceneAttributes = sceneAttributesInformation.attributes;
+        warningMessages.push(...sceneAttributesInformation.warningMessages);
 
         // Getting scene elements (starting elements and from prototype)
-        var sceneElements = gatherSceneElements(prototypeObject);
+        var sceneElementsInformation = await gatherSceneElements(prototypeObject, req.user);
 
-        if (!sceneElements)
+        if (!sceneElementsInformation)
         {
           res.json(errorResponse);
           return;
         }
+
+        var sceneElements = sceneElementsInformation.sceneElements;
+        warningMessages.push(...sceneElementsInformation.warningMessages);
 
         // Putting together editor input string
         var editorInput = '{';
@@ -1179,6 +1310,7 @@ const getPrototypeInfo = async (req, res, next) =>
 
         var prototypeInfo = {
           status: 'success',
+          warningMessages: warningMessages,
           editorInput: editorInput,
           sceneAttributes: sceneAttributes,
           sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
@@ -1206,6 +1338,149 @@ const getPrototypeInfo = async (req, res, next) =>
     res.json(errorResponse);
     return;
   }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Storing model uploaded by user
+const uploadModel = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  // Setting file size restriction
+  form.options.maxFileSize = CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE * 1024 * 1024;
+
+  // Setting location to upload file to
+  form.uploadDir = path.join(__dirname, '/../uploads');
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      if (err.code === formidable.errors.biggerThanMaxFileSize)
+      {
+        errorResponse.error = 'Model is too large, please ensure your model is under ' + CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE + 'MB';
+      }
+      else
+      {
+        errorResponse.error = 'Model could not be uploaded, please try again';
+      }
+
+      res.json(errorResponse);
+      return;
+    }
+
+    const file = files.modelFile;
+
+    // Getting valid file types
+    var validFiles = [];
+
+    for (const key in CIRCLES.VALID_3D_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
+    }
+
+    // originalFilename: filename.fileType
+    // split result array: {"filename", ..., "fileType"}
+    const filenameSplit = file.originalFilename.split('.');
+    
+    // Getting filename
+    var filename = '';
+
+    for (var i = 0; i < filenameSplit.length - 1; i++)
+    {
+      filename += (filenameSplit[i] + '.');
+    }
+    
+    filename = filename.slice(0, -1);
+
+    // Getting file type
+    const fileType = file.originalFilename.split('.').pop();
+
+    // Making sure file type is valid
+    if (validFiles.includes(fileType.toLowerCase()))
+    {
+      const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
+
+      // Renaming file to be in uploads folder with unique name
+      try
+      {
+        fs.renameSync(file.filepath, fileURL);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(file.filepath, {recursive: true});
+
+        errorResponse.error = 'File could not be uploaded, please try again';
+        
+        res.json(errorResponse);
+        return;
+      }
+
+      // If the user has file(s) with the same name, adding a number to the end of the filename
+      var similarFilenames = [];
+      similarFilenames = await Uploads.find({ user: await User.findById(req.user._id).exec(), displayName: new RegExp('(?<!.)' + filename + '([0-9]+)?[.]', 'gi'), type: fileType });
+
+      if (similarFilenames.length > 0)
+      {
+        file.originalFilename = filename + (similarFilenames.length + 1) + '.' + fileType;
+      }
+
+      // Storing the file in the database
+      const fileInfo = {
+        user: await User.findById(req.user._id).exec(),
+        displayName: file.originalFilename,
+        name: file.newFilename + '.' + fileType,
+        url: fileURL,
+        type: fileType,
+        category: 'model',
+      }
+
+      try
+      {
+        await Uploads.create(fileInfo);
+        
+        var successResponse = {
+          status: 'success',
+          model: {displayName: fileInfo.displayName, name: fileInfo.name, type: fileInfo.type },
+        }
+
+        res.json(successResponse);
+        return;
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(fileURL, {recursive: true});
+
+        errorResponse.error = 'File could not be uploaded, please try again';
+        
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      errorResponse.error = 'Incorrect model type uploaded. Only .gltf, .glb, and .fbx models are allowed';
+      
+      res.json(errorResponse);
+      return;
+    }
+  });
 }
 
 // ------------------------------------------------------------------------------------------
@@ -1489,6 +1764,7 @@ module.exports = {
     getPrototypes,
     deletePrototype,
     getPrototypeInfo,
+    uploadModel,
     servePrototypeCircle,
     // Museum Games Page
     serveMuseumGames,

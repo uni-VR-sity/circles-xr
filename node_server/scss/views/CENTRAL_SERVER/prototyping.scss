@@ -137,12 +137,18 @@
     #result-container {
         position: relative;
 
-        #prototype-input-error {
+        #prototype-input-messages{
             position: absolute; 
             left: 0px; 
             top: 0px; 
             z-index: +1;
             margin: $SMALL_MARGIN+5px $MEDIUM_MARGIN;
+
+            .error-message, .warning-message {
+                margin-top: 0;
+                margin-bottom: $X_SMALL_MARGIN;
+                display: flex;
+            }
         }
     }
 }

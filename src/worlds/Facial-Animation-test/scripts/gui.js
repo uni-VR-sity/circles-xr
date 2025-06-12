@@ -1,11 +1,21 @@
 import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm';
 
 // Animations and states
-const animations = ['mouthPress', 'fullSmile',
-                    'noseSneerRight', 'noseNeutral',
-                    'tongueOut', 'tongueIn',
-                    'mouthNeutral', 'eyesNeutral',
-                    'eyesLookRight', 'eyesLookLeft'
+const mouthAnimations = ['mouthNeutral',
+                        'fullSmile', 
+                        /*'mouthPressRight', 'relaxMouthPressRight', 'mouthPressLeft', 'relaxMouthPressLeft',*/ 'mouthPress', 
+                        /*'frownRight', 'relaxFrownRight', 'frownLeft', 'relaxFrownLeft',*/ 'fullFrown', 
+                        /*'mouthLeft', 'mouthLeftNeutral', 'mouthRight', 'mouthRightNeutral',*/
+                        'mouthPucker', /*'relaxPucker',*/
+                        'mouthFunnel', /*'relaxFunnel',*/
+                        /*'mouthStretchRight', 'mouthStretchRelaxRight', 'mouthStretchLeft', 'mouthStretchRelaxLeft',*/ 'mouthStretch',
+                        /*'mouthUpperUpRight', 'mouthUpperUpRelaxRight', 'mouthUpperUpLeft', 'mouthUpperUpRelaxLeft',*/ 'mouthUpperUp',
+                        /*'mouthRollUpper', 'relaxRollUpper','mouthRollLower', 'relaxRollLower',*/ 'mouthRoll',
+                        /*'mouthShrugUpper', 'relaxShrugUpper', 'mouthShrugLower', 'relaxShrugLower',*/ 'mouthShrug',
+                        /*'mouthLowerDownRight', 'mouthLowerDownRelaxRight', 'mouthLowerDownLeft', 'mouthLowerDownRelaxLeft',*/ 'mouthLowerDown',
+                        'mouthOpen', /*'mouthClose', 'relaxMouthClose'*/
+                        'viseme-BMP', 'viseme-FF', 'viseme-TH', 'viseme-TLDN', 'viseme-KK', 'viseme-CH',
+                        'viseme-SS', 'viseme-RR', 'viseme-AA', 'viseme-E', 'viseme-I', 'viseme-O', 'viseme-U'
                 ];
 const states = ['Idle'];
 
@@ -20,16 +30,17 @@ gui.add(obj, 'State', states).onChange(value => {
 });
 
 // Adding animations
-const animationsFolder = gui.addFolder('Animations');
+const animationsFolder = gui.addFolder('Mouth Animations');
 
 // Find the face to animate
 const animatedModels = document.getElementsByClassName("animated");
 const firstAnimated = animatedModels[0];
 console.log(firstAnimated.id);
 
-for (const animation of animations)
+for (const animation of mouthAnimations)
 {
     obj[animation] = function() {
+        firstAnimated.emit('viseme-sil');
         firstAnimated.emit(animation);
     };
     animationsFolder.add(obj, animation);
