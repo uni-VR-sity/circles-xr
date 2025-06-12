@@ -30,7 +30,7 @@ AFRAME.registerComponent('animated-face', {
         CONTEXT_AF.el.setAttribute('animated-mouth', {});
         CONTEXT_AF.el.setAttribute('animated-jaw', {});
         CONTEXT_AF.el.setAttribute('animated-tongue', {});
-
+        CONTEXT_AF.el.setAttribute('animated-visemes', {});
     },
 
     update: function(oldData){
