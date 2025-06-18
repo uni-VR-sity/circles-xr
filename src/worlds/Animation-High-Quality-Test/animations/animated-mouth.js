@@ -118,12 +118,24 @@ AFRAME.registerComponent('animated-mouth', {
 
 
 
-        context.el.setAttribute('morph-targets__mouthSmile', {target: 3, value: 0});
+        context.el.setAttribute('morph-targets__mouthPlosive', {target: 46, value: 0});
+        context.el.setAttribute('morph-targets__mouthWidenSides', {target: 43, value: 0});
+        context.el.setAttribute('morph-targets__mouthTopLipUp', {target: 52, value: 0});
+        context.el.setAttribute('morph-targets__mouthPucker', {target: 40, value: 0});
+        context.el.setAttribute('morph-targets__mouthPuckerOpen', {target: 41, value: 0});
+        context.el.setAttribute('morph-targets__mouthBottomLipDown', {target: 51, value: 0});
+        context.el.setAttribute('morph-targets__mouthOpen', {target: 67, value: 0});
+        context.el.setAttribute('morph-targets__mouthSmile', {target: 33, value: 0});
     },
 
     createAnimations: async function (context){
+
+
+
+
+
         // mouth animations
-        context.el.setAttribute('animation__mouthSmile', {   property: 'morph-targets__mouthSmile.value', to: 1, loop: false, dur: 300, autoplay: false, 
+        /* context.el.setAttribute('animation__mouthSmile', {   property: 'gltf-morph__mouthSmile.value', to: 1, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'fullSmile'});
         context.el.setAttribute('animation__relaxSmile', {   property: 'gltf-morph__mouthSmile.value', 
                                                                 to: 0, loop: false, dur: 200, autoplay: false, 
@@ -247,7 +259,7 @@ AFRAME.registerComponent('animated-mouth', {
                                                                 startEvents: 'mouthClose'});
         context.el.setAttribute('animation__relaxMouthClose', {   property: 'gltf-morph__mouthClose.value', 
                                                                 to: 0, loop: false, dur: 200, autoplay: false, 
-                                                                startEvents: 'relaxMouthClose, mouthOpen, mouthNeutral'});
+                                                                startEvents: 'relaxMouthClose, mouthOpen, mouthNeutral'}); */
         //console.log('Finished creating mouth animations');
     },
 

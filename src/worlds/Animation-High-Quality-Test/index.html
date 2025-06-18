@@ -27,7 +27,7 @@
     <script src="/worlds/Animation-Quality-Test/animations/animated-face.js"></script>
     <script src="/worlds/Animation-Quality-Test/animations/animated-visemes.js"></script>
 
-    <script src="/worlds/Animation-Quality-Test/scripts/gui.js" type="module"></script>
+    <!-- <script src="/worlds/Animation-Quality-Test/scripts/gui.js" type="module"></script> -->
 
     <script src="/worlds/Animation-Quality-Test/scripts/morph-targets.js"></script>
 
@@ -42,7 +42,7 @@
     <circles-start-ui/>
 
     <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-    <a-scene circles_scene_properties circles-model-manager>
+    <a-scene circles_scene_properties circles-model-manager stats>
       
       <a-assets>
         <!-- Circles' built-in assets [REQUIRED] -->
@@ -57,13 +57,45 @@
       <a-entity id="agent"
                 class="animated"
                 circles-model-display="agent-model"
-                position="0 0 -0.5"
-                rotation="0 0 0"
+                position="-0.15 0 -0.5"
+                rotation="0 20 0"
                 scale="0.01 0.01 0.01"
-                animated-face>
+                animated-face
+                circles-audio-listener
+                queue2-circles-ai-agent
+                queue-circles-facial-animator>
     </a-entity>
+
+    <a-entity id="animation-button"
+                geometry="primitive:box"
+                material="color:grey"
+                position="0.75 0.4 -1.25"
+                scale="0.5 0.8 0.5">
+
+        <a-entity circles-button="target:#animation-button; click_on_event:start; click_off_event:stop"
+                  position="0 0.5 0">
+        </a-entity>
+
+      </a-entity>
       
     </a-scene>
+
+    <script>
+
+      document.getElementById('animation-button').addEventListener('start', function()
+      {
+        //document.getElementById('agent').emit('response-ready', {audioClip: '/worlds/Allosaurus-Test/audio/sample.wav'});
+        //document.getElementById('agent').emit('start-listening');
+        document.getElementById('agent').components['queue2-circles-ai-agent'].processInput('Hello. How are you?');
+      });
+
+      document.getElementById('animation-button').addEventListener('stop', function()
+      {
+        //document.getElementById('agent').emit('stop-listening');
+        document.getElementById('agent').components['queue2-circles-ai-agent'].processInput('Hello. How are you?');
+      });
+
+    </script>
 
     <!-- Circles' end scripts [REQUIRED] -->
     <circles-end-scripts/>
