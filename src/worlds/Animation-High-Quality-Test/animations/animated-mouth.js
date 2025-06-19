@@ -116,8 +116,6 @@ AFRAME.registerComponent('animated-mouth', {
         context.el.setAttribute('gltf-morph__mouthClose', {morphtarget: 'mouthClose', value: 0});
         context.el.setAttribute('gltf-morph__mouthOpen', {morphtarget: 'mouthOpen', value: 0});
 
-
-
         context.el.setAttribute('morph-targets__mouthPlosive', {target: 46, value: 0});
         context.el.setAttribute('morph-targets__mouthWidenSides', {target: 43, value: 0});
         context.el.setAttribute('morph-targets__mouthTopLipUp', {target: 52, value: 0});
