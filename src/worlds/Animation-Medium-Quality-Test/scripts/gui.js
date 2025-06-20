@@ -61,8 +61,24 @@ TestFolder.add(obj, 'Mesh');
 
 obj['Morph Target'] = function() 
 {
-    var targets = document.getElementById('agent').getObject3D('mesh').children[7].morphTargetDictionary;
+    var targets = document.getElementById('agent').getObject3D('mesh').children[0].children[0].children[0].children[0].children[0].children[2].morphTargetDictionary;
     console.log(targets);
 };
 
 TestFolder.add(obj, 'Morph Target');
+
+// Adding visemes
+const VisemeFolder = gui.addFolder('Visemes');
+
+obj['AA'] = function() 
+{
+    document.getElementById('agent').getObject3D('mesh').children[0].children[0].children[0].children[0].children[0].children[2].morphTargetInfluences[40] = 1;
+
+    // document.getElementById('agent').getObject3D('mesh').children[3].children[5].children[0].morphTargetInfluences[1] = 1;
+    // document.getElementById('agent').getObject3D('mesh').children[3].children[5].children[1].morphTargetInfluences[1] = 1;
+
+    // document.getElementById('agent').getObject3D('mesh').children[3].children[7].children[0].morphTargetInfluences[1] = 1;
+    // document.getElementById('agent').getObject3D('mesh').children[3].children[7].children[1].morphTargetInfluences[1] = 1;
+};
+
+VisemeFolder.add(obj, 'AA');
