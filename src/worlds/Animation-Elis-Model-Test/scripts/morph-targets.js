@@ -11,7 +11,7 @@ AFRAME.registerComponent('morph-targets',
     {
         if (this.el.getObject3D('mesh'))
         {
-            this.el.getObject3D('mesh').children[0].children[1].morphTargetInfluences[this.data.target] = this.data.value;
+            this.el.getObject3D('mesh').children[16].morphTargetInfluences[this.data.target] = this.data.value;
         }
     }
 });

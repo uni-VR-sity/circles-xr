@@ -118,15 +118,27 @@ AFRAME.registerComponent('animated-mouth', {
 
 
 
-        context.el.setAttribute('morph-targets__AI', {target: 50, value: 0});
-        context.el.setAttribute('morph-targets__E', {target: 51, value: 0});
-        context.el.setAttribute('morph-targets__FV', {target: 52, value: 0});
-        context.el.setAttribute('morph-targets__L', {target: 53, value: 0});
-        context.el.setAttribute('morph-targets__MBP', {target: 54, value: 0});
-        context.el.setAttribute('morph-targets__O', {target: 55, value: 0});
-        context.el.setAttribute('morph-targets__U', {target: 56, value: 0});
-        // ect touches teeth
-        context.el.setAttribute('morph-targets__ect', {target: 49, value: 0});
+        context.el.setAttribute('morph-targets__aa02', {target: 1, value: 0});
+        context.el.setAttribute('morph-targets__aa_ah_ax_01', {target: 0, value: 0});
+        context.el.setAttribute('morph-targets__ao_03', {target: 2, value: 0});
+        context.el.setAttribute('morph-targets__aw_09', {target: 8, value: 0});
+        context.el.setAttribute('morph-targets__ay_11', {target: 10, value: 0});
+        context.el.setAttribute('morph-targets__d_t_n_19', {target: 18, value: 0});
+        context.el.setAttribute('morph-targets__er_05', {target: 6, value: 0});
+        context.el.setAttribute('morph-targets__ey_eh_uh_04', {target: 3, value: 0});
+        context.el.setAttribute('morph-targets__f_v_18', {target: 17, value: 0});
+        context.el.setAttribute('morph-targets__h_12', {target: 11, value: 0});
+        context.el.setAttribute('morph-targets__k_g_ng_20', {target: 19, value: 0});
+        context.el.setAttribute('morph-targets__l_14', {target: 13, value: 0});
+        context.el.setAttribute('morph-targets__ow_08', {target: 7, value: 0});
+        context.el.setAttribute('morph-targets__oy_10', {target: 9, value: 0});
+        context.el.setAttribute('morph-targets__p_b_m_21', {target: 20, value: 0});
+        context.el.setAttribute('morph-targets__r_13', {target: 12, value: 0});
+        context.el.setAttribute('morph-targets__s_z_15', {target: 14, value: 0});
+        context.el.setAttribute('morph-targets__sh_ch_jh_zh_16', {target: 15, value: 0});
+        context.el.setAttribute('morph-targets__th_dh_17', {target: 16, value: 0});
+        context.el.setAttribute('morph-targets__w_uw_07', {target: 5, value: 0});
+        context.el.setAttribute('morph-targets__y_iy_ih_ix_06', {target: 4, value: 0});
     },
 
     createAnimations: async function (context){
