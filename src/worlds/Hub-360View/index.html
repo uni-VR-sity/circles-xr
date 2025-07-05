@@ -10,8 +10,11 @@
   <script src="scripts/play-pause.js"></script>
   <script src="scripts/video-bar.js"></script>
   
-  <!-- rock stacking code -->
+  <!-- rock stacking code (taking this out for now)
   <script src="scripts/rock-marker.js"></script>
+  -->
+
+  <script src="scripts/teleport-click.js"></script>
 
 </head>
 <body>
@@ -64,7 +67,8 @@
       geometry="primitive: plane; height: 10; width: 10" 
       material="shader: flat; color: #aa9999; src: #ground_txr"
       circles-interactive-object
-      rock-marker></a-entity>
+      rock-marker
+      teleport-click></a-entity>
 
       <!-- add the video sphere -->
       <a-videosphere src="#video3D"></a-videosphere>
