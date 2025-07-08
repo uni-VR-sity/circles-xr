@@ -39,7 +39,7 @@ AFRAME.registerComponent('animated-tongue', {
 
             case 'null':
                 clearInterval(activeState);
-                console.log('*Set null ActiveState*');
+                //console.log('*Set null ActiveState*');
 
                 break;
 
@@ -58,6 +58,8 @@ AFRAME.registerComponent('animated-tongue', {
      createMorphTargets: async function (context){
         // tongue morph targets
         context.el.setAttribute('gltf-morph__tongueOut', {morphtarget: 'tongueOut', value: 0});
+
+        console.log("tongue morph targets created");
     },
 
     createAnimations: async function (context){

@@ -41,7 +41,7 @@ AFRAME.registerComponent('animated-cheeks', {
 
             case 'null':
                 clearInterval(activeState);
-                console.log('*Set null ActiveState*');
+                //console.log('*Set null ActiveState*');
 
                 break;
 
@@ -65,7 +65,7 @@ AFRAME.registerComponent('animated-cheeks', {
         context.el.setAttribute('gltf-morph__cheekSquintLeft', {morphtarget: 'cheekSquint_left', value: 0});
         context.el.setAttribute('gltf-morph__cheekPuff', {morphtarget: 'cheekPuff', value: 0});
         
-        //console.log("cheek morph targets created");
+        console.log("cheek morph targets created");
     },
 
     createAnimations: async function (context){

@@ -20,7 +20,7 @@ AFRAME.registerComponent('animated-nose', {
         // Add the animations to trigger the morphtargets
         CONTEXT_AF.createAnimations(CONTEXT_AF);
 
-        console.log('nose-created!');
+        //console.log('nose-created!');
 
     },
 
@@ -41,7 +41,7 @@ AFRAME.registerComponent('animated-nose', {
 
             case 'null':
                 clearInterval(activeState);
-                console.log('*Set null ActiveState*');
+                //console.log('*Set null ActiveState*');
 
                 break;
 
@@ -61,6 +61,7 @@ AFRAME.registerComponent('animated-nose', {
         // nose morph targets
         context.el.setAttribute('gltf-morph__noseSneerRight', {morphtarget: 'noseSneer_right', value: 0});
         context.el.setAttribute('gltf-morph__noseSneerLeft', {morphtarget: 'noseSneer_left', value: 0});
+        
         console.log('nose morph targets created!');
     },
 

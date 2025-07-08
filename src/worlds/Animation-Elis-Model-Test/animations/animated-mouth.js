@@ -94,6 +94,7 @@ AFRAME.registerComponent('animated-mouth', {
 
       createMorphTargets: async function (context){
         // mouth morph targets
+        /*
         context.el.setAttribute('gltf-morph__mouthSmile', {morphtarget: 'HAPPY', value: 0});
         context.el.setAttribute('gltf-morph__mouthPucker', {morphtarget: 'LipsPucker', value: 0});
         context.el.setAttribute('gltf-morph__mouthFunnel', {morphtarget: 'LipsFunnel', value: 0});
@@ -115,7 +116,7 @@ AFRAME.registerComponent('animated-mouth', {
         context.el.setAttribute('gltf-morph__mouthLeft', {morphtarget: 'MouthLeft', value: 0});
         context.el.setAttribute('gltf-morph__mouthClose', {morphtarget: 'mouthClose', value: 0});
         context.el.setAttribute('gltf-morph__mouthOpen', {morphtarget: 'mouthOpen', value: 0});
-
+        */
 
 
         context.el.setAttribute('morph-targets__aa02', {target: 1, value: 0});
@@ -139,14 +140,11 @@ AFRAME.registerComponent('animated-mouth', {
         context.el.setAttribute('morph-targets__th_dh_17', {target: 16, value: 0});
         context.el.setAttribute('morph-targets__w_uw_07', {target: 5, value: 0});
         context.el.setAttribute('morph-targets__y_iy_ih_ix_06', {target: 4, value: 0});
+
+        console.log("mouth morph targets created");
     },
 
     createAnimations: async function (context){
-
-
-
-
-
         // mouth animations
         /* context.el.setAttribute('animation__mouthSmile', {   property: 'gltf-morph__mouthSmile.value', to: 1, loop: false, dur: 300, autoplay: false, 
                                                                 startEvents: 'fullSmile'});

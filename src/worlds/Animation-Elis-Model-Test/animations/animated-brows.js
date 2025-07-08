@@ -59,7 +59,7 @@ AFRAME.registerComponent('animated-brows', {
 
             case 'null':
                 clearInterval(activeState);
-                console.log('*Set null ActiveState*');
+                //console.log('*Set null ActiveState*');
 
                 break;
 
@@ -84,7 +84,7 @@ AFRAME.registerComponent('animated-brows', {
         context.el.setAttribute('gltf-morph__browOuterUpLeft', {morphtarget: 'browOuterUp_left', value: 0});
         // QUESTION: do we want browDown + browOuterUp too?
         
-        console.log("eye morph targets created");
+        console.log("eyebrow morph targets created");
     },
 
     createAnimations: async function (context){                                                                
@@ -120,7 +120,7 @@ AFRAME.registerComponent('animated-brows', {
                                                                 to: 0, loop: false, dur: 200, autoplay: false, 
                                                                 startEvents: 'browOuterUpRelaxLeft, browOuterUpRelax, neutralizeBrows'});
         //console.log('Finished creating brow animations');
-        console.log('finished creating brow animations! - in eyes');
+        //console.log('finished creating brow animations! - in brows');
     },
 
     browsAngry: async function (side, dur){

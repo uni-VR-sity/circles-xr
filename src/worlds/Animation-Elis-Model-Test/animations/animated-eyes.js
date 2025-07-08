@@ -92,7 +92,7 @@ AFRAME.registerComponent('animated-eyes', {
 
             case 'null':
                 clearInterval(activeState);
-                console.log('*Set null ActiveState*');
+                //console.log('*Set null ActiveState*');
 
                 break;
 
@@ -258,7 +258,7 @@ AFRAME.registerComponent('animated-eyes', {
                                                                 startEvents: 'eyeLookOutNeutralLeft, eyesLookOutNeutral, eyesNeutral, eyeLeftNeutral'});
         //console.log('Finished creating look animations');
         
-        console.log('finished creating eye animations! - in eyes');
+        //console.log('finished creating eye animations! - in eyes');
     },
 
     closeEyes: async function (side, dur){

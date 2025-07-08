@@ -51,7 +51,7 @@ AFRAME.registerComponent('animated-jaw', {
                 break;
 
             default:
-                console.log('*Unknown ActiveState*');
+                //console.log('*Unknown ActiveState*');
         }
     },
 
@@ -61,6 +61,8 @@ AFRAME.registerComponent('animated-jaw', {
         context.el.setAttribute('gltf-morph__jawOpen', {morphtarget: 'JawOpen', value: 0});
         context.el.setAttribute('gltf-morph__jawRight', {morphtarget: 'JawRight', value: 0});
         context.el.setAttribute('gltf-morph__jawLeft', {morphtarget: 'JawLeft', value: 0});
+
+        console.log("jaw morph targets created");
     },
 
     createAnimations: async function (context){

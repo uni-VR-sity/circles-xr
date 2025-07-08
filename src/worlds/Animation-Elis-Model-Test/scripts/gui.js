@@ -61,7 +61,7 @@ TestFolder.add(obj, 'Mesh');
 
 obj['Morph Target'] = function() 
 {
-    var targets = document.getElementById('agent').getObject3D('mesh').children[1].morphTargetDictionary;
+    var targets = document.getElementById('agent').getObject3D('mesh').children[8].morphTargetDictionary;
     console.log(targets);
 };
 

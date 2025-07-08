@@ -56,7 +56,7 @@ AFRAME.registerComponent('animated-face', {
 
             case 'null':
                 clearInterval(activeState);
-                console.log('*Set null ActiveState*');
+                //console.log('*Set null ActiveState*');
 
                 break;
 
