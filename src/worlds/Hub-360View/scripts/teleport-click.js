@@ -20,10 +20,10 @@ AFRAME.registerComponent('teleport-click', {
 
   tick: function () {
       
-    if (!this.raycaster) { return; }  // Not intersecting.
+    if (!this.raycaster) { console.log('not intersecting'); return; }  // Not intersecting.
     
     let intersection = this.raycaster.components.raycaster.getIntersection(this.el);
-    if (!intersection) { return; }
+    if (!intersection) { console.log('intersecting!'); return; }
     
     // move the cursor
     let teleportCursor = document.querySelector('#teleport-cursor');

@@ -25,7 +25,7 @@
   <circles-start-ui/>
 
   <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-  <a-scene circles_scene_properties background="color: #c3f2f7">
+  <a-scene circles_scene_properties background="color: #c3f2f7" circles-model-manager>
     <a-assets>
 
       <!-- Circles' built-in assets [REQUIRED] -->
@@ -49,6 +49,7 @@
       <!-- Ground texture -->
       <img id="ground_txr" src="assets/textures/top-view-corn-flour-texture.jpg" crossorigin="anonymous">
 
+      
     </a-assets>
 
     <!-- Circles' built-in manager and avatar [REQUIRED] -->
@@ -62,6 +63,16 @@
       circles-portal="img_src:#link_1_360; title_text:Campfire Hub; link_url:/w/Campfire-Hub;"
       shadow></a-entity>
 
+    <a-entity id="mountain" circles-model="/worlds/Hub-360View/assets/models/mountain/source/Rockn/Mou.fbx"></a-entity>
+    
+    <a-entity circles-model-display="mountain"
+              scale="0.05 0.05 0.05"
+              position="-20.42576 -4.6 -3.55064"
+              circles-interactive-object
+              teleport-click>
+    </a-entity>
+    
+<!--
     <a-entity id="floor"
       rotation="-90 0 0" scale="1 1 1"
       geometry="primitive: plane; height: 10; width: 10" 
@@ -69,7 +80,7 @@
       circles-interactive-object
       rock-marker
       teleport-click></a-entity>
-
+-->
       <!-- add the video sphere -->
       <a-videosphere src="#video3D"></a-videosphere>
 
