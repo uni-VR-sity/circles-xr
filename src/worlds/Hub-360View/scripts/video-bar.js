@@ -33,7 +33,7 @@ AFRAME.registerComponent('video-bar', {
 
         //only update the bar if it's changing
         if (data.curTime != myVideo.currentTime) {
-            console.log("init time " + data.curTime);
+            //console.log("init time " + data.curTime);
             
             // calculate the new length of the progress bar
             // (curTime / video_length) = percenatge of how far we're in the video

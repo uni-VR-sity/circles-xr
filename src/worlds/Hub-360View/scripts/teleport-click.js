@@ -20,10 +20,16 @@ AFRAME.registerComponent('teleport-click', {
 
   tick: function () {
       
-    if (!this.raycaster) { console.log('not intersecting'); return; }  // Not intersecting.
+    if (!this.raycaster) { 
+      //console.log('not intersecting'); 
+      return; 
+    }  // Not intersecting.
     
     let intersection = this.raycaster.components.raycaster.getIntersection(this.el);
-    if (!intersection) { console.log('intersecting!'); return; }
+    if (!intersection) { 
+      //console.log('intersecting!'); 
+      return; 
+    }
     
     // move the cursor
     let teleportCursor = document.querySelector('#teleport-cursor');
@@ -31,9 +37,9 @@ AFRAME.registerComponent('teleport-click', {
         teleportCursor.setAttribute('position', {x:intersection.point.x, y:intersection.point.y, z:intersection.point.z});
     }
     else {
-        console.log(document.querySelector('teleport-cursor'));
+        //console.log(document.querySelector('teleport-cursor'));
     }
     
-    console.log(intersection.point);
+    //console.log(intersection.point);
   }
 });

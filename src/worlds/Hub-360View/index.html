@@ -9,7 +9,8 @@
   <!-- video UI -->
   <script src="scripts/play-pause.js"></script>
   <script src="scripts/video-bar.js"></script>
-  
+  <script src="scripts/video3d-swap.js"></script>
+
   <!-- rock stacking code (taking this out for now)
   <script src="scripts/rock-marker.js"></script>
   -->
@@ -36,8 +37,9 @@
       
       <!-- 360 video -->
       <!-- video link https://www.storyblocks.com/video/stock/waterfall-in-green-rainforest-360vr-tropical-tuasan-falls-in-mountain-jungle-waterfall-in-the-tropical-forest-camiguin-philippines-mindanao-347542865 -->
-      <video id="video3D" src="assets/videos/5402769-uhd_3840_2160_30fps.mp4" autoplay loop="true" crossorigin="anonymous"></video>
-      <video id="video3D_test_1" src="assets/videos/gold-coast-beach-360-vr-aerial-SBV-318263600-preview.mp4" autoplay loop="true" crossorigin="anonymous"></video>
+      <video id="video3D" src="assets/videos/CemeteryWalkthrough_360.mp4" autoplay="true" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D_1" src="assets/videos/DockOnLake_360.mp4" autoplay="true" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D_2" src="assets/videos/TruckDrive_360.mp4" autoplay="true" loop="true" crossorigin="anonymous"></video>
       
       <!-- audio link https://pixabay.com/sound-effects/waterfall-24060/ -->
       <!-- NOTE: we might want to make an array of environtmetn sounds so we can add more easily and stop them all at once when we pasue -->
@@ -85,29 +87,46 @@
       teleport-click></a-entity>
 
       <!-- add the video sphere -->
-      <a-videosphere src="#video3D"></a-videosphere>
+      <a-videosphere id="video3D_main" src="#video3D"></a-videosphere>
 
       <!-- mini video spheres; when you click on them they become the large video around you -->
-      <a-videosphere  src="#video3D_test_1"
+      <a-videosphere  src="#video3D"
                       position="-4 1 -3"
                       scale="0.001 0.001 0.001"
+                      circles-interactive-object
+                      video3d-swap
+                      ></a-videosphere>
+      <a-videosphere  src="#video3D_1"
+                      position="-3 1 -3"
+                      scale="0.001 0.001 0.001"
+                      circles-interactive-object
+                      video3d-swap
+                      ></a-videosphere>
+      <a-videosphere  src="#video3D_2"
+                      position="-2 1 -3"
+                      scale="0.001 0.001 0.001"
+                      circles-interactive-object
+                      video3d-swap
                       ></a-videosphere>
 
-      <!-- add the play button in the scene to play and puase the video 
+
+      <!-- add the play button in the scene to play and puase the video --> 
       <a-image  id="videoControls" 
                 src="#play" 
                 position="0 1 -2"
                 play-pause
                 circles-interactive-object="type:scale; click_sound:#toggle_snd"></a-image>
-      -->
+      
       <!-- full lenght of video -->
+      <!--
       <a-entity id="videoBar"
                 geometry="primitive:plane"
                 position="0 0.37862 -2"
                 scale="2 0.08 0"
                 material="color:#888888"></a-entity>
-
+      -->
       <!-- current video time -->
+      <!-- 
       <a-entity id="videoProgressBar"
                 geometry="primitive:plane"
                 position="0 0.37862 -1.98"
@@ -115,7 +134,7 @@
                 material="color:#FF0000"
                 video-bar="video_length:52; video_bl: 2.0; video_blc: 0.0;">
       </a-entity>
-  
+      -->
 
     <!-- end your code: -->
   </a-scene>
