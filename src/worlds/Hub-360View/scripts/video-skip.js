@@ -12,6 +12,9 @@ AFRAME.registerComponent('video-skip', {
         CONTEXT_AF.video = document.querySelector(CONTEXT_AF.videoSrc);
         CONTEXT_AF.videoNum = 0;
 
+        //make sure to change the pause button state
+        CONTEXT_AF.pauseButton = document.querySelector('#videoControls');
+
         // Note: remember to not have capital letters in component names!
         //console.log("vidoe3d swap is registered");
 
@@ -28,6 +31,8 @@ AFRAME.registerComponent('video-skip', {
             //trigger animation
             if (CONTEXT_AF.fadeSphere.getAttribute('material').opacity == 0) {
                 CONTEXT_AF.video.pause();
+                //change it so that the pause button icon indicates that you need to press it to play
+                CONTEXT_AF.pauseButton.setAttribute('src', '#play')
                 CONTEXT_AF.fadeSphere.emit('fadein');
             } else {
                 CONTEXT_AF.fadeSphere.emit('fadeout');
