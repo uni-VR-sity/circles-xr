@@ -45,7 +45,7 @@ AFRAME.registerComponent('video-skip', {
         } else {
             console.log("Clip index out of range");
         }
-            CONTEXT_AF.video = document.querySelector(CONTEXT_AF.videoSrc);
+            this.video = document.querySelector(this.videoSrc);
     }
 
 })

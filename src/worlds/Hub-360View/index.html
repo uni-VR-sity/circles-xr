@@ -7,16 +7,16 @@
   <script src="https://unpkg.com/aframe-immersive-video-component/dist/aframe-immersive-video-component.min.js"></script>
   
   <!-- video UI -->
-  <script src="scripts/play-pause.js"></script>
-  <script src="scripts/video-bar.js"></script>
-  <script src="scripts/video3d-swap.js"></script>
-  <script src="scripts/video-skip.js"></script>
+  <script src="/worlds/Hub-360View/scripts/play-pause.js"></script>
+  <script src="/worlds/Hub-360View/scripts/scripts/video-bar.js"></script>
+  <script src="/worlds/Hub-360View/scripts/scripts/video3d-swap.js"></script>
+  <script src="/worlds/Hub-360View/scripts/scripts/video-skip.js"></script>
 
   <!-- rock stacking code (taking this out for now)
   <script src="scripts/rock-marker.js"></script>
   -->
 
-  <script src="scripts/teleport-click.js"></script>
+  <script src="/worlds/Hub-360View/scripts/scripts/teleport-click.js"></script>
 
 </head>
 <body>
@@ -38,20 +38,20 @@
       
       <!-- 360 video -->
       <!-- video link https://www.storyblocks.com/video/stock/waterfall-in-green-rainforest-360vr-tropical-tuasan-falls-in-mountain-jungle-waterfall-in-the-tropical-forest-camiguin-philippines-mindanao-347542865 -->
-      <video id="video3D" src="assets/videos/boatTest_short_360.mp4" autoplay="false" loop="false" crossorigin="anonymous"></video>
-      <video id="video3D_2" src="assets/videos/TruckDrive_360_cliped_1.mp4" autoplay="false" loop="false" crossorigin="anonymous"></video>
+      <video id="video3D" src="/worlds/Hub-360View/assets/videos/boatTest_short_360.mp4" autoplay="false" loop="false" crossorigin="anonymous"></video>
+      <video id="video3D_2" src="/worlds/Hub-360View/assets/videos/TruckDrive_360_cliped_1.mp4" autoplay="false" loop="false" crossorigin="anonymous"></video>
       <!-- audio link https://pixabay.com/sound-effects/waterfall-24060/ -->
       <!-- NOTE: we might want to make an array of environtmetn sounds so we can add more easily and stop them all at once when we pasue 
       <audio id="video3D_snd" src="assets/audio/waterfall-24060.mp3" autoplay loop="true" crossorigin="anonymous"></audio>
       -->
 
       <!-- play / pause button -->
-      <img id="play" src="assets/images/play-button.png" crossorigin="anonymous">
-      <img id="pause" src="assets/images/pause-button.png" crossorigin="anonymous">
-      <audio id="toggle_snd" src="assets/audio/item_selected.mp3" preload="auto" crossorigin="anonymous"></audio>
+      <img id="play" src="/worlds/Hub-360View/assets/images/play-button.png" crossorigin="anonymous">
+      <img id="pause" src="/worlds/Hub-360View/assets/images/pause-button.png" crossorigin="anonymous">
+      <audio id="toggle_snd" src="/worlds/Hub-360View/assets/audio/item_selected.mp3" preload="auto" crossorigin="anonymous"></audio>
 
       <!-- Ground texture -->
-      <img id="ground_txr" src="assets/textures/top-view-corn-flour-texture.jpg" crossorigin="anonymous">
+      <img id="ground_txr" src="/worlds/Hub-360View/assets/textures/top-view-corn-flour-texture.jpg" crossorigin="anonymous">
 
       
     </a-assets>
