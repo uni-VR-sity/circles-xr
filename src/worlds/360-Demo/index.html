@@ -2,6 +2,17 @@
 <head>
   <!-- Circles' head scripts [REQUIRED] -->
   <circles-start-scripts/>
+  
+  <!-- video UI -->
+  <script src="/worlds/Hub-360View/scripts/video3d-swap.js"></script>
+  <script src="/worlds/Hub-360View/scripts/video-skip.js"></script>
+
+  <!-- rock stacking code (taking this out for now)
+  <script src="scripts/rock-marker.js"></script>
+  -->
+
+  <script src="/worlds/Hub-360View/scripts/teleport-click.js"></script>
+
 </head>
 <body>
   <!-- 2D UI elements overylayed on the 3D scene for user options -->
@@ -11,17 +22,88 @@
   <circles-start-ui/>
 
   <!-- a-scene with 'circles-properties' component [REQUIRED] -->
-  <a-scene circles_scene_properties>
+  <a-scene circles_scene_properties background="color: #c3f2f7" circles-model-manager>
     <a-assets>
 
       <!-- Circles' built-in assets [REQUIRED] -->
       <circles-assets/>
+
+      <!-- 360 -->
+      <img id='link_1_360'        src='/global/images/WIT_1_Screen.jpg' crossorigin="anonymous">
+      
+      <!-- 360 video -->
+      <video id="video3D" src="/worlds/360-Demo/assets/videos/walkingSequence/walking_360_05.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D_1" src="/worlds/360-Demo/assets/videos/canoe_360_04.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D_2" src="/worlds/360-Demo/assets/videos/canoe_360_02.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video_walking01" src="/worlds/360-Demo/assets/videos/walkingSequence/walking_360_01.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video_walking02" src="/worlds/360-Demo/assets/videos/walkingSequence/walking_360_02.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video_walking03" src="/worlds/360-Demo/assets/videos/walkingSequence/walking_360_03.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video_walking04" src="/worlds/360-Demo/assets/videos/walkingSequence/walking_360_04.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video_walking05" src="/worlds/360-Demo/assets/videos/walkingSequence/walking_360_05.mp4" loop="true" crossorigin="anonymous"></video>
+
+      <!-- Ground texture -->
+      <img id="ground_txr" src="/worlds/Hub-360View/assets/textures/top-view-corn-flour-texture.jpg" crossorigin="anonymous">
+
     </a-assets>
 
     <!-- Circles' built-in manager and avatar [REQUIRED] -->
     <circles-manager-avatar/>
 
     <!-- start your code: put your A-frame, Circles XR, and custom components here -->
+
+    <!-- links to other worlds -->
+    <a-entity id="link_1"
+      position="-0.559 1.7 4.134" rotation="0 56.215 0" scale="0.5 0.5 0.5"
+      circles-portal="img_src:#link_1_360; title_text:Campfire Hub; link_url:/w/Campfire-Hub;"
+      shadow></a-entity>
+
+    <a-entity id="floor"
+      rotation="-90 0 0" scale="1 1 1"
+      geometry="primitive: plane; height: 10; width: 10" 
+      material="shader: flat; color: #aa9999; src: #ground_txr"></a-entity>
+
+      <!-- add the video sphere -->
+      <a-videosphere  id="video3D_main" 
+                      src="#video_walking01"
+                      ></a-videosphere>
+
+      <!-- Black sphere for a fade transition -->
+      <a-entity id="fadeSphere"
+                geometry="primitive: sphere; radius: 400;"
+                material="color: #000000; opacity: 0; shader: flat; side: back;"
+                ></a-entity>
+
+      <!-- mini video spheres; when you click on them they become the large video around you -->
+      <a-videosphere  src="#video_walking01"
+                      position="-1 1 -1"
+                      scale="0.001 0.001 0.001"
+                      circles-interactive-object
+                      video3d-swap
+                      circles-sendpoint="target:#vid_point_1"
+                      ></a-videosphere>
+      <a-entity       id="vid_point_1"
+                      circles-checkpoint 
+                      position="0f 0f 0f"></a-entity>
+      <a-videosphere  src="#video_walking03"
+                      position="-16.5f 1f -4.3f"
+                      scale="0.001 0.001 0.001"
+                      circles-interactive-object
+                      video3d-swap
+                      circles-sendpoint="target:#vid_point_2"
+                      ></a-videosphere>
+      <a-entity       id="vid_point_2"
+                      circles-checkpoint 
+                      position="-15.5f 0f -3.3f"></a-entity>
+      <a-videosphere  src="#video_walking05"
+                      position="-26.2 1 2.4"
+                      scale="0.001 0.001 0.001"
+                      circles-interactive-object
+                      video3d-swap
+                      circles-sendpoint="target:#vid_point_3"
+                      ></a-videosphere>
+      <a-entity       id="vid_point_3"
+                      circles-checkpoint 
+                      position="-25.2f 0f 1.4f"></a-entity>
 
     <!-- end your code: -->
   </a-scene>

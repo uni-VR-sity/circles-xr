@@ -84,7 +84,10 @@ testingArea/
 *.pem
 *.csr
 
-//ignore visual studio workspace
+# ignore visual studio workspace
 *.code-workspace
+
+# ignore video files to avoid large file issues
+*.mp4
 
 ### end global ignore
