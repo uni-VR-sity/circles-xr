@@ -22,17 +22,17 @@
       <circles-assets/>
 
       <!-- 3D Models -->
-      <a-asset-item id="stump-gltf"  src="/worlds/Language-Lesson/assets/models/detailed_spruce_tree_stump.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="forest-floor-gltf"  src="/worlds/Language-Lesson/assets/models/mossy_ground.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="canoe-gltf"  src="/worlds/Language-Lesson/assets/models/canoe.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="spruce-gltf"  src="/worlds/Language-Lesson/assets/models/spruceTree.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="moose-gltf"  src="/worlds/Language-Lesson/assets/models/moose.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="wolf-gltf"  src="/worlds/Language-Lesson/assets/models/wolf.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="crow-gltf"  src="/worlds/Language-Lesson/assets/models/crow_01.glb" response-type="arraybuffer"></a-asset-item>
-      <a-asset-item id="navmesh_gltf" src="/worlds/Campfire/assets/models/campfire-nav.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
-      <a-asset-item id="enviro-gltf"    src="/worlds/Language-Lesson/assets/models/hubenviro.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="stump-gltf"  src="/worlds/Language-Lesson/assets/models/detailed_spruce_tree_stump.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="forest-floor-gltf"  src="/worlds/Language-Lesson/assets/models/mossy_ground.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="canoe-gltf"  src="/worlds/Language-Lesson/assets/models/canoe.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="spruce-gltf"  src="/worlds/Language-Lesson/assets/models/spruce_tree.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="moose-gltf"  src="/worlds/Language-Lesson/assets/models/moose.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="wolf-gltf"  src="/worlds/Language-Lesson/assets/models/wolf.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="crow-gltf"  src="/worlds/Language-Lesson/assets/models/crow_01.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="navmesh_gltf" src="/worlds/Campfire/assets/models/campfire-nav.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="enviro-gltf"    src="/worlds/Language-Lesson/assets/models/hubenviro_02.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
 
-      <video id="video3D" src="/worlds/360-Demo/assets/videos/canoe_360_01.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D" src="/worlds/360-Demo/assets/videos/canoe_360_01.mp4" loop="true" preload="auto" crossorigin="anonymous"></video>
       <video id="video3D_canoe" src="/worlds/360-Demo/assets/videos/canoe_360_04.mp4" loop="true" crossorigin="anonymous"></video>
 
       <audio id="forest-sound" src="/worlds/Language-Lesson/assets/sounds/forest-atmosphere.mp3" autoplay preload="auto" crossorigin="anonymous"></audio>
@@ -58,14 +58,14 @@
               shadow="receive: true; cast: true"></a-entity>
 
     <a-entity id="forest-floor"
-              position="2.63 0.02 -0.87" rotation="0 -128 0" scale="4.36 3 4.78"
+              position="2.108 -0.1 0.504" rotation="-0.22 -128 1.048" scale="4.36 3 4.78"
               gltf-model="#forest-floor-gltf"
               shadow="receive: true; cast: false"></a-entity>
 
-    <a-entity
-      id="spruce"
-      gltf-model="#spruce-gltf"
-      shadow="receive: true; cast: true"></a-entity>
+    <a-entity id="spruce"
+              rotation="0 90 0" scale="1.75 1 1.75"
+              gltf-model="#spruce-gltf"
+              shadow="receive: true; cast: true"></a-entity>
 
     <!-- The animals -->
     <a-entity id="moose"
@@ -76,7 +76,7 @@
               animation__rot="property: rotation; to: 0 0 0; delay: 6000; dur: 1000; easing: linear; loop: false; autoplay: true;"
               shadow="receive: true; cast: true"
               circles-interactive-object="type: highlight;">
-              <a-entity 
+              <a-entity
                 position="0.7 1 -1"
                 circles-label="text: denyák; arrow_position:up;"></a-entity>
     </a-entity>
@@ -97,8 +97,7 @@
               shadow="receive: true; cast: true">
               <a-entity 
                 scale="2 2 2" position="0 1 2.5"
-                circles-label="text: ts'éhk'i; font: src(\worlds\Language-Lesson\assets\custom-msdf.json);arrow_position:up;">
-                <a-text value="ts'éhk'i" font="\worlds\Language-Lesson\assets\custom-msdf.json" font-image="\worlds\Language-Lesson\assets\custom-msdf.png" negate="false"></a-text>
+                circles-label="text: ts'éhk'i; arrow_position:up;">
               </a-entity>
     </a-entity>
     <a-entity id="canoe"
