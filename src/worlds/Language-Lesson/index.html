@@ -2,6 +2,10 @@
 <head>
   <!-- Circles' head scripts [REQUIRED] -->
   <circles-start-scripts/>
+
+  <!-- video UI -->
+  <script src="/worlds/Hub-360View/scripts/video3d-swap.js"></script>
+  <script src="/worlds/Hub-360View/scripts/play-pause.js"></script>
 </head>
 <body>
   <!-- 2D UI elements overylayed on the 3D scene for user options -->
@@ -16,15 +20,136 @@
 
       <!-- Circles' built-in assets [REQUIRED] -->
       <circles-assets/>
+
+      <!-- 3D Models -->
+      <a-asset-item id="stump-gltf"  src="/worlds/Language-Lesson/assets/models/detailed_spruce_tree_stump.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="forest-floor-gltf"  src="/worlds/Language-Lesson/assets/models/mossy_ground.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="canoe-gltf"  src="/worlds/Language-Lesson/assets/models/canoe.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="spruce-gltf"  src="/worlds/Language-Lesson/assets/models/spruceTree.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="moose-gltf"  src="/worlds/Language-Lesson/assets/models/moose.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="wolf-gltf"  src="/worlds/Language-Lesson/assets/models/wolf.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="crow-gltf"  src="/worlds/Language-Lesson/assets/models/crow_01.glb" response-type="arraybuffer"></a-asset-item>
+      <a-asset-item id="navmesh_gltf" src="/worlds/Campfire/assets/models/campfire-nav.glb" response-type="arraybuffer" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="enviro-gltf"    src="/worlds/Language-Lesson/assets/models/hubenviro.glb" response-type="arraybuffer"></a-asset-item>
+
+      <video id="video3D" src="/worlds/360-Demo/assets/videos/canoe_360_01.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D_canoe" src="/worlds/360-Demo/assets/videos/canoe_360_04.mp4" loop="true" crossorigin="anonymous"></video>
+
+      <audio id="forest-sound" src="/worlds/Language-Lesson/assets/sounds/forest-atmosphere.mp3" autoplay preload="auto" crossorigin="anonymous"></audio>
+
+      <!-- play / pause button -->
+      <img id="play" src="/global/assets/textures/icons/icon-play.png" crossorigin="anonymous">
+      <img id="pause" src="/global/assets/textures/icons/icon-pause.png" crossorigin="anonymous">
+
     </a-assets>
 
     <!-- Circles' built-in manager and avatar [REQUIRED] -->
     <circles-manager-avatar/>
 
     <!-- start your code: put your A-frame, Circles XR, and custom components here -->
+    <a-entity
+      gltf-model="#enviro-gltf"
+      shadow="receive: true; cast: true"
+      circles-sound="src: #forest-sound; loop: true;"></a-entity>
+
+    <a-entity id="stump"
+              position="0.46 0.05 -1.45" rotation="0 140 0" scale="1.25 2.2 1.25"
+              gltf-model="#stump-gltf"
+              shadow="receive: true; cast: true"></a-entity>
+
+    <a-entity id="forest-floor"
+              position="2.63 0.02 -0.87" rotation="0 -128 0" scale="4.36 3 4.78"
+              gltf-model="#forest-floor-gltf"
+              shadow="receive: true; cast: false"></a-entity>
+
+    <a-entity
+      id="spruce"
+      gltf-model="#spruce-gltf"
+      shadow="receive: true; cast: true"></a-entity>
+
+    <!-- The animals -->
+    <a-entity id="moose"
+              position="4 0.1 6.6" rotation="0 50 0" 
+              gltf-model="#moose-gltf"
+              animation-mixer="clip: Armature|Take*; loop: repeat; repetitions: 5;"
+              animation__pos="property: position; to: 1.8 0.1 2.4; dur: 7000; easing: linear; loop: false; autoplay: true;"
+              animation__rot="property: rotation; to: 0 0 0; delay: 6000; dur: 1000; easing: linear; loop: false; autoplay: true;"
+              shadow="receive: true; cast: true"
+              circles-interactive-object="type: highlight;">
+              <a-entity 
+                position="0.7 1 -1"
+                circles-label="text: denyák; arrow_position:up;"></a-entity>
+    </a-entity>
+    <a-entity id="wolf"
+              position="1.35 0 -3.5" rotation="0 41 0" scale="0.6 0.6 0.6"
+              gltf-model="#wolf-gltf"
+              animation-mixer="clip: Animation*; loop: once;"
+              shadow="receive: true; cast: true">
+              <a-entity 
+                position="0 1 1.5"
+                circles-label="text: agay; arrow_position:up;">
+              </a-entity>
+    </a-entity>
+    <a-entity id="crow"
+              position="0.29 0.75 -1.45" rotation="0 26 0" scale="0.2 0.2 0.2"
+              gltf-model="#crow-gltf"
+              animation-mixer="clip: FlyToIdle*; loop: once; clampWhenFinished: true; "
+              shadow="receive: true; cast: true">
+              <a-entity 
+                scale="2 2 2" position="0 1 2.5"
+                circles-label="text: ts'éhk'i; font: src(\worlds\Language-Lesson\assets\custom-msdf.json);arrow_position:up;">
+                <a-text value="ts'éhk'i" font="\worlds\Language-Lesson\assets\custom-msdf.json" font-image="\worlds\Language-Lesson\assets\custom-msdf.png" negate="false"></a-text>
+              </a-entity>
+    </a-entity>
+    <a-entity id="canoe"
+              position="26.4 0.2 -0.7" rotation="0 -36 0" scale="0.8 0.8 0.8"
+              gltf-model="#canoe-gltf"
+              shadow="receive: true; cast: true"></a-entity>
+    <a-entity id="canoe_point"
+              circles-checkpoint
+              position="26.4 -0.25 -0.7"
+              visible="false"></a-entity>
+
+    <a-videosphere  src="#video3D_canoe"
+                    position="27.5 2 0.2"
+                    scale="0.001 0.001 0.001"
+                    circles-interactive-object
+                    video3d-swap
+                    circles-sendpoint="target:#canoe_point"
+                    ></a-videosphere>
+    <a-videosphere  id="video3D_main"
+                    src="#video3D"
+                    rotation="0 145 0"
+                    ></a-videosphere>
+
+    <a-entity id="navmesh" gltf-model="#navmesh_gltf" visible='false' nav-mesh></a-entity>
+
+    <a-entity id="spawn_point"
+              circles-checkpoint
+              circles-spawnpoint
+              position="5.7f 0f -0.8f"></a-entity>
+
+    
+    <a-image  id="videoControls" 
+              src="#play"
+              position="9.5 1 -3" rotation="0 -90 0"
+              play-pause
+              circles-interactive-object="type:scale; click_sound:#toggle_snd"></a-image>
 
     <!-- end your code: -->
   </a-scene>
+  <script>
+    //This is a bandaid fix for the disappearing crow bug. Not really efficient but it works.
+    var el = document.getElementById('crow');
+    el.addEventListener('model-loaded', () => {
+      const model = el.getObject3D('mesh');
+      model.traverse((node) => {
+        if (node.isMesh) {
+          node.frustumCulled = false;
+        }
+      });
+    });
+  </script>
 
   <!-- Circles' end scripts [REQUIRED] -->
   <circles-end-scripts/>
