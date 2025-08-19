@@ -3,9 +3,13 @@
   <!-- Circles' head scripts [REQUIRED] -->
   <circles-start-scripts/>
 
+  <script src="https://rawcdn.githack.com/elbobo/aframe-gltf-morph-component/07e9b80bd382cc1c19223468d35c453e7c76e9a2/dist/aframe-gltf-morph-component.js"></script>
+
   <!-- video UI -->
   <script src="/worlds/Hub-360View/scripts/video3d-swap.js"></script>
   <script src="/worlds/Hub-360View/scripts/play-pause.js"></script>
+
+  <script src="/worlds/Language-Lesson/scripts/animal-script.js"></script>
 </head>
 <body>
   <!-- 2D UI elements overylayed on the 3D scene for user options -->
@@ -31,16 +35,23 @@
       <a-asset-item id="crow-gltf"  src="/worlds/Language-Lesson/assets/models/crow_01.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
       <a-asset-item id="navmesh_gltf" src="/worlds/Campfire/assets/models/campfire-nav.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
       <a-asset-item id="enviro-gltf"    src="/worlds/Language-Lesson/assets/models/hubenviro_02.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
-      <a-asset-item id="waterEdge-gltf"    src="/worlds/Language-Lesson/assets/models/waterEdge.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="water-edge-gltf"    src="/worlds/Language-Lesson/assets/models/waterEdge.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
 
-      <video id="video3D" src="/worlds/360-Demo/assets/videos/canoe_360_01.mp4" loop="true" preload="auto" crossorigin="anonymous"></video>
-      <video id="video3D_canoe" src="/worlds/360-Demo/assets/videos/canoe_360_04.mp4" loop="true" crossorigin="anonymous"></video>
+      <video id="video3D" src="/worlds/360-Demo/assets/videos/canoe_360_01.mp4" muted loop="true" preload="auto" crossorigin="anonymous"></video>
+      <video id="video3D_canoe" src="/worlds/360-Demo/assets/videos/canoe_360_04.mp4" muted loop="true" crossorigin="anonymous"></video>
 
-      <audio id="forest-sound" src="/worlds/Language-Lesson/assets/sounds/forest-atmosphere.mp3" autoplay preload="auto" crossorigin="anonymous"></audio>
+      <audio id="forest-sound" src="/worlds/Language-Lesson/assets/sounds/forest-atmosphere.mp3" loop="true" autoplay preload="auto" crossorigin="anonymous"></audio>
+      <audio id="greeting-sound" src="/worlds/Language-Lesson/assets/sounds/Walter_Peter_greeting.mp3" preload="auto" crossorigin="anonymous"></audio>
+      <audio id="greeting-wolf-sound" src="/worlds/Language-Lesson/assets/sounds/Walter_Peter_greeting_wolf.mp3" preload="auto" crossorigin="anonymous"></audio>
+      <audio id="greeting-crow-sound" src="/worlds/Language-Lesson/assets/sounds/Walter_Peter_greeting_raven.mp3" preload="auto" crossorigin="anonymous"></audio>
 
       <!-- play / pause button -->
       <img id="play" src="/global/assets/textures/icons/icon-play.png" crossorigin="anonymous">
       <img id="pause" src="/global/assets/textures/icons/icon-pause.png" crossorigin="anonymous">
+
+      <img id="moose-label" src="/worlds/Language-Lesson/assets/images/moose_label.png" crossorigin="anonymous">
+      <img id="crow-label" src="/worlds/Language-Lesson/assets/images/raven_label.png" crossorigin="anonymous">
+      <img id="wolf-label" src="/worlds/Language-Lesson/assets/images/wolf_label.png" crossorigin="anonymous">
 
     </a-assets>
 
@@ -51,10 +62,10 @@
     <a-entity
       gltf-model="#enviro-gltf"
       shadow="receive: true; cast: true"
-      circles-sound="src: #forest-sound; loop: true;"></a-entity>
-
+      circles-sound="src: #forest-sound; loop: true;  volume: 0.3; autoplay: true;"></a-entity>
+      
     <a-entity
-      gltf-model="#waterEdge-gltf"
+      gltf-model="#water-edge-gltf"
       shadow="receive: true; cast: true"></a-entity>
 
     <a-entity id="stump"
@@ -74,52 +85,94 @@
 
     <!-- The animals -->
     <a-entity id="moose"
+              animal
               position="4 0.1 6.6" rotation="0 50 0" 
-              gltf-model="#moose-gltf"
+              gltf-model="#moose-gltf" shadow="receive: true; cast: true"
               animation-mixer="clip: Armature|Take*; loop: repeat; repetitions: 5;"
               animation__pos="property: position; to: 1.8 0.1 2.4; dur: 7000; easing: linear; loop: false; autoplay: true;"
               animation__rot="property: rotation; to: 0 0 0; delay: 6000; dur: 1000; easing: linear; loop: false; autoplay: true;"
-              shadow="receive: true; cast: true"
-              circles-interactive-object="type: highlight;">
+              circles-interactive-object="type: scale; click_sound: #greeting-sound;"
+              circles-sound="src: #greeting-sound; type: dialogue;  volume: 3;"
+              onclick="document.getElementById('moose').emit('speak', {value: 'moose'});">
+              <!--
               <a-entity
                 position="0.7 1 -1"
                 circles-label="text: denyák; arrow_position:up;"></a-entity>
+              <a-text text="value:denyák; align:center" 
+                      geometry="primitive:plane; height:0.3; width:0.9"
+                      material="color: black" scale="0.6 0.6 0.6" position="0.7 1 -1" width="3.5"
+                      circles-lookat="constrainYAxis: false;"></a-text> -->
+              <a-image  src="#moose-label"
+                        position="0.7 1 -1" scale="0.25 0.15 0.25"
+                        circles-lookat="constrainYAxis: false;"></a-image>
     </a-entity>
     <a-entity id="wolf"
+              animal
               position="1.35 0 -3.5" rotation="0 41 0" scale="0.6 0.6 0.6"
-              gltf-model="#wolf-gltf"
+              gltf-model="#wolf-gltf" shadow="receive: false; cast: true"
               animation-mixer="clip: Animation*; loop: once;"
-              shadow="receive: true; cast: true">
+              circles-interactive-object="type: scale; click_sound: #greeting-wolf-sound;"
+              circles-sound="src: #greeting-wolf-sound; type: dialogue; volume: 3;"
+              onclick="document.getElementById('wolf').emit('speak', {value: 'wolf'});">
+              <!--
               <a-entity 
                 position="0 1 1.5"
                 circles-label="text: agay; arrow_position:up;">
               </a-entity>
+              <a-text text="value:agay; align:center" 
+                      geometry="primitive:plane; height:0.3; width:0.6"
+                      material="color: black" scale="0.8 0.8 0.8" position="0 1 1.5" width="3.5"
+                      circles-lookat="constrainYAxis: false;"></a-text> -->
+              <a-image  src="#wolf-label"
+                        position="0 1 1.5" scale="0.5 0.3 0.5"
+                        circles-lookat="constrainYAxis: false;"></a-image>
     </a-entity>
     <a-entity id="crow"
+              animal
               position="0.29 0.75 -1.45" rotation="0 26 0" scale="0.2 0.2 0.2"
-              gltf-model="#crow-gltf"
-              animation-mixer="clip: FlyToIdle*; loop: once; clampWhenFinished: true; "
-              shadow="receive: true; cast: true">
+              gltf-model="#crow-gltf" shadow="receive: true; cast: true" gltf-morph__key="morphtarget:Key 1; value:0;"
+              animation__wingsClose="property: gltf-morph__key.value; to: 1; dur: 2000; startEvents: wingsClose;"
+              animation__wingsOpen="property: gltf-morph__key.value; to: 0; dur: 2000; startEvents: wingsOpen;"
+              animation-mixer="clip: FlyToIdle*; loop: once; clampWhenFinished: true;"
+              circles-interactive-object="type: scale; click_sound: #greeting-crow-sound;"
+              circles-sound="src: #greeting-crow-sound; type: dialogue;  volume: 3;"
+              onclick="document.getElementById('crow').emit('speak', {value: 'crow'});">
+              <a-entity 
+                geometry="primitive: sphere; radius: 1;" visible="false"
+                scale="2 2 2" position="0 1.75 0"
+                circles-interactive-object="type: scale;">
+              </a-entity>
+              <!--
               <a-entity 
                 scale="2 2 2" position="0 1 2.5"
                 circles-label="text: ts'éhk'i; arrow_position:up;">
-              </a-entity>
+              </a-entity> 
+              <a-text text="value:ts'éhk'i; align:center" 
+                      geometry="primitive:plane; height:0.3; width:0.8"
+                      material="color: black" scale="1.5 1.5 1.5" position="0 1.75 2.5" width="3.5"
+                      circles-lookat="constrainYAxis: false;"></a-text>-->
+              <a-image  src="#crow-label"
+                        position="0 1.75 2" scale="1 0.6 1"
+                        circles-lookat="constrainYAxis: false;"></a-image>
     </a-entity>
     <a-entity id="canoe"
-              position="26.4 0.2 -0.7" rotation="0 -36 0" scale="0.8 0.8 0.8"
+              position="24.6 0.2 -1.55" rotation="0 -36 0" scale="0.8 0.8 0.8"
               gltf-model="#canoe-gltf"
               shadow="receive: true; cast: true"></a-entity>
-    <a-entity id="canoe_point"
+    <a-entity id="canoe-point"
               circles-checkpoint
-              position="26.4 -0.25 -0.7"
+              position="24.6 -0.25 -1.55"
               visible="false"></a-entity>
 
-    <a-videosphere  src="#video3D_canoe"
-                    position="27.5 2 0.2"
+    <a-videosphere  id="video3D-canoe"
+                    src="#video3D_canoe"
+                    position="24.6 1.5 -1.55"
                     scale="0.001 0.001 0.001"
                     circles-interactive-object
+                    circles-interactive-visible
                     video3d-swap
-                    circles-sendpoint="target:#canoe_point"
+                    circles-sendpoint="target:#canoe-point"
+                    onclick="document.getElementById('video3D-canoe').setAttribute('circles-interactive-visible', 'false'); document.getElementById('video3D-tree').setAttribute('circles-interactive-visible', 'true');"
                     ></a-videosphere>
     <a-videosphere  id="video3D_main"
                     src="#video3D"
@@ -128,17 +181,28 @@
 
     <a-entity id="navmesh" gltf-model="#navmesh_gltf" visible='false' nav-mesh></a-entity>
 
-    <a-entity id="spawn_point"
+    <a-entity id="spawn-point"
               circles-checkpoint
               circles-spawnpoint
-              position="5.7f 0f -0.8f"></a-entity>
+              position="6.7f 0f -0.9f"></a-entity>
+    <a-videosphere  id="video3D-tree"
+                    src="#video3D"
+                    position="7.6f 1.5f 0.8f"
+                    scale="0.001 0.001 0.001"
+                    circles-interactive-object
+                    circles-interactive-visible="false"
+                    video3d-swap
+                    circles-sendpoint="target:#spawn-point"
+                    onclick="document.getElementById('video3D-tree').setAttribute('circles-interactive-visible', 'false'); document.getElementById('video3D-canoe').setAttribute('circles-interactive-visible', 'true');"
+                    ></a-videosphere>
 
     
-    <a-image  id="videoControls" 
+    <a-image  id="videoControls"
               src="#play"
               position="9.5 1 -3" rotation="0 -90 0"
               play-pause
-              circles-interactive-object="type:scale; click_sound:#toggle_snd"></a-image>
+              circles-interactive-object="type:scale; click_sound:#toggle_snd"
+              circles-lookat></a-image>
 
     <!-- end your code: -->
   </a-scene>
