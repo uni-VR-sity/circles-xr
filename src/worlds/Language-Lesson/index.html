@@ -31,6 +31,7 @@
       <a-asset-item id="crow-gltf"  src="/worlds/Language-Lesson/assets/models/crow_01.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
       <a-asset-item id="navmesh_gltf" src="/worlds/Campfire/assets/models/campfire-nav.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
       <a-asset-item id="enviro-gltf"    src="/worlds/Language-Lesson/assets/models/hubenviro_02.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
+      <a-asset-item id="waterEdge-gltf"    src="/worlds/Language-Lesson/assets/models/waterEdge.glb" response-type="arraybuffer" preload="auto" crossorigin="anonymous"></a-asset-item>
 
       <video id="video3D" src="/worlds/360-Demo/assets/videos/canoe_360_01.mp4" loop="true" preload="auto" crossorigin="anonymous"></video>
       <video id="video3D_canoe" src="/worlds/360-Demo/assets/videos/canoe_360_04.mp4" loop="true" crossorigin="anonymous"></video>
@@ -51,6 +52,10 @@
       gltf-model="#enviro-gltf"
       shadow="receive: true; cast: true"
       circles-sound="src: #forest-sound; loop: true;"></a-entity>
+
+    <a-entity
+      gltf-model="#waterEdge-gltf"
+      shadow="receive: true; cast: true"></a-entity>
 
     <a-entity id="stump"
               position="0.46 0.05 -1.45" rotation="0 140 0" scale="1.25 2.2 1.25"
