@@ -4,6 +4,8 @@ const router     = require('express').Router();
 const path       = require('path');
 const viewController = require('../controllers/viewController');
 const circleController = require('../controllers/circleController');
+const centralServerController = require('../controllers/centralServerController');
+const animationController = require('../controllers/animationController');
 const User       = require('../models/user');
 const passport   = require('passport');
 const express    = require('express');
@@ -34,14 +36,39 @@ const notAuthenticated = (req, res, next) => {
   return next();
 };
 
+// Homepage Routes ---------------------------------------------------------------------------------------------------------------------------------
+
+router.get('/', centralServerController.serveHomepage);
+
 // Login Routes ------------------------------------------------------------------------------------------------------------------------------------
 
-router.get('/', notAuthenticated, viewController.serveLogin);
+router.get('/login', notAuthenticated, viewController.serveLogin);
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), function(err, req, res, next) {
-  req.session.errorMessage = 'Username and/ or password incorrect';
-  return res.redirect('/');
+router.post('/login-user', passport.authenticate('local', { successRedirect: '/get-display-name', failWithError: true }), async function(err, req, res, next) 
+{
+  // Checking if user account is verified to give appropriate error message
+  try 
+  {
+    var user = await User.findOne({ username: req.body.username }).exec();
+
+    if (!user.verified)
+    {
+      req.session.errorMessage = 'Please check your email to verify your account before logging in';
+    }
+    else
+    {
+      req.session.errorMessage = 'Username and/ or password is incorrect';
+    }
+  } 
+  catch(err) 
+  {
+    req.session.errorMessage = 'Username and/ or password is incorrect';
+  }
+
+  return res.redirect('/login');
 });
+
+router.get('/verify-email/:token', viewController.verifyUserEmail);
 
 router.get('/get-display-name', authenticated, function(req, res)
 {
@@ -100,12 +127,16 @@ router.get('/logout', authenticated, (req, res, next) => {
 
 router.get('/register', notAuthenticated, viewController.serveRegister);
 
+router.post('/register-user', notAuthenticated, viewController.registerUser);
+
+/*
 router.post('/register-user', viewController.registerUser, passport.authenticate('local', { successRedirect: '/explore', failWithError: true}), function(err, req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/register'), {
     message: "User registered successfully but login failed, please login again"
   });
 });
+*/
 
 // Explore Page Routes -----------------------------------------------------------------------------------------------------------------------------
 
@@ -142,6 +173,7 @@ router.get('/manage-users', authenticated, viewController.serveManageUsers);
 router.post('/create-user', authenticated, viewController.createUser);
 router.post('/bulk-create-users', authenticated, viewController.bulkCreateUsers);
 router.post('/update-usertype', authenticated, viewController.updateUsertype);
+router.post('/delete-user', authenticated, viewController.deleteUser);
 
 router.get('/sample-upload-file', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../public/web/views/sampleUserUpload.txt'));
@@ -160,10 +192,6 @@ router.post('/upload-content', authenticated, viewController.uploadContent);
 router.get('/uploads/:file_name', authenticated, viewController.serveUploadedFile);
 router.post('/set-file-dimensions', authenticated, viewController.setFileDimensions);
 router.post('/delete-uploaded-content', authenticated, viewController.deleteContent);
-
-// More Circles Page Routes -----------------------------------------------------------------------------------------------------------------------
-
-router.get('/more-circles', authenticated, viewController.serveMoreCircles);
 
 // Accessing Circles Routes -----------------------------------------------------------------------------------------------------------------------
 
@@ -187,6 +215,56 @@ router.post('/update-whiteboard-file-position', authenticated, circleController.
 
 router.post('/update-user-model', authenticated, circleController.updateUserModel);
 router.post('/update-user-colour', authenticated, circleController.updateUserColour);
+
+// Data Collection Routes -----------------------------------------------------------------------------------------------------------------------
+
+router.post('/save-collected-data', authenticated, circleController.saveCollectedData);
+router.post('/check-existing-logs', authenticated, circleController.checkExistingLogs);
+router.get('/download-logs/:circle', authenticated, circleController.downloadCollectedData);
+
+// CENTRAL SERVER ROUTES ----------------------------------------------------------------------------------------------------------------------
+
+// More Circles Page Routes -----------------------------------------------------------------
+
+router.get('/more-circles', centralServerController.serveMoreCircles);
+router.post('/add-server', authenticated, centralServerController.addCirclesServer);
+router.post('/deactivate-circles-server', authenticated, centralServerController.deactivateCirclesServer);
+router.post('/activate-circles-server', authenticated, centralServerController.activateCirclesServer);
+router.post('/delete-circles-server', authenticated, centralServerController.deleteCirclesServer);
+
+router.get('/get-servers', centralServerController.getServersList); // This is requested from outside servers and can not have authenticated access only
+
+// Prototyping Routes -----------------------------------------------------------------------
+
+router.get('/prototyping', authenticated, centralServerController.servePrototyping);
+router.post('/create-new-prototype', authenticated, centralServerController.createNewPrototype);
+router.post('/update-prototype', authenticated, centralServerController.updatePrototype);
+router.post('/get-prototypes', authenticated, centralServerController.getPrototypes);
+router.post('/delete-prototype', authenticated, centralServerController.deletePrototype);
+router.post('/get-prototype-info', authenticated, centralServerController.getPrototypeInfo);
+router.post('/upload-model', authenticated, centralServerController.uploadModel);
+
+router.get('/prototype/:prototype_name', centralServerController.servePrototypeCircle);
+
+// Prototyping (AI) Routes ------------------------------------------------------------------
+
+router.get('/prototyping-AI', authenticated, centralServerController.servePrototypingAI);
+router.post('/create-new-prototype-AI', authenticated, centralServerController.createNewPrototypeAI);
+router.post('/update-prototype-AI', authenticated, centralServerController.updatePrototypeAI);
+router.post('/get-prototypes-AI', authenticated, centralServerController.getPrototypesAI);
+router.post('/delete-prototype-AI', authenticated, centralServerController.deletePrototypeAI);
+router.post('/get-prototype-info-AI', authenticated, centralServerController.getPrototypeInfoAI);
+router.post('/generate-scene-from-text', authenticated, centralServerController.generateSceneFromText);
+router.post('/add-model-to-prototype', authenticated, centralServerController.addModelToPrototype);
+
+// Museum Games Page Routes -----------------------------------------------------------------
+
+router.get('/museum-games', centralServerController.serveMuseumGames);
+
+// ANIMATION ROUTES -------------------------------------------------------------------------------------------------------------------------------
+
+router.post('/get-phones-from-audio', authenticated, animationController.getPhonesFromAudio);
+router.post('/get-phones-from-blob', authenticated, animationController.getPhonesFromBlob);
 
 // Magic Link Routes ------------------------------------------------------------------------------------------------------------------------------
 

@@ -2,6 +2,19 @@
 
 body {
     @include no-spacing;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+body.no-navigations {
+    @include no-spacing;
+    min-height: 100vh;
+    display: block;
+
+    main {
+        height: 100%;
+    }
 }
 
 // Navigation Bar ----------------------------------------------------------------------------------------------------------------------------------
@@ -11,7 +24,7 @@ body {
 nav {
     @include no-spacing;
     margin: 0 auto;
-    margin-bottom: $NAVIGATION_MARGIN + 1px;
+    margin-bottom: $NAVIGATION_MARGIN;
     background-color: $WHITE;
     width: 100%;
     display: grid;
@@ -22,11 +35,17 @@ nav {
     .logo-container {
         @include start-flex;
         justify-self: start;
+        align-self: center;
         grid-area: nav-logo;
-        padding: 15px $SECTION_PADDING;
+        height: $DEFAULT_NAV_HEIGHT;
+        padding: 0 $SECTION_PADDING;
 
         a {
-            width: 125px;
+            height: 55%;
+
+            img {
+                height: 100%;
+            }
         }
     }
 
@@ -44,10 +63,12 @@ nav {
         .nav-items {
             @include no-spacing;
             list-style: none;
+            height: 100%;
         
             li {
                 display: inline-block;
                 background-color: $WHITE;
+                height: 100%;
         
                 a {
                     display: inline-block;
@@ -69,7 +90,7 @@ nav {
         grid-area: nav-profile;
         justify-self: end;
         position: relative;
-        min-width: 198px;
+        min-width: 200px;
 
         // Information
         .profile-information {
@@ -171,7 +192,7 @@ nav {
 
         // Profile
         .profile-container {
-            min-width: 192px;
+            min-width: 200px;
 
             // Information
             .profile-information {
@@ -301,11 +322,42 @@ nav {
     }
 }
 
+// Footer ------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+footer {
+    margin-top: $SECTION_MARGIN;
+    background-color: $DARK_GREY;
+    padding: $SMALL_MARGIN $SECTION_PADDING;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    p {
+        color: $WHITE;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .footer-email {
+        @include start-flex;
+    }
+
+    .footer-copyright {
+        @include end-flex;
+    }
+}
+
 // Page Sections -----------------------------------------------------------------------------------------------------------------------------------
 section {
     @include no-spacing;
-    margin-bottom: $SECTION_MARGIN;
+    padding-top: $SECTION_MARGIN;
     width: 100%;
+}
+
+section:first-of-type, .title-container + section{
+    padding-top: 0;
 }
 
 .content-container {
@@ -316,4 +368,13 @@ section {
 
 .title-container {
     margin-bottom: $NAVIGATION_MARGIN;
+}
+
+.section-divider {
+    width: 300px;
+    margin: 0 auto;
+    margin-top: $SECTION_MARGIN;
+    height: 1.5px;
+    border: none;
+    background: black;
 }

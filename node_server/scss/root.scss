@@ -16,8 +16,17 @@
 @import './views/manage-users.scss';
 @import './views/your-magic-links.scss';
 @import './views/uploaded-content.scss';
-@import './views/more-circles.scss';
+
+@import './views/CENTRAL_SERVER/homepage.scss';
+@import './views/CENTRAL_SERVER/more-circles.scss';
+@import './views/CENTRAL_SERVER/prototyping.scss';
+@import './views/CENTRAL_SERVER/prototyping-AI.scss';
+@import './views/CENTRAL_SERVER/museum-games.scss';
 
 // View Include Imports ----------------------------------------------------------------------------------------------------------------------------
 @import './views/includes/manage-groups.scss';
 @import './views/includes/update-circle-group.scss';
+
+@import './views/CENTRAL_SERVER/includes/create-prototype.scss';
+@import './views/CENTRAL_SERVER/includes/open-prototype.scss';
+@import './views/CENTRAL_SERVER/includes/prototype-models.scss';

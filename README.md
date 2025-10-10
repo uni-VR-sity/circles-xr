@@ -20,11 +20,13 @@
 - [Circles Overview](#circles-overview)
   - [Why Use VR in Learning?](#why-use-vr-in-learning)
   - [Why Circles?](#why-circles)
+  - [Research Using Circles](#research-using-circles)
 - [Circles Interactions](#circles-interactions)
 - [Running Circles Locally](#running-circles-locally)
 - [Creating A New Circles World](#creating-a-new-circles-world)
 - [Circles Structure](#circles-structure)
 - [Circles Components](#circles-components)
+- [Circles Events](#circles-events)
 - [Circles Networking](#circles-networking)
 - [Learning More About A-Frame and Javascript Development](#learning-more-about-a-frame-and-javascript-development)
 - [Contributing to Circles](#contributing-to-circles)
@@ -42,7 +44,8 @@ developers to create multi-user and multi-platform [WebXR](https://www.w3.org/TR
 
 CIRCLES is the practical Work-In-Progress (WIP) implementation of a research project into [universal](http://universaldesign.ie/What-is-Universal-Design/The-7-Principles/) and [inclusive](https://www.microsoft.com/design/inclusive/) multi-user VR considering how people interact with each other, their physical and virtual environments, and with learning artefacts in variable VR space. Our current focus is within both guided and unguided classroom and museum learning contexts; but we aim to keep the framework flexible where possible to allow for greater creativity.
 
-**[Click here for more information on Circles and its progress, research, and development](https://www.anthony-scavarelli.com/portfolio/circles-webvr-education-platform/)**
+- **[Click here for a blogpost on Circles and its progress, research, and development.](https://www.anthony-scavarelli.com/portfolio/circles-webvr-education-platform/)**
+- **[Click here to view an open-access paper describing Circles and its core motivation, elements,and features.](https://publications.immersivelrn.org/index.php/academic/article/view/228)**
 
 <br>
 
@@ -66,7 +69,7 @@ Rather than trying to recreate our physical learning spaces or be a more general
 <br><br>
 
 ### The (3) primary motivations for **CIRCLES** are as follows:
-derived from [Scavarelli et al. 2020](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Scavarelli%2C+A.%2C+Arya%2C+A.%2C+%26+Teather%2C+R.+J.+%282020%29.+Virtual+reality+and+augmented+reality+in+social+learning+spaces%3A+a+literature+review.+Virtual+Reality.+https%3A%2F%2Fdoi.org%2F10.1007%2Fs10055-020-00444-8++&btnG=)
+derived from [Scavarelli et al. 2021](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Scavarelli%2C+A.%2C+Arya%2C+A.%2C+%26+Teather%2C+R.+J.+%282020%29.+Virtual+reality+and+augmented+reality+in+social+learning+spaces%3A+a+literature+review.+Virtual+Reality.+https%3A%2F%2Fdoi.org%2F10.1007%2Fs10055-020-00444-8++&btnG=)
 
 - **Accessibility**
   - **Device Scalability:** Platform Scalability refers to a system capable of adapting to a range of [VR](https://en.wikipedia.org/wiki/Virtual_reality)/[AR](https://en.wikipedia.org/wiki/Augmented_reality) capable platforms (desktop, mobile, large screens, etc.). This is comparable to a virtual form of [UDL (Universal Design for Learning)](https://udlguidelines.cast.org), which suggests increasing the accessibility of learning activities via (1) Multiple Means of Representation, (2) Multiple Means of Expression, and (3) Multiple Means of Engagement ([Rose et al., 2006](https://scholar.google.com/scholar_lookup?title=Universal%20design%20for%20learning%20in%20postsecondary%20education%3A%20reflections%20on%20principles%20and%20their%20application&journal=J%20Postsecond%20Educ%20Disabil&volume=19&issue=2&pages=135-151&publication_year=2006&author=Rose%2CDH&author=Harbour%2CWS&author=Johnston%2CCS&author=Daley%2CSG&author=Abarnall%2CL)). By supporting multiple platforms (Desktop, Mobile\[tablet\], and Head-Mounted Display (HMD - [Oculus Quest](https://www.oculus.com/blog/introducing-oculus-quest-our-first-6dof-all-in-one-vr-system-launching-spring-2019/) only right now)), VR/AR content can be potentially more accessible with “multiple means of action and expression.” *Note that we are only supporting Oculus Quest 1/2 at this time because the Quest does not introduce trip-hazards i.e., wires to a computer, is the most cost-effective immersive HMD on the market, includes the most well-supported HMD [WebXR browser](https://developer.oculus.com/documentation/oculus-browser/), and standalone HMDs have **much less** friction pushing immersive WebXR content over an HMD wired to a PC.*
@@ -79,6 +82,24 @@ derived from [Scavarelli et al. 2020](https://scholar.google.com/scholar?hl=en&a
 There is some work looking at how the virtual work can affect our reality, in how we identify in virtual worlds can change our behaviour ([Yee & Bailenson, 2007](https://scholar.google.com/scholar_lookup?title=The%20proteus%20effect%3A%20the%20effect%20of%20transformed%20self-representation%20on%20behavior&journal=Hum%20Commun%20Res&volume=33&issue=3&pages=271-290&publication_year=2007&author=Yee%2CN&author=Bailenson%2CJ)), in how task performance can be affected by others through social facilitation and social inhibition ([Miller et al., 2019](https://scholar.google.com/scholar_lookup?title=Social%20interaction%20in%20augmented%20reality&journal=PLoS%20ONE&volume=14&issue=5&pages=1-26&publication_year=2019&author=Miller%2CMR&author=Jun%2CH&author=Herrera%2CF&author=Villa%2CJY&author=Welch%2CG&author=Bailenson%2CJN)), and in how virtual spaces can also change behaviour ([MacIntyre et al., 2004](https://scholar.google.com/scholar_lookup?title=Presence%20and%20the%20aura%20of%20meaningful%20places&journal=Presence%20Teleoper%20Virtual%20Environ&volume=6&issue=2&pages=197-206&publication_year=2004&author=MacIntyre%2CB&author=Bolter%2CJD&author=Gandy%2CM); [Proulx et al., 2016](https://scholar.google.com/scholar_lookup?title=Where%20am%20I%3F%20Who%20am%20I%3F%20The%20relation%20between%20spatial%20cognition%2C%20social%20cognition%20and%20individual%20differences%20in%20the%20built%20environment&journal=Front%20Psychol&doi=10.3389%2Ffpsyg.2016.00064&volume=7&issue=February&pages=1-23&publication_year=2016&author=Proulx%2CMJ&author=Todorov%2COS&author=Aiken%2CAT&author=Sousa%2CAA)); but there is still much work to be done on how the physical learning spaces we inhabit may affect our virtual behaviours. We have seen that the very nature of using this technology can inhibit participation and comfort ([Brignull & Rogers, 2002](https://scholar.google.com/scholar_lookup?title=Enticing%20people%20to%20interact%20with%20large%20public%20displays%20in%20public%20spaces&journal=Proc%20INTERACT&volume=3&pages=17-24&publication_year=2002&author=Brignull%2CH&author=Rogers%2CY); [Outlaw & Duckles, 2017](https://extendedmind.io/social-vr); [Rogers et al., 2019](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Rogers+K%2C+Funke+J%2C+Frommel+J%2C+Stamm+S%2C+Weber+M+%282019%29+Exploring+interaction+fidelity+in+virtual+reality&btnG=)); but it is still very early beyond some studies into how we prevent collisions in shared virtual spaces ([Langbehn et al., 2018](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Langbehn+E%2C+Harting+E%2C+Steinicke+F+%282018%29+Shadow-avatars%3A+a+visualization+method+to+avoid+collisions+of+physically+co-located+users+in+room&btnG=); [Scavarelli & Teather, 2017](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Scavarelli+A%2C+Teather+RJ+%282017%29+VR+Collide%21+comparing+collision-avoidance+methods+between+co-located+virtual+reality+users&btnG=)). Just as connectivism and activity theory suggest that our digital tools and the socio-historical culture that surround learners become intrinsic part of the learning process, we should also consider how these same processes apply to both virtual environments and physical worlds as it becomes clear that the virtual worlds and physical worlds are not mutually exclusive perspectives.
 
 - **Learning Foundations:** Though most VR/AR projects in learning depend on constructivism, experiential learning, and/or social cognitive theory as a foundation for chosen features and properties, there are additional theoretical and methodological foundations within [CSCL (Computer-Supported Collaborative Learning)](https://en.wikipedia.org/wiki/Computer-supported_collaborative_learning) that may help lend more significant consideration to both the virtual and physical environments within a socio-cultural context. [Activity theory](https://en.wikipedia.org/wiki/Activity_theory), in the form of expansive learning, includes not only digital tools and objects/artefacts as an intrinsic part of the learning process; but also the socio-historical properties of learning spaces ([Engeström, 2016](https://www.cambridge.org/core/books/studies-in-expansive-learning/E68E35B6DC42FCD58853E098917F4764); [Stahl & Hakkarainen, 2020](https://researchportal.helsinki.fi/en/publications/theories-of-cscl)). This could include some exciting explorations into the interplay between the social, spatial, and cultural aspects present within both the virtual and physical learning spaces; and how to better create VR/AR content that acknowledges them. This could include exploring how wearing in HMDs in learning spaces is not yet culturally acceptable ([Rogers et al., 2019](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Rogers+K%2C+Funke+J%2C+Frommel+J%2C+Stamm+S%2C+Weber+M+%282019%29+Exploring+interaction+fidelity+in+virtual+reality&btnG=)), or that being a woman in social VR spaces may encourage virtual harassment, decreasing participation in activities using these technologies ([Outlaw & Duckles, 2017](https://extendedmind.io/social-vr)). The interconnected processes of learning within individuals and their actions, the social environment, and the spatial environments are complex, and as we add in virtual environments that may change behaviour, we may need to look towards additional learning theories that better encapsulate how this learning happens.
+
+<br>
+
+### **Research Using Circles**
+##### *[back to top](#circles-xr-learning-framework)*
+
+- [Scavarelli, A., Arya, A., Teather, R.J., Wakelin, R., Gauen, S., McCann, J., “Exploring the Inclusive Design and Use of Social Multi-Platform Virtual Reality for a Post-Secondary Gender Diversity Workshop,” 2024 10th International Conference of the Immersive Learning Research Network (iLRN), Glasgow, Scotland, 2024.](https://www.immersivelrn.org/ilrn2024/home/)
+- [Scavarelli, A., Arya, A., & Teather, R. J., “Circles: A Framework for Creating Inclusive Virtual Reality Learning Activities in Social Learning Spaces,” Immersive Learning Research – Academic, 1(1), pp. 1–11, 2024.](https://publications.immersivelrn.org/index.php/academic/article/view/228) 
+- [Scavarelli, A., Teather, R. J. & Arya, A., “Exploring Selection and Search Usability Across Desktop, Tablet, and Head-Mounted Display WebXR Platforms,” 2023 9th International Conference on Virtual Reality (ICVR), 2023, pp. 505-514, 2023.](https://ieeexplore.ieee.org/document/10169549)
+- [Yong, A., Arya A., & Mantch M., "Indigenous Technology Empowerment Model: A Community-based Design Framework," 2023 IEEE International Conference on Engineering, Technology and Innovation (ICE/ITMC), Edinburgh, United Kingdom, pp. 1-9, 2023.](https://ieeexplore.ieee.org/abstract/document/10332432?casa_token=ORzJMJ2PVIMAAAAA:WljQYCNyilcfzFahu8dRTlio58CkAZTAUH0q6NJ5L3F1uwb_SgvhDGTRTGydVFPHPf-RK9UWy8od)
+- [Kroma A., Grinyer K., Scavarelli A., Samimi E., Kyian S. and Teather R.J., “The Reality of Remote Extended Reality Research: Practical Case Studies and Taxonomy,” Front. Comput. Sci., 2022.](https://www.frontiersin.org/articles/10.3389/fcomp.2022.954038/)
+- [Blais, L., Qorbani, H. S., Arya, A., & Davies, J. "A Memory Palace for Brain Anatomy and Function Represented in Virtual Reality. International Association for Development of the Information Society," 19th International Conference on Cognition and Exploratory Learning in Digital Age (CELDA). 2022.](https://eric.ed.gov/?id=ED626951)
+- [Scavarelli, A., Arya, A., & Teather, R. J., “Circles: exploring multi-platform accessible, socially scalable VR in the classroom,” 2019 IEEE Games, Entertainment, Media Conference (GEM), pp. 1–4, 2019.](https://ieeexplore.ieee.org/abstract/document/8897532)
+- [Scavarelli, A., Teather, R. J., & Arya, A. “Towards a Framework on Accessible and Social VR in Education,” 2019 IEEE Conference on Virtual Reality and 3D User Interfaces (VR), pp. 1148–1149, 2019.](https://ieeexplore.ieee.org/abstract/document/8798100)
+
+_[More information on Circles' related research](https://www.anthony-scavarelli.com/research/)_
+
+<br><br>
 
 ----------------
 
@@ -97,11 +118,11 @@ _NOTE: For navigation, we use the [Aframe-Extras'](https://github.com/c-frame/af
 
 | <br>Interaction      | Default<br>Desktop  | <br>Mobile          |<br>HMD              | Advanced<br>Desktop | <br>Mobile          | <br>HMD             |
 |:---                  |:---                 |:---                 |:---                 |:---                 |:---                 |:---                 |
-|  Navigation          | Checkpoint Teleport                       ||                    | WASD                | n/a                 | Left Joysick        |
-|  Look                | Left-Mouse Drag     | Device Orientation  | HMD Orientation     | n/a                 | tap-drag left/right | n/a                 |
-|  Selection           | Single Click/Tap/Raycast Object           ||                    | TBD                 | TBD                 | TBD                 |
-|  Manipulation        | Non-Diegetic UI (rotate, zoom, release)   ||                    | TBD                 | TBD                 | TBD                 |
-|  Release             | Single Click/Tap/Raycast Object           ||                    | TBD                 | TBD                 | TBD                 |         
+|  Navigation          | Checkpoint Teleport | Checkpoint Teleport | Checkpoint Teleport | Keyboard's WASD     | On-screen Left Joystick                 | Click-in Left Joysick        |
+|  Look                | Left-Mouse Drag     | Device Orientation  | HMD Orientation     | n/a                 | On-screen Right Joystick | Joysicks left/right (click-in for smooth)                 |
+|  Selection           | Single Click        | Tap                 | Raycast (laser pointer)     | TBD                 | TBD                 | TBD                 |
+|  Manipulation        | Non-Diegetic UI     | Non-Diegetic UI     | Non-Diegetic UI     | TBD                 | TBD                 | TBD                 |
+|  Release             | Single Click        | Tap                 | Raycast Object      | TBD                 | TBD                 | TBD                 |         
 
 <br>
 
@@ -117,7 +138,7 @@ _NOTE: For navigation, we use the [Aframe-Extras'](https://github.com/c-frame/af
 1. Though not necessary, [Visual Studio Code](https://code.visualstudio.com/) is recommended to develop, run, and modify *Circles*. Additionally, VSCode allows you to easily open [an integrated terminal](https://code.visualstudio.com/docs/editor/integrated-terminal) to execute the terminal commands below. It also has many [built-in Github features](https://code.visualstudio.com/docs/editor/versioncontrol). 
 1. [Install mongo community server](https://www.mongodb.com/docs/manual/administration/install-community/)
     - We also _recommend_ installing the [MongoDB command line tool](https://www.mongodb.com/docs/mongodb-shell/) so that you can access the Mongo databases via command line, though you can also use the [Compass application](https://www.mongodb.com/docs/compass/current/). This is usually included with the mongo community server install.
-1. [Install node/npm](https://nodejs.org/en/download/). **NOTE: We recommend installing the "LTS" version of npm/node.** Currently, this framework is running on  *Node version 14.18.0* and *NPM version 8.3.1.* You can check versions after install with the commands `node --version` and `npm --version`. For Windows you may have this additional command after install to downgrade NPM `npm install -g npm@8.3.1`. *Unfortunately many the libraries associated with A-frame and circles may not build correctly if you use other versions.*
+1. [Install node/npm](https://nodejs.org/en/download/). **NOTE: We recommend installing the "LTS" version of npm/node.**
 1. Make sure you have [Python installed](https://www.python.org/downloads/) (as some libraries may require Python to build this project with NPM)
 1. Go into project folder and install NPM dependencies 
     - `npm install`
@@ -217,11 +238,11 @@ _NOTE: For navigation, we use the [Aframe-Extras'](https://github.com/c-frame/af
 
 Circles follows the [ECS (Entity-Component System)](https://aframe.io/docs/1.4.0/introduction/entity-component-system.html) programming design pattern that [A-Frame](https://aframe.io) follows, likely be familiar to [Unity](https://unity.com) Developers.
 
-Also note that Circle sis built on several libraries, giving you additional functionality. They follow:
-- [A-Frame](https://aframe.io/docs/1.4.0/introduction/), which is built on [Three.js](https://aframe.io/docs/1.4.0/introduction/developing-with-threejs.html): This gives us a 3D engine specifically created for building multi-platform WebXR content using [HTML](https://www.w3schools.com/whatis/whatis_html.asp) and [Javascript](https://www.w3schools.com/js/).
+Also note that Circles is built on several libraries, giving you additional functionality. The foundational libraries are:
+- [A-Frame](https://aframe.io), which is built on [Three.js](https://threejs.org): This gives us a 3D engine specifically created for building multi-platform WebXR content using [HTML](https://www.w3schools.com/whatis/whatis_html.asp) and [Javascript](https://www.w3schools.com/js/).
 - [Networked-Aframe](https://github.com/networked-aframe/networked-aframe): For quickly networking objects. To send simple message, and synching client states, see [Circles Networking](https://github.com/PlumCantaloupe/circlesxr#circles-networking).
 - [Aframe-extras (controls and pathfinding)](https://github.com/c-frame/aframe-extras). This library gives us additional multi-platform controls, including the ability to use [nav meshes](https://medium.com/@donmccurdy/creating-a-nav-mesh-for-a-webvr-scene-b3fdb6bed918) to limit movement within Circles' worlds.
-- [Aframe-Physics](https://github.com/c-frame/aframe-physics-system): Available for those that wish to include physics into their Circles worlds (see the "KIN_" worlds included as an example).
+- [Aframe-Physics-System](https://github.com/c-frame/aframe-physics-system): Available for those that wish to include physics into their Circles worlds (see the "KIN_" worlds included as an example).
 
 The general structure of the framework (and the Github repository) follows:
 
@@ -230,7 +251,7 @@ The general structure of the framework (and the Github repository) follows:
 - [Circles Worlds](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds): All Circles' worlds are placed here. From here they are modified to include Circles specific functionality and copied into an untracked folder on the server.
 - [Circles Groups](https://github.com/networked-aframe/networked-aframe#scene-component): All Circles' users are connected to others within the same "group" (or "room"), no matter which Circles world they are within. You can set this manually by adding `?group=YOUR_GROUP_NAME` manually to the end of your Circles URL e.g., `http://127.0.0.1:{SERVER_PORT}/w/{YOUR_WORLD_FOLDER}?group={YOUR_GROUP_NAME}`, or as recommended above using [ngrok](https://ngrok.com/), `https://your_ngrok_url.ngrok.io/w/{YOUR_WORLD_FOLDER}?group={YOUR_GROUP_NAME}`. This group is then passed to the [networked-aframe](https://github.com/networked-aframe/networked-aframe) room property to connect users only to users within the same group..
 
-*Also note, that a [TestBed](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds/Testbed/scripts) is currently in development for testing selection and find performance using [Fitt's Law](https://www.yorku.ca/mack/hhci2018.html). At this time the TestBed, and the associated [research-manager](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds/Testbed/scripts) components are local to the ["TestBed" world](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds/Testbed). After more extensive testing it will likely be moved to the Circles core.*
+*Also note, that a [ResearchSpace](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds/ResearchSpace/) is currently in development for evaluating [Fitts' Law selections](https://www.yorku.ca/mack/hhci2018.html) and search performance. At this time the ResearchSpace, and the associated [research components](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds/ResearchSpace/scripts) are local to the ["ResearchSpace" world](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/worlds/ResearchSpace/index.html). After more extensive testing it will likely be moved to the Circles core.*
 
 ----------------
 
@@ -265,12 +286,26 @@ CIRCLES.getAvatarRigElement();
 //return the camera element (from the avatar's point of view, if you want parent things to the camera e.g., adding UIs))
 CIRCLES.getMainCameraElement();
 
-//Example
-//You may also listen to the CIRCLES.READY event on the scene to find out when Circles is ready to manipulate
-CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.READY, function() {
-    //to change speed of character movement
-    CIRCLES.getAvatarRigElement().setAttribute('movement-controls', {speed:0.3});
-});
+//get reference to the Circles manager entity
+CIRCLES.getCirclesManagerElement();
+
+//get reference to the Circles manager component
+CIRCLES.getCirclesManagerComp();
+
+//returns reference to held element, or null if no held object on this player/client  
+CIRCLES.getPickedUpElement();
+
+//to get the non-networked id of an elem (queries the 'circles-object-world' component for the original "id") 
+CIRCLES.getNonNetworkedID(elem);
+
+//get communication socket
+CIRCLES.getCirclesWebsocket();
+
+//return all avatars in the scene. Yourself and other networked-aframe avatar entities
+CIRCLES.getNetworkedAvatarElements();
+
+//return all networked-aframe networked entities (includes avatars and any other objects). You may have to dig into children for the geometry, materials etc.
+CIRCLES.getAllNetworkedElements();
 ```
 
 And now the components available for you.
@@ -627,17 +662,6 @@ You will find an example of synching simple switches in the "hub"/campfire world
 _First, some useful functions (please note there are others noted in the [Circles Componenets](#circle-components) section:_
 
 ```js
-//get communication socket
-CIRCLES.getCirclesWebsocket();
-
-//return all avatars in the scene. Yourself and other networked-aframe avatar entities
-CIRCLES.getNAFAvatarElements();
-
-//return all networked-aframe networked entities (includes avatars and any other objects). You may have to dig into children for the geometry, materials etc.
-CIRCLES.getAllNAFElements();
-```
-
-```js
 //get the webcocket we will use to communicate between all users via the server (which will forward all events to all other users)
 
 //connect to web sockets so we can sync the campfire lights between users
@@ -705,6 +729,37 @@ CONTEXT_AF.campfireEventName = "campfire_event";
 
 ----------------
 
+## Circles Events
+##### *[back to top](#circles-xr-learning-framework)*
+
+<br>
+
+As in many JavaScript projects, Circles makes extensive use of events to allow some transparency about when things are happening. Below are some events that may be useful:
+
+```js
+//'CIRCLES.EVENTS.READY' emitted on scene element, when Circles has loaded
+CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.READY, (e) => {});
+
+//'CIRCLES.EVENTS.EXPERIENCE_ENTERED' emitted on scene element, when user clicks on 'enter experience button'
+CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.EXPERIENCE_ENTERED, (e) => {});
+
+//'CIRCLES.EVENTS.PICKUP_OBJECT' emitted on scene element, when the user picks up an object, returns {id:e.detail.id} with callback function
+CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.PICKUP_OBJECT, (e) => {});
+
+//'CIRCLES.EVENTS.RELEASE_OBJECT' emitted on scene element, when the user picks up an object, returns {id:releasedElem.id} with callback function
+CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.RELEASE_OBJECT, (e) => {});
+
+//'CIRCLES.EVENTS.USER_CONNECTED' emitted on scene element, when a networked user connects, returns {id:e.detail.id, world:e.detail.world, device:e.detail.device} with callback function
+CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.USER_CONNECTED, (e) => {});
+
+//'CIRCLES.EVENTS.USER_DISCONNECTED' emitted on scene element, when a networked user disconnects, returns {id:e.detail.id, world:e.detail.world, device:e.detail.device} with callback function
+CIRCLES.getCirclesSceneElement().addEventListener(CIRCLES.EVENTS.USER_DISCONNECTED, (e) => {});
+
+//NOTE: for more detail on networking events and functionality, please see the Circles networking section
+```
+
+----------------
+
 ## Learning More About A-Frame and Javascript Development
 ##### *[back to top](#circles-xr-learning-framework)*
 
@@ -733,17 +788,21 @@ Also, of course, if you have any formal or informal bugs, feedback, or suggestio
 
 <br>
 
-The following are several companions that have helped to bring this project into existence. Starting as a prototype for [Oculus Launchpad 2018](https://developer.oculus.com/launch-pad/) to showcase [Viola Desmond's story as a pioneer for Canadian civil rights](https://humanrights.ca/story/one-womans-resistance), I wanted to recognize them for their early direction and support. Though this is mainly a research project for my [Ph.D. work at Carleton University](https://carleton.ca/engineering-design/story/giving-new-life-to-a-canadian-legend/), I hope that their contributions in this open-source repository will also help inspire others as they have myself.
+The following are several companions that have helped to bring this project into existence. Starting as a prototype for [Oculus Launchpad 2018](https://developer.oculus.com/launch-pad/) to showcase [Viola Desmond's story as a pioneer for Canadian civil rights](https://humanrights.ca/story/one-womans-resistance), I wanted to recognize them for their early direction and support. Though this project is an extension of my completed [Ph.D. research at Carleton University](https://carleton.ca/engineering-design/story/giving-new-life-to-a-canadian-legend/), I hope that their contributions in this open-source repository will also help inspire others as they have myself.
 
-Thank you from an aspiring student of all things XR and learning, [Anthony Scavarelli](http://portfolio.anthony-scavarelli.com/)
+Thank you from an aspiring student of all things XR and learning, 
+[Anthony Scavarelli](http://portfolio.anthony-scavarelli.com/)
 
+
+To all those that helped along the way:
+
+- **[Dr. Ali Arya](https://www.csit.carleton.ca/~arya/)**, *Research Advisor*
+- **[Dr. Robert J. Teather](https://www.csit.carleton.ca/~rteather/)**, *Research Advisor*
 - **[Favour Diokpo](https://www.behance.net/favourdiokpo)**, *3D Artist*
 - **[Virginia Mielke](https://www.linkedin.com/in/virginia-mielke-ba1a361/)**, *3D Artist*
 - **[Nathaniel Parant](https://www.linkedin.com/in/nathaniel-parant-43901341/?originalSubdomain=ca)**, *Storyteller*
 - **[Jessica Alberga](http://jessicaalberga.ca/)**, *Journalist*
 - **[Julie McCann](http://portfolios.camayak.com/julie-mccann/page/4/)**, *Journalist*
-- **[Dr. Ali Arya](https://www.csit.carleton.ca/~arya/)**, *Research Advisor*
-- **[Dr. Robert J. Teather](https://www.csit.carleton.ca/~rteather/)**, *Research Advisor*
 - **[Grant Lucas](https://grantlucas.com/)**, *Web Developer*
 - **[Tetsuro Takara](https://www.tetchi.ca/)**, *Web Developer*
 - **[Heather Hennessey](https://www.linkedin.com/in/heather-hennessey-4961a5132/)**, *WebXR Developer*

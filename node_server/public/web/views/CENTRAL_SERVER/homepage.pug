@@ -1,0 +1,273 @@
+extends ../template.pug
+
+block append scripts
+    script(src='/web/js/views/CENTRAL_SERVER/homepage.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    - var year;
+    - var article;
+    - var line;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+
+    // News article display - ---------------------------------------------------------------
+    mixin displayNewsArticle(article)
+        - var articleClass = 'news-year-' + article.year;
+        - var altText = article.title + "'s image";
+        
+        .news-article(class=articleClass).hidden-article
+
+            img(src=article.photo alt=altText)
+
+            .article-description
+
+                h2= article.title
+
+                h3= article.monthDay + ', ' + article.year
+
+                p
+                    for line of article.description.split('<a href=')
+                        if line.includes('</a>')
+                            a.link-underline(href=line.split('"')[1] target='_blank')= line.split('>')[1].split('<')[0]
+                            span= line.split('</a>')[1]
+                        else 
+                            span= line
+
+                if article.link
+                    a.link-icon(href=article.link target='_blank') Read more
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
+
+        // Banner ---------------------------------------------------------------------------
+        section#homepage-banner-container
+            #homepage-title
+                .content-container 
+
+                    // Title ------------------------------------------------------------------------
+                    img(src='/web/images/logos/uni-VR-sity-banner.png' alt='uni-VR-sity')
+
+                    // Description ------------------------------------------------------------------
+                    #intro-description
+                        p A group of research and educational projects aimed at exploring inclusive, effective, and
+                        p transformative uses of VR in education, based on a web-based VR framework
+
+            // Page Navigation --------------------------------------------------------------
+            #homepage-navigation-container.top-bar-container
+                .top-bar
+                    
+                    .top-bar-tabs
+                        .tab 
+                            a(href='#About') About 
+
+                        .tab 
+                            a(href='#Showroom') Showroom 
+
+                        .tab 
+                            a(href='#Development') Development 
+
+                        .tab 
+                            a(href='#News') News 
+
+                        .tab 
+                            a(href='#Project-Team') Project Team
+
+        // About ----------------------------------------------------------------------------
+        section#About 
+            .content-container 
+                
+                h1 Educational VR Framework
+
+                #about-description
+
+                    p Uni-VR-sity is a collection of educational research and development projects at Carleton University’s 
+                        a.link-underline(href='https://img.csit.carleton.ca/' target='_blank') Interactive Media Group (iMG)
+                        span  and partner organizations/ institutions. The uni-VR-sity group of projects is rooted in our design and development of a multi-platform multi-user web-based VR framework for education called 
+                        a.link-underline(href='https://circlesxr.com/' target='_blank') Circles
+                        span . The uni-VR-sity projects range from VR-based educational modules for specific courses or cultural topics to investigation and demonstration of various technical features in VR systems. While most of these projects are done with the Circles framework, we continuously explore other tools and options, and are open to collaborations beyond our existing projects. For more information, or to connect to our projects or propose new ones, contact 
+                        a.link-underline(href='#Project-Team' target='_blank') our people
+                        span  or email us at info@uni-vr-sity.ca.
+
+                    #video-container
+                        iframe(src='https://www.youtube.com/embed/SMST6atuiFY' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
+
+                #logos-container 
+                    a(href="https://img.csit.carleton.ca/#projects/0/UNI-VR-SITY" target='_blank')
+                        img#iMG-logo(src='/web/images/logos/iMG-logo.png' alt="iMG Logo")
+
+                    a(href="https://circlesxr.com/" target='_blank')
+                        img#circles-logo(src='/web/images/logos/circles-logo.svg' alt="CirclesXR Logo")
+
+                    a(href="https://carleton.ca/" target='_blank')
+                        img#carletonU-logo(src='/web/images/logos/carletonU-logo.png' alt="Carleton University Logo")
+
+        // Showroom -------------------------------------------------------------------------
+        section#Showroom 
+            .content-container 
+
+                h1 Featured Circles
+
+                #circles-scroll-container.descriptive-scroll-gallery-container
+
+                    #left-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-left' onclick='changeScrollGalleryPage("circles-scroll-container", -1)')
+
+                    .featured-circle.scroll-gallery-item
+                        img.gallery-item-image
+
+                        .description-container
+                            h2.gallery-item-name
+                            p.gallery-item-description
+
+                            a.link-icon.gallery-item-link(href='' target='_blank') Visit Circle
+
+                    #right-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-right' onclick='changeScrollGalleryPage("circles-scroll-container", 1)')
+
+                - var featuredCirclesJSON = JSON.stringify(featuredCircles);
+                - var featuredCirclesJSON = featuredCirclesJSON.replaceAll(/'/gm, /\'/gm);
+
+                script.
+                    setUpScrollGallery('!{featuredCirclesJSON}', 1, 'circles-scroll-container');
+
+        // Development ----------------------------------------------------------------------
+        section#Development 
+            .content-container
+
+                #development-description-container 
+
+                    #development-description 
+                        
+                        h1 Development 
+
+                        p Circles is a WebXR learning framework and research project that explores multi-learner and multi-platform (Desktop, Mobile, and HMD) learning affordances. Circles is open-source and Circles worlds can be hosted by setting up new server or uploading to existing servers, such as uni-vr-sity.ca and circlesxr.com. We are working on various development tools to help new users build their own “circles”. For more information, visit 
+                            a.link-underline(href='https://circlesxr.com/' target='_blank') Circles website
+                            span  or 
+                            a.link-underline(href='https://github.com/PlumCantaloupe/circlesxr' target='_blank') GitHub home
+                            span .
+
+                    #video-container
+                        iframe(src='https://player.vimeo.com/video/326387226' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen)
+
+                //#development-links
+
+                    a(href='' target='_blank')#documentation-link.link-icon-section
+                        
+                        .icon-container 
+                            i(class='fa-regular fa-file-lines')
+                        
+                        p Documentation 
+
+                    a(href='' target='_blank')#github-link.link-icon-section
+
+                        .icon-container 
+                            i(class='fa-brands fa-github')
+                        
+                        p GitHub
+
+        hr.section-divider
+        
+        // News -----------------------------------------------------------------------------
+        section#News 
+            .content-container
+
+                h1 News 
+
+                #news-years-container 
+
+                    for year of newsYears
+                        - var buttonClass = year + '-news-button';
+
+                        .news-year(class=buttonClass)
+                            a(onclick='displayNewsYear(' + year + ')')= year
+                        
+                #news-articles-container 
+                    
+                    for article of news
+                        +displayNewsArticle(article)
+
+                script.
+                    displayNewsYear('!{newsYears[0]}');
+
+        hr.section-divider
+
+        // Project Team ---------------------------------------------------------------------
+        section#Project-Team 
+            .content-container 
+
+                h1 Project Team
+
+                #team-scroll-container.scroll-gallery-container
+
+                    #left-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-left' onclick='changeScrollGalleryPage("team-scroll-container", -1)')
+
+                    .team-member.scroll-gallery-item
+                        img.gallery-item-image
+                        h3.gallery-item-name
+                        p.gallery-item-secondary-info
+                        
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe' target='_blank')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin' target='_blank')
+
+                    
+                    .team-member.scroll-gallery-item
+                        img.gallery-item-image
+                        h3.gallery-item-name
+                        p.gallery-item-secondary-info
+
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe' target='_blank')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin' target='_blank')
+
+                    .team-member.scroll-gallery-item
+                        img.gallery-item-image
+                        h3.gallery-item-name
+                        p.gallery-item-secondary-info
+
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe' target='_blank')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin' target='_blank')
+
+                    .team-member.scroll-gallery-item
+                        img.gallery-item-image
+                        h3.gallery-item-name
+                        p.gallery-item-secondary-info
+
+                        .gallery-item-icon-links
+
+                            .icon-container 
+                                a(class='fa-solid fa-globe' target='_blank')
+
+                            .icon-container 
+                                a(class='fa-brands fa-linkedin' target='_blank')
+
+                    #right-arrow.arrow
+                        .icon-container 
+                            i(class='fa-solid fa-chevron-right' onclick='changeScrollGalleryPage("team-scroll-container", 1)')
+
+                - var projectTeamJSON = JSON.stringify(projectTeam);
+                - var projectTeamJSON = projectTeamJSON.replaceAll(/'/gm, /\'/gm);
+
+                script.
+                    setUpScrollGallery('!{projectTeamJSON}', 4, 'team-scroll-container');
+
+    include ../includes/footer.pug

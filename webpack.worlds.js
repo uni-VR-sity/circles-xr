@@ -4,17 +4,7 @@ const path  = require('path');
 const CopyWebpackPlugin   = require('copy-webpack-plugin');
 const {CleanWebpackPlugin}  = require('clean-webpack-plugin');
 
-// Set up and parse Environment based configuation
-const dotenv                = require('dotenv');
-const dotenvParseVariables  = require('dotenv-parse-variables');
-
-let env = dotenv.config({})
-if (env.error) {
-  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
-}
-
-// Parse the dot configs so that things like false are boolean, not strings
-env = dotenvParseVariables(env.parsed);
+const env = require('./node_server/modules/env-util.js');
 
 // Read in parts content to insert (default parts)
 let circles_header              =  fs.readFileSync('./src/webpack.worlds.parts/circles_header.part.html', 'utf8');
@@ -45,6 +35,25 @@ circles_scene_properties = circles_scene_properties.toString().replace(nafServer
 // Removing the current public worlds folder
 fs.rmSync(__dirname + '/node_server/public/worlds', {recursive: true, force: true});
 
+function transformWorldHtml(content, filePath) {
+  if (filePath.endsWith('.html')) {
+    content = content.toString();
+    content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
+    content = content.replace(/<circles-basic-ui(\s+)?\/>/i, circles_basic_ui);
+    content = content.replace(/<circles-start-ui(\s+)?\/>/i, circles_enter_ui);
+    content = content.replace(/circles_scene_properties/i, circles_scene_properties);
+    content = content.replace(/<circles-assets(\s+)?\/>/i, circles_assets);
+    content = content.replace(/<circles-manager-avatar(\s+)?\/>/i, circles_avatar);
+    content = content.replace(/<circles-end-scripts(\s+)?\/>/i, circles_end_scripts);
+    content = content.replace(/circles_NN_scene_properties/i, circles_NN_scene_properties);
+    content = content.replace(/<circles-NN-end-scripts(\s+)?\/>/i, circles_NN_end_scripts);
+    content = content.replace(/<circles-NA-start-ui(\s+)?\/>/i, circles_NA_enter_ui);
+    content = content.replace(/<circles-NA-manager-avatar(\s+)?\/>/i, circles_NA_avatar);
+    return content;
+  }
+  return content;
+}
+
 module.exports = {
   entry: function() {
     return {};
@@ -63,33 +72,24 @@ module.exports = {
       verbose: true
     }),
     new CopyWebpackPlugin({
-        patterns: [{
-          from: 'src/worlds',
-          to: './',
-          transform (content, path) {
-            if (path.endsWith('.html')) {
-              // Insert new parts (default parts)
-              content = content.toString();
-              content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
-              content = content.replace(/<circles-basic-ui(\s+)?\/>/i, circles_basic_ui);
-              content = content.replace(/<circles-start-ui(\s+)?\/>/i, circles_enter_ui);
-              content = content.replace(/circles_scene_properties/i, circles_scene_properties);
-              content = content.replace(/<circles-assets(\s+)?\/>/i, circles_assets);
-              content = content.replace(/<circles-manager-avatar(\s+)?\/>/i, circles_avatar);
-              content = content.replace(/<circles-end-scripts(\s+)?\/>/i, circles_end_scripts);
-              // Insert new parts (no networking parts)
-              content = content.replace(/circles_NN_scene_properties/i, circles_NN_scene_properties);
-              content = content.replace(/<circles-NN-end-scripts(\s+)?\/>/i, circles_NN_end_scripts);
-              // Insert new parts (no avatar parts)
-              content = content.replace(/<circles-NA-start-ui(\s+)?\/>/i, circles_NA_enter_ui);
-              content = content.replace(/<circles-NA-manager-avatar(\s+)?\/>/i, circles_NA_avatar);
-              //return content.toString().replace(janusServerRegex, env.JANUS_SERVER);
-              return content;
-            } else {
-              return content;
+        patterns: [
+          {
+            from: 'src/worlds',
+            to: './',
+            noErrorOnMissing: true,
+            transform (content, filePath) {
+              return transformWorldHtml(content, filePath);
+            }
+          },
+          {
+            from: '../worlds',
+            to: './',
+            noErrorOnMissing: true,
+            transform (content, filePath) {
+              return transformWorldHtml(content, filePath);
             }
           }
-        }]
+        ]
       }
     )
   ]

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NLP Model Insertion Demo</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .input-section {
+            margin: 20px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #007cba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #005a8b;
+        }
+        .response {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .model-list {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .model-list h4 {
+            margin-top: 0;
+        }
+        .model-item {
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 NLP Model Insertion Demo</h1>
+    
+    <div class="demo-section">
+        <h2>How it Works</h2>
+        <p>This demo shows how you can use natural language to add 3D models to your CirclesXR prototype scenes. Simply describe what you want to add, and the AI will:</p>
+        <ol>
+            <li>Parse your natural language description</li>
+            <li>Identify the models you mentioned</li>
+            <li>Find the corresponding .glb files from our asset library</li>
+            <li>Add them to your scene with appropriate positioning</li>
+        </ol>
+    </div>
+
+    <div class="demo-section">
+        <h3>Available Models in Asset Library</h3>
+        <div class="model-list">
+            <h4>Miscellaneous Collection:</h4>
+            <div class="model-item">chopstick, chopsticks, chopstick pair → chopstick.glb / chopstick-pair.glb</div>
+            <div class="model-item">hair comb, comb → hair-comb.glb</div>
+            <div class="model-item">lipstick, makeup → lipstick.glb</div>
+            <div class="model-item">mah jong, mahjong, game cube → mah-jong-cube.glb</div>
+            <div class="model-item">mannequin, dummy, model → mannequin.glb</div>
+            <div class="model-item">mirror, looking glass → mirror.glb</div>
+            <div class="model-item">pendant, jewelry, necklace → pendant.glb / pendant-necklace.glb</div>
+            <div class="model-item">plate, dish, dinner plate → plate.glb</div>
+            <div class="model-item">traffic cone, cone, road cone → traffic-cone.glb</div>
+        </div>
+    </div>
+
+    <div class="input-section">
+        <h3>Try it out!</h3>
+        <p>Example prompts to try:</p>
+        <ul>
+            <li>"Add a hair comb to the scene"</li>
+            <li>"Please put a mannequin and a mirror in the scene"</li>
+            <li>"Can you add some chopsticks and a plate?"</li>
+            <li>"Put a traffic cone next to a lipstick"</li>
+            <li>"Add all the jewelry - pendant and necklace"</li>
+        </ul>
+        
+        <label for="prototype-name">Prototype Name:</label>
+        <input type="text" id="prototype-name" placeholder="Enter prototype name" style="width: 200px; padding: 8px; margin: 10px 0;">
+        
+        <br>
+        
+        <label for="description">Describe what you want to add:</label>
+        <textarea id="description" placeholder="Example: Add a hair comb and a mirror to the scene"></textarea>
+        
+        <div>
+            <button onclick="addModelToPrototype()">Add to Prototype</button>
+            <button onclick="generateNewScene()">Generate New Scene</button>
+            <button onclick="clearResponse()">Clear</button>
+        </div>
+    </div>
+
+    <div id="response"></div>
+
+    <script>
+        async function addModelToPrototype() {
+            const prototypeName = document.getElementById('prototype-name').value.trim();
+            const description = document.getElementById('description').value.trim();
+            
+            if (!prototypeName) {
+                showResponse('Please enter a prototype name', 'error');
+                return;
+            }
+            
+            if (!description) {
+                showResponse('Please enter a description', 'error');
+                return;
+            }
+
+            try {
+                showResponse('Processing your request...', 'success');
+                
+                const response = await fetch('/add-model-to-prototype', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prototypeName: prototypeName,
+                        description: description
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResponse(`✅ Success!\n\n${result.message}\n\nAdded objects:\n${JSON.stringify(result.addedObjects, null, 2)}`, 'success');
+                } else {
+                    showResponse(`❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResponse(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function generateNewScene() {
+            const description = document.getElementById('description').value.trim();
+            
+            if (!description) {
+                showResponse('Please enter a description', 'error');
+                return;
+            }
+
+            try {
+                showResponse('Generating scene...', 'success');
+                
+                const response = await fetch('/generate-scene-from-text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: description
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showResponse(`✅ Scene generated!\n\nObjects created:\n${JSON.stringify(result.sceneObjects, null, 2)}\n\nHTML Elements:\n${result.sceneElements}`, 'success');
+                } else {
+                    showResponse(`❌ Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResponse(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        function showResponse(message, type) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = message;
+            responseDiv.className = `response ${type}`;
+        }
+
+        function clearResponse() {
+            document.getElementById('response').textContent = '';
+            document.getElementById('response').className = '';
+        }
+
+        // Example prototype name for testing
+        document.getElementById('prototype-name').value = 'test-prototype';
+    </script>
+</body>
+</html> 

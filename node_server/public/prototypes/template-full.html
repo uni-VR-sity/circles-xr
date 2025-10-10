@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        <title>Prototype</title>
+
+        <meta name="description" content="Prototype">
+
+        <script src='/global/js/libs/aframe-master.min.js'></script>
+
+    </head>
+
+    <body>
+        <div class="natural-language-section">
+            <h3>Describe Your Scene</h3>
+            <textarea id="scene-description" placeholder="Describe the VR scene you want to create...
+          Example: 'Create a room with a red cube on the left, a blue sphere in the center, and a green cylinder on the right'"></textarea>
+            <button onclick="generateFromDescription()">Generate Scene</button>
+          </div>
+
+        <!-- A-Frame Scene -->
+        <a-scene id="scene">
+
+        </a-scene>
+
+    </body>
+
+</html>

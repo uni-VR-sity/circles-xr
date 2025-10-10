@@ -1,0 +1,113 @@
+html
+    head
+
+        title Prototyping (AI)
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+        block stylesheets
+            link(rel='icon' href='/web/images/logos/uni-VR-sity-logo-with-background.png' type='image/x-icon')
+            link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
+            link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
+
+        block scripts
+            script(src='/web/js/layout.js')
+            script(src='/web/js/forms.js')
+            script(src='/web/js/overlay.js')
+            script(src='/web/js/scroll-gallery.js')
+            script(src='/web/js/views/CENTRAL_SERVER/prototyping-AI.js')
+            script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
+
+            script(src="/global/js/libs/adapter-latest.js")
+            script(src='/global/js/libs/aframe.min.js')
+            script(src='/global/js/libs/networked-aframe.min.js')
+            script(src='/global/js/libs/naf-janus-adapter.min.js')
+            script(src='/global/js/libs/aframe-extras.min.js')
+            script(src='/socket.io/socket.io.js')
+            script(src='//mozilla.github.io/pdf.js/build/pdf.js')
+            script(src='/global/js/components/aframe-fps-counter-component.min.js')
+            script(src='/global/js/components/aframe-mirror.js')
+            script(src='/global/js/circles_client_bundle.min.js')
+            script(src='/global/js/libs/aframe-physics-system.min.js')
+
+    body#prototyping-body
+
+        // Variables -------------------------------------------------------------------------------------------------------------------------------
+
+        // Navigation ------------------------------------------------------------------------------------------------------------------------------
+        nav#prototyping-navigation-container
+
+            // Logo -------------------------------------------------------------------------
+            #logo-container
+                a.logo(href='/')
+                    img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
+
+            // Title Container --------------------------------------------------------------
+            #prototyping-title-container
+                h3 Prototyping (AI)
+
+            // Exit Prototyping -------------------------------------------------------------
+            #exit-prototyping-container 
+                .icon-container
+                    a(class='fa-solid fa-arrow-right-from-bracket' href='/')
+
+            // Current Prototype Title Container --------------------------------------------
+            #current-prototype-title-container
+                h3#prototype-title.hide-until-ready Name
+
+            // Prototype Buttons Container --------------------------------------------------
+            #prototyping-buttons-container
+                input(type='submit' form='prototyping-form' value='Update').hide-until-ready
+                
+                .prototype-button.hide-until-ready
+                    a() Export
+
+                .prototype-button
+                    a(onclick='getExistingPrototypes()') Open
+
+                .prototype-button
+                    a(onclick='openOverlay("create-prototype-overlay")') New Prototype
+
+        // Webpage ---------------------------------------------------------------------------------------------------------------------------------
+        main#prototyping-main
+
+            include includes/create-prototype.pug
+            include includes/open-prototype.pug
+
+            // Prototyping ------------------------------------------------------------------
+            section#prototyping-AI-container.hide-until-ready
+
+                #prototype-input-container  
+                    
+                    // Natural Language Input Section
+                    .natural-language-section
+                        h4 Describe Your Scene
+                        textarea#scene-description(placeholder='Describe the VR scene you want to create...\nExample: "Create a room with a red cube on the left, a blue sphere in the center, and a green cylinder on the right"')
+                        button#generate-from-description(type='button' onclick='generateFromDescription()') Generate Scene
+                        p#nl-generation-status
+                    
+                    // Visual Editor Section
+                    #visual-editor-section.hide-until-ready(style='margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px; display: none;')
+                        h4 Visual Scene Editor
+                        p Adjust your objects using the sliders below. Changes are applied in real-time.
+                        #objects-list
+                            // Objects will be dynamically populated here
+                    
+                    // JSON Editor (Collapsible)
+                    #json-editor-section.hide-until-ready(style='margin-top: 20px;')
+                        .accordion-header(onclick='toggleAccordion("json-editor-accordion")')
+                            h4(style='display: inline-block; margin: 0;') JSON Editor (Advanced)
+                            span#json-accordion-icon(style='float: right; font-weight: bold;') ▼
+                        
+                        #json-editor-accordion.accordion-content(style='display: none; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 10px;')
+                            form#prototyping-form(onsubmit='updatePrototype(event)' method='post')
+                                fieldset
+                                    .form-field
+                                        label(for='prototyping-input') Edit JSON directly (for advanced users)
+                                        textarea#prototyping-input(name='prototyping' required)
+
+                #result-container
+                    #prototype-scene 
+
+                    p#prototype-input-error.error-message
+
+        include ../includes/footer.pug

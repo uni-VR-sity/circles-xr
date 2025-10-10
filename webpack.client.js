@@ -3,17 +3,7 @@ const fs    = require('fs');
 const path  = require('path');
 // const StringReplacePlugin = require("string-replace-loader");
 
-// Set up and parse Environment based configuation
-const dotenv                = require('dotenv');
-const dotenvParseVariables  = require('dotenv-parse-variables');
-
-let env = dotenv.config({})
-if (env.error) {
-  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
-}
-
-// Parse the dot configs so that things like false are boolean, not strings
-env = dotenvParseVariables(env.parsed);
+const env = require('./node_server/modules/env-util');
 
 module.exports = {
   module: {

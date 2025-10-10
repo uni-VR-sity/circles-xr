@@ -7,7 +7,12 @@
     .content-container {
         
         .success-message, .error-message {
-            display: block;
+            display: flex;
+        }
+
+        .single-create-success, .single-create-error
+        {
+            margin-top: 0;
             margin-bottom: $MEDIUM_MARGIN;
         }
 
@@ -54,11 +59,11 @@
                 
                 .row {
                     display: grid;
-                    grid-template-columns: 1fr 1fr 1.25fr;
-                    grid-template-areas: "username user-type update-type"
-                                        "divider divider divider";
+                    grid-template-columns: 1fr 1fr 1.25fr auto;
+                    grid-template-areas: "username user-type update-type delete-user"
+                                        "divider divider divider divider";
 
-                    p, select {
+                    p, select, .icon-container {
                         margin: $MEDIUM_MARGIN 0;
                         align-self: center;
                     }
@@ -75,12 +80,29 @@
 
                     select {
                         grid-area: update-type;
-                        width: calc(100% - $X_LARGE_MARGIN);
+                        width: calc(100% - $SMALL_MARGIN);
+                    }
+
+                    .icon-container {
+                        grid-area: delete-user;
+                        @include icon-button($MEDIUM_ICON, $WHITE, 11px 13px);
+                        margin-right: $SMALL_MARGIN;
+                        margin-left: $SMALL_MARGIN;
+
+                        i {
+                            color: $RED;
+                        }
                     }
 
                     hr {
                         grid-area: divider;
                     }
+                }
+
+                .no-users-message {
+                    display: none;
+                    text-align: center;
+                    margin-top: $LARGE_MARGIN;
                 }
             }
 
@@ -95,6 +117,10 @@
 
                     .error-message, .success-message {
                         display: flex;
+                    }
+
+                    #deleting-user-error {
+                        display: none;
                     }
                 }
 

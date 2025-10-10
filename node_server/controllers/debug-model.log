@@ -1,0 +1,2999 @@
+{
+  "timestamp": "2025-06-20T02:39:16.298Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "0"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:39:45.195Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:40:17.938Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:40:17.939Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:43:52.545Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:43:52.546Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:43:52.547Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "pendant",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "pendant",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:57:53.857Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:57:53.858Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:57:53.858Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:57:53.859Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:57:53.859Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:57:53.859Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:19.070Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:19.071Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:19.071Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:19.071Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:19.071Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:19.071Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:29.202Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:29.202Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:29.203Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:29.203Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:29.203Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:29.203Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:43.283Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:43.283Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:43.284Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:43.284Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:43.284Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:43.284Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:48.775Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "0"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model"
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:51.214Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:51.215Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:51.215Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:51.216Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:51.216Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T02:58:51.216Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:02:37.652Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:02:37.653Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:02:37.654Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:02:37.654Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:02:37.654Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:02:37.654Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.582Z",
+  "fullObject": {
+    "position": [
+      "-4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopsticks",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopsticks",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.583Z",
+  "fullObject": {
+    "position": [
+      "-2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.583Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.583Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.584Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.584Z",
+  "fullObject": {
+    "position": [
+      "-3",
+      "1",
+      "-3"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:02.584Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-3"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:48.604Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:48.605Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:48.605Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:48.605Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:48.606Z",
+  "fullObject": {
+    "position": [
+      "8",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "plate",
+    "modelPath": "/asset-library/miscellaneous/plate.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "plate",
+  "modelPathProperty": "/asset-library/miscellaneous/plate.glb",
+  "finalModelPath": "/asset-library/miscellaneous/plate.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:48.606Z",
+  "fullObject": {
+    "position": [
+      "10",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.5",
+      "0.5",
+      "0.5"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.942Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopsticks",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "1.0",
+      "1.0",
+      "1.0"
+    ]
+  },
+  "modelProperty": "chopsticks",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.942Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.942Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.942Z",
+  "fullObject": {
+    "position": [
+      "9",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.3",
+      "0.3",
+      "0.3"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.943Z",
+  "fullObject": {
+    "position": [
+      "12",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.943Z",
+  "fullObject": {
+    "position": [
+      "15",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:04:55.943Z",
+  "fullObject": {
+    "position": [
+      "18",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.429Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopsticks",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "1.0",
+      "1.0",
+      "1.0"
+    ]
+  },
+  "modelProperty": "chopsticks",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.429Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.429Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.430Z",
+  "fullObject": {
+    "position": [
+      "9",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.1",
+      "0.1",
+      "0.1"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.430Z",
+  "fullObject": {
+    "position": [
+      "12",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.430Z",
+  "fullObject": {
+    "position": [
+      "15",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:05:21.430Z",
+  "fullObject": {
+    "position": [
+      "18",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.100Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopsticks",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "1.0",
+      "1.0",
+      "1.0"
+    ]
+  },
+  "modelProperty": "chopsticks",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.100Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.101Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.101Z",
+  "fullObject": {
+    "position": [
+      "9",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.02",
+      "0.02",
+      "0.02"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.101Z",
+  "fullObject": {
+    "position": [
+      "12",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.101Z",
+  "fullObject": {
+    "position": [
+      "15",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:06:30.101Z",
+  "fullObject": {
+    "position": [
+      "18",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:14:05.322Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "0"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model"
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:14:44.583Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:14:44.584Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopstick pair",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "1.0",
+      "1.0",
+      "1.0"
+    ]
+  },
+  "modelProperty": "chopstick pair",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:14:44.585Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:14:44.585Z",
+  "fullObject": {
+    "position": [
+      "9",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T03:14:44.585Z",
+  "fullObject": {
+    "position": [
+      "12",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:35:32.510Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:06.179Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:06.180Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:06.181Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:06.181Z",
+  "fullObject": {
+    "position": [
+      "9",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:43.395Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "3",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:43.396Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "2",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:43.396Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:36:43.397Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "0",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:09.770Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:09.771Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "2",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:09.771Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "3",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:09.772Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "4",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:28.150Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:28.151Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:28.151Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T13:37:28.151Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:22.780Z",
+  "fullObject": {
+    "position": [
+      "2",
+      "1",
+      "0"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model"
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:22.781Z",
+  "fullObject": {
+    "position": [
+      "4",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model"
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:22.782Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "0"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model"
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.560Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "chopsticks",
+    "modelPath": "/asset-library/miscellaneous/chopstick-pair.glb",
+    "type": "model",
+    "scale": [
+      "1.0",
+      "1.0",
+      "1.0"
+    ]
+  },
+  "modelProperty": "chopsticks",
+  "modelPathProperty": "/asset-library/miscellaneous/chopstick-pair.glb",
+  "finalModelPath": "/asset-library/miscellaneous/chopstick-pair.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.560Z",
+  "fullObject": {
+    "position": [
+      "3",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "lipstick",
+    "modelPath": "/asset-library/miscellaneous/lipstick.glb",
+    "type": "model",
+    "scale": [
+      "0.6",
+      "0.6",
+      "0.6"
+    ]
+  },
+  "modelProperty": "lipstick",
+  "modelPathProperty": "/asset-library/miscellaneous/lipstick.glb",
+  "finalModelPath": "/asset-library/miscellaneous/lipstick.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.561Z",
+  "fullObject": {
+    "position": [
+      "6",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.561Z",
+  "fullObject": {
+    "position": [
+      "9",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mannequin",
+    "modelPath": "/asset-library/miscellaneous/mannequin.glb",
+    "type": "model",
+    "scale": [
+      "0.02",
+      "0.02",
+      "0.02"
+    ]
+  },
+  "modelProperty": "mannequin",
+  "modelPathProperty": "/asset-library/miscellaneous/mannequin.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mannequin.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.561Z",
+  "fullObject": {
+    "position": [
+      "12",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "mirror",
+    "modelPath": "/asset-library/miscellaneous/mirror.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "mirror",
+  "modelPathProperty": "/asset-library/miscellaneous/mirror.glb",
+  "finalModelPath": "/asset-library/miscellaneous/mirror.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.561Z",
+  "fullObject": {
+    "position": [
+      "15",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "jewelry",
+    "modelPath": "/asset-library/miscellaneous/pendant.glb",
+    "type": "model",
+    "scale": [
+      "0.7",
+      "0.7",
+      "0.7"
+    ]
+  },
+  "modelProperty": "jewelry",
+  "modelPathProperty": "/asset-library/miscellaneous/pendant.glb",
+  "finalModelPath": "/asset-library/miscellaneous/pendant.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:18:42.561Z",
+  "fullObject": {
+    "position": [
+      "18",
+      "1",
+      "-5"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "traffic cone",
+    "modelPath": "/asset-library/miscellaneous/traffic-cone.glb",
+    "type": "model",
+    "scale": [
+      "0.4",
+      "0.4",
+      "0.4"
+    ]
+  },
+  "modelProperty": "traffic cone",
+  "modelPathProperty": "/asset-library/miscellaneous/traffic-cone.glb",
+  "finalModelPath": "/asset-library/miscellaneous/traffic-cone.glb"
+}
+---
+{
+  "timestamp": "2025-06-20T14:19:04.682Z",
+  "fullObject": {
+    "position": [
+      "0",
+      "1",
+      "0"
+    ],
+    "rotation": [
+      "0",
+      "0",
+      "0"
+    ],
+    "model": "hair comb",
+    "modelPath": "/asset-library/miscellaneous/hair-comb.glb",
+    "type": "model",
+    "scale": [
+      "0.8",
+      "0.8",
+      "0.8"
+    ]
+  },
+  "modelProperty": "hair comb",
+  "modelPathProperty": "/asset-library/miscellaneous/hair-comb.glb",
+  "finalModelPath": "/asset-library/miscellaneous/hair-comb.glb"
+}
+---

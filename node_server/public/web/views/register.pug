@@ -1,22 +1,23 @@
 html
     head
 
-        title Register for CIRCLES
+        title Register for uni-VR-sity
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
         block stylesheets
+            link(rel='icon' href='/web/images/logos/uni-VR-sity-logo-with-background.png' type='image/x-icon')
             link(rel='stylesheet' type='text/css' href='/web/css/styles.css')
             link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700')
 
         block scripts
             script(src='/web/js/forms.js')
+            script(src='/web/js/views/register.js')
             script(src='https://kit.fontawesome.com/23ccd10015.js' crossorigin='anonymous')
 
-    body 
+    body.no-navigations
 
+        // Webpage ---------------------------------------------------------------------------------------------------------------------------------
         main 
-
-            // Webpage -------------------------------------------------------------------------------------------------------------------------------------
 
             // Login --------------------------------------------------------------------------------
             section#register
@@ -28,23 +29,30 @@ html
                 #right
 
                     #logo 
-                        include includes/circles-logo.svg
+                        a.logo(href='/')
+                            img(src='/web/images/logos/uni-VR-sity-logo.png' alt='uni-VR-sity Logo')
 
-                    #register-form 
-                    
-                        h2 Register
-
+                    #introduction 
+                        
                         p Create an account to begin exploring! Or 
                             a.link-icon(href="/guest-login") continue as guest
 
-                        if message
-                            p.error-message= message
+                    #register-form 
 
-                        form(action='/register-user' method='post')
+                        form(onsubmit='registerUser(event)' method='post')
+
+                            p#registration-error.error
+                            p#registration-success.success
+
+                            i#loading-icon(class="fa-solid fa-spinner fa-spin-pulse")
 
                             .form-field
                                 label.required-form-label Username
                                 input(type='text' name='username' placeholder='SuperFriend99' required)
+
+                            .form-field
+                                label.required-form-label Email
+                                input(type='email' name='email' placeholder='super@uni-vr-sity.ca' required)
 
                             .form-field
                                 label.required-form-label Password 
@@ -55,7 +63,7 @@ html
                                 input(type='password' name='passwordConf' required)
 
                             .form-field.last-field.full-width-submit
-                                input(type='submit' value='Login')
+                                input(type='submit' value='Register')
 
-                        p
-                            a.link-icon(href='/') Return to home page
+                        p.login-message() Have an account? 
+                            a.link-icon(href='/login') Log in here

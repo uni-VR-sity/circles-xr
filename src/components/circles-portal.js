@@ -25,54 +25,69 @@ AFRAME.registerComponent('circles-portal', {
 
     //where do we go when this portal is clicked
     CONTEXT_AF.portalElem.addEventListener('click', (e) => {
-      //goto url (but make sure we pass along the url params for group, avatar data etc.)
-      //note that if a queryString is already defined in 'link_url' we will pass along the existing url params
-      const urlArr = data.link_url.split('?');
-      const baseUrl = ((urlArr.length > 0) ? urlArr[0] : '');
+      
+      // Setting up transition to next circle
+      var circleTransitioner = document.querySelector('[circles-transition]');
+      circleTransitioner.components['circles-transition'].nextCircle();
 
-      //make sure we add all urlParams together from provided link and existing url bar
-      const queryString = ((window.location.search) ? window.location.search + '&' : '?') + ((urlArr.length > 1) ? urlArr[1] : window.location.search);
+      // Waiting to be ready to transition before going to next circle
+      var transitionInterval = setInterval(() =>
+      {
+        if (circleTransitioner.components['circles-transition'].isTransitionReady())
+        {
+          clearInterval(transitionInterval);
 
-      //we want to know the last world they visisted (could be useful for some world logic :)
-      const params_orig = new URLSearchParams(window.location.search);
-      const params_new  = new URLSearchParams(((urlArr.length > 1) ? urlArr[1] : ''));
-      for (let [key, val] of params_new.entries()) {
-        if (!params_new.has(key)) {
-          params_orig.append(key, val);
-        }
-        else {
-          params_orig.set(key, val);
-        }
-      }
+          //goto url (but make sure we pass along the url params for group, avatar data etc.)
+          //note that if a queryString is already defined in 'link_url' we will pass along the existing url params
+          const urlArr = data.link_url.split('?');
+          const baseUrl = ((urlArr.length > 0) ? urlArr[0] : '');
 
-      //check for window.newURLSearchParams. If so we have to combine these new params with existing ones
-      if (window.newURLSearchParams) {
-        for (let [key, val] of window.newURLSearchParams.entries()) {
-          if (!window.newURLSearchParams.has(key)) {
-            params_orig.append(key, val);
+          //make sure we add all urlParams together from provided link and existing url bar
+          const queryString = ((window.location.search) ? window.location.search + '&' : '?') + ((urlArr.length > 1) ? urlArr[1] : window.location.search);
+
+          //we want to know the last world they visisted (could be useful for some world logic :)
+          const params_orig = new URLSearchParams(window.location.search);
+          const params_new  = new URLSearchParams(((urlArr.length > 1) ? urlArr[1] : ''));
+          for (let [key, val] of params_new.entries()) {
+            if (!params_new.has(key)) {
+              params_orig.append(key, val);
+            }
+            else {
+              params_orig.set(key, val);
+            }
+          }
+
+          //check for window.newURLSearchParams. If so we have to combine these new params with existing ones
+          if (window.newURLSearchParams) {
+            for (let [key, val] of window.newURLSearchParams.entries()) {
+              if (!window.newURLSearchParams.has(key)) {
+                params_orig.append(key, val);
+              }
+              else {
+                params_orig.set(key, val);
+              }
+            }
+          }
+
+          //add last_route
+          if (!params_orig.has('last_route')) {
+            params_orig.append('last_route', window.location.pathname);
           }
           else {
-            params_orig.set(key, val);
+            params_orig.set('last_route', window.location.pathname);
           }
+
+          if (!params_orig.has('dressed')) {
+            if (window.location.pathname.match(/wardrobe/i)) {
+              params_orig.append('dressed', 'true');
+            }
+          }
+
+          const completeURL = baseUrl + '?' + params_orig.toString();
+          window.location.href = completeURL;
         }
-      }
 
-      //add last_route
-      if (!params_orig.has('last_route')) {
-        params_orig.append('last_route', window.location.pathname);
-      }
-      else {
-        params_orig.set('last_route', window.location.pathname);
-      }
-
-      if (!params_orig.has('dressed')) {
-        if (window.location.pathname.match(/wardrobe/i)) {
-          params_orig.append('dressed', 'true');
-        }
-      }
-
-      const completeURL = baseUrl + '?' + params_orig.toString();
-      window.location.href = completeURL;
+      }, 100);
     });
   },
   update: function (oldData) {

@@ -1,0 +1,300 @@
+// Prototyping -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#prototyping-AI-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: $LARGE_MARGIN;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 $SECTION_PADDING;
+
+    #prototype-input-container {
+
+        .natural-language-section {
+            margin-bottom: $LARGE_MARGIN;
+            padding: $MEDIUM_MARGIN;
+            background-color: $LIGHT_GREY;
+            border-radius: $BORDER_RADIUS;
+
+            h4 {
+                @include no-spacing;
+                margin-bottom: $SMALL_MARGIN;
+                color: $BLUE;
+            }
+
+            #scene-description {
+                width: 100%;
+                height: 100px;
+                resize: vertical;
+                margin-bottom: $SMALL_MARGIN;
+                padding: $XX_SMALL_MARGIN;
+                border: $FORM_BORDER;
+                border-radius: $BORDER_RADIUS;
+                font-family: inherit;
+                
+                &:focus {
+                    border: $FORM_ACTIVE_BORDER;
+                    outline: none;
+                }
+            }
+
+            #generate-from-description {
+                @include primary-button;
+                margin-bottom: $SMALL_MARGIN;
+                
+                &:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                    background-color: $MEDIUM_GREY;
+                }
+            }
+
+            #nl-generation-status {
+                @include no-spacing;
+                font-size: 0.9em;
+                margin-top: $XX_SMALL_MARGIN;
+                
+                &.success {
+                    color: $GREEN;
+                }
+                
+                &.error {
+                    color: $RED;
+                }
+                
+                &.loading {
+                    color: $BLUE;
+                }
+            }
+
+            // Styles for the model insertion section
+            #add-models-description {
+                width: 100%;
+                height: 80px;
+                resize: vertical;
+                margin-bottom: $SMALL_MARGIN;
+                padding: $XX_SMALL_MARGIN;
+                border: $FORM_BORDER;
+                border-radius: $BORDER_RADIUS;
+                font-family: inherit;
+                
+                &:focus {
+                    border: $FORM_ACTIVE_BORDER;
+                    outline: none;
+                }
+            }
+
+            #add-models-button {
+                @include secondary-button;
+                margin-bottom: $SMALL_MARGIN;
+                
+                &:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                    background-color: $MEDIUM_GREY;
+                }
+            }
+
+            #add-models-status {
+                @include no-spacing;
+                font-size: 0.9em;
+                margin-top: $XX_SMALL_MARGIN;
+                
+                &.success {
+                    color: $GREEN;
+                }
+                
+                &.error {
+                    color: $RED;
+                }
+                
+                &.loading {
+                    color: $BLUE;
+                }
+            }
+        }
+
+        // Visual Editor Section
+        #visual-editor-section {
+            margin-bottom: $LARGE_MARGIN;
+            padding: $MEDIUM_MARGIN;
+            background-color: $LIGHT_GREY;
+            border-radius: $BORDER_RADIUS;
+
+            h4 {
+                @include no-spacing;
+                margin-bottom: $SMALL_MARGIN;
+                color: $BLUE;
+            }
+
+            p {
+                @include no-spacing;
+                margin-bottom: $MEDIUM_MARGIN;
+                font-size: 0.9em;
+                color: $DARK_GREY;
+            }
+
+            #objects-list {
+                .object-editor {
+                    background-color: $WHITE;
+                    margin-bottom: $MEDIUM_MARGIN;
+                    padding: $MEDIUM_MARGIN;
+                    border-radius: $BORDER_RADIUS;
+                    border: 1px solid $MEDIUM_GREY;
+
+                    .object-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: $MEDIUM_MARGIN;
+                        padding-bottom: $SMALL_MARGIN;
+                        border-bottom: 1px solid $LIGHT_GREY;
+
+                        h5 {
+                            @include no-spacing;
+                            color: $BLUE;
+                            font-weight: 500;
+                        }
+
+                        .object-type {
+                            background-color: $LIGHT_GREY;
+                            padding: 2px 8px;
+                            border-radius: 12px;
+                            font-size: 0.8em;
+                            color: $DARK_GREY;
+                        }
+                    }
+
+                    .slider-group {
+                        margin-bottom: $MEDIUM_MARGIN;
+
+                        .slider-group-title {
+                            font-weight: 500;
+                            margin-bottom: $SMALL_MARGIN;
+                            color: $DARK_GREY;
+                        }
+
+                        .slider-controls {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr 1fr;
+                            grid-gap: $SMALL_MARGIN;
+
+                            .slider-control {
+                                .slider-label {
+                                    font-size: 0.85em;
+                                    margin-bottom: 2px;
+                                    color: $MEDIUM_GREY;
+                                    font-weight: 500;
+                                }
+
+                                .slider-input {
+                                    width: 100%;
+                                    margin-bottom: 2px;
+                                    -webkit-appearance: none;
+                                    height: 6px;
+                                    border-radius: 3px;
+                                    background: $LIGHT_GREY;
+                                    outline: none;
+
+                                    &::-webkit-slider-thumb {
+                                        -webkit-appearance: none;
+                                        appearance: none;
+                                        width: 16px;
+                                        height: 16px;
+                                        border-radius: 50%;
+                                        background: $BLUE;
+                                        cursor: pointer;
+                                    }
+
+                                    &::-moz-range-thumb {
+                                        width: 16px;
+                                        height: 16px;
+                                        border-radius: 50%;
+                                        background: $BLUE;
+                                        cursor: pointer;
+                                        border: none;
+                                    }
+                                }
+
+                                .slider-value {
+                                    font-size: 0.8em;
+                                    text-align: center;
+                                    color: $MEDIUM_GREY;
+                                    background-color: $LIGHT_GREY;
+                                    padding: 1px 4px;
+                                    border-radius: 3px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // JSON Editor Section (Accordion)
+        #json-editor-section {
+            .accordion-header {
+                cursor: pointer;
+                padding: $MEDIUM_MARGIN;
+                background-color: $LIGHT_GREY;
+                border-radius: $BORDER_RADIUS;
+                transition: background-color 0.2s ease;
+
+                &:hover {
+                    background-color: darken($LIGHT_GREY, 5%);
+                }
+
+                h4 {
+                    color: $BLUE;
+                }
+
+                #json-accordion-icon {
+                    transition: transform 0.2s ease;
+                    
+                    &.rotated {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .accordion-content {
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+        }
+
+        #prototyping-form {
+            height: 100%;
+
+            fieldset {
+                
+                label {
+                    display: block;
+                    margin-bottom: $XX_SMALL_MARGIN;
+                    font-weight: 500;
+                    color: $DARK_GREY;
+                }
+            
+                #prototyping-input {
+                    resize: none;
+                    width: 100%;
+                    height: 200px;
+                }
+            }
+        }
+    }
+
+    #result-container {
+        position: relative;
+
+        #prototype-input-error {
+            position: absolute; 
+            left: 0px; 
+            top: 0px; 
+            z-index: +1;
+            margin: $SMALL_MARGIN+5px $MEDIUM_MARGIN;
+        }
+    }
+}

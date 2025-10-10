@@ -1,0 +1,95 @@
+// DEFAULT ----------------------------------------------------------------------------------
+
+#prototype-models-overlay {
+
+    .overlay {
+        width: 80%; 
+        height: 80%; 
+        box-sizing: border-box;
+        padding: $X_LARGE_MARGIN;
+        display: flex;
+        flex-direction: column;
+
+        #new-model-upload {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            margin-bottom: $MEDIUM_MARGIN;
+
+            input[type=file] {
+                display: none;
+            }
+
+            input[type=button] {
+                @include primary-button-regular(block);
+            }
+            
+            input[type=button]:hover {
+                @include primary-button-hover;
+            }
+
+            #prototype-model-error {
+                margin-top: $XX_SMALL_MARGIN;
+            }
+        }
+
+        #uploaded-models-container {
+            overflow-y: auto;
+            height: 100%;
+
+            #no-models-message {
+                @include center-flex;
+                display: none;
+                height: 85%;
+            }
+
+            #models-container {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                column-gap: $MEDIUM_MARGIN;
+                row-gap: $MEDIUM_MARGIN;
+
+                .model {
+                    background-color: $LIGHT-GREY;
+                    border-radius: $BORDER_RADIUS;
+
+                    h3 {
+                        text-align: center;
+                        text-transform: uppercase;
+                        margin-top: $LARGE_MARGIN;
+                        margin-bottom: $SMALL_MARGIN;
+                    }
+
+                    .name-container
+                    {
+                        text-align: center;
+                        margin-bottom: $LARGE_MARGIN;
+
+                        p {
+                            display: inline;
+                            white-space: nowrap;
+                        }
+                    }
+
+                    .model-options {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        margin-bottom: $LARGE_MARGIN;
+
+                        .copy-icon {
+                            @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $DARK-GREY);
+                            justify-self: end;
+                            margin-right: $SMALL_MARGIN;
+                        }
+                        
+                        .trash-icon {
+                            @include icon-highlight($DEFAULT_LARGE_ICON, $BLACK, $RED);
+                            justify-self: start;
+                            margin-left: $SMALL_MARGIN;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

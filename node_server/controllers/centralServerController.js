@@ -1,0 +1,2513 @@
+'use strict';
+
+require('../../src/core/circles_server');
+
+const path = require('path');
+const fs = require('fs');
+const jwt = require('jsonwebtoken');
+const { CONSTANTS } = require('../../src/core/circles_research');
+const formidable = require("formidable");
+const XMLHttpRequest = require('xhr2');
+const uniqueFilename = require('unique-filename');
+const { convertTextToSceneJSON, validateSceneJSON } = require('../modules/nlp-scene-generator');
+
+const User = require('../models/user');
+const Guest = require('../models/guest');
+const Model3D = require('../models/model3D');
+const CircleGroups = require('../models/circleGroups');
+const Circles = require('../models/circles');
+const Uploads = require('../models/uploads');
+const MagicLinks = require('../models/magicLinks');
+const Servers = require('../models/servers');
+const Prototypes = require('../models/prototypes');
+
+const env = require('../modules/env-util');
+
+// Getting user information to send to pages
+const getUserInfo = function(req)
+{
+  if (req.user)
+  {
+    var user = req.user;
+
+    const userInfo = {
+      username: user.username,
+      usertype: user.usertype,
+      email: user.email,
+      displayName: user.displayName,
+      headUrl: user.gltf_head_url,
+      hairUrl: user.gltf_hair_url,
+      bodyUrl: user.gltf_body_url,
+      headColor: user.color_head,
+      hairColor: user.color_hair,
+      bodyColor: user.color_body,
+      handLeftColor: user.color_hand_left,
+      handRightColor: user.color_hand_right,
+    }
+
+    return userInfo;
+  }
+  else
+  {
+    return null;
+  }
+}
+
+// Homepage ----------------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering homepage page
+const serveHomepage = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+
+  // Featured circles
+  // Descriptions can have links: <a href='...'>...</a>
+  var featuredCircles = [];
+
+  featuredCircles[0] = {
+    photo: '/worlds/COG-Memory-Palace/profile.jpg',
+    name: 'BrainVR',
+    description: "BrainVR is an immersive interactive educational module created in collaboration with <a class='link-underline' href='https://carleton.ca/cognitivescience/people/davies-jim/' target='_blank'>Dr. Jim Davies</a> for a course on Cognitive Science. It uses a pneumonic approach to help students learn about the names and functions of brain parts.",
+    link: 'https://uni-vr-sity.ca/Memory-Palace',
+  }
+
+  featuredCircles[1] = {
+    photo: '/worlds/Gathering-Place/profile.jpg',
+    name: 'Gathering Place',
+    description: "Indigenous Gathering Place is an ongoing project in collaboration with Indigenous Culture and Media Innovations (<a class='link-underline' href='https://icmi.ca/' target='_blank'>ICMI</a>) to develop a place for Indigenous communities and their allies to meet, exhibit art and culture artefact, and educate.",
+    link: 'https://uni-vr-sity.ca/Gathering-Place',
+  }
+
+  featuredCircles[2] = {
+    photo: '/worlds/CU-Campus/profile.jpg',
+    name: 'CU Campus',
+    description: "Carleton University (CU) Campus is a simplified version of a campus simulation used in English as a Second Language course for international students to allow them to explore the campus and interact with others and AI agents prior to attending the university.",
+    link: 'https://uni-vr-sity.ca/CU-Campus',
+  }
+
+  featuredCircles[3] = {
+    photo: '/worlds/Asteroid-Field/profile.jpg',
+    name: 'Asteroid Field',
+    description: "Asteroid Field is a simple yet engaging VR game that demonstrates the abilities of the Circles framework in creating immersive, active video games.",
+    link: 'https://uni-vr-sity.ca/Asteroid-Field',
+  }
+
+  // News
+  // Descriptions can have links: <a href='...'>...</a>
+  var newsYears = [2024];
+
+  var news = [];
+
+  news[0] = {
+    photo: '/web/images/news/InspirED2024Symposium.jpg',
+    title: 'InspirED 2024 Symposium',
+    monthDay: 'April 24',
+    year: '2024',
+    description: 'Based on the projects in uni-VR-sity, Dr. Ali Arya discussed his experience and insights on teaching with Virtual/ Augmented/ Extended Reality during the InspirED 2024 Symposium <a href="https://www.csit.carleton.ca/~arya/prez/Teaching_with_XR-INSPIRED_2024.pptx">PPTX</a>, <a href="https://www.csit.carleton.ca/~arya/prez/Teaching_with_XR-INSPIRED_2024.pdf">PDF</a>',
+  }
+
+  // Project Team
+  var projectTeam = [];
+
+  projectTeam[0] = {
+    photo: '/web/images/people/AliArya.jpg',
+    name: 'Ali Arya',
+    secondaryInfo: 'Associate Professor (Info Tech), Carleton University',
+    iconLinks: ['https://www.csit.carleton.ca/~arya/', 'https://www.linkedin.com/in/aliarya/'],
+  }
+
+  projectTeam[1] = {
+    photo: '/web/images/people/AnthonyScavarelli.jpg',
+    name: 'Anthony Scavarelli',
+    secondaryInfo: 'Professor (Multimedia), Algonquin College',
+    iconLinks: ['http://portfolio.anthony-scavarelli.com/', 'https://www.linkedin.com/in/anthonyscavarelli/'],
+  }
+
+  /*
+  projectTeam[2] = {
+    photo: '/web/images/people/JimDavies.jpg',
+    name: 'Jim Davies',
+    secondaryInfo: 'Professor (Cog Sci), Research Collaborator',
+    iconLinks: ['http://www.jimdavies.org'],
+  }
+
+  projectTeam[3] = {
+    photo: '/web/images/people/DanHawes.png',
+    name: 'Dan Hawes',
+    secondaryInfo: 'PHD DM',
+  }
+  */
+
+  projectTeam[2] = {
+    photo: '/web/images/people/DanielleCole.png',
+    name: 'Danielle Cole',
+    secondaryInfo: 'Research Assistant',
+    iconLinks: ['https://coledani.myportfolio.com/', 'https://www.linkedin.com/in/cole-dani/'],
+  }
+
+  projectTeam[3] = {
+    photo: '/web/images/people/AnastaciaGorbenko.jpg',
+    name: 'Anastacia Gorbenko',
+    secondaryInfo: 'Developer',
+    iconLinks: [null, 'https://www.linkedin.com/in/anastaciagorbenko/'],
+  }
+
+  projectTeam[4] = {
+    photo: '/web/images/people/ElisJoynes.jpg',
+    name: 'Elis Joynes',
+    secondaryInfo: 'Developer',
+    iconLinks: ['https://www.elisjoynes.com/', 'https://www.linkedin.com/in/elis-joynes-a95848208'],
+  }
+
+  res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/homepage'), {
+    title: 'uni-VR-sity',
+    userInfo: userInfo,
+    featuredCircles: featuredCircles,
+    newsYears: newsYears,
+    news: news,
+    projectTeam: projectTeam,
+  });
+}
+
+// More Circles Page ------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering more circles page
+const serveMoreCircles = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+
+  // Getting success and error messages
+  let successMessage = null;
+  let errorMessage = null;
+
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = null;
+  }
+
+  if (req.session.errorMessage)
+  {
+    errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+  }
+
+  var request = new XMLHttpRequest();
+  request.open('GET', env.CENTRAL_SERVER + '/get-servers');
+
+  const renderError = function (message)
+  {
+    res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/more-circles'), {
+      title: 'More Circles',
+      userInfo: userInfo,
+      circleServers: {},
+      successMessage: successMessage,
+      errorMessage: errorMessage,
+      serverErrorMessage: message,
+      secondaryMessage: 'Please try again. If error persists, contact the central Circles server',
+    });
+  }
+
+  request.onerror = function() 
+  {
+    renderError('An error occured while connecting to central server');
+  }
+
+  request.onload = function() 
+  {
+    var serverData = JSON.parse(request.response);
+    
+    // Checking that the server data was able the be collected, if not, outputting an error message
+    if (serverData === 'ERROR')
+    {
+      renderError('An error occured while getting data from central server');
+    }
+    else
+    {
+      res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/more-circles'), {
+        title: "More Circles",
+        userInfo: userInfo,
+        circleServers: JSON.parse(request.response),
+        successMessage: successMessage,
+        errorMessage: errorMessage,
+      });
+    }
+  };
+
+  request.send();
+}
+
+// ------------------------------------------------------------------------------------------
+
+const addCirclesServer = async (req, res, next) =>
+{
+  // Making sure all required fields are there (owner's name, description, link to server, and worlds)
+  if (req.body.ownerName && req.body.link && req.body.description && req.body.circles) 
+  {
+    let serverData = {
+      ownerName: req.body.ownerName,
+      description: req.body.description,
+      link: req.body.link,
+      worlds: [],
+    }
+
+      // Adding circles
+      // req.body.circles will either be:
+      //    - 'circle'                          --> Not array (only 1 subgroup and will add that)
+      //    - ['circle1', 'circle2', ...]       --> Array (will loop through and add each subgroup)
+      if (Array.isArray(req.body.circles))
+      {
+        for(const circle of req.body.circles)
+        {
+          serverData.worlds.push(circle);
+        }
+      }
+      else
+      {
+        serverData.worlds.push(req.body.circles);
+      }
+
+    try
+    {
+      await Servers.create(serverData);
+      req.session.successMessage = serverData.ownerName + "'s server successfully added to database";
+
+    }
+    catch(e)
+    {
+      console.log(e);
+      req.session.errorMessage = 'Something went wrong, please try again';
+    }
+  }
+
+  return res.redirect('/more-circles');
+}
+
+// ------------------------------------------------------------------------------------------
+
+const deactivateCirclesServer = async (req, res, next) =>
+{
+  // Finding server in database
+  let server = await Servers.findById(req.body.server);
+
+  // Updating active variable in server
+  if (server)
+  {
+    try
+    {
+      server.active = false;
+      await server.save();
+
+      console.log(server.ownerName + "'s server set to be inactive");
+    }
+    catch(e)
+    {
+      console.log("ERROR: Could not set " + server.ownerName + "'s server to be inactive");
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not get the server with following id from the database: ' + req.body.server);
+  }
+
+  res.json('complete');
+}
+
+// ------------------------------------------------------------------------------------------
+
+const activateCirclesServer = async (req, res, next) => 
+{
+  // Finding server in database
+  let server = await Servers.findById(req.body.server);
+
+  // Updating active variable in server
+  if (server)
+  {
+    try
+    {
+      server.active = true;
+      await server.save();
+
+      console.log(server.ownerName + "'s server set to be active");
+    }
+    catch(e)
+    {
+      console.log("ERROR: Could not set " + server.ownerName + "'s server to be active");
+    }
+  }
+  else
+  {
+    console.log('ERROR: Could not get the server with following id from the database: ' + req.body.server);
+  }
+
+  res.json('complete');
+}
+
+// ------------------------------------------------------------------------------------------
+
+const deleteCirclesServer = async (req, res, next) =>
+{
+  // Deleting server
+  try
+  {
+    await Servers.findByIdAndDelete(req.body.server);
+
+    console.log('Server with the following id deleted: ' + req.body.server);
+  }
+  catch(e)
+  {
+    console.log('ERROR: The server with the following id could not be deleted: ' + req.body.server);
+  }
+
+  res.json('complete');
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Getting list of servers from database
+const getServersList = async (req, res, next) =>
+{
+  try 
+  {
+    let servers = await Servers.find({});
+    res.json(servers);
+  }
+  catch(e)
+  {
+    res.json('ERROR');
+  }
+}
+
+// Prototyping Page --------------------------------------------------------------------------------------------------------------------------------
+
+// Rendering prototyping page
+const servePrototyping = async (req, res, next) =>
+{
+  // Getting models uploaded by user
+  var uploadedModels = await Uploads.find({ user: req.user, category: 'model' }, 'displayName name type');
+
+  // Rendering the prototyping page
+  const userInfo = getUserInfo(req);
+  
+  res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/prototyping'), {
+    title: 'Prototyping',
+    userInfo: userInfo,
+    uploadedModels: uploadedModels,
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating new prototype from template
+const createNewPrototype = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName) 
+  {
+    const destinationFilePath = __dirname + '/../public/prototypes/created';
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+
+    const startingScene = {
+      sceneAttributes : {
+        background: { color : '#ededed' },
+      },
+      sceneObjects : [{
+        geometry: { primitive: 'box' },
+        material: { color: 'grey' },
+        position: [0, 0, -5],
+        rotation: [0, 45, 0],
+      }],
+    };
+
+    // Making sure prototype name is unique, sending error message if it already exists
+    if (await Prototypes.findOne({fileName: fileName}))
+    {
+      errorResponse.error = 'Prototype name is unavailable';
+  
+      res.json(errorResponse);
+      return;
+    }
+
+    // Creating prototype folder
+    const prototypeFolderPath = destinationFilePath + '/' + fileName;
+
+    try
+    {
+      fs.mkdirSync(prototypeFolderPath); 
+    }
+    catch(e)
+    {
+      res.json(errorResponse);
+      return;
+    }
+
+    // Creating prototype JSON file
+    var prototypeJSON = {
+      title : req.body.prototypeName,
+      sceneAttributes : startingScene.sceneAttributes,
+      sceneObjects : startingScene.sceneObjects,
+    }
+
+    try 
+    {
+      fs.writeFileSync(prototypeFolderPath + '/' + fileName + '.json', JSON.stringify(prototypeJSON));
+    }
+    catch(e)
+    {
+      res.json(errorResponse);
+      return;
+    }
+
+    // Creating prototype HTML file
+    var sceneInformation = await updatePrototypeHTML(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON, req.user);
+
+    // Storing prototype in the database
+    var prototypeInfo = {
+      user: await User.findById(req.user._id).exec(),
+      name: req.body.prototypeName,
+      fileName: fileName,
+      url: prototypeFolderPath,
+    }
+
+    try
+    {
+      await Prototypes.create(prototypeInfo);
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      // Deleting prototype folder
+      try
+      {
+        fs.rmSync(prototypeFolderPath, {recursive: true});
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+
+      res.json(errorResponse);
+      return;
+    }
+
+    var successResponse = {
+      status: 'success',
+      warningMessages: sceneInformation.warningMessages,
+      prototypeName: req.body.prototypeName,
+      startingString: JSON.stringify(startingScene),
+      sceneAttributes: sceneInformation.sceneAttributes,
+      sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneInformation.sceneElements),
+    }
+
+    res.json(successResponse);
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype JSON file
+// Returns updated JSON object
+const updatePrototypeJSON = function(filePath, edits)
+{
+  // Reading file
+  var prototypeJSON;
+
+  try
+  {
+    prototypeJSON = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+  
+  // Parsing file to update
+  var prototypeObject = JSON.parse(prototypeJSON);
+  var parsedEdits = JSON.parse(edits);
+
+  prototypeObject.sceneAttributes = parsedEdits.sceneAttributes;
+  prototypeObject.sceneObjects = parsedEdits.sceneObjects;
+
+  // Saving file updates
+  try 
+  {
+    fs.writeFileSync(filePath, JSON.stringify(prototypeObject));
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  return prototypeObject;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating string to add component to element depending on its values
+const addComponentValue = async function(componentName, componentInfo, prototypeObject, user)
+{
+  var component = '';
+  var warningMessages = [];
+
+  // If value is a string
+  if (componentInfo.value === "string")
+  {
+    component += prototypeObject[componentName];
+  }
+  // If value is an array
+  else if (componentInfo.value === "array")
+  {
+    for (var i = 0; i < componentInfo.size; i++)
+    {
+      component += prototypeObject[componentName][i];
+
+      // If array position is not the last, adding space
+      if (i + 1 != componentInfo.size)
+      {
+        component += ' ';
+      }
+    }
+  }
+  // If value is an object
+  else if (componentInfo.value === "object")
+  {
+    // Looping through all attributes in prototype object's component
+    for (var attribute in prototypeObject[componentName])
+    {
+      // Checking if attribute exists
+      if (componentInfo.attributes.hasOwnProperty(attribute))
+      {
+        var attributeComponent = await addComponentValue(attribute, componentInfo.attributes[attribute], prototypeObject[componentName], user)
+        
+        component += attribute + ':' + attributeComponent.component + ';';
+        warningMessages.push(...attributeComponent.warningMessages);
+      }
+    }
+  }
+
+  // If component is a glft-model or src and does not contain a url (ex. does not contain "http://"), add asset library path (keeping url())
+  if (componentName === 'gltf-model' || componentName === 'src')
+  {
+    if (!component.includes('http://'))
+    {
+      // Making sure that the model exists in asset library
+      // Otherwise leaving component empty and displaying warning message
+      if (fs.existsSync(__dirname + '/../public/asset-library/' + component.slice(4, -1)))
+      {
+        component = component.slice(0, 4) + env.DOMAIN + '/asset-library/' + component.slice(4);
+      }
+      else
+      {
+        warningMessages.push('"' + component.slice(4, -1) + '" does not exist in asset library');
+        component = '';
+      }
+    }
+  }
+
+  // If component is a circles-model and does not contain a url (ex. does not contain "http://"), add asset library path (with no url())
+  if (componentName === 'circles-model')
+  {
+    if (!component.includes('http://'))
+    {
+      // If model was uploaded by user, getting file name from database
+      // Otherwise getting model from asset library
+      if (component.includes('custom/'))
+      {
+        // Getting file name from database
+        var model = await Uploads.findOne({ user: user, displayName: component.split('/')[1] }, 'name');
+
+        // If model was found, adding its path
+        // Otherwise leaving component empty and displaying warning message
+        if (model)
+        {
+          component = env.DOMAIN + '/uploads/' + model.name;
+        }
+        else
+        {
+          warningMessages.push('Custom model "' + component.split('/')[1] + '" missing');
+          component = '';
+        }
+      }
+      else
+      {
+        // Making sure that the model exists in asset library
+        // Otherwise leaving component empty and displaying warning message
+        if (fs.existsSync(__dirname + '/../public/asset-library/' + component))
+        {
+          component = env.DOMAIN + '/asset-library/' + component;
+        }
+        else
+        {
+          warningMessages.push(component + ' does not exist in asset library');
+          component = '';
+        }
+      }
+    }
+  }
+
+  var componentInformation = {
+    component: component,
+    warningMessages: warningMessages,
+  } 
+
+  return componentInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating prototype element
+const createPrototypeElement = async function(object, allComponents, user)
+{
+  var element = '<a-entity';
+  var warningMessages = [];
+
+  // Looping through all components in object
+  for (var component in object)
+  {
+    // Checking if component contains __ (for custom tag names (ex. animation__rotation, animation__position))
+    if (component.includes('__'))
+    {
+      // Checking if component before __ exists
+      if (allComponents.hasOwnProperty(component.split('__')[0]))
+      {
+        var componentValue = await addComponentValue(component, allComponents[component.split('__')[0]], object, user);
+        
+        element += ' ' + component + '="' + componentValue.component + '"';
+        warningMessages.push(...componentValue.warningMessages);
+      }
+    }
+    else
+    {
+      // Checking if component exists
+      if (allComponents.hasOwnProperty(component))
+      {
+        var componentValue = await addComponentValue(component, allComponents[component], object, user);
+
+        element += ' ' + component + '="' + componentValue.component + '"';
+        warningMessages.push(...componentValue.warningMessages);
+      }
+    }
+  }
+
+  element += '>\n';
+
+  // Adding children if object has some specified
+  if (object.children)
+  {
+    if (Array.isArray(object.children))
+    {
+      for (const childObject of object.children)
+      {
+        var childElement = await createPrototypeElement(childObject, allComponents, user);
+
+        element += childElement.element;
+        warningMessages.push(...childElement.warningMessages);
+      }
+    }
+  }
+
+  element += '</a-entity>\n';
+  
+  var elementInformation = {
+    element: element,
+    warningMessages: warningMessages,
+  };
+
+  return elementInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning scene elements from prototype object
+const parseSceneElements = async function(prototypeObject, user)
+{
+  var sceneElements = '';
+  var warningMessages = [];
+
+  // Reading element components file
+  var componentsJSON;
+
+  try
+  {
+    componentsJSON = fs.readFileSync(__dirname + '/../public/prototypes/element-components.JSON', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing file to update
+  var allComponents = JSON.parse(componentsJSON);
+
+  // Creating an a-entity element for each scene element
+  for (const object of prototypeObject.sceneObjects)
+  {
+    var elementInformation = await createPrototypeElement(object, allComponents, user);
+
+    sceneElements += elementInformation.element;
+    warningMessages.push(...elementInformation.warningMessages);
+  }
+
+  var sceneElementsInformation = {
+    sceneElements: sceneElements,
+    warningMessages: warningMessages,
+  }
+
+  return sceneElementsInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Putting scene elements together from template and prototype
+const gatherSceneElements = async function(prototypeObject, user)
+{
+  // Getting assets from template
+  var templateAssets;
+
+  try
+  {
+    templateAssets = fs.readFileSync(__dirname + '/../public/prototypes/template-scene-assets.html', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Getting elements from template
+  var templateElements;
+
+  try
+  {
+    templateElements = fs.readFileSync(__dirname + '/../public/prototypes/template-scene-elements.html', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing prototype scene elements
+  var prototypeSceneElements = '';
+  var warningMessages = [];
+  
+  if (prototypeObject.sceneObjects)
+  {
+    var elementsInformation = await parseSceneElements(prototypeObject, user);
+
+    if (elementsInformation == null)
+    {
+      return null;
+    }
+    
+    prototypeSceneElements = elementsInformation.sceneElements;
+    warningMessages.push(...elementsInformation.warningMessages);
+  }
+
+  // Putting assets and elements together
+  var sceneElements = '';
+
+  sceneElements += templateAssets;
+  sceneElements += templateElements;
+  sceneElements += prototypeSceneElements;
+
+  var sceneElementsInformation = {
+    sceneElements: sceneElements,
+    warningMessages: warningMessages,
+  };
+
+  return sceneElementsInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning scene attributes from prototype object
+const parseSceneAttributes = async function(prototypeObject, user)
+{
+  var attributes = '';
+  var warningMessages = [];
+
+  if (prototypeObject.sceneAttributes)
+  {
+    // Reading scene attributes file
+    var attributesJSON;
+
+    try
+    {
+      attributesJSON = fs.readFileSync(__dirname + '/../public/prototypes/scene-attributes.JSON', { encoding: 'utf8', flag: 'r' });
+    }
+    catch(e)
+    {
+      console.log(e);
+      return null;
+    }
+
+    var allAttributes = JSON.parse(attributesJSON);
+
+    // Looping through scene attributes
+    for (const attribute in prototypeObject.sceneAttributes)
+    {
+      // Checking if attribute exists
+      if (allAttributes.hasOwnProperty(attribute))
+      {
+        var attributeValue = await addComponentValue(attribute, allAttributes[attribute], prototypeObject.sceneAttributes, user);
+
+        attributes += attribute + '="' + attributeValue.component + '"\n';
+        warningMessages.push(...attributeValue.warningMessages);
+      }
+    }
+  }
+
+  var attributesInformation = {
+    attributes: attributes,
+    warningMessages: warningMessages,
+  }
+
+  return attributesInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Putting scene tag together with attributes from template and prototype
+const gatherSceneTag = async function(prototypeObject, user)
+{
+  var warningMessages = [];
+
+  // Gettting scene tag and its attributes
+  var sceneStart; 
+
+  try
+  {
+    sceneStart = fs.readFileSync(__dirname + '/../public/prototypes/template-scene-starter.html', { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing prototype scene attributes
+  var sceneAttributesInformation = await parseSceneAttributes(prototypeObject, user);
+
+  if (sceneAttributesInformation == null)
+  {
+    return null;
+  }
+
+  var sceneAttributes = sceneAttributesInformation.attributes;
+  warningMessages.push(...sceneAttributesInformation.warningMessages);
+
+  // Putting scene tag together
+  var sceneTag = '';
+
+  sceneTag += sceneStart;
+  sceneTag += sceneAttributes;
+  sceneTag += '>';
+
+  var sceneTagInformation = {
+    sceneTag: sceneTag,
+    sceneAttributes: sceneAttributes,
+    warningMessages: warningMessages,
+  }
+
+  return sceneTagInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype HTML file
+// Returns HTML scene object
+const updatePrototypeHTML = async function(filePath, prototypeObject, user)
+{
+  var warningMessages = [];
+
+  // Getting scene tag
+  var sceneTagInformation = await gatherSceneTag(prototypeObject, user);
+
+  if (!sceneTagInformation)
+  {
+    return null;
+  }
+
+  warningMessages.push(...sceneTagInformation.warningMessages);
+
+  // Getting scene elements
+  var sceneElementsInformation = await gatherSceneElements(prototypeObject, user);
+
+  if (!sceneElementsInformation)
+  {
+    return null;
+  }
+
+  var sceneElements = sceneElementsInformation.sceneElements;
+  warningMessages.push(...sceneElementsInformation.warningMessages);
+
+  // Creating updated HTML file with new scene elements
+  const templateBeforeFilePaths = [
+    __dirname + '/../public/prototypes/template-header.html',
+    __dirname + '/../public/prototypes/template-body.html',
+  ];
+
+  const templateAfterFilePaths = [
+    __dirname + '/../public/prototypes/template-end.html',
+  ];
+
+  var updatedHTML = '';
+
+  // Inserting before templates
+  for (const template of templateBeforeFilePaths)
+  {
+    try
+    {
+      updatedHTML += fs.readFileSync(template, { encoding: 'utf8', flag: 'r' });
+    }
+    catch(e)
+    {
+      console.log(e);
+      return null;
+    }
+  }
+
+  // Replacing __PROTOTYPE_TITLE__ with prototype title
+  updatedHTML = updatedHTML.replaceAll(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
+
+  // Inserting scene tag and attributes
+  updatedHTML += sceneTagInformation.sceneTag;
+  updatedHTML += '\n';
+
+  // Inserting scene elements
+  updatedHTML += sceneElements;
+  updatedHTML += '\n';
+
+  // Inserting after templates
+  for (const template of templateAfterFilePaths)
+  {
+    try
+    {
+      updatedHTML += fs.readFileSync(template, { encoding: 'utf8', flag: 'r' });
+    }
+    catch(e)
+    {
+      console.log(e);
+      return null;
+    }
+  }
+
+  // Saving file updates
+  try 
+  {
+    fs.writeFileSync(filePath, updatedHTML);
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  var sceneInformation = {
+    sceneAttributes: sceneTagInformation.sceneAttributes,
+    sceneElements: sceneElements,
+    warningMessages: warningMessages,
+  }
+  
+  return sceneInformation;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype files
+const updatePrototype = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName && req.body.prototypeEdits) 
+  {
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+    const prototypePath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypePath + '/' + fileName + '.json';
+    const HTMLPath = prototypePath + '/' + fileName + '.html';
+
+    // Checking that prototype files exists
+    if (fs.existsSync(JSONPath) && fs.existsSync(HTMLPath))
+    {
+      // Updating prototype JSON file
+      var updatedJSON = updatePrototypeJSON(JSONPath, req.body.prototypeEdits);
+
+      if (updatedJSON)
+      {
+        // Updating HTML file
+        var sceneInformation = await updatePrototypeHTML(HTMLPath, updatedJSON, req.user);
+
+        if (sceneInformation)
+        {
+          var successResponse = {
+            status: 'success',
+            warningMessages: sceneInformation.warningMessages,
+            sceneAttributes: sceneInformation.sceneAttributes,
+            sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneInformation.sceneElements),
+          }
+      
+          res.json(successResponse);
+          return;
+        }
+        else
+        {
+          res.json(errorResponse);
+          return;
+        }
+        
+      }
+      else
+      {
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      res.json(errorResponse);
+      return;
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning current user's existing prototypes
+const getPrototypes = async (req, res, next) =>
+{
+  var prototypes = [];
+  prototypes = await Prototypes.find({user: req.user}, 'name');
+
+  res.json(prototypes);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleting specified prototype
+const deletePrototype = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName) 
+  {
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
+
+    // Getting prototype from database
+    var prototype = null;
+    var prototypeOwner = null;
+
+    try
+    {
+      prototype = await Prototypes.findOne({fileName: fileName}).sort().exec();
+      prototypeOwner = await User.findOne(prototype.user);
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (prototype && prototypeOwner)
+    {
+      // Checking if the prototype belongs to the current user
+      const currentUser = await User.findById(req.user._id).sort().exec();
+
+      // If it does, deleting prototype
+      if (JSON.stringify(prototypeOwner) == JSON.stringify(currentUser))
+      {
+        // Deleting prototype folder
+        try
+        {
+          fs.rmSync(prototypeFolderPath, {recursive: true});
+        }
+        catch(e)
+        {
+          console.log(e);
+
+          res.json(errorResponse);
+          return;
+        }
+
+        // Deleting prototype from database
+        try
+        {
+          await Prototypes.deleteOne({fileName: fileName});
+        }
+        catch(e)
+        {
+          console.log(e);
+      
+          res.json(errorResponse);
+          return;
+        }
+
+        var response = {
+          status: 'success',
+        }
+
+        res.json(response);
+        return;
+      }
+      else
+      {
+        errorResponse.error = 'Unauthorized access';
+    
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      res.json(errorResponse);
+      return;
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning information about specified prototype
+const getPrototypeInfo = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  var warningMessages = [];
+
+  if (req.body.prototypeName) 
+  {
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypeFolderPath + '/' + fileName + '.json';
+
+    // Getting prototype from database
+    var prototype = null;
+    var prototypeOwner = null;
+
+    try
+    {
+      prototype = await Prototypes.findOne({fileName: fileName}).sort().exec();
+      prototypeOwner = await User.findOne(prototype.user);
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (prototype && prototypeOwner)
+    {
+      // Checking if the prototype belongs to the current user
+      const currentUser = await User.findById(req.user._id).sort().exec();
+
+      // If it does, send prototype information
+      if (JSON.stringify(prototypeOwner) == JSON.stringify(currentUser))
+      {
+        // Reading JSON file
+        var prototypeJSON;
+
+        try
+        {
+          prototypeJSON = fs.readFileSync(JSONPath , { encoding: 'utf8', flag: 'r' });
+        }
+        catch(e)
+        {
+          console.log(e);
+      
+          res.json(errorResponse);
+          return;
+        }
+
+        var prototypeObject = JSON.parse(prototypeJSON);
+
+        // Getting scene attributes (from prototype)
+        var sceneAttributesInformation = await parseSceneAttributes(prototypeObject, req.user);
+
+        if (sceneAttributesInformation == null)
+        {
+          res.json(errorResponse);
+          return;
+        }
+
+        var sceneAttributes = sceneAttributesInformation.attributes;
+        warningMessages.push(...sceneAttributesInformation.warningMessages);
+
+        // Getting scene elements (starting elements and from prototype)
+        var sceneElementsInformation = await gatherSceneElements(prototypeObject, req.user);
+
+        if (!sceneElementsInformation)
+        {
+          res.json(errorResponse);
+          return;
+        }
+
+        var sceneElements = sceneElementsInformation.sceneElements;
+        warningMessages.push(...sceneElementsInformation.warningMessages);
+
+        // Putting together editor input string
+        var editorInput = '{';
+
+        if (prototypeObject.sceneAttributes)
+        {
+          editorInput += '"sceneAttributes":' + JSON.stringify(prototypeObject.sceneAttributes);
+
+          if (prototypeObject.sceneObjects)
+          {
+            editorInput += ',';
+          }
+        }
+
+        if (prototypeObject.sceneObjects)
+        {
+          editorInput += '"sceneObjects":' + JSON.stringify(prototypeObject.sceneObjects);
+        }
+
+        editorInput += '}';
+
+        var prototypeInfo = {
+          status: 'success',
+          warningMessages: warningMessages,
+          editorInput: editorInput,
+          sceneAttributes: sceneAttributes,
+          sceneElements: addPrototypeUserInfo(req, req.body.prototypeName, sceneElements),
+        };
+
+        res.json(prototypeInfo);
+        return;
+      }
+      else
+      {
+        errorResponse.error = 'Unauthorized access';
+    
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      res.json(errorResponse);
+      return;
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Storing model uploaded by user
+const uploadModel = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  // Getting file
+  const form = new formidable.IncomingForm();
+
+  // Setting file size restriction
+  form.options.maxFileSize = CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE * 1024 * 1024;
+
+  // Setting location to upload file to
+  form.uploadDir = path.join(__dirname, '/../uploads');
+
+  form.parse(req, async (err, fields, files) => 
+  {
+    if (err)
+    {
+      if (err.code === formidable.errors.biggerThanMaxFileSize)
+      {
+        errorResponse.error = 'Model is too large, please ensure your model is under ' + CIRCLES.CONSTANTS.MAX_FILE_UPLOAD_SIZE + 'MB';
+      }
+      else
+      {
+        errorResponse.error = 'Model could not be uploaded, please try again';
+      }
+
+      res.json(errorResponse);
+      return;
+    }
+
+    const file = files.modelFile;
+
+    // Getting valid file types
+    var validFiles = [];
+
+    for (const key in CIRCLES.VALID_3D_TYPES)
+    {
+      validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
+    }
+
+    // originalFilename: filename.fileType
+    // split result array: {"filename", ..., "fileType"}
+    const filenameSplit = file.originalFilename.split('.');
+    
+    // Getting filename
+    var filename = '';
+
+    for (var i = 0; i < filenameSplit.length - 1; i++)
+    {
+      filename += (filenameSplit[i] + '.');
+    }
+    
+    filename = filename.slice(0, -1);
+
+    // Getting file type
+    const fileType = file.originalFilename.split('.').pop();
+
+    // Making sure file type is valid
+    if (validFiles.includes(fileType.toLowerCase()))
+    {
+      const fileURL = path.join(__dirname, '/../uploads', file.newFilename + '.' + fileType);
+
+      // Renaming file to be in uploads folder with unique name
+      try
+      {
+        fs.renameSync(file.filepath, fileURL);
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(file.filepath, {recursive: true});
+
+        errorResponse.error = 'File could not be uploaded, please try again';
+        
+        res.json(errorResponse);
+        return;
+      }
+
+      // If the user has file(s) with the same name, adding a number to the end of the filename
+      var similarFilenames = [];
+      similarFilenames = await Uploads.find({ user: await User.findById(req.user._id).exec(), displayName: new RegExp('(?<!.)' + filename + '([0-9]+)?[.]', 'gi'), type: fileType });
+
+      if (similarFilenames.length > 0)
+      {
+        file.originalFilename = filename + (similarFilenames.length + 1) + '.' + fileType;
+      }
+
+      // Storing the file in the database
+      const fileInfo = {
+        user: await User.findById(req.user._id).exec(),
+        displayName: file.originalFilename,
+        name: file.newFilename + '.' + fileType,
+        url: fileURL,
+        type: fileType,
+        category: 'model',
+      }
+
+      try
+      {
+        await Uploads.create(fileInfo);
+        
+        var successResponse = {
+          status: 'success',
+          model: {displayName: fileInfo.displayName, name: fileInfo.name, type: fileInfo.type },
+        }
+
+        res.json(successResponse);
+        return;
+      }
+      catch(e)
+      {
+        console.log(e);
+
+        // Deleting file from folder
+        fs.rmSync(fileURL, {recursive: true});
+
+        errorResponse.error = 'File could not be uploaded, please try again';
+        
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      // Deleting file from folder
+      fs.rmSync(file.filepath, {recursive: true});
+
+      errorResponse.error = 'Incorrect model type uploaded. Only .gltf, .glb, and .fbx models are allowed';
+      
+      res.json(errorResponse);
+      return;
+    }
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Adding user information to prototype HTML
+const addPrototypeUserInfo = function(req, prototypeName, prototypeHTML)
+{
+  var specialStatus = '';
+      
+  const u_name = req.session.sessionName;
+  const u_height = CIRCLES.CONSTANTS.DEFAULT_USER_HEIGHT;
+
+  var head_type = req.user.gltf_head_url;
+  var hair_type = req.user.gltf_hair_url;
+  var body_type = req.user.gltf_body_url;
+
+  const head_col = req.user.color_head;
+  const hair_col = req.user.color_hair;
+  const body_col = req.user.color_body;
+  
+  if (req.user.usertype === CIRCLES.USER_TYPE.TEACHER) 
+  {
+    specialStatus = ' (T)';
+  }
+  else if (req.user.usertype === CIRCLES.USER_TYPE.RESEARCHER) 
+  {
+    specialStatus = ' (R)';
+  }
+
+  prototypeHTML = prototypeHTML.replaceAll(/__WORLDNAME__/g, prototypeName);
+  prototypeHTML = prototypeHTML.replaceAll(/__USERTYPE__/g, req.user.usertype);
+  prototypeHTML = prototypeHTML.replaceAll(/__USERNAME__/g, req.user.username);
+  prototypeHTML = prototypeHTML.replaceAll(/__VISIBLENAME__/g, u_name + specialStatus);
+  prototypeHTML = prototypeHTML.replaceAll(/__FACE_MAP__/g, CIRCLES.CONSTANTS.DEFAULT_FACE_HAPPY_MAP);
+
+  prototypeHTML = prototypeHTML.replaceAll(/__USER_HEIGHT__/g, u_height);
+  prototypeHTML = prototypeHTML.replaceAll(/__MODEL_HEAD__/g, head_type);
+  prototypeHTML = prototypeHTML.replaceAll(/__MODEL_HAIR__/g, hair_type);
+  prototypeHTML = prototypeHTML.replaceAll(/__MODEL_BODY__/g, body_type);
+  prototypeHTML = prototypeHTML.replaceAll(/__COLOR_HEAD__/g, head_col);
+  prototypeHTML = prototypeHTML.replaceAll(/__COLOR_HAIR__/g, hair_col);
+  prototypeHTML = prototypeHTML.replaceAll(/__COLOR_BODY__/g, body_col);
+
+  return prototypeHTML;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Temporary, renders prototype circle
+const servePrototypeCircle = async (req, res, next) =>
+{
+  // Need to make sure we have the trailing slash to signify a folder so that relative links works correctly
+  // https://stackoverflow.com/questions/30373218/handling-relative-urls-in-a-node-js-http-server 
+  const splitURL = req.url.split('?');
+  const baseURL = (splitURL.length > 0)?splitURL[0]:'';
+  const urlParamsStr = (splitURL.length > 1)?splitURL[1]:'';
+
+  if (splitURL.length > 0) 
+  {
+      if (baseURL.charAt(baseURL.length - 1) !== '/') 
+      {
+        const fixedURL = baseURL + "/"  + ((urlParamsStr === '')?'':'?' + urlParamsStr);
+        res.writeHead(302, { "Location": fixedURL });
+        res.end();
+        return;
+      }
+  }
+
+  // Make sure there are the correct url seatch params available
+  const urlObj = new URL(req.protocol + '://' + req.get('host') + req.originalUrl);
+  const searchParamsObj = urlObj.searchParams;
+
+  // If no group indicated then assume the group 'explore'
+  if (!searchParamsObj.has('group')) 
+  {
+    const fixedURL = baseURL + "?" + 'group=explore' + ((urlParamsStr === '')?'':'&' + urlParamsStr);
+    res.writeHead(302, { "Location": fixedURL });
+    res.end();
+    return;
+  }
+
+  const prototypeName = req.params.prototype_name;
+  const pathStr = path.resolve(__dirname + '/../public/prototypes/created/' + prototypeName + '/' + prototypeName + '.html');
+
+  // Ensure the world file exists
+  fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => 
+  {
+    if (error) 
+    {
+      return res.redirect('/explore');
+    }
+    else 
+    {
+      var prototypeHTML = addPrototypeUserInfo(req, prototypeName, data);
+
+      // Replace room ID with generic explore name too keep the HTML output
+      // clean
+      prototypeHTML = prototypeHTML.replaceAll(/__ROOM_NAME__/g, searchParamsObj.get('group'));
+
+      res.set('Content-Type', 'text/html');
+      res.end(prototypeHTML); //not sure exactly why res.send doesn't work here ...
+    }
+  });
+}
+
+// Prototyping Page (AI) ---------------------------------------------------------------------------------------------------------------------------
+
+// Rendering prototyping page
+const servePrototypingAI = async (req, res, next) =>
+{
+  const userInfo = getUserInfo(req);
+  
+  res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/prototyping-AI'), {
+    title: 'Prototyping (AI)',
+    userInfo: userInfo,
+  });
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating new prototype from template
+const createNewPrototypeAI = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName) 
+  {
+    const destinationFilePath = __dirname + '/../public/prototypes/created';
+    const startingString = '{\n    "shape" : "box",\n    "colour" : "grey",\n    "position" : ["0", "0", "-5"],\n    "rotation" : ["0", "45", "0"]\n}';
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+
+    // Making sure prototype name is unique, sending error message if it already exists
+    if (await Prototypes.findOne({fileName: fileName}))
+    {
+      errorResponse.error = 'Prototype name is unavailable';
+  
+      res.json(errorResponse);
+      return;
+    }
+
+    // Creating prototype folder
+    const prototypeFolderPath = destinationFilePath + '/' + fileName;
+
+    try
+    {
+      fs.mkdirSync(prototypeFolderPath); 
+    }
+    catch(e)
+    {
+      res.json(errorResponse);
+      return;
+    }
+
+    // Creating prototype JSON file
+    var prototypeJSON = {
+      title : req.body.prototypeName,
+      sceneObjects : [JSON.parse(startingString)],
+    }
+
+    try 
+    {
+      fs.writeFileSync(prototypeFolderPath + '/' + fileName + '.json', JSON.stringify(prototypeJSON));
+    }
+    catch(e)
+    {
+      res.json(errorResponse);
+      return;
+    }
+
+    // Creating prototype HTML file
+    var sceneElements = updatePrototypeHTMLAI(prototypeFolderPath + '/' + fileName + '.html', prototypeJSON);
+
+    // Storing prototype in the database
+    var prototypeInfo = {
+      user: await User.findById(req.user._id).exec(),
+      name: req.body.prototypeName,
+      fileName: fileName,
+      url: prototypeFolderPath,
+    }
+
+    try
+    {
+      await Prototypes.create(prototypeInfo);
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      // Deleting prototype folder
+      try
+      {
+        fs.rmSync(prototypeFolderPath, {recursive: true});
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+
+      res.json(errorResponse);
+      return;
+    }
+
+    var successResponse = {
+      status: 'success',
+      prototypeName: req.body.prototypeName,
+      startingString: startingString,
+      sceneElements: sceneElements,
+    }
+
+    res.json(successResponse);
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype JSON file
+// Returns updated JSON object
+const updatePrototypeJSONAI = function(filePath, edits)
+{
+  // Reading file
+  var prototypeJSON;
+
+  try
+  {
+    prototypeJSON = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Parsing file to update
+  var prototypeObject = JSON.parse(prototypeJSON);
+  
+  // Parse the edits and validate them
+  const rawSceneObjects = JSON.parse(edits);
+  console.log('DEBUG - updatePrototypeJSON - Raw scene objects:', JSON.stringify(rawSceneObjects, null, 2));
+  
+  // Import validation function
+  const { validateSceneJSON } = require('../modules/nlp-scene-generator');
+  
+  // Validate the scene objects to ensure model/modelPath properties are set correctly
+  const validatedSceneObjects = validateSceneJSON(rawSceneObjects);
+  console.log('DEBUG - updatePrototypeJSON - Validated scene objects:', JSON.stringify(validatedSceneObjects, null, 2));
+  
+  prototypeObject.sceneObjects = validatedSceneObjects;
+
+  // Saving file updates
+  try 
+  {
+    fs.writeFileSync(filePath, JSON.stringify(prototypeObject));
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  return prototypeObject;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Creating prototype scene element
+const createPrototypeElementAI = function(object)
+{
+  var element = '<a-entity';
+
+  // Adding id if object has one specified
+  if (object.id)
+  {
+    element += ' id="' + object.id + '"';
+  }
+
+  // Handle 3D models vs primitive shapes
+  if (object.model || object.modelPath)
+  {
+    // This is a 3D model - prioritize modelPath over model
+    let modelPath;
+    
+    if (object.modelPath) {
+      // Use the file path directly
+      modelPath = object.modelPath;
+    } else if (object.model) {
+      // Try to find the model path from the model name
+      const { findModelByDescription } = require('../modules/nlp-scene-generator');
+      modelPath = findModelByDescription(object.model);
+      
+      if (!modelPath) {
+        // Fallback: assume it's already a path
+        modelPath = object.model;
+      }
+    }
+    
+    // Log to file for debugging
+    const debugInfo = {
+      timestamp: new Date().toISOString(),
+      fullObject: object,
+      modelProperty: object.model,
+      modelPathProperty: object.modelPath,
+      finalModelPath: modelPath
+    };
+    
+    const fs = require('fs');
+    fs.appendFileSync(__dirname + '/debug-model.log', JSON.stringify(debugInfo, null, 2) + '\n---\n');
+    
+    console.log('DEBUG - createPrototypeElement - Full object:', JSON.stringify(object, null, 2));
+    console.log('DEBUG - createPrototypeElement - object.model:', object.model);
+    console.log('DEBUG - createPrototypeElement - object.modelPath:', object.modelPath);
+    console.log('DEBUG - createPrototypeElement - Final modelPath used:', modelPath);
+    
+    element += ' gltf-model="' + modelPath + '"';
+    
+    // Models don't need geometry or material color
+  }
+  else
+  {
+    // This is a primitive shape
+    // If object has a shape specified, adding it
+    // Otherwise adding default cube shape
+    element += ' geometry="';
+
+    if (object.shape)
+    {
+      element += 'primitive:' + object.shape + ';';
+
+      // Adding height if object has one specified
+      if (object.height)
+      {
+        element += ' height:' + object.height + ';';
+      }
+
+      // Adding width if object has one specified
+      if (object.width)
+      {
+        element += ' width:' + object.width + ';';
+      }
+
+      // Adding depth if object has one specified
+      if (object.depth)
+      {
+        element += ' depth:' + object.depth + ';';
+      }
+
+      // Adding radius if object has one specified
+      if (object.radius)
+      {
+        element += ' radius:' + object.radius + ';';
+      }
+    }
+    else
+    {
+      element += 'primitive:cube;';
+    }
+
+    element += '"';
+
+    // Adding colour if object has on specified
+    if (object.colour)
+    {
+      element += ' material="color:' + object.colour + ';"';
+    }
+  }
+
+  // Adding position if object has one specified
+  if (object.position)
+  {
+    element += ' position="' + object.position[0] + ' ' + object.position[1] + ' ' + object.position[2] + ';"'
+  }
+
+  // Adding rotation if object has one specified
+  if (object.rotation)
+  {
+    element += ' rotation="' + object.rotation[0] + ' ' + object.rotation[1] + ' ' + object.rotation[2] + ';"'
+  }
+
+  // Adding scale if object has one specified
+  if (object.scale)
+  {
+    element += ' scale="' + object.scale[0] + ' ' + object.scale[1] + ' ' + object.scale[2] + ';"'
+  }
+
+  element += '>';
+
+  // Adding children if object has some specified
+  if (object.children)
+  {
+    if (Array.isArray(object.children))
+    {
+      for (const childObject of object.children)
+      {
+        var childElement = createPrototypeElementAI(childObject);
+        element += childElement;
+      }
+    }
+    else
+    {
+      var childElement = createPrototypeElementAI(childObject);
+      element += childElement;
+    }
+  }
+
+  element += '</a-entity>';
+
+  return element;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning scene elements from prototype object
+const parsePrototypeAI = function(prototypeObject)
+{
+  var sceneElements = '';
+
+  // Creating an a-entity element for each scene element
+  for (const object of prototypeObject.sceneObjects)
+  {
+    var element = createPrototypeElementAI(object);    
+    sceneElements += element;
+  }
+
+  return sceneElements;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype HTML file
+// Returns HTML scene object
+const updatePrototypeHTMLAI = function(filePath, prototypeObject)
+{
+  // Getting scene elements from prototype
+  var sceneElements = parsePrototypeAI(prototypeObject);
+
+  // Creating updated HTML file with new scene objects
+  const templateTopFilePath = __dirname + '/../public/prototypes/template-top.html';
+  const templateBottomFilePath = __dirname + '/../public/prototypes/template-bottom.html';
+
+  var updatedHTML;
+
+  // Getting template top
+  try
+  {
+    updatedHTML = fs.readFileSync(templateTopFilePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Replacing __PROTOTYPE_TITLE__ with prototype title
+  updatedHTML = updatedHTML.replace(/__PROTOTYPE_TITLE__/g, prototypeObject.title);
+
+  // Inserting scene objects
+  updatedHTML += sceneElements;
+  updatedHTML += '\n';
+
+  // Inserting template bottom
+  try
+  {
+    updatedHTML += fs.readFileSync(templateBottomFilePath, { encoding: 'utf8', flag: 'r' });
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  // Saving file updates
+  try 
+  {
+    fs.writeFileSync(filePath, updatedHTML);
+  }
+  catch(e)
+  {
+    console.log(e);
+    return null;
+  }
+
+  return sceneElements;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating prototype files
+const updatePrototypeAI = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName && req.body.prototypeEdits) 
+  {
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+    const prototypePath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypePath + '/' + fileName + '.json';
+    const HTMLPath = prototypePath + '/' + fileName + '.html';
+
+    // Checking that prototype files exists
+    if (fs.existsSync(JSONPath) && fs.existsSync(HTMLPath))
+    {
+      // Updating prototype JSON file
+      var updatedJSON = updatePrototypeJSONAI(JSONPath, req.body.prototypeEdits);
+
+      if (updatedJSON)
+      {
+        // Updating HTML file
+        var sceneElements = updatePrototypeHTMLAI(HTMLPath, updatedJSON);
+
+        if (sceneElements)
+        {
+          var successResponse = {
+            status: 'success',
+            sceneElements: sceneElements,
+          }
+      
+          res.json(successResponse);
+          return;
+        }
+        else
+        {
+          res.json(errorResponse);
+          return;
+        }
+        
+      }
+      else
+      {
+        res.json(errorResponse);
+        return;
+      }
+    }
+    else
+    {
+      res.json(errorResponse);
+      return;
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning current user's existing prototypes
+const getPrototypesAI = async (req, res, next) =>
+{
+  var prototypes = [];
+  prototypes = await Prototypes.find({user: req.user}, 'name');
+
+  res.json(prototypes);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleting specified prototype
+const deletePrototypeAI = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName) 
+  {
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
+
+    // Deleting prototype folder
+    try
+    {
+      fs.rmSync(prototypeFolderPath, {recursive: true});
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      res.json(errorResponse);
+      return;
+    }
+
+    // Deleting prototype from database
+    try
+    {
+      await Prototypes.deleteOne({fileName: fileName});
+    }
+    catch(e)
+    {
+      console.log(e);
+  
+      res.json(errorResponse);
+      return;
+    }
+
+    var response = {
+      status: 'success',
+    }
+
+    res.json(response);
+    return;
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Returning information about specified prototype
+const getPrototypeInfoAI = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.prototypeName) 
+  {
+    const fileName = req.body.prototypeName.toLowerCase().replaceAll(' ', '-');
+    const prototypeFolderPath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypeFolderPath + '/' + fileName + '.json';
+    const HTMLPath = prototypeFolderPath + '/' + fileName + '.html';
+
+    // Getting prototype from database
+    var prototype = null;
+    var prototypeOwner = null;
+
+    try
+    {
+      prototype = await Prototypes.findOne({fileName: fileName}).sort().exec();
+      prototypeOwner = await User.findOne(prototype.user);
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+
+    if (prototype && prototypeOwner)
+    {
+      // Checking if the prototype belongs to the current user
+      const currentUser = await User.findById(req.user._id).sort().exec();
+
+      // If it does, send prototype information
+      if (JSON.stringify(prototypeOwner) == JSON.stringify(currentUser))
+      {
+        // Reading JSON file
+        var prototypeJSON;
+
+        try
+        {
+          prototypeJSON = fs.readFileSync(JSONPath , { encoding: 'utf8', flag: 'r' });
+        }
+        catch(e)
+        {
+          console.log(e);
+      
+          res.json(errorResponse);
+          return;
+        }
+
+        var prototypeObject = JSON.parse(prototypeJSON);
+
+        var prototypeInfo = {
+          status: 'success',
+          editorInput: JSON.stringify(prototypeObject.sceneObjects).slice(1, -1),
+          sceneElements: parsePrototypeAI(prototypeObject),
+        };
+
+        res.json(prototypeInfo);
+        return;
+      }
+      else
+      {
+        errorResponse.error = 'Unauthorized access';
+    
+        res.json(errorResponse);
+        return;
+      }
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Generating scene from text
+const generateSceneFromText = async (req, res, next) => 
+{
+  const userDescription = req.body.description;
+  
+  try {
+    // Call AI service to convert text to JSON
+    const sceneJSON = await convertTextToSceneJSON(userDescription);
+    
+    // Validate and sanitize the generated JSON
+    const validatedScene = validateSceneJSON(sceneJSON);
+    
+    res.json({
+      status: 'success',
+      sceneObjects: validatedScene,
+      sceneElements: parsePrototypeAI({sceneObjects: validatedScene})
+    });
+  } catch(error) {
+    res.json({
+      status: 'error',
+      error: 'Failed to generate scene from description'
+    });
+  }
+};
+
+// ------------------------------------------------------------------------------------------
+
+// Add model to existing prototype using NLP
+const addModelToPrototype = async (req, res, next) => 
+{
+  const { prototypeName, description } = req.body;
+  const fileName = prototypeName.toLowerCase().replaceAll(' ', '-');
+  
+  console.log('DEBUG - addModelToPrototype called with:', { prototypeName, description });
+  
+  try {
+    // Validate inputs
+    if (!prototypeName || !description) {
+      return res.json({
+        status: 'error',
+        error: 'Prototype name and description are required'
+      });
+    }
+
+    const prototypePath = __dirname + '/../public/prototypes/created/' + fileName;
+    const JSONPath = prototypePath + '/' + fileName + '.json';
+    const HTMLPath = prototypePath + '/' + fileName + '.html';
+
+    console.log('DEBUG - Prototype paths:', { JSONPath, HTMLPath });
+
+    // Check if prototype exists
+    if (!fs.existsSync(JSONPath) || !fs.existsSync(HTMLPath)) {
+      console.log('DEBUG - Prototype files do not exist');
+      return res.json({
+        status: 'error',
+        error: 'Prototype not found'
+      });
+    }
+
+    // Load existing prototype
+    let existingPrototype;
+    try {
+      const prototypeData = fs.readFileSync(JSONPath, { encoding: 'utf8', flag: 'r' });
+      existingPrototype = JSON.parse(prototypeData);
+      console.log('DEBUG - Loaded existing prototype:', JSON.stringify(existingPrototype, null, 2));
+    } catch (error) {
+      console.log('DEBUG - Error loading existing prototype:', error);
+      return res.json({
+        status: 'error',
+        error: 'Failed to load existing prototype'
+      });
+    }
+
+    // Generate new objects from description
+    const newObjects = await convertTextToSceneJSON(description);
+    console.log('DEBUG - Generated new objects from AI:', JSON.stringify(newObjects, null, 2));
+    
+    const validatedNewObjects = validateSceneJSON(newObjects);
+    console.log('DEBUG - Validated new objects:', JSON.stringify(validatedNewObjects, null, 2));
+
+    if (validatedNewObjects.length === 0) {
+      console.log('DEBUG - No valid objects generated');
+      return res.json({
+        status: 'error',
+        error: 'No valid objects could be generated from the description'
+      });
+    }
+
+    // Add new objects to existing scene
+    if (!existingPrototype.sceneObjects) {
+      existingPrototype.sceneObjects = [];
+    }
+
+    // Add positioning logic to avoid overlaps
+    const existingPositions = existingPrototype.sceneObjects.map(obj => obj.position);
+    validatedNewObjects.forEach((newObj, index) => {
+      // Simple positioning: place new objects to the right of existing ones
+      const baseX = existingPositions.length > 0 ? 
+        Math.max(...existingPositions.map(pos => parseFloat(pos[0]))) + 2 + (index * 2) : 
+        index * 2;
+      
+      newObj.position = [baseX.toString(), newObj.position[1], newObj.position[2]];
+      existingPrototype.sceneObjects.push(newObj);
+    });
+
+    console.log('DEBUG - Final prototype with new objects:', JSON.stringify(existingPrototype, null, 2));
+
+    // Save updated prototype
+    try {
+      fs.writeFileSync(JSONPath, JSON.stringify(existingPrototype, null, 2));
+      console.log('DEBUG - Saved updated prototype to JSON');
+    } catch (error) {
+      console.log('DEBUG - Error saving prototype:', error);
+      return res.json({
+        status: 'error',
+        error: 'Failed to save updated prototype'
+      });
+    }
+
+    // Update HTML file
+    console.log('DEBUG - About to call updatePrototypeHTML');
+    const sceneElements = updatePrototypeHTMLAI(HTMLPath, existingPrototype);
+    console.log('DEBUG - updatePrototypeHTML returned:', sceneElements);
+
+    if (sceneElements !== null) {
+      res.json({
+        status: 'success',
+        message: `Added ${validatedNewObjects.length} object(s) to prototype`,
+        addedObjects: validatedNewObjects,
+        sceneElements: sceneElements
+      });
+    } else {
+      res.json({
+        status: 'error',
+        error: 'Failed to update prototype HTML'
+      });
+    }
+
+  } catch (error) {
+    console.error('Error adding model to prototype:', error);
+    res.json({
+      status: 'error',
+      error: 'Failed to add model to prototype'
+    });
+  }
+};
+
+// Museum Games Page -------------------------------------------------------------------------------------------------------------------------------
+
+const serveMuseumGames = async (req, res, next) =>
+{
+  // New line: \n
+  // Quotation marks: \"
+  // Subtitle: <subtitle>...\n
+  // List item: <list>...\n
+  var games = [];
+
+  games[0] = {
+    name: "Asteroid Field",
+    platform: "VR",
+    credit: "CirclesXR",
+    description: "This is a mini-game demo for the Circles XR framework. Avoid the asteroids as you navigate through the Asteroid Field!",
+    instructions: "<subtitle>VR Headset:\nEnter \"VR Mode\" to begin the game. Avoid the asteroids by jumping. Crouching, and moving side to side.\n\n<subtitle>Desktop:\nUse the WASD or arrow keys to move around through space.",
+    link: "https://uni-vr-sity.ca/Asteroid-Field",
+    image: "AsteroidFieldCover.png",
+    contact: "Anastacia Gorbenko\nanastaciagorbenko@yahoo.ca\n\nAli Arya\narya@carleton.ca\n\n",
+    other: [{
+      title: "Attributions:",
+      description: "<list>\"Heart\" (https://skfb.ly/6WPTn) by freshlybaked is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n<list>\"Asteroids Pack (metallic version)\" (https://skfb.ly/o6LtG) by SebastianSosnowski is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\n<list>\"Bold Style Font Pack 5\" (https://skfb.ly/oGGSO) by Okapiguy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
+    }],
+  }
+
+  games[1] = {
+    name: "Ambivalence",
+    platform: "WEB",
+    credit: "Elis Joynes, Dandan Tao, Kylie Duck, Emily Chen",
+    description: "Ambivalence is a puzzle platformer that plays on there being two halves of one whole puzzle that you switch between in order to get to the end.  ***Flashing Lights***",
+    instructions: "All you need to play is your keyboard and mouse. We also suggest that you have your volume on as there are sound effects.",
+    link: "https://elisvoid.itch.io/ambivalence",
+    image: "AmbivalenceCover.png",
+    other: [{
+      title: "Attributions:",
+      description: "<list>Birds Sound Effect: https://freesound.org/people/hargissssound/sounds/345851/\n<list>Light Switch Sound Effect: https://freesound.org/people/FillSoko/sounds/257958/\n<list>Background music: https://soundimage.org/looping-music/",
+    }],
+  }
+
+  games[2] = {
+    name: "Sea Barks",
+    platform: "WEB",
+    credit: "Anastacia Gorbenko, Msgana Ocabazgi, Sam Lamoureux, Zoe Prevost",
+    description: "In this underwater adventure, you play the role of Neptune, an eager puppy looking to please his owner at his new underwater farm SeaBarks. Neptune is responsible for putting away the sea creatures, and protecting them from hungry sharks. Get the sea creatures in to correct pens and you will be rewarded with treats.",
+    instructions: "<list>Use your keyboard arrows to move around, and the space bar to bark!\n<list>Guide sea creatures into their pens, and the catch? Neptune holds himself to good boy standards and wants to guide a minimum number of sea creatures to safety (shown on each pen). Neptune's hard work does not go unnoticed, he receives a treat before embarking on his next duty.\n<list>Barking can be used on the sea creatures and the shark to yield different results. For the sea creatures, barking has different effects on each creature (find out more on hints screen) and barking at the shark scares them away when they are attacking.\n<list>The shark will think about its meal choice for a few seconds before they attack, be prepared to defend that creature! If the shark eats too many and you can no longer meet the farm’s minimum requirements, it's level over. Don’t worry, Neptune's owner always gives him another shot!",
+    link: "https://stacy-g.itch.io/sea-barks",
+    image: "SeaBarksCover.png",
+  }
+
+  games[3] = {
+    name: "Shooting Range",
+    platform: "WEB",
+    credit: "Anastacia Gorbenko",
+    description: "Practice your aim in this space-themed shooting range!",
+    instructions: "When you enter, choose your colour and begin. Look around using your mouse and shoot by pressing the spacebar.",
+    link: "https://uni-vr-sity.ca/Shooting-Range",
+    image: "ShootingRangeCover.png",
+    contact: "anastaciagorbenko@yahoo.ca",
+  }
+
+  games[4] = {
+    name: "Super Laugh Bros",
+    platform: "WEB",
+    credit: "Forest Kristoffer Ziven Anderson, Matt Penny, Matt Diener",
+    description: "You're jesters tasked with pleasing the Lord of the land... with laughter! Please his requests for humor, but stay out of his way if he runs at you, or you'll be pushed out of the arena.",
+    instructions: "<subtitle>Controller Controls:\n<list>Move: Left stick\n<list>Jump: Xbox A / Sony cross / Nintendo B\n<list>Attack: Xbox X / Sony square / Nintendo Y\n\n<subtitle>Keyboard Controls:\n<list>Move: WASD / IJKL\n<list>Jump: E / U\n<list>Attack: Q / O",
+    link: "https://mwpenny.github.io/GGJ2024",
+    image: "SuperLaughBrosCover.png",
+  }
+
+  games[5] = {
+    name: "Wattson's Way Home",
+    platform: "WEB",
+    credit: "Alex Di Nobile, Cole McMullin, Emma Souannhaphanh, Cohen Ly",
+    description: "Wattson’s Way Home is a 2D platformer game about helping a little spark find his way home. One day during a thunderstorm, Wattson fell out of a lightning bolt and was sent crashing into an unsuspecting house. Lost in a strange place filled with dust bunnies and leaky pipes, Wattson only knows that he needs to make it back home. Help find Wattson’s Way Home!",
+    instructions: "Use arrow keys to move, Space to jump, E/Enter to interact",
+    link: "https://alexdinobile.itch.io/wattsons-way-home",
+    image: "WattsonsWayHomeCover.png",
+  }
+
+  games[6] = {
+    name: "Avian RumbLOL",
+    platform: "Windows EXE",
+    credit: "Patrick Boyer",
+    description: "In Avian RumbLOL, you're a bird trying to find letters to spell out \"LOL\", \"LMAO\", and \"ROFL\" before anyone else does. Be the first to get all the letters in the right order, and you win!",
+    instructions: "<subtitle>Controls:\n<list>For the Chicken: Use the \"WASD\" keys to move around.\n<list>For the Pigeon: Use the arrow keys (← ↑ → ↓) to fly in different directions.\n<list>Got a Gamepad? You can use it to control the chicken if it's connected.\n<list>Oops, Need a Do-Over? Press \"P\" to start the game again.\n<list>All Done Playing? Press \"Esc\" to quit the game.\n\n<subtitle>Rules:\n<list>Wrap-Around Magic: Your bird can magically pop from one side of the screen to the other!\n<list>Letter Hunt: Grab letters as they pop up. But watch out! Grabbing a letter makes a grumpy duck come after you.\n<list>Duck Trouble: If a grumpy duck catches you, you'll lose your letters and have to start over.\n<list>Invincible Bird: After a duck bumps into you, you'll be invincible for a short time. You'll know because your bird will look really sad but don't worry, it can't be hurt during this time.\n<list>Speedy Feathers: Every time you complete a word sequence, you get a little faster. Zoom zoom!\n<list>Bumping Birds: The chicken and pigeon can bump into each other. It's all part of the fun!",
+    link: "https://pboyer2.itch.io/avian-rumblol",
+    image: "AvianRumbLOLCover.png",
+    contact: "boyer.patrick@gmail.com",
+    other: [{
+      title: "Responsible AI Use Disclosure:",
+      description: "The description and playing instructions for Avian RumbLOL were crafted with the assistance of an Artificial Intelligence (AI) tool. This AI, developed by OpenAI, provided guidance on language simplification and creativity to ensure the content is engaging and understandable for a target audience of K-6 students. I am committed to using AI responsibly and transparently, enhancing my creative processes while maintaining the integrity and safety of the content. I reviewed the synthetic wording and adjusted where needed to produce the final version of the content. For any questions or concerns about the use of AI, please feel free to reach out to me.",
+    }],
+  }
+
+  games[7] = {
+    name: "Deck of Laughs",
+    platform: "Windows EXE",
+    credit: "Tyson Moyes, Michael Dillabough, Jason Hein, David Dunkelman, Mathieu O'Brien",
+    description: "Tactical Card Comedy! Use your spell cards to cast jokes onto the crowd of gremlins to make them laugh. Beware, the hexler will cast his own spells and end the laughter.\nBug note: In the end screen, if your mouse disappears after clicking, hit TAB on the keyboard, your mouse should reappear.",
+    instructions: "Extract the files from the zip. In-game, click on the card you wish to read & select. Click on the location in the crowd to cast the spell. Right click to cancel the spell and to deselect the card. When you are done your turn, click the \"end turn\" button.",
+    link: "https://skypyre.itch.io/deck-of-laughs",
+    image: "DeckOfLaughsCover.png",
+    contact: "general@skypyre.com",
+  }
+
+  games[8] = {
+    name: "ICE - Make me laugh for Mental Health",
+    platform: "Windows EXE",
+    credit: "Avery Babineau",
+    description: "This game was designed at the 2024 Global Game Jam. The theme for the game jam was \"Make Me Laugh\". This game is to promote and remind people how laughter can be used to improve mental health and make you feel better. The goal of this game is to make the monster (aka ICE) laugh and improve his mental health by collecting \"Jokens\" throughout the city of New York. Be careful, because at the beginning the monster is angry will not like when you get too close to him.",
+    instructions: "You play the game by using the WASD keys to move in different directions, and the mouse to look around. Space bar is to jump, SHIFT key is to sprint. Remember to collect the coins (a.k.a. Jokens).",
+    link: "https://avocadoscancode.itch.io/ice-make-me-laugh",
+    image: "ICECover.png",
+    contact: "av.babineau@gmail.com",
+  }
+
+  games[9] = {
+    name: "Just a Jester Jesting",
+    platform: "Windows EXE",
+    credit: "Adel Manji, Danielle Cole, Everett O’man, Marcos Angelos Santos, Nicolas Teriault",
+    description: "Can you perform enough tricks to survive the king's wrath?\nA 2D and 3D fusion game where you only need a mouse to play. Help the jester be funny for the court\nSurvive as long as you can while keeping all your lives (hearts), the fast paced mini games in the bottom half of the screen will test your skill. Inspired by Nintendo DS games likes Wario Ware and Rhythm Heaven. Keep up!",
+    instructions: "Mouse: Use the left click to interact with elements on the bottom half of the screen. Click fast, drag, and time your clicks to stay alive.",
+    link: "https://dcole.itch.io/just-a-jester-jesting",
+    image: "JustAJesterJestingCover.png",
+    contact: "Danielle Cole at coles-danielle@shaw.ca",
+    other: [{
+      title: "Credits:",
+      description: "<subtitle>Audio and Sound:\nAdel Manji\n\n<subtitle>Programming and Game Design:\nMarcos Angelos Santos\nNicolas Teriault\n\n<subtitle>Art and Assets:\nDanielle Cole\nEverett O’man",
+    }],
+
+  }
+
+  games[10] = {
+    name: "Rooting for Carrots",
+    platform: "Windows EXE",
+    credit: "Avery Babineau",
+    description: "Rooting for carrots is a rpg-based farming simulator created for the 2022 Global Game Jam. The game jam theme was roots.",
+    instructions: "Use the arrow keys to move. Find the garden. In the garden, left click to plant, watch the carrots grow and right click to harvest the carrots.",
+    link: "https://avocadoscancode.itch.io/rooting-for-carrots",
+    image: "RootingForCarrotsCover.png",
+  }
+
+  games[11] = {
+    name: "Wend",
+    platform: "Windows EXE",
+    credit: "Christa Buttera, Matt Donoghue, Quinn Hentschel, Heather Hennessey",
+    description: "Wend is a single player, top-down perspective game about exploration where you, the player, will navigate a complex labyrinth, lighting your way with a single torch as you collect relics and wander towards the center. The catch, however, is that the brightness and size of your torch light is dependent on your state of motion: the torch burns low and small while you run through the labyrinth, and burns bright and large while you stand still. Luminescent gems can be found throughout the labyrinth and allow you to mark your way as you proceed along the dark and mysterious paths. Uncover the mysteries of these unexplored depths as you wend your way through the labyrinth, and recover ancient relics to discover the secrets that lie at its center.",
+    instructions: "You, the player, have the ability to control your torch light through the game's movement mechanics: while moving, only a small radius around your avatar is illuminated. While stationary, however, your torch is raised automatically to expand this radius to the neighbouring pathways to view a greater portion of the labyrinth. While playing, you can discover and collect emissive gems hidden throughout the labyrinth to help you find your way. These gems illuminate a small area around themselves, and, as such, can be placed anywhere in the labyrinth to create strategic paths to specific areas or landmarks that you deem significant.\n\n<subtitle>Controller Controls:\nUse the left stick to move around the labyrinth\nUse the right stick to move the camera (only enabled when you're standing still!)\nPress 'A' to pick up and drop gems, and to collect relics\nPress Start to pause\n\n<subtitle>Keyboard Controls:\nWASD to move\nArrow keys to move camera\nB key for picking up/dropping objects and any other action button prompts\nTAB to pause (arrow keys to navigate menus while paused)",
+    link: "https://christabuttera.itch.io/wend",
+    image: "WendCover.png",
+  }
+
+  res.render(path.resolve(__dirname + '/../public/web/views/CENTRAL_SERVER/museum-games'), {
+    title: "Museum Games",
+    games: games,
+  });
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------
+
+module.exports = {
+    // Homepage
+    serveHomepage,
+    // More Circles Page
+    serveMoreCircles,
+    addCirclesServer,
+    deactivateCirclesServer,
+    activateCirclesServer,
+    deleteCirclesServer,
+    getServersList,
+    // Prototyping
+    servePrototyping,
+    createNewPrototype,
+    updatePrototype,
+    getPrototypes,
+    deletePrototype,
+    getPrototypeInfo,
+    uploadModel,
+    servePrototypeCircle,
+    // Prototyping AI
+    servePrototypingAI,
+    createNewPrototypeAI,
+    updatePrototypeAI,
+    getPrototypesAI,
+    deletePrototypeAI,
+    getPrototypeInfoAI,
+    generateSceneFromText,
+    addModelToPrototype,
+    // Museum Games Page
+    serveMuseumGames,
+  }

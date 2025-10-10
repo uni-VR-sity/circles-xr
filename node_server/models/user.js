@@ -4,15 +4,7 @@
 const mongoose = require('mongoose');
 
 const bcrypt   = require('bcrypt');
-const dotenv   = require('dotenv');
-const dotenvParseVariables = require('dotenv-parse-variables');
-
-let env = dotenv.config({});
-if (env.error) {
-  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
-}
-
-env = dotenvParseVariables(env.parsed);
+const env = require('../modules/env-util');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -36,8 +28,27 @@ const UserSchema = new mongoose.Schema({
   email: {
     type:       String,
     unique:     false,
+    required:   true,
+    trim:       false,
+  },
+  emailToken: {
+    type:       String,
     required:   false,
     trim:       false,
+  },
+  verified: {
+    type:       Boolean,
+    unique:     false,
+    required:   true,
+    trim:       false,
+    default:    false,
+  },
+  expireAt: {
+    type:       Date,
+    expires:    86400,  // Expires in 24 hours
+    unique:     false,
+    required:   false,
+    default:    Date.now
   },
   displayName: {
     type:       String,
@@ -103,6 +114,14 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
+UserSchema.index(
+  { emailToken: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { emailToken: { $type: 'string' } }
+  }
+);
+
 // Verify password for this user
 UserSchema.methods.validatePassword = function (password, next) {
   // NOTE: "Function" method here is *needed* to ensure "this" is the current
@@ -164,6 +183,9 @@ const addSuperUser = async function()
   {
     const userData = {
       username: 'superuser',
+      email: 'info@uni-vr-sity.ca',
+      verified: true,
+      expireAt: null,
       usertype: CIRCLES.USER_TYPE.SUPERUSER,
       password: env.DEFAULT_PASSWORD,
       displayName: 'superuser',

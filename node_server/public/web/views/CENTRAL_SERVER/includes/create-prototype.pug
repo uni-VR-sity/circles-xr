@@ -1,0 +1,24 @@
+block content
+
+    // Create prototype overlay --------------------------------------------------------------------------------------------------------------------
+    #create-prototype-overlay.overlay-container
+        .overlay 
+    
+            // Title ------------------------------------------------------------------------
+            #title-container
+                h2 Create Prototype
+
+                .icon-container
+                    i(class="fa-solid fa-xmark" onclick='closeOverlay("create-prototype-overlay"); hideMessages()')
+
+            // Create Prototype -------------------------------------------------------------
+            #create-prototype-container
+
+                form#create-prototype-form(onsubmit='createPrototype(event)' method='post')
+                    fieldset 
+
+                        .form-field.last-field
+                            input(type='text' name='prototypeName' placeholder='Name...' required)
+                            input.inline-submit(type='submit' value='Create') 
+
+                p#prototype-creation-error.error-message

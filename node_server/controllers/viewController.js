@@ -2,15 +2,18 @@
 
 require('../../src/core/circles_server');
 
+const express = require('express');
+const app = express();
 const path = require('path');
 const fs = require('fs');
-const dotenv = require('dotenv');
-const dotenvParseVariables = require('dotenv-parse-variables');
 const jwt = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
+const { createMailTransporter } = require('../../src/core/circles_mailTransporter');
+const crypto = require('crypto');
+const zip = require('express-zip');
 
 const User = require('../models/user');
 const Guest = require('../models/guest');
@@ -20,19 +23,7 @@ const Circles = require('../models/circles');
 const Uploads = require('../models/uploads');
 const MagicLinks = require('../models/magicLinks');
 
-// General -----------------------------------------------------------------------------------------------------------------------------------------
-
-// Loading in config  
-var env = dotenv.config({});
-
-if (env.error) 
-{
-  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
-}
-
-env = dotenvParseVariables(env.parsed);
-
-// ------------------------------------------------------------------------------------------
+const env = require('../modules/env-util');
 
 // Getting user information to send to pages
 const getUserInfo = function(req)
@@ -55,6 +46,27 @@ const getUserInfo = function(req)
   }
 
   return userInfo;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Checking that user name is valid
+const validUsername = function(username)
+{
+  if (username.includes(' '))
+  {
+    return false;
+  }
+  else if (username.includes("'"))
+  {
+    return false;
+  }
+  else if (username.includes('"'))
+  {
+    return false;
+  }
+
+  return true;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -100,7 +112,8 @@ const createJWT_MagicLink = function(expiryTimeMin, circles)
 // Rendering login page
 const serveLogin = async (req, res, next) => 
 {
-  let errorMessage = null;
+  var errorMessage = null;
+  var successMessage = null;
 
   if (req.session.errorMessage)
   {
@@ -108,8 +121,15 @@ const serveLogin = async (req, res, next) =>
     req.session.errorMessage = '';
   }
 
+  if (req.session.successMessage)
+  {
+    successMessage = req.session.successMessage;
+    req.session.successMessage = '';
+  }
+
   res.render(path.resolve(__dirname + '/../public/web/views/login'), {
-    message: errorMessage
+    errorMessage: errorMessage,
+    successMessage: successMessage,
   });
 }
 
@@ -118,7 +138,7 @@ const serveLogin = async (req, res, next) =>
 const invalidAddress = function(req, res, next)
 {
   res.render(path.resolve(__dirname + '/../public/web/views/login'), {
-    message: 'Invalid address entered'
+    errorMessage: 'Invalid address entered'
   });
 }
 
@@ -187,79 +207,203 @@ const serveRegister = async (req, res, next) =>
 
 // ------------------------------------------------------------------------------------------
 
-// Creates a new user and puts them in the user database
-const registerUser = (req, res, next) => 
+// Registering new user
+// https://www.youtube.com/watch?v=HI_KKUvcwtk
+const registerUser = (req, res, next) =>
 {
-  // Making sure all required fields are there (username, password, and password confirmation)
-  if (req.body.username && req.body.password && req.body.passwordConf) 
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  // Making sure all required fields are there (username, email, and password)
+  if (req.body.username && req.body.email && req.body.password) 
   {
-    // Making sure passwords match
-    // If they don't, send an error message to the user
-    if (req.body.password !== req.body.passwordConf) 
+    // Checking that username does not contain any invalid characters
+    if (!validUsername(req.body.username))
     {
-      console.log('ERROR: Passwords do not match');
-      renderRegister(res, 'Passwords do not match');
+      errorResponse.error = 'Username contains invalid character (space, \', ")';
+      
+      res.json(errorResponse);
+      return;
     }
-    else
+
+    // Compiling all data for the new user
+    const userData = {
+      username: req.body.username,                                    // User entered username
+      usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
+      email: req.body.email,                                          // User entered email
+      emailToken: crypto.randomBytes(64).toString('hex'),             // Token to verify email
+      password: req.body.password,                                    // User entered password
+      displayName: req.body.username,                                 // By default, display name is the same as the username
+    };
+
+    var user = null;
+    var error = null;
+
+    // Creating new user in database
+    async function createNewUser(newUser) 
     {
-      // Compiling all data for the new user
-      const userData = {
-        username: req.body.username,                                    // User entered username
-        usertype: CIRCLES.USER_TYPE.PARTICIPANT,                        // Default usertype upon registration is "Participant"
-        password: req.body.password,                                    // User entered password
-        displayName: req.body.username,                                 // By default, display name is the same as the username
-      };
-
-      var user = null;
-      var error = null;
-
-      // Creating new user in database
-      async function createNewUser(newUser) 
+      try {
+        user = await User.create(newUser);
+      } 
+      catch(err) 
       {
-        try {
-          user = await User.create(newUser);
-        } 
-        catch(err) 
+        error = err;
+
+        console.log(error);
+      }
+    }
+    
+    createNewUser(userData).then(function() 
+    {
+      // Checking if there was an error while creating the user and if there was, sending the error to the console
+      // If user creation was successful, sending verification email
+      if (error) 
+      {
+        console.log("createUser error on [" + userData.username + "]: " + error.message);
+
+        const errorMessage = error.message;
+
+        // Usernames must be unique
+        // If there was an error because the username already exists in the database, output an error message to the user
+        if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
         {
-          error = err;
+          errorResponse.error = 'Username is unavailable';
+      
+          res.json(errorResponse);
+          return;
+        }
+        else
+        {
+          res.json(errorResponse);
+          return;
+        }
+      } 
+      else 
+      {
+        // Sending email verification email with unique token
+        const transporter = createMailTransporter();
+
+        if (transporter)
+        {
+          var emailContent = '<h3 style="margin-top:0; margin-bottom:20px">Welcome to uni-VR-sity!</h3><p style="margin-bottom:8px;">Hello ';
+          emailContent += userData.username;
+          emailContent += ', </p><p style="margin-top:0">You are almost ready to begin exploring, just click on the button below to verify your email! The link will expire in 24 hours.</p><a href="';
+          emailContent += env.DOMAIN;
+          emailContent += '/verify-email/';
+          emailContent += userData.emailToken;
+          emailContent += '" style="display:inline-block; padding:0 15px; margin-top:7.5px; line-height:40px; text-decoration:none; border-radius:6px; background-color:#0f68bb; color:white">Verify Email</a>'
+
+          const mailOptions = {
+            from: '"uni-VR-sity" <' + env.EMAIL + '>',
+            to: userData.email,
+            subject: "uni-VR-sity Email Verification",
+            html: emailContent,
+          };
+
+          // Sending email
+          // If email is sent, returning success message
+          // Otherwise deleting user entry in database and returning an error message
+          transporter.sendMail(mailOptions, async (error, info) => 
+          {
+            if (error)
+            {
+              try
+              {
+                await User.deleteOne({username: userData.username});
+              }
+              catch(e) { }
+
+              console.log(error);
+
+              res.json(errorResponse);
+              return;
+            }
+            else
+            {
+              console.log('verification email sent to ' + userData.username);
+              var response = {
+                status: 'success',
+              };
+            
+              res.json(response);
+              return;
+            }
+          });
+        }
+        else
+        {
+          res.json(errorResponse);
+          return;
         }
       }
-      
-      createNewUser(userData).then(function() 
-      {
-        // Checking if there was an error while creating the user and if there was, sending the error to the console
-        // If user creation was successfull, outputting a success message to the user
-        if (error) 
-        {
-          console.log("createUser error on [" + userData.username + "]: " + error.message);
-
-          const errorMessage = error.message;
-
-          // Usernames must be unique
-          // If there was an error because the username already exists in the database, output an error message to the user
-          if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
-          {
-            req.session.errorMessage = 'Username is unavailable';
-            return res.redirect('/register');
-          }
-          else
-          {
-            req.session.errorMessage = 'Something went wrong, please try again';
-            return res.redirect('/register');
-          }
-        } 
-        else 
-        {
-          console.log("Successfully added user: " + user.username);
-          return next();
-        }
-      });
-    }
-  } 
-  else 
+    });
+  }
+  else
   {
+    console.log('missing information for user registration');
+
+    res.json(errorResponse);
+    return;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Verifying user email through unique token
+const verifyUserEmail = async (req, res, next) => 
+{
+  // url: /verify-email/token
+  // split result array: {"", "verify-email", "token"}
+  const token = req.url.split('/')[2];
+
+  // Getting user with email token from database
+  var user = null;
+
+  try
+  {
+    user = await User.findOne({emailToken: token});
+  }
+  catch(e)
+  {
+    console.log(e);
+
     req.session.errorMessage = 'Something went wrong, please try again';
-    return res.redirect('/register');
+    return res.redirect('/login');
+  }
+
+  // If user is found, updating them to be verified
+  // Otherwise returning that email verification link has expired
+  if (user)
+  {
+    var updatedUserData = {
+      verified: true,
+      emailToken: user._id,       // Can't be null because key must be unique
+      expireAt: null
+    }
+
+    try
+    {
+      await User.findOneAndUpdate({emailToken: token}, updatedUserData);
+
+      console.log(user.username + "'s email verified");
+
+      req.session.successMessage = 'Email successfully verified';
+      return res.redirect('/login');
+    }
+    catch(e)
+    {
+      console.log(e);
+
+      req.session.errorMessage = 'Something went wrong, please try again';
+      return res.redirect('/login');
+    }
+  }
+  else
+  {
+    req.session.errorMessage = 'Email verification link expired, please create a new account';
+    return res.redirect('/login');
   }
 }
 
@@ -298,6 +442,11 @@ const getCircles = async function(user, permissionType)
     {
       circles.push(await Circles.find(circle));
     }
+  }
+
+  // Filter out 'circles-developement' and 'performance-testing' unless in DEVELOPER_MODE
+  if (!env.DEVELOPER_MODE) {
+    circles = circles.filter(c => c.name !== 'circles-developement' && c.name !== 'performance-testing');
   }
 
   return circles;
@@ -405,16 +554,16 @@ const organizeToGroups = function(circles, databaseGroups)
 
         var subIndex = organizedCircles.groups[index].subgroups.indexOf(subgroup);
 
-        organizedCircles.groups[index].subgroups[subIndex].circles.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+        organizedCircles.groups[index].subgroups[subIndex].circles.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
       }
       else
       {
-        organizedCircles.groups[index].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+        organizedCircles.groups[index].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
       }
     }
     else
     {
-      organizedCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+      organizedCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
     }
   }
 
@@ -544,11 +693,11 @@ const serveExplore = async (req, res, next) =>
   {
     if (circle.viewingRestrictions)
     {
-      groupedEditableCircles.groups[0].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+      groupedEditableCircles.groups[0].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
     }
     else
     {
-      groupedEditableCircles.groups[1].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+      groupedEditableCircles.groups[1].noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
     }
   }
 
@@ -561,7 +710,7 @@ const serveExplore = async (req, res, next) =>
 
   for (const circle of magicCircles)
   {
-    groupedMagicCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage});
+    groupedMagicCircles.noGroup.push({name: circle.name, displayName: circle.displayName, hasProfileImage: circle.hasProfileImage, credit: circle.credit, description: circle.description, extraInfo: circle.extraInfo, contact: circle.contact});
   }
 
   // Rendering page
@@ -1339,16 +1488,6 @@ const updateUserProfile = async (req, res, next) =>
       accountUpdated = true;
     }
 
-    // Checking if email was updated
-    if (req.body.email)
-    {
-      if (req.body.email !== user.email)
-      {
-        userData.email = req.body.email;
-        accountUpdated = true;
-      }
-    }
-
     // Checking if the user wants to delete their email from their account
     // If the checkbox was checked
     if (req.body.deleteEmail)
@@ -1606,11 +1745,21 @@ const serveManageUsers = async (req, res, next) =>
 // Creating new user on user request
 const createUser = async (req, res, next) => 
 {
-  if (req.body.username && req.body.usertype)
+  if (req.body.username && req.body.email && req.body.usertype)
   {
+    // Checking that username does not contain any invalid characters
+    if (!validUsername(req.body.username))
+    {
+      req.session.singleCreateError = 'Username contains invalid character (space, \', ")';
+      return res.redirect('/manage-users');
+    }
+
     // Compiling all data for the new user
     const userData = {
       username: req.body.username,                    // User entered username
+      email: req.body.email,                          // User entered email
+      verified: true,                                 // User automatically verified if created by admin user
+      expireAt: null,
       usertype: req.body.usertype,                    // User entered usertype
       password: env.DEFAULT_PASSWORD,                 // Default password
       displayName: req.body.username,                 // By default, display name is the same as the username
@@ -1634,12 +1783,14 @@ const createUser = async (req, res, next) =>
         return res.redirect('/manage-users');
       }
 
+      console.log(error);
       req.session.singleCreateError = 'Something went wrong, please try again';
       return res.redirect('/manage-users');
     }
   }
   else
   {
+    console.log('Information missing to create user')
     req.session.singleCreateError = 'Something went wrong, please try again';
     return res.redirect('/manage-users');
   }
@@ -1698,60 +1849,71 @@ const bulkCreateUsers = async (req, res, next) =>
 
           // Ensuring entry has the correct amount of data
           // Otherwise outputting an error message for the entry
-          if (entryInfo.length === 2)
+          if (entryInfo.length === 3)
           {
             // Getting user info
             const userInfo = {
               username: entryInfo[0],                         // User entered username
-              usertype: entryInfo[1],                         // User entered usertype
+              email: entryInfo[1],                            // User entered email
+              verified: true,                                 // User automatically verified if created by admin user
+              expireAt: null,
+              usertype: entryInfo[2],                         // User entered usertype
               password: env.DEFAULT_PASSWORD,                 // Default password
               displayName: entryInfo[0],                      // By default, display name is the same as the username
             }
-            
-            // Ensuring usertype is valid
-            var validUsertypes = [];
 
-            for (const key in CIRCLES.USER_TYPE)
+            // Checking that username does not contain any invalid characters
+            if (validUsername(userInfo.username))
             {
-              if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.MAGIC_GUEST)
+              // Ensuring usertype is valid
+              var validUsertypes = [];
+
+              for (const key in CIRCLES.USER_TYPE)
               {
-                validUsertypes.push(CIRCLES.USER_TYPE[key]);
-              }
-            }
-
-            if (validUsertypes.includes(userInfo.usertype))
-            {
-              try 
-              {
-                var user = null;
-
-                user = await User.create(userInfo);
-
-                if (user)
+                if (CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.SUPERUSER && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.GUEST && CIRCLES.USER_TYPE[key] !== CIRCLES.USER_TYPE.MAGIC_GUEST)
                 {
-                  numCreated += 1;
-                }
-              } 
-              catch(err) 
-              {
-                const errorMessage = err.message;
-
-                // Usernames must be unique
-                // If there was an error because the username already exists in the database, output an error message to the user
-                if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
-                {
-                  req.session.bulkCreateError.push('The following entry contains an unavailable username: ' + entry);
-                }
-                else
-                {
-                  req.session.bulkCreateError.push('An unexpected error occured when creating the following user: ' + entry);
+                  validUsertypes.push(CIRCLES.USER_TYPE[key]);
                 }
               }
-              
+
+              if (validUsertypes.includes(userInfo.usertype))
+              {
+                try 
+                {
+                  var user = null;
+
+                  user = await User.create(userInfo);
+
+                  if (user)
+                  {
+                    numCreated += 1;
+                  }
+                } 
+                catch(err) 
+                {
+                  const errorMessage = err.message;
+
+                  // Usernames must be unique
+                  // If there was an error because the username already exists in the database, output an error message to the user
+                  if ((errorMessage.includes('dup key') === true) && (errorMessage.includes('username') === true))
+                  {
+                    req.session.bulkCreateError.push('The following entry contains an unavailable username: ' + entry);
+                  }
+                  else
+                  {
+                    req.session.bulkCreateError.push('An unexpected error occured when creating the following user: ' + entry);
+                  }
+                }
+                
+              }
+              else
+              {
+                req.session.bulkCreateError.push('The following entry has an invalid usertype: ' + entry);
+              }
             }
             else
             {
-              req.session.bulkCreateError.push('The following entry has an invalid usertype: ' + entry);
+              req.session.bulkCreateError.push('The following entry contains an username with an invalid character (space, \', ") : ' + entry);
             }
           }
           else
@@ -1767,7 +1929,7 @@ const bulkCreateUsers = async (req, res, next) =>
           }
         }
 
-        req.session.bulkCreateSuccess.push(numCreated + ' users were successfully created');
+        req.session.bulkCreateSuccess.push(numCreated + ' user(s) were successfully created');
         return res.redirect('/manage-users');
       });
     }
@@ -1825,6 +1987,58 @@ const updateUsertype = async (req, res, next) =>
   }
 
   return res.redirect('/manage-users');
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Deleting specified user
+const deleteUser = async (req, res, next) =>
+{
+  var errorResponse = {
+    status: 'error',
+    error: 'Something went wrong, please try again',
+  }
+
+  if (req.body.username) 
+  {
+    // Checking if currect user is an admin user
+    if (CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(req.user.usertype))
+    {
+      // Deleting user from database
+      try
+      {
+        await User.deleteOne({username: req.body.username});
+      }
+      catch(e)
+      {
+        console.log(e);
+    
+        errorResponse.error = req.body.username + 'could not be deleted, please try again';
+
+        res.json(errorResponse);
+        return;
+      }
+
+      var response = {
+        status: 'success',
+      }
+
+      res.json(response);
+      return;
+    }
+    else
+    {
+      errorResponse.error = 'Unauthorized access';
+    
+      res.json(errorResponse);
+      return;
+    }
+  }
+  else
+  {
+    res.json(errorResponse);
+    return;
+  }
 }
 
 // Your Magic Links Page ---------------------------------------------------------------------------------------------------------------------------
@@ -1923,7 +2137,7 @@ const renewMagicLink = async (req, res, next) =>
       {
         try 
         {
-          circles.push(await Circles.findOne({name: circle}));
+          circles.push(await Circles.findOne({displayName: circle}));
         }
         catch (e)
         {
@@ -1932,6 +2146,8 @@ const renewMagicLink = async (req, res, next) =>
           return res.redirect('/your-magic-links');
         }
       }
+
+      console.log(circles);
 
       // Creating magic link
       const magicLink = createJWT_MagicLink(expiryTimeMin, circles);
@@ -2036,17 +2252,19 @@ const serveUploadedContent = async (req, res, next) =>
     validVideos.push('.' + CIRCLES.VALID_VIDEO_TYPES[key]);
   }
 
+  /*
   for (const key in CIRCLES.VALID_3D_TYPES)
   {
     valid3D.push('.' + CIRCLES.VALID_3D_TYPES[key]);
   }
+  */
 
   // Getting user content
   var content = [];
 
   var currentUser = req.user;
 
-  content = await Uploads.find({user: currentUser});
+  content = await Uploads.find({ user: currentUser, category: { $ne: 'model' } });
 
   // Rendering the uploadedContent page
   const userInfo = getUserInfo(req);
@@ -2114,10 +2332,12 @@ const uploadContent = async (req, res, next) =>
       validFiles.push(CIRCLES.VALID_VIDEO_TYPES[key]);
     }
 
+    /*
     for (const key in CIRCLES.VALID_3D_TYPES)
     {
       validFiles.push(CIRCLES.VALID_3D_TYPES[key]);
     }
+    */
 
     // Checking that the file is of the correct type
     // Otherwise, sending an error message
@@ -2175,14 +2395,13 @@ const uploadContent = async (req, res, next) =>
 
       return res.redirect('/uploaded-content');
     }
-
-    // This file type means no file was uploaded
-    else if (fileType === 'octet-stream')
+    // This file type and a size of 0 means no file was uploaded
+    else if (fileType === 'octet-stream' && file.size == 0)
     {
       // Deleting file from folder
       fs.rmSync(file.filepath, {recursive: true});
 
-      req.session.errorMessage = 'No file uploaded';
+      req.session.errorMessage = 'No file chosen';
       return res.redirect('/uploaded-content');
     }
     else
@@ -2348,6 +2567,7 @@ module.exports = {
   // Register Page
   serveRegister,
   registerUser,
+  verifyUserEmail,
   // Explore Page
   serveExplore,
   updateSessionName,
@@ -2372,6 +2592,7 @@ module.exports = {
   createUser,
   bulkCreateUsers,
   updateUsertype,
+  deleteUser,
   // Your Magic Links Page
   serveYourMagicLinks,
   renewMagicLink,

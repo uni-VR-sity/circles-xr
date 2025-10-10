@@ -78,23 +78,25 @@ const USER_CATEGORIES = {
 
 const VALID_TEXT_TYPES = {
   PDF     : 'pdf',
-}
+};
 
 const VALID_IMAGE_TYPES = {
   PNG     : 'png',
   JPG     : 'jpg',
   JPEG    : 'jpeg',
-}
+};
 
 const VALID_VIDEO_TYPES = {
   MP4     : 'mp4',
   MOV     : 'mov',
   AVI     : 'avi',
-}
+};
 
 const VALID_3D_TYPES = {
-
-}
+  GLTF    : 'gltf',
+  GLB     : 'glb',
+  FBX     : 'fbx',
+};
 
 const MODEL_HEAD_TYPE = {
   head_0   : '/global/assets/models/gltf/head/Head_Circle.glb',
@@ -123,6 +125,7 @@ const MODEL_BODY_TYPE = {
 
 const EVENTS = {
   READY                     : 'CIRCLES_READY',
+  EXPERIENCE_ENTERED        : 'CIRCLES_EXPERIENCE_ENTERED',
   CAMERA_ATTACHED           : 'CAMERA_ATTACHED',
   OBJECT_HIGHLIGHT_LOADED   : 'OBJECT_HIGHLIGHT_LOADED',
   AVATAR_LOADED             : 'AVATAR_LOADED',
@@ -132,6 +135,8 @@ const EVENTS = {
   SELECT_THIS_OBJECT        : 'SELECT_THIS_OBJECT',
   PICKUP_THIS_OBJECT        : 'PICKUP_THIS_OBJECT',
   RELEASE_THIS_OBJECT       : 'RELEASE_THIS_OBJECT',
+  PICKUP_OBJECT             : 'CIRCLES_PICKUP_OBJECT',  //global pickup and release event for devs
+  RELEASE_OBJECT            : 'CIRCLES_RELEASE_OBJECT',
   RELEASE_THIS_OBJECT_PRE   : 'RELEASE_THIS_OBJECT_PRE',
   OBJECT_OWNERSHIP_GAINED   : 'OBJECT_OWNERSHIP_GAINED',
   OBJECT_OWNERSHIP_LOST     : 'OBJECT_OWNERSHIP_LOST',
@@ -148,8 +153,18 @@ const EVENTS = {
   QUESTION_OBJECT_STATE     : 'CIRCLES_QUESTION_OBJECT_STATE',
   ANSWER_OBJECT_STATE       : 'CIRCLES_ANSWER_OBJECT_STATE',
   OBJECT_OWNER_GONE         : 'CIRCLES_OBJECT_OWNER_GONE',
+  USER_CONNECTED            : 'CIRCLES_USER_CONNECTED',
+  USER_DISCONNECTED         : 'CIRCLES_USER_DISCONNECTED'
   // OBJECT_CREATED            : 'CIRCLES_OBJECT_CREATED',
   // OBJECT_DESTROYED          : 'CIRCLES_OBJECT_DESTROYED',
+};
+
+const VR_PLATFORMS = {
+  DESKTOP              : 'DESKTOP',
+  MOBILE_PHONE         : 'MOBILE',
+  MOBILE_TABLET        : 'MOBILE_TABLET',
+  HMD_STANDALONE       : 'HMD_MOBILE',
+  HMD_WIRED            : 'HMD_OTHER',
 };
 
 const NETWORKED_TEMPLATES = {
@@ -180,6 +195,22 @@ const getUUID = function() {
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 };
+
+const getRandomColor = function() {
+  return new THREE.Color('rgb(' + THREE.MathUtils.randInt(0, 255) + ',' + THREE.MathUtils.randInt(0, 255) + ',' + THREE.MathUtils.randInt(0, 255) + ')');
+};
+
+const getRandomString = function(length) {
+  let result = '';
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
 
 //time that the socket connected
 const getCirclesConnectTime = function() {
@@ -233,23 +264,31 @@ const getCirclesResearchWebsocket = function() {
 };
 
 const getCirclesGroupName = function() {
-  return getCirclesManager().getRoom();
+  return getCirclesManagerComp().getRoom();
 }
 
 const getCirclesUserName = function() {
-  return getCirclesManager().getUser();
+  return getCirclesManagerComp().getUser();
 }
 
 const getCirclesWorldName = function() {
-  return getCirclesManager().getWorld();
+  return getCirclesManagerComp().getWorld();
 }
 
-const getCirclesManager = function() {
-  return document.querySelector('[circles-manager]').components['circles-manager'];
+const getCirclesManagerElement = function() {
+  return document.querySelector('[circles-manager]');
+}
+
+const getCirclesManagerComp = function() {
+  return getCirclesManagerElement().components['circles-manager'];
 }
 
 const isReady = function() {
-  return getCirclesManager().isCirclesReady();
+  return getCirclesManagerComp().isCirclesReady();
+}
+
+const isExperienceEntered = function() {
+  return getCirclesManagerComp().isExperienceEntered();
 }
 
 const isCirclesWebsocketReady = function() {
@@ -291,12 +330,20 @@ const getCirclesSceneElement = function() {
   return document.querySelector('a-scene');
 }
 
-const getNAFAvatarElements = function() {
+const getNetworkedAvatarElements = function() {
   return document.querySelectorAll('[circles-user-networked]');  //return all avatars being networked by NAF
 }
 
-const getAllNAFElements = function() {
+const getAllNetworkedElements = function() {
   return document.querySelectorAll('[networked]');              //returns all NAF networked objects. You may have to dig into children for more detail.             
+}
+
+const getPickedUpElement = function() {
+  return getCirclesManagerComp().pickedUpElem;             //returns reference to held element, or null if no held object on this player/client            
+}
+
+const getNonNetworkedID = function(elem) {
+  return (elem.hasAttribute('circles-object-world')) ? elem.components['circles-object-world'].data.id : elem.id;             //returns reference to held element, or null if no held object on this player/client            
 }
 
 //CIRCLES.log(text);
@@ -329,6 +376,33 @@ const enableErrors = function(enable) {
   errorLogsEnabled = enabled;
 }
 
+const getVRPlatform = function() {
+  let vr_platform = 'not_available';
+
+  if (AFRAME.utils.device.checkHeadsetConnected() === true) {
+    //alert('isVRDisplay!!!');
+    vr_platform = VR_PLATFORMS.HMD_WIRED;
+  }
+  if (AFRAME.utils.device.isMobileVR() === true) {
+    //alert('isMobileVR!!!');
+    vr_platform = VR_PLATFORMS.HMD_STANDALONE;
+  }
+  else if (AFRAME.utils.device.isMobile() === true) {
+    //alert('isMobile!!!');
+    vr_platform = VR_PLATFORMS.MOBILE_PHONE;
+  }
+  else if (AFRAME.utils.device.isTablet() === true || AFRAME.utils.device.isMobileDeviceRequestingDesktopSite() === true ) {
+    //alert('isTabletVR!!!');
+    vr_platform = VR_PLATFORMS.MOBILE_TABLET;
+  }
+  else {
+    //alert('isDesktop!!!');
+    vr_platform = VR_PLATFORMS.DESKTOP;
+  }
+
+  return vr_platform
+}
+
 module.exports = {
   CONSTANTS,
   UTILS,
@@ -348,8 +422,11 @@ module.exports = {
   MODEL_BODY_TYPE,
   EVENTS,
   NETWORKED_TEMPLATES,
+  VR_PLATFORMS,
   COLOR_PALETTE,
   getUUID,
+  getRandomColor,
+  getRandomString,
   getCirclesConnectTime,
   setupCirclesWebsocket,
   getCirclesWebsocket,
@@ -357,20 +434,25 @@ module.exports = {
   getCirclesGroupName,
   getCirclesUserName,
   getCirclesWorldName,
-  getCirclesManager,
+  getCirclesManagerElement,
+  getCirclesManagerComp,
   isReady,
+  isExperienceEntered,
   isCirclesWebsocketReady,
   getAvatarElement,
   getAvatarHolderElementBody,
   getAvatarRigElement,
   getMainCameraElement,
   getCirclesSceneElement,
-  getNAFAvatarElements,
-  getAllNAFElements,
+  getNetworkedAvatarElements,
+  getAllNetworkedElements,
+  getPickedUpElement,
+  getNonNetworkedID,
   log,
   enableLogs,
   warn,
   enableWarning,
   error,
-  enableErrors
+  enableErrors,
+  getVRPlatform
 };

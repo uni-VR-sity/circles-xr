@@ -4,13 +4,12 @@ require('../../src/core/circles_server');
 
 const path = require('path');
 const fs = require('fs');
-const dotenv = require('dotenv');
-const dotenvParseVariables = require('dotenv-parse-variables');
 const jwt = require('jsonwebtoken');
 const { CONSTANTS } = require('../../src/core/circles_research');
 const formidable = require("formidable");
 const XMLHttpRequest = require('xhr2');
 const uniqueFilename = require('unique-filename');
+const readline = require('readline');
 
 const User = require('../models/user');
 const Guest = require('../models/guest');
@@ -20,17 +19,7 @@ const Circles = require('../models/circles');
 const Uploads = require('../models/uploads');
 const MagicLinks = require('../models/magicLinks');
 
-// General -----------------------------------------------------------------------------------------------------------------------------------------
-
-// Loading in config  
-var env = dotenv.config({});
-
-if (env.error) 
-{
-  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
-}
-
-env = dotenvParseVariables(env.parsed);
+const env = require('../modules/env-util');
 
 // Rendering Circles -------------------------------------------------------------------------------------------------------------------------------
 
@@ -39,7 +28,16 @@ const serveWorld = (req, res, next) => {
     // https://stackoverflow.com/questions/30373218/handling-relative-urls-in-a-node-js-http-server 
     const splitURL = req.url.split('?');
     const baseURL = (splitURL.length > 0)?splitURL[0]:'';
-    const urlParamsStr = (splitURL.length > 1)?splitURL[1]:'';
+    var urlParamsStr = (splitURL.length > 1)?splitURL[1]:'';
+
+    // Make sure there are the correct url search params available
+    const urlObj = new URL(req.protocol + '://' + req.get('host') + req.originalUrl);
+    const searchParamsObj = urlObj.searchParams;
+
+    if (env.DEVELOPER_MODE && !searchParamsObj.has('devmode')) 
+    {   
+      urlParamsStr += ((urlParamsStr === '')?'':'&') + 'devmode=true';
+    }
 
     if (splitURL.length > 0) {
         if (baseURL.charAt(baseURL.length - 1) !== '/') {
@@ -50,9 +48,6 @@ const serveWorld = (req, res, next) => {
         }
     }
 
-    // Make sure there are the correct url seatch params available
-    const urlObj = new URL(req.protocol + '://' + req.get('host') + req.originalUrl);
-    const searchParamsObj = urlObj.searchParams;
     // If no group indicated then assume the group 'explore'
     if (!searchParamsObj.has('group')) {
         const fixedURL = baseURL + "?" + 'group=explore' + ((urlParamsStr === '')?'':'&' + urlParamsStr);
@@ -65,18 +60,25 @@ const serveWorld = (req, res, next) => {
     const user = req.user;
     const pathStr = path.resolve(__dirname + '/../public/worlds/' + world_id + '/index.html');
 
+    // If developer mode is active, recompiling world
+    if (env.DEVELOPER_MODE)
+    {
+      recompileCircle(world_id);
+    }
+
     modifyServeWorld(world_id, searchParamsObj, user, pathStr, req, res);
 }
 
 // ------------------------------------------------------------------------------------------
 
 const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) => {
-    // Ensure the world file exists
+  // Ensure the world file exists
     fs.readFile(pathStr, {encoding: 'utf-8'}, (error, data) => {
       if (error) {
-        return res.redirect('/profile');
+        return res.redirect('/explore');
       }
       else {
+
         var specialStatus = '';
   
         const u_name = ((searchParamsObj.has('name')) ? searchParamsObj.get('name') : req.session.sessionName);
@@ -164,6 +166,93 @@ const serveRelativeWorldContent = (req, res, next) => {
   const relURL = req.params[0];
   const newURL = '/worlds/' + worldID + '/' + relURL;
   return res.redirect(newURL);
+}
+
+// ------------------------------------------------------------------------------------------
+
+const recompileCircle = (circle) => 
+{
+  const publicCirclePath = __dirname + '/../public/worlds/' + circle;
+  const srcCirclePath = __dirname + '/../../src/worlds/' + circle;
+  const altCirclePath = __dirname + '/../../../worlds/' + circle;  // New alternative path
+
+  // Determine which source path exists
+  let sourcePath = null;
+  if (fs.existsSync(srcCirclePath)) {
+    sourcePath = srcCirclePath;
+  } else if (fs.existsSync(altCirclePath)) {
+    sourcePath = altCirclePath;
+  } else {
+    throw new Error(`Circle folder not found in either src or alternate worlds directory for "${circle}"`);
+  }
+
+  // Read in parts content to insert (default parts)
+  let circles_header              =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_header.part.html', 'utf8');
+  let circles_basic_ui            =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_basic_ui.part.html', 'utf8');
+  let circles_enter_ui            =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_enter_ui.part.html', 'utf8');
+  let circles_scene_properties    =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_scene_properties.part.html', 'utf8');
+  let circles_assets              =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_assets.part.html', 'utf8');
+  let circles_avatar              =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_avatar_manager.part.html', 'utf8');
+  let circles_end_scripts         =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/circles_end_scripts.part.html', 'utf8');
+  
+  // Read in parts content to insert (no networking parts)
+  let circles_NN_scene_properties =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noNetworking/circles_NN_scene_properties.part.html', 'utf8');
+  let circles_NN_end_scripts      =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noNetworking/circles_NN_end_scripts.part.html', 'utf8');
+  
+  // Read in parts content to insert (no avatar parts)
+  let circles_NA_enter_ui         =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noAvatar/circles_NA_enter_ui.part.html', 'utf8');
+  let circles_NA_avatar           =  fs.readFileSync(__dirname + '/../../src/webpack.worlds.parts/noAvatar/circles_NA_avatar_manager.part.html', 'utf8');
+  
+  const nafAudioRegex   = new RegExp(/\{\{(\s+)?NAF_AUDIO(\s+)?\}\}/,   'gmi');
+  const nafAdapterRegex = new RegExp(/\{\{(\s+)?NAF_ADAPTER(\s+)?\}\}/, 'gmi');
+  const nafServerRegex  = new RegExp(/\{\{(\s+)?NAF_SERVER(\s+)?\}\}/,  'gmi');
+  
+  // Insert env vars into parts
+  circles_scene_properties = circles_scene_properties.toString().replace(nafAudioRegex,   env.NAF_AUDIO);
+  circles_scene_properties = circles_scene_properties.toString().replace(nafAdapterRegex, env.NAF_ADAPTER);
+  circles_scene_properties = circles_scene_properties.toString().replace(nafServerRegex,  env.NAF_SERVER);
+  
+  // Removing the current public worlds folder
+  fs.rmSync(publicCirclePath, {recursive: true, force: true});
+
+  // Copying the circle folder from scr to public
+  fs.cpSync(sourcePath, publicCirclePath, {recursive: true});
+
+  // Getting all files from circle folder to find the .html file
+  var files = fs.readdirSync(publicCirclePath);
+  var htmlFile = null;
+
+  for (const file of files)
+  {
+    if (file.endsWith('.html'))
+    {
+      htmlFile = file;
+    }
+  }
+
+  // Getting content from circle's .html file
+  var content = fs.readFileSync(publicCirclePath + '/' + htmlFile, { encoding: 'utf8', flag: 'r' });
+
+  // Inserting new parts (default parts)
+  content = content.toString();
+  content = content.replace(/<circles-start-scripts(\s+)?\/>/i, circles_header);
+  content = content.replace(/<circles-basic-ui(\s+)?\/>/i, circles_basic_ui);
+  content = content.replace(/<circles-start-ui(\s+)?\/>/i, circles_enter_ui);
+  content = content.replace(/circles_scene_properties/i, circles_scene_properties);
+  content = content.replace(/<circles-assets(\s+)?\/>/i, circles_assets);
+  content = content.replace(/<circles-manager-avatar(\s+)?\/>/i, circles_avatar);
+  content = content.replace(/<circles-end-scripts(\s+)?\/>/i, circles_end_scripts);
+
+  // Inserting new parts (no networking parts)
+  content = content.replace(/circles_NN_scene_properties/i, circles_NN_scene_properties);
+  content = content.replace(/<circles-NN-end-scripts(\s+)?\/>/i, circles_NN_end_scripts);
+
+  // Inserting new parts (no avatar parts)
+  content = content.replace(/<circles-NA-start-ui(\s+)?\/>/i, circles_NA_enter_ui);
+  content = content.replace(/<circles-NA-manager-avatar(\s+)?\/>/i, circles_NA_avatar);
+
+  // Updating circle's .html file
+  fs.writeFileSync(publicCirclePath + '/' + htmlFile, content); 
 }
 
 // Whiteboard --------------------------------------------------------------------------------------------------------------------------------------
@@ -547,6 +636,287 @@ const updateUserColour = async (req, res, next) =>
   }
 }
 
+// Data Collection ---------------------------------------------------------------------------------------------------------------------------------
+
+// Getting latest version log file
+// If there are not logs for the circle, null is returned
+const getLatestLogFile = function(logFolder, circle)
+{
+  // Getting all files in log folder
+  var existingLogs = fs.readdirSync(logFolder);
+
+  // Getting all log files associated with the current circle
+  function checkExistingLogs(log)
+  {
+    return log.includes(circle);
+  }
+
+  var circleLogs = existingLogs.filter(checkExistingLogs);
+
+  // If the circle has existing logs, getting the latest file
+  // Otherwise returning null
+  if (circleLogs.length > 0) 
+  {
+    // Going through each log to get the highest numerical value
+    var highestLog = 0;
+
+    for (const log of circleLogs)
+    {
+      // Getting what is after circle name --> Ex. ["", "0.csv"] or ["", "1.csv"]
+      var logNum = log.split(circle)[1][0];
+      
+      // Converting to an integer
+      logNum = parseInt(logNum);
+
+      // Checking if logNum is the highest log so far
+      //  If it is, saving it
+      if (logNum > highestLog)
+      {
+        highestLog = logNum;
+      }
+    }
+
+    return highestLog;
+  }
+  else
+  {
+    return null;
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Saving data collected in an .csv log file
+const saveCollectedData = async (req, res, next) => 
+{
+  if (req.body.circle)
+  {
+    const possibleData = ['date', 'time', 'user', 'position', 'name', 'description'];
+    const logFolder = __dirname + '/../dataLogs/';
+
+    var log = '';
+    var header = '';
+
+    // Going through possible data collected
+    for (const data of possibleData)
+    {
+      // If that data was collected, adding it to log
+      if (req.body.hasOwnProperty(data))
+      {
+        // If data is an array, adding each entry to the log, surrounded by quotation marks
+        // Otherwise, just adding entry to log
+        if (Array.isArray(req.body[data]))
+        {
+          log += '"';
+
+          for (var i = 0; i < req.body[data].length; i++)
+          {
+            log += req.body[data][i] + ',';
+          }
+
+          // Removing last comma (,) from log
+          log = log.slice(0, -1);
+
+          log += '",';
+        }
+        else
+        {
+          // Checking is data is "user"
+          // If it is, adding current user's username to log
+          if (data == 'user')
+          {
+            log += req.user.username + ',';
+          }
+          else if (req.body[data].includes(','))
+          {
+            log += '"' + req.body[data] + '",';
+          }
+          else
+          {
+            log += req.body[data] + ',';
+          }
+        }
+
+        // Adding to header
+        header += data + ',';
+      }
+    }
+
+    // Removing last comma (,) from log and header
+    log = log.slice(0, -1);
+    header = header.slice(0, -1);
+
+    // Getting the latest log file version
+    var latestVersion = getLatestLogFile(logFolder, req.body.circle);
+
+    // If there are already log files for the circle, checking if the header has changed and a new file should be created
+    // Otherwise, setting up to create the first log file
+    var currentFile;
+
+    if (latestVersion != null)
+    {
+      // Getting the first line (header) from latest log file
+      // https://www.geeksforgeeks.org/how-to-read-a-file-line-by-line-using-node-js/
+      var latestFile = req.body.circle + latestVersion + '.csv';
+      var latestHeader = '';
+
+      // Using a promise to wait for header to be read
+      function readLogPromise() 
+      {
+        return new Promise(function(resolve, reject)
+        {
+          
+          const logFile = readline.createInterface(
+          {
+            input: fs.createReadStream(logFolder + latestFile),
+            output: process.stdout,
+            terminal: false
+          });
+
+          logFile.on('error', function()
+          {
+            resolve();
+          });
+          
+          logFile.on('line', function(line)
+          {
+            latestHeader = line;
+
+            // Stopping after first line is read
+            // https://stackoverflow.com/questions/44153552/readline-doesnt-stop-line-reading-after-rl-close-emit-in-nodejs
+            logFile.close();
+            logFile.removeAllListeners();
+          });
+          
+          // When header has been read
+          logFile.on('close', function()
+          {
+            resolve();
+          });
+          
+        });
+      }
+
+      await readLogPromise();
+
+      // Checking if header has changed
+      // If it has, setting up for creating a new log file
+      // Otherwise, preparing log line to be added to the latest log file
+      if (header != latestHeader)
+      {
+        latestVersion++;
+        currentFile = req.body.circle + latestVersion + '.csv';
+        log = header + '\n' + log;
+      }
+      else
+      {
+        currentFile = latestFile;
+        log = '\n' + log;
+      }
+    }
+    else
+    {
+      log = header + '\n' + log;
+      currentFile = req.body.circle + '0.csv';
+    }
+
+    // Adding log to .csv file
+    // (If this is the first log for the circle, .csv file is created)
+    try
+    {
+      fs.appendFileSync(logFolder + currentFile, log, "utf8");
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+
+  // Has to return something or logs stop going through
+  res.json('complete');
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Checking if there are logs to download for the specified circle
+const checkExistingLogs = async (req, res, next) =>
+{
+  const logFolder = __dirname + '/../dataLogs/';
+
+  var response = { exists: false };
+
+  if (req.body.circle)
+  {
+    // Getting all files in log folder
+    var existingLogs = fs.readdirSync(logFolder);
+
+    // Checking what kind of logs are request (all logs or only logs for the user)
+    if (req.body.allLogs == 'true')
+    {
+      // Checking if there is at least one log for the circle
+      // If there is, creating a link to download requested logs
+      for (const log of existingLogs)
+      {
+        if (log.includes(req.body.circle))
+        {
+          response.exists = true;
+          response.downloadLink = '/download-logs/' + req.body.circle;
+          
+          break;
+        }
+      }
+    }
+    else
+    {
+      if (req.body.user)
+      {
+        // TO DO!!!!!!!!!!!!!!!
+      }
+    }
+  }
+
+  res.json(response);
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Sends collected data files for requested circle for download
+const downloadCollectedData = async (req, res, next) =>
+{
+  const logFolder = __dirname + '/../dataLogs/';
+
+  // url: /download-logs/circle
+  // split result array: {"", "download-logs" "circle"}
+  const circle = req.url.split('/')[2];
+
+  // Getting all files in log folder
+  var existingLogs = fs.readdirSync(logFolder);
+
+  // Getting all log files associated with the requested circle
+  function checkExistingLogs(log)
+  {
+    return log.includes(circle);
+  }
+
+  var circleLogs = existingLogs.filter(checkExistingLogs);
+
+  // Putting together information for each log file
+  var logFiles = [];
+
+  for (const log of circleLogs)
+  {
+    var file = {
+      path: logFolder + log,
+      name: log,
+    }
+
+    logFiles.push(file);
+  }
+
+  // Sending a zipped file of files to download
+  res.zip(logFiles, circle + '-Logs.zip');
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------
 
 module.exports = {
@@ -563,4 +933,8 @@ module.exports = {
   // Wardrobe
   updateUserModel,
   updateUserColour,
+  // Data Collection
+  saveCollectedData,
+  checkExistingLogs,
+  downloadCollectedData,
 }

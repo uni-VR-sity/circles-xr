@@ -72,75 +72,81 @@ const dragMove = function(object, max, min)
 // Creating and displaying arrow UI elements
 const arrowUI = function()
 {
-    // Container for UI
-    var container = document.createElement('div');
-    container.setAttribute('id', 'arrow-ui-container');
+    // UI
+    var ui = document.createElement('div');
+    ui.setAttribute('class', 'circles-ui');
 
-        // Container for arrows
-        var arrowContainer = document.createElement('div');
-        arrowContainer.setAttribute('id', 'arrow-container');
+        // Container
+        var container = document.createElement('div');
+        container.setAttribute('id', 'arrow-ui-container');
 
-            // Up arrow container
-            var upContainer = document.createElement('div');
-            upContainer.setAttribute('class', 'vertical-arrow');
+            // Container for arrows
+            var arrowContainer = document.createElement('div');
+            arrowContainer.setAttribute('id', 'arrow-container');
 
-                // Up arrow
-                var upArrow = document.createElement('i');
-                upArrow.setAttribute('class', 'fa-solid fa-circle-up up-arrow');
-                upArrow.setAttribute('id', 'up-arrow');
+                // Up arrow container
+                var upContainer = document.createElement('div');
+                upContainer.setAttribute('class', 'vertical-arrow');
 
-                upContainer.appendChild(upArrow);
+                    // Up arrow
+                    var upArrow = document.createElement('i');
+                    upArrow.setAttribute('class', 'fa-solid fa-circle-up up-arrow');
+                    upArrow.setAttribute('id', 'up-arrow');
 
-            arrowContainer.appendChild(upContainer);
+                    upContainer.appendChild(upArrow);
 
-            // Horizontal arrows container
-            var horizontalContainer = document.createElement('div');
-            horizontalContainer.setAttribute('class', 'clearfix');
+                arrowContainer.appendChild(upContainer);
 
-                // Left arrow container
-                var leftContainer = document.createElement('div');
-                leftContainer.setAttribute('class', 'horizontal-left-arrow');
+                // Horizontal arrows container
+                var horizontalContainer = document.createElement('div');
+                horizontalContainer.setAttribute('class', 'clearfix');
 
-                    // Left arrow
-                    var leftArrow = document.createElement('i');
-                    leftArrow.setAttribute('class', 'fa-solid fa-circle-left left-arrow');
-                    leftArrow.setAttribute('id', 'left-arrow');
+                    // Left arrow container
+                    var leftContainer = document.createElement('div');
+                    leftContainer.setAttribute('class', 'horizontal-left-arrow');
 
-                    leftContainer.appendChild(leftArrow);
+                        // Left arrow
+                        var leftArrow = document.createElement('i');
+                        leftArrow.setAttribute('class', 'fa-solid fa-circle-left left-arrow');
+                        leftArrow.setAttribute('id', 'left-arrow');
 
-                horizontalContainer.appendChild(leftContainer);
+                        leftContainer.appendChild(leftArrow);
 
-                // Right arrow container
-                var rightContainer = document.createElement('div');
-                rightContainer.setAttribute('class', 'horizontal-right-arrow');
+                    horizontalContainer.appendChild(leftContainer);
 
-                    // Right arrow
-                    var rightArrow = document.createElement('i');
-                    rightArrow.setAttribute('class', 'fa-solid fa-circle-right right-arrow');
-                    rightArrow.setAttribute('id', 'right-arrow');
+                    // Right arrow container
+                    var rightContainer = document.createElement('div');
+                    rightContainer.setAttribute('class', 'horizontal-right-arrow');
 
-                    rightContainer.appendChild(rightArrow);
+                        // Right arrow
+                        var rightArrow = document.createElement('i');
+                        rightArrow.setAttribute('class', 'fa-solid fa-circle-right right-arrow');
+                        rightArrow.setAttribute('id', 'right-arrow');
 
-                horizontalContainer.appendChild(rightContainer);
+                        rightContainer.appendChild(rightArrow);
 
-            arrowContainer.appendChild(horizontalContainer);
+                    horizontalContainer.appendChild(rightContainer);
 
-            // Down arrow container
-            var downContainer = document.createElement('div');
-            downContainer.setAttribute('class', 'vertical-arrow');
+                arrowContainer.appendChild(horizontalContainer);
 
-                // Down arrow
-                var downArrow = document.createElement('i');
-                downArrow.setAttribute('class', 'fa-solid fa-circle-down down-arrow');
-                downArrow.setAttribute('id', 'down-arrow');
+                // Down arrow container
+                var downContainer = document.createElement('div');
+                downContainer.setAttribute('class', 'vertical-arrow');
 
-                downContainer.appendChild(downArrow);
+                    // Down arrow
+                    var downArrow = document.createElement('i');
+                    downArrow.setAttribute('class', 'fa-solid fa-circle-down down-arrow');
+                    downArrow.setAttribute('id', 'down-arrow');
 
-            arrowContainer.appendChild(downContainer);
+                    downContainer.appendChild(downArrow);
 
-        container.appendChild(arrowContainer);
+                arrowContainer.appendChild(downContainer);
 
-    document.getElementsByTagName('body')[0].appendChild(container);
+            container.appendChild(arrowContainer);
+
+    ui.appendChild(container);
+
+    document.getElementsByTagName('body')[0].appendChild(ui);
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------

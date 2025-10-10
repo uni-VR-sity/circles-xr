@@ -1,17 +1,9 @@
 'use strict';
 
 // Set up and parse Environment based configuation
-const dotenv = require('dotenv');
-const dotenvParseVariables = require('dotenv-parse-variables');
 const crypto = require('crypto');
 
-let env = dotenv.config({})
-if (env.error) {
-  throw 'Missing environment config. Copy .env.dist to .env and make any adjustments needed from the defaults';
-}
-
-// Parse the dot configs so that things like false are boolean, not strings
-env = dotenvParseVariables(env.parsed);
+const env = require('./modules/env-util');
 
 //authentication tutorial used : https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359
 require('../src/core/circles_server');
@@ -186,11 +178,16 @@ passport.use(new passportLocalStrategy (
 
       getItems().then(function() {
         if (error) {
-          return done(error, user, { message: 'unexpected error' });
+          return done(error, user, { message: 'Unexpected error' });
         }
 
         if (!user) {
-          return done(error, user, { message: 'username invalid' });
+          return done(error, user, { message: 'Username invalid' });
+        }
+
+        if (!user.verified)
+        {
+          return done(error, false, { message: 'Unverified account' });
         }
 
         user.validatePassword(password, function (err, usr) {

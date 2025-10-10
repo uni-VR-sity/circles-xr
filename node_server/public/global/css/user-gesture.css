@@ -2,446 +2,439 @@ html {
     font-family: "Roboto",sans-serif;
 }
 
-/* Enter World UI ****************************************************************************************************************************************/
+.circles-ui {
 
-div.grid2col {
-    display:grid;
-    grid-template-columns: max-content max-content;
-    grid-column-gap:10px;
-    grid-row-gap:5px;
-}
+    /* Enter World UI ****************************************************************************************************************************************/
+    
+    div.grid2col {
+        display:grid;
+        grid-template-columns: max-content max-content;
+        grid-column-gap:10px;
+        grid-row-gap:5px;
+    }
 
-.label {
-    position: relative;
-    margin: 8px 0;
-    line-height: 41px;
-    font-size: 20px; color:#000; 
-    /*font-family: Trebuchet, Arial, sans-serif;*/
-    font-weight: bold;
-    width: 164px;
-    height:45px;
-    text-align: right;
-}
+    .title {
+        position: relative;
+        margin: 8px 0px 8px 0px;
+        line-height: 41px;
+        font-size: 28px; color:#2196F3; 
+        /*font-family: Trebuchet, Arial, sans-serif;*/
+        font-weight: bold;
+        text-align:center;
+    }
 
-.title {
-    position: relative;
-    margin: 8px 0px 8px 0px;
-    line-height: 41px;
-    font-size: 28px; color:#2196F3; 
-    /*font-family: Trebuchet, Arial, sans-serif;*/
-    font-weight: bold;
-    text-align:center;
-}
+    .logo {
+        position: relative;
+        margin: 8px 0;
+        width: 280px;
+    }
 
-.logo {
-    position: relative;
-    margin: 8px 0;
-    width: 280px;
-}
+    .overlay {
+        display: block;
+        z-index: inherit;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 1.0);
+        padding: 10px;
+        width: 300px;
+        filter: drop-shadow(0 0 0.75rem rgb(50, 50, 50));
+    }
 
-.overlay {
-    display: block;
-    z-index: inherit;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 1.0);
-    padding: 10px;
-    width: 300px;
-    filter: drop-shadow(0 0 0.75rem rgb(50, 50, 50));
-}
+    #user-gesture-overlay {
+        display: none;
+        z-index: 99;
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255,255,255,0.5);
+        backdrop-filter: blur(10px);
+    }
 
-#user-gesture-overlay {
-    display: block;
-    z-index: 99;
-    position: absolute;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255,255,255,0.5);
-    backdrop-filter: blur(10px);
-}
+    .suboverlay {
+        display: block;
+        z-index: inherit;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.8);
+    }
 
-.suboverlay {
-    display: block;
-    z-index: inherit;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.8);
-}
+    /* toggle switch */
+    .onoffswitch {
+        position: relative; 
+        width: 116px;
+        height: 45px;
+        margin: 5px 0 0 0;
+        user-select: none;
+    }
+    .onoffswitch-checkbox {
+        display: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 2px solid #FFFFFF; border-radius: 20px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 41px; padding: 0; line-height: 41px;
+        font-size: 25px; color: white; 
+        /*font-family: Trebuchet, Arial, sans-serif;*/
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        content: "ON";
+        padding-left: 14px;
+        background-color: #EEEEEE; color: #2196F3;
+    }
+    .onoffswitch-inner:after {
+        content: "OFF";
+        padding-right: 14px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block; width: 38px; margin: 1.5px;
+        background: #A1A1A1;
+        position: absolute; top: 0; bottom: 0;
+        right: 71px;
+        border: 2px solid #FFFFFF;
+        border-radius: 20px;
+        transition: all 0.3s ease-in 0s; 
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px; 
+        background-color: #2196F3; 
+    }
 
-/* toggle switch */
-.onoffswitch {
-    position: relative; 
-    width: 116px;
-    height: 45px;
-    margin: 5px 0 0 0;
-    user-select: none;
-}
-.onoffswitch-checkbox {
-    display: none;
-}
-.onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #FFFFFF; border-radius: 20px;
-}
-.onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
-}
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 41px; padding: 0; line-height: 41px;
-    font-size: 25px; color: white; 
-    /*font-family: Trebuchet, Arial, sans-serif;*/
-    font-weight: bold;
-    box-sizing: border-box;
-}
-.onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 14px;
-    background-color: #EEEEEE; color: #2196F3;
-}
-.onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 14px;
-    background-color: #EEEEEE; color: #999999;
-    text-align: right;
-}
-.onoffswitch-switch {
-    display: block; width: 38px; margin: 1.5px;
-    background: #A1A1A1;
-    position: absolute; top: 0; bottom: 0;
-    right: 71px;
-    border: 2px solid #FFFFFF;
-    border-radius: 20px;
-    transition: all 0.3s ease-in 0s; 
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px; 
-    background-color: #2196F3; 
-}
+    /*rest of form*/
+    .user-gesture-button {
+        display:none;
+        width: 280px;
+        height: 50px;
+        background-color: #2196F3;
+        color: white;
+        padding: 14px 20px;
+        margin: 0px 10px 8px 10px;
+        border: 2px solid #FFFFFF; 
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .user-gesture-button:hover {
+        background-color: rgb(123, 196, 255);
+    }
 
-/*rest of form*/
-.user-gesture-button {
-    display:none;
-    width: 280px;
-    height: 50px;
-    background-color: #2196F3;
-    color: white;
-    padding: 14px 20px;
-    margin: 0px 10px 8px 10px;
-    border: 2px solid #FFFFFF; 
-    border-radius: 20px;
-    cursor: pointer;
-}
-.user-gesture-button:hover {
-    background-color: rgb(123, 196, 255);
-}
+    #wardrobe-enter {
+        background-color: #f3aa21;
+    }
 
-#wardrobe-enter {
-    background-color: #f3aa21;
-}
+    #ui_wrapper {
+        display: none;
+        z-index: 99;
+        position: absolute;
+        left:20px;
+        bottom:20px;
+    }
 
-#ui_wrapper {
-    display: none;
-    z-index: 99;
-    position: absolute;
-    left:20px;
-    bottom:20px;
-}
+    #button_microphone {
+        display: block;
+        width: 50px;
+        height: 50px;
+        background-color: #2196F3;
+        background-image: url("/global/images/microphone_off.png");
+        background-repeat:no-repeat;
+        background-size:contain;
+        color: white;
+        margin: 10px 10px 10px 10px;
+        border: 2px solid #FFFFFF; 
+        border-radius: 15px;
+        cursor: pointer;
+    }
+    #button_microphone:hover {
+        background-color: rgb(123, 196, 255);
+    }
 
-#button_microphone {
-    display: block;
-    width: 50px;
-    height: 50px;
-    background-color: #2196F3;
-    background-image: url("/global/images/microphone_off.png");
-    background-repeat:no-repeat;
-    background-size:contain;
-    color: white;
-    margin: 10px 10px 10px 10px;
-    border: 2px solid #FFFFFF; 
-    border-radius: 15px;
-    cursor: pointer;
-}
-#button_microphone:hover {
-    background-color: rgb(123, 196, 255);
-}
+    #loading-animation-enter {
+        display:block;
+        width:50px;
+        height:50px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+        
+    /* Home Button *******************************************************************************************************************************************/
 
-#loading-animation-enter {
-    display:block;
-    width:50px;
-    height:50px;
-    margin-left: auto;
-    margin-right: auto;
-}
+    #home-ui-container {
+        z-index: 100;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 2% 0 0 2%;
+    }
 
-/* Home Button *******************************************************************************************************************************************/
+    #home-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 65px;
+        height: 65px;
+        background-color: #ffffff8a;
+        border-radius: 100px;
+    }
 
-#home-ui-container {
-    z-index: 100;
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 2% 0 0 2%;
-}
+    #home-container i {
+        user-select: none;
+        color: #000000;
+        font-size: 24px;
+    }
 
-#home-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 65px;
-    height: 65px;
-    background-color: #ffffff8a;
-    border-radius: 100px;
-}
+    #home-container:hover {
+        cursor: pointer;
+    }
 
-#home-container i {
-    user-select: none;
-    color: #000000;
-    font-size: 24px;
-}
+    #home-container:hover i {
+        font-size: 26px;
+    }
 
-#home-container:hover {
-    cursor: pointer;
-}
+    /* Whiteboard Insert File UI (circles-upload-whiteboard-ui) *********************************************************************************************************/
 
-#home-container:hover i {
-    font-size: 26px;
-}
+    #upload-content-container {
+        display: none;
+        z-index: 99;
+        width: 80%;
+        height: 90%;
+        box-sizing: border-box;
+        padding: 30px 50px;
+        flex-direction: column;
+    }
 
-/* Whiteboard Insert File UI (circles-upload-ui) *********************************************************************************************************/
+    #upload-content-container h2 {
+        font-weight: 300;
+        font-size: 28px;
+        text-transform: uppercase;
+        display: inline-block;
+    }
 
-#upload-content-container {
-    display: none;
-    z-index: 99;
-    width: 80%;
-    height: 90%;
-    box-sizing: border-box;
-    padding: 30px 50px;
-    flex-direction: column;
-}
+    #upload-content-container hr {
+        border-top: 1px solid #000;
+        margin-bottom: 0;
+        width: 100%;
+    }
 
-#upload-content-container h2 {
-    font-weight: 300;
-    font-size: 28px;
-    text-transform: uppercase;
-    display: inline-block;
-}
+    .close-upload {
+        position: absolute;
+        display: inline-block;
+        top: 70px;
+        right: 65px;
+        color:black;
+    }
 
-#upload-content-container hr {
-    border-top: 1px solid #000;
-    margin-bottom: 0;
-    width: 100%;
-}
+    .close-upload:hover {
+        color:red;
+        cursor: pointer;
+    }
 
-.close-upload {
-    position: absolute;
-    display: inline-block;
-    top: 70px;
-    right: 65px;
-    color:black;
-}
+    #file-container {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: 35px;
+        row-gap: 35px;
+        margin-top: 35px;
+        overflow-y: auto;
+    }
 
-.close-upload:hover {
-    color:red;
-    cursor: pointer;
-}
+    .file {
+        position: relative;
+    }
 
-#file-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    column-gap: 35px;
-    row-gap: 35px;
-    margin-top: 35px;
-    overflow-y: auto;
-}
+    .file:hover {
+        border: 3px solid #5aafff;
+        box-shadow: 0 0 15px #0078e7;
+        cursor: pointer;
+    }
 
-.file {
-    position: relative;
-}
+    .file-selected {
+        border:3px solid #5aafff;
+        box-shadow: 0 0 15px #0078e7;
+    }
 
-.file:hover {
-    border: 3px solid #5aafff;
-    box-shadow: 0 0 15px #0078e7;
-    cursor: pointer;
-}
+    #file-container .file img, #file-container .file video {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
 
-.file-selected {
-    border:3px solid #5aafff;
-    box-shadow: 0 0 15px #0078e7;
-}
+    .video-symbol-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #ffffffb6;
+    }
 
-#file-container .file img, #file-container .file video {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-}
+    .video-symbol-overlay i {
+        font-size: 35px;
+    }
 
-.video-symbol-overlay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #ffffffb6;
-}
+    .other-file {
+        display: grid;
+        grid-template-rows: repeat(2, 1fr);
+        background-color: #ededed;
+        overflow: hidden;
+    }
 
-.video-symbol-overlay i {
-    font-size: 35px;
-}
+    .other-file .icon-container {
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
 
-.other-file {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    background-color: #ededed;
-}
+    .other-file .icon-container i {
+        font-size: 35px;
+    }
 
-.other-file .icon-container {
-    display: flex;
-    align-items: end;
-    justify-content: center;
-    margin-bottom: 10px;
-}
+    .other-file .file-name-container {
+        display: flex;
+        align-items: start;
+        justify-content: center;
+    }
 
-.other-file .icon-container i {
-    font-size: 35px;
-}
+    .other-file .file-name-container p {
+        display: inline-block;
+        font-size: 14px;
+    }
 
-.other-file .file-name-container {
-    display: flex;
-    align-items: start;
-    justify-content: center;
-}
+    .error-message {
+        text-align: center;
+        line-height: 25px;
+        margin-top: 60px;
+    }
 
-.other-file .file-name-container p {
-    display: inline-block;
-    font-size: 14px;
-}
+    .error-message a {
+        text-decoration: none;
+        color: #0f68bb;
+        cursor: pointer;
+    }
 
-.error-message {
-    text-align: center;
-    line-height: 25px;
-    margin-top: 60px;
-}
+    .error-message a::after {
+        font: var(--fa-font-solid);
+        content: '\f105';
+        font-size: 12px;
+        margin-left: 2px;
+        margin-right: 3px;
+    }
 
-.error-message a {
-    text-decoration: none;
-    color: #0f68bb;
-    cursor: pointer;
-}
+    .error-message a:hover::after {
+        content: '\f061';
+        font-size: 12px;
+        margin-left: 5px;
+        margin-right: 3px
+    }
 
-.error-message a::after {
-    font: var(--fa-font-solid);
-    content: '\f105';
-    font-size: 12px;
-    margin-left: 2px;
-    margin-right: 3px;
-}
+    .button-container {
+        display: flex;
+        flex: 1;
+        align-items: end;
+        justify-content: end;
+    }
 
-.error-message a:hover::after {
-    content: '\f061';
-    font-size: 12px;
-    margin-left: 5px;
-    margin-right: 3px
-}
+    #insert-button {
+        display: inline-block;
+        width: auto;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        font-size: 17px;
+        border: none;
+        border-collapse: collapse;
+        text-align: center;
+        padding: 0 30px;
+        line-height: 45px;
+        border-radius: 6px;
+        color: #fff;
+    }
 
-.button-container {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-}
+    .button-active {
+        background-color: #0f68bb;
+    }
 
-#insert-button {
-    display: inline-block;
-    width: auto;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    font-size: 17px;
-    border: none;
-    border-collapse: collapse;
-    text-align: center;
-    padding: 0 30px;
-    line-height: 45px;
-    border-radius: 6px;
-    color: #fff;
-}
+    .button-active:hover {
+        background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+        cursor:pointer
+    }
 
-.button-active {
-    background-color: #0f68bb;
-}
+    .button-inactive {
+        background-color:#b8b8b8;
+    }
 
-.button-active:hover {
-    background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
-    cursor:pointer
-}
+    .button-inactive:hover {
+        cursor: not-allowed;
+    }
 
-.button-inactive {
-    background-color:#b8b8b8;
-}
+    /* Arrow UI (circles-drag-object) ************************************************************************************************************************/
 
-.button-inactive:hover {
-    cursor: not-allowed;
-}
+    #arrow-ui-container {
+        z-index: 99;
+        position: absolute;
+        width: 250px;
+        right: 0;
+        bottom: 0;
+        padding: 0 3% 3% 0;
+    }
 
-/* Arrow UI (circles-drag-object) ************************************************************************************************************************/
+    #arrow-container {
+        display: inline-block;
+        width: 190px;
+        background-color: #ffffff8a;
+        border-radius: 50px;
+        padding: 30px;
+    }
 
-#arrow-ui-container {
-    z-index: 99;
-    position: absolute;
-    width: 250px;
-    right: 0;
-    bottom: 0;
-    padding: 0 3% 3% 0;
-}
+    .vertical-arrow {
+        text-align: center;
+    }
 
-#arrow-container {
-    display: inline-block;
-    width: 190px;
-    background-color: #ffffff8a;
-    border-radius: 50px;
-    padding: 30px;
-}
+    /* The clearfix Hack: https://www.w3schools.com/css/css_align.asp */
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
 
-.vertical-arrow {
-    text-align: center;
-}
+    .horizontal-left-arrow {
+        float: left;
+    }
 
-/* The clearfix Hack: https://www.w3schools.com/css/css_align.asp */
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-}
+    .horizontal-right-arrow {
+        float: right;
+    }
 
-.horizontal-left-arrow {
-    float: left;
-}
+    .vertical-arrow i, .horizontal-left-arrow i, .horizontal-right-arrow i {
+        font-size: 60px;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        color:#000000bd;
+    }
 
-.horizontal-right-arrow {
-    float: right;
-}
-
-.vertical-arrow i, .horizontal-left-arrow i, .horizontal-right-arrow i {
-    font-size: 60px;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color:#000000bd;
-}
-
-.vertical-arrow i:hover, .horizontal-left-arrow i:hover, .horizontal-right-arrow i:hover {
-    color:#000000;
-    cursor: pointer;
+    .vertical-arrow i:hover, .horizontal-left-arrow i:hover, .horizontal-right-arrow i:hover {
+        color:#000000;
+        cursor: pointer;
+    }
 }

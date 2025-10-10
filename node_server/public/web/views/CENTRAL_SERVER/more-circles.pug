@@ -1,0 +1,139 @@
+extends ../template.pug
+
+block append scripts
+    script(src='/web/js/views/CENTRAL_SERVER/more-circles.js')
+
+block content
+
+    // Variables -----------------------------------------------------------------------------------------------------------------------------------
+    if userInfo
+        - var adminUser = CIRCLES.USER_CATEGORIES.ADMIN_USERS.includes(userInfo.usertype);
+
+    - var circleServer;
+    - var circle;
+
+    // Mixins --------------------------------------------------------------------------------------------------------------------------------------
+    mixin circlesServer(server)
+
+        h3.circles-name #{server.ownerName}'s Circles 
+            span 
+                h3.inactive-text (INACTIVE)
+
+        b.description-title Description 
+
+        .description 
+            if server.description
+                p= server.description 
+            else 
+                p No description avaliable
+
+            .link-button 
+                a(href=server.link target='_blank') Check It Out 
+
+        b.circles-title Circles:
+
+        .server-circles 
+            ul
+                for circle of server.worlds
+                    div
+                        li= circle 
+
+        if adminUser
+
+            .server-buttons 
+
+                .deactivate-button
+                    a(onclick='deactivateServer("server-' + server._id + '", "' + server._id + '")') Deactivate
+
+                .activate-button
+                    a(onclick='activateServer("server-' + server._id + '", "' + server._id + '")') Activate 
+
+                .delete-button
+                    a(onclick='deleteServerConfirmation("server-' + server._id + '")') Delete
+
+        .delete-confirmation-container
+
+            p.message Delete this server?
+
+            .delete-buttons  
+                .delete-button
+                    a(onclick='deleteServer("' + server._id + '")') Delete
+
+                .cancel-button
+                    a(onclick='closeDeleteConfirmation("server-' + server._id + '")') Cancel
+
+        hr
+
+    // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
+
+        // Add New Servers ------------------------------------------------------------------
+        if adminUser
+            section#add-new-server-container 
+                .content-container 
+
+                    h2 Add New Server
+
+                    if errorMessage 
+                        p.error-message= errorMessage
+
+                    if successMessage 
+                        p.success-message= successMessage
+
+                    form#add-server-form(action='/add-server' method='post')
+                        
+                        .server-info
+                            .form-field 
+                                label.required-form-label Owner's name 
+                                input(type='text' name='ownerName' placeholder='John Doe' required)
+
+                            .form-field.textarea-field
+                                label.required-form-label Description 
+                                textarea(name='description' placeholder='This server features ...' required)
+
+                            .form-field 
+                                label.required-form-label Link to Server
+                                input(type='url' name='link' pattern="https?://+.+\\.+.+" placeholder='https://circles.com' required)
+                        
+                            .form-field.last-field.indented-field
+                                input(type='submit' value='Add Server')
+
+                        .circles-field-container
+                            label.required-form-label Circles
+
+                            .circles-field
+                                input(type='text' name='circles' placeholder='Classroom' required)
+
+                                .icon-container.add-circle-icon
+                                    i(class='fa-solid fa-square-plus' onclick="addCircleInput(this)")
+                            
+                    hr
+
+        // More Circles ---------------------------------------------------------------------
+        section#more-circles-container 
+            .content-container 
+
+                b.intro-message Take a look at the other Circles out there and what they have been working on!
+
+                if circleServers.length > 0
+                    
+                    for circleServer of circleServers
+                        if circleServer.active
+                            .server(id='server-' + circleServer._id)
+                                +circlesServer(circleServer)
+                        else 
+                            .server.inactive-server(id='server-' + circleServer._id)
+                                +circlesServer(circleServer)
+
+                else
+
+                    .server-error-messages
+                    
+                        if serverErrorMessage 
+                            p.error-message=serverErrorMessage
+                            p.error-message=secondaryMessage
+
+                        else 
+                            p Oops, no other Circles servers are available right now...
+                        
+    include ../includes/footer.pug

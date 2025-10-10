@@ -24,13 +24,16 @@ $CONTRAST_COLOR: #E85D75;
 $RED: #cb0000;
 $HOVER_RED: #ae0000;
 $DISABLED_RED: #e3b1b1;
+$LIGHT_RED: #EFDCDC;
 $GREEN: #008000;
 $DISABLED_GREEN: #99d599;
-$LIGHT_GREEN: #e3f1e3;
+$LIGHT_GREEN: #EBF5EB;
+$YELLOW: #ffb700;
+$ORANGE: #ff7300;
 
 // Dimensions
 $MAX_CONTENT_WIDTH: 1200px;
-$DEFAULT_NAV_HEIGHT: 60px;
+$DEFAULT_NAV_HEIGHT:70px;
 $TABLET_NAV_HEIGHT: 55px;
 $MOBILE_NAV_HEIGHT: 58px;
 
@@ -38,11 +41,14 @@ $MOBILE_NAV_HEIGHT: 58px;
 $NAVIGATION_MARGIN: 60px;
 $SECTION_MARGIN: 80px;
 $SECTION_PADDING: 30px;
+$XX_SMALL_MARGIN: 5px;
 $X_SMALL_MARGIN: 10px;
 $SMALL_MARGIN: 15px;
 $MEDIUM_MARGIN: 25px;
 $LARGE_MARGIN: 40px;
 $X_LARGE_MARGIN: 50px;
+$XX_LARGE_MARGIN: 60px;
+$XXX_LARGE_MARGIN: 70px;
 
 $BORDER_RADIUS: 6px;
 
@@ -52,6 +58,8 @@ $FORM_ACTIVE_BORDER: 2px solid $BLUE;
 $FORM_HEIGHT: 45px;
 
 // Icons
+$DEFAULT_XXX_LARGE_ICON: 60px;
+$DEFAULT_XX_LARGE_ICON: 45px;
 $DEFAULT_X_LARGE_ICON: 35px;
 $DEFAULT_LARGE_ICON: 25px;
 $MOBILE_LARGE_ICON: 22.5px;
@@ -426,6 +434,63 @@ $SMALL_ICON: 14px;
 
         a:active {
             @include icon-highlight-hover($hover-colour);
+        }
+    }
+}
+
+// Icon button grow
+@mixin icon-grow-regular($font-size, $colour) {
+    color: $colour;
+    font-size: $font-size;
+}
+
+@mixin icon-grow-hover($font-size, $grow-by, $right-grow) {
+    font-size: $font-size + $grow-by;
+
+    @if $right-grow {
+        margin-right: -2.5px;
+    }
+    @else {
+        margin-left: -2.5px;
+    }
+
+    cursor: pointer;
+}
+
+@mixin icon-grow($font-size, $right-grow: true, $grow-by: 5px, $colour: $BLACK) {
+    i {
+        @include icon-grow-regular($font-size, $colour);
+    }
+
+    i:hover {
+        @include icon-grow-hover($font-size, $grow-by, $right-grow);
+    }
+
+    a {
+        @include icon-grow-regular($font-size, $colour);
+    }
+
+    a:hover {
+        @include icon-grow-hover($font-size, $grow-by, $right-grow);
+    }
+
+    // Tablet and mobile buttons have no hover state, only active
+    @media only screen and (max-width: $TABLET_BREAK) 
+    {
+        i:hover {
+            @include icon-grow-regular($font-size, $colour);
+        }
+
+        i:active {
+            @include icon-grow-hover($font-size, $grow-by, $right-grow);
+        }
+
+        a:hover {
+            @include icon-grow-regular($font-size, $colour);
+        }
+
+        a:active {
+            @include icon-grow-hover($font-size, $grow-by, $right-grow);
         }
     }
 }

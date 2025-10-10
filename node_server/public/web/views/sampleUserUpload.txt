@@ -1,6 +1,6 @@
-sampleAdmin,Admin
-sampleTeacher,Teacher
-sampleResearcher,Researcher
-sampleStudent,Student
-sampleParticipant,Participant
-sampleTester,Tester
+sampleAdmin,admin@uni-vr-sity.ca,Admin
+sampleTeacher,teacher@uni-vr-sity.ca,Teacher
+sampleResearcher,researcher@uni-vr-sity.ca,Researcher
+sampleStudent,student@uni-vr-sity.ca,Student
+sampleParticipant,participant@uni-vr-sity.ca,Participant
+sampleTester,tester@uni-vr-sity.ca,Tester

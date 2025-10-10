@@ -7,10 +7,20 @@ AFRAME.registerComponent('circles-button', {
     button_color_hover: {type:'color', default:'rgb(255, 0, 0)'},
     pedastal_color:     {type:'color', default:'rgb(255, 255, 255)'},
     diameter:           {type:'number', default:0.5},
-    pedastal_visible:   {type:'boolean', default:true}
+    pedastal_visible:   {type:'boolean', default:true},
+    click_on_event:     {type:'string', default:''},
+    click_on_event_details:     {type:'string', default:''}, // Ex. "key":"value",
+    click_off_event:    {type:'string', default:''},
+    click_off_event_details:     {type:'string', default:''}, // Ex. "key":"value",
+    target:             {type:'string', default:''},
   },
   init: function () {
     const CONTEXT_AF = this;
+    const data = this.data;
+
+    this.clickEvent = this.clickEvent.bind(this);
+
+    CONTEXT_AF.on = false;
 
     //add classes
     if (!CONTEXT_AF.el.classList.contains('circles-button')) {
@@ -36,6 +46,12 @@ AFRAME.registerComponent('circles-button', {
     CONTEXT_AF.button_pedastal.setAttribute('geometry', {primitive:'box', width:0.5, depth:0.5, height:0.6});
     CONTEXT_AF.button_pedastal.setAttribute('material', {color:'rgb(255,255,255)'});
     CONTEXT_AF.el.appendChild(CONTEXT_AF.button_pedastal);
+
+    //if there is a click on event, adding event listener
+    if (data.target)
+    {
+      CONTEXT_AF.el.addEventListener('click', CONTEXT_AF.clickEvent);
+    }
   },
   update : function(oldData) {
     const CONTEXT_AF = this;
@@ -75,6 +91,44 @@ AFRAME.registerComponent('circles-button', {
 
     if ( (oldData.pedastal_visible !== data.pedastal_visible) && (data.pedastal_visible !== '') ) {
       CONTEXT_AF.button_pedastal.setAttribute('visible', data.pedastal_visible);
+    }
+
+    if (oldData.target !== data.target)
+    {
+      CONTEXT_AF.el.removeEventListener('click', CONTEXT_AF.clickEvent);
+
+      if (data.target)
+      {
+        CONTEXT_AF.el.addEventListener('click', CONTEXT_AF.clickEvent);
+      }
+    }
+  },
+  clickEvent : function()
+  {
+    const CONTEXT_AF = this;
+    const data = this.data;
+
+    const targetElement = document.querySelector(data.target);
+
+    if (targetElement)
+    {
+      if (CONTEXT_AF.on)
+      {
+        if (data.click_off_event)
+        {
+          targetElement.emit(data.click_off_event, JSON.parse("{" + data.click_off_event_details + "}"), false);
+        }
+        else
+        {
+          targetElement.emit(data.click_on_event, JSON.parse("{" + data.click_on_event_details + "}"), false);
+        }
+      }
+      else
+      {
+        targetElement.emit(data.click_on_event, JSON.parse("{" + data.click_on_event_details + "}"), false);
+      }
+  
+      CONTEXT_AF.on = !CONTEXT_AF.on;
     }
   }
 });

@@ -4,6 +4,7 @@
 const mongoose = require('mongoose');
 
 const fs       = require('fs');
+const path     = require('path');
 
 const CircleSchema = new mongoose.Schema({
     name: {
@@ -18,12 +19,44 @@ const CircleSchema = new mongoose.Schema({
       required:   true,
       trim:       true
     },
+    credit: {
+      type:       String,
+      unique:     false,
+      required:   false,
+      trim:       true,
+    },
+    description: {
+      type:       String,
+      unique:     false,
+      required:   false,
+      trim:       true,
+    },
+    extraInfo: [{
+      title: {
+        type:       String,
+        unique:     false,
+        required:   false,
+        trim:       true,
+      },
+      description: {
+        type:       String,
+        unique:     false,
+        required:   false,
+        trim:       true
+      },
+    }],
     url: {
       type:       String,
       unique:     false,
       required:   true,
       trim:       true
     },
+    contact: [{
+      type:       String,
+      unique:     false,
+      required:   false,
+      trim:       true,
+    }],
     hasProfileImage: {
       type:       Boolean,
       unique:     false,
@@ -93,177 +126,256 @@ const CircleSchema = new mongoose.Schema({
 
 const Circles = mongoose.model('circles', CircleSchema);
 
-// Adding circles from public/worlds to the database
-const addCircles = async function()
+const worldDirs = [
+  path.join(__dirname, '../../src/worlds/'),
+  path.join(__dirname, '../../../worlds/')
+];
+
+// ------------------------------------------------------------------------------------------
+
+// Adding circle settings to circle data
+const addCircleSettings = function(possibleSettings, circleSettings, circleData)
 {
-  // Getting all world folders under public/worlds
-  var files = null;
-  try
+  // Going through all possible settings
+  for (const setting of possibleSettings)
   {
-    files = await fs.promises.readdir(__dirname + '/../public/worlds/');
-  }
-  catch (e) 
-  {
-    console.log(e.message);
-  }
-
-  if (files)
-  {
-    for (const file of files) 
+    // If the circle has the setting, storing its value
+    if (circleSettings.hasOwnProperty(setting.name))
     {
-      // Skipping over Wardrobe world as everyone has access to it
-      if (file != 'Wardrobe')
+      circleData[setting.circleName] = circleSettings[setting.name];
+    }
+  }
+
+  return circleData;
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Updating circle settings in circle
+const updateCircleSettings = function(possibleSettings, circleSettings, circle)
+{
+  // Going through all possible settings
+  for (const setting of possibleSettings)
+  {
+    // Checking if circle has the setting
+    if (circleSettings.hasOwnProperty(setting.name))
+    {
+      // If the setting has changed, saving the new value
+      if (setting.type == "string")
       {
-        const path = __dirname + '/../public/worlds/' + file;
-
-        var stat = null;
-
-        // Checking if path is a directory
-        try
+        if (circle[setting.circleName] !== circleSettings[setting.name])
         {
-          stat = await fs.promises.stat(path);
+          circle[setting.circleName] = circleSettings[setting.name];
         }
-        catch (e)
+      }
+      else if (setting.type == "array")
+      {
+        if (JSON.stringify(circle[setting.circleName]) !== JSON.stringify(circleSettings[setting.name]))
         {
-          console.log(e.message);
+          circle[setting.circleName] = circleSettings[setting.name];
         }
-
-        // If path is a directory,
-        // If the circle is not already in the database, add it
-        // If it is, check that the settings are still the name (if something changed, update it)
-        if (stat.isDirectory())
-        {
-          var circle = null;
-
-          try
-          {
-            circle = await Circles.findOne({ name: file }).exec();
-          }
-          catch (e)
-          {
-            console.log(e.message);
-          }
-
-          // Getting settings folder
-          var displayName;
-
-          try
-          {
-            var settings = JSON.parse(fs.readFileSync(path + '/settings.JSON', 'utf8'));
-            
-            if (settings.world.name)
-            {
-              displayName = settings.world.name;
-            }
-            else
-            {
-              displayName = file;
-            }
-          }
-          catch(e)
-          {
-            displayName = file;
-          }
-
-          // Checking if world has profile image
-          var hasProfileImage;
-
-          try
-          {
-            fs.readFileSync(path + '/profile.jpg', 'utf8');
-            hasProfileImage = true;
-          }
-          catch(e)
-          {
-            hasProfileImage = false;
-          }
-
-          if (circle === null)
-          {
-            const circleData = {
-              name: file,
-              displayName: displayName,
-              url: path,
-              hasProfileImage: hasProfileImage,
-            };
-
-            try 
-            {
-              await Circles.create(circleData);
-              console.log(file + ' added to database');
-            } 
-            catch(err) 
-            {
-              throw file + " creation error: " + err.message;
-            }
-          }
-          else
-          {
-            if (circle.displayName !== displayName)
-            {
-              circle.displayName = displayName;
-              await circle.save();
-            }
-
-            if (circle.hasProfileImage !== hasProfileImage)
-            {
-              circle.hasProfileImage = hasProfileImage;
-              await circle.save();
-            }
-          }
-        }
+      }
+    }
+    // Resetting value in case setting was removed
+    else
+    {
+      if (setting.type == "string")
+      {
+        circle[setting.circleName] = null;
+      }
+      else if (setting.type == "array")
+      {
+        circle[setting.circleName] = [];
       }
     }
   }
 }
+
+// ------------------------------------------------------------------------------------------
+
+// Resetting circle setting in circle
+const resetCircleSettings = function(possibleSettings, circle)
+{
+  // Going through all possible settings and resetting them
+  for (const setting of possibleSettings)
+  {
+    if (setting.type == "string")
+    {
+      circle[setting.circleName] = null;
+    }
+    else if (setting.type == "array")
+    {
+      circle[setting.circleName] = [];
+    }
+  }
+}
+
+// ------------------------------------------------------------------------------------------
+
+// Adding circles from public/worlds to the database
+const addCircles = async function()
+{
+  const possibleWorldSettings = [
+    { name: 'credit', type: 'string', circleName: 'credit' },
+    { name: 'description', type: 'string', circleName: 'description' },
+    { name: 'extraInfo', type: 'array', circleName: 'extraInfo' },
+    { name: 'contact', type: 'array', circleName: 'contact' },
+  ];
+
+  // To avoid processing duplicates
+  const processedFolders = new Set();
+
+  for (const worldDir of worldDirs)
+  {
+    let folders = null;
+
+    try {
+      folders = await fs.promises.readdir(worldDir);
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        console.warn(`Directory not found, skipping: ${worldDir}`);
+      } else {
+        console.error(`Error reading directory ${worldDir}:`, e);
+      }
+      continue;
+    }
+
+    for (const folder of folders)
+    {
+      if (folder === 'Wardrobe' || processedFolders.has(folder)) continue;
+
+      const fullPath = path.join(worldDir, folder);
+
+      let stat;
+      try {
+        stat = await fs.promises.stat(fullPath);
+      } catch (e) {
+        console.log(`Error stating folder ${fullPath}: ${e.message}`);
+        continue;
+      }
+
+      if (!stat.isDirectory()) continue;
+
+      processedFolders.add(folder);  // Avoid reprocessing this folder if it's found in both locations
+
+      // Try to find existing circle in DB
+      let circle = null;
+      try {
+        circle = await Circles.findOne({ name: folder }).exec();
+      } catch (e) {
+        console.log(`Error querying DB for ${folder}: ${e.message}`);
+      }
+
+      // Read settings.JSON
+      let circleSettings;
+      try {
+        circleSettings = JSON.parse(fs.readFileSync(path.join(fullPath, 'settings.JSON'), 'utf8'));
+      } catch (e) {
+        circleSettings = null;
+      }
+
+      let displayName = folder;
+      if (circleSettings?.world?.name) {
+        displayName = circleSettings.world.name;
+      }
+
+      let hasProfileImage;
+      try {
+        fs.readFileSync(path.join(fullPath, 'profile.jpg'));
+        hasProfileImage = true;
+      } catch (e) {
+        hasProfileImage = false;
+      }
+
+      if (circle === null)
+      {
+        let circleData = {
+          name: folder,
+          displayName: displayName,
+          url: fullPath,
+          hasProfileImage: hasProfileImage,
+        };
+
+        if (circleSettings?.world)
+        {
+          circleData = addCircleSettings(possibleWorldSettings, circleSettings.world, circleData);
+        }
+
+        try {
+          await Circles.create(circleData);
+          console.log(`${folder} added to database`);
+        } catch (err) {
+          throw `${folder} creation error: ${err.message}`;
+        }
+      }
+      else
+      {
+        // Update existing circle
+        if (circle.displayName !== displayName)
+          circle.displayName = displayName;
+
+        if (circle.hasProfileImage !== hasProfileImage)
+          circle.hasProfileImage = hasProfileImage;
+
+        if (circleSettings?.world)
+        {
+          updateCircleSettings(possibleWorldSettings, circleSettings.world, circle);
+        }
+        else
+        {
+          resetCircleSettings(possibleWorldSettings, circle);
+        }
+
+        await circle.save();
+      }
+    }
+  }
+}
+
+
+// ------------------------------------------------------------------------------------------
 
 // Removing all circles that are in the database but not in public/worlds
 const removeDeletedCircles = async function()
 {
-  // Getting all worlds in the database
-  var databaseWorlds = [];
-
-  try
-  {
+  let databaseWorlds = [];
+  try {
     databaseWorlds = await Circles.find({});
-  }
-  catch (e)
-  {
-    console.log(e.message);
-  }
-
-  // Getting all worlds in public/worlds
-  var serverWorlds = [];
-
-  try
-  {
-    serverWorlds = await fs.promises.readdir(__dirname + '/../public/worlds/');
-  }
-  catch (e) 
-  {
-    console.log(e.message);
+  } catch (e) {
+    console.error('Error loading worlds from DB:', e.message);
+    return;
   }
 
-  // Comparing the worlds in the database to the worlds in public/worlds
-  // If a world in the database is not in public/worlds, delete it
-  for (var i = 0; i < databaseWorlds.length; i++)
-  {
-    var circle = databaseWorlds[i];
+  // Use a Set for fast and clean existence checks
+  const serverWorlds = new Set();
 
-    if (!serverWorlds.includes(circle.name))
-    {
-      try
-      {
-        console.log('deleting ' + circle.name);
-        await Circles.deleteOne({name: circle.name});
+  for (const worldDir of worldDirs) {
+    try {
+      const folders = await fs.promises.readdir(worldDir);
+      folders.forEach(folder => serverWorlds.add(folder));
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        console.warn(`Directory not found, skipping: ${worldDir}`);
+      } else {
+        console.error(`Error reading directory ${worldDir}:`, e);
       }
-      catch (e) 
-      {
-        console.log(e.message);
+    }
+  }
+
+  // Compare database entries to actual folders and delete missing ones
+  for (const circle of databaseWorlds) {
+    if (!serverWorlds.has(circle.name)) {
+      try {
+        console.log('Deleting circle from DB:', circle.name);
+        await Circles.deleteOne({ name: circle.name });
+      } catch (e) {
+        console.error(`Error deleting ${circle.name}:`, e.message);
       }
     }
   }
 }
+
+// ------------------------------------------------------------------------------------------
 
 // Checking that all whiteboard files are in the folder
 const checkWhiteboardFiles = async function()
@@ -319,6 +431,8 @@ const checkWhiteboardFiles = async function()
     }
   }
 }
+
+// ------------------------------------------------------------------------------------------
 
 // Calling functions one by one (errors occur if async functions run together)
 const execute = async function()

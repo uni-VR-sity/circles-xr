@@ -102,22 +102,25 @@ block content
             hr
 
     // Webpage -------------------------------------------------------------------------------------------------------------------------------------
+    main 
 
-    // Title --------------------------------------------------------------------------------
-    section#magic-links-title-container.title-container
-        .content-container
-            h1 Your Magic Links 
-            
-            hr
+        // Title ----------------------------------------------------------------------------
+        section#magic-links-title-container.title-container
+            .content-container
+                h1 Your Magic Links 
+                
+                hr
 
-    // Magic Links --------------------------------------------------------------------------
-    section#magic-links-container 
-        .content-container 
+        // Magic Links ----------------------------------------------------------------------
+        section#magic-links-container 
+            .content-container 
 
-            if magicLinks.length > 0
+                if magicLinks.length > 0
 
-                for link of magicLinks 
-                    +magicLink(link)
-            
-            else 
-                p.no-links-message You have no magic links
+                    for link of magicLinks 
+                        +magicLink(link)
+                
+                else 
+                    p.no-links-message You have no magic links
+
+    include includes/footer.pug

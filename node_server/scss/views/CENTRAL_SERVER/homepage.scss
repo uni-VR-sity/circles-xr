@@ -1,0 +1,270 @@
+// Banner ------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#homepage-banner-container {
+    height: 600px;
+    margin-top: calc(-1 * $NAVIGATION_MARGIN);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("/web/images/CU-campus.png");
+    background-size: cover;
+    background-position: 50% 20%;
+    display: grid;
+    grid-template-rows: 7fr 1fr;
+    color: $WHITE;
+
+    #homepage-title {
+
+        .content-container {
+            width: $MAX_CONTENT_WIDTH;
+            margin-top: $LARGE_MARGIN * 2;
+            
+            img {
+                align-self: end;
+                width: 50%;
+                margin-bottom: $LARGE_MARGIN;
+            }
+    
+            p {
+                font-size: 22px;
+            }
+        }
+    }
+
+    #homepage-navigation-container {
+        background-color: rgba(0, 0, 0, 0.50);
+        align-self: end;
+
+        .top-bar-tabs {
+            grid-template-columns: repeat(5, 1fr);
+            background-color: transparent;
+
+            a {
+                color: $WHITE;
+            }
+
+            .tab:not(.selected-tab):hover
+            {
+                background-color: $BLACK;
+            }
+        }
+    }
+}
+
+// About -------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#About {
+
+    .content-container {
+
+        h1 {
+            text-align: center;
+            margin-bottom: $X_LARGE_MARGIN;
+        }
+
+        #about-description {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: $XX_LARGE_MARGIN;
+            align-items: center;
+            margin-bottom: $X_LARGE_MARGIN;
+
+            #video-container {
+                position: relative; 
+                padding-bottom: 56%; 
+                height: 0; 
+                overflow: hidden; 
+                max-width: 100%;
+
+                iframe, object, embed {
+                    position: absolute; 
+                    top: 0; 
+                    left: 0; 
+                    width: 100%; 
+                    height: 100%;
+                }
+            }
+        }
+
+        #logos-container {
+            @include center-flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            a {
+                width: 45%;
+                justify-self: center;
+
+                img {
+                    width: 100%;
+                }
+
+                #iMG-logo {
+                    width: 80%;
+                }
+            }
+        }
+    }
+}
+
+// Showroom ----------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#Showroom {
+    background-color: $LIGHT_GREY;
+    margin-top: $XX_LARGE_MARGIN;
+    padding: $XX_LARGE_MARGIN 0;
+
+    .content-container {
+
+        h1 {
+            text-align: center;
+            margin-bottom: $X_LARGE_MARGIN;
+        }
+    }
+}
+
+// Development -------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#Development {
+    
+    .content-container {
+
+        #development-description-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: $SMALL_MARGIN;
+            align-items: center;
+            //margin-bottom: $XXX_LARGE_MARGIN;
+
+            #video-container {
+                position: relative; 
+                padding-bottom: 45%; 
+                height: 0; 
+                overflow: hidden; 
+                max-width: 100%;
+
+                iframe, object, embed {
+                    position: absolute; 
+                    top: 0; 
+                    left: 0; 
+                    width: 100%; 
+                    height: 100%;
+                }
+            }
+        }
+
+        #development-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            justify-items: center;
+            margin: 0 $X_LARGE_MARGIN;
+
+            .icon-container {
+                @include center-flex;
+                margin-bottom: $SMALL_MARGIN;
+
+                i {
+                    font-size: $DEFAULT_XXX_LARGE_ICON;
+                }
+            }
+
+            p, a {
+                text-align: center;
+                color: $BLACK;
+            }
+        }
+    }
+}
+
+// News --------------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#News {
+    padding-top: $XXX_LARGE_MARGIN;
+
+    .content-container {
+
+        #news-years-container {
+            margin-bottom: $MEDIUM_MARGIN;
+
+            .news-year {
+                @include secondary-button;
+                display: inline-block;
+                margin-right: $MEDIUM_MARGIN;
+            }
+
+            .selected-news-year {
+                @include primary-button;
+            }
+        }
+
+        #news-articles-container {
+            
+            .news-article {
+                grid-template-columns: 1fr 5fr;
+                grid-gap: $LARGE_MARGIN;
+                background-color: $LIGHT_GREY;
+                padding: $LARGE_MARGIN;
+                margin-bottom: $MEDIUM_MARGIN;
+
+                img {
+                    width: 100%;
+                    border-radius: $BORDER_RADIUS;
+                }
+
+                .article-description {
+                    align-self: center;
+                    
+                    h2 {
+                        margin-bottom: $X_SMALL_MARGIN;
+                    }
+
+                    h3 {
+                        margin-bottom: $SMALL_MARGIN;
+                    }
+
+                    p:not(:last-child) {
+                        margin-bottom: $X_SMALL_MARGIN;
+                    }
+                }
+            }
+
+            .hidden-article {
+                display: none;
+            }
+
+            .visible-article {
+                display: grid;
+            }
+        }
+    }
+}
+
+// Project Team ------------------------------------------------------------------------------------------------------------------------------------
+
+// DEFAULT ----------------------------------------------------------------------------------
+
+#Project-Team {
+
+    .content-container {
+
+        h1 {
+            text-align: center;
+            margin-bottom: $X_LARGE_MARGIN;
+        }
+
+        #team-scroll-container {
+            grid-template-columns: auto repeat(4, 1fr) auto;
+        }
+
+        .team-member {
+            grid-template-rows: repeat(3, auto) 1fr;
+        }
+    }
+}

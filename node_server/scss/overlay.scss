@@ -13,6 +13,18 @@
     background-color:#00000065; 
     display: none;
 
+    // https://stackoverflow.com/questions/16676166/apply-border-radius-to-scrollbars-with-css
+    ::-webkit-scrollbar-thumb {
+        background-color: $GREY;
+        border: 4px solid transparent;
+        border-radius: calc($BORDER_RADIUS * 2);
+        background-clip: padding-box;  
+    }
+      
+    ::-webkit-scrollbar {
+        width: 16px;
+    }
+
     .overlay { 
         background-color: $WHITE; 
         position: absolute; 
@@ -23,9 +35,8 @@
         #title-container {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            grid-template-areas: "title close-button"
-                                 "divider divider";
-            margin-bottom: $LARGE_MARGIN;
+            grid-template-areas: "title close-button";
+            margin-bottom: $SMALL_MARGIN;
 
             h2 {
                 grid-area: title;
@@ -40,11 +51,6 @@
                 padding-top: calc($X_SMALL_MARGIN / 2);
                 padding-right: $X_SMALL_MARGIN;
             }
-
-            hr {
-                grid-area: divider;
-                width: 100%
-            }
         }
     }
 }
@@ -53,7 +59,7 @@
 
 .overlay-delete-confirmation {
     width: 25%; 
-    height: 65%; 
+    height: auto; 
     box-sizing: border-box;
     padding: $X_LARGE_MARGIN;
     display: flex;
@@ -72,7 +78,7 @@
     h3 {
         color: $RED;
         text-align: center;
-        margin-bottom: $LARGE_MARGIN;
+        margin-bottom: $SMALL_MARGIN;
     }
 
     p {
@@ -88,19 +94,77 @@
     .button-container {
         display: grid;
         grid-template-columns: 1fr 1fr; 
+        grid-gap: $SMALL_MARGIN;
         align-items: end;
         height: 100%;
+        margin-top: $LARGE_MARGIN;
 
         div {
             @include center-flex;
         }
 
         .cancel-button {
-            @include secondary-button(inline-block, auto, 0 30px);
+            @include secondary-button(inline-block, 100%, 0 30px);
         }
     
         .delete-button {
-            @include red-button(inline-block, auto, 0 30px);
+            @include red-button(inline-block, 100%, 0 30px);
+        }
+    }
+}
+
+// Warning -----------------------------------------------------------------------------------------------------------------------------------------
+
+.overlay-warning {
+    width: auto; 
+    height: auto; 
+    box-sizing: border-box;
+    padding: $X_LARGE_MARGIN;
+    display: flex;
+    flex-direction: column;
+
+    .icon-container {
+        @include center-flex;
+        margin-bottom: $MEDIUM_MARGIN;
+
+        i {
+            color: $YELLOW;
+            font-size: $DEFAULT_X_LARGE_ICON;
+        }
+    }
+
+    h3 {
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    p {
+        margin-top: $SMALL_MARGIN;
+        text-align: center;
+        line-height: 30px;
+    }
+
+    .button-container {
+        display: flex;
+        grid-gap: $SMALL_MARGIN;
+        align-items: end;
+        height: 100%;
+        margin-top: $LARGE_MARGIN;
+
+        div {
+            @include center-flex;
+        }
+
+        .cancel-button {
+            @include secondary-button(inline-block, auto, 0 25px);
+        }
+    
+        .option-button:nth-of-type(1) {
+            @include primary-button(inline-block, auto, 0 25px);
+        }
+
+        .option-button:nth-of-type(2) {
+            @include secondary-button(inline-block, auto, 0 25px);
         }
     }
 }
