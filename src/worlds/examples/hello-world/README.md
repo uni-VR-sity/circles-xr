@@ -1,17 +1,13 @@
+
+Below is the most basic example, with only a Circles' avatar networked into a scene. Feel free to use [A-Frame](https://aframe.io) components to add [geometry](https://github.com/aframevr/aframe/blob/master/docs/components/geometry.md), [3D models](https://aframe.io/docs/1.4.0/introduction/models.html), [animations](https://github.com/aframevr/aframe/blob/master/docs/components/animation.md), [lights](https://github.com/aframevr/aframe/blob/master/docs/components/light.md), and [load assets](https://aframe.io/docs/1.4.0/core/asset-management-system.html). You may also want to add some [Circles specific components](#circles-components) for navigation, artefacts, buttons etc. 
+
+```html
 <html>
-
     <head>
-
         <!-- Circles' head scripts [REQUIRED] -->
         <circles-start-scripts/>
-
     </head>
-
     <body>
-
-        <!-- 2D UI elements overylayed on the 3D scene for user options -->
-        <circles-basic-ui/>
-        
         <!-- this is used to create our enter UI that creates a 2D overlay to capture a user gesture for sound/mic access etc. -->
         <circles-start-ui/>
 
@@ -25,15 +21,10 @@
 
             <!-- Circles' built-in manager and avatar [REQUIRED] -->
             <circles-manager-avatar/>
-
-            <!-- start your code: put your A-frame, Circles XR, and custom components here -->
-             
-            <!-- end your code: -->
         </a-scene>
 
         <!-- Circles' end scripts [REQUIRED] -->
         <circles-end-scripts/>
-
     </body>
-
 </html>
+```
