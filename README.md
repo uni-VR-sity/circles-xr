@@ -2,7 +2,6 @@
 
 <img src="node_server/public/global/images/Circles_MultiPlatform.jpg?raw=true" width="49.3%" alt="Screenshot of 3D avatars around the campfire in CIRCLES" />  <img src="node_server/public/global/images/Circles_WomenInTrades.jpg?raw=true" width="49.3%" alt="Screenshot of CIRCLES' world that highlights the challenges women face in the trades" /><img src="node_server/public/global/images/Circles_KinematicsHub.jpg?raw=true" width="49.3%" alt="Screenshot of CIRCLES' hub world for showcasing basic kinematics" /> <img src="node_server/public/global/images/Circles_ExampleWorld.jpg?raw=true" width="49.3%" alt="Screenshot of CIRCLES' example world for showing Circles' features to developers" />
 
-----------------
 
 ## Table of Contents
 
@@ -20,8 +19,6 @@
 
 <br>
 
-----------------
-
 ## Circles Overview
 
 <br>
@@ -29,8 +26,6 @@
 This is an internal development fork of [Circles-XR](https://github.com/PlumCantaloupe/circlesxr) built by [Anthony Scavarelli](http://portfolio.anthony-scavarelli.com/)
 
 <br>
-
-----------------
 
 ## Required Installs
 
@@ -42,7 +37,6 @@ This is an internal development fork of [Circles-XR](https://github.com/PlumCant
 1. Make sure you have [Python](https://www.python.org/downloads/) installed
 
 <br>
-
 
 ## Submodule Circles-XR and Setup
 
@@ -66,5 +60,3 @@ This is an internal development fork of [Circles-XR](https://github.com/PlumCant
 1. Password: password
 
 <br>
-  
-----------------
