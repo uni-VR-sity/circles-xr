@@ -61,7 +61,24 @@ AFRAME.registerComponent('circles-enter-ui',
             const ambientSounds = document.querySelectorAll('.autoplay-sound');
             ambientSounds.forEach(function(soundEntity)
             {
-                soundEntity.setAttribute('circles-sound', {state:'play'});
+                if (soundEntity.components['circle-sound'])
+                {
+                    soundEntity.setAttribute('circles-sound', {state:'play'});
+                }
+                else if (soundEntity.components['sound'])
+                {
+                    soundEntity.components['sound'].playSound();
+                }
+            });
+        };
+
+        const startAmbientVideos = function()
+        {            
+            //start all autoplay/ambient videos
+            const ambientVideos = document.querySelectorAll('.autoplay-video');
+            ambientVideos.forEach(function(videoEntity)
+            {
+                document.querySelector(videoEntity.getAttribute('src')).play();
             });
         };
 
@@ -71,40 +88,21 @@ AFRAME.registerComponent('circles-enter-ui',
             document.querySelector('#user-gesture-overlay').style.display='none';   //hide user-gesture overlay
             document.querySelector('#ui_wrapper').style.display='block';            //show "extra" controls i.e. microphone toggle
             
-            //start all autoplay/ambient music
+            //start all autoplay/ambient music and videos
             startAmbientSounds();
+            startAmbientVideos();
 
             //let everyone know that the circles experience has been entered
             CIRCLES.getCirclesManagerComp().experienceEntered();
         });
 
-        // Simulate click on #user-gesture-enter if devmode=true in URL, after event listener is attached
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('devmode') === 'true')
-        {
-            setTimeout(() =>
-            {
-                const enterCirclesButton = document.getElementById('user-gesture-enter');
-                if (enterCirclesButton) 
-                {
-                    enterCirclesButton.click();
-                }
-            }, 0);
-        }
-
         //I think we need to play sounds if on HMD VR anyhow, as the HTML UI may not be present when using portals
         if (AFRAME.utils.device.isMobileVR())
         {
             startAmbientSounds();
+            startAmbientVideos();
             CIRCLES.getCirclesManagerComp().experienceEntered();
         }
-
-        //start all autoplay/ambient music
-        const ambientSounds = document.querySelectorAll('.autoplay-sound');
-        ambientSounds.forEach(function(soundEntity)
-        {
-            soundEntity.setAttribute('circles-sound', {state:'play'});
-        });
 
         //clicking on customize avatar brings user to wardobe world
         let wardobeButton = document.querySelector('#wardrobe-enter');
