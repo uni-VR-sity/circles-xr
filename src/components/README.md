@@ -1,8 +1,3 @@
-
-There are dozens of components created for use within this framework that you can find in the [components folder of this repo](https://github.com/PlumCantaloupe/circlesxr/tree/master/src/components); but the following will likely be the most used, and thus the most significant.
-
-First, some useful functions that may be useful for the creation of your own components:
-
 ```js
 //get the name of the group we are in (users in a group can only see each other)
 CIRCLES.getCirclesGroupName();
