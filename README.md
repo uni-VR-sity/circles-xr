@@ -5,11 +5,11 @@
 
 <br>
 
-## Circles Overview
+## Circles XR Overview
 
 <br>
 
-This is an internal development fork of [Circles-XR](https://github.com/PlumCantaloupe/circlesxr) built by [Anthony Scavarelli](http://portfolio.anthony-scavarelli.com/)
+This is an internal development fork of [CIRCLES XR Learning Framework](https://github.com/PlumCantaloupe/circlesxr) built by [Anthony Scavarelli](http://portfolio.anthony-scavarelli.com/)
 
 <br>
 
@@ -24,7 +24,7 @@ This is an internal development fork of [Circles-XR](https://github.com/PlumCant
 
 <br>
 
-## Submodule Circles-XR and Setup
+## Submodule Circles XR and Setup
 
 <br>
 
