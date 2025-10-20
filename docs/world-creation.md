@@ -136,9 +136,3 @@ Additional sections can be specified under `extraInfo`:
 ```
 
 <br>
-
-## Developer Mode
-
-To enable developer mode, set `DEVELOPER_MODE=true` in .env. This will enable to following features:
-- Update world on page load instead of on server load
-- Automatically click on "Enter Circles" button on enter UI

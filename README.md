@@ -40,9 +40,18 @@ This is an internal development fork of [CIRCLES XR Learning Framework](https://
 
 <br>
 
+## Developer Mode
+
+To enable developer mode, set `DEVELOPER_MODE=true` in .env. This will enable to following features:
+- Update world on page load instead of on server load
+- Automatically click on "Enter Circles" button on enter UI
+
+<br>
+
 ## Documentation and Examples
 - [Server Management](https://github.com/uni-VR-sity/circles-xr/tree/main/docs#server-management)
 - [World Creation](https://github.com/uni-VR-sity/circles-xr/tree/main/docs#world-creation)
+- [Circles Networking](https://github.com/uni-VR-sity/circles-xr/tree/main/docs/#networking)
 - [Circles Components](https://github.com/uni-VR-sity/circles-xr/tree/main/docs/components)
 - [Example Worlds](https://github.com/uni-VR-sity/circles-xr/tree/main/src/worlds/examples)
     - [Hello World](https://github.com/uni-VR-sity/circles-xr/tree/main/src/worlds/examples/hello-world)
