@@ -7,7 +7,7 @@ It can send basic messages and small javascript objects, as well as sync events.
 
 _For voice or vother large bandwidth items like video, you will have to run a janus server and use the [naf-janus-adapter](https://github.com/networked-aframe/naf-janus-adapter). For local development, it defaults to fast and reliable [websockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) communication that does not support voice and video._
 
-The following example shows how to implement a networked light (a simplified example from [Fully Featured World](https://github.com/uni-VR-sity/circles-xr/tree/main/src/worlds/examples/fully-featured))
+The following example shows how to implement a networked light (a simplified example from [Fully Featured World](https://github.com/uni-VR-sity/circles-xr/tree/main/src/worlds/fully-featured))
 
 ```js
 // Connect to web sockets to sync the lights between users
