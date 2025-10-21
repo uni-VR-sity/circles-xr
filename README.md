@@ -51,6 +51,7 @@ To enable developer mode, set `DEVELOPER_MODE=true` in .env. This will enable to
 ## Documentation and Examples
 - [Server Management](https://github.com/uni-VR-sity/circles-xr/tree/main/docs#server-management)
 - [World Creation](https://github.com/uni-VR-sity/circles-xr/tree/main/docs#world-creation)
+- [Circles Core](https://github.com/uni-VR-sity/circles-xr/tree/main/docs#core)
 - [Circles Networking](https://github.com/uni-VR-sity/circles-xr/tree/main/docs/#networking)
 - [Circles Components](https://github.com/uni-VR-sity/circles-xr/tree/main/docs/components)
 - [Example Worlds](https://github.com/uni-VR-sity/circles-xr/tree/main/src/worlds/examples)
