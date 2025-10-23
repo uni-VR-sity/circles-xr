@@ -96,6 +96,24 @@ AFRAME.registerComponent('circles-enter-ui',
             CIRCLES.getCirclesManagerComp().experienceEntered();
         });
 
+        // Simulate click on #user-gesture-enter if devmode=true in URL, after event listener is attached
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('devmode') === 'true')
+        {
+            setTimeout(() =>
+            {
+                const enterCirclesButton = document.getElementById('user-gesture-enter');
+                if (enterCirclesButton) 
+                {
+                    enterCirclesButton.click();
+
+                    //start all autoplay/ambient music and videos
+                    startAmbientSounds();
+                    startAmbientVideos();
+                }
+            }, 0);
+        }
+
         //I think we need to play sounds if on HMD VR anyhow, as the HTML UI may not be present when using portals
         if (AFRAME.utils.device.isMobileVR())
         {
