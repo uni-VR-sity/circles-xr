@@ -89,7 +89,7 @@ const CircleSchema = new mongoose.Schema({
     whiteboardFiles: [{
       name: {
         type:       String,
-        unique:     true,
+        unique:     false,
         required:   true,
         trim:       true,
       },
