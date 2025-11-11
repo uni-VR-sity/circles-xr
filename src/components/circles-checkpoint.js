@@ -3,7 +3,9 @@
 AFRAME.registerComponent('circles-checkpoint', {
   schema: {
     offset:           {type:'vec3', default:{x: 0, y: 0, z: 0} },   //where the user spawns, relative to the position of the checkpoint
-    useDefaultModel:  {type:'boolean', default:true }
+    useDefaultModel:  {type:'boolean', default:true },
+    onClickSound:     {type: 'string', default:''},
+    soundVolume:      {type:'number', default:0.5},
   },
 
   init: function () {
@@ -34,12 +36,20 @@ AFRAME.registerComponent('circles-checkpoint', {
       //create sphere component for portal
       CONTEXT_AF.el.setAttribute('material', {transparent:false, color:'rgb(57, 187, 130)', emissive:'rgb(7,137,80)', roughness:0.8, metalness:0.0});
       CONTEXT_AF.el.setAttribute('geometry', {primitive:'cylinder', radius:0.5, height:0.04});
-      CONTEXT_AF.el.setAttribute('circles-interactive-object', {type:'outline'});
+      CONTEXT_AF.el.setAttribute('circles-interactive-object', {
+        type:'outline',
+        click_sound: data.onClickSound,
+        sound_volume: data.soundVolume,
+      });
     }
     else {
       CONTEXT_AF.el.removeAttribute('material');
       CONTEXT_AF.el.removeAttribute('geometry');
-      CONTEXT_AF.el.setAttribute('circles-interactive-object', {type:'none'});
+      CONTEXT_AF.el.setAttribute('circles-interactive-object', {
+        type:'none',
+        click_sound: data.onClickSound,
+        sound_volume: data.soundVolume,
+      });
     }
   }
 });
