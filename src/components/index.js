@@ -1,5 +1,6 @@
 require('./circles-add-camera-equipment');
 require('./circles-artefact');
+require('./circles-autoplay-media');
 require('./circles-avatar-construction');
 require('./circles-boundaries');
 require('./circles-button');

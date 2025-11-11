@@ -55,42 +55,11 @@ AFRAME.registerComponent('circles-enter-ui',
             });
         }
 
-        const startAmbientSounds = function()
-        {            
-            //start all autoplay/ambient music
-            const ambientSounds = document.querySelectorAll('.autoplay-sound');
-            ambientSounds.forEach(function(soundEntity)
-            {
-                if (soundEntity.components['circle-sound'])
-                {
-                    soundEntity.setAttribute('circles-sound', {state:'play'});
-                }
-                else if (soundEntity.components['sound'])
-                {
-                    soundEntity.components['sound'].playSound();
-                }
-            });
-        };
-
-        const startAmbientVideos = function()
-        {            
-            //start all autoplay/ambient videos
-            const ambientVideos = document.querySelectorAll('.autoplay-video');
-            ambientVideos.forEach(function(videoEntity)
-            {
-                document.querySelector(videoEntity.getAttribute('src')).play();
-            });
-        };
-
         //clicking on enter circles removes Ui and starts sounds (as most web browsers need a user gesture to start sound)
         document.querySelector('#user-gesture-enter').addEventListener('click', function()
         {
             document.querySelector('#user-gesture-overlay').style.display='none';   //hide user-gesture overlay
             document.querySelector('#ui_wrapper').style.display='block';            //show "extra" controls i.e. microphone toggle
-            
-            //start all autoplay/ambient music and videos
-            startAmbientSounds();
-            startAmbientVideos();
 
             //let everyone know that the circles experience has been entered
             CIRCLES.getCirclesManagerComp().experienceEntered();
@@ -106,10 +75,6 @@ AFRAME.registerComponent('circles-enter-ui',
                 if (enterCirclesButton) 
                 {
                     enterCirclesButton.click();
-
-                    //start all autoplay/ambient music and videos
-                    startAmbientSounds();
-                    startAmbientVideos();
                 }
             }, 0);
         }
@@ -117,8 +82,6 @@ AFRAME.registerComponent('circles-enter-ui',
         //I think we need to play sounds if on HMD VR anyhow, as the HTML UI may not be present when using portals
         if (AFRAME.utils.device.isMobileVR())
         {
-            startAmbientSounds();
-            startAmbientVideos();
             CIRCLES.getCirclesManagerComp().experienceEntered();
         }
 
