@@ -30,7 +30,7 @@ AFRAME.registerComponent('circles-checkpoint', {
       CONTEXT_AF.setDefaultModel(data.useDefaultModel);
     }
 
-    if ( (oldData.onClickSound !== data.onClickSound) || (oldData.soundVolume !== data.soundVolume) && (data.useDefaultModel !== '')) {
+    if ( ((oldData.onClickSound !== data.onClickSound) || (oldData.soundVolume !== data.soundVolume)) && (data.useDefaultModel !== '')) {
       let interactionType = (data.useDefaultModel) ? ('outline') : ('none');
       CONTEXT_AF.setInteractiveObject(CONTEXT_AF.setInteractiveObject(interactionType));
     }
