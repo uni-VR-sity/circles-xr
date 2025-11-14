@@ -2,7 +2,8 @@
 
 AFRAME.registerComponent('circles-spawnpoint', {
   schema: {
-    //offset: {default: {x: 0, y: 0, z: 0}, type: 'vec3'}
+    rotateToCenter: {type: 'bool', default: true},
+    spawnRotation: {type: 'vec3', default: {x: 0, y: 0, z: 0}},
   },
 
   init: function () {
