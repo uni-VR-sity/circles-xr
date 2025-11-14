@@ -21,13 +21,11 @@ AFRAME.registerComponent('circles-spawn-at-random-checkpoint', {
     CONTEXT_AF.el.setAttribute('position',{x:randElemPos.x, y:randElemPos.y, z:randElemPos.z});
 
     //set rotation towards centre of scene (assume origin) or specified value
-    if (checkpoints[randCheckpoint].components['circles-spawnpoint'].data.rotateToCenter)
-    {
+    if (checkpoints[randCheckpoint].components['circles-spawnpoint'].data.rotateToCenter) {
       const yRotation = THREE.MathUtils.radToDeg(Math.atan2( CONTEXT_AF.el.object3D.position.x, CONTEXT_AF.el.object3D.position.z ));
       CONTEXT_AF.el.setAttribute('rotation',{x:0.0, y:yRotation, z:0.0});
     }
-    else
-    {
+    else {
       let spawnRotation = checkpoints[randCheckpoint].components['circles-spawnpoint'].data.spawnRotation;
       CONTEXT_AF.el.setAttribute('rotation',{x:spawnRotation.x, y:spawnRotation.y, z:spawnRotation.z});
     }
