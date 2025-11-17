@@ -5,9 +5,9 @@ AFRAME.registerComponent('circles-autoplay-media', {
         // Listening for user to enter the experience
         document.addEventListener(CIRCLES.EVENTS.EXPERIENCE_ENTERED, function() {
             
-            // Start all autoplay/ambient music
-            const ambientSounds = document.querySelectorAll('.autoplay-sound');
-            ambientSounds.forEach(function(soundEntity) {
+            // Start all autoplay music
+            const autoplaySounds = document.querySelectorAll('.autoplay-sound');
+            autoplaySounds.forEach(function(soundEntity) {
                 if (soundEntity.components['circle-sound']) {
                     soundEntity.setAttribute('circles-sound', {state:'play'});
                 }
@@ -16,9 +16,9 @@ AFRAME.registerComponent('circles-autoplay-media', {
                 }
             });
 
-            // Start all autoplay/ambient videos
-            const ambientVideos = document.querySelectorAll('.autoplay-video');
-            ambientVideos.forEach(function(videoEntity) {
+            // Start all autoplay videos
+            const autoplayVideos = document.querySelectorAll('.autoplay-video');
+            autoplayVideos.forEach(function(videoEntity) {
                 document.querySelector(videoEntity.getAttribute('src')).play();
             });
         });
