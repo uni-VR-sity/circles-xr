@@ -26,11 +26,13 @@ AFRAME.registerComponent('circles-checkpoint', {
             CONTEXT_AF.el.setAttribute('checkpoint', {offset:CONTEXT_AF.data.offset});
         }
 
-        if ( (oldData.useDefaultModel !== data.useDefaultModel) && (data.useDefaultModel !== '') ) {
+        if (data.useDefaultModel == '') return;
+
+        if (oldData.useDefaultModel !== data.useDefaultModel) {
             CONTEXT_AF.setDefaultModel(data.useDefaultModel);
         }
 
-        if ( ((oldData.onClickSound !== data.onClickSound) || (oldData.soundVolume !== data.soundVolume)) && (data.useDefaultModel !== '')) {
+        if ( (oldData.onClickSound !== data.onClickSound) || (oldData.soundVolume !== data.soundVolume) ) {
             let interactionType = (data.useDefaultModel) ? ('outline') : ('none');
             CONTEXT_AF.setInteractiveObject(CONTEXT_AF.setInteractiveObject(interactionType));
         }
