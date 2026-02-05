@@ -23,7 +23,26 @@ const env = require('../modules/env-util');
 
 // Rendering Circles -------------------------------------------------------------------------------------------------------------------------------
 
-const serveWorld = (req, res, next) => {
+// Checking if current user has access to the requested circle
+const canUserAccessCircle = async (user, world_id) => {
+  // Superusers and admins can access all circles
+  if (user.usertype === CIRCLES.USER_TYPE.SUPERUSER || user.usertype === CIRCLES.USER_TYPE.ADMIN) return true;
+
+  let circle = await Circles.findOne({name: world_id});
+
+  if (!circle) return false;
+
+  if (circle.viewingRestrictions == false) return true;
+  if (circle.viewingPermissions.includes(user._id)) return true;
+
+  return false;
+}
+
+// ------------------------------------------------------------------------------------------
+
+const serveWorld = async (req, res, next) => {
+    if (!(await canUserAccessCircle(req.user, req.params.world_id))) return res.redirect('/explore');
+
     // Need to make sure we have the trailing slash to signify a folder so that relative links works correctly
     // https://stackoverflow.com/questions/30373218/handling-relative-urls-in-a-node-js-http-server 
     const splitURL = req.url.split('?');
@@ -160,7 +179,9 @@ const modifyServeWorld = (world_id, searchParamsObj, user, pathStr, req, res) =>
 
 // ------------------------------------------------------------------------------------------
 
-const serveRelativeWorldContent = (req, res, next) => {
+const serveRelativeWorldContent = async (req, res, next) => {
+  if (!(await canUserAccessCircle(req.user, req.params.world_id))) return res.redirect('/explore');
+  
   //making it easier for devs as absolute paths are a pain to type in ...
   const worldID = req.params.world_id;
   const relURL = req.params[0];
