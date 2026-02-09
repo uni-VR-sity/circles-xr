@@ -712,7 +712,7 @@ const saveCollectedData = async (req, res, next) =>
 {
   if (req.body.circle)
   {
-    const possibleData = ['date', 'time', 'user', 'position', 'name', 'description'];
+    const possibleData = ['date', 'time', 'user', 'displayName', 'position', 'name', 'description'];
     const logFolder = __dirname + '/../dataLogs/';
 
     var log = '';
@@ -742,13 +742,7 @@ const saveCollectedData = async (req, res, next) =>
         }
         else
         {
-          // Checking is data is "user"
-          // If it is, adding current user's username to log
-          if (data == 'user')
-          {
-            log += req.user.username + ',';
-          }
-          else if (req.body[data].includes(','))
+          if (req.body[data].includes(','))
           {
             log += '"' + req.body[data] + '",';
           }
