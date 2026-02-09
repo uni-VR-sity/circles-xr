@@ -27,8 +27,8 @@ AFRAME.registerComponent('circles-data-collector',
         const userElement = document.getElementsByClassName('user_cam_rig')[0];
 
         this.userInfo = {};
-        this.userInfo.username = userElement.getAttribute('circles-username');
-        //this.userInfo.usertype = userElement.getAttribute('circles-usertype');
+        this.userInfo.user = userElement.getAttribute('circles-username');
+        this.userInfo.displayName = userElement.getAttribute('circles-visiblename');
 
         // If users can download logs, creating UI
         if (schema.allowLogDownload)
@@ -50,31 +50,28 @@ AFRAME.registerComponent('circles-data-collector',
         // Checking what data to collect
         var currentDate = new Date();
 
-        // Date (YYYY-MM-DD)
+        // Date (MM/DD/YYYY timezone)
         if (schema.dataToCollect.includes('date'))
         {
-            var year = currentDate.getFullYear();
-            var month = ('00' + (currentDate.getMonth() + 1)).slice(-2);
-            var day = ('00' + currentDate.getDate()).slice(-2);
-
-            logData.date = year + '-' + month + '-' + day;
+            logData.date = currentDate.toLocaleDateString("en-US", { timeZoneName: 'short' }).replace(',', '');
         }
 
-        // Time (HH:MM:SS)
+        // Time (HH:MM:SS timezone)
         if (schema.dataToCollect.includes('time'))
         {
-            var hour = ('00' + currentDate.getHours()).slice(-2);
-            var minute = ('00' + currentDate.getMinutes()).slice(-2);
-            var second = ('00' + currentDate.getSeconds()).slice(-2);
-
-            logData.time = hour + ':' + minute + ':' + second;
+            logData.time = currentDate.toLocaleTimeString("en-US", { hour12: false, timeZoneName: 'short' }).replace(',', '');
         }
 
         // User
         if (schema.dataToCollect.includes('user'))
         {
-            // Setting user to true to signal to get current user when creating log on server side
-            logData.user = true;
+            logData.user = this.userInfo.user;
+        }
+
+        // Display name
+        if (schema.dataToCollect.includes('displayName'))
+        {
+            logData.displayName = this.userInfo.displayName;
         }
 
         // Player position
@@ -264,8 +261,6 @@ AFRAME.registerComponent('circles-data-collector',
     downloadAllLogs: function()
     {
         const CONTEXT_AF = this;
-        const element = CONTEXT_AF.el;
-        const schema = CONTEXT_AF.data;
 
         // Checking if any logs exist for the circle
         var request = new XMLHttpRequest();
