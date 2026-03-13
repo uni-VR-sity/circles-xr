@@ -25,6 +25,9 @@ AFRAME.registerComponent('circles-pickup-object', {
 
     CONTEXT_AF.physicsAttributes = null;
 
+    this.removePhysicsBody = this.removePhysicsBody.bind(this);
+    this.reinstatePhysicsBody = this.reinstatePhysicsBody.bind(this);
+
     if (CONTEXT_AF.el.hasAttribute('circles-interactive-object') === false) {
       CONTEXT_AF.el.setAttribute('circles-interactive-object', {});
     }
@@ -46,11 +49,6 @@ AFRAME.registerComponent('circles-pickup-object', {
     {
       CONTEXT_AF.setPickUpAnimations();
       CONTEXT_AF.setDropAnimations();
-    }
-
-    if (data.physicsObject)
-    {
-      CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
     }
 
     CONTEXT_AF.el.addEventListener('click', CONTEXT_AF.clickFunc);
@@ -85,20 +83,31 @@ AFRAME.registerComponent('circles-pickup-object', {
         CONTEXT_AF.setDropAnimations();
       }
     }
+
+    if (!oldData.physicsObject && data.physicsObject && CONTEXT_AF.el.hasAttribute('dynamic-body'))
+    {
+      CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
+
+      CONTEXT_AF.el.addEventListener(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT, CONTEXT_AF.removePhysicsBody);
+      CONTEXT_AF.el.addEventListener(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT, CONTEXT_AF.reinstatePhysicsBody);
+    }
+    else if (oldData.physicsObject && !data.physicsObject)
+    {
+      CONTEXT_AF.el.removeEventListener(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT, CONTEXT_AF.removePhysicsBody);
+      CONTEXT_AF.el.removeEventListener(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT, CONTEXT_AF.reinstatePhysicsBody);
+    }
   },
   remove : function() {
     this.el.removeEventListener('click', this.clickFunc);
+    this.el.removeEventListener(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT, this.removePhysicsBody);
+    this.el.removeEventListener(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT, this.reinstatePhysicsBody);
   },
   pickup : function(sendNetworkEvent, passedContext) {
     const CONTEXT_AF    = (passedContext) ? passedContext : this;
     const data          = CONTEXT_AF.data;
     const SAME_DIFF     = 0.001;
 
-    if (data.physicsObject)
-    {
-      CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
-      CONTEXT_AF.el.removeAttribute('dynamic-body');
-    }
+    if (data.physicsObject) CONTEXT_AF.removePhysicsBody();
 
     CONTEXT_AF.playerHolder.object3D.attach(CONTEXT_AF.el.object3D);
 
@@ -118,7 +127,7 @@ AFRAME.registerComponent('circles-pickup-object', {
     CONTEXT_AF.el.emit(CIRCLES.EVENTS.PICKUP_THIS_OBJECT, {sendNetworkEvent:sendNetworkEvent}, true);
     CIRCLES.getCirclesManagerElement().emit(CIRCLES.EVENTS.PICKUP_THIS_OBJECT, {el:CONTEXT_AF.el}, false);
   },
-  release : function(sendNetworkEvent, passedContext) {
+  release : function(sendNetworkEvent, passedContext, isNetworkedPickup = false) {
     const CONTEXT_AF  = (passedContext) ? passedContext : this;
     const data        = CONTEXT_AF.data;
     const SAME_DIFF   = 0.001;
@@ -194,31 +203,15 @@ AFRAME.registerComponent('circles-pickup-object', {
       }
     }
 
-    if (data.physicsObject)
-    {
-      CONTEXT_AF.el.setAttribute('dynamic-body', {shape: CONTEXT_AF.physicsAttributes.shape, mass: CONTEXT_AF.physicsAttributes.mass, angluarDamping: CONTEXT_AF.physicsAttributes.angluarDamping, linearDamping: CONTEXT_AF.physicsAttributes.linearDamping, sphereRadius: CONTEXT_AF.physicsAttributes.sphereRadius, cylinderAxis: CONTEXT_AF.physicsAttributes.cylinderAxis});
-
-      if (data.shapeNames.length > 0)
-      {
-        // Resetting shape components
-        for (var i = 0; i < data.shapeNames.length; i++)
-        {
-          var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
-          
-          // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
-          CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
-  
-          CONTEXT_AF.el.setAttribute(data.shapeNames[i], {shape: shape.shape, offset: shape.offset, orientation: shape.orientation, radius: shape.radius, halfExtents: shape.halfExtents, radiusTop: shape.radiusTop, radiusBottom: shape.radiusBottom, height: shape.height, numSegments: shape.numSegments, });
-        }
-      }
-    }
+    // Adding dynamic body back to object (unless function was called because another user picked it up)
+    if (!isNetworkedPickup && data.physicsObject) CONTEXT_AF.reinstatePhysicsBody();
 
     CONTEXT_AF.pickedUp = false;
 
     //sending a "pre" event to turn off controls before any animations might be done
     CONTEXT_AF.el.emit(CIRCLES.EVENTS.RELEASE_THIS_OBJECT_PRE, null, true);
   },
-  throwRelease : function(sendNetworkEvent, passedContext) {
+  throwRelease : function(sendNetworkEvent, passedContext, isNetworkedPickup = false) {
     const CONTEXT_AF  = (passedContext) ? passedContext : this;
     const data        = CONTEXT_AF.data;
     const SAME_DIFF   = 0.001;
@@ -271,24 +264,8 @@ AFRAME.registerComponent('circles-pickup-object', {
       }
     }
 
-    if (data.physicsObject)
-    {
-      CONTEXT_AF.el.setAttribute('dynamic-body', {shape: CONTEXT_AF.physicsAttributes.shape, mass: CONTEXT_AF.physicsAttributes.mass, angluarDamping: CONTEXT_AF.physicsAttributes.angluarDamping, linearDamping: CONTEXT_AF.physicsAttributes.linearDamping, sphereRadius: CONTEXT_AF.physicsAttributes.sphereRadius, cylinderAxis: CONTEXT_AF.physicsAttributes.cylinderAxis});
-
-      if (data.shapeNames.length > 0)
-      {
-        // Resetting shape components
-        for (var i = 0; i < data.shapeNames.length; i++)
-        {
-          var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
-          
-          // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
-          CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
-  
-          CONTEXT_AF.el.setAttribute(data.shapeNames[i], {shape: shape.shape, offset: shape.offset, orientation: shape.orientation, radius: shape.radius, halfExtents: shape.halfExtents, radiusTop: shape.radiusTop, radiusBottom: shape.radiusBottom, height: shape.height, numSegments: shape.numSegments, });
-        }
-      }
-    }
+    // Adding dynamic body back to object (unless function was called because another user picked it up)
+    if (!isNetworkedPickup && data.physicsObject) CONTEXT_AF.reinstatePhysicsBody();
 
     CONTEXT_AF.pickedUp = false;
 
@@ -340,5 +317,38 @@ AFRAME.registerComponent('circles-pickup-object', {
     CONTEXT_AF.el.setAttribute('animation__cpo_rotationZ', { property:'object3D.rotation.z', dur:data.animateDurationMS, isRawProperty:true, to:data.dropRotation.z, easing:'easeInOutQuad', startEvents:'cpo_drop_rotation'});
 
     CONTEXT_AF.el.setAttribute('animation__cpo_scale', { property:'scale', dur:data.animateDurationMS, isRawProperty:true, to:{x:data.dropScale.x, y:data.dropScale.y, z:data.dropScale.z}, easing:'easeInOutQuad', startEvents:'cpo_drop_scale'});
+  },
+  removePhysicsBody : function()
+  {
+    const CONTEXT_AF = this;
+
+    if (!CONTEXT_AF.el.hasAttribute('dynamic-body')) return;
+      
+    CONTEXT_AF.physicsAttributes = CONTEXT_AF.el.getAttribute('dynamic-body');
+
+    CONTEXT_AF.el.removeAttribute('dynamic-body');
+  },
+  reinstatePhysicsBody : function()
+  {
+    const CONTEXT_AF = this;
+    const data = this.data;
+
+    if (!CONTEXT_AF.physicsAttributes) return;
+
+    CONTEXT_AF.el.setAttribute('dynamic-body', {shape: CONTEXT_AF.physicsAttributes.shape, mass: CONTEXT_AF.physicsAttributes.mass, angluarDamping: CONTEXT_AF.physicsAttributes.angluarDamping, linearDamping: CONTEXT_AF.physicsAttributes.linearDamping, sphereRadius: CONTEXT_AF.physicsAttributes.sphereRadius, cylinderAxis: CONTEXT_AF.physicsAttributes.cylinderAxis});
+
+    if (data.shapeNames.length > 0)
+    {
+      // Resetting shape components
+      for (var i = 0; i < data.shapeNames.length; i++)
+      {
+        var shape = CONTEXT_AF.el.getAttribute(data.shapeNames[i]);
+        
+        // Will throw error (aframe-physics-system.min.js:1 removing shape component not currently supported) but will break if removed
+        CONTEXT_AF.el.removeAttribute(data.shapeNames[i]);
+
+        CONTEXT_AF.el.setAttribute(data.shapeNames[i], {shape: shape.shape, offset: shape.offset, orientation: shape.orientation, radius: shape.radius, halfExtents: shape.halfExtents, radiusTop: shape.radiusTop, radiusBottom: shape.radiusBottom, height: shape.height, numSegments: shape.numSegments, });
+      }
+    }
   }
 });
