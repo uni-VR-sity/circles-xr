@@ -196,11 +196,12 @@ AFRAME.registerComponent('circles-pickup-networked', {
     CONTEXT_AF.ownerLostFunc = function(e) {
       //console.log('ownerLostFunc', CONTEXT_AF.el.id);
       //release artefact
-      CONTEXT_AF.el.components['circles-pickup-object'].release(false);
+      CONTEXT_AF.el.components['circles-pickup-object'].release(false, null, true);
     };
 
     CONTEXT_AF.pickupObjFunc_Sync = function(data) {
       //console.log('pickupObjFunc_Sync ', CONTEXT_AF.el.id);
+      CONTEXT_AF.el.emit(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT);
 
       CONTEXT_AF.isPickedUp = true;
 
@@ -233,6 +234,7 @@ AFRAME.registerComponent('circles-pickup-networked', {
 
     CONTEXT_AF.releaseObjFunc_Sync = function(data) {
       //console.log('releaseObjFunc_Sync ', data);
+      CONTEXT_AF.el.emit(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT);
 
       CONTEXT_AF.isPickedUp = false;
 
