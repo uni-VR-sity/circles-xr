@@ -30,9 +30,6 @@ AFRAME.registerComponent('circles-trigger',
         // Pre-allocate vectors for distance calculations to avoid per-frame allocations.
         CONTEXT_AF.targetPos = new THREE.Vector3();
         CONTEXT_AF.triggerPos = new THREE.Vector3();
-        
-        // Read world positions into pre-allocated vectors to avoid object creation
-        CONTEXT_AF.triggerObj3D.getWorldPosition(CONTEXT_AF.triggerPos);
 
         // add classes
         if (!CONTEXT_AF.el.classList.contains('circles-trigger')) 
@@ -65,6 +62,7 @@ AFRAME.registerComponent('circles-trigger',
 
         // Read world positions into pre-allocated vectors to avoid object creation
         CONTEXT_AF.targetObj3D.getWorldPosition(CONTEXT_AF.targetPos);
+        CONTEXT_AF.triggerObj3D.getWorldPosition(CONTEXT_AF.triggerPos);
 
         // Use squared distance to avoid the expensive Math.sqrt call
         let distanceSq = CONTEXT_AF.targetPos.distanceToSquared(CONTEXT_AF.triggerPos);
