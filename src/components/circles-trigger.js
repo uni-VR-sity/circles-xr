@@ -8,7 +8,7 @@ AFRAME.registerComponent('circles-trigger',
         isEnabled:          {type:'bool',       default:true},
         isEventsEnabled:    {type:'bool',       default:true},
         isVisible:          {type:'bool',       default:true},
-        opacity:            {type:'float',      default:'0.5'},
+        opacity:            {type:'float',      default:0.5},
         radius:             {type:'float',      default:2.0},
         targetId:           {type:'string',     default:'#Player1'}
     }, 
