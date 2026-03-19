@@ -132,6 +132,8 @@ AFRAME.registerComponent('circles-pickup-object', {
     const data        = CONTEXT_AF.data;
     const SAME_DIFF   = 0.001;
 
+    if (!CONTEXT_AF.pickedUp) return;
+
     //release
     CONTEXT_AF.origParent.object3D.attach(CONTEXT_AF.el.object3D); //using three's "attach" allows us to retain world transforms during pickup/release
 

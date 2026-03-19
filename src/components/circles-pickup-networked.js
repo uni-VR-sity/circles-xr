@@ -201,9 +201,11 @@ AFRAME.registerComponent('circles-pickup-networked', {
 
     CONTEXT_AF.pickupObjFunc_Sync = function(data) {
       //console.log('pickupObjFunc_Sync ', CONTEXT_AF.el.id);
-      CONTEXT_AF.el.emit(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT);
 
       CONTEXT_AF.isPickedUp = true;
+
+      document.querySelector('#' + data.id)?.emit(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT);
+      document.querySelector('#' + data.origId)?.emit(CIRCLES.EVENTS.SYNC_PICKUP_THIS_OBJECT);
 
         const isSameWorld = (data.origWorld === CIRCLES.getCirclesWorldName());
         const isSameElem  = (data.origId === CONTEXT_AF.el.components['circles-object-world'].data.id);
@@ -234,9 +236,11 @@ AFRAME.registerComponent('circles-pickup-networked', {
 
     CONTEXT_AF.releaseObjFunc_Sync = function(data) {
       //console.log('releaseObjFunc_Sync ', data);
-      CONTEXT_AF.el.emit(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT);
 
       CONTEXT_AF.isPickedUp = false;
+
+      document.querySelector('#' + data.id)?.emit(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT);
+      document.querySelector('#' + data.origId)?.emit(CIRCLES.EVENTS.SYNC_RELEASE_THIS_OBJECT);
 
       const isSameWorld = (data.origWorld === CIRCLES.getCirclesWorldName());
       const isSameElem  = (data.origId === CONTEXT_AF.el.components['circles-object-world'].data.id);
@@ -421,6 +425,8 @@ AFRAME.registerComponent('circles-pickup-networked', {
     let isSameElem  = false;
     const allNetworkObjects = document.querySelectorAll('[circles-pickup-networked]');
     allNetworkObjects.forEach(function(netObj) {
+      if (!netObj.components['circles-object-world']) return;
+
       isSameWorld = (netObj.components['circles-object-world'].data.world === CIRCLES.getCirclesWorldName());
       isSameElem  = (netObj.components['circles-object-world'].data.id === CONTEXT_AF.el.components['circles-object-world'].data.id);
 
