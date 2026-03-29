@@ -4,10 +4,11 @@
 
 AFRAME.registerComponent('circles-networked-basic', {
   schema: {
-    className:          {type:'string',   default:''},    //We will randomly generate one if need be. The class we will use to synch with the networked version
-    visibleOtherWorlds: {type:'boolean',  default:false},
-    networkedEnabled:   {type:'boolean',  default:true},
-    networkedTemplate:  {type:'string',   default:CIRCLES.NETWORKED_TEMPLATES.BASIC_OBJECT}
+    className:            {type:'string',   default:''},    //We will randomly generate one if need be. The class we will use to synch with the networked version
+    visibleOtherWorlds:   {type:'boolean',  default:false},
+    networkedEnabled:     {type:'boolean',  default:true},
+    networkedTemplate:    {type:'string',   default:CIRCLES.NETWORKED_TEMPLATES.BASIC_OBJECT},
+    synchWorldTransforms: {type:'boolean',  default:true},
   },
   init: function() {
     const CONTEXT_AF      = this;
@@ -267,7 +268,7 @@ AFRAME.registerComponent('circles-networked-basic', {
     if (CONTEXT_AF.isClone === false) {
       if (enable === true) {
         if (CONTEXT_AF.listenersAttached === false) {
-          CONTEXT_AF.el.setAttribute('networked', {template:'#' + CONTEXT_AF.data.networkedTemplate, attachTemplateToLocal:true, synchWorldTransforms:true}); //broken in NAF - persistent:true});
+          CONTEXT_AF.el.setAttribute('networked', {template:'#' + CONTEXT_AF.data.networkedTemplate, attachTemplateToLocal:true, synchWorldTransforms:CONTEXT_AF.data.synchWorldTransforms}); //broken in NAF - persistent:true});
         }
       }
       else {
