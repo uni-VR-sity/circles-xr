@@ -158,6 +158,8 @@ AFRAME.registerComponent('circles-networked-basic', {
     }
 
     //if object from a different world we don't want to see this (if component option set)
+    if (!CONTEXT_AF.el.components['circles-object-world']) return;
+
     const isSameWorld = (CONTEXT_AF.el.components['circles-object-world'].data.world === CIRCLES.getCirclesWorldName());
     if (isSameWorld === false && CONTEXT_AF.data.visibleOtherWorlds === false) {
       CONTEXT_AF.showThisElement(false, false);
@@ -211,6 +213,8 @@ AFRAME.registerComponent('circles-networked-basic', {
     //console.log(allNetworkObjects);
 
     allNetworkObjects.forEach(function(netObj) {
+      if (!netObj.components['circles-object-world'] || !CONTEXT_AF.el.components['circles-object-world']) return;
+
       isSameWorld = (netObj.components['circles-object-world'].data.world === CIRCLES.getCirclesWorldName());
       isSameElem  = (netObj.components['circles-object-world'].data.id === CONTEXT_AF.el.components['circles-object-world'].data.id);
 
