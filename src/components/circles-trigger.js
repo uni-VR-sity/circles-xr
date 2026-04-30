@@ -68,7 +68,7 @@ AFRAME.registerComponent('circles-trigger',
         let distanceSq = CONTEXT_AF.targetPos.distanceToSquared(CONTEXT_AF.triggerPos);
 
         if (distanceSq < CONTEXT_AF.radiusSq)
-            {
+        {
             if (!CONTEXT_AF.isTriggered)
             {
                 CONTEXT_AF.isTriggered = true;
@@ -89,6 +89,7 @@ AFRAME.registerComponent('circles-trigger',
         const data = CONTEXT_AF.data;
 
         CONTEXT_AF.isEnabled = isEnabled;
+        CONTEXT_AF.isTriggered = null;
 
         CONTEXT_AF.el.setAttribute('visible', CONTEXT_AF.isEnabled && data.isVisible);
     },
