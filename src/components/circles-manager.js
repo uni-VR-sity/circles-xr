@@ -210,7 +210,7 @@ AFRAME.registerComponent('circles-manager', {
   },
   isExperienceEntered : function() {
     //let everyone know that circles is ready
-    return this.isExperienceEntered;
+    return this.isExperienceEnteredVar;
   },
   addEventListeners : function () {
     const CONTEXT_AF  = this;
